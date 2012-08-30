@@ -1,0 +1,33 @@
+Options ExecCGI Includes IncludesNOEXEC SymLinksIfOwnerMatch -Indexes
+
+RewriteEngine On
+
+RewriteRule ^(EDM|ebook)/([^/]+).html$  $1/$2.html [L]
+RewriteRule ^new-products.html$  products.php?func=p_new [L]
+#主功能頁
+RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|goodlink|gallery).htm$  $1.php [L]
+#主功能列表頁-無檔名
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)list-([0-9]+).htm$  $1.php?func=$2_list&$2c_id=$3 [L]
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)list-([0-9]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?func=$2_list&$2c_id=$3&nowp=$4&jp=$5 [L]
+#主功能詳細頁-無檔名
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)detail-([0-9]+)-([0-9]+).html$  $1.php?func=$2_show&$2c_id=$3&$2_id=$4 [L]
+#主功能詳細頁-有檔名
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?type=list&f=$2&nowp=$3&jp=$4 [L]
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+).html$  $1.php?type=show&f=$2 [L]
+#主功能詳細頁-有檔名-功能主頁分頁
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)-pages-([0-9]+)-([0-9]+).htm$  $1.php?nowp=$2&jp=$3 [L]
+#主功能列表頁-有檔名
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+).htm$  $1.php?type=list&f=$2 [L]
+
+
+
+#無設定檔名目錄
+RewriteRule ^category-([0-9]+)-pages-([0-9]+)-([0-9]+).htm$  products.php?func=p_list&pc_parent=$1&nowp=$2&jp=$3 [L]
+RewriteRule ^category-([0-9]+).htm$  products.php?func=p_list&pc_parent=$1 [L]
+#有設定檔名目錄
+RewriteRule ^([^/]+)-pages-([0-9]+)-([0-9]+).htm$  products.php?func=p_list&f=$1&nowp=$2&jp=$3 [L]
+RewriteRule ^([^/]+).htm$  products.php?func=p_list&f=$1 [L]
+#無設定檔名產品
+RewriteRule ^([^/]+)/products-([0-9]+)-([0-9]+).html$  products.php?func=p_detail&p_id=$2&&pc_parent=$3&d=$1 [L]
+#有設定檔名產品
+RewriteRule ^([^/]+)/([^/]+).html$  products.php?func=p_detail&d=$1&f=$2 [L]

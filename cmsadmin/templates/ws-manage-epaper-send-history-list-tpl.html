@@ -1,0 +1,40 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>電子報發送記錄</h1>
+    <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
+    <tr>
+      <th width="5%">No.</th>
+      <th width="25%">電子報</th>
+      <th width="35%">發送日期</th>
+      <th width="35%">發送群組</th>
+    </tr>
+    <!-- START BLOCK : EPAPER_SEND_HISTORY_LIST -->
+    <tr {TAG_TR_CLASS}>
+      <td>{VALUE_ES_SERIAL}</td>
+      <td>{VALUE_E_SUBJECT}</td>
+      <td>{VALUE_ES_MODIFYDATE}</td>
+      <td>{VALUE_ES_GROUP}</td>
+     </tr>
+    <!-- END BLOCK : EPAPER_SEND_HISTORY_LIST -->
+  </table>
+      <div align="center"><font size='3' color='red'>{MSG_NO_DATA}</font></div>
+      <!-- START BLOCK : PAGE_DATA_SHOW -->
+      <table width="95%" border="0" cellpadding="0" cellspacing="0" class="pagetable">
+        <tr>
+            <td align="left" width="30%">  共 {VALUE_TOTAL_RECORDS} 筆，每頁 {VALUE_PAGES_LIMIT} 筆，總頁數：{VALUE_TOTAL_PAGES}</td>
+            <td align="left">分頁:
+            <!-- START BLOCK : PAGE_BACK_SHOW -->
+                <a href="{VALUE_PAGES_BACK}">
+                    <img src="images/number-back.jpg" border="0"/></a>
+            <!-- END BLOCK : PAGE_BACK_SHOW -->
+            {VALUE_PAGES_STR}
+            <!-- START BLOCK : PAGE_NEXT_SHOW -->
+                <a href="{VALUE_PAGES_NEXT}">
+                    <img src="images/number-next.jpg" border="0"/></a>
+            <!-- END BLOCK : PAGE_NEXT_SHOW -->
+            </td>
+        </tr>
+      </table>
+      <!-- END BLOCK : PAGE_DATA_SHOW -->
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

@@ -1,0 +1,140 @@
+<!-- START BLOCK : PRODUCTS_DETAIL_CUSTOM -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>
+    {VALUE_P_CUSTOM}
+	</td>
+  </tr>
+</table>
+<!-- END BLOCK : PRODUCTS_DETAIL_CUSTOM -->
+<!-- START BLOCK : PRODUCTS_DETAIL_DEFAULT -->
+<!-- START BLOCK : BIG_IMG_MUTI -->
+<div id="products-show-pic">
+    <div id="ifocus">
+      <div id="ifocus_pic">
+        <div id="ifocus_piclist">
+            <ul>
+              <!-- START BLOCK : BIG_IMG_LIST -->
+              <li><a href="{VALUE_P_BIG_IMG}" rel="lightbox[roadtrip]" ><img src="{VALUE_P_BIG_IMG}" alt="{VALUE_P_NAME_ALIAS}" width="{VALUE_P_BIG_IMG_W}" height="{VALUE_P_BIG_IMG_H}" border="0" /></a></li>
+              <!-- END BLOCK : BIG_IMG_LIST -->
+            </ul>
+        </div>
+        <div id="ifocus_opdiv"></div>
+        <div id="ifocus_tx">
+            <ul>
+              <li class="current"></li>
+              <li class="normal"></li>
+              <li class="normal"></li>
+              <li class="normal"></li>
+            </ul>
+        </div>
+      </div>
+      <div id="ifocus_btn">
+          <ul>
+          <!-- START BLOCK : SMALL_IMG_LIST -->
+          <li class="{TAG_CURRENT}"><img src="{VALUE_P_SMALL_IMG}" width="75" height="75" border="0" /></li>
+          <!-- END BLOCK : SMALL_IMG_LIST -->
+          </ul>
+      </div>
+    </div>
+</div>
+<div id="products_show_data">
+  <!-- START BLOCK : CART_TYPE_SHOPPING_MULTI -->
+  <div>{MSG_PRODUCT_LIST_PRICE}:<s>{VALUE_P_LIST_PRICE}</s></div>
+  <div>{MSG_PRODUCT_SPECIAL_PRICE}:<span class="red">{VALUE_P_SPECIAL_PRICE}</span></div>
+  <!-- END BLOCK : CART_TYPE_SHOPPING_MULTI -->
+  <!-- START BLOCK : SHOW_DISCOUNT_MULTI -->
+  <div>{MSG_PRODUCT_DISCOUNT_PRICE}:<span class="red">{VALUE_P_DISCOUNT_PRICE}</span></div>
+  <!-- END BLOCK : SHOW_DISCOUNT_MULTI -->
+  <div>
+  <form name="myform" method="post" action="{TAG_ROOT_PATH}cart.php" style="margin:0px;padding:0px;">
+  <input type="image" src="{TAG_THEME_PATH}{TAG_LANG}_inquire.jpg" border="0" />&nbsp;<a href="#" onClick="javascript:addBookmarkForBrowser(document.title,document.URL);"><img src="{TAG_THEME_PATH}{TAG_LANG}_favorite.jpg"  border="0" /></a>
+  <!-- START BLOCK : ATTACH_FILE1_MULTI -->
+    <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
+  <!-- END BLOCK : ATTACH_FILE1_MULTI -->
+  <!-- START BLOCK : ATTACH_FILE2_MULTI -->
+    <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
+  <!-- END BLOCK : ATTACH_FILE2_MULTI -->
+    <input name="amount" value="1" size="2" type="hidden" />
+    <input type="hidden" name="func" value="c_add">
+    <input type="hidden" name="cart_type" value="{VALUE_P_CART_TYPE}">
+    <input type="hidden" name="p_id" value="{VALUE_P_ID}">
+  </form>
+  </div>
+  <!-- START BLOCK : SINGLE_INQUIRY_MULTI -->
+  <div><a href="#" onClick="javascript:popinquiry({VALUE_P_ID})"><img src="{TAG_THEME_PATH}ws-product-inquire.jpg" border="0" /></a></div>
+  <!-- END BLOCK : SINGLE_INQUIRY_MULTI -->
+</div>
+<!-- END BLOCK : BIG_IMG_MUTI -->
+<!-- START BLOCK : BIG_IMG_SINGLE -->
+<table>
+<tr>
+<td>
+    <a href="{VALUE_P_BIG_IMG}" rel="lightbox[roadtrip]" ><img src="{VALUE_P_BIG_IMG}" alt="{VALUE_P_NAME_ALIAS}" width="{VALUE_P_BIG_IMG_W}" height="{VALUE_P_BIG_IMG_H}" border="0" /></a>
+</td>
+<td>
+<div class="align_inquiry">
+  <!-- START BLOCK : CART_TYPE_SHOPPING_SINGLE -->
+  <div>{MSG_PRODUCT_LIST_PRICE}:<s>{VALUE_P_LIST_PRICE}</s></div>
+  <div>{MSG_PRODUCT_SPECIAL_PRICE}:<span class="red">{VALUE_P_SPECIAL_PRICE}</span></div>
+  <!-- END BLOCK : CART_TYPE_SHOPPING_SINGLE -->
+  <!-- START BLOCK : SHOW_DISCOUNT_SINGLE -->
+  <div>{MSG_PRODUCT_DISCOUNT_PRICE}:<span class="red">{VALUE_P_DISCOUNT_PRICE}</span></div>
+  <!-- END BLOCK : SHOW_DISCOUNT_SINGLE -->
+  <form name="myform" method="post" action="{TAG_ROOT_PATH}cart.php" style="margin:0px;padding:0px;">
+  <input type="image" src="{TAG_THEME_PATH}{TAG_LANG}_inquire.jpg" border="0" />&nbsp;<a href="#" onClick="javascript:addBookmarkForBrowser(document.title,document.URL);"><img src="{TAG_THEME_PATH}{TAG_LANG}_favorite.jpg"  border="0" /></a>
+  <!-- START BLOCK : ATTACH_FILE1_SINGLE -->
+    <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
+  <!-- END BLOCK : ATTACH_FILE1_SINGLE -->
+  <!-- START BLOCK : ATTACH_FILE2_SINGLE -->
+    <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
+  <!-- END BLOCK : ATTACH_FILE2_SINGLE -->
+    <input name="amount" value="1" size="2" type="hidden" />
+    <input type="hidden" name="func" value="c_add">
+    <input type="hidden" name="cart_type" value="{VALUE_P_CART_TYPE}">
+    <input type="hidden" name="p_id" value="{VALUE_P_ID}">
+    <input type="submit" value="submit" style="display:none;"> 
+  </form>
+  </div>
+  <!-- START BLOCK : SINGLE_INQUIRY_SINGLE -->
+  <div><a href="#" onClick="javascript:popinquiry({VALUE_P_ID})"><img src="{TAG_THEME_PATH}ws-product-inquire.jpg" border="0" /></a></div>
+  <!-- END BLOCK : SINGLE_INQUIRY_SINGLE -->
+</td>
+</tr></table>
+<!-- END BLOCK : BIG_IMG_SINGLE -->
+<!-- START BLOCK : PRODUCT_DESC1 -->
+<div class="products_show_title">{MSG_PRODUCT_DESC}</div>
+<div class="products_show_introduction">{VALUE_P_DESC}</div>
+<!-- END BLOCK : PRODUCT_DESC1 -->
+<!-- START BLOCK : PRODUCT_CHARACTER1 -->
+<div class="products_show_title">{MSG_PRODUCT_CHARACTER}</div>
+<div class="products_show_introduction">{VALUE_P_CHARACTER}</div>
+<!-- END BLOCK : PRODUCT_CHARACTER1 -->
+<!-- START BLOCK : PRODUCT_SPEC1 -->
+<div class="products_show_title">{MSG_PRODUCT_SPEC}</div>
+<div class="products_show_introduction">{VALUE_P_SPEC}</div>
+<!-- END BLOCK : PRODUCT_SPEC1 -->
+<!-- END BLOCK : PRODUCTS_DETAIL_DEFAULT -->
+<!-- START BLOCK : RELATED_PRODUCTS_ZONE -->
+<div class="products_show_title">Related Products</div>
+<div id="related_products">
+  <div id="imageFlow">	
+    <div class="bank">
+    <!-- START BLOCK : RELATED_PRODUCTS -->
+    <a rel="{VALUE_P_SMALL_IMG}" href="{VALUE_P_LINK}" title="{VALUE_PC_NAME}">{VALUE_P_NAME}</a>
+    <!-- END BLOCK : RELATED_PRODUCTS -->
+    </div>
+    <div class="text">
+        <div class="title">Loading</div>
+        <div class="legend">Please wait...</div>
+    </div>	
+    <div class="scrollbar">
+        <img class="track" src="{TAG_ROOT_PATH}js/imageflow/sb.gif" >
+        <img class="arrow-left" src="{TAG_ROOT_PATH}js/imageflow/sl.gif" >
+        <img class="arrow-right" src="{TAG_ROOT_PATH}js/imageflow/sr.gif" >
+        <img class="bar" src="{TAG_ROOT_PATH}js/imageflow/sc.gif" >
+    </div>
+  </div>
+</div>
+<!-- END BLOCK : RELATED_PRODUCTS_ZONE -->
+<div id="back"><a href="javascript:void(0);history.back();"><img src="{TAG_THEME_PATH}{TAG_LANG}_back.jpg" border="0"></a></div>

@@ -1,0 +1,65 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>電子報發送</h1>
+<form name="myform" method="post" action="epaper.php?func=e_replace"  class="formular" id="formID">
+    <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
+        <tr>
+            <th>標題:</th>
+            <td>
+                &nbsp;{VALUE_E_SUBJECT}
+            </td>
+        </tr> 
+        <tr>
+            <th>選擇發送對象</th>
+            <td>
+                <INPUT TYPE="radio" NAME="e_st" class="form-checkbox" value="2" onClick="document.getElementById('member_cate_checkbox').style.display='';" checked> 選擇會員群組發送
+                <INPUT TYPE="radio" NAME="e_st" class="form-checkbox" value="1" onClick="document.getElementById('member_cate_checkbox').style.display='none';"> 全部發送(<font color="red">含未分類會員訂閱人數:{VALUE_E_TOTAL}</font>)
+            </td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td>
+                <div id="member_cate_checkbox" style="display:">
+                <!-- START BLOCK : MEMBER_CATE -->
+                    <INPUT TYPE="checkbox" NAME="mc_id[]" class="form-checkbox" value="{VALUE_MC_ID}" >{VALUE_MC_SUBJECT}(<font color="red">訂閱人數:{VALUE_E_SUBTOTAL}</font>)<br>
+                <!-- END BLOCK : MEMBER_CATE -->
+                </div>&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td>
+                <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" /><br>
+                <font color="red">(為了避免大量發送電子廣告信被列入黑名單，如果發送e-mail過多，時間會持續好幾個小時做間隔發送。送出後，系統程式未執行完成前，請勿關閉瀏覽器)</font>
+            </td>
+        </tr>
+        <tr>
+            <th>發送記錄</th>
+            <td>
+           <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
+            <tr>
+              <th width="5%">No.</th>
+              <th width="25%">電子報</th>
+              <th width="35%">發送日期</th>
+              <th width="35%">發送群組</th>
+            </tr>
+            <!-- START BLOCK : EPAPER_SEND_HISTORY_LIST -->
+            <tr {TAG_TR_CLASS}>
+              <td>{VALUE_ES_SERIAL}</td>
+              <td>{VALUE_E_SUBJECT}</td>
+              <td>{VALUE_ES_MODIFYDATE}</td>
+              <td>{VALUE_ES_GROUP}</td>
+             </tr>
+            <!-- END BLOCK : EPAPER_SEND_HISTORY_LIST -->
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="e_id" value="{VALUE_E_ID}">
+    <input type="hidden" name="action_mode" value="send">
+    <input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
+    <input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
+    <input name="nowp" type="hidden" id="nowp" value="{VALUE_NOW_PAGE}">
+    <input name="jp" type="hidden" id="jp" value="{VALUE_JUMP_PAGE}">
+</form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

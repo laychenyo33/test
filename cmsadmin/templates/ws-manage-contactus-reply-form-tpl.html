@@ -1,0 +1,75 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>聯絡我們回覆</h1>
+<form name="myform" method="post" action="contactus.php?func=cur_replace" class="formular" id="formID">
+<table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
+    <tr>
+        <th>分類:</th>
+        <td>
+            {VALUE_CUC_SUBJECT}</td>
+    </tr>
+    <tr>
+        <th>回覆情形:</th>
+        <td>
+            {VALUE_CU_STATUS}</td>
+    </tr>
+    <tr>
+        <th>姓名:</th>
+        <td>
+            {VALUE_CU_NAME}</td>
+    </tr>
+    <tr>
+        <th>電話:</th>
+        <td>
+            {VALUE_CU_TEL}</td>
+    </tr>
+    <tr>
+        <th>傳真:</th>
+        <td>
+            {VALUE_CU_FAX}</td>
+    </tr>
+    <tr>
+        <th>住址:</th>
+        <td>
+            {VALUE_CU_ADDRESS}</td>
+    </tr>
+    <tr>
+        <th>e-mail:</th>
+        <td>
+            {VALUE_CU_EMAIL}</td>
+    </tr>
+    <tr>
+        <th colspan="2">已回覆內容</th>
+    </tr>
+    <!-- START BLOCK : CONTACTUS_REPLY_LIST -->
+    <tr>
+        <td colspan="2"> 回覆時間:{VALUE_CUR_MODIFYDATE}
+            <br>回覆內容:{VALUE_CUR_CONTENT}</td>
+    </tr>
+    <!-- END BLOCK : CONTACTUS_REPLY_LIST -->
+    <tr>
+        <th colspan="2">回覆</th>
+    </tr>
+    <tr >
+        <th>回覆內容:</th>
+        <td>
+            <textarea name="cur_content" cols="100" rows="20" id="cur_content"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>&nbsp;</td>
+        <td>
+            <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" />
+        </td>
+    </tr>
+</table>
+<input type="hidden" name="cu_id" value="{VALUE_CU_ID}">
+<input type="hidden" name="action_mode" value="{VALUE_ACTION_MODE}">
+<input type="hidden" name="cu_email" value="{VALUE_CU_EMAIL}">
+<input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
+<input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
+<input name="nowp" type="hidden" id="nowp" value="{VALUE_NOW_PAGE}">
+<input name="jp" type="hidden" id="jp" value="{VALUE_JUMP_PAGE}">
+</form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

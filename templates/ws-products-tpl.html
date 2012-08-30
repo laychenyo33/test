@@ -1,0 +1,61 @@
+        <!-- START BLOCK : PRODUCTS_CATE_CUSTOM -->
+        <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+            {VALUE_PC_CUSTOM}</td>
+          </tr>
+        </table>
+        <!-- END BLOCK : PRODUCTS_CATE_CUSTOM -->
+        <!-- START BLOCK : PRODUCTS_CATE_SHORT_DESC -->
+        <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+            <h2>{VALUE_PC_SHORT_DESC}</h2></td>
+          </tr>
+        </table>
+        <!-- END BLOCK : PRODUCTS_CATE_SHORT_DESC -->
+        <!-- START BLOCK : SHOW_STYLE_PC1 -->
+        <div class="product_list">
+          <div class="product_pic"><a href="{VALUE_PC_LINK}"><img src="{VALUE_PC_CATE_IMG}" width="{VALUE_PC_SMALL_IMG_W}" height="{VALUE_PC_SMALL_IMG_H}" alt="{VALUE_PC_NAME_ALIAS}" border="0"/></a></div>  
+          <div class="product_list_title"><a href="{VALUE_PC_LINK}">{VALUE_PC_NAME}</a></div>
+        </div>
+        <!-- END BLOCK : SHOW_STYLE_PC1 -->
+        <!-- START BLOCK : SHOW_STYLE_P1 -->
+        <div class="product_list">
+          <div class="product_pic"><a href="{VALUE_P_LINK}"><img src="{VALUE_P_SMALL_IMG}" width="{VALUE_P_SMALL_IMG_W}" height="{VALUE_P_SMALL_IMG_H}" alt="{VALUE_P_NAME_ALIAS}" border="0"/></a></div>  
+          <div class="product_list_title"><a href="{VALUE_P_LINK}">{VALUE_P_NAME}</a></div>
+        </div>
+        <!-- END BLOCK : SHOW_STYLE_P1 -->
+        <!-- START BLOCK : TAG_PRODUCTS_SEARCH -->
+         <table width="90%" border="0" cellpadding="0" cellspacing="0" class="product_table">
+          <tr>
+            <th width="5%">No.</th>
+            <th width="25%">{MSG_CATE}</th>
+            <th width="45%">{MSG_NAME}</th>
+          </tr>
+          <!-- START BLOCK : PRODUCTS_SEARCH_LIST -->
+          <tr>
+            <td>{VALUE_P_SERIAL}</td>
+            <td><a href="{VALUE_PC_LINK}">{VALUE_PC_NAME}</a></td>
+            <td><a href="{VALUE_P_LINK}">{VALUE_P_NAME}</a></td>
+          </tr>
+          <!-- END BLOCK : PRODUCTS_SEARCH_LIST -->
+        </table>
+        <!-- END BLOCK : TAG_PRODUCTS_SEARCH -->
+        <div id="nodata">{MSG_NO_DATA}</div>
+
+            <!-- START BLOCK : PAGE_DATA_SHOW -->
+            <table width="920" border="0" cellpadding="2" cellspacing="2">
+              <tr>
+                <td align="center">
+                <!-- START BLOCK : PAGE_BACK_SHOW -->
+                <a href="{VALUE_PAGES_BACK}"> << </a>
+                <!-- END BLOCK : PAGE_BACK_SHOW -->
+                {VALUE_PAGES_STR}
+                <!-- START BLOCK : PAGE_NEXT_SHOW -->
+                <a href="{VALUE_NEXT_BACK}"> >> </a>
+                <!-- END BLOCK : PAGE_NEXT_SHOW -->   
+                </td>
+              </tr>
+            </table>
+            <!-- END BLOCK : PAGE_DATA_SHOW -->

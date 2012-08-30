@@ -1,0 +1,36 @@
+<!-- START BLOCK : SEO_SHORT_DESC -->
+<table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>
+    <h2>{VALUE_SEO_SHORT_DESC}</h2></td>
+  </tr>
+</table>
+<!-- END BLOCK : SEO_SHORT_DESC -->
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="download_table">
+        <tr>
+          <th width="44" height="24" >NO.</th>
+          <th width="139" height="24" >{MSG_CATE}</th>
+          <th width="341" height="24" >{MSG_SUBJECT}</th>
+          <th width="141" height="24" >{MSG_DATE}</th>
+        </tr>
+        <!-- START BLOCK : DOWNLOAD_LIST -->
+        <tr {TAG_TR_CLASS}>
+          <td height="24" class="no">{VALUE_D_SERIAL}</td>
+          <td><a href="{VALUE_DC_LINK}">{VALUE_DC_SUBJECT}</a></td>
+          <td class="title"><a href="{VALUE_D_FILEPATH}">{VALUE_D_SUBJECT}</a></td>
+          <td class="date">{VALUE_D_MODIFYDATE}</td>
+        </tr>
+        <!-- END BLOCK : DOWNLOAD_LIST -->
+        </table>
+        <div id="nodata">{MSG_NO_DATA}</div>
+        <!-- START BLOCK : PAGE_DATA_SHOW -->
+       <div id="page">
+            <!-- START BLOCK : PAGE_BACK_SHOW -->
+            <a href="{VALUE_PAGES_BACK}"><img src="{TAG_THEME_PATH}bt-page02.gif" ></a>
+            <!-- END BLOCK : PAGE_BACK_SHOW -->
+            {VALUE_PAGES_STR}
+            <!-- START BLOCK : PAGE_NEXT_SHOW -->
+            <a href="{VALUE_PAGES_NEXT}"><img src="{TAG_THEME_PATH}bt-page03.gif" ></a>
+            <!-- END BLOCK : PAGE_NEXT_SHOW -->
+       </div>
+        <!-- END BLOCK : PAGE_DATA_SHOW -->
