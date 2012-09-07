@@ -320,7 +320,7 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
 }
 #man_zone h1 {
     font-size: 16px;
-    background-image: url(images/h1-bg2.jpg);
+    /*background-image: url(images/h1-bg2.jpg);*/
     background-repeat: repeat-x;
     background-position: left bottom;
     color: #63ABC7;
