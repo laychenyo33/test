@@ -30,6 +30,7 @@
     <!-- END BLOCK : JS_MAIN -->
     <!-- START BLOCK : JS_FORMVALID -->
     <link rel="stylesheet" href="{TAG_ROOT_PATH}js/formvalid/validationEngine.jquery.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+    <script src="{TAG_ROOT_PATH}js/formvalid/jquery.js" type="text/javascript"></script>
     <script src="{TAG_ROOT_PATH}js/formvalid/jquery.validationEngine-cht.js" type="text/javascript"></script>
     <script>    
     $(document).ready(function() {
@@ -118,27 +119,31 @@
     </table>
     <!-- activate tabs with JavaScript -->
 <script>
-$(function() { 
+(function($){
+    $(function() { 
+        $("#accordion").tabs("#accordion div.pane", {tabs: 'h2', effect: 'slide', initialIndex: null});
+    });    
+})(jQuery);
 
-$("#accordion").tabs("#accordion div.pane", {tabs: 'h2', effect: 'slide', initialIndex: null});
-});
 </script>
 <script>
 
 // add new effect to the tabs
-$.tools.tabs.addEffect("slide", function(i, done) {
+(function($){
+    $.tools.tabs.addEffect("slide", function(i, done) {
 
-	// 1. upon hiding, the active pane has a ruby background color
-	this.getPanes().slideUp().css({backgroundColor: "#b8128f"});
+            // 1. upon hiding, the active pane has a ruby background color
+            this.getPanes().slideUp().css({backgroundColor: "#b8128f"});
 
-	// 2. after a pane is revealed, its background is set to its original color (transparent)
-	this.getPanes().eq(i).slideDown(function()  {
-		$(this).css({backgroundColor: 'transparent'});
+            // 2. after a pane is revealed, its background is set to its original color (transparent)
+            this.getPanes().eq(i).slideDown(function()  {
+                    $(this).css({backgroundColor: 'transparent'});
 
-		// the supplied callback must be called after the effect has finished its job
-		done.call();
-	});
-});
+                    // the supplied callback must be called after the effect has finished its job
+                    done.call();
+            });
+    });    
+})(jQuery);
 </script>
 </body>
 </html>
