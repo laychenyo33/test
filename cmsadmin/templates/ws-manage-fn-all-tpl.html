@@ -33,12 +33,14 @@
     <script src="{TAG_ROOT_PATH}js/formvalid/jquery.js" type="text/javascript"></script>
     <script src="{TAG_ROOT_PATH}js/formvalid/jquery.validationEngine-cht.js" type="text/javascript"></script>
     <script>    
-    $(document).ready(function() {
-        $("#formID").validationEngine({
-            success : function() { callSuccessFunction() }, 
-            failure : function() { }
-        })
-    });
+    (function($){
+        $(document).ready(function() {
+            $("#formID").validationEngine({
+                success : function() { callSuccessFunction() }, 
+                failure : function() { }
+            })
+        });        
+    })(jQuery);
     </script>
     <!-- END BLOCK : JS_FORMVALID -->
     <!-- START BLOCK : JS_CALENDAR -->
@@ -60,9 +62,12 @@
         }
     </style>
     <script>
-    $(function() {     // setup ul.tabs to work as tabs for each div directly under div.panes     
-        $("ul.tabs").tabs("div.panes > div");
-    });
+    (function($){
+        $(function() {     // setup ul.tabs to work as tabs for each div directly under div.panes     
+            $("ul.tabs").tabs("div.panes > div");
+        });        
+    })(jQuery);
+
     </script>
     <!-- END BLOCK : JS_TABTITLE -->
     <!-- START BLOCK : JS_PIC_ACCORDION -->
@@ -78,26 +83,28 @@
     <script type="text/javascript" src="js/jquery.simple.tree.js"></script>
     <script type="text/javascript">
     var simpleTreeCollection;
-    $(document).ready(function(){
-        simpleTreeCollection = $('.simpleTree').simpleTree({
-            autoclose: false,
-            afterClick:function(node){
-                //alert("text-"+$('span:first',node).text());
-            },
-            afterDblClick:function(node){
-                //alert("text-"+$('span:first',node).text());
-            },
-            afterMove:function(destination, source, pos){
-                //alert("destination-"+destination.attr('id')+" source-"+source.attr('id')+" pos-"+pos);
-            },
-            afterAjax:function()
-            {
-                //alert('Loaded');
-            },
-            animate:true
-            //,docToFolderConvert:true
-        });
-    });
+    (function($){
+        $(document).ready(function(){
+            simpleTreeCollection = $('.simpleTree').simpleTree({
+                autoclose: false,
+                afterClick:function(node){
+                    //alert("text-"+$('span:first',node).text());
+                },
+                afterDblClick:function(node){
+                    //alert("text-"+$('span:first',node).text());
+                },
+                afterMove:function(destination, source, pos){
+                    //alert("destination-"+destination.attr('id')+" source-"+source.attr('id')+" pos-"+pos);
+                },
+                afterAjax:function()
+                {
+                    //alert('Loaded');
+                },
+                animate:true
+                //,docToFolderConvert:true
+            });
+        });        
+    })(jQuery);
     </script>
     <!-- END BLOCK : JS_PC_TREE -->
 </head>
