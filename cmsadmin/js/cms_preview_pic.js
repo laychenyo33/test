@@ -6,9 +6,9 @@ function onImageSelect(obj,img){
     if (obj.value == "") {
         return false;
     }
-    if(ie) {
+    //if(ie) {
        document.getElementById(img).src= imgPath;
-    }       
+    //}       
 }           
 function isValidImageExt(imageName) {
     if (imageName.substring(imgPath.length - 3, imageName.length).toLowerCase() != "jpg" && imageName.substring(imgPath.length - 3, imageName.length).toLowerCase() != "gif" && imageName.substring(imgPath.length - 3, imageName.length).toLowerCase() != "png" && imageName.substring(imgPath.length - 4, imageName.length).toLowerCase() != "jpeg") {
