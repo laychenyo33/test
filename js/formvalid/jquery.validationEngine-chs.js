@@ -113,7 +113,7 @@
                         "alertText":"* 请输入英文字母(大小写不限)"}
                     }   
     }
-    settings = jQuery.extend({
+    settings = $.extend({
         allrules:allRules,                  
         inlineValidation: true, 
         ajaxSubmit: false,
@@ -592,4 +592,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jQuery);
+})(jjQuery);

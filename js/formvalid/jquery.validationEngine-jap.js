@@ -63,7 +63,7 @@
                         "alertText":"* 文字のみ"}
                     }   
     }
-    settings = jQuery.extend({
+    settings = $.extend({
         allrules:allRules,                  
         inlineValidation: true, 
         ajaxSubmit: false,
@@ -542,4 +542,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jQuery);
+})(jjQuery);

@@ -113,7 +113,7 @@
                         "alertText":"* 請輸入英文字母(大小寫不限)"}
                     }   
     }
-    settings = jQuery.extend({
+    settings = $.extend({
         allrules:allRules,                  
         inlineValidation: true, 
         ajaxSubmit: false,
@@ -592,4 +592,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jQuery);
+})(jjQuery);
