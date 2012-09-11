@@ -1045,5 +1045,20 @@ class MAINFUNC{
         global $cms_cfg;
         return  preg_replace("#^".preg_quote($cms_cfg['base_root'],"/")."#","",preg_replace("/\.php$/","", $_SERVER['SCRIPT_NAME']));
     }
+    function dropdown_menu(){
+        global $cms_cfg,$tpl,$db;
+        $tpl->newBlock("DROPDOWN_MENU");//載入下拉式功能的JS
+        //撈取下拉式功能表項目
+        /////產品介紹 的下拉式選單
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent = '0' order by pc_sort desc ";
+        $res = $db->query($sql);
+        if($db->numRows($res)){
+            while($row = $db->fetch_array($res,true)){
+                $tpl->newBlock("DROPDOWN_MENU_PRODUCT");
+                $tpl->assign("MENU_ITEM_NAME",$row['pc_name']);
+                $tpl->assign("MENU_ITEM_LINK","products.php?func=p_list&pc_parent=".$row['pc_id']);
+            }
+        }        
+    }        
 }
 ?>

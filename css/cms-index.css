@@ -1109,3 +1109,17 @@ h2 {
 	color: #ff0000;
 	font: normal 12px;
 }
+.btn_submenu{
+    display:none;
+    width:125px;
+    position:absolute;
+    background:#090909;
+    border:1px solid grey;
+    z-index: 10000;
+    padding-bottom: 3px;
+}
+.btn_submenu a{
+    display:block;
+    padding:3px 5px;
+    border-bottom:1px #939393 dotted;
+}
