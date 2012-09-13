@@ -1085,5 +1085,9 @@ class MAINFUNC{
         global $tpl;
         $tpl->newBlock("SCROLL_FLOAT_SCRIPT");
     }     
+    
+    function get_short_str($str,$len){
+        return (mb_strlen($str,"utf-8")<=$len)?$str:mb_substr($str, 0, $len-3, "utf-8")."...";
+    }    
 }
 ?>
