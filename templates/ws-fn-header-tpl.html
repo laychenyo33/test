@@ -132,3 +132,14 @@
         })(jQuery);
     </script>
 <!-- END BLOCK : DROPDOWN_MENU -->    
+<!-- START BLOCK : SCROLL_FLOAT_SCRIPT -->
+<script type="text/javascript" src="{TAG_ROOT_PATH}js/floatMark.js"></script>
+<script type="text/javascript">
+    (function($){
+        $(document).ready(function(){
+             var floatDiv = new floatMark("cart-mune",20); 
+             floatDiv.setScroll(10);
+        });
+    })(jQuery);
+</script>
+<!-- END BLOCK : SCROLL_FLOAT_SCRIPT -->

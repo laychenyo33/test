@@ -262,6 +262,8 @@ class MAINFUNC{
             $this->login_zone();
         }
         $this->mouse_disable(); //鎖滑鼠右鍵功能
+        //$this->float_menu();
+        //$this->goodlink_select();
         //尾檔
         //$tpl->assignGlobal("VALUE_SC_FOOTER" ,$_SESSION[$cms_cfg['sess_cookie_name']]["sc_footer"]);
     }
@@ -1077,6 +1079,11 @@ class MAINFUNC{
                 ));
             }
         }
-    }    
+    }   
+    
+    function float_menu(){
+        global $tpl;
+        $tpl->newBlock("SCROLL_FLOAT_SCRIPT");
+    }     
 }
 ?>
