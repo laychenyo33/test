@@ -626,7 +626,7 @@ class GOODLINK{
             }else{
                 $l_id=$_REQUEST["id"];
             }
-            if(!empty($n_id)){
+            if(!empty($l_id)){
                 $l_id_str = implode(",",$l_id);
                 //刪除勾選的相關連結
                 $sql="update ".$cms_cfg['tb_prefix']."_goodlink set l_status=".$value." where l_id in (".$l_id_str.")";
