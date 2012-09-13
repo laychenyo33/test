@@ -1060,5 +1060,23 @@ class MAINFUNC{
             }
         }        
     }        
+    /*相關網站
+    **將 tempaltes/ws-fn-goodlink-select-tpl 引入為區塊
+    */
+    function goodlink_select(){
+        global $db,$tpl,$cms_cfg;
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_goodlink where l_status='1' order by l_sort desc ";
+        $res = $db->query($sql);
+        if($db->numRows($res)){
+            while($row = $db->fetch_array($res,1)){
+                $tpl->newBlock("GOODLINK_SELECT_OPTION");
+                $tpl->assign(array(
+                    'GOODLINK_URL'  => $row['l_url'],
+                    "GOODLINK_NAME" => $row['l_subject'],
+                    "GOODLINK_POP"  => $row['l_pop'],
+                ));
+            }
+        }
+    }    
 }
 ?>
