@@ -84,26 +84,8 @@ function iFocusChange() {
         classNormal('ifocus_btn','ifocus_tx');
         classCurrent('ifocus_btn','ifocus_tx',0);
     }
-    if (listLength>=2) {
-        iFocusBtns[1].onmouseover = function() {
-            moveElement('ifocus_piclist',0,-395,5);
-            classNormal('ifocus_btn','ifocus_tx');
-            classCurrent('ifocus_btn','ifocus_tx',1);
-        }
-    }
-    if (listLength>=3) {
-        iFocusBtns[2].onmouseover = function() {
-            moveElement('ifocus_piclist',0,-790,5);
-            classNormal('ifocus_btn','ifocus_tx');
-            classCurrent('ifocus_btn','ifocus_tx',2);
-        }
-    }
-    if (listLength>=4) {
-        iFocusBtns[3].onmouseover = function() {
-            moveElement('ifocus_piclist',0,-1185,5);
-            classNormal('ifocus_btn','ifocus_tx');
-            classCurrent('ifocus_btn','ifocus_tx',3);
-        }
+    for(var i=1;i<img_limit;i++){
+        eval("if (listLength>="+(i+1)+") {iFocusBtns["+i+"].onmouseover = function() {moveElement('ifocus_piclist',0,"+(-img_height*i)+",5);classNormal('ifocus_btn','ifocus_tx');classCurrent('ifocus_btn','ifocus_tx',"+i+");}}");
     }
 }
 
