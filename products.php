@@ -240,7 +240,7 @@ class PRODUCTS{
                     $dimensions["height"]=$cms_cfg['small_img_height'];
                     if(is_file($_SERVER['DOCUMENT_ROOT'].$pc_img)){
                         list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$pc_img);
-                        $dimensions = $this->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
+                        $dimensions = $main->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
                     }
                     $tpl->assign("VALUE_PC_SMALL_IMG_W",$dimensions["width"]);
                     $tpl->assign("VALUE_PC_SMALL_IMG_H",$dimensions["height"]);
@@ -369,7 +369,7 @@ class PRODUCTS{
                 $dimensions["height"]=$cms_cfg['small_img_height'];
                 if(is_file($_SERVER['DOCUMENT_ROOT'].$p_img)){
                     list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$p_img);
-                    $dimensions = $this->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
+                    $dimensions = $main->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
                 }
                 $tpl->assign("VALUE_P_SMALL_IMG_W",$dimensions["width"]);
                 $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions["height"]);
@@ -734,7 +734,7 @@ class PRODUCTS{
     }
     //顯示大圖資料
     function products_show_pic($p_id) {
-        global $db,$tpl,$cms_cfg;
+        global $db,$tpl,$cms_cfg,$main;
         $sql="select * from ".$cms_cfg['tb_prefix']."_products_img where p_id='".$p_id."'";
         $selectrs = $db->query($sql);
         $row2 = $db->fetch_array($selectrs,1);
@@ -758,7 +758,7 @@ class PRODUCTS{
                    $tpl->newBlock("BIG_IMG_LIST");
                    if(is_file($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$value)){
                        list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$value);
-                       $dimensions = $this->resize_dimensions($cms_cfg['big_img_width'][$this->show_style],$cms_cfg['big_img_height'][$this->show_style],$width,$height);
+                       $dimensions = $main->resize_dimensions($cms_cfg['big_img_width'][$this->show_style],$cms_cfg['big_img_height'][$this->show_style],$width,$height);
                    }
                    $tpl->assign("VALUE_P_BIG_IMG",$cms_cfg["file_root"].$value);
                    $tpl->assign("VALUE_P_BIG_IMG_W",$dimensions["width"]);
@@ -779,7 +779,7 @@ class PRODUCTS{
                 if($pic_num==1){
                    if(is_file($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$big_img_array[0])){
                        list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$big_img_array[0]);
-                       $dimensions = $this->resize_dimensions($cms_cfg['single_img_width'],$cms_cfg['single_img_height'],$width,$height);
+                       $dimensions = $main->resize_dimensions($cms_cfg['single_img_width'],$cms_cfg['single_img_height'],$width,$height);
                    }
                    $tpl->assign("VALUE_P_BIG_IMG",$cms_cfg["file_root"].$big_img_array[0]);
                 }else{
@@ -789,20 +789,6 @@ class PRODUCTS{
                 $tpl->assign("VALUE_P_BIG_IMG_H",$dimensions["height"]);
             }
         }
-    }
-    //等比圖輸出
-    function resize_dimensions($goal_width,$goal_height,$width,$height) {
-        //長寬在範圍內的維持原尺寸
-        $resize_img = array('width' => $width, 'height' => $height);
-        // If the ratio > goal ratio and the width > goal width resize down to goal width
-        if ($width/$height > $goal_width/$goal_height && $width > $goal_width) {
-            $resize_img['width'] = $goal_width;
-            $resize_img['height'] = round($goal_width/$width * $height);
-        } elseif ($height > $goal_height) { // Otherwise, if the height > goal, resize down to goal height
-            $resize_img['width'] = round($goal_height/$height * $width);
-            $resize_img['height'] = $goal_height;
-        }
-        return $resize_img;
     }
     function select_icon($file_type) {
         global $cms_cfg;

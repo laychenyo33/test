@@ -1089,5 +1089,19 @@ class MAINFUNC{
     function get_short_str($str,$len){
         return (mb_strlen($str,"utf-8")<=$len)?$str:mb_substr($str, 0, $len-3, "utf-8")."...";
     }    
+    //等比圖輸出
+    function resize_dimensions($goal_width,$goal_height,$width,$height) {
+        //長寬在範圍內的維持原尺寸
+        $resize_img = array('width' => $width, 'height' => $height);
+        // If the ratio > goal ratio and the width > goal width resize down to goal width
+        if ($width/$height > $goal_width/$goal_height && $width > $goal_width) {
+            $resize_img['width'] = $goal_width;
+            $resize_img['height'] = round($goal_width/$width * $height);
+        } elseif ($height > $goal_height) { // Otherwise, if the height > goal, resize down to goal height
+            $resize_img['width'] = round($goal_height/$height * $width);
+            $resize_img['height'] = $goal_height;
+        }
+        return $resize_img;
+    }    
 }
 ?>
