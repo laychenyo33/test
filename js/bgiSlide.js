@@ -1,14 +1,13 @@
 (function($){
     $.fn.bgiSlide = function(settings) {
-        var _settings = {
-           width:'100%',
-           height:'100%'
-        };
+        var _settings = {width:'100%', height:'100%'};
         $.extend(_settings,settings);
         var banner_index = 0;
         var pre_index = -1;   
         var tarobj  = $(this[0]);
         var imgLength = tarobj.find('div[rel]').size();
+        
+        tarobj.css({position:'relative'});
         var init = function(){
             tarobj.find("div[rel]").each(function(){
                 var img_src = $(this).attr("rel");
