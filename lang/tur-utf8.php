@@ -242,4 +242,6 @@ $TPLMSG['DELIVERY_DATE'] = "Teslim Tarihi";
 $TPLMSG['TRANSFER_BANK'] = "Banka Havalesi";
 $TPLMSG['TRANSFER_BANK_CODE'] = "Banka Adı";
 $TPLMSG['TRANSFER_ACCOUNT'] = "Transferi Hesap";
+
+$TPLMSG['SELECT_COUNTRY'] = "Ülke Seç";
 ?>

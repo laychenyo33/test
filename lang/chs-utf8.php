@@ -246,4 +246,6 @@ $TPLMSG['DELIVERY_DATE'] = "出货日期";
 $TPLMSG['TRANSFER_BANK'] = "转帐银行";
 $TPLMSG['TRANSFER_BANK_CODE'] = "台湾银行 (代码：004)";
 $TPLMSG['TRANSFER_ACCOUNT'] = "转帐帐号";
+
+$TPLMSG['SELECT_COUNTRY'] = "选择国家";
 ?>

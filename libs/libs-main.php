@@ -858,7 +858,7 @@ class MAINFUNC{
         global $tpl,$ws_array,$TPLMSG;
         $tpl->newBlock("SELECT_COUNTRY");
         $tpl->assign("MSG_COUNTRY", $TPLMSG['COUNTRY']);
-        $str = "<option value=\"\">-- Select Country --</option>\n";
+        $str = "<option value=\"\">-- ".$TPLMSG['SELECT_COUNTRY']." --</option>\n";
         foreach($ws_array["country_array"] as $key => $value) {
             $sel = ($value==$country) ? "selected":"";
             $str .= "<option value=\"".$value."\" ".$sel.">".$value."</option>\n";

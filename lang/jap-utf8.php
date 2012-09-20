@@ -243,4 +243,6 @@ $TPLMSG['DELIVERY_DATE'] = "配信日";
 $TPLMSG['TRANSFER_BANK'] = "銀行振替";
 $TPLMSG['TRANSFER_BANK_CODE'] = "銀行名";
 $TPLMSG['TRANSFER_ACCOUNT'] = "振替口座";
+
+$TPLMSG['SELECT_COUNTRY'] = "国を選択";
 ?>

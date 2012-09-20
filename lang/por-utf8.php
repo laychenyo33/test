@@ -242,4 +242,6 @@ $TPLMSG['DELIVERY_DATE'] = "Data de entrega";
 $TPLMSG['TRANSFER_BANK'] = "Transferência Bancária";
 $TPLMSG['TRANSFER_BANK_CODE'] = "Nome do banco";
 $TPLMSG['TRANSFER_ACCOUNT'] = "Conta de transferência";
+
+$TPLMSG['SELECT_COUNTRY'] = "Wybierz kraj";
 ?>

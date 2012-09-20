@@ -242,4 +242,6 @@ $TPLMSG['DELIVERY_DATE'] = "납기 날짜";
 $TPLMSG['TRANSFER_BANK'] = "Bank Transfer";
 $TPLMSG['TRANSFER_BANK_CODE'] = "Bank Name";
 $TPLMSG['TRANSFER_ACCOUNT'] = "Transfer Account";
+
+$TPLMSG['SELECT_COUNTRY'] = "국가를 선택";
 ?>

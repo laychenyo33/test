@@ -248,4 +248,6 @@ $TPLMSG['DELIVERY_DATE'] = "出貨日期";
 $TPLMSG['TRANSFER_BANK'] = "轉帳銀行";
 $TPLMSG['TRANSFER_BANK_CODE'] = "台灣銀行 (代碼：004)";
 $TPLMSG['TRANSFER_ACCOUNT'] = "轉帳帳號";
+
+$TPLMSG['SELECT_COUNTRY'] = "選擇國家";
 ?>
