@@ -1,118 +1,138 @@
-//自訂參數
-var img_limit=20;//最多幾個圖
-var img_height=544;//大圖的高度
-var act_mode="";//換圖模式;changeMode:直接換；預設為輪動
-//
-function $(id) { return document.getElementById(id); }
+(function($){
+    $.fn.extend({
+       showImages : function(settings){        
+            var _settings = {
+                img_limit:20,    //最多幾個圖
+                img_height:272,  //大圖的高度
+                act_mode:"",      //換圖模式;changeMode:直接換；預設為輪動    
+                container_id : 'ifocus',
+                piclist_id : 'ifocus_piclist',
+                btn_id : 'ifocus_btn',
+                txt_id : 'ifocus_tx',
+                btn_container : "li",
+                txt_container : 'li',
+                current_className : 'current',
+                normal_className : 'normal'
+                
+            };    
 
-function addLoadEvent(func){
-    var oldonload = window.onload;
-    if (typeof window.onload != 'function') {
-        window.onload = func;
-    } else {
-        window.onload = function(){
-            oldonload();
-            func();
-        }
-    }
-}
+            $.extend(_settings,settings?settings:{});
 
-function moveElement(elementID,final_x,final_y,interval) {
-    if (!document.getElementById) return false;
-    if (!document.getElementById(elementID)) return false;
-    var elem = document.getElementById(elementID);
-    if (elem.movement) {
-        clearTimeout(elem.movement);
-    }
-    if (!elem.style.left) {
-        elem.style.left = "0px";
-    }
-    if (!elem.style.top) {
-        elem.style.top = "0px";
-    }
-    var xpos = parseInt(elem.style.left);
-    var ypos = parseInt(elem.style.top);
-    if (xpos == final_x && ypos == final_y) {
-        return true;
-    }
-    if (xpos < final_x) {
-        var dist = Math.ceil((final_x - xpos)/10);
-        xpos = xpos + dist;
-    }
-    if (xpos > final_x) {
-        var dist = Math.ceil((xpos - final_x)/10);
-        xpos = xpos - dist;
-    }
-    if (ypos < final_y) {
-        var dist = Math.ceil((final_y - ypos)/10);
-        ypos = ypos + dist;
-    }
-    if (ypos > final_y) {
-        var dist = Math.ceil((ypos - final_y)/10);
-        ypos = ypos - dist;
-    }
-    elem.style.left = xpos + "px";
-    elem.style.top = ypos + "px";
-    var repeat = "moveElement('"+elementID+"',"+final_x+","+final_y+","+interval+")";
-    elem.movement = setTimeout(repeat,interval);
-}
+            function moveElement(elementID,final_x,final_y,interval,caller) {
+                if (!caller) return false;
+                if ($(caller).find("#"+elementID).size()==0) return false;
+                var elem = $(caller).find("#"+elementID)[0];
+                if (elem.movement) {
+                    clearTimeout(elem.movement);
+                }
+                if (!elem.style.left) {
+                    elem.style.left = "0px";
+                }
+                if (!elem.style.top) {
+                    elem.style.top = "0px";
+                }
+                var xpos = parseInt(elem.style.left);
+                var ypos = parseInt(elem.style.top);
+                if (xpos == final_x && ypos == final_y) {
+                    return true;
+                }
+                if (xpos < final_x) {
+                    var dist = Math.ceil((final_x - xpos)/10);
+                    xpos = xpos + dist;
+                }
+                if (xpos > final_x) {
+                    var dist = Math.ceil((xpos - final_x)/10);
+                    xpos = xpos - dist;
+                }
+                if (ypos < final_y) {
+                    var dist = Math.ceil((final_y - ypos)/10);
+                    ypos = ypos + dist;
+                }
+                if (ypos > final_y) {
+                    var dist = Math.ceil((ypos - final_y)/10);
+                    ypos = ypos - dist;
+                }
+                elem.style.left = xpos + "px";
+                elem.style.top = ypos + "px";
+                elem.movement = setTimeout(function(){
+                    moveElement(elementID,final_x,final_y,interval,caller);
+                },interval);
+            }
 
-function classNormal(iFocusBtnID,iFocusTxID){
-    var iFocusBtns= $(iFocusBtnID).getElementsByTagName('li');
-    var iFocusTxs = $(iFocusTxID).getElementsByTagName('li');
-    for(var i=0; i<iFocusBtns.length; i++) {
-        iFocusBtns[i].className='normal';
-        iFocusTxs[i].className='normal';
-    }
-}
+            function classNormal(iFocusBtnID,iFocusTxID,caller){
+                var iFocusBtns= $(caller).find("#"+iFocusBtnID).find(_settings.btn_container);
+                var iFocusTxs = $(caller).find("#"+iFocusTxID).find(_settings.txt_container);
+                for(var i=0; i<iFocusBtns.size(); i++) {
+                    iFocusBtns[i].className = iFocusBtns[i].className.replace(_settings.current_className,_settings.normal_className);
+                    iFocusTxs[i].className = iFocusTxs[i].className.replace(_settings.current_className,_settings.normal_className);
+                }
+            }
 
-function classCurrent(iFocusBtnID,iFocusTxID,n){
-    var iFocusBtns= $(iFocusBtnID).getElementsByTagName('li');
-    var iFocusTxs = $(iFocusTxID).getElementsByTagName('li');
-    iFocusBtns[n].className='current';
-    iFocusTxs[n].className='current';
-}
+            function classCurrent(iFocusBtnID,iFocusTxID,n,caller){
+                var iFocusBtns= $(caller).find("#"+iFocusBtnID).find(_settings.btn_container);
+                var iFocusTxs = $(caller).find("#"+iFocusTxID).find(_settings.txt_container);
+                iFocusBtns[n].className = iFocusBtns[n].className.replace(_settings.normal_className,_settings.current_className);
+                iFocusTxs[n].className = iFocusTxs[n].className.replace(_settings.normal_className,_settings.current_className);
+            }
 
-function iFocusChange() {
-    if(!$('ifocus')) return false;
-    $('ifocus').onmouseover = function(){atuokey = true};
-    $('ifocus').onmouseout = function(){atuokey = false};
-    var iFocusBtns = $('ifocus_btn').getElementsByTagName('li');
-    var listLength = iFocusBtns.length;
-    iFocusBtns[0].onmouseover = function() {
-        moveElement('ifocus_piclist',0,0,5);
-        classNormal('ifocus_btn','ifocus_tx');
-        classCurrent('ifocus_btn','ifocus_tx',0);
-    }
-    for(var i=1;i<img_limit;i++){
-        eval("if (listLength>="+(i+1)+") {iFocusBtns["+i+"].onmouseover = function() {moveElement('ifocus_piclist',0,"+(-img_height*i)+",5);classNormal('ifocus_btn','ifocus_tx');classCurrent('ifocus_btn','ifocus_tx',"+i+");}}");
-    }
-}
+            function iFocusChange(caller) {
+                if($(caller).find('#'+_settings.container_id).size()==0) return false;
+                $(caller).find('#'+_settings.container_id).mouseover( function(){caller.atuokey = true});
+                $(caller).find('#'+_settings.container_id).mouseout(function(){caller.atuokey = false});
+                $(caller).find('#'+_settings.btn_id).mouseover(function(){caller.atuokey = true});
+                $(caller).find('#'+_settings.btn_id).mouseout( function(){caller.atuokey = false});
+                var iFocusBtns = $(caller).find('#'+_settings.btn_id).find(_settings.btn_container);
+                var listLength = iFocusBtns.size();
+                for(var i=0;i<_settings.img_limit;i++){
+                    if(listLength>=(i+1)) {
+                         iFocusBtns[i].index = i;
+                         iFocusBtns[i].onmouseover = function() {
+                             var index = this.index;
+                             moveElement(_settings.piclist_id,0,-_settings.img_height*index,5,caller);
+                             classNormal(_settings.btn_id,_settings.txt_id,caller);
+                             classCurrent(_settings.btn_id,_settings.txt_id,index,caller);
+                         }
+                    }
+                }
+            }                
+            var container = this;
+            var autoiFocus = function(index) {
+                caller = container[index];
+                if(!caller) return false;
+                if(caller.atuokey) return false;
+                if($(caller).parent().css("display")=="none")return false;
+                caller.focusBtnList = $(caller).find('#'+_settings.btn_id).find(_settings.btn_container);
+                caller.listLength = caller.focusBtnList.size();
+                for(var i=0; i<caller.listLength; i++) {
+                    if (caller.focusBtnList[i].className.indexOf(_settings.current_className)!==-1){
+                        caller.currentNum = i;
+                        break;
+                    }
+                }
+                caller.new_y = 0;
+                if(caller.currentNum < caller.listLength-1){
+                    caller.new_y = 0-_settings.img_height*(caller.currentNum+1);
+                    moveElement(_settings.piclist_id,0,caller.new_y,5,caller);
+                    classNormal(_settings.btn_id,_settings.txt_id,caller);
+                    classCurrent(_settings.btn_id,_settings.txt_id,caller.currentNum+1,caller);        
+                }else{
+                    caller.new_y = 0;
+                    moveElement(_settings.piclist_id,0,caller.new_y,5,caller);
+                    classNormal(_settings.btn_id,_settings.txt_id,caller);
+                    classCurrent(_settings.btn_id,_settings.txt_id,0,caller);        
+                }            
+            }   
+            $.extend({
+                autoiFocus:autoiFocus
+            });
 
-setInterval('autoiFocus()',10000);
-var atuokey = false;
-function autoiFocus() {
-    if(!$('ifocus')) return false;
-    if(atuokey) return false;
-    var focusBtnList = $('ifocus_btn').getElementsByTagName('li');
-    var listLength = focusBtnList.length;
-    for(var i=0; i<listLength; i++) {
-        if (focusBtnList[i].className.indexOf('current')!==-1){
-            var currentNum = i;
-            break;
-        }
-    }
-    var new_y;
-    if(currentNum < listLength-1){
-        new_y = 0-img_height*(currentNum+1);
-        moveElement('ifocus_piclist',0,new_y,5);
-        classNormal('ifocus_btn','ifocus_tx');
-        classCurrent('ifocus_btn','ifocus_tx',currentNum+1);        
-    }else{
-        new_y = 0;
-        moveElement('ifocus_piclist',0,new_y,5);
-        classNormal('ifocus_btn','ifocus_tx');
-        classCurrent('ifocus_btn','ifocus_tx',0);        
-    }
-}
-addLoadEvent(iFocusChange);
+            for(var i=0;i<this.size();i++){
+                 var wrapper = this[i];
+                 iFocusChange(wrapper);
+                 wrapper.atuokey = false;
+                 setInterval("jQuery.autoiFocus("+i+")",10000);
+            }
+            return this;
+       }
+    });
+})(jQuery);
