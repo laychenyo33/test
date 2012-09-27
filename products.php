@@ -496,6 +496,10 @@ class PRODUCTS{
                                 "meta_description"=>$row["p_seo_description"],
             );
             $main->header_footer($meta_array,$seo_H1);
+			//顯示上一筆、下一筆連結
+			if($cms_cfg["ws_module"]["ws_products_nextlink"]==1){
+				$this->products_next_previous($row["p_id"],$row["pc_id"],$row["p_sort"]);
+			}			
             //是否為自訂頁面
             if($row["p_custom_status"]){
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
@@ -523,10 +527,6 @@ class PRODUCTS{
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
                 ));
                 $this->products_show_pic($row["p_id"]);//顯示大圖資料
-                //顯示上一筆、下一筆連結
-                if($cms_cfg["ws_module"]["ws_products_nextlink"]==1){
-                    $this->products_next_previous($row["p_id"],$row["pc_id"],$row["p_sort"]);
-                }
                 //當後台系統設定為詢價車,則強制把所有的價格隱藏
                 if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]!=1){
                     $show_price=0;
