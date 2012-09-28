@@ -52,13 +52,8 @@ $cms_cfg['default_status_on'] = "icon-on2.gif";
 $cms_cfg['default_status_off'] = "icon-stop.gif";
 $cms_cfg['default_key'] = "icon-key.gif";
 $cms_cfg['default_lock'] = "icon-lock.gif";
-/*
-database information
-*/
-$cms_cfg['db_host'] = "localhost";
-$cms_cfg['db_name'] = "ipsdemo";
-$cms_cfg['db_user'] = "root";
-$cms_cfg['db_password'] = "24920740";
+
+require_once dirname(__FILE__)."database.php";
 
 //default language
 $cms_cfg['language'] = "eng";
