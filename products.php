@@ -876,5 +876,35 @@ class PRODUCTS{
             }
         }
     }
+    /*由$row取得該筆記錄的url
+     */
+    function get_link(&$row,$is_product=false){
+        $link = "";
+        if($is_product){
+            if($this->ws_seo){
+                $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
+                if(trim($row["p_seo_filename"]) !=""){
+                    $link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
+                }else{
+                    $link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
+                }
+            }else{
+                $link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
+            }      
+        }else{
+            if($this->ws_seo){
+                if(trim($row["pc_seo_filename"]) !=""){
+                    //$dirname=$row["pc_seo_filename"];
+                    $link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
+                }else{
+                    //$dirname=$row["pc_id"];
+                    $link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
+                }
+            }else{
+                $link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
+            }
+        }
+        return $link;                  
+    }    	
 }
 ?>
