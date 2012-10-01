@@ -67,10 +67,25 @@
 </script>  
 <!-- END BLOCK : JS_SHOW_STYLE_P1 -->
 <!-- START BLOCK : JS_POP_IMG -->
-<link rel="stylesheet" href="{TAG_ROOT_PATH}js/pop_img/lightbox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="{TAG_ROOT_PATH}js/pop_img/prototype.js"></script>
-<script type="text/javascript" src="{TAG_ROOT_PATH}js/pop_img/scriptaculous.js?load=effects,builder"></script>
-<script type="text/javascript" src="{TAG_ROOT_PATH}js/pop_img/lightbox.js"></script>
+<link rel="stylesheet" href="{TAG_ROOT_PATH}js/lightbox/jquery.lightbox-0.5.css" type="text/css" media="screen" />
+<script type="text/javascript" src="{TAG_ROOT_PATH}js/lightbox/jquery.lightbox-0.5.pack.js"></script>
+<script type="text/javascript">
+(function($){
+    $(document).ready(function(){
+       $('a[@rel*=lightbox]').lightBox({
+            overlayBgColor: '#FFF',
+            overlayOpacity: 0.6,
+            imageLoading: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-ico-loading.gif',
+            imageBtnClose: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-close.gif',
+            imageBtnPrev: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-prev.gif',
+            imageBtnNext: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-next.gif',
+            containerResizeSpeed: 350,
+            txtImage: 'Imagem',
+            txtOf: 'de'
+       });        
+    });
+})(jQuery);    
+</script>
 <!-- END BLOCK : JS_POP_IMG -->
 <!-- START BLOCK : JS_IMAGE_FLOW -->
 <link rel="stylesheet" href="{TAG_ROOT_PATH}js/imageflow/cms_imageflow.css" type="text/css" />
