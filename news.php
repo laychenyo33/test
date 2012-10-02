@@ -8,6 +8,7 @@ class NEWS{
         $this->op_limit=$cms_cfg['newsop_limit'];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->ps = " > ";
         if(!empty($_REQUEST["type"])){
             $_REQUEST["func"]="n_".$_REQUEST["type"];
             $this->func_str=$cms_cfg['base_root']."news/".$_REQUEST["f"];
@@ -78,15 +79,16 @@ class NEWS{
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
-            if($this->ws_seo==1 ){
-                if(trim($row["nc_seo_filename"])==""){
-                    $cate_link=$cms_cfg["base_root"]."news/nlist-".$row["nc_id"].".htm";
-                }else{
-                    $cate_link=$cms_cfg["base_root"]."news/".$row["nc_seo_filename"].".htm";
-                }
-            }else{
-                $cate_link=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$row["nc_id"];
-            }
+//            if($this->ws_seo==1 ){
+//                if(trim($row["nc_seo_filename"])==""){
+//                    $cate_link=$cms_cfg["base_root"]."news/nlist-".$row["nc_id"].".htm";
+//                }else{
+//                    $cate_link=$cms_cfg["base_root"]."news/".$row["nc_seo_filename"].".htm";
+//                }
+//            }else{
+//                $cate_link=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$row["nc_id"];
+//            }
+            $cate_link = $this->get_link($row);
             //顯示左方分類
             $tpl->newBlock( "LEFT_CATE_LIST" );
             $tpl->assign( array( "VALUE_CATE_NAME" => $row["nc_subject"],
@@ -94,7 +96,7 @@ class NEWS{
             ));
             if($_REQUEST["nc_id"]==$row["nc_id"] || ($_REQUEST["f"]==$row["nc_seo_filename"])){
                 $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
-                $news_link .= " > <a href=\"".$cate_link."\">".$row["nc_subject"]."</a>";
+                $news_link .= $this->ps."<a href=\"".$cate_link."\">".$row["nc_subject"]."</a>";
                 if($this->ws_seo){
                     $meta_array=array("meta_title"=>$row["nc_seo_title"],
                                       "meta_keyword"=>$row["nc_seo_keyword"],
@@ -134,15 +136,16 @@ class NEWS{
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             if($row["n_content_type"]==1) {
-                if($this->ws_seo==1 ){
-                    if(trim($row["n_seo_filename"])==""){
-                        $n_link=$cms_cfg["base_root"]."news/ndetail-".$row["nc_id"]."-".$row["n_id"].".html";
-                    }else{
-                        $n_link=$cms_cfg["base_root"]."news/".$row["n_seo_filename"].".html";
-                    }
-                }else{
-                    $n_link="news.php?func=n_show&nc_id=".$row["nc_id"]."&n_id=".$row["n_id"];
-                }
+//                if($this->ws_seo==1 ){
+//                    if(trim($row["n_seo_filename"])==""){
+//                        $n_link=$cms_cfg["base_root"]."news/ndetail-".$row["nc_id"]."-".$row["n_id"].".html";
+//                    }else{
+//                        $n_link=$cms_cfg["base_root"]."news/".$row["n_seo_filename"].".html";
+//                    }
+//                }else{
+//                    $n_link="news.php?func=n_show&nc_id=".$row["nc_id"]."&n_id=".$row["n_id"];
+//                }
+                $n_link = $this->get_link($row, true);
             }else{
                 $n_link = $row["n_url"];
             }
@@ -196,15 +199,16 @@ class NEWS{
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
-            if($this->ws_seo==1 ){
-                if(trim($row["nc_seo_filename"])==""){
-                    $cate_link=$cms_cfg["base_root"]."news/nlist-".$row["nc_id"].".htm";
-                }else{
-                    $cate_link=$cms_cfg["base_root"]."news/".$row["nc_seo_filename"].".htm";
-                }
-            }else{
-                $cate_link=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$row["nc_id"];
-            }
+//            if($this->ws_seo==1 ){
+//                if(trim($row["nc_seo_filename"])==""){
+//                    $cate_link=$cms_cfg["base_root"]."news/nlist-".$row["nc_id"].".htm";
+//                }else{
+//                    $cate_link=$cms_cfg["base_root"]."news/".$row["nc_seo_filename"].".htm";
+//                }
+//            }else{
+//                $cate_link=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$row["nc_id"];
+//            }
+            $cate_link = $this->get_link($row);
             $cate_link_array[$row["nc_id"]]=$cate_link;
             $cate_subject_array[$row["nc_id"]]=$row["nc_subject"];
             $tpl->newBlock( "LEFT_CATE_LIST" );
@@ -232,7 +236,7 @@ class NEWS{
         }else{
             $main->header_footer("news",$TPLMSG["NEWS"]);
         }
-        $news_link .= " > <a href=\"".$cate_link_array[$row["nc_id"]]."\">".$cate_subject_array[$row["nc_id"]]."</a> > ".$row["n_subject"];
+        $news_link .= $this->ps."<a href=\"".$cate_link_array[$row["nc_id"]]."\">".$cate_subject_array[$row["nc_id"]]."</a>".$this->ps.$row["n_subject"];
         $tpl->newBlock( "NEWS_SHOW" );
         $row["n_content"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["n_content"]);
         $tpl->assign( array("VALUE_N_ID"  => $row["n_id"],
@@ -242,5 +246,34 @@ class NEWS{
         ));
         $tpl->assignGlobal("TAG_LAYER",$news_link);
     }
+    
+    /*由$row取得該筆記錄的url
+     */
+    function get_link(&$row,$is_news=false){
+        global $cms_cfg;
+        $link = "";
+        if($is_news){
+            if($this->ws_seo==1 ){
+                if(trim($row["n_seo_filename"])==""){
+                    $link = $cms_cfg["base_root"]."news/ndetail-".$row["nc_id"]."-".$row["n_id"].".html";
+                }else{
+                    $link = $cms_cfg["base_root"]."news/".$row["n_seo_filename"].".html";
+                }
+            }else{
+                $link = "news.php?func=n_show&nc_id=".$row["nc_id"]."&n_id=".$row["n_id"];
+            }   
+        }else{
+            if($this->ws_seo==1 ){
+                if(trim($row["nc_seo_filename"])==""){
+                    $link = $cms_cfg["base_root"]."news/nlist-".$row["nc_id"].".htm";
+                }else{
+                    $link = $cms_cfg["base_root"]."news/".$row["nc_seo_filename"].".htm";
+                }
+            }else{
+                $link = $cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$row["nc_id"];
+            }
+        }
+        return $link;                  
+    }      
 }
 ?>

@@ -8,6 +8,7 @@ class PRODUCTS{
         $this->op_limit=($_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"])?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"]:$cms_cfg["op_limit"];
         $this->jp_limit=$cms_cfg["jp_limit"];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->ps = " > ";
         switch($_REQUEST["func"]){
             case "p_list"://產品列表
                 $this->ws_tpl_file = "templates/ws-products-tpl.html";
@@ -206,17 +207,18 @@ class PRODUCTS{
                 }
                 $i=0;
                 while($row = $db->fetch_array($selectrs,1)){
-                    if($this->ws_seo){
-                        if(trim($row["pc_seo_filename"]) !=""){
-                            //$dirname=$row["pc_seo_filename"];
-                            $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
-                        }else{
-                            //$dirname=$row["pc_id"];
-                            $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
-                        }
-                    }else{
-                        $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
-                    }
+//                    if($this->ws_seo){
+//                        if(trim($row["pc_seo_filename"]) !=""){
+//                            //$dirname=$row["pc_seo_filename"];
+//                            $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
+//                        }else{
+//                            //$dirname=$row["pc_id"];
+//                            $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
+//                        }
+//                    }else{
+//                        $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
+//                    }
+                    $pc_link = $this->get_link($row);
                     //收集第二頁以後pc_name 做為 meta title
                     if(!empty($_REQUEST["nowp"]) && $i<3){
                         $meta_title .=$row["pc_name"];
@@ -262,7 +264,7 @@ class PRODUCTS{
         $func_str="";
         $products_cate_layer=$main->get_layer_rewrite($cms_cfg['tb_prefix']."_products_cate","pc_name","pc",$this->parent,$func_str);
         if(!empty($products_cate_layer)){
-            $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link." > ".implode(" > ",$products_cate_layer));
+            $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link . $this->ps . implode($this->ps,$products_cate_layer));
         }
         if($row["pc_custom_status"]==1){//自訂頁面
                 $row["pc_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_custom"]);
@@ -336,16 +338,17 @@ class PRODUCTS{
             $j=0;
             $k=$page["start_serial"];
             while ( $row = $db->fetch_array($selectrs,1) ) {
-                if($this->ws_seo){
-                    $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                    if(trim($row["p_seo_filename"]) !=""){
-                        $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                    }else{
-                        $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                    }
-                }else{
-                    $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-                }
+//                if($this->ws_seo){
+//                    $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
+//                    if(trim($row["p_seo_filename"]) !=""){
+//                        $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
+//                    }else{
+//                        $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
+//                    }
+//                }else{
+//                    $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
+//                }
+                $p_link = $this->get_link($row,true);
                 //收集第二頁以後pc_name 做為 meta title
                 if(!empty($_REQUEST["nowp"]) && $j<3){
                     $meta_title .=$row["p_name"];
@@ -489,17 +492,17 @@ class PRODUCTS{
             $func_str="";
             $products_cate_layer=$main->get_layer_rewrite($cms_cfg['tb_prefix']."_products_cate","pc_name","pc",$row["pc_id"],$func_str,1);
             if(!empty($products_cate_layer)){
-                $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link." > ".implode(" > ",$products_cate_layer)." > ".$row["p_name"]);
+                $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link . $this->ps . implode($this->ps,$products_cate_layer) . $this->ps . $row["p_name"]);
             }
             $meta_array = array("meta_title"=>$row["p_seo_title"],
                                 "meta_keyword"=>$row["p_seo_keyword"],
                                 "meta_description"=>$row["p_seo_description"],
             );
             $main->header_footer($meta_array,$seo_H1);
-			//顯示上一筆、下一筆連結
-			if($cms_cfg["ws_module"]["ws_products_nextlink"]==1){
-				$this->products_next_previous($row["p_id"],$row["pc_id"],$row["p_sort"]);
-			}			
+            //顯示上一筆、下一筆連結
+            if($cms_cfg["ws_module"]["ws_products_nextlink"]==1){
+                    $this->products_next_previous($row["p_id"],$row["pc_id"],$row["p_sort"]);
+            }			
             //是否為自訂頁面
             if($row["p_custom_status"]){
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
@@ -649,15 +652,16 @@ class PRODUCTS{
                     $pc_subtotal=$main->count_total_records($sql);
                     $sql2="select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$row["pc_id"]."' and p_status='1'";
                     $p_total=$main->count_total_records($sql2)+$pc_subtotal; //次分類及所屬產品總合
-                    if($this->ws_seo){
-                        if(trim($row["pc_seo_filename"]) !=""){
-                            $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
-                        }else{
-                            $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
-                        }
-                    }else{
-                        $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
-                    }
+//                    if($this->ws_seo){
+//                        if(trim($row["pc_seo_filename"]) !=""){
+//                            $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
+//                        }else{
+//                            $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
+//                        }
+//                    }else{
+//                        $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
+//                    }
+                    $pc_link = $this->get_link($row);
                     $tpl->newBlock( "LEFT_CATE_LIST" );
                     $tpl->assign( array( "VALUE_CATE_NAME" => $row["pc_name"]."(".$p_total.")",
                                          "VALUE_CATE_LINK"  => $pc_link,
@@ -808,32 +812,34 @@ class PRODUCTS{
         $row = $db->fetch_array($selectrs,1);
         $rsnum  = $db->numRows($selectrs);
         if ($rsnum > 0) {
-            if($this->ws_seo){
-                $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                if(trim($row["p_seo_filename"]) !=""){
-                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                }else{
-                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                }
-            }else{
-                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-            }
+//            if($this->ws_seo){
+//                $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
+//                if(trim($row["p_seo_filename"]) !=""){
+//                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
+//                }else{
+//                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
+//                }
+//            }else{
+//                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
+//            }
+            $p_link = $this->get_link($row,true);
             $tpl->assignGlobal("TAG_PREVIOUS_PRODUCT","<a href='".$p_link."'><img src=\"".$cms_cfg['base_images'].$cms_cfg['language']."_prev.jpg\" border=\"0\" /></a>");
         }
         $selectrs = $db->query($next_sql);
         $row = $db->fetch_array($selectrs,1);
         $rsnum  = $db->numRows($selectrs);
         if ($rsnum > 0) {
-            if($this->ws_seo){
-                $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                if(trim($row["p_seo_filename"]) !=""){
-                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                }else{
-                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                }
-            }else{
-                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-            }
+//            if($this->ws_seo){
+//                $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
+//                if(trim($row["p_seo_filename"]) !=""){
+//                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
+//                }else{
+//                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
+//                }
+//            }else{
+//                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
+//            }
+            $p_link = $this->get_link($row,true);
             $tpl->assignGlobal("TAG_NEXT_PRODUCT","<a href='".$p_link."'><img src=\"".$cms_cfg['base_images'].$cms_cfg['language']."_next.jpg\" border=\"0\" /></a>");
         }
     }
@@ -855,16 +861,17 @@ class PRODUCTS{
             $tpl->newBlock("RELATED_PRODUCTS_ZONE");
             while($row = $db->fetch_array($selectrs,1)){
                 $tpl->newBlock("RELATED_PRODUCTS");
-                if($this->ws_seo){
-                    $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                    if(trim($row["p_seo_filename"]) !=""){
-                        $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                    }else{
-                        $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                    }
-                }else{
-                    $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-                }
+//                if($this->ws_seo){
+//                    $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
+//                    if(trim($row["p_seo_filename"]) !=""){
+//                        $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
+//                    }else{
+//                        $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
+//                    }
+//                }else{
+//                    $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
+//                }
+                $p_link = $this->get_link($row,true);
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
                 $tpl->assign( array("VALUE_PC_NAME"  => $row["pc_name"],
                                     "VALUE_P_ID"  => $row["p_id"],
@@ -879,6 +886,7 @@ class PRODUCTS{
     /*由$row取得該筆記錄的url
      */
     function get_link(&$row,$is_product=false){
+        global $cms_cfg;
         $link = "";
         if($is_product){
             if($this->ws_seo){
