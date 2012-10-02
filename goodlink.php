@@ -61,7 +61,7 @@ class GOODLINK{
         $ext=($this->ws_seo)?".html":".php";
         $goodlink_link="<a href=\"".$cms_cfg["base_root"]."goodlink".$ext."\">"."相關網站"."</a>";
         //相關網站分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink_cate where lc_status='1' order by lc_sort desc ";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink_cate where lc_status='1' order by lc_sort asc ";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
@@ -96,7 +96,7 @@ class GOODLINK{
         }else{
             $lc_id=0;
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink where l_status='1' ".$and_str." order by l_sort desc,l_modifydate desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink where l_status='1' ".$and_str." order by l_sort asc,l_modifydate desc";
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
@@ -154,7 +154,7 @@ class GOODLINK{
         //相關網站分類
         $ext=($this->ws_seo)?".html":".php";
         $goodlink_link="<a href=\"".$cms_cfg["base_root"]."goodlink".$ext."\">"."相關網站"."</a>";
-        $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink_cate where lc_status='1' order by lc_sort desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink_cate where lc_status='1' order by lc_sort asc";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){

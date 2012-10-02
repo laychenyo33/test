@@ -62,7 +62,7 @@ class FAQ{
         $ext=($this->ws_seo)?".htm":".php";
         $faq_link="<a href=\"".$cms_cfg["base_root"]."faq".$ext."\">".$TPLMSG["FAQ"]."</a>";
         //問與答分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_faq_cate where fc_status='1' order by fc_sort desc ";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_faq_cate where fc_status='1' order by fc_sort asc ";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
@@ -106,7 +106,7 @@ class FAQ{
         if($fc_id!=0){
             $and_str="and fc_id='".$fc_id."'";
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_faq where f_status='1' ".$and_str." order by f_sort desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_faq where f_status='1' ".$and_str." order by f_sort asc";
         echo $sql;
         //取得總筆數
         $selectrs = $db->query($sql);

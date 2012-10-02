@@ -117,7 +117,7 @@ class AD{
         if(!empty($_REQUEST["ad_cate"])){
             $and_str .= " and ad_cate = '".$_REQUEST["ad_cate"]."'";
         }
-        $sql .= $and_str." order by ad_sort desc,ad_modifydate desc ";
+        $sql .= $and_str." order by ad_sort asc,ad_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);

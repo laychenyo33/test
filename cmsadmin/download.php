@@ -14,7 +14,7 @@ class DOWNLOAD{
         global $db,$cms_cfg,$tpl;
         $this->seo=($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
-            case "dc_list"://ÀÉ®×¤U¸ü¤ÀÃş¦Cªí
+            case "dc_list"://æª”æ¡ˆä¸‹è¼‰åˆ†é¡åˆ—è¡¨
                 $this->current_class="DC";
                 $this->ws_tpl_file = "templates/ws-manage-download-cate-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -23,7 +23,7 @@ class DOWNLOAD{
                 $this->download_cate_list();
                 $this->ws_tpl_type=1;
                 break;
-            case "dc_add"://ÀÉ®×¤U¸ü¤ÀÃş·s¼W
+            case "dc_add"://æª”æ¡ˆä¸‹è¼‰åˆ†é¡æ–°å¢
                 $this->current_class="DC";
                 $this->ws_tpl_file = "templates/ws-manage-download-cate-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -32,7 +32,7 @@ class DOWNLOAD{
                 $this->download_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
-            case "dc_mod"://ÀÉ®×¤U¸ü¤ÀÃş­×§ï
+            case "dc_mod"://æª”æ¡ˆä¸‹è¼‰åˆ†é¡ä¿®æ”¹
                 $this->current_class="DC";
                 $this->ws_tpl_file = "templates/ws-manage-download-cate-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -41,19 +41,19 @@ class DOWNLOAD{
                 $this->download_cate_form("mod");
                 $this->ws_tpl_type=1;
                 break;
-            case "dc_replace"://ÀÉ®×¤U¸ü¤ÀÃş§ó·s¸ê®Æ(replace)
+            case "dc_replace"://æª”æ¡ˆä¸‹è¼‰åˆ†é¡æ›´æ–°è³‡æ–™(replace)
                 $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->download_cate_replace();
                 $this->ws_tpl_type=1;
                 break;
-            case "dc_del"://ÀÉ®×¤U¸ü¤ÀÃş§R°£
+            case "dc_del"://æª”æ¡ˆä¸‹è¼‰åˆ†é¡åˆªé™¤
                 $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->download_cate_del();
                 $this->ws_tpl_type=1;
                 break;
-            case "d_list"://ÀÉ®×¤U¸ü¦Cªí
+            case "d_list"://æª”æ¡ˆä¸‹è¼‰åˆ—è¡¨
                 $this->current_class="D";
                 $this->ws_tpl_file = "templates/ws-manage-download-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -62,7 +62,7 @@ class DOWNLOAD{
                 $this->download_list();
                 $this->ws_tpl_type=1;
                 break;
-            case "d_add"://ÀÉ®×¤U¸ü·s¼W
+            case "d_add"://æª”æ¡ˆä¸‹è¼‰æ–°å¢
                 $this->current_class="D";
                 $this->ws_tpl_file = "templates/ws-manage-download-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -72,7 +72,7 @@ class DOWNLOAD{
                 $this->download_form("add");
                 $this->ws_tpl_type=1;
                 break;
-            case "d_mod"://ÀÉ®×¤U¸ü­×§ï
+            case "d_mod"://æª”æ¡ˆä¸‹è¼‰ä¿®æ”¹
                 $this->current_class="D";
                 $this->ws_tpl_file = "templates/ws-manage-download-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -82,25 +82,25 @@ class DOWNLOAD{
                 $this->download_form("mod");
                 $this->ws_tpl_type=1;
                 break;
-            case "d_replace"://ÀÉ®×¤U¸ü§ó·s¸ê®Æ(replace)
+            case "d_replace"://æª”æ¡ˆä¸‹è¼‰æ›´æ–°è³‡æ–™(replace)
                 $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->download_replace();
                 $this->ws_tpl_type=1;
                 break;
-            case "d_del"://ÀÉ®×¤U¸ü§R°£
+            case "d_del"://æª”æ¡ˆä¸‹è¼‰åˆªé™¤
                 $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->download_del();
                 $this->ws_tpl_type=1;
                 break;
-            case "data_processing"://¦hµ§§R°£,½Æ»s,±Ò¥Î,°±¥Î ³B²z
+            case "data_processing"://å¤šç­†åˆªé™¤,è¤‡è£½,å•Ÿç”¨,åœç”¨ è™•ç†
                 $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->data_processing();
                 $this->ws_tpl_type=1;
                 break;
-            default:    //ÀÉ®×¤U¸ü¦Cªí
+            default:    //æª”æ¡ˆä¸‹è¼‰åˆ—è¡¨
                 $this->current_class="D";
                 $this->ws_tpl_file = "templates/ws-manage-download-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -114,7 +114,7 @@ class DOWNLOAD{
             $tpl->printToScreen();
         }
     }
-    //¸ü¤J¹ïÀ³ªº¼ËªO
+    //è¼‰å…¥å°æ‡‰çš„æ¨£æ¿
     function ws_load_tp($ws_tpl_file){
         global $tpl,$cms_cfg,$db,$main;
         $tpl = new TemplatePower( $cms_cfg['manage_all_tpl'] );
@@ -124,11 +124,11 @@ class DOWNLOAD{
         $tpl->prepare();
         $tpl->assignGlobal("TAG_".$this->current_class."_CURRENT","class=\"current\"");
         $tpl->assignGlobal("CSS_BLOCK_DOWNLOAD","style=\"display:block\"");
-        //¨ÌÅv­­Åã¥Ü¶µ¥Ø
+        //ä¾æ¬Šé™é¡¯ç¤ºé …ç›®
         $main->mamage_authority();
     }
 
-    //ÀÉ®×¤U¸ü¤ÀÃş--¦Cªí
+    //æª”æ¡ˆä¸‹è¼‰åˆ†é¡--åˆ—è¡¨
     function download_cate_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id > '0'";
@@ -136,13 +136,13 @@ class DOWNLOAD{
         if(!empty($_REQUEST["sk"])){
             $and_str = " and dc_subject like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by dc_sort desc";
-        //¨ú±oÁ`µ§¼Æ
+        $sql .= $and_str." order by dc_sort asc";
+        //å–å¾—ç¸½ç­†æ•¸
         $total_records=$main->count_total_records($sql);
-        //¨ú±o¤À­¶³sµ²
+        //å–å¾—åˆ†é é€£çµ
         $func_str="download.php?func=dc_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
         $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-        //­«·s²Õ¦X¥]§tlimitªºsql»yªk
+        //é‡æ–°çµ„åˆåŒ…å«limitçš„sqlèªæ³•
         $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
@@ -150,7 +150,7 @@ class DOWNLOAD{
                                   "VALUE_TOTAL_BOX" => $rsnum,
                                   "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR']
         ));
-        //¤ÀÃş¦Cªí
+        //åˆ†é¡åˆ—è¡¨
         $i=$page["start_serial"];
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
@@ -170,7 +170,7 @@ class DOWNLOAD{
         if($i==0){
             $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
         }else{
-            //¤À­¶Åã¥Ü¶µ¥Ø
+            //åˆ†é é¡¯ç¤ºé …ç›®
             $tpl->newBlock( "PAGE_DATA_SHOW" );
             $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
                                 "VALUE_TOTAL_PAGES"  => $page["total_pages"],
@@ -189,13 +189,13 @@ class DOWNLOAD{
             }
         }
     }
-    //ÀÉ®×¤U¸ü¤ÀÃş--ªí³æ
+    //æª”æ¡ˆä¸‹è¼‰åˆ†é¡--è¡¨å–®
     function download_cate_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         if($this->seo){
             $tpl->newBlock("SEO_EDIT_ZONE");
         }
-        //Äæ¦ì¦WºÙ
+        //æ¬„ä½åç¨±
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
                                   "NOW_DC_ID"  => 0,
                                   "VALUE_DC_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_download_cate","dc","","",0),
@@ -203,7 +203,7 @@ class DOWNLOAD{
                                   "STR_DC_STATUS_CK0" => "",
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
-        //¬ÛÃö°Ñ¼Æ
+        //ç›¸é—œåƒæ•¸
         if(!empty($_REQUEST['nowp'])){
             $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
@@ -212,7 +212,7 @@ class DOWNLOAD{
 
             ));
         }
-        //¦pªG¬°­×§ï¼Ò¦¡,±a¤J¸ê®Æ®w¸ê®Æ
+        //å¦‚æœç‚ºä¿®æ”¹æ¨¡å¼,å¸¶å…¥è³‡æ–™åº«è³‡æ–™
         if($action_mode=="mod" && !empty($_REQUEST["dc_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id='".$_REQUEST["dc_id"]."'";
             $selectrs = $db->query($sql);
@@ -241,7 +241,7 @@ class DOWNLOAD{
             }
         }
     }
-    //ÀÉ®×¤U¸ü¤ÀÃş--¸ê®Æ§ó·s
+    //æª”æ¡ˆä¸‹è¼‰åˆ†é¡--è³‡æ–™æ›´æ–°
     function download_cate_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         if($this->seo){
@@ -301,7 +301,7 @@ class DOWNLOAD{
             }
         }
     }
-    //ÀÉ®×¤U¸ü¤ÀÃş--§R°£
+    //æª”æ¡ˆä¸‹è¼‰åˆ†é¡--åˆªé™¤
     function download_cate_del(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         if($_REQUEST["dc_id"]){
@@ -311,12 +311,12 @@ class DOWNLOAD{
         }
         if(!empty($dc_id)){
             $dc_id_str = implode(",",$dc_id);
-            //²MªÅ¤ÀÃş©³¤UªºÀÉ®×¤U¸ü
+            //æ¸…ç©ºåˆ†é¡åº•ä¸‹çš„æª”æ¡ˆä¸‹è¼‰
             $sql="delete from ".$cms_cfg['tb_prefix']."_download where  dc_id in (".$dc_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
-                //§R°£¤ÀÃş
+                //åˆªé™¤åˆ†é¡
                 $sql="delete from ".$cms_cfg['tb_prefix']."_download_cate where dc_id in (".$dc_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
@@ -332,13 +332,13 @@ class DOWNLOAD{
             }
         }
     }
-//ÀÉ®×¤U¸ü--¦Cªí================================================================
+//æª”æ¡ˆä¸‹è¼‰--åˆ—è¡¨================================================================
     function download_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id > '0'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
-        //¨S¦³¤ÀÃş¥ı«Ø¥ß¤ÀÃş
+        //æ²’æœ‰åˆ†é¡å…ˆå»ºç«‹åˆ†é¡
         if($rsnum < 1){
             $tpl->assignGlobal( "MSG_CREATE_CATE_FIRST" , $TPLMSG["CREATE_CATE_FIRST"]);
             $goto_url=$cms_cfg["manage_url"]."download.php?func=dc_add";
@@ -364,9 +364,9 @@ class DOWNLOAD{
                     $tpl->assignGlobal("TAG_NOW_CATE",$row["dc_subject"]);
                 }
             }
-            //ÀÉ®×¤U¸ü¦Cªí
+            //æª”æ¡ˆä¸‹è¼‰åˆ—è¡¨
             $sql="select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id where d.d_id > '0'";
-            //ªş¥[±ø¥ó
+            //é™„åŠ æ¢ä»¶
             $and_str="";
             if(!empty($_REQUEST["dc_id"])){
                 $and_str .= " and d.dc_id = '".$_REQUEST["dc_id"]."'";
@@ -380,14 +380,14 @@ class DOWNLOAD{
             if($_REQUEST["st"]=="d_content"){
                 $and_str .= " and d.d_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by d.d_sort desc,d.d_modifydate desc ";
-            //¨ú±oÁ`µ§¼Æ
+            $sql .= $and_str." order by d.d_sort asc,d.d_modifydate desc ";
+            //å–å¾—ç¸½ç­†æ•¸
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
-            //¨ú±o¤À­¶³sµ²
+            //å–å¾—åˆ†é é€£çµ
             $func_str="download.php?func=d_list&dc_id=".$_REQUEST["dc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
             $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-            //­«·s²Õ¦X¥]§tlimitªºsql»yªk
+            //é‡æ–°çµ„åˆåŒ…å«limitçš„sqlèªæ³•
             $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
@@ -449,10 +449,10 @@ class DOWNLOAD{
             }
         }
     }
-//ÀÉ®×¤U¸ü--ªí³æ================================================================
+//æª”æ¡ˆä¸‹è¼‰--è¡¨å–®================================================================
     function download_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        //Äæ¦ì¦WºÙ
+        //æ¬„ä½åç¨±
         $cate=(trim($_REQUEST["dc_id"])!="")?1:0;
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
                                   "VALUE_D_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_download","d","dc_id",$_REQUEST["dc_id"],$cate),
@@ -460,7 +460,7 @@ class DOWNLOAD{
                                   "STR_D_STATUS_CK0" => "",
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
-        //¬ÛÃö°Ñ¼Æ
+        //ç›¸é—œåƒæ•¸
         if(!empty($_REQUEST['nowp'])){
             $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
@@ -469,7 +469,7 @@ class DOWNLOAD{
 
             ));
         }
-        //¦pªG¬°­×§ï¼Ò¦¡,±a¤J¸ê®Æ®w¸ê®Æ
+        //å¦‚æœç‚ºä¿®æ”¹æ¨¡å¼,å¸¶å…¥è³‡æ–™åº«è³‡æ–™
         if($action_mode=="mod" && !empty($_REQUEST["d_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_download where d_id='".$_REQUEST["d_id"]."'";
             $selectrs = $db->query($sql);
@@ -489,7 +489,7 @@ class DOWNLOAD{
                 header("location : download.php?func=d_list");
             }
         }
-        //ÀÉ®×¤U¸ü¤ÀÃş
+        //æª”æ¡ˆä¸‹è¼‰åˆ†é¡
         $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id > '0'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
@@ -501,7 +501,7 @@ class DOWNLOAD{
             ));
         }
     }
-//ÀÉ®×¤U¸ü--¸ê®Æ§ó·s================================================================
+//æª”æ¡ˆä¸‹è¼‰--è³‡æ–™æ›´æ–°================================================================
     function download_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         switch ($_REQUEST["action_mode"]){
@@ -550,7 +550,7 @@ class DOWNLOAD{
             }
         }
     }
-//ÀÉ®×¤U¸ü--§R°£--¸ê®Æ§R°£¥i¦hµ§³B²z================================================================
+//æª”æ¡ˆä¸‹è¼‰--åˆªé™¤--è³‡æ–™åˆªé™¤å¯å¤šç­†è™•ç†================================================================
     function download_del(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         if($_REQUEST["d_id"]){
@@ -560,7 +560,7 @@ class DOWNLOAD{
         }
         if(!empty($d_id)){
             $d_id_str = implode(",",$d_id);
-            //§R°£¤Ä¿ïªºÀÉ®×¤U¸ü
+            //åˆªé™¤å‹¾é¸çš„æª”æ¡ˆä¸‹è¼‰
             $sql="delete from ".$cms_cfg['tb_prefix']."_download where d_id in (".$d_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
@@ -573,17 +573,17 @@ class DOWNLOAD{
             }
         }
     }
-    //Åã¥Ü°T®§¨Ã­«·s¾É¦V
+    //é¡¯ç¤ºè¨Šæ¯ä¸¦é‡æ–°å°å‘
     function goto_target_page($url,$sec=0){
         global $tpl;
         if(!empty($url)){
             $tpl->assignGlobal( "TAG_META_REFRESH" , "<meta http-equiv=\"refresh\" content=\"$sec;URL=$url\">");
         }
     }
-    //§ó§ïª¬ºA
+    //æ›´æ”¹ç‹€æ…‹
     function change_status($ws_table,$value){
         global $db,$tpl,$cms_cfg,$TPLMSG;
-        //ÀÉ®×¤U¸ü¤ÀÃş§ó§ïª¬ºA
+        //æª”æ¡ˆä¸‹è¼‰åˆ†é¡æ›´æ”¹ç‹€æ…‹
         if($ws_table=="dc"){
             if($_REQUEST["dc_id"]){
                 $dc_id=array(0=>$_REQUEST["dc_id"]);
@@ -592,12 +592,12 @@ class DOWNLOAD{
             }
             if(!empty($dc_id)){
                 $dc_id_str = implode(",",$dc_id);
-                //§ó§ï¤ÀÃş©³¤UªºÀÉ®×¤U¸üª¬ºA
+                //æ›´æ”¹åˆ†é¡åº•ä¸‹çš„æª”æ¡ˆä¸‹è¼‰ç‹€æ…‹
                 $sql="update ".$cms_cfg['tb_prefix']."_download set d_status='".$value."' where dc_id in (".$dc_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
-                    //ª¬ºA¤ÀÃşª¬ºA
+                    //ç‹€æ…‹åˆ†é¡ç‹€æ…‹
                     $sql="update ".$cms_cfg['tb_prefix']."_download_cate set dc_status='".$value."' where dc_id in (".$dc_id_str.")";
                     $rs = $db->query($sql);
                     $db_msg = $db->report();
@@ -613,7 +613,7 @@ class DOWNLOAD{
                 }
             }
         }
-        //ÀÉ®×¤U¸ü§ó§ïª¬ºA
+        //æª”æ¡ˆä¸‹è¼‰æ›´æ”¹ç‹€æ…‹
         if($ws_table=="d"){
             if($_REQUEST["d_id"]){
                 $d_id=array(0=>$_REQUEST["d_id"]);
@@ -622,7 +622,7 @@ class DOWNLOAD{
             }
             if(!empty($d_id)){
                 $d_id_str = implode(",",$d_id);
-                //§R°£¤Ä¿ïªºÀÉ®×¤U¸ü
+                //åˆªé™¤å‹¾é¸çš„æª”æ¡ˆä¸‹è¼‰
                 $sql="update ".$cms_cfg['tb_prefix']."_download set d_status='".$value."' where d_id in (".$d_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
@@ -636,10 +636,10 @@ class DOWNLOAD{
             }
         }
     }
-    //§ó§ï±Æ§Ç­È
+    //æ›´æ”¹æ’åºå€¼
     function change_sort($ws_table){
         global $db,$tpl,$cms_cfg,$TPLMSG;
-        //ÀÉ®×¤U¸ü¤ÀÃş§ó§ï±Æ§Ç­È
+        //æª”æ¡ˆä¸‹è¼‰åˆ†é¡æ›´æ”¹æ’åºå€¼
         if(!empty($_REQUEST["sort_value"]) && !empty($ws_table)){
             if($ws_table=="dc"){
                 $table_name=$cms_cfg['tb_prefix']."_download_cate";
@@ -661,10 +661,10 @@ class DOWNLOAD{
             }
         }
     }
-    //½Æ»s³æµ§¸ê®Æ
+    //è¤‡è£½å–®ç­†è³‡æ–™
     function copy_data($ws_table){
         global $db,$tpl,$cms_cfg,$TPLMSG;
-        //ÀÉ®×¤U¸ü¤ÀÃş½Æ»s
+        //æª”æ¡ˆä¸‹è¼‰åˆ†é¡è¤‡è£½
         if($ws_table=="dc"){
             $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id='".$_REQUEST["id"][0]."'";
             $selectrs = $db->query($sql);
@@ -692,7 +692,7 @@ class DOWNLOAD{
                 }
             }
         }
-        //ÀÉ®×¤U¸ü½Æ»s
+        //æª”æ¡ˆä¸‹è¼‰è¤‡è£½
         if($ws_table=="d"){
             $sql="select * from ".$cms_cfg['tb_prefix']."_download where d_id='".$_REQUEST["id"][0]."'";
             $selectrs = $db->query($sql);
@@ -731,7 +731,7 @@ class DOWNLOAD{
 
     }
 
-    //¸ê®Æ³B²z
+    //è³‡æ–™è™•ç†
     function data_processing(){
         switch ($_REQUEST["process_type"]){
             case "del":

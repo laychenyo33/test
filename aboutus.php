@@ -39,7 +39,7 @@ class ABOUTUS{
     function aboutus_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //前台關於我們列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' order by au_sort desc,au_modifydate desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' order by au_sort asc,au_modifydate desc";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if(empty($_REQUEST["au_id"]) && empty($_REQUEST["f"])){

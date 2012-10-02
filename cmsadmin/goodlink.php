@@ -148,7 +148,7 @@ class GOODLINK{
         if(!empty($_REQUEST["sk"])){
             $and_str = " and lc_subject like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by lc_sort desc ";
+        $sql .= $and_str." order by lc_sort asc ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結
@@ -353,7 +353,7 @@ class GOODLINK{
             if($_REQUEST["st"]=="l_content"){
                 $and_str .= " and l.l_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by l.l_sort desc,l.l_modifydate desc ";
+            $sql .= $and_str." order by l.l_sort asc,l.l_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);

@@ -103,7 +103,7 @@ class ABOUTUS{
         if($_REQUEST["st"]=="au_content"){
             $and_str .= " and au_content like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by au_sort desc,au_modifydate desc ";
+        $sql .= $and_str." order by au_sort asc,au_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);

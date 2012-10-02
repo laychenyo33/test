@@ -74,7 +74,7 @@ class NEWS{
         $ext=($this->ws_seo)?".htm":".php";
         $news_link="<a href=\"".$cms_cfg["base_root"]."news".$ext."\">".$TPLMSG["NEWS"]."</a>";
         //最新消息分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort asc";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
@@ -116,7 +116,7 @@ class NEWS{
         if($nc_id!=0){
             $and_str="and nc_id='".$nc_id."'";
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_news where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_sort desc,n_modifydate desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_news where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_sort asc,n_modifydate desc";
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
@@ -194,7 +194,7 @@ class NEWS{
         //最新消息分類
         $ext=($this->ws_seo)?".htm":".php";
         $news_link="<a href=\"".$cms_cfg["base_root"]."news".$ext."\">".$TPLMSG["NEWS"]."</a>";
-        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort asc";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){

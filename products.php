@@ -198,7 +198,7 @@ class PRODUCTS{
                 //分類列表------------------------
                 $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id >'0'";
                 $sql .=  " and pc_parent='".$this->parent."' ";
-                $and_str = " and pc_status='1' order by pc_up_sort desc,pc_sort desc";
+                $and_str = " and pc_status='1' order by pc_up_sort desc,pc_sort asc";
                 $sql .= $and_str;
                 $selectrs = $db->query($sql);
                 $rsnum    = $db->numRows($selectrs);
@@ -295,9 +295,9 @@ class PRODUCTS{
             }
             //附加條件
             if($mode == "p_new") {
-                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_new_sort desc,p.p_modifydate desc";
+                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_new_sort asc,p.p_modifydate desc";
             }else{
-                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_sort desc,p.p_modifydate desc";
+                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_sort asc,p.p_modifydate desc";
             }
             $sql .= $and_str;
             //取得總筆數
@@ -642,7 +642,7 @@ class PRODUCTS{
         $rsnum    = $db->numRows($selectrs);
         if($rsnum > 0 ){
             $row = $db->fetch_array($selectrs,1);
-            $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$row["pc_parent"]."' and pc_status='1' order by pc_up_sort desc,pc_sort desc";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$row["pc_parent"]."' and pc_status='1' order by pc_up_sort desc,pc_sort asc";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             if($rsnum > 0 ){
@@ -805,9 +805,9 @@ class PRODUCTS{
     function products_next_previous($p_id,$pc_id,$p_sort){
         global $db,$tpl,$cms_cfg;
         $pre_sql="select p.p_sort,p.pc_id,p.p_id,p.p_name,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
-            where p.pc_id='".$pc_id."' and p.p_id <> '".$p_id."' and p.p_status=1 and p.p_sort < '".$p_sort."' order by p.p_sort desc limit 0,1 ";
+            where p.pc_id='".$pc_id."' and p.p_id <> '".$p_id."' and p.p_status=1 and p.p_sort <= '".$p_sort."' order by p.p_sort asc limit 0,1 ";
         $next_sql="select p.p_sort,p.pc_id,p.p_id,p.p_name,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
-            where p.pc_id='".$pc_id."' and p.p_id <> '".$p_id."' and p.p_status=1 and p.p_sort > '".$p_sort."' order by p.p_sort limit 0,1 ";
+            where p.pc_id='".$pc_id."' and p.p_id <> '".$p_id."' and p.p_status=1 and p.p_sort >= '".$p_sort."' order by p.p_sort limit 0,1 ";
         $selectrs = $db->query($pre_sql);
         $row = $db->fetch_array($selectrs,1);
         $rsnum  = $db->numRows($selectrs);

@@ -5,31 +5,31 @@ class GUESTBOOK{
     function GUESTBOOK(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
-            case "gb_list"://¯d¨¥ª©¦Cªí
+            case "gb_list"://ç•™è¨€ç‰ˆåˆ—è¡¨
                 $this->ws_tpl_file = "templates/ws-guestbook-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->guestbook_list();
                 $this->ws_tpl_type=1;
                 break;
-            case "gb_add"://¯d¨¥ª©·s¼W
+            case "gb_add"://ç•™è¨€ç‰ˆæ–°å¢
                 $this->ws_tpl_file = "templates/ws-guestbook-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->guestbook_form("add");
                 $this->ws_tpl_type=1;
                 break;
-            case "gbr_add"://¯d¨¥ª©¦^ÂĞ·s¼W
+            case "gbr_add"://ç•™è¨€ç‰ˆå›è¦†æ–°å¢
                 $this->ws_tpl_file = "templates/ws-guestbook-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->guestbook_form("reply");
                 $this->ws_tpl_type=1;
                 break;
-            case "gb_replace"://¯d¨¥ª©§ó·s¸ê®Æ(replace)
+            case "gb_replace"://ç•™è¨€ç‰ˆæ›´æ–°è³‡æ–™(replace)
                 $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->guestbook_replace();
                 $this->ws_tpl_type=1;
                 break;
-            default:    //¯d¨¥ª©¦Cªí
+            default:    //ç•™è¨€ç‰ˆåˆ—è¡¨
                 $this->ws_tpl_file = "templates/ws-guestbook-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->guestbook_list();
@@ -40,15 +40,15 @@ class GUESTBOOK{
             $tpl->printToScreen();
         }
     }
-    //¸ü¤J¹ïÀ³ªº¼ËªO
+    //è¼‰å…¥å°æ‡‰çš„æ¨£æ¿
     function ws_load_tp($ws_tpl_file){
         global $tpl,$cms_cfg,$ws_array,$db,$TPLMSG,$main;
         $tpl = new TemplatePower( $cms_cfg['base_all_tpl'] );
-        $tpl->assignInclude( "HEADER", $cms_cfg['base_header_tpl']); //ÀYÀÉtitle,meta,js,css
-        //$tpl->assignInclude( "TOP_MENU", $cms_cfg['base_top_menu_tpl']);// ¥\¯à¦Cªí
-        $tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //¥ª¤è¤@¯ëªí³æ
-        $tpl->assignInclude( "MAIN", $ws_tpl_file); //¥D¥\¯àÅã¥Ü°Ï
-        //$tpl->assignInclude( "FOOTER", $cms_cfg['base_footer_tpl']); //§ÀÀÉ¥\¯à¦Cªí
+        $tpl->assignInclude( "HEADER", $cms_cfg['base_header_tpl']); //é ­æª”title,meta,js,css
+        //$tpl->assignInclude( "TOP_MENU", $cms_cfg['base_top_menu_tpl']);// åŠŸèƒ½åˆ—è¡¨
+        $tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //å·¦æ–¹ä¸€èˆ¬è¡¨å–®
+        $tpl->assignInclude( "MAIN", $ws_tpl_file); //ä¸»åŠŸèƒ½é¡¯ç¤ºå€
+        //$tpl->assignInclude( "FOOTER", $cms_cfg['base_footer_tpl']); //å°¾æª”åŠŸèƒ½åˆ—è¡¨
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["GUESTBOOK"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["GUESTBOOK"]);
@@ -57,18 +57,18 @@ class GUESTBOOK{
         $main->login_zone();
     }
 
-//¯d¨¥ª©--¦Cªí================================================================
+//ç•™è¨€ç‰ˆ--åˆ—è¡¨================================================================
     function guestbook_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        //¯d¨¥ª©¦Cªí
+        //ç•™è¨€ç‰ˆåˆ—è¡¨
         $sql="select * from ".$cms_cfg['tb_prefix']."_guestbook  where gb_reply_type=0 order by gb_modifydate desc";
-        //¨ú±oÁ`µ§¼Æ
+        //å–å¾—ç¸½ç­†æ•¸
         $selectrs = $db->query($sql);
         $total_records = $db->numRows($selectrs);
-        //¨ú±o¤À­¶³sµ²
+        //å–å¾—åˆ†é é€£çµ
         $func_str="guestbook.php?func=gb_list";
         $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-        //­«·s²Õ¦X¥]§tlimitªºsql»yªk
+        //é‡æ–°çµ„åˆåŒ…å«limitçš„sqlèªæ³•
         $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
@@ -136,7 +136,7 @@ class GUESTBOOK{
         }
     }
 
-//¯d¨¥ª©--¸ê®Æ§ó·s================================================================
+//ç•™è¨€ç‰ˆ--è³‡æ–™æ›´æ–°================================================================
     function guestbook_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         if(!ereg($cms_cfg['base_url'],$_SERVER['HTTP_REFERER'])){
@@ -200,7 +200,7 @@ class GUESTBOOK{
         }
     }
 
-//¯d¨¥ª©¦^ÂĞ--ªí³æ================================================================
+//ç•™è¨€ç‰ˆå›è¦†--è¡¨å–®================================================================
     function guestbook_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $main->security_zone();
@@ -209,7 +209,7 @@ class GUESTBOOK{
                                     "VALUE_GB_CONTENT" => $_SESSION["guestbook"]["gb_content"],
                                     "VALUE_GB_EMAIL" => $_SESSION["guestbook"]["gb_email"],
         ));
-        //Äæ¦ì¦WºÙ
+        //æ¬„ä½åç¨±
         $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['NAME'],
                                   "MSG_SUBJECT"  => $TPLMSG['SUBJECT'],
                                   "MSG_STATUS" => $TPLMSG['STATUS'],
@@ -221,7 +221,7 @@ class GUESTBOOK{
                                   "VALUE_GB_PARENT" => 0,
                                   "REMOTE_ADDR" =>  $_SERVER["REMOTE_ADDR"]
         ));
-        //±a¤J­n¦^ÂĞªº¯d¨¥ª©¸ê®Æ
+        //å¸¶å…¥è¦å›è¦†çš„ç•™è¨€ç‰ˆè³‡æ–™
         if(!empty($_REQUEST["gb_id"]) && $action_mode=="reply"){
             $sql="select * from ".$cms_cfg['tb_prefix']."_guestbook where gb_id='".$_REQUEST["gb_id"]."' or gb_parent='".$_REQUEST["gb_id"]."'";
             $selectrs = $db->query($sql);
@@ -247,12 +247,12 @@ class GUESTBOOK{
                                       "VALUE_GB_PARENT" => $_REQUEST["gb_id"],
             ));
         }
-        //±Ò¥ÎÅçµı½XÅã¥Ü¿ù»~°T®§
+        //å•Ÿç”¨é©—è¨¼ç¢¼é¡¯ç¤ºéŒ¯èª¤è¨Šæ¯
         if($cms_cfg["ws_module"]["ws_security"]==1 && $_SESSION["guestbook"]["security_error"]==1){
             $tpl->assignGlobal("MSG_ERROR_MESSAGE",$TPLMSG['SECURITY_ERROR']);
         }
     }
-    //Åã¥Ü°T®§¨Ã­«·s¾É¦V
+    //é¡¯ç¤ºè¨Šæ¯ä¸¦é‡æ–°å°å‘
     function goto_target_page($url,$sec=2){
         global $tpl;
         if(!empty($url)){

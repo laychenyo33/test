@@ -249,7 +249,7 @@ class PRODUCTS{
         }else{
             $and_str .= " and pc_parent='".$this->parent."'";
         }
-        $sql .= $and_str." order by pc_sort desc,pc_modifydate desc ";
+        $sql .= $and_str." order by pc_sort asc,pc_modifydate desc ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結
@@ -654,7 +654,7 @@ class PRODUCTS{
             if($_REQUEST["st"]=="p_desc"){
                 $and_str .= " and p.p_desc like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by p.p_sort desc,p.p_modifydate desc ";
+            $sql .= $and_str." order by p.p_sort asc,p.p_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -1509,7 +1509,7 @@ class PRODUCTS{
     //組合分類下拉選單
     function products_cate_select(&$output, &$pc_id,$now_pc_parent, $pc_parent=0, $indent="") {
         global $db,$cms_cfg;
-        $sql = "SELECT pc_id,pc_name FROM ".$cms_cfg['tb_prefix']."_products_cate WHERE  pc_parent='".$pc_parent."' order by pc_sort desc,pc_modifydate desc";
+        $sql = "SELECT pc_id,pc_name FROM ".$cms_cfg['tb_prefix']."_products_cate WHERE  pc_parent='".$pc_parent."' order by pc_sort asc,pc_modifydate desc";
         $selectrs = $db->query($sql);
         while ($row =  $db->fetch_array($selectrs,1)) {
             $selected = ($row["pc_id"]==$now_pc_parent ? "selected" : "");
@@ -1525,7 +1525,7 @@ class PRODUCTS{
     //組合分類下拉選單--產品選擇分類專用
     function products_cate_select2(&$output,$now_pc_parent, $pc_parent=0, $indent="") {
         global $db,$cms_cfg;
-        $sql = "SELECT pc_id,pc_name FROM ".$cms_cfg['tb_prefix']."_products_cate WHERE pc_parent='".$pc_parent."' order by pc_sort desc,pc_modifydate desc";
+        $sql = "SELECT pc_id,pc_name FROM ".$cms_cfg['tb_prefix']."_products_cate WHERE pc_parent='".$pc_parent."' order by pc_sort asc,pc_modifydate desc";
         $selectrs = $db->query($sql);
         while ($row =  $db->fetch_array($selectrs,1)) {
             $selected = ($row["pc_id"]==$now_pc_parent) ? "selected" : "";
@@ -1551,7 +1551,7 @@ class PRODUCTS{
     }
     function get_tree($pc_id,$now_pc_id,$pc_layer_array,$pc_cate_tree,$type){
         global $db,$cms_cfg,$tpl;
-        $sql="select pc_id,pc_parent,pc_name,pc_layer,pc_level from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$pc_id."' order by pc_sort desc,pc_modifydate desc";
+        $sql="select pc_id,pc_parent,pc_name,pc_layer,pc_level from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$pc_id."' order by pc_sort asc,pc_modifydate desc";
         $selectrs = $db->query($sql);
         $rsnum = $db->numRows($selectrs);
         if($rsnum >0){
@@ -1689,7 +1689,7 @@ class PRODUCTS{
                 $tpl->assign("VALUE_PC_MAIN_NAME",$row["pc_name"]);
                 $tpl->assign("VALUE_PC_ID",$row["pc_id"]);
                 $tpl->assign("TAG_DIV_DISPLAY","none");//預設為隱藏
-                $sql1="select p_id,p_name from ".$cms_cfg['tb_prefix']."_products where pc_layer like '".$row["pc_layer"]."%' order by p_sort desc";
+                $sql1="select p_id,p_name from ".$cms_cfg['tb_prefix']."_products where pc_layer like '".$row["pc_layer"]."%' order by p_sort asc";
                 $selectrs1 = $db->query($sql1);
                 while ( $row1 = $db->fetch_array($selectrs1,1) ) {
                     $tpl->newBlock("PRODUCT_CATE_SUB");
@@ -1794,7 +1794,7 @@ class PRODUCTS{
             if($_REQUEST["st"]=="p_desc"){
                 $and_str .= " and p.p_desc like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by p.p_new_sort desc,p.p_modifydate desc ";
+            $sql .= $and_str." order by p.p_new_sort asc,p.p_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
