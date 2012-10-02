@@ -72,16 +72,17 @@
 <script type="text/javascript">
 (function($){
     $(document).ready(function(){
-       $('a[@rel*=lightbox]').lightBox({
-            overlayBgColor: '#FFF',
+       $('a[rel*=lightbox]').lightBox({
+            overlayBgColor: '#000',
             overlayOpacity: 0.6,
             imageLoading: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-ico-loading.gif',
             imageBtnClose: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-close.gif',
             imageBtnPrev: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-prev.gif',
             imageBtnNext: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-next.gif',
-            containerResizeSpeed: 350,
-            txtImage: 'Imagem',
-            txtOf: 'de'
+			imageBlank: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-blank.gif',
+            containerResizeSpeed: 1000,
+            txtImage: 'Image',
+            txtOf: 'of'
        });        
     });
 })(jQuery);    
