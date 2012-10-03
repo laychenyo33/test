@@ -8,6 +8,7 @@ class FAQ{
         $this->op_limit=$cms_cfg['faqsop_limit'];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->ps = " > ";
         if(!empty($_REQUEST["type"])){
             $_REQUEST["func"]="f_".$_REQUEST["type"];
             $this->func_str=$cms_cfg['base_root']."faq/".$_REQUEST["f"];
@@ -83,7 +84,7 @@ class FAQ{
             ));
             if($_REQUEST["fc_id"]==$row["fc_id"] || ($_REQUEST["f"]==$row["fc_seo_filename"])){
                 $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
-                $faq_link .= " > <a href=\"".$cate_link."\">".$row["fc_subject"]."</a>";
+                $faq_link .= $this->ps."<a href=\"".$cate_link."\">".$row["fc_subject"]."</a>";
                 if($this->ws_seo){
                     $meta_array=array("meta_title"=>$row["fc_seo_title"],
                                       "meta_keyword"=>$row["fc_seo_keyword"],

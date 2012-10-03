@@ -8,6 +8,7 @@ class GALLERY{
         $this->op_limit=$cms_cfg['newsop_limit'];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->ps = " > ";
         switch($_REQUEST["func"]){
             case "g_list"://活動剪影列表
                 $this->ws_tpl_file = "templates/ws-gallery-tpl.html";
@@ -77,7 +78,7 @@ class GALLERY{
             ));
             if($_REQUEST["gc_id"]==$row["gc_id"]){
                 //$tpl->assignGlobal("TAG_SUB_FUNC"  , "--&nbsp;&nbsp;".$row["gc_subject"]);
-                $gallery_link .= " > <a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
+                $gallery_link .= $this->ps."<a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
             }
         }
         $tpl->assignGlobal("TAG_LAYER",$gallery_link);
@@ -165,14 +166,14 @@ class GALLERY{
             ));
             if($_REQUEST["gc_id"]==$row["gc_id"]){
                 $tpl->assignGlobal("TAG_SUB_TITLE"  , "--&nbsp;&nbsp;".$row["gc_subject"]);
-                $gallery_link .= " > <a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
+                $gallery_link .= $this->ps."<a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
             }
         }
         //活動剪影內容
         $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where n_id='".$_REQUEST["g_id"]."'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
-        $gallery_link .= " > ".$row["g_subject"];
+        $gallery_link .= $this->ps.$row["g_subject"];
         $tpl->newBlock( "GALLERY_SHOW" );
         //$row["g_content"]=preg_replace("/src=\"(.*)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["g_content"]);
         $tpl->assign( array("VALUE_G_ID"  => $row["g_id"],

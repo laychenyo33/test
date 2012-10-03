@@ -8,6 +8,7 @@ class DOWNLOAD{
         $this->op_limit=$cms_cfg["dlop_limit"];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->ps = " > ";
         if(!empty($_REQUEST["type"])){
             $_REQUEST["func"]="d_".$_REQUEST["type"];
             $this->func_str=$cms_cfg['base_root']."download/".$_REQUEST["f"];
@@ -78,7 +79,7 @@ class DOWNLOAD{
             ));
             if($_REQUEST["dc_id"]==$row["dc_id"]  || ($_REQUEST["f"]==$row["dc_seo_filename"])){
                 $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
-                $download_link .= " > <a href=\"".$cate_link."\">".$row["dc_subject"]."</a>";
+                $download_link .= $this->ps."<a href=\"".$cate_link."\">".$row["dc_subject"]."</a>";
                 if($this->ws_seo){
                     $meta_array=array("meta_title"=>$row["dc_seo_title"],
                                       "meta_keyword"=>$row["dc_seo_keyword"],

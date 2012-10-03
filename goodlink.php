@@ -8,6 +8,7 @@ class GOODLINK{
         $this->op_limit=$cms_cfg['newsop_limit'];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->ps = " > ";
         switch($_REQUEST["func"]){
             case "l_list"://相關網站列表
                 $this->ws_tpl_file = "templates/ws-goodlink-tpl.html";
@@ -82,7 +83,7 @@ class GOODLINK{
             }
             if($_REQUEST["lc_id"]==$row["lc_id"]){
                 $tpl->assignGlobal("TAG_MAIN_FUNC"  , $row["lc_subject"]);
-                $goodlink_link .= " > <a href=\"".$cate_link."\">".$row["lc_subject"]."</a>";
+                $goodlink_link .= $this->ps."<a href=\"".$cate_link."\">".$row["lc_subject"]."</a>";
             }
             if($i%2==0){
                 $tpl->assign("TAG_CLASS","class='altrow'");
@@ -175,14 +176,14 @@ class GOODLINK{
             }
             if($_REQUEST["lc_id"]==$row["lc_id"]){
                 $tpl->assignGlobal("TAG_MAIN_FUNC"  , $row["lc_subject"]);
-                $goodlink_link .= " > <a href=\"".$cate_link."\">".$row["lc_subject"]."</a>";
+                $goodlink_link .= $this->ps."<a href=\"".$cate_link."\">".$row["lc_subject"]."</a>";
             }
         }
         //相關網站內容
         $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink where l_id='".$_REQUEST["l_id"]."'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
-        $goodlink_link .= " > ".$row["l_subject"];
+        $goodlink_link .= $this->ps.$row["l_subject"];
         $tpl->newBlock( "GOODLINK_SHOW" );
         $row["l_content"]=preg_replace("/src=\"(.*)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["l_content"]);
         $tpl->assign( array("VALUE_L_ID"  => $row["l_id"],
