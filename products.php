@@ -8,7 +8,7 @@ class PRODUCTS{
         $this->op_limit=($_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"])?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"]:$cms_cfg["op_limit"];
         $this->jp_limit=$cms_cfg["jp_limit"];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
-        $this->ps = " > ";
+        $this->ps = $cms_cfg['path_separator'];
         switch($_REQUEST["func"]){
             case "p_list"://產品列表
                 $this->ws_tpl_file = "templates/ws-products-tpl.html";

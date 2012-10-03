@@ -8,7 +8,7 @@ class GOODLINK{
         $this->op_limit=$cms_cfg['newsop_limit'];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
-        $this->ps = " > ";
+        $this->ps = $cms_cfg['path_separator'];
         switch($_REQUEST["func"]){
             case "l_list"://相關網站列表
                 $this->ws_tpl_file = "templates/ws-goodlink-tpl.html";

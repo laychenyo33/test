@@ -8,7 +8,7 @@ class NEWS{
         $this->op_limit=$cms_cfg['newsop_limit'];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
-        $this->ps = " > ";
+        $this->ps = $cms_cfg['path_separator'];
         if(!empty($_REQUEST["type"])){
             $_REQUEST["func"]="n_".$_REQUEST["type"];
             $this->func_str=$cms_cfg['base_root']."news/".$_REQUEST["f"];

@@ -8,7 +8,7 @@ class GALLERY{
         $this->op_limit=$cms_cfg['newsop_limit'];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
-        $this->ps = " > ";
+        $this->ps = $cms_cfg['path_separator'];
         switch($_REQUEST["func"]){
             case "g_list"://活動剪影列表
                 $this->ws_tpl_file = "templates/ws-gallery-tpl.html";
