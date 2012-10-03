@@ -365,7 +365,7 @@ class EPAPER{
             if($_REQUEST["st"]=="e_content"){
                 $and_str .= " and e.e_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by e.e_sort asc,e.e_modifydate desc ";
+            $sql .= $and_str." order by e.e_sort ".$cms_cfg['sort_pos'].",e.e_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -708,7 +708,7 @@ class EPAPER{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //會員才有訂閱電子報的權限
         $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_status='1' and m_epaper_status='1' ";
-        $sql .= " order by m_sort asc,m_modifydate desc ";
+        $sql .= " order by m_sort ".$cms_cfg['sort_pos'].",m_modifydate desc ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結

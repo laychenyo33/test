@@ -306,7 +306,7 @@ class MAINDEFAULT{
     function aboutus_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         //前台關於我們列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where  au_status='1' order by au_sort asc,au_modifydate desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where  au_status='1' order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
 

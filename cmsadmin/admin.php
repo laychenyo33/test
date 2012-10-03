@@ -96,7 +96,7 @@ class ADMIN{
         if($_REQUEST["st"]=="ai_name"){
             $and_str .= " and ai_name like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by ai_sort asc,ai_modifydate desc ";
+        $sql .= $and_str." order by ai_sort ".$cms_cfg['sort_pos'].",ai_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);

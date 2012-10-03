@@ -135,7 +135,7 @@ class MEMBER{
         if(!empty($_REQUEST["sk"])){
             $and_str = " and mc_subject like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by mc_sort asc ";
+        $sql .= $and_str." order by mc_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結
@@ -346,7 +346,7 @@ class MEMBER{
             if($_REQUEST["st"]=="m_name"){
                 $and_str .= " and m.m_name like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by m.m_sort asc,m.m_modifydate desc ";
+            $sql .= $and_str." order by m.m_sort ".$cms_cfg['sort_pos'].",m.m_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);

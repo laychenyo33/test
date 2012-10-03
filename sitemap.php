@@ -60,7 +60,7 @@ class SITEMAP{
         ));
 
         //主分類
-        $sql="select pc_id,pc_parent,pc_name,pc_layer,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent=0 and pc_status='1' order by pc_sort asc ";
+        $sql="select pc_id,pc_parent,pc_name,pc_layer,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent=0 and pc_status='1' order by pc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql);
         while($row = $db->fetch_array($selectrs,1)){
             if($this->ws_seo){
@@ -77,7 +77,7 @@ class SITEMAP{
                                  "VALUE_PC_LINK"  => $pc_link,
             ));
             //搜尋次分類
-            $sql1="select pc_id,pc_name,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_layer like '".$row["pc_layer"]."-%' and pc_status='1' order by pc_sort asc";
+            $sql1="select pc_id,pc_name,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_layer like '".$row["pc_layer"]."-%' and pc_status='1' order by pc_sort ".$cms_cfg['sort_pos']." ";
             $selectrs1 = $db->query($sql1);
             $rsnum1     = $db->numRows($selectrs1);
             if($rsnum1 > 0) {
@@ -106,7 +106,7 @@ class SITEMAP{
                     if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
                         $sql2 .=  " and p.p_type not in ('1','3','5','7') ";
                     }
-                    $sql2 .=  " order by p.p_sort asc ";
+                    $sql2 .=  " order by p.p_sort ".$cms_cfg['sort_pos']." ";
                     $selectrs2 = $db->query($sql2);
                     $rsnum2    = $db->numRows($selectrs2);
                     if($rsnum2 > 0) {
@@ -143,7 +143,7 @@ class SITEMAP{
                 if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
                     $sql3 .=  " and p.p_type not in ('1','3','5','7') ";
                 }
-                $sql3 .=  " order by p.p_sort asc ";
+                $sql3 .=  " order by p.p_sort ".$cms_cfg['sort_pos']." ";
                 $selectrs3 = $db->query($sql3);
                 $rsnum3    = $db->numRows($selectrs3);
                 if($rsnum3 > 0) {
@@ -178,7 +178,7 @@ class SITEMAP{
             if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
                 $sql4 .=  " and p_type not in ('1','3','5','7') ";
             }
-            $sql4 .=  " order by p_sort asc ";
+            $sql4 .=  " order by p_sort ".$cms_cfg['sort_pos']." ";
             $selectrs4 = $db->query($sql4);
             while($row4 = $db->fetch_array($selectrs4,1)){
                 if($this->ws_seo){

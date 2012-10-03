@@ -103,6 +103,8 @@ $cms_cfg['sess_cookie_name']		= 'ipsdemoeng';
 $cms_cfg['mysql_dump'] = "/MySQL/bin/";   //mysqldump執行檔路徑
 $cms_cfg['sql_dir'] = "/sql_dump/";    //SQL備份檔存放路徑
 
+$cms_cfg['sort_pos'] = "asc";    //sort欄位的排序方法
+
 include_once("config.auth.php");
 
 ?>

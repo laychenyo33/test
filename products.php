@@ -198,7 +198,7 @@ class PRODUCTS{
                 //分類列表------------------------
                 $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id >'0'";
                 $sql .=  " and pc_parent='".$this->parent."' ";
-                $and_str = " and pc_status='1' order by pc_up_sort desc,pc_sort asc";
+                $and_str = " and pc_status='1' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos']." ";
                 $sql .= $and_str;
                 $selectrs = $db->query($sql);
                 $rsnum    = $db->numRows($selectrs);
@@ -295,9 +295,9 @@ class PRODUCTS{
             }
             //附加條件
             if($mode == "p_new") {
-                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_new_sort asc,p.p_modifydate desc";
+                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_new_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
             }else{
-                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_sort asc,p.p_modifydate desc";
+                $and_str = " and p.p_status='1' order by p.p_up_sort desc,p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
             }
             $sql .= $and_str;
             //取得總筆數
@@ -642,7 +642,7 @@ class PRODUCTS{
         $rsnum    = $db->numRows($selectrs);
         if($rsnum > 0 ){
             $row = $db->fetch_array($selectrs,1);
-            $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$row["pc_parent"]."' and pc_status='1' order by pc_up_sort desc,pc_sort asc";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$row["pc_parent"]."' and pc_status='1' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos']." ";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             if($rsnum > 0 ){

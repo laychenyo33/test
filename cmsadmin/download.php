@@ -136,7 +136,7 @@ class DOWNLOAD{
         if(!empty($_REQUEST["sk"])){
             $and_str = " and dc_subject like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by dc_sort asc";
+        $sql .= $and_str." order by dc_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結
@@ -380,7 +380,7 @@ class DOWNLOAD{
             if($_REQUEST["st"]=="d_content"){
                 $and_str .= " and d.d_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by d.d_sort asc,d.d_modifydate desc ";
+            $sql .= $and_str." order by d.d_sort ".$cms_cfg['sort_pos'].",d.d_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);

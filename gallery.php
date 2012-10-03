@@ -62,7 +62,7 @@ class GALLERY{
         $ext=($this->ws_seo)?".html":".php";
         $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">活動剪影</a>";
         //活動剪影分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where nc_status='1' order by nc_sort asc ";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
@@ -89,7 +89,7 @@ class GALLERY{
         }else{
             $gc_id=0;
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where (g_status='1' or (g_status='2' and g_startdate <= '".date("Y-m-d")."' and g_enddate >= '".date("Y-m-d")."')) ".$and_str." order by g_sort asc,g_modifydate desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where (g_status='1' or (g_status='2' and g_startdate <= '".date("Y-m-d")."' and g_enddate >= '".date("Y-m-d")."')) ".$and_str." order by g_sort ".$cms_cfg['sort_pos'].",g_modifydate desc";
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
@@ -150,7 +150,7 @@ class GALLERY{
         //活動剪影分類
         $ext=($this->ws_seo)?".html":".php";
         $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">Gallery</a>";
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where nc_status='1' order by nc_sort asc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
