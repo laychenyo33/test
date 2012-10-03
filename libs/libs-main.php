@@ -289,7 +289,7 @@ class MAINFUNC{
         $tpl->assignGlobal("LEFT_CATE_TITLE_IMG",$cms_cfg['base_images']."left-title-products.png");
         //判斷是否顯示主分類
         if($cms_cfg["ws_module"]["ws_left_main_pc"]==1) {
-            $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1' order by pc_up_sort desc,pc_sort desc";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos']." ";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
         }else{
@@ -336,7 +336,7 @@ class MAINFUNC{
                 }
                 //判斷是否顯示次分類
                 if($cms_cfg["ws_module"]["ws_left_sub_pc"]==1){
-                    $sql1="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$row["pc_id"]."' and pc_status='1' order by pc_up_sort desc,pc_sort desc ";
+                    $sql1="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$row["pc_id"]."' and pc_status='1' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos']." ";
                     $selectrs1 = $db->query($sql1);
                     $rsnum1    = $db->numRows($selectrs1);
                 }else{
@@ -388,7 +388,7 @@ class MAINFUNC{
                 }else{ //無次分類
                     //判斷是否顯示次分類的產品
                     if($cms_cfg["ws_module"]["ws_left_products"]==1){
-                        $sql2="select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$row["pc_id"]."' and p_status='1' order by p_up_sort desc,p_sort desc";
+                        $sql2="select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$row["pc_id"]."' and p_status='1' order by p_up_sort desc,p_sort ".$cms_cfg['sort_pos']." ";
                         $selectrs2 = $db->query($sql2);
                         $rsnum2    = $db->numRows($selectrs2);
                     }else{
@@ -441,7 +441,7 @@ class MAINFUNC{
             }
         }else{//無主分類,顯示未分類產品
             if($cms_cfg["ws_module"]["ws_left_products"]==1){
-                $sql3="select * from ".$cms_cfg['tb_prefix']."_products where pc_id='0' and p_status='1' order by p_up_sort desc,p_sort desc";
+                $sql3="select * from ".$cms_cfg['tb_prefix']."_products where pc_id='0' and p_status='1' order by p_up_sort desc,p_sort ".$cms_cfg['sort_pos']." ";
                 $selectrs3 = $db->query($sql3);
                 $rsnum3    = $db->numRows($selectrs3);
             }else{
@@ -922,7 +922,7 @@ class MAINFUNC{
                 $orderby=" order by ad_modifydate desc ";
                 break;
             case 2 :
-                $orderby=" order by ad_sort desc ";
+                $orderby=" order by ad_sort ".$cms_cfg['sort_pos']." ";
                 break;
             default :
                 $orderby=" order by rand() ";
@@ -1053,7 +1053,7 @@ class MAINFUNC{
         $tpl->newBlock("DROPDOWN_MENU");//載入下拉式功能的JS
         //撈取下拉式功能表項目
         /////產品介紹 的下拉式選單
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent = '0' order by pc_sort desc ";
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent = '0' order by pc_sort ".$cms_cfg['sort_pos']." ";
         $res = $db->query($sql);
         if($db->numRows($res)){
             while($row = $db->fetch_array($res,true)){
@@ -1068,7 +1068,7 @@ class MAINFUNC{
     */
     function goodlink_select(){
         global $db,$tpl,$cms_cfg;
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_goodlink where l_status='1' order by l_sort desc ";
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_goodlink where l_status='1' order by l_sort ".$cms_cfg['sort_pos']." ";
         $res = $db->query($sql);
         if($db->numRows($res)){
             while($row = $db->fetch_array($res,1)){
