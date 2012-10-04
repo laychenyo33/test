@@ -53,7 +53,7 @@ $cms_cfg['default_status_off'] = "icon-stop.gif";
 $cms_cfg['default_key'] = "icon-key.gif";
 $cms_cfg['default_lock'] = "icon-lock.gif";
 
-require_once dirname(__FILE__)."database.php";
+require_once dirname(__FILE__)."/database.php";
 
 //default language
 $cms_cfg['language'] = "eng";
