@@ -108,7 +108,6 @@ class FAQ{
             $and_str="and fc_id='".$fc_id."'";
         }
         $sql="select * from ".$cms_cfg['tb_prefix']."_faq where f_status='1' ".$and_str." order by f_sort ".$cms_cfg['sort_pos']." ";
-        echo $sql;
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
