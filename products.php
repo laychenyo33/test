@@ -544,7 +544,7 @@ class PRODUCTS{
                             $tpl->assignGlobal("VALUE_P_CART_TYPE","inquiry");
                             $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_INQUIRY']);
                         }else{
-                            $tpl->newBlock("SINGLE_INQUIRY".$this->template_str);
+                            $tpl->newBlock("SINGLE_INQUIRY");
                         }
                         //$tpl->gotoBlock("BIG_IMG".$this->template_str);
                     }else{
@@ -552,38 +552,38 @@ class PRODUCTS{
                         $tpl->assignGlobal("VALUE_P_SPECIAL_PRICE","");
                     }
                 }else{
-                    $tpl->newBlock("CART_TYPE_SHOPPING".$this->template_str);
+                    $tpl->newBlock("CART_TYPE_SHOPPING");
                     //$tpl->gotoBlock($show_style_str_p);
                     //會員有登入顯示折扣價
                     if(!empty($this->discount)){
                         if($this->discount!=100){ //無折扣也不顯示
                             $discount_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$row["p_special_price"]);
-                            $tpl->newBlock("SHOW_DISCOUNT".$this->template_str);
+                            $tpl->newBlock("SHOW_DISCOUNT");
                             $tpl->assign("VALUE_P_DISCOUNT_PRICE",$discount_price);
-                            $tpl->gotoBlock("BIG_IMG".$this->template_str);
+                            //$tpl->gotoBlock("BIG_IMG".$this->template_str);
                         }
                     }
                     $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["SHOPPING_CART"]);
                     $tpl->assignGlobal("VALUE_P_CART_TYPE","shopping");
                     $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_SHOPPING']);
-                    $tpl->gotoBlock("BIG_IMG".$this->template_str);
+                    //$tpl->gotoBlock("BIG_IMG".$this->template_str);
                 }
                 //附件檔案1
                 $ext_array= array("pdf","doc");
                 if($row["p_attach_file1"]){
                     $icon = $this->select_icon($row["p_attach_file1"]);
-                    $tpl->newBlock("ATTACH_FILE1".$this->template_str);
+                    $tpl->newBlock("ATTACH_FILE1");
                     $tpl->assign("VALUE_PAF_LINK",$cms_cfg["file_root"].$row["p_attach_file1"]);
                     $tpl->assign("ATTACH_ICON", $icon);
-                    $tpl->gotoBlock("BIG_IMG".$this->template_str);
+                    //$tpl->gotoBlock("BIG_IMG".$this->template_str);
                 }
                 //附件檔案2
                 if($row["p_attach_file2"]){
                     $icon = $this->select_icon($row["p_attach_file2"]);
-                    $tpl->newBlock("ATTACH_FILE2".$this->template_str);
+                    $tpl->newBlock("ATTACH_FILE2");
                     $tpl->assign("VALUE_PAF_LINK",$cms_cfg["file_root"].$row["p_attach_file2"]);
                     $tpl->assign("ATTACH_ICON", $icon);
-                    $tpl->gotoBlock("BIG_IMG".$this->template_str);
+                    //$tpl->gotoBlock("BIG_IMG".$this->template_str);
                 }
                 $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<img>"));
                 //產品敘述
