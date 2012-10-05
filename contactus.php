@@ -106,6 +106,7 @@ class CONTACTUS{
 //聯絡我們--資料更新================================================================
     function contactus_replace(){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
+            $main->magic_gpc($_REQUEST);
             if($cms_cfg["ws_module"]["ws_security"]==1){
                 $pass=(isset($_POST['callback']) && $main->math_security_isvalue())?1:0;
             }else{
@@ -129,17 +130,17 @@ class CONTACTUS{
                         cu_modifydate
                     ) values (
                         '".$this->m_id."',
-                        '".$_REQUEST["cu_cate"]."',
+                        '".mysql_real_escape_string($_REQUEST["cu_cate"])."',
                         '0',
-                        '".$_REQUEST["cu_company_name"]."',
-                        '".$_REQUEST["cu_contact_s"]."',
-                        '".$_REQUEST["cu_name"]."',
-                        '".$_REQUEST["cu_tel"]."',
-                        '".$_REQUEST["cu_fax"]."',
-                        '".$_REQUEST["cu_country"]."',
-                        '".$_REQUEST["cu_address"]."',
-                        '".$_REQUEST["cu_email"]."',
-                        '".$_REQUEST["cu_content"]."',
+                        '".mysql_real_escape_string($_REQUEST["cu_company_name"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_contact_s"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_name"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_tel"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_fax"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_country"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_address"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_email"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_content"])."',
                         '".date("Y-m-d H:i:s")."'
                     )";
                 $rs = $db->query($sql);
@@ -166,7 +167,7 @@ class CONTACTUS{
                             "VALUE_CU_TEL" => $_REQUEST["cu_tel"],
                             "VALUE_CU_ADDRESS" => $_REQUEST["cu_address"],
                             "VALUE_CU_EMAIL" => $_REQUEST["cu_email"],
-                            "VALUE_CU_CONTENT" => $_REQUEST["cu_content"]
+                            "VALUE_CU_CONTENT" => (get_magic_quotes_gpc())?stripcslashes($_REQUEST["cu_content"]):$_REQUEST["cu_content"]
                     ));
                     //國家欄位
                     if($cms_cfg["ws_module"]["ws_country"]==1) {
