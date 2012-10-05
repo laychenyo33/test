@@ -71,8 +71,8 @@
             function classCurrent(iFocusBtnID,iFocusTxID,n,caller){
                 var iFocusBtns= $(caller).find("#"+iFocusBtnID).find(_settings.btn_container);
                 var iFocusTxs = $(caller).find("#"+iFocusTxID).find(_settings.txt_container);
-                iFocusBtns[n].className = iFocusBtns[n].className.replace(_settings.normal_className,_settings.current_className);
-                iFocusTxs[n].className = iFocusTxs[n].className.replace(_settings.normal_className,_settings.current_className);
+                if(iFocusBtns[n])iFocusBtns[n].className = iFocusBtns[n].className.replace(_settings.normal_className,_settings.current_className);
+                if(iFocusTxs[n])iFocusTxs[n].className = iFocusTxs[n].className.replace(_settings.normal_className,_settings.current_className);
             }
 
             function iFocusChange(caller) {
