@@ -262,6 +262,7 @@ class MAINFUNC{
             $this->login_zone();
         }
         $this->mouse_disable(); //鎖滑鼠右鍵功能
+        //$this->dropdown_menu();
         //$this->float_menu();
         //$this->goodlink_select();
         //尾檔
