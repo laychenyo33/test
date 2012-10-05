@@ -49,7 +49,7 @@ $TPLMSG['FILE'] = "Archivo";
 $TPLMSG['PUBLISH_ON'] = "Restante del Cargo";
 $TPLMSG['PUBLISH_OFF'] = "Caducado";
 $TPLMSG['PAGE_BACK'] = "de nuevo";
-
+$TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";

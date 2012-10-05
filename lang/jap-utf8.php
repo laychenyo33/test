@@ -49,7 +49,7 @@ $TPLMSG['FILE'] = "ファイル";
 $TPLMSG['PUBLISH_ON'] = "未経過";
 $TPLMSG['PUBLISH_OFF'] = "期限切れの";
 $TPLMSG['PAGE_BACK'] = "戻る";
-
+$TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";

@@ -49,7 +49,7 @@ $TPLMSG['FILE'] = "Файл";
 $TPLMSG['PUBLISH_ON'] = "оставшийся";
 $TPLMSG['PUBLISH_OFF'] = "окончен";
 $TPLMSG['PAGE_BACK'] = "назад";
-
+$TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";

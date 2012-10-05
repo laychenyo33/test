@@ -49,7 +49,7 @@ $TPLMSG['FILE'] = "Dosya";
 $TPLMSG['PUBLISH_ON'] = "Devam Eden";
 $TPLMSG['PUBLISH_OFF'] = "süresi doldu";
 $TPLMSG['PAGE_BACK'] = "geri";
-
+$TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";

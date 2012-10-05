@@ -49,7 +49,7 @@ $TPLMSG['FILE'] = "arquivo";
 $TPLMSG['PUBLISH_ON'] = "não expirados";
 $TPLMSG['PUBLISH_OFF'] = "expirado";
 $TPLMSG['PAGE_BACK'] = "de volta";
-
+$TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";

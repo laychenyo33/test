@@ -253,10 +253,10 @@ class MAINFUNC{
         $tpl->assignGlobal("TAG_MENU_EQUIPMENT",$TPLMSG['EQUIPMENT']);
         $tpl->assignGlobal("TAG_MENU_CONTACTUS",$TPLMSG['CONTACT_US']);
         //設定頁腳變數
-        $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['CUS_ADDRESS']);
-        $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['CUS_FAX']);
-        $tpl->assignGlobal("TAG_FOOTER_TEL",$TPLMSG['CUS_TEL']);
-        $tpl->assignGlobal("TAG_FOOTER_EMAIL",$TPLMSG['CUS_EMAIL']);
+        $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['ADDRESS']);
+        $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['FAX']);
+        $tpl->assignGlobal("TAG_FOOTER_TEL",$TPLMSG['TEL']);
+        $tpl->assignGlobal("TAG_FOOTER_EMAIL",$TPLMSG['EMAIL']);
         //有會員即顯示會員登入區
         if($cms_cfg["ws_module"]["ws_member"]==1){
             $this->login_zone();

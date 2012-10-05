@@ -49,7 +49,7 @@ $TPLMSG['FILE'] = "档案";
 $TPLMSG['PUBLISH_ON'] = "刊登中";
 $TPLMSG['PUBLISH_OFF'] = "已过期";
 $TPLMSG['PAGE_BACK'] = "回上页";
-
+$TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系统预设首页";
