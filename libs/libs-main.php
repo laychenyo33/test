@@ -1104,5 +1104,18 @@ class MAINFUNC{
         }
         return $resize_img;
     }    
+	/*將$_GET,$_POST,$_COOKIE等資料去除magic_quotes_gpc = on時的影響(加\)
+	*/
+    function magic_gpc(&$data_arr){
+        if(get_magic_quotes_gpc()){
+            foreach($data_arr as $k => $value){
+                if(is_string($value)){
+                    $data_arr[$k] = stripslashes($value);
+                }elseif(is_array($value)){
+                    $this->magic_gpc($value);
+                }
+            }
+        }
+    }	
 }
 ?>
