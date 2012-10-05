@@ -149,7 +149,7 @@ class NEWS{
         if(!empty($_REQUEST["sk"])){
             $and_str = " and nc_subject like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by nc_sort desc";
+        $sql .= $and_str." order by nc_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結
@@ -403,7 +403,7 @@ class NEWS{
             if($_REQUEST["st"]=="n_content"){
                 $and_str .= " and n.n_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by n.n_sort desc,n.n_modifydate desc ";
+            $sql .= $and_str." order by n.n_sort ".$cms_cfg['sort_pos'].",n.n_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);

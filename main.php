@@ -270,7 +270,7 @@ class MAINDEFAULT{
     function news_list(){
         global $db,$tpl,$cms_cfg;
         //最新消息列表
-        $sql="select n.*,nc.nc_subject from ".$cms_cfg['tb_prefix']."_news as n left join ".$cms_cfg['tb_prefix']."_news_cate as nc on n.nc_id=nc.nc_id where  nc.nc_status='1' and (n.n_status='1' or (n.n_status='2' and n.n_startdate <= '".date("Y-m-d")."' and n.n_enddate >= '".date("Y-m-d")."')) order by n.n_modifydate desc limit 0,4";
+        $sql="select n.*,nc.nc_subject from ".$cms_cfg['tb_prefix']."_news as n left join ".$cms_cfg['tb_prefix']."_news_cate as nc on n.nc_id=nc.nc_id where  nc.nc_status='1' and (n.n_status='1' or (n.n_status='2' and n.n_startdate <= '".date("Y-m-d")."' and n.n_enddate >= '".date("Y-m-d")."')) order by n.n_sort ".$cms_cfg['sort_pos'].",n.n_modifydate desc limit 0,4";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $i=0;
