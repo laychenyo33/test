@@ -516,6 +516,7 @@ class MAINFUNC{
         }
         ($cms_cfg["ws_module"]["ws_statistic"])?$tpl->newBlock( "AUTHORITY_STATISTIC" ):"";
         ($cms_cfg["ws_module"]["ws_service"])?$tpl->newBlock( "AUTHORITY_SERVICE" ):"";
+        ($cms_cfg["ws_module"]["ws_index_banner"])?$tpl->newBlock( "INDEX_BANNER" ):"";//自訂首頁banner管理
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
     }
