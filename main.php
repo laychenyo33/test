@@ -10,15 +10,16 @@ class MAINDEFAULT{
         $this->ws_tpl_file = "templates/ws-index-tpl.html";
         $this->ws_load_tp($this->ws_tpl_file);
         //請依首頁不同的版型取消註解，顯示以下的項目
-//         $this->products_rand(); //隨機產品
-//         $this->show_category_list(); //分類列表
-//         $this->new_products_list();   //最新產品
-//         $this->hot_products_list();   //熱門產品
-//         $this->promotion_products_list(); //促銷產品
-//         $main->ad_list(0); //廣告列表
-//         $this->news_list(); //最新消息
-//         $this->aboutus_list(); //關於我們
-//         $main->counter(); //網站計數器
+//        $this->products_rand(); //隨機產品
+//        $this->show_category_list(); //分類列表
+//        $this->new_products_list();   //最新產品
+//        $this->hot_products_list();   //熱門產品
+//        $this->promotion_products_list(); //促銷產品
+//        $main->ad_list(0); //廣告列表
+//        $this->news_list(); //最新消息
+//        $this->aboutus_list(); //關於我們
+//        $main->counter(); //網站計數器
+//        $this->index_banner(); //自訂首頁banner
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -318,6 +319,21 @@ class MAINDEFAULT{
             $i++;
             if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"])){
                 $tpl->assignGlobal( "VALUE_AU_CONTENT" , mb_substr($row["au_content"], 0, 520, 'utf-8')."...");
+            }
+        }
+    }
+    //自訂首頁banner
+    function index_banner(){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_index_banner order by ib_id ";
+        $res = $db->query($sql);
+        if($db->num_rows($res)){
+            while($row = $db->fetch_array($res,1)){
+                $tpl->newBlock("INDEX_BANNER_ITEM");
+                $tpl->assign(array(
+                    "VALUE_BANNER_IMG"  => $row['ib_img'],
+                    "VALUE_BANNER_LINK" => $row['ib_link']
+                ));
             }
         }
     }

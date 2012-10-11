@@ -51,6 +51,13 @@ class SYSTEMCFG{
                 $this->system_config_replace();
                 $this->ws_tpl_type=1;
                 break;
+	    case "sc_banner"://首頁Banner設定
+		$this->current_class="IB";
+                $this->ws_tpl_file = "templates/ws-manage-banner-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->index_banner();
+                $this->ws_tpl_type=1;
+	        break;             
             default:    //系統設定
                 $this->ws_tpl_file = "templates/ws-manage-system-config-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -281,6 +288,40 @@ class SYSTEMCFG{
             $tpl->assignGlobal( "TAG_META_REFRESH" , "<meta http-equiv=\"refresh\" content=\"$sec;URL=$url\">");
         }
     }
+    //自訂首頁banner
+    function index_banner(){
+	global $db,$tpl,$cms_cfg,$main;
+        if($cms_cfg['index_banner_nums']>0){
+            $sql="select * from ".$cms_cfg['tb_prefix']."_index_banner order by ib_id ";
+            $data_array = $db->get_result($sql);       
+            for($i=1;$i<=$cms_cfg['index_banner_nums'];$i++){
+                $tpl->newBlock("INDEX_BANNER_ITEM");
+                $tpl->assign(array(
+                    "SERIAL" => $i,
+                    "VALUE_IB_IMG"  => $data_array[$i-1]['ib_img'],
+                    "VALUE_IB_LINK" => $data_array[$i-1]['ib_link'],
+                ));
+            }
+        }
+        if($_REQUEST['banner_updata_ck']){
+            $sql = "REPLACE INTO `".$cms_cfg['tb_prefix']."_index_banner`VALUES";
+            foreach($_REQUEST['ib_img'] as $k=>$img){
+                $value_arr[] = sprintf("(%d,'%s','%s')",$k,$img,$_REQUEST['ib_link'][$k]);
+            }
+            $sql .= explode(',',$value_arr);
+            $db->query($sql);
+            $db_msg = $db->report();
+        }
+        if($db_msg == ""){
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                $goto_url=$cms_cfg["manage_url"]."system-config.php?func=sc_banner";
+                $this->goto_target_page($goto_url);
+        }else{
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+                $this->error = 1;
+        }
+        
+    }       
 }
 //ob_end_flush();
 ?>

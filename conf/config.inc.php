@@ -106,6 +106,9 @@ $cms_cfg['sql_dir'] = "/sql_dump/";    //SQL備份檔存放路徑
 $cms_cfg['sort_pos'] = "asc";    //sort欄位的排序方法
 $cms_cfg['path_separator'] = " > ";    //麵包屑(網站路徑的分隔符號)
 
+//custom index banner numbers
+$cms_cfg['index_banner_nums'] = 4;
+
 include_once("config.auth.php");
 
 ?>

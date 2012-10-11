@@ -355,7 +355,7 @@ class CONTACTUS{
         $from_email=explode(",",$from);
         $from_name=(trim($_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]))?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]:$from_email[0];
         //寄給送信者
-        $MAIL_HEADER   = "From: ".$from_name." <".$from_email[0].">\n";
+        $MAIL_HEADER   = "From: =?UTF-8?B?".base64_encode($from_name)."?= <".$from_email[0].">\n";
         $MAIL_HEADER  .= "Content-Type: text/html; charset=\"utf-8\"\n";
         $MAIL_HEADER  .= "X-Priority: 1\n";
 
