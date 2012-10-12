@@ -399,7 +399,7 @@ class EPAPER{
                 if($i%2){
                     $tpl->assign("TAG_TR_CLASS","class='altrow'");
                 }
-                $tpl->assign( array("VALUE_EC_ID"  => $row["e_id"],
+                $tpl->assignGlobal( array("VALUE_EC_ID"  => $row["e_id"],
                                     "VALUE_E_ID"  => $row["e_id"],
                                     "VALUE_E_SORT"  => $row["e_sort"],
                                     "VALUE_E_SUBJECT" => $row["e_subject"],
@@ -409,6 +409,7 @@ class EPAPER{
                                     "VALUE_STATUS_IMG_ALT" => ($row["e_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
 
                 ));
+                if($row["e_status"])$tpl->newBlock("EPAPER_SEND_BUTTON");
 
             }
             if($i==0){

@@ -1,7 +1,7 @@
 <!-- INCLUDE BLOCK : HEADER -->
 <div id="man_zone">
 <h1>電子報管理</h1>
-<form action="download.php" method="get" name="myform" class="formular" id="formID">
+<form action="epaper.php" method="get" name="myform" class="formular" id="formID">
     <table width="95%" border="0" cellpadding="0" cellspacing="0" class="catetable">
        <tr>
           <!-- START BLOCK : EPAPER_CATE_LIST -->
@@ -62,9 +62,13 @@
       <td><input type="text" name="sort_value[{VALUE_E_ID}]" value="{VALUE_E_SORT}" class="validate[custom[onlyNumber]]" size="2" maxlength="4"></td>
       <td>{VALUE_EC_SUBJECT}</td>
       <td><a href="epaper.php?func=e_preview&e_id={VALUE_E_ID}" target="_blank">{VALUE_E_SUBJECT}</a></td>
-      <td><a href="epaper.php?func=e_send&e_id={VALUE_E_ID}">發送</a></td>
+      <td>
+          <!-- START BLOCK : EPAPER_SEND_BUTTON -->
+          <a href="epaper.php?func=e_send&e_id={VALUE_E_ID}">發送</a>
+          <!-- END BLOCK : EPAPER_SEND_BUTTON -->          
+      </td>
       <td><a href="epaper.php?func=e_mod&e_id={VALUE_E_ID}&st={VALUE_SEARCH_TARGET}&sk={SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}"><img src="images/icon-edit2.gif" width="11" border="0" alt="{MSG_MODIFY}" /></a></td>
-      <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','epaper.php?func=e_del&e_id={VALUE_E_ID}&st={VALUE_SEARCH_TARGET}&sk={VALUE_SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}');"><img src="image/icon-del2.gif" width="10" height="9" border="0" /></a></td>
+      <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','epaper.php?func=e_del&e_id={VALUE_E_ID}&st={VALUE_SEARCH_TARGET}&sk={VALUE_SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}');"><img src="images/icon-del2.gif" width="10" height="9" border="0" /></a></td>
       <td><img src="images/{VALUE_STATUS_IMG}" alt='{VALUE_STATUS_IMG_ALT}{MSG_STATUS}' border="0" /></td>
     </tr>
     <!-- END BLOCK : EPAPER_LIST -->
