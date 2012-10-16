@@ -37,7 +37,7 @@
                         "regex":"/^[0-9\-\(\)\ ]+$/",
                         "alertText":"* Invalid phone number"},  
                     "email":{
-                        "regex":"/^[a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4}$/",
+                        "regex":"/^([a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4})*$/",
                         "alertText":"* Invalid email address"}, 
                     "date":{
                          "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",

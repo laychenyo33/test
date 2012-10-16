@@ -37,7 +37,7 @@
                         "regex":"/^[0-9\-\(\)\ ]+$/",
                         "alertText":"* Número de teléfono no válido"},  
                     "email":{
-                        "regex":"/^[a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4}$/",
+                        "regex":"/^([a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4})*$/",
                         "alertText":"* Dirección de correo electrónico no válido"}, 
                     "date":{
                          "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",
