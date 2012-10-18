@@ -42,10 +42,7 @@
 (function($){
     $(document).ready(function() {
         // SUCCESS AJAX CALL, replace "success: false," by:     success : function() { callSuccessFunction() }, 
-        $("#formID").validationEngine({
-            success : function() { callSuccessFunction() }, 
-            failure : function() {}
-        })
+        $("#formID").validationEngine();
         //$.validationEngine.buildPrompt("#date","This is an example","error")           // Exterior prompt build example
         //$.validationEngine.closePrompt(".date")                                        // Exterior prompt close example
     });    
