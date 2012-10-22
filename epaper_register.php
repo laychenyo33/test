@@ -4,10 +4,11 @@ new epaper_register();
 class epaper_register {
     //put your code here
     function __construct() {
+        global $TPLMSG;
         $result = $this->_isDataValid($_POST);
         if($result[0]){ //註冊epaper資料有效
             $this->_register_data($_POST);
-            $this->_show_msg("your submit is registered!");
+            $this->_show_msg($TPLMSG['EPAPER_REGISTERED']);
         }else{  //註冊epaper資料無效
             $this->_show_msg($result[1]);
         }
@@ -15,21 +16,25 @@ class epaper_register {
     }
     
     protected function _isDataValid(&$data){
-        global $main;
+        global $TPLMSG,$main;
         $main->magic_gpc($data);
         $result = array(false,'');
         if(!empty($data['name']) && !empty($data['email'])){
             if(strtolower($data['name'])!='name' && strtolower($data['email'])!='e-mail'){
                 if(!$this->_isMailExists($data['email'])){
-                    $result[0] = true;
+                    if(strpos('@', $data['email'])!==FALSE){
+                        $result[0] = true;
+                    }else{
+                        $result[1] = $TPLMSG['EPAPER_EMAIL_INVALID'];
+                    }                    
                 }else{
-                    $result[1] = "e-mail existed!";
+                    $result[1] = $TPLMSG['EPAPER_EMAIL_EXISTED'];
                 }                
             }else{
-                $result[1] = "name or e-mail missing";
+                $result[1] = $TPLMSG['EPAPER_MISSING_DATA'];
             }
         }else{
-            $result[1] = "name or e-mail missing";
+            $result[1] = $TPLMSG['EPAPER_MISSING_DATA'];
         }
         return $result;
     }
@@ -53,14 +58,12 @@ class epaper_register {
     }
     
     protected function _show_msg($msg){
-        global $cms_cfg;
-        header("content-type:text/html;charset=utf-8");
-        echo <<<MSG
-       <script type="text/javascript">
-           alert("{$msg}");
-           history.go(-1);
-       </script>
-MSG;
+        global $tpl,$cms_cfg,$main;
+        $tpl = new TemplatePower("templates/ws-epaper-msg-tpl.html");
+        $tpl->prepare();
+        $main->header_footer("epaper");
+        $tpl->assign("_ROOT.MSG",$msg);
+        $tpl->printToScreen();
     }
     
 }

@@ -244,4 +244,9 @@ $TPLMSG['TRANSFER_BANK_CODE'] = "Nom de la banque";
 $TPLMSG['TRANSFER_ACCOUNT'] = "transfert de compte";
 
 $TPLMSG['SELECT_COUNTRY'] = "choisir le pays";
+
+$TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
+$TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
+$TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
+$TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
 ?>

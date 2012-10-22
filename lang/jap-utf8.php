@@ -245,4 +245,9 @@ $TPLMSG['TRANSFER_BANK_CODE'] = "銀行名";
 $TPLMSG['TRANSFER_ACCOUNT'] = "振替口座";
 
 $TPLMSG['SELECT_COUNTRY'] = "国を選択";
+
+$TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
+$TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
+$TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
+$TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
 ?>

@@ -248,4 +248,9 @@ $TPLMSG['TRANSFER_BANK_CODE'] = "台湾银行 (代码：004)";
 $TPLMSG['TRANSFER_ACCOUNT'] = "转帐帐号";
 
 $TPLMSG['SELECT_COUNTRY'] = "选择国家";
+
+$TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
+$TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
+$TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
+$TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
 ?>

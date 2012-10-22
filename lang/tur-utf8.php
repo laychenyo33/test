@@ -244,4 +244,9 @@ $TPLMSG['TRANSFER_BANK_CODE'] = "Banka Adı";
 $TPLMSG['TRANSFER_ACCOUNT'] = "Transferi Hesap";
 
 $TPLMSG['SELECT_COUNTRY'] = "Ülke Seç";
+
+$TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
+$TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
+$TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
+$TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
 ?>

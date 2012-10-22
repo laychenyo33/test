@@ -250,4 +250,9 @@ $TPLMSG['TRANSFER_BANK_CODE'] = "台灣銀行 (代碼：004)";
 $TPLMSG['TRANSFER_ACCOUNT'] = "轉帳帳號";
 
 $TPLMSG['SELECT_COUNTRY'] = "選擇國家";
+
+$TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
+$TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
+$TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
+$TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
 ?>

@@ -224,4 +224,9 @@ $TPLMSG['TRANSFER_BANK_CODE'] = "Название банка";
 $TPLMSG['TRANSFER_ACCOUNT'] = "Передача счет";
 
 $TPLMSG['SELECT_COUNTRY'] = "Выберите страну";
+
+$TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
+$TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
+$TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
+$TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
 ?>
