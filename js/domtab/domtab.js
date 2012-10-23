@@ -47,7 +47,8 @@ domtab={
 		var id;
 		var loc=window.location.toString();
 		loc=/#/.test(loc)?loc.match(/#(\w.+)/)[1]:'';
-		if(loc==''){return;}
+                return;
+//		if(loc==''){return;}
 		var elm=document.getElementById(loc);
 		if(!elm){return;}
 		var parentMenu=elm.parentNode.parentNode.parentNode;
