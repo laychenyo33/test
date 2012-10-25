@@ -24,14 +24,14 @@ class MAINFUNC{
             $page_end=($total%$op_limit)?$Page["total_pages"] : $Page["total_pages"]+1;
         }else{
             //有上跳頁沒有下跳頁
-            if($jp>= $ppages){ //最後下跳頁
+            if($jp>= $ppages-1){ //最後下跳頁
                 $bp=$jp-1;
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
                 $Page["nj_page"]="";
             }
             //有上跳頁也有下跳頁
-            if($jp < $ppages && $jp!=0){
+            if($jp < $ppages-1 && $jp!=0){
                 $bp=$jp-1;
                 $np=$jp+1;
                 $prev=$page_start-1;
