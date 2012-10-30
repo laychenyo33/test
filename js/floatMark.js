@@ -32,7 +32,7 @@ Date:March 2008
 
             setInterval(function(){
 
-                    diffY = document.documentElement.scrollTop; //(document.all)?
+                    diffY = (document.all)?document.documentElement.scrollTop:self.pageYOffset;
                     diffX = $(window).width()-$(obj).outerWidth();
 
 
