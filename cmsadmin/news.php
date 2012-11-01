@@ -566,7 +566,7 @@ class NEWS{
             $tpl->newBlock( "SELECT_OPTION_NEWS_CATE" );
             $tpl->assign( array( "OPTION_NEWS_CATE_NAME"  => $row1["nc_subject"],
                                  "OPTION_NEWS_CATE_VALUE" => $row1["nc_id"],
-                                 "STR_NC_SEL"       => ($row1["nc_id"]==$row["nc_id"])?"selected":""
+                                 "STR_NC_SEL"       => ($row1["nc_id"]==$row["nc_id"] || $row1["nc_id"]==$_REQUEST["nc_id"])?"selected":""
             ));
         }
 		if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
