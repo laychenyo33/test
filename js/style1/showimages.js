@@ -98,6 +98,11 @@
             var container = this;
             var autoiFocus = function(index) {
                 caller = container[index];
+                //沒有按鈕就清除intervalId, 修改於2012.11.02
+                if(!$(caller).find("#"+_settings.btn_id).find(_settings.btn_container).size()){
+                    clearInterval(caller.intervalId);
+                    return false;
+                }                
                 if(!caller) return false;
                 if(caller.atuokey) return false;
                 if($(caller).parent().css("display")=="none")return false;
@@ -130,7 +135,7 @@
                  var wrapper = this[i];
                  iFocusChange(wrapper);
                  wrapper.atuokey = false;
-                 setInterval("jQuery.autoiFocus("+i+")",10000);
+                 wrapper.intervalId = setInterval("jQuery.autoiFocus("+i+")",10000);
             }
             return this;
        }
