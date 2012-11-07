@@ -311,14 +311,14 @@ class SYSTEMCFG{
             $sql .= explode(',',$value_arr);
             $db->query($sql);
             $db_msg = $db->report();
-        }
-        if($db_msg == ""){
-                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."system-config.php?func=sc_banner";
-                $this->goto_target_page($goto_url);
-        }else{
-                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
-                $this->error = 1;
+            if($db_msg == ""){
+                    $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                    $goto_url=$cms_cfg["manage_url"]."system-config.php?func=sc_banner";
+                    $this->goto_target_page($goto_url);
+            }else{
+                    $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+                    $this->error = 1;
+            }
         }
         
     }       
