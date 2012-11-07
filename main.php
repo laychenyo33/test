@@ -330,10 +330,19 @@ class MAINDEFAULT{
         if($db->numRows($res)){
             while($row = $db->fetch_array($res,1)){
                 $tpl->newBlock("INDEX_BANNER_ITEM");
-                $tpl->assign(array(
-                    "VALUE_BANNER_IMG"  => $row['ib_img'],
-                    "VALUE_BANNER_LINK" => $row['ib_link']
-                ));
+                //依據鏈結資料有無進入不同的區塊
+                if(trim($row['ib_link'])){
+                    $tpl->newBlock("INDEX_BANNER_ITEM_IN_LINK");
+                    $tpl->assign(array(
+                        "VALUE_BANNER_IMG"  => $row['ib_img'],
+                        "VALUE_BANNER_LINK" => $row['ib_link']
+                    ));
+                }else{
+                    $tpl->newBlock("INDEX_BANNER_ITEM_NO_LINK");
+                    $tpl->assign(array(
+                        "VALUE_BANNER_IMG"  => $row['ib_img']
+                    ));
+                }
             }
         }
     }
