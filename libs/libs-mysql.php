@@ -112,7 +112,7 @@ class DB {
       $this->query($query);
     }
     $result = $this->fetch_array($this->query_result);
-    $this->free_result();
+    $this->freeResult();
     return $result;
   }
 
@@ -202,7 +202,7 @@ class DB {
       $res[$i] = $row;
       $i++;
     }
-    $this->free_result();
+    $this->freeResult();
     return $res;
   }
 
