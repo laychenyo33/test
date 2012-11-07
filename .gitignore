@@ -18,3 +18,4 @@ local.properties
 Thumbs.db
 /nbproject/private/
 /conf/database.php
+/upload_files/*
