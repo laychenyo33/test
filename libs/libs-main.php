@@ -200,7 +200,7 @@ class MAINFUNC{
     }
     //頭尾檔設定
     function header_footer($meta_array,$seo_h1=""){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG;
         if($cms_cfg["ws_module"]["ws_seo"] ==0 ){
             unset($meta_array);
             // IPB META SETUP
@@ -246,12 +246,11 @@ class MAINFUNC{
         $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
         $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
         //設定主選單變數
-        $tpl->assignGlobal("TAG_MENU_ABOUTUS",$TPLMSG['INTRODUCTION']);
-        $tpl->assignGlobal("TAG_MENU_PRODUCTS",$TPLMSG['PRODUCTS']);
-        $tpl->assignGlobal("TAG_MENU_NEWS",$TPLMSG['NEWS']);
-        $tpl->assignGlobal("TAG_MENU_QUALITY",$TPLMSG['QUALITY'] );
-        $tpl->assignGlobal("TAG_MENU_EQUIPMENT",$TPLMSG['EQUIPMENT']);
-        $tpl->assignGlobal("TAG_MENU_CONTACTUS",$TPLMSG['CONTACT_US']);
+        if(!empty($ws_array["main"])){
+            foreach($ws_array["main"] as $item => $itemName){
+                $tpl->assignGlobal("TAG_MENU_".  strtoupper($item),  $itemName);
+            }
+        }
         //設定頁腳變數
         $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['ADDRESS']);
         $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['FAX']);
