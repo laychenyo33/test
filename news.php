@@ -61,9 +61,6 @@ class NEWS{
         $tpl->assignGlobal( "TAG_NEWS_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["news"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-news"); //主要顯示區域的css設定
-        if($_REQUEST["f"]=="news"){
-            $main->header_footer("news", $TPLMSG["NEWS"]);
-        }
         $main->google_code(); //google analystics code , google sitemap code
     }
 
@@ -111,6 +108,10 @@ class NEWS{
                 $nc_id=$row["nc_id"];
             }
         }
+        //最新消息首頁適用的 header_footer
+        if(!isset($_GET['nc_id']) && !isset($_GET['f']) ){
+            $main->header_footer("news",$TPLMSG["NEWS"]);
+        }        
         $tpl->assignGlobal("TAG_LAYER",$news_link);
         //最新消息列表
         if($nc_id!=0){
