@@ -325,7 +325,7 @@ class MAINDEFAULT{
     //自訂首頁banner
     function index_banner(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_index_banner order by ib_id ";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_index_banner where ib_img<>'' order by ib_id ";
         $res = $db->query($sql);
         if($db->numRows($res)){
             while($row = $db->fetch_array($res,1)){
