@@ -50,7 +50,7 @@ class DB {
     }
   }
 
-  function query($query = "") {
+  function query($query = "",$showError=false) {
     unset($this->query_result);
     if ($query != "") {
       //if (defined("PRINT_QUERIES") || defined("PRINT_STATS")) {
@@ -61,7 +61,11 @@ class DB {
       $querytime_before = ((float)$usec + (float)$sec);
 
       $this->query_result = @mysql_query($query, $this->connection);
-
+      if($showError){
+            if($this->report()){
+                echo $this->report();die();
+            }          
+      }
       list($usec, $sec) = explode(' ',microtime());
       $querytime_after = ((float)$usec + (float)$sec);
 
