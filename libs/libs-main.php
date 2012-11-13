@@ -320,8 +320,8 @@ class MAINFUNC{
                 ));
                 //左方產品次分類為click menu
                 if($cms_cfg['ws_module']['ws_seo']==1){
-                    if($_REQUEST["f"]!="") {
-                        if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && $row["pc_seo_filename"]==$_REQUEST["f"]) {
+                    if($_REQUEST["d"] || $_REQUEST["f"]) {
+                        if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && ($row["pc_seo_filename"]==$_REQUEST["d"] || $row["pc_seo_filename"]==$_REQUEST["f"])) {
                             $tpl->assignGlobal("CLICK_NUM1", $i);
                         }
                     }else{
@@ -366,8 +366,8 @@ class MAINFUNC{
                         ));
                         //左方產品次分類為click menu
                         if($cms_cfg['ws_module']['ws_seo']==1){
-                            if($_REQUEST["f"]!="") {
-                                if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && $row1["pc_seo_filename"]==$_REQUEST["f"]) {
+                            if($_REQUEST["d"] || $_REQUEST["f"]) {
+                                if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && ($row1["pc_seo_filename"]==$_REQUEST["d"] || $row1["pc_seo_filename"]==$_REQUEST["f"])) {
                                     $tpl->assignGlobal("CLICK_NUM1", $i);
                                 }
                             }else{
