@@ -299,6 +299,14 @@ class MAINFUNC{
             //有次分類或主分類產品
             if($cms_cfg["ws_module"]["ws_left_menu_effects"]==1) {
                 $tpl->newBlock("JS_LEFT_MENU");
+                switch($cms_cfg["ws_module"]['ws_left_menu_type']){
+                    case 1:
+                        $tpl->newBlock("CLICK_MODE");
+                        break;
+                    case 0:
+                        $tpl->newBlock("OVER_MODE");
+                        break;
+                }
             }
             $i=0;
             while($row = $db->fetch_array($selectrs,1)){
@@ -321,8 +329,13 @@ class MAINFUNC{
                 //左方產品次分類為click menu
                 if($cms_cfg['ws_module']['ws_seo']==1){
                     if($_REQUEST["d"] || $_REQUEST["f"]) {
-                        if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && ($row["pc_seo_filename"]==$_REQUEST["d"] || $row["pc_seo_filename"]==$_REQUEST["f"])) {
-                            $tpl->assignGlobal("CLICK_NUM1", $i);
+                        if($row["pc_seo_filename"]==$_REQUEST["d"] || $row["pc_seo_filename"]==$_REQUEST["f"]){
+                            $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
+                            if($cms_cfg["ws_module"]["ws_left_menu_type"]==1  ) {
+                                $tpl->assignGlobal("CLICK_NUM1", $i);
+                            }else{
+                                $tpl->assignGlobal("OVER_NUM1", $i);
+                            }
                         }
                     }else{
                         if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && $row["pc_id"]==$_REQUEST["pc_parent"]) {
@@ -367,8 +380,13 @@ class MAINFUNC{
                         //左方產品次分類為click menu
                         if($cms_cfg['ws_module']['ws_seo']==1){
                             if($_REQUEST["d"] || $_REQUEST["f"]) {
-                                if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && ($row1["pc_seo_filename"]==$_REQUEST["d"] || $row1["pc_seo_filename"]==$_REQUEST["f"])) {
-                                    $tpl->assignGlobal("CLICK_NUM1", $i);
+                                if($row1["pc_seo_filename"]==$_REQUEST["d"] || $row1["pc_seo_filename"]==$_REQUEST["f"]){
+                                    $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
+                                    if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 ) {
+                                        $tpl->assignGlobal("CLICK_NUM1", $i);
+                                    }else{
+                                        $tpl->assignGlobal("OVER_NUM1", $i);
+                                    }
                                 }
                             }else{
                                 if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && $row1["pc_id"]==$_REQUEST["pc_parent"]) {
