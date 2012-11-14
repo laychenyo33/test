@@ -83,7 +83,6 @@ class AD{
         $tpl->assignInclude( "TOP_MENU", $cms_cfg['manage_top_menu_tpl']);
         $tpl->assignInclude( "MAIN", $ws_tpl_file);
         $tpl->prepare();
-        $tpl->assignGlobal("TAG_".$this->current_class."_CURRENT","class=\"current\"");
         $tpl->assignGlobal("CSS_BLOCK_AD","style=\"display:block\"");
          //依權限顯示項目
         $main->mamage_authority();
@@ -96,6 +95,8 @@ class AD{
         //聯絡我們分類
         $i=0;
         $tpl->assignGlobal("TAG_NOW_CATE" ,$TPLMSG["NO_CATE"]);
+        $tpl->assignGlobal("TAG_".$this->current_class."_CURRENT","class=\"current\"");
+
         foreach($ws_array["ad_cate"] as $key =>$value){
             $i++;
             $tpl->newBlock( "AD_CATE_LIST" );
@@ -212,6 +213,8 @@ class AD{
                                   "STR_AD_FILE_TYPE_TXT" => "",
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
+        $tpl->assignGlobal("TAG_".$this->current_class."_ADD_CURRENT","class=\"current\"");
+
         //相關參數
         if(!empty($_REQUEST['nowp'])){
             $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
