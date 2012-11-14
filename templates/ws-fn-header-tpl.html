@@ -149,3 +149,12 @@
 })(jQuery);    
 </script>
 <!-- END BLOCK : EASYACCORDION_SCRIPT -->
+<!-- START BLOCK : JSCAROUSEL_SCRIPT -->
+<script type="text/javascript">
+    (function($){
+        $(document).ready(function(){
+            $('#servies-main').jsCarousel({ onthumbnailclick: function(src) { alert(src); }, autoscroll: true, masked: true, itemstodisplay: 2, orientation: 'v' });
+        });
+    })(jQuery);
+</script>
+<!-- END BLOCK : JSCAROUSEL_SCRIPT -->
