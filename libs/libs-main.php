@@ -918,7 +918,6 @@ class MAINFUNC{
     }
     //取得最大排序值
     function get_max_sort_value($table_name,$table_prefix,$field,$id,$cate){
-//        return 0;
         global $db;
         if($cate){ //是否有上層分類
             $sql="select MAX(".$table_prefix."_sort) as max_value from ".$table_name." where ".$field."='".$id."'";
@@ -930,19 +929,18 @@ class MAINFUNC{
         $sort_value=$row["max_value"]+1;
         return $sort_value;
     }
+    
     function ad_list($id){
         global $db,$tpl,$cms_cfg;
         //排序方式
         switch($_SESSION[$cms_cfg['sess_cookie_name']]["sc_ad_sort_type"]){
-            case 0 :
-                $orderby=" order by rand() ";
+            case 2 :
+                $orderby=" order by ad_sort ".$cms_cfg['sort_pos']." ";
                 break;
             case 1 :
                 $orderby=" order by ad_modifydate desc ";
                 break;
-            case 2 :
-                $orderby=" order by ad_sort ".$cms_cfg['sort_pos']." ";
-                break;
+            case 0 :
             default :
                 $orderby=" order by rand() ";
         }
@@ -957,9 +955,14 @@ class MAINFUNC{
                 switch($row["ad_file_type"]){
                     case "image" :
                         $tpl->newBlock("AD_TYPE_IMAGE_580_120");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_IMAGE_580_120_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_IMAGE_580_120_NOLINK");
+                        }
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
                         $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
-                        $tpl->assign("VALUE_AD_FILE",$row["ad_file"]);
+                        $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$row["ad_file"]);
                         break;
                     case "flash" :
                         $tpl->newBlock("AD_TYPE_FLASH_580_120");
@@ -971,8 +974,14 @@ class MAINFUNC{
                         break;
                     case "txt" :
                         $tpl->newBlock("AD_TYPE_TXT_580_120");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_TXT_580_120_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_TXT_580_120_NOLINK");
+                        }
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
                         $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
+                        $tpl->assign("VALUE_AD_FILE",$row["ad_file"]);
                         break;
                 }
                 $tpl->gotoBlock("AD_ZONE_580_120");
@@ -989,6 +998,11 @@ class MAINFUNC{
                 switch($row["ad_file_type"]){
                     case "image" :
                         $tpl->newBlock("AD_TYPE_IMAGE_150_150");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_IMAGE_150_150_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_IMAGE_150_150_NOLINK");
+                        }
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
                         $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
                         $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$row["ad_file"]);
@@ -1003,8 +1017,14 @@ class MAINFUNC{
                         break;
                     case "txt" :
                         $tpl->newBlock("AD_TYPE_TXT_150_150");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_TXT_150_150_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_TXT_150_150_NOLINK");
+                        }
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
                         $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
+                        $tpl->assign("VALUE_AD_FILE",$row["ad_file"]);
                         break;
                 }
                 $tpl->gotoBlock("AD_ZONE_150_150");
@@ -1021,6 +1041,11 @@ class MAINFUNC{
                 switch($row["ad_file_type"]){
                     case "image" :
                         $tpl->newBlock("AD_TYPE_IMAGE_150_50");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_IMAGE_150_50_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_IMAGE_150_50_NOLINK");
+                        }
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
                         $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
                         $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$row["ad_file"]);
@@ -1035,8 +1060,14 @@ class MAINFUNC{
                         break;
                     case "txt" :
                         $tpl->newBlock("AD_TYPE_TXT_150_50");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_TXT_150_50_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_TXT_150_50_NOLINK");
+                        }
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
                         $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
+                        $tpl->assign("VALUE_AD_FILE",$row["ad_file"]);
                         break;
                 }
                 $tpl->gotoBlock("AD_ZONE_150_50");

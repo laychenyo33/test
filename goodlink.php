@@ -46,6 +46,8 @@ class GOODLINK{
         $tpl->assignInclude( "HEADER", $cms_cfg['base_header_tpl']); //頭檔title,meta,js,css
         $tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //左方一般表單
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
+        $tpl->assignInclude( "AD_IMG", "templates/ws-fn-ad-image-tpl.html"); //圖片廣告模板
+        $tpl->assignInclude( "AD_TXT", "templates/ws-fn-ad-txt-tpl.html"); //文字廣告模板        
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , "相關網站");
         $tpl->assignGlobal( "TAG_GOODLINK_CURRENT" , "class='current'");
