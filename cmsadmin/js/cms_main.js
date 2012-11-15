@@ -269,40 +269,47 @@ function resize_opener(){
     window.opener.resizeTo(scr_width,scr_height);
 }
 
-
 /* checkbox 全選/取消 */
 function click_all(form) {
-    if (form.box_check.value == 1) {
-        if (form.total_box.value ==1) {
-            form['id[]'].checked = true ;
-        } else { 
-            for (var i=0;i<form.total_box.value;i++) {
-                var e = form['id[]'][i];
+    status=(form.box_check.value==1)?true:false;
+    $("#formID input").each( function() {
+    $(this).attr("checked",status);
+    form.box_check.value=(status==true)?0:1
+    });
+
+ /*
+ var obj=eval("document."+form);
+    if (obj.box_check.value == 1) {
+        if (obj.total_box.value ==1) {
+            obj['id[]'].checked = true ;
+        } else {
+            for (var i=0;i<obj.total_box.value;i++) {
+                var e = obj['id[]'][i];
                 e.checked = true;
             }
-        } 
-        form.box_check.value = 0;
+        }
+        obj.box_check.value = 0;
     } else { //box_else
-        if (form.total_box.value ==1 ) {
-            if (form['id[]'].checked==true) { 
-                form['id[]'].checked = false;
-            } else if (form['id[]'].checked==false) {
-                form['id[]'].checked = true;
+        if (obj.total_box.value ==1 ) {
+            if (obj['id[]'].checked==true) {
+                obj['id[]'].checked = false;
+            } else if (obj['id[]'].checked==false) {
+                obj['id[]'].checked = true;
             }
-        } else { 
-            for (var i=0;i<form.total_box.value;i++) {
-                var e = form['id[]'][i];
-                if (e.checked==true) { 
+        } else {
+            for (var i=0;i<obj.total_box.value;i++) {
+                var e = obj['id[]'][i];
+                if (e.checked==true) {
                     e.checked = false;
                 } else if (e.checked==false) {
                     e.checked = true;
-                }  
+                } 
             }
-        }  
-        form.box_check.value = 1;
+        } 
+        obj.box_check.value = 1;
     }
+  8*/
 }
-
 
 function ConfirmMSG(msg,url){
     var conf = confirm(msg);
