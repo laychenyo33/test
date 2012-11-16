@@ -34,23 +34,23 @@ $ws_array["contactus_cate"]=array( 1 =>$TPLMSG['CONTACT_US_PRODUCTS'],2 =>$TPLMS
 $ws_array["epaper_order_cate"]=array( 1 =>$TPLMSG['EPAPER_ORDER_NORMAL'],2 =>$TPLMSG['EPAPER_ORDER_MEMBER'],3 =>$TPLMSG['EPAPER_ORDER_FIRST']);
 $ws_array["ad_cate"]=array( 1 =>$TPLMSG['AD_UP_BANNER_580_120'],2 =>$TPLMSG['AD_SIDE_BUTTON_150_150'],3 =>$TPLMSG['AD_SIDE_BUTTON_150_50'],4 =>"首頁跑馬燈",5 =>"內頁跑馬燈");
 $ws_array["payment_type"]=array( 0 =>$TPLMSG["PAYMENT_ATM"],1 =>$TPLMSG["PAYMENT_CASH_ON_DELIVERY"]);
-$ws_array["main"]=array("aboutus" => "aboutus",
-                        "products" => "products",
-                        "download" => "download",
-                        "news" => "news",
-                        "faq" => "faq",
-                        "service" => "service",
-                        "contactus" => "contactus",
-                        "sitemap" => "sitemap"
+$ws_array["main"]=array("aboutus" => $TPLMSG["ABOUT_US"],
+                        "products" => $TPLMSG["PRODUCTS"],
+                        "download" => $TPLMSG["DOWNLOAD"],
+                        "news" => $TPLMSG["NEWS"],
+                        "faq" => $TPLMSG["FAQ"],
+                        "service" => $TPLMSG["SERVICE"],
+                        "contactus" => $TPLMSG["CONTACT_US"],
+                        "sitemap" => $TPLMSG["SITEMAP"]
                     );
-$ws_array["left"]=array("aboutus" => "Aboutus",
-                        "products" => "Products",
-                        "download" => "Download",
-                        "news" => "News",
-                        "faq" => "Faq",
-                        "service" => "Service",
-                        "contactus" => "Contactus",
-                        "sitemap" => "Sitemap"
+$ws_array["left"]=array("aboutus" => $TPLMSG["ABOUT_US"],
+                        "products" => $TPLMSG["PRODUCTS"],
+                        "download" => $TPLMSG["DOWNLOAD"],
+                        "news" => $TPLMSG["NEWS"],
+                        "faq" => $TPLMSG["FAQ"],
+                        "service" => $TPLMSG["SERVICE"],
+                        "contactus" => $TPLMSG["CONTACT_US"],
+                        "sitemap" => $TPLMSG["SITEMAP"]
                     );
 
 $ws_array["country_array"]=array(
