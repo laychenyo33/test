@@ -5,21 +5,20 @@
 (function($){
     $.fn.extend({
         samesize:function(){
-            this.each(function(){
-                 var tmp_height = $(this).height();
-                 if(tmp_height>$.samesize.height)$.samesize.height = tmp_height;
-            }); 
-            this.each(function(){
-                 $(this).height($.samesize.height); 
-            });
+            function sameheight(caller){
+                this.height=0;
+                var obj = this;
+                caller.each(function(){
+                     var tmp_height = $(this).height();
+                     if(tmp_height>obj.height)obj.height = tmp_height;
+                }); 
+                caller.each(function(){
+                     $(this).height(obj.height); 
+                });
+            }
+            var ss = new sameheight(this);
             return this;
         }
-    })
-    $.extend({
-       samesize:{
-           height:0,
-           width:0
-       } 
     });
 })(jQuery);
 
