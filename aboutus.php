@@ -62,7 +62,8 @@ class ABOUTUS{
                                      "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"]."aboutus.".$ext:$cate_link,
                 ));
             }
-			if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
+            if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
+                 $tpl->assign("TAG_CURRENT_CLASS", "class=\"current\"");
                 if($this->ws_seo){
                     $meta_array=array("meta_title"=>$row["au_seo_title"],
                                       "meta_keyword"=>$row["au_seo_keyword"],
