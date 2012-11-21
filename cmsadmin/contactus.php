@@ -274,11 +274,12 @@ class CONTACTUS{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
                 //回覆資料列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id='".$_REQUEST["cu_id"]."' order by cur_modifydate desc ";
+                $sql="select * from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id='".$_REQUEST["cu_id"]."' order by cur_modifydate desc limit 1";
                 $selectrs = $db->query($sql);
                 while($row = $db->fetch_array($selectrs,1)){
+                    $tpl->assign("_ROOT.VALUE_CU_DEFAULT_REPLY",$row["cur_content"]);//取出做為預設回覆的內容
                     $tpl->newBlock( "CONTACTUS_REPLY_LIST" );
-                    $tpl->assign( array("VALUE_CUR_CONTENT"  => $row["cur_content"],
+                    $tpl->assign( array("VALUE_CUR_CONTENT"  => nl2br($row["cur_content"]),
                                         "VALUE_CUR_MODIFYDATE" => $row["cur_modifydate"]
                     ));
                 }
