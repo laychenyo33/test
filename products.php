@@ -587,7 +587,7 @@ class PRODUCTS{
                     $tpl->assign("ATTACH_ICON", $icon);
                     //$tpl->gotoBlock("BIG_IMG".$this->template_str);
                 }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<img>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<img><iframe>"));
                 //產品敘述
                 if(trim($ck_str)!=""){
                         $row["p_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["p_desc"]);
@@ -596,7 +596,7 @@ class PRODUCTS{
                         $tpl->assign("VALUE_P_DESC" , $row["p_desc"]);
                         $tpl->gotoBlock("PRODUCTS_DETAIL_DEFAULT");
                 }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_character"],"<img>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_character"],"<img><iframe>"));
                 //產品特性
                 if(trim($ck_str)!=""){
                         $tpl->newBlock($product_character_style);
@@ -605,7 +605,7 @@ class PRODUCTS{
                         $tpl->assign("VALUE_P_CHARACTER" , $row["p_character"]);
                         $tpl->gotoBlock("PRODUCTS_DETAIL_DEFAULT");
                 }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_spec"],"<img>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_spec"],"<img><iframe>"));
                 //產品規格
                 if(trim($ck_str)!=""){
                         $tpl->newBlock($product_spec_style);
