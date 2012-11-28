@@ -12,7 +12,8 @@
                 btn_container : "li",
                 txt_container : 'li',
                 current_className : 'current',
-                normal_className : 'normal'
+                normal_className : 'normal',
+                scrolling: true
                 
             };    
 
@@ -134,8 +135,10 @@
             for(var i=0;i<this.size();i++){
                  var wrapper = this[i];
                  iFocusChange(wrapper);
-                 wrapper.atuokey = false;
-                 wrapper.intervalId = setInterval("jQuery.autoiFocus("+i+")",10000);
+                 if(_settings.scrolling){
+                     wrapper.atuokey = false;
+                     wrapper.intervalId = setInterval("jQuery.autoiFocus("+i+")",10000);
+                 }
             }
             return this;
        }
