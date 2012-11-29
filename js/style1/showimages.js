@@ -13,7 +13,7 @@
                 txt_container : 'li',
                 current_className : 'current',
                 normal_className : 'normal',
-                scrolling: true
+                scrolling: false
                 
             };    
 
