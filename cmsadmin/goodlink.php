@@ -353,7 +353,7 @@ class GOODLINK{
             if($_REQUEST["st"]=="l_content"){
                 $and_str .= " and l.l_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by l.l_sort ".$cms_cfg['sort_pos'].",l.l_modifydate desc ";
+            $sql .= $and_str." order by lc.lc_sort ".$cms_cfg['sort_pos'].",l.l_sort ".$cms_cfg['sort_pos'].",l.l_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);

@@ -380,7 +380,7 @@ class DOWNLOAD{
             if($_REQUEST["st"]=="d_content"){
                 $and_str .= " and d.d_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by d.d_sort ".$cms_cfg['sort_pos'].",d.d_modifydate desc ";
+            $sql .= $and_str." order by dc.dc_sort ".$cms_cfg['sort_pos'].",d.d_sort ".$cms_cfg['sort_pos'].",d.d_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);

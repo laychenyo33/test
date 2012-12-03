@@ -654,7 +654,7 @@ class PRODUCTS{
             if($_REQUEST["st"]=="p_desc"){
                 $and_str .= " and p.p_desc like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc ";
+            $sql .= $and_str." order by pc.pc_sort ".$cms_cfg['sort_pos'].",p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
