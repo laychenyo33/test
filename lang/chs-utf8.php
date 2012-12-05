@@ -253,4 +253,12 @@ $TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
 $TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
 $TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
 $TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
+
+$TPLMSG['SLIDE_BOX_IMAGE'] = "图片";
+$TPLMSG['SLIDE_BOX_OF'] = "之";
+$TPLMSG['SLIDE_BOX_BTN_BACK'] = "关闭";
+$TPLMSG['SLIDE_BOX_BTN_NEXT'] = "下一张";
+$TPLMSG['SLIDE_BOX_BTN_PREV'] = "前一张";
+$TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'] = "显示图片清单";
+$TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "关闭图片清单";
 ?>

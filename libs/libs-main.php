@@ -1181,9 +1181,19 @@ class MAINFUNC{
            "SBOX_CLICK_CLOSE_LIST" => $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'], 
         ));
     }
+    //不知為何還有一個au_box，和上面的slide_box好像差不多
     function AU_BOX(){
         global $tpl,$cms_cfg,$TPLMSG;
-        
+        $tpl->newBlock("AU_BOX");
+        $tpl->assign(array(
+           "SBOX_IMAGE" => $TPLMSG['SLIDE_BOX_IMAGE'], 
+           "SBOX_OF" => $TPLMSG['SLIDE_BOX_OF'], 
+           "SBOX_BACK" => $TPLMSG['SLIDE_BOX_BTN_BACK'], 
+           "SBOX_NEXT" => $TPLMSG['SLIDE_BOX_BTN_NEXT'], 
+           "SBOX_PREV" => $TPLMSG['SLIDE_BOX_BTN_PREV'], 
+           "SBOX_CLICK_VIEW_LIST" => $TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'], 
+           "SBOX_CLICK_CLOSE_LIST" => $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'], 
+        ));
     }
 }
 ?>

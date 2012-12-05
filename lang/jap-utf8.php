@@ -250,4 +250,12 @@ $TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
 $TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
 $TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
 $TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
+
+$TPLMSG['SLIDE_BOX_IMAGE'] = "image";
+$TPLMSG['SLIDE_BOX_OF'] = "of";
+$TPLMSG['SLIDE_BOX_BTN_BACK'] = "Back";
+$TPLMSG['SLIDE_BOX_BTN_NEXT'] = "Next";
+$TPLMSG['SLIDE_BOX_BTN_PREV'] = "Prev";
+$TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'] = "Click view images list";
+$TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
 ?>

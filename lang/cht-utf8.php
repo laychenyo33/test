@@ -255,4 +255,12 @@ $TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
 $TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
 $TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
 $TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
+
+$TPLMSG['SLIDE_BOX_IMAGE'] = "圖片";
+$TPLMSG['SLIDE_BOX_OF'] = "之";
+$TPLMSG['SLIDE_BOX_BTN_BACK'] = "關閉";
+$TPLMSG['SLIDE_BOX_BTN_NEXT'] = "下一張";
+$TPLMSG['SLIDE_BOX_BTN_PREV'] = "前一張";
+$TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'] = "顯示圖片清單";
+$TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "關閉圖片清單";
 ?>
