@@ -201,6 +201,8 @@ class MAINFUNC{
     //頭尾檔設定
     function header_footer($meta_array,$seo_h1=""){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG;
+        static $e =0;//本方法的執行次數
+        $e++;        
         if($cms_cfg["ws_module"]["ws_seo"] ==0 ){
             unset($meta_array);
             // IPB META SETUP
@@ -232,40 +234,42 @@ class MAINFUNC{
             $tpl->newBlock("SEO_SHORT_DESC");
             $tpl->assign("VALUE_SEO_SHORT_DESC",$meta_array["seo_short_desc"]);
         }
-        if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_status"]==1 && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_starttime"] < date("H:i:s") && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_endtime"] > date("H:i:s")){
-            $tpl->newBlock( "IM_ZONE" );
-            $tpl->assign(array("VALUE_SC_IM_SKYPE" =>"skype:<a href=\"callto:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_skype"]."\"><img src=\"".$cms_cfg['base_images']."skype_call_me.png\" alt=\"Skype Me™!\" border='0' width='70' height='23'/></a>",
-                               "VALUE_SC_IM_MSN" =>"msn:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_msn"],
-            ));
-        }
-        $tpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
-        $tpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
-        $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
-        $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
-        $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
-        $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
-        $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
-        //設定主選單變數
-        if(!empty($ws_array["main"])){
-            foreach($ws_array["main"] as $item => $itemName){
-                $tpl->assignGlobal("TAG_MENU_".  strtoupper($item),  $itemName);
+        if($e==1){  //第一次執行才做
+            if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_status"]==1 && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_starttime"] < date("H:i:s") && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_endtime"] > date("H:i:s")){
+                $tpl->newBlock( "IM_ZONE" );
+                $tpl->assign(array("VALUE_SC_IM_SKYPE" =>"skype:<a href=\"callto:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_skype"]."\"><img src=\"".$cms_cfg['base_images']."skype_call_me.png\" alt=\"Skype Me™!\" border='0' width='70' height='23'/></a>",
+                                   "VALUE_SC_IM_MSN" =>"msn:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_msn"],
+                ));
             }
+            $tpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+            $tpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
+            $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
+            $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
+            $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
+            $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
+            $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
+            //設定主選單變數
+            if(!empty($ws_array["main"])){
+                foreach($ws_array["main"] as $item => $itemName){
+                    $tpl->assignGlobal("TAG_MENU_".  strtoupper($item),  $itemName);
+                }
+            }
+            //設定頁腳變數
+            $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['ADDRESS']);
+            $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['FAX']);
+            $tpl->assignGlobal("TAG_FOOTER_TEL",$TPLMSG['TEL']);
+            $tpl->assignGlobal("TAG_FOOTER_EMAIL",$TPLMSG['EMAIL']);
+            //有會員即顯示會員登入區
+            if($cms_cfg["ws_module"]["ws_member"]==1){
+                $this->login_zone();
+            }
+            $this->mouse_disable(); //鎖滑鼠右鍵功能
+            //$this->dropdown_menu();
+            //$this->float_menu();
+            //$this->goodlink_select();
+            //尾檔
+            //$tpl->assignGlobal("VALUE_SC_FOOTER" ,$_SESSION[$cms_cfg['sess_cookie_name']]["sc_footer"]);
         }
-        //設定頁腳變數
-        $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['ADDRESS']);
-        $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['FAX']);
-        $tpl->assignGlobal("TAG_FOOTER_TEL",$TPLMSG['TEL']);
-        $tpl->assignGlobal("TAG_FOOTER_EMAIL",$TPLMSG['EMAIL']);
-        //有會員即顯示會員登入區
-        if($cms_cfg["ws_module"]["ws_member"]==1){
-            $this->login_zone();
-        }
-        $this->mouse_disable(); //鎖滑鼠右鍵功能
-        //$this->dropdown_menu();
-        //$this->float_menu();
-        //$this->goodlink_select();
-        //尾檔
-        //$tpl->assignGlobal("VALUE_SC_FOOTER" ,$_SESSION[$cms_cfg['sess_cookie_name']]["sc_footer"]);
     }
     function func_metatitle($func){
         global $db,$cms_cfg;
