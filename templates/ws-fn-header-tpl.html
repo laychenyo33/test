@@ -158,3 +158,377 @@
     })(jQuery);
 </script>
 <!-- END BLOCK : JSCAROUSEL_SCRIPT -->
+<!--START BLOCK : SLIDE_BOX -->
+<script type="text/javascript">
+//document.onload = timedCount();
+(function($){
+    function timedCount(){
+            $('.barbox').click();
+            TIMER=setTimeout("timedCount()",2000);
+    }
+
+    function IMG_LOAD(SRC){
+            var IMG = new Image();
+            IMG.src = SRC;
+
+            var WINDOW_H = $(window).height();
+            var NOW_TOP =parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
+
+            $('#light_box #box_bottom #box_message span').eq(0).html("{SBOX_IMAGE} "+ IMG_POT +" {SBOX_OF} "+ IMG_NUM);
+            $('#light_box #box_close').css({ "top":NOW_TOP +"px" });
+
+            if(IMG.complete == false){
+                    $(IMG).load(function(){
+                            var IMG_W = IMG.width / 2;
+                            var IMG_H = IMG.height / 2;
+                            var CENTER_H = NOW_TOP + WINDOW_H / 2;
+
+                            $('#light_box div#next,#light_box div#prev').css({ "top":CENTER_H +"px","margin-top":"-15px" });
+                            $('#light_box div#main img').attr("src",SRC)
+                            $('#light_box div#main').css({ "margin-left":"-"+ IMG_W +"px","top":CENTER_H +"px","margin-top":"-"+ IMG_H +"px" });
+                    });
+            }else{
+                    $('#light_box div#main img').attr("src",SRC);
+                    var IMG_W = IMG.width / 2;
+                    var IMG_H = IMG.height / 2;
+                    var CENTER_H = NOW_TOP + WINDOW_H / 2;
+
+                    $('#light_box div#next,#light_box div#prev').css({ "top":CENTER_H +"px","margin-top":"-15px" });
+                    $('#light_box div#main').css({ "margin-left":"-"+ IMG_W +"px","top":CENTER_H +"px","margin-top":"-"+ IMG_H +"px" });
+            }
+    }
+
+    //var AD_ROW = new Array();
+    //var AD_NUM = new Array();
+
+    $(document).ready(function(){
+
+            /*
+            //var BOX_ROW = $(".barbox").size()
+            $("body").on("click","div.barbox",function(){
+                    var BOX_NUM = $(".barbox").index(this);
+                    if(!AD_ROW[BOX_NUM]){
+                            AD_ROW[BOX_NUM] = 1;
+                    }
+                    AD_NUM[BOX_NUM] = $(this).children('a').size();
+                    if(AD_ROW[BOX_NUM] < AD_NUM[BOX_NUM]){
+                            AD_ROW[BOX_NUM] = AD_ROW[BOX_NUM] + 1;
+                    }else{
+                            AD_ROW[BOX_NUM] = 1;
+                    }
+                    $(this).children("a").hide();
+                    $(this).children("a.row_"+ AD_ROW[BOX_NUM] +"").show();
+            });
+
+            timedCount();
+            */
+            $("div.barbox").each(function(hide_key){
+                    $(this).children("a").each(function(hide_key_2){
+                            if(hide_key_2 != 0){
+                                    $(this).hide();
+                            }
+                    });
+            });
+
+            $('body').append("<div id=\"light_box\"><div id=\"main\"><img></div><div id=\"box_bottom\"><div id=\"box_message\"><span></span><span>|</span><span id=\"box_toggle\"></span><span>|</span><span id=\"box_close\">{SBOX_BACK}</span></div><div id=\"box_small_img\"></div></div><div id=\"next\">{SBOX_NEXT} ></div><div id=\"prev\">< {Prev}</div><div id=\"bg\"></div></div>");
+
+            $('body').on("click","a.box",function(){
+                    //event.preventDefault();
+                    var FIRST_IMG = $(this).parent("div.barbox").find("a:eq(0)").attr("rel");
+                    IMG_NUM = $(this).parent("div.barbox").children("a").size();
+                    IMG_POT = 1;
+
+                    IMG_ALL_REL = new Array();
+
+                    $(this).parent("div.barbox").children("a").each(function(key){
+                            IMG_ALL_REL[key + 1] = $(this).attr("rel");
+                    });
+
+                    if(FIRST_IMG != ""){
+                            $('#light_box').fadeIn('slow');
+                            if(IMG_NUM == 1){
+                                    $('#light_box #next,#light_box #prev').css({ "display":"none" });
+                            }else{
+                                    $('#light_box #next,#light_box #prev').css({ "display":"block" });
+                            }
+
+                            $('body').css({ "overflow":"hidden" });
+
+                            var WINDOW_H = $(window).height();
+                            var NOW_TOP =parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
+                            var BOTTOM_H = WINDOW_H + NOW_TOP;
+
+                            $('#light_box div#bg').css({ "top":NOW_TOP +"px" });
+                            $('#light_box div#box_bottom').css({ "top":BOTTOM_H +"px","margin-top":"-30px" });
+                            $('#light_box #box_bottom #box_message span').eq(0).html("{SBOX_IMAGE} "+ IMG_POT +" {SBOX_OF} "+ IMG_NUM);
+                            $('#light_box #box_bottom #box_message span').eq(2).html("<a>{SBOX_CLICK_VIEW_LIST}</a>");
+
+                            IMG_LOAD(FIRST_IMG);
+                    }
+            });
+
+            $('#light_box #next').click(function(){
+                    if(IMG_POT < IMG_NUM){
+                            IMG_POT++;
+                    }else{
+                            IMG_POT = 1;
+                    }	
+
+                    IMG_LOAD(IMG_ALL_REL[IMG_POT]);
+            });
+
+            $('#light_box #prev').click(function(){
+                    if(IMG_POT > 1){
+                            IMG_POT--;
+                    }else{
+                            IMG_POT = IMG_NUM;
+                    }
+
+                    IMG_LOAD(IMG_ALL_REL[IMG_POT]);
+            });
+
+            $("#light_box #bg,#light_box #box_close").click(function(){
+                    $("#light_box").fadeOut('slow');
+                    $('body').css({ "overflow":"auto" });
+                    //$('#light_box div#main').html("");
+            });
+
+            $("#box_toggle").toggle(function(){
+                    $("div#box_bottom").animate({ "margin-top":"-150px" });
+                    $("#box_message span").eq(2).html("<a>{SBOX_CLICK_CLOSE_LIST}</a>");
+                    $("#box_small_img").html("");
+                    $.each(IMG_ALL_REL, function(KEY,VALUE){
+                            if(KEY != 0){
+                                    $("#box_small_img").append("<img rel=\""+ KEY +"\" src=\""+ IMG_ALL_REL[KEY] +"\" >");
+                            }
+                    });
+            } ,function(){
+                    $("div#box_bottom").animate({ "margin-top":"-30px" });
+                    $("#box_message span").eq(2).html("<a>{SBOX_CLICK_VIEW_LIST}</a>");
+            });
+
+            $('body').on("hover","#box_small_img img",function(){
+                    var IMG_OVER = $(this).attr("rel");
+                    IMG_POT = IMG_OVER - 1;
+                    $('#light_box #next').click();
+            });
+    });    
+})(jQuery);
+</script>
+<!-- END BLOCK : SLIDE_BOX -->
+
+<!-- START BLOCK : AU_BOX -->
+<script type="text/javascript">
+(function($){
+    function IMG_LOAD(SRC){
+            var IMG = new Image();
+            IMG.src = SRC;
+
+            var WINDOW_H = $(window).height();
+            var NOW_TOP =parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
+
+            $('#light_box #box_bottom #box_message span').eq(0).html("{SBOX_IMAGE} "+ IMG_POT +" {SBOX_OF} "+ IMG_NUM);
+            $('#light_box #box_close').css({ "top":NOW_TOP +"px" });
+
+            if(IMG.complete == false){
+                    $(IMG).load(function(){
+                            var IMG_W = IMG.width / 2;
+                            var IMG_H = IMG.height / 2;
+                            var CENTER_H = NOW_TOP + WINDOW_H / 2;
+
+                            $('#light_box div#next,#light_box div#prev').css({ "top":CENTER_H +"px","margin-top":"-15px" });
+                            $('#light_box div#main img').attr("src",SRC)
+                            $('#light_box div#main').css({ "margin-left":"-"+ IMG_W +"px","top":CENTER_H +"px","margin-top":"-"+ IMG_H +"px" });
+                    });
+            }else{
+                    $('#light_box div#main img').attr("src",SRC);
+                    var IMG_W = IMG.width / 2;
+                    var IMG_H = IMG.height / 2;
+                    var CENTER_H = NOW_TOP + WINDOW_H / 2;
+
+                    $('#light_box div#next,#light_box div#prev').css({ "top":CENTER_H +"px","margin-top":"-15px" });
+                    $('#light_box div#main').css({ "margin-left":"-"+ IMG_W +"px","top":CENTER_H +"px","margin-top":"-"+ IMG_H +"px" });
+            }
+    }
+
+
+    $(document).ready(function(){
+            $('body').append("<div id=\"light_box\"><div id=\"main\"><img></div><div id=\"box_bottom\"><div id=\"box_message\"><span></span><span>|</span><span id=\"box_toggle\"></span><span>|</span><span id=\"box_close\">{SBOX_BACK}</span></div><div id=\"box_small_img\"></div></div><div id=\"next\">{SBOX_NEXT} ></div><div id=\"prev\">< {SBOX_PREV}</div><div id=\"bg\"></div></div>");
+
+            $('body').on("click",".service_pic a",function(){
+                    //event.preventDefault();
+                    var FIRST_IMG = $(this).parents("div.service_list").find("a:eq(0)").attr("rel");
+                    IMG_NUM = $(this).parents("div.service_list").find("a").size();
+                    IMG_POT = 1;
+
+                    IMG_ALL_REL = new Array();
+
+                    $(this).parents("div.service_list").find("a").each(function(key){
+                            IMG_ALL_REL[key + 1] = $(this).attr("rel");
+                    });
+
+                    if(FIRST_IMG != ""){
+                            $('#light_box').fadeIn('slow');
+                            if(IMG_NUM == 1){
+                                    $('#light_box #next,#light_box #prev').css({ "display":"none" });
+                            }else{
+                                    $('#light_box #next,#light_box #prev').css({ "display":"block" });
+                            }
+
+                            $('body').css({ "overflow":"hidden" });
+
+                            var WINDOW_H = $(window).height();
+                            var NOW_TOP =parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
+                            var BOTTOM_H = WINDOW_H + NOW_TOP;
+
+                            $('#light_box div#bg').css({ "top":NOW_TOP +"px" });
+                            $('#light_box div#box_bottom').css({ "top":BOTTOM_H +"px","margin-top":"-30px" });
+                            $('#light_box #box_bottom #box_message span').eq(0).html("{SBOX_IMAGE} "+ IMG_POT +" {SBOX_OF} "+ IMG_NUM);
+                            $('#light_box #box_bottom #box_message span').eq(1).html("|");
+                            $('#light_box #box_bottom #box_message span').eq(2).html("<a>{SBOX_CLICK_VIEW_LIST}</a>");
+
+                            IMG_LOAD(FIRST_IMG);
+                    }
+            });
+
+            //-----
+
+            $('body').on("click",".service_list_01 a",function(){
+                    //event.preventDefault();
+                    var FIRST_IMG = $(this).parents("div.service_list_01").find("div.box:eq(0) a").attr("rel");	
+                    IMG_NUM = $(this).parents("div.service_list_01").find("div.box").size();
+                    IMG_POT = 1;
+
+                    IMG_ALL_REL = new Array();
+
+                    $(this).parents("div.service_list_01").find("div.box a").each(function(key){
+                            IMG_ALL_REL[key + 1] = $(this).attr("rel");
+                    });
+
+                    if(FIRST_IMG != ""){
+                            $('#light_box').fadeIn('slow');
+                            if(IMG_NUM == 1){
+                                    $('#light_box #next,#light_box #prev').css({ "display":"none" });
+                            }else{
+                                    $('#light_box #next,#light_box #prev').css({ "display":"block" });
+                            }
+
+                            $('body').css({ "overflow":"hidden" });
+
+                            var WINDOW_H = $(window).height();
+                            var NOW_TOP =parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
+                            var BOTTOM_H = WINDOW_H + NOW_TOP;
+
+                            $('#light_box div#bg').css({ "top":NOW_TOP +"px" });
+                            $('#light_box div#box_bottom').css({ "top":BOTTOM_H +"px","margin-top":"-30px" });
+                            $('#light_box #box_bottom #box_message span').eq(0).html("{SBOX_IMAGE} "+ IMG_POT +" {SBOX_OF} "+ IMG_NUM);
+                            $('#light_box #box_bottom #box_message span').eq(2).html("<a>{SBOX_CLICK_VIEW_LIST}</a>");
+
+                            IMG_LOAD(FIRST_IMG);
+                    }
+            });
+
+            //-----
+
+            $('#light_box #next').click(function(){
+                    if(IMG_POT < IMG_NUM){
+                            IMG_POT++;
+                    }else{
+                            IMG_POT = 1;
+                    }
+
+                    IMG_LOAD(IMG_ALL_REL[IMG_POT]);
+            });
+
+            $('#light_box #prev').click(function(){
+                    if(IMG_POT > 1){
+                            IMG_POT--;
+                    }else{
+                            IMG_POT = IMG_NUM;
+                    }
+
+                    IMG_LOAD(IMG_ALL_REL[IMG_POT]);
+            });
+
+            $("#light_box #bg,#light_box #box_close").click(function(){
+                    $("#light_box").fadeOut('slow');
+                    $('body').css({ "overflow":"auto" });
+                    //$('#light_box div#main').html("");
+            });
+
+            $("#box_toggle").toggle(function(){
+                    $("div#box_bottom").animate({ "margin-top":"-150px" });
+                    $("#box_message span").eq(2).html("<a>{SBOX_CLICK_CLOSE_LIST}</a>");
+                    $("#box_small_img").html("");
+                    $.each(IMG_ALL_REL, function(KEY,VALUE){
+                            if(KEY != 0){
+                                    $("#box_small_img").append("<img rel=\""+ KEY +"\" src=\""+ IMG_ALL_REL[KEY] +"\" >");
+                            }
+                    });
+            } ,function(){
+                    $("div#box_bottom").animate({ "margin-top":"-30px" });
+                    $("#box_message span").eq(2).html("<a>{SBOX_CLICK_VIEW_LIST}</a>");
+            });
+
+            $('body').on("hover","#box_small_img img",function(){
+                    var IMG_OVER = $(this).attr("rel");
+                    IMG_POT = IMG_OVER - 1;
+                    $('#light_box #next').click();
+            });
+    });    
+})(jQuery);
+
+</script>
+<!-- END BLOCK : AU_BOX -->
+
+<!-- START BLOCK : AU_PAGING -->
+<script type="text/javascript">
+(function($){
+    $.extend({ 
+            getUrlVars: function(){ 
+              var vars = [], hash; 
+              var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&'); 
+              for(var i = 0; i < hashes.length; i++) 
+              { 
+                    hash = hashes[i].split('='); 
+                    vars.push(hash[0]); 
+                    vars[hash[0]] = hash[1]; 
+              } 
+              return vars; 
+            }, 
+            getUrlVar: function(name){ 
+              return $.getUrlVars()[name]; 
+            } 
+    }); 
+
+    var AU_PAGE = $.getUrlVar('au_page');
+
+    $(document).ready(function(){
+            if(AU_PAGE){
+                    $(".domtabs li").removeClass("active");
+                    $(".domtabs li").eq(AU_PAGE - 1).addClass("active");
+                    $(".page-word").hide();
+                    $(".page-word").eq(AU_PAGE - 1).show();
+            }else{
+                    $(".page-word:eq(0)").show();
+                    $(".domtabs li:eq(0)").addClass("active");
+            }
+
+            $(".domtabs li").click(function(){
+                    $(".domtabs li").removeClass("active");
+                    $(this).addClass("active");
+                    var ROW_NUM = $(this).index();
+
+                    $(".page-word").hide();
+                    $(".page-word").eq(ROW_NUM).show();
+
+                    if(ROW_NUM != 0){
+                            $("#au_bottom").hide();
+                    }else{
+                            $("#au_bottom").show();
+                    }
+            });
+    });
+})(jQuery);    
+</script>
+<!-- END BLOCK : AU_PAGING -->

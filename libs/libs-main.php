@@ -1167,5 +1167,23 @@ class MAINFUNC{
             }
         }
     }	
+    //類似light box的效果，顯示區域下方有顯示圖片清單
+    function SLIDE_BOX(){
+        global $tpl,$cms_cfg,$TPLMSG;
+        $tpl->newBlock("SLIDE_BOX");
+        $tpl->assign(array(
+           "SBOX_IMAGE" => $TPLMSG['SLIDE_BOX_IMAGE'], 
+           "SBOX_OF" => $TPLMSG['SLIDE_BOX_OF'], 
+           "SBOX_BACK" => $TPLMSG['SLIDE_BOX_BTN_BACK'], 
+           "SBOX_NEXT" => $TPLMSG['SLIDE_BOX_BTN_NEXT'], 
+           "SBOX_PREV" => $TPLMSG['SLIDE_BOX_BTN_PREV'], 
+           "SBOX_CLICK_VIEW_LIST" => $TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'], 
+           "SBOX_CLICK_CLOSE_LIST" => $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'], 
+        ));
+    }
+    function AU_BOX(){
+        global $tpl,$cms_cfg,$TPLMSG;
+        
+    }
 }
 ?>
