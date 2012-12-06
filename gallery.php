@@ -45,27 +45,30 @@ class GALLERY{
         global $tpl,$cms_cfg,$db,$ws_array,$TPLMSG,$main;
         $tpl = new TemplatePower( $cms_cfg['base_all_tpl'] );
         $tpl->assignInclude( "HEADER", $cms_cfg['base_header_tpl']); //頭檔title,meta,js,css
+        $tpl->assignInclude( "MAIN_MENU", "templates/ws-fn-main-menu-tpl.html"); //主選單
+        $tpl->assignInclude( "FOOTER", "templates/ws-fn-footer-tpl.html"); //頁腳        
         $tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //左方一般表單
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
         $tpl->assignInclude( "AD_IMG", "templates/ws-fn-ad-image-tpl.html"); //圖片廣告模板
         $tpl->assignInclude( "AD_TXT", "templates/ws-fn-ad-txt-tpl.html"); //文字廣告模板        
         $tpl->prepare();
-        $tpl->assignGlobal( "TAG_MAIN_FUNC" , "活動剪影");
+        $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['GALLERY']);
         $tpl->assignGlobal( "TAG_GALLERY_CURRENT" , "class='current'");
-        $tpl->assignGlobal( "TAG_CATE_TITLE", "活動剪影");
-        $tpl->assignGlobal( "TAG_LAYER" , "活動剪影");
+        $tpl->assignGlobal( "TAG_CATE_TITLE", $TPLMSG['GALLERY']);
+        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['GALLERY']);
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "album"); //主要顯示區域的css設定
-        $main->header_footer("");
+        $tpl->assignGlobal( "TAG_SUBMENU_TITLE_IMG" , $cms_cfg['default_theme']."left-title-activity.png"); //選單標題圖檔
+        $main->header_footer("",$TPLMSG['GALLERY']);
     }
 
 //活動剪影--列表================================================================
     function gallery_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         $ext=($this->ws_seo)?".html":".php";
-        $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">活動剪影</a>";
+        $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">".$TPLMSG['GALLERY']."</a>";
         //活動剪影分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql);
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' order by gc_sort ".$cms_cfg['sort_pos']." ";
+        $selectrs = $db->query($sql,true);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
@@ -81,6 +84,7 @@ class GALLERY{
             if($_REQUEST["gc_id"]==$row["gc_id"]){
                 //$tpl->assignGlobal("TAG_SUB_FUNC"  , "--&nbsp;&nbsp;".$row["gc_subject"]);
                 $gallery_link .= $this->ps."<a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
+                $main->header_footer("",$row["gc_subject"]);
             }
         }
         $tpl->assignGlobal("TAG_LAYER",$gallery_link);
@@ -91,8 +95,8 @@ class GALLERY{
         }else{
             $gc_id=0;
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where (g_status='1' or (g_status='2' and g_startdate <= '".date("Y-m-d")."' and g_enddate >= '".date("Y-m-d")."')) ".$and_str." order by g_sort ".$cms_cfg['sort_pos'].",g_modifydate desc";
-        $selectrs = $db->query($sql);
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where g_status='1'  ".$and_str." order by g_sort ".$cms_cfg['sort_pos'].",g_modifydate desc";
+        $selectrs = $db->query($sql,true);
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
         if($this->ws_seo==1 ){
@@ -152,7 +156,7 @@ class GALLERY{
         //活動剪影分類
         $ext=($this->ws_seo)?".html":".php";
         $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">Gallery</a>";
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' order by gc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
@@ -169,10 +173,11 @@ class GALLERY{
             if($_REQUEST["gc_id"]==$row["gc_id"]){
                 $tpl->assignGlobal("TAG_SUB_TITLE"  , "--&nbsp;&nbsp;".$row["gc_subject"]);
                 $gallery_link .= $this->ps."<a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
+                $main->header_footer("",$row["gc_subject"]);
             }
         }
         //活動剪影內容
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where n_id='".$_REQUEST["g_id"]."'";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where g_id='".$_REQUEST["g_id"]."'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         $gallery_link .= $this->ps.$row["g_subject"];
@@ -201,6 +206,7 @@ class GALLERY{
             }
         }
         $tpl->assignGlobal("TAG_LAYER",$gallery_link);
+        $tpl->assignGlobal("GO_BACK",$TPLMSG['PAGE_BACK']);
     }
 }
 ?>
