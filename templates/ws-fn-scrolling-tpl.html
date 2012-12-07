@@ -66,14 +66,14 @@
                             $(this).parents('a').next().fadeOut(500,function(){
                                 $(this).remove();
                                 $("#loading").hide();
-                                $(this).lightBox({
-                                    imageLoading: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-ico-loading.gif',
-                                    imageBtnClose: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-close.gif'                            
-                                });
                             }); 
                         });
+                        var link = $('"<a href="'+img+'" rel="lightbox"/>');
                         var wrapper = $("<div/>").addClass("wrapper").append(imgInstant);
-                        $('"<a href="'+img+'" rel="lightbox"/>').append(wrapper).prependTo("#ifocus");
+                        $(link).append(wrapper).lightBox({
+                            imageLoading: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-ico-loading.gif',
+                            imageBtnClose: '{TAG_ROOT_PATH}js/lightbox/images/lightbox-btn-close.gif'                            
+                        }).prependTo("#ifocus");
                         $("#ifocus").data("currentClick",this);
                     }
               });
