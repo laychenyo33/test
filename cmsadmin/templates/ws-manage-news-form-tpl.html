@@ -70,7 +70,7 @@
         <tr>
         <th>最新消息小圖</th>
         <td>
-        <input type="hidden" name="n_s_pic" value="{VALUE_N_S_PIC}" id="attach_img" onpropertychange="Javascript:onImageSelect(this,'pic_preview');"> &nbsp;
+        <input type="hidden" name="n_s_pic" value="{VALUE_N_S_PIC}" id="attach_img" onchange="onImageSelect(this,'pic_preview');"> &nbsp;
         <a href="javascript:mcImageManager.open('myform','n_s_pic');">
         <img src="{VALUE_PIC_PREVIEW}" border="0" width="110" height="85" name="pic_preview" id="pic_preview"></a>
         <a href="javascript:LoadDefaultPic('attach_img','pic_preview')">取消圖片</a>
