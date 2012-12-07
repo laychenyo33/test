@@ -1199,5 +1199,15 @@ class MAINFUNC{
            "SBOX_CLICK_CLOSE_LIST" => $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'], 
         ));
     }
+    //等比圖輸出的精簡版
+    function resizeto($img,$to_w,$to_h){
+        $dimensions["width"]=$to_w;
+        $dimensions["height"]=$to_h;
+        if(is_file($_SERVER['DOCUMENT_ROOT'].$img)){
+            list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$img);
+            $dimensions = $this->resize_dimensions($dimensions["width"],$dimensions["height"],$width,$height);
+        }        
+        return $dimensions;
+    }
 }
 ?>
