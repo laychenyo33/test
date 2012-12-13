@@ -271,44 +271,15 @@ function resize_opener(){
 
 /* checkbox 全選/取消 */
 function click_all(form) {
-    status=(form.box_check.value==1)?true:false;
-    $("#formID input").each( function() {
-    $(this).attr("checked",status);
-    form.box_check.value=(status==true)?0:1
-    });
-
- /*
- var obj=eval("document."+form);
-    if (obj.box_check.value == 1) {
-        if (obj.total_box.value ==1) {
-            obj['id[]'].checked = true ;
-        } else {
-            for (var i=0;i<obj.total_box.value;i++) {
-                var e = obj['id[]'][i];
-                e.checked = true;
-            }
+    checked = form.check_box?true:false;
+    $(form).find(":checkbox").each( function() {
+        if(checked){
+            $(this).removeAttr("checked");
+        }else{
+            $(this).attr("checked",'true');
         }
-        obj.box_check.value = 0;
-    } else { //box_else
-        if (obj.total_box.value ==1 ) {
-            if (obj['id[]'].checked==true) {
-                obj['id[]'].checked = false;
-            } else if (obj['id[]'].checked==false) {
-                obj['id[]'].checked = true;
-            }
-        } else {
-            for (var i=0;i<obj.total_box.value;i++) {
-                var e = obj['id[]'][i];
-                if (e.checked==true) {
-                    e.checked = false;
-                } else if (e.checked==false) {
-                    e.checked = true;
-                } 
-            }
-        } 
-        obj.box_check.value = 1;
-    }
-  8*/
+    });
+    form.check_box = checked?false:true;
 }
 
 function ConfirmMSG(msg,url){
