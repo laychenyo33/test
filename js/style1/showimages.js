@@ -53,8 +53,13 @@
                     var dist = Math.ceil((ypos - final_y)/10);
                     ypos = ypos - dist;
                 }
-                elem.style.left = xpos + "px";
-                elem.style.top = ypos + "px";
+                if(_settings.act_mode==""){
+                    elem.style.left = xpos + "px";
+                    elem.style.top = ypos + "px";
+                }else if(_settings.act_mode=="switch"){
+                    elem.style.left = final_x + "px";
+                    elem.style.top = final_y + "px";
+                }
                 elem.movement = setTimeout(function(){
                     moveElement(elementID,final_x,final_y,interval,caller);
                 },interval);
