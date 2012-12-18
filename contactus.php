@@ -6,6 +6,7 @@ class CONTACTUS{
     function CONTACTUS(){
         global $db,$cms_cfg,$tpl;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
+        $this->security_mode = 1;//表單安全驗證模式:0=>math_security,1=>security_zone
         switch($_REQUEST["func"]){
             case "cu_add"://聯絡我們新增
                 $this->ws_tpl_file = "templates/ws-contactus-form-tpl.html";
@@ -51,7 +52,14 @@ class CONTACTUS{
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-contactus"); //主要顯示區域的css設定
         $main->header_footer("contactus", $TPLMSG["CONTACT_US"]);
         $main->google_code(); //google analystics code , google sitemap code
-        $main->math_security();
+        if($this->security_mode){
+            $tpl->newBlock("IMAGE_SECURITY_ZONE");
+            $main->security_zone();
+            
+        }else{
+            $tpl->newBlock("MATH_SECURITY_ZONE");
+            $main->math_security();
+        }
         if($cms_cfg["ws_module"]["ws_left_main_pc"]==1){
             $main->left_fix_cate_list();
         }
@@ -110,7 +118,13 @@ class CONTACTUS{
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
             $main->magic_gpc($_REQUEST);
             if($cms_cfg["ws_module"]["ws_security"]==1){
-                $pass=(isset($_POST['callback']) && $main->math_security_isvalue())?1:0;
+                if($this->security_mode){
+                    require_once("./libs/libs-security-image.php");
+                    $si = new securityImage();                    
+                    $pass=(isset($_POST['callback']) && $si->isValid())?1:0;
+                }else{
+                    $pass=(isset($_POST['callback']) && $main->math_security_isvalue())?1:0;
+                }
             }else{
                 $pass=1;
             }

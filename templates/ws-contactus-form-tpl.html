@@ -60,10 +60,18 @@
             <th><font color="#ff0000">*</font>{MSG_CONTENT}</th>
             <td><textarea name="cu_content" id="cu_content" class="validate[required]" cols="50" rows="5" class="text_area">{VALUE_CU_CONTENT}</textarea></td>
           </tr>
+          <!-- START BLOCK : MATH_SECURITY_ZONE -->
           <tr>
             <th>{MSG_LOGIN_SECURITY}</th>
             <td>{TAG_MATH_SECURITY}&nbsp;{TAG_MATH_INPUT}&nbsp;&nbsp;<font color="red">{MSG_ERROR_MESSAGE}</font></td>
           </tr>
+          <!-- END BLOCK : MATH_SECURITY_ZONE -->
+          <!-- START BLOCK : IMAGE_SECURITY_ZONE -->
+          <tr>
+            <th>{MSG_LOGIN_SECURITY}</th>
+            <td>{TAG_MATH_SECURITY}&nbsp;{TAG_MATH_INPUT}&nbsp;&nbsp;<font color="red">{MSG_ERROR_MESSAGE}</font></td>
+          </tr>
+          <!-- END BLOCK : IMAGE_SECURITY_ZONE -->
           <tr class="altrow">
             <th>&nbsp;</th>
             <td align="center"><input type="submit" value="{MSG_MODE}" name="Submit" /></td>
