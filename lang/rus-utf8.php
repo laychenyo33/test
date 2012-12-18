@@ -237,4 +237,6 @@ $TPLMSG['SLIDE_BOX_BTN_NEXT'] = "Next";
 $TPLMSG['SLIDE_BOX_BTN_PREV'] = "Prev";
 $TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'] = "Click view images list";
 $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
+
+$TPLMSG['SUBMIT'] = "Submit";
 ?>
