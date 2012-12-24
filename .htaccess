@@ -7,6 +7,11 @@ RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
+#預設圖片，圖片不存在時使用
+#RewriteCond %{REQUEST_FILENAME} !-s
+#RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|gif|png|tif|tiff|bmp)$
+#RewriteRule ^.*$ ../ws-no-image.jpg
+
 RewriteRule ^new-products.html$  products.php?func=p_new [L]
 #主功能頁
 RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|goodlink|gallery).htm$  $1.php [L]
