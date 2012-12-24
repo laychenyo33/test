@@ -2,15 +2,35 @@ Options ExecCGI Includes IncludesNOEXEC SymLinksIfOwnerMatch -Indexes
 
 RewriteEngine On
 
+#防盜連
+#圖片request的HTTP_REFERER不包括主機的網域
+#RewriteCond %{HTTP_REFERER} !http://localhost/ [NC]
+#而且是圖片類型
+#RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|png|gif)$ [NC]
+#而且也不是預設圖片類型
+#RewriteCond %{REQUEST_FILENAME} !ws-no-image.jpg$ [NC]
+#RewriteRule ^.*$ ws-no-image.jpg [L]
+
+#預設圖片，圖片不存在時使用
+#檔案不存在，或檔案size為0
+#RewriteCond %{REQUEST_FILENAME} !-s
+#且副檔名是這些
+#RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|gif|png|tif|tiff|bmp)$
+#設定預設圖片，絕對路徑或相對路徑皆可
+#RewriteRule ^.*$ ../ws-no-image.jpg
+
+#禁跨網域POST
+#來自非本機的網域
+#RewriteCond %{HTTP_REFERER} !http://localhost/ [NC]
+#而且是post
+#RewriteCond %{REQUEST_METHOD} POST [NC]
+#RewriteCond %{REQUEST_FILENAME} contactus.htm$ [NC]
+#RewriteRule ^.*$ 404.htm [L]
+
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
-
-#預設圖片，圖片不存在時使用
-#RewriteCond %{REQUEST_FILENAME} !-s
-#RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|gif|png|tif|tiff|bmp)$
-#RewriteRule ^.*$ ../ws-no-image.jpg
 
 RewriteRule ^new-products.html$  products.php?func=p_new [L]
 #主功能頁
