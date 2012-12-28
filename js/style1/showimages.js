@@ -13,8 +13,8 @@
                 txt_container : 'li',
                 current_className : 'current',
                 normal_className : 'normal',
-                scrolling: false
-                
+                scrolling: false,
+                on:'click'
             };    
 
             $.extend(_settings,settings?settings:{});
@@ -92,12 +92,12 @@
                 for(var i=0;i<_settings.img_limit;i++){
                     if(listLength>=(i+1)) {
                          iFocusBtns[i].index = i;
-                         iFocusBtns[i].onmouseover = function() {
+                         $(iFocusBtns[i]).bind(_settings.on, function() {
                              var index = this.index;
                              moveElement(_settings.piclist_id,0,-_settings.img_height*index,5,caller);
                              classNormal(_settings.btn_id,_settings.txt_id,caller);
                              classCurrent(_settings.btn_id,_settings.txt_id,index,caller);
-                         }
+                         });
                     }
                 }
             }                

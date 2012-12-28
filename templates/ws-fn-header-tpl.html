@@ -65,7 +65,21 @@
 <script type="text/javascript">
     (function($){
         $(document).ready(function(){
-            $(".products_show").showImages({ img_height:294,img_limit:4 }); 
+            $(".products_show").showImages({ 
+                img_limit:4,    //最多幾個圖
+                img_height:272,  //大圖的高度
+                act_mode:"",      //預設(空白為輪動,switch:直接切換    
+                container_id : 'ifocus',   //本效果所有的dom元件的parent     
+                piclist_id : 'ifocus_piclist',//包裝大圖的容器id
+                btn_id : 'ifocus_btn', //包含小圖的容器id
+                txt_id : 'ifocus_tx',  //包含大圖文字的容器id
+                btn_container : "li", //單一小圖的容器標籤
+                txt_container : 'li', //單一大圖文字容器標籤
+                current_className : 'current', //代表當前選擇的小圖樣式
+                normal_className : 'normal', //代表未選擇的小圖樣式
+                scrolling: false, //是否自動輪播
+                on:'click' //切換圖片需觸發的事件
+            }); 
         });         
     })(jQuery);   
 </script>  
