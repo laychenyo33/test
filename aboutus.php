@@ -26,7 +26,6 @@ class ABOUTUS{
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["ABOUT_US"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["ABOUT_US"]);
-        $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["aboutus"]);//左方menu title
         $tpl->assignGlobal( "TAG_ABOUTUS_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["aboutus"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-aboutus"); //主要顯示區域的css設定
@@ -35,6 +34,9 @@ class ABOUTUS{
         $main->login_zone();
         if($cms_cfg["ws_module"]["ws_left_main_au"]==0){
             $main->left_fix_cate_list();
+            $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
+        }else{
+            $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["aboutus"]);//左方menu title
         }
     }
     //前台關於我們--列表================================================================
