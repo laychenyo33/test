@@ -87,6 +87,13 @@
                     </td>
             </tr>
             <tr>
+                <th>{MSG_BIRTHDAY}</th>
+                <td>
+                    <input type="text" name="m_birthday" id="m_birthday" value="{VALUE_M_BIRTHDAY}"/>
+                    <a href="#m_birthday" onclick="displayCalendar(document.myform.m_birthday,'yyyy-mm-dd',this)"><img src="{TAG_ROOT_PATH}js/calendar/calendar.gif" border="0"></a>
+                </td>
+            </tr>
+            <tr>
                 <th>
                    {MSG_SUBSCRIBE}</th>
                 <td>
@@ -98,7 +105,7 @@
             <!-- START BLOCK : SERVICE_TERM_SHOW -->
             <tr>
                 <th>
-                    {MSG_ACCEPT_SERVICE_TERM}<input type="checkbox" name="m_agree_term" class="validate[required] checkbox" value="0" onclick="CheckTerm(myform)" /></th>
+                    {MSG_ACCEPT_SERVICE_TERM}<input type="checkbox" name="m_agree_term" id="m_agree_term" class="validate[required] checkbox" value="0" onclick="CheckTerm(myform)" /></th>
                 <td>
                     <iframe src="service.php?st=service&s=1" width="100%"></iframe>
                     </td>
