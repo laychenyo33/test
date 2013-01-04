@@ -7,7 +7,9 @@ Author: Gilbert Pellegrom
 Author URI: http://dev7studios.com
 Supports Thumbs: true
 */
-
+.theme-default{
+    position:relative;
+}
 .theme-default .nivoSlider {
 	position:relative;
 	background:#fff url(loading.gif) no-repeat 50% 50%;
