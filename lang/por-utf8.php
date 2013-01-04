@@ -259,4 +259,5 @@ $TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'] = "Click view images list";
 $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
 
 $TPLMSG['SUBMIT'] = "Submit";
+$TPLMSG['COMPANY_ADDRESS'] = "endereço";
 ?>

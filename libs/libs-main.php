@@ -255,7 +255,7 @@ class MAINFUNC{
                 }
             }
             //設定頁腳變數
-            $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['ADDRESS']);
+            $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['COMPANY_ADDRESS']);
             $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['FAX']);
             $tpl->assignGlobal("TAG_FOOTER_TEL",$TPLMSG['TEL']);
             $tpl->assignGlobal("TAG_FOOTER_EMAIL",$TPLMSG['EMAIL']);
