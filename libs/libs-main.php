@@ -248,6 +248,8 @@ class MAINFUNC{
             $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
             $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
             $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
+            $tpl->assignGlobal("MSG_PRODUCT_SEARCH",$TPLMSG['PRODUCTS_SEARCH']);
+            $tpl->assignGlobal("MSG_PRODUCT_SEARCH_KEYWORD",$TPLMSG['ENTER_KEYWORD']);
             //設定主選單變數
             if(!empty($ws_array["main"])){
                 foreach($ws_array["main"] as $item => $itemName){
@@ -538,6 +540,7 @@ class MAINFUNC{
         ($cms_cfg["ws_module"]["ws_statistic"])?$tpl->newBlock( "AUTHORITY_STATISTIC" ):"";
         ($cms_cfg["ws_module"]["ws_service"])?$tpl->newBlock( "AUTHORITY_SERVICE" ):"";
         ($cms_cfg["ws_module"]["ws_index_banner"])?$tpl->newBlock( "INDEX_BANNER" ):"";//自訂首頁banner管理
+        ($cms_cfg["ws_module"]["ws_products_application"])?$tpl->newBlock( "AUTHORITY_PRODUCTS_APPLICATION" ):"";//產品應用領域
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
     }

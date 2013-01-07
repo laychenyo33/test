@@ -17,6 +17,49 @@ class PRODUCTS{
         $this->op_limit=10;
         $this->jp_limit=10;
         switch($_REQUEST["func"]){
+            case "pa_list"://應用領域分類列表
+                $this->current_class="PA";
+                $this->ws_tpl_file = "templates/ws-manage-products-application-list-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_FORMVALID");
+                $this->products_application_list();
+                $this->ws_tpl_type=1;
+                break;
+            case "pa_add":
+                $this->current_class="PA";
+                $this->ws_tpl_file = "templates/ws-manage-products-application-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_PREVIEWS_PIC");
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_TINYMCE");
+                $this->products_application_form("add");
+                $this->ws_tpl_type=1;                
+                break;
+            case "pa_mod":
+                $this->current_class="PA";
+                $this->ws_tpl_file = "templates/ws-manage-products-application-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_PREVIEWS_PIC");
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_TINYMCE");
+                $this->products_application_form("mod");
+                $this->ws_tpl_type=1;             
+                break;
+            case "pa_replace":
+                $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->products_application_replace();
+                $this->ws_tpl_type=1;                
+                break;
+            case "pa_del":
+                $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->products_application_del();
+                $this->ws_tpl_type=1;            
+                break;
             case "pc_list"://產品管理分類列表
                 $this->current_class="PC";
                 $this->ws_tpl_file = "templates/ws-manage-products-cate-list-tpl.html";
@@ -960,6 +1003,9 @@ class PRODUCTS{
                                    "VALUE_P_DESC" => $row["p_desc"],
                                    "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none"
         ));
+        if($cms_cfg["ws_module"]['ws_products_application']){
+            $this->application_checkbox($row["p_id"]);
+        }
     }
 //產品管理--資料更新================================================================
     function products_replace(){
@@ -1118,12 +1164,12 @@ class PRODUCTS{
                 break;
         }
         if ( $db_msg == "" ) {
-			$p_big_img_replace_str="";
-			for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){
-				$p_img_target="p_big_img".$j;
-				$$p_img_target=$main->file_str_replace($_REQUEST["p_big_img".$j]);//會變成這樣$p_big_img1=$main->file_str_replace($_REQUEST["p_big_img1"])			
-				$p_big_img_replace_str.="p_big_img".$j." = '".$$p_img_target."',";
-			}			
+            $p_big_img_replace_str="";
+            for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){
+                    $p_img_target="p_big_img".$j;
+                    $$p_img_target=$main->file_str_replace($_REQUEST["p_big_img".$j]);//會變成這樣$p_big_img1=$main->file_str_replace($_REQUEST["p_big_img1"])			
+                    $p_big_img_replace_str.="p_big_img".$j." = '".$$p_img_target."',";
+            }			
             $sql="
                 REPLACE INTO ".$cms_cfg['tb_prefix']."_products_img SET
 					".$p_big_img_replace_str."				
@@ -1131,6 +1177,25 @@ class PRODUCTS{
             ";
             $rs = $db->query($sql);
             $db_msg = $db->report();
+            if($cms_cfg["ws_module"]['ws_products_application']){//有應用領域
+                if($_POST['pa_id_str']){
+                    $pa_id_arr = explode(',',$_POST['pa_id_str']);
+                    $sql = "replace into ".$cms_cfg['tb_prefix']."_products_application_map(p_id,pa_id,checked)values";
+                    $values = array();
+                    for($i=0;$i<count($pa_id_arr);$i++){
+                        $pa_id = $pa_id_arr[$i];
+                        $checked = $_POST['pa_id'][$pa_id_arr[$i]]?1:0;
+                        $values[] = "('".$this->p_id."','".$pa_id."','".$checked."')";
+                    }
+                    if(count($values)){
+                        $sql .= implode(",",$values);
+                        $db->query($sql);
+                        if($err=$db->report()){
+                            $db_msg.=$err;
+                        }
+                    }
+                }
+            }
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
@@ -1206,9 +1271,7 @@ class PRODUCTS{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
             }
-        }
-        //產品管理更改狀態
-        if($ws_table=="p"){
+        }elseif($ws_table=="p"){//產品管理更改狀態
             if($_REQUEST["p_id"]){
                 $p_id=array(0=>$_REQUEST["p_id"]);
             }else{
@@ -1226,6 +1289,25 @@ class PRODUCTS{
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
+            }
+        }elseif($ws_table=="pa"){//應用領域更改狀態
+            if($_REQUEST["pa_id"]){
+                $pa_id=(array)$_REQUEST["pa_id"];
+            }else{
+                $pa_id=$_REQUEST["id"];
+            }
+            if(!empty($pa_id)){
+                $pa_id_str = implode(",",$pa_id);
+                $sql="update ".$cms_cfg['tb_prefix']."_products_application set pa_status=".$value." where pa_id in (".$pa_id_str.")";
+                $rs = $db->query($sql);
+                $db_msg = $db->report();
+                if ( $db_msg == "" ) {
+                    $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                    $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $this->goto_target_page($goto_url);
+                }else{
+                    $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+                }  
             }
         }
     }
@@ -1282,9 +1364,10 @@ class PRODUCTS{
         if(!empty($_REQUEST["sort_value"]) && !empty($ws_table)){
             if($ws_table=="pc"){
                 $table_name=$cms_cfg['tb_prefix']."_products_cate";
-            }
-            if($ws_table=="p" || $ws_table=="p_new"){
+            }elseif($ws_table=="p" || $ws_table=="p_new"){
                 $table_name=$cms_cfg['tb_prefix']."_products";
+            }elseif($ws_table=="pa"){
+                $table_name=$cms_cfg['tb_prefix']."_products_application";
             }
             foreach($_REQUEST["id"] as $key => $value){
                 if($ws_table == "p_new") {
@@ -1391,9 +1474,7 @@ class PRODUCTS{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
             }
-        }
-        //產品管理複製
-        if($ws_table=="p"){
+        }elseif($ws_table=="p"){//產品管理複製
             $sql="select p.*,pi.*  from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_img as pi on p.p_id=pi.p_id where p.p_id='".$_REQUEST["id"][0]."'";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
@@ -1503,8 +1584,62 @@ class PRODUCTS{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
             }
+        }elseif($ws_table=="pa"){
+            $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_id='".$_REQUEST["id"][0]."'";
+            $selectrs = $db->query($sql);
+            $rsnum    = $db->numRows($selectrs);
+            $row = $db->fetch_array($selectrs,1);
+            if($this->seo){
+                $add_field_str="pa_name_alias,
+                                pa_seo_title,
+                                pa_seo_keyword,
+                                pa_seo_description,
+                                pa_seo_short_desc,
+                                pa_seo_down_short_desc,
+                                pa_seo_h1,";
+                $add_value_str="'".addslashes($row["pa_name_alias"])."',
+                                '".addslashes($row["pa_seo_title"])."',
+                                '".addslashes($row["pa_seo_keyword"])."',
+                                '".addslashes($row["pa_seo_description"])."',
+                                '".addslashes($row["pa_seo_short_desc"])."',
+                                '".addslashes($row["pa_seo_down_short_desc"])."',
+                                '".addslashes($row["pa_seo_h1"])."',";
+            }
+            if($rsnum >0){
+                $sql="
+                insert into ".$cms_cfg['tb_prefix']."_products_application(
+                    pa_status,
+                    pa_sort,
+                    pa_name,
+                    pa_custom_status,
+                    pa_custom,
+                    pa_small_img,
+                    pa_modifydate,
+                    ".$add_field_str."
+                    pa_modifyaccount
+                ) values (
+                    '".$row["pa_status"]."',
+                    '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_products_application","pa","","",0)."',
+                    '".addslashes($row["pa_name"])." (copy)',
+                    '".$row["pa_custom_status"]."',
+                    '".addslashes($row["pa_custom"])."',
+                    '".$row["pa_small_img"]."',
+                    '".date("Y-m-d H:i:s")."',
+                    ".$add_value_str."
+                    '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
+                )";
+                $rs = $db->query($sql);
+                $db_msg = $db->report();
+                if ( $db_msg == "" ) {
+                    $this->pc_id=$db->get_insert_id();
+                    $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                    $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $this->goto_target_page($goto_url);
+                }else{
+                    $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+                }
+            }
         }
-
     }
     //組合分類下拉選單
     function products_cate_select(&$output, &$pc_id,$now_pc_parent, $pc_parent=0, $indent="") {
@@ -1721,9 +1856,10 @@ class PRODUCTS{
             case "del":
                 if($_REQUEST["ws_table"]=="pc"){
                     $this->products_cate_del();
-                }
-                if($_REQUEST["ws_table"]=="p"){
+                }elseif($_REQUEST["ws_table"]=="p"){
                     $this->products_del();
+                }elseif($_REQUEST["ws_table"]=="pa"){
+                    $this->products_application_del();
                 }
                 break;
             case "copy":
@@ -1866,7 +2002,296 @@ class PRODUCTS{
             }
         }
     }
+    //應用領域列表
+    function products_application_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        //相關參數
+        if(!empty($_REQUEST['nowp'])){
+            $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
+                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
+                                      "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
+                                      "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
 
+            ));
+        }
+        $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_id > '0'";
+        $and_str = "";
+        if(!empty($_REQUEST["sk"])){
+            $and_str .= " and pa_name like '%".$_REQUEST["sk"]."%'";
+        }
+        $sql .= $and_str." order by pa_sort ".$cms_cfg['sort_pos'].",pa_modifydate desc ";
+        //取得總筆數
+        $total_records=$main->count_total_records($sql);
+        //取得分頁連結
+        $func_str="products.php?func=pa_list&&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+        $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+        //重新組合包含limit的sql語法
+        $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        $tpl->assignGlobal( array("VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
+                                  "VALUE_TOTAL_BOX" => $rsnum,
+                                  "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                                  "VALUE_NOW_PAGE" => $_REQUEST['nowp']
+        ));
+        //分類列表
+        $i=$page["start_serial"];
+        while ( $row = $db->fetch_array($selectrs,1) ) {
+            $i++;
+            $tpl->newBlock( "PRODUCTS_APPLICATION_LIST" );
+            if($i%2){
+                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+            }
+            $tpl->assign( array("VALUE_PA_ID"  => $row["pa_id"],
+                                "VALUE_PA_STATUS"  => $row["pa_status"],
+                                "VALUE_PA_SORT"  => $row["pa_sort"],
+                                "VALUE_PA_NAME" => $row["pa_name"],
+                                "VALUE_PA_SMALL_IMG" => (trim($row["pa_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pa_small_img"],
+                                "VALUE_PA_SERIAL" => $i,
+                                "VALUE_STATUS_IMG" => ($row["pa_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
+                                "VALUE_STATUS_IMG_ALT" => ($row["pa_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
+                                "VALUE_PA_MODIFYDATE" => $row["pa_modifydate"],
+                                "VALUE_PA_MODIFYACCOUNT" => $row["pa_modifyaccount"],
+            ));
+        }
+        if($i==0){
+            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
+        }else{
+            //分頁顯示項目
+            $tpl->newBlock( "PAGE_DATA_SHOW" );
+            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
+                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
+                                "VALUE_PAGES_STR"  => $page["pages_str"],
+                                "VALUE_PAGES_LIMIT"=>$this->op_limit
+            ));
+            if($page["bj_page"]){
+                $tpl->newBlock( "PAGE_BACK_SHOW" );
+                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }
+            if($page["nj_page"]){
+                $tpl->newBlock( "PAGE_NEXT_SHOW" );
+                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }
+        }
+    }
+    //應用領域表單
+    function products_application_form($action_mode){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        if($this->seo){
+            $tpl->newBlock("SEO_EDIT_ZONE");
+        }
+        //欄位名稱
+        $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
+                                  "VALUE_PA_SORT" => 1,
+                                  "NOW_PA_ID"  => 0,
+                                  "VALUE_PA_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_products_application","pa","","",0),
+                                  "STR_PA_STATUS_CK1" => "checked",
+                                  "STR_PA_STATUS_CK0" => "",
+                                  "STR_PA_CUSTOM_STATUS_CK1" => "",
+                                  "STR_PA_CUSTOM_STATUS_CK0" => "checked",
+                                  "STR_PA_CUSTOM_STATUS_DISPLAY" => "none",
+                                  "VALUE_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
+                                  "VALUE_ACTION_MODE" => $action_mode
+        ));
+        //相關參數
+        if(!empty($_REQUEST['nowp'])){
+            $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
+                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
+                                      "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
+                                      "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
+
+            ));
+        }
+        //如果為修改模式,帶入資料庫資料
+        if($action_mode=="mod" && !empty($_REQUEST["pa_id"])){
+            $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_id='".$_REQUEST["pa_id"]."'";
+            $selectrs = $db->query($sql);
+            $row = $db->fetch_array($selectrs,1);
+            $rsnum    = $db->numRows($selectrs);
+            if ($rsnum > 0) {
+                $tpl->assignGlobal( array("NOW_PA_ID"  => $row["pa_id"],
+                                          "VALUE_PA_SORT"  => $row["pa_sort"],
+                                          "VALUE_PA_NAME" => $row["pa_name"],
+                                          "VALUE_PA_NAME_ALIAS" => $row["pa_name_alias"],
+                                          "VALUE_PA_CUSTOM" => $row["pa_custom"],
+                                          "VALUE_PA_SMALL_IMG" => (trim($row["pa_small_img"])=="")?"":$cms_cfg["file_root"].$row["pa_small_img"],
+                                          "VALUE_PIC_PREVIEW1" => (trim($row["pa_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pa_small_img"],
+                                          "STR_PA_STATUS_CK1" => ($row["pa_status"])?"checked":"",
+                                          "STR_PA_STATUS_CK0" => ($row["pa_status"])?"":"checked",
+                                          "STR_PA_CUSTOM_STATUS_CK1" => ($row["pa_custom_status"]==1)?"checked":"",
+                                          "STR_PA_CUSTOM_STATUS_CK0" => ($row["pa_custom_status"]==0)?"checked":"",
+                                          "STR_PA_CUSTOM_STATUS_DISPLAY" => ($row["pa_custom_status"]==1)?" ":"none",
+                                          "MSG_MODE" => $TPLMSG['MODIFY']
+                ));
+                if($this->seo){
+                    $tpl->assignGlobal( array(
+                        "VALUE_PA_SEO_FILENAME" => $row["pa_seo_filename"],
+                        "VALUE_PA_SEO_TITLE" => $row["pa_seo_title"],
+                        "VALUE_PA_SEO_KEYWORD" => $row["pa_seo_keyword"],
+                        "VALUE_PA_SEO_DESCRIPTION" => $row["pa_seo_description"],
+                        "VALUE_PA_SEO_H1" => $row["pa_seo_h1"],
+                        "VALUE_PA_SEO_SHORT_DESC" => $row["pa_seo_short_desc"],
+                        "VALUE_PA_SEO_DOWN_SHORT_DESC" => $row["pa_seo_down_short_desc"],
+                    ));
+                }
+                $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
+            }else{
+                header("location : products.php?func=pa_list");
+            }
+        }
+        if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
+            $tpl->newBlock("WYSIWYG_TINYMCE1");
+            $tpl->assign( "VALUE_PA_CUSTOM" , $row["pa_custom"] );
+        }
+    }
+    //應用領域儲存
+    function products_application_replace(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        if($this->seo){
+            $seo_fields = array(
+                "pa_name_alias"=>array(
+                    'filter'=>array('htmlspecialchars')
+                ),
+                "pa_seo_filename"=>array(
+                    //'filter'=>array('htmlspecialchars')
+                ),
+                "pa_seo_title"=>array(
+                    'filter'=>array('htmlspecialchars')
+                ),
+                "pa_seo_keyword"=>array(
+                    'filter'=>array('htmlspecialchars')              
+                ),
+                "pa_seo_description"=>array(
+                    'filter'=>array('htmlspecialchars')  
+                ),
+                "pa_seo_short_desc"=>array(
+                    //'filter'=>array('htmlspecialchars')   
+                ),
+                "pa_seo_down_short_desc"=>array(
+                    //'filter'=>array('htmlspecialchars')   
+                ),
+                "pa_seo_h1"=>array(
+                    'filter'=>array('htmlspecialchars')   
+                ));
+            $add_field_str='';
+            $add_value_str='';
+            $update_str="";                
+            foreach($seo_fields as $field => $info){
+                $val = trim($_REQUEST[$field]);
+                if(is_array($info['filter'])){
+                    foreach($info['filter'] as $func){
+                        $val = $func($val);   
+                    }
+                }
+                $add_field_str .= "".$field.",";
+                $add_value_str .= "'".$val."',";
+                $update_str    .= "".$field."='".$val."',";                
+            }
+        }
+        switch ($_REQUEST["action_mode"]){
+            case "add":
+                $sql="
+                insert into ".$cms_cfg['tb_prefix']."_products_application(
+                    pa_status,
+                    pa_sort,
+                    pa_name,
+                    pa_custom_status,
+                    pa_custom,
+                    pa_small_img,
+                    pa_modifydate,
+                    ".$add_field_str."
+                    pa_modifyaccount
+                ) values (
+                    '".$_REQUEST["pa_status"]."',
+                    '".$_REQUEST["pa_sort"]."',
+                    '".htmlspecialchars($_REQUEST["pa_name"])."',
+                    '".$_REQUEST["pa_custom_status"]."',
+                    '".$_REQUEST["pa_custom"]."',
+                    '".$main->file_str_replace($_REQUEST["pa_small_img"])."',
+                    '".date("Y-m-d H:i:s")."',
+                    ".$add_value_str."
+                    '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
+                )";
+                $rs = $db->query($sql);
+                $db_msg = $db->report();
+                if ( $db_msg == "" ) {
+                    $this->pa_id=$db->get_insert_id();
+                }
+                break;
+            case "mod":
+                $sql="
+                update ".$cms_cfg['tb_prefix']."_products_application set
+                    pa_status='".$_REQUEST["pa_status"]."',
+                    pa_sort='".$_REQUEST["pa_sort"]."',
+                    pa_name='".htmlspecialchars($_REQUEST["pa_name"])."',
+                    pa_custom_status='".$_REQUEST["pa_custom_status"]."',
+                    pa_custom='".$_REQUEST["pa_custom"]."',
+                    pa_small_img='".$main->file_str_replace($_REQUEST["pa_small_img"])."',
+                    pa_modifydate='".date("Y-m-d H:i:s")."',
+                    ".$update_str."
+                    pa_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
+                where pa_id='".$_REQUEST["now_pa_id"]."'";
+                $rs = $db->query($sql);
+                $db_msg = $db->report();
+                break;
+        }
+        if ( $db_msg == "" ) {
+            $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+            $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            $this->goto_target_page($goto_url);
+        }else{
+            $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+        }
+    }    
+    //應用領域刪除
+    function products_application_del(){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        if($_REQUEST["pa_id"]){
+            $pa_id=(array)$_REQUEST["pa_id"];
+        }else{
+            $pa_id=$_REQUEST["id"];
+        }
+        if(!empty($pa_id)){
+            $pa_id_str = implode(",",$pa_id);
+            //刪除勾選的產品管理
+            $sql="delete from ".$cms_cfg['tb_prefix']."_products_application where pa_id in (".$pa_id_str.")";
+            $rs = $db->query($sql);
+            $db_msg = $db->report();
+            if ( $db_msg == "" ) {
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $this->goto_target_page($goto_url);
+            }else{
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            }
+        }
+    }    
+    //應用領域核取方塊
+    function application_checkbox($p_id){
+        global $db,$cms_cfg,$tpl;
+        $tpl->newBlock("PRODUCTS_APPLICATION_ZONE");
+        $sql = "select pa.*,pam.checked as `checked` from ".$cms_cfg['tb_prefix']."_products_application as pa left join (select * from ".$cms_cfg['tb_prefix']."_products_application_map where p_id='".$p_id."') as pam on pa.pa_id=pam.pa_id where pa.pa_status='1' order by pa.pa_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        $s=1;
+        $pa_id_arr = array();
+        while($row=$db->fetch_array($res,1)){
+            $pa_id_arr[] = $row['pa_id'];
+            $tpl->newBlock("APPLICATION_ITEM");
+            $tpl->assign(array(
+                "SERIAL" => $s,
+                "VALUE_PA_ID" => $row['pa_id'],
+                "VALUE_PA_NAME" => $row['pa_name'],
+                "TAG_PA_ID_CHK" => $row['checked']?"checked":"",
+            ));
+            $s++;
+        }
+        if(count($pa_id_arr)){
+            $tpl->gotoBlock("PRODUCTS_APPLICATION_ZONE");
+            $tpl->assign("VALUE_PA_ID_STR",implode(',',$pa_id_arr));
+        }
+    }
 }
 //ob_end_flush();
 ?>

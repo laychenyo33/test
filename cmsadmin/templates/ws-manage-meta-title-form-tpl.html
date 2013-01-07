@@ -21,6 +21,9 @@
             <!-- START BLOCK : SEO_ZONE_PRODUCTS_T -->
             <li><a href="#products">產品主頁</a></li>
             <!-- END BLOCK : SEO_ZONE_PRODUCTS_T -->
+            <!-- START BLOCK : SEO_ZONE_APPLICATION_T -->
+            <li><a href="#application">應用領域</a></li>
+            <!-- END BLOCK : SEO_ZONE_APPLICATION_T -->
             <!-- START BLOCK : SEO_ZONE_SITEMAP_T -->
             <li><a href="#sitemap">網站地圖</a></li>
             <!-- END BLOCK : SEO_ZONE_SITEMAP_T -->
@@ -254,15 +257,15 @@
         <tr>
           <th>自訂頁面:</th>
           <td>
-              <input type="radio" name="mt_seo_custom_status" value="0" {STR_P_SEO_CUSTOM_STATUS_CK0} onClick="document.getElementById('div_custom').style.display='none';"> 否
-              <input type="radio" name="mt_seo_custom_status" value="1" {STR_P_SEO_CUSTOM_STATUS_CK1} onclick="document.getElementById('div_custom').style.display='';"> 是
+              <input type="radio" name="p_mt_seo_custom_status" value="0" {STR_P_SEO_CUSTOM_STATUS_CK0} onClick="document.getElementById('div_custom').style.display='none';"> 否
+              <input type="radio" name="p_mt_seo_custom_status" value="1" {STR_P_SEO_CUSTOM_STATUS_CK1} onclick="document.getElementById('div_custom').style.display='';"> 是
               <br><font color="red">(如果選擇【是】的話，產品主頁面會出現編輯的內容；如果選擇【否】的話，必須先清空內容。)</font>
           </td>
         </tr>
         <tr id="div_custom" style="display:{STR_P_SEO_CUSTOM_STATUS_DISPLAY}">
           <th>&nbsp;</th>
           <td>
-              <textarea id="elm2" name="mt_seo_custom" cols="50" rows="15">{VALUE_P_SEO_CUSTOM}</textarea>
+              <textarea id="elm2" name="p_mt_seo_custom" cols="50" rows="15">{VALUE_P_SEO_CUSTOM}</textarea>
           </td>
         </tr>
         <tr>
@@ -274,6 +277,58 @@
         </table>
         </div>
         <!-- END BLOCK : SEO_ZONE_PRODUCTS -->
+        <!-- START BLOCK : SEO_ZONE_APPLICATION -->
+        <div>
+        <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
+        <tr>
+            <th colspan="2">應用領域</th>
+        </tr>
+        <tr>
+            <th>網頁標題(Meta Title):</th>
+            <td>
+                <input name="pa_seo_title" type="text" value="{VALUE_PA_SEO_TITLE}" size="60" /></td>
+        </tr>
+        <tr>
+            <th>網頁關鍵字(Meta Keyword):</th>
+            <td>
+                <textarea name="pa_seo_keyword" cols="50" rows="3" >{VALUE_PA_SEO_KEYWORD}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>網頁敘述(Meta Description):</th>
+            <td>
+                <textarea name="pa_seo_description" cols="50" rows="3" >{VALUE_PA_SEO_DESCRIPTION}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <th>簡述:</th>
+            <td>
+                <textarea name="pa_seo_short_desc" id="elm4" cols="50" rows="3" >{VALUE_PA_SEO_SHORT_DESC}</textarea>
+            </td>
+        </tr>
+        <tr>
+          <th>自訂頁面:</th>
+          <td>
+              <input type="radio" name="pa_mt_seo_custom_status" value="0" {STR_PA_SEO_CUSTOM_STATUS_CK0} onClick="document.getElementById('div_app_custom').style.display='none';"> 否
+              <input type="radio" name="pa_mt_seo_custom_status" value="1" {STR_PA_SEO_CUSTOM_STATUS_CK1} onclick="document.getElementById('div_app_custom').style.display='';"> 是
+              <br><font color="red">(如果選擇【是】的話，產品主頁面會出現編輯的內容；如果選擇【否】的話，必須先清空內容。)</font>
+          </td>
+        </tr>
+        <tr id="div_app_custom" style="display:{STR_PA_SEO_CUSTOM_STATUS_DISPLAY}">
+          <th>&nbsp;</th>
+          <td>
+              <textarea id="elm3" name="pa_mt_seo_custom" cols="50" rows="15">{VALUE_PA_SEO_CUSTOM}</textarea>
+          </td>
+        </tr>
+        <tr>
+            <th>H1 標題:</th>
+            <td>
+                <input name="pa_seo_h1" type="text"  value="{VALUE_PA_SEO_H1}" size="40" >
+            </td>
+        </tr>
+        </table>
+        </div>
+        <!-- END BLOCK : SEO_ZONE_APPLICATION -->
         <!-- START BLOCK : SEO_ZONE_SITEMAP -->
         <div>
         <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">

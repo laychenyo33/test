@@ -11,6 +11,9 @@ $arrayToJs = array();
 $arrayToJs[0] = $validateId;
 $arrayToJs[1] = $validateError;
 switch($_REQUEST["func"]){
+    case "pa":
+        $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_products_application where pa_seo_filename='".$validateValue."' and pa_id!='".$validateId."'";
+        break;
     case "pc":
         $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_products_cate where pc_seo_filename='".$validateValue."' and pc_id!='".$validateId."'";
         break;

@@ -63,6 +63,11 @@
                         "alertTextOk":"* 這個檔名可以使用", 
                         "alertTextLoad":"* 載入中請稍候",
                         "alertText":"* 這個檔名已被使用"},
+                    "ajaxPAfilename":{
+                        "file":"validateFilename.php?func=pa",
+                        "alertTextOk":"* 這個檔名可以使用", 
+                        "alertTextLoad":"* 載入中請稍候",
+                        "alertText":"* 這個檔名已被使用"},
                     "ajaxPfilename":{
                         "file":"validateFilename.php?func=p",
                         "alertTextOk":"* 這個檔名可以使用", 
