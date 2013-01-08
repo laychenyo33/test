@@ -36,6 +36,7 @@ $ws_array["ad_cate"]=array( 1 =>$TPLMSG['AD_UP_BANNER_580_120'],2 =>$TPLMSG['AD_
 $ws_array["payment_type"]=array( 0 =>$TPLMSG["PAYMENT_ATM"],1 =>$TPLMSG["PAYMENT_CASH_ON_DELIVERY"]);
 $ws_array["main"]=array("aboutus" => $TPLMSG["ABOUT_US"],
                         "products" => $TPLMSG["PRODUCTS"],
+                        "application" => $TPLMSG["APPLICATION"],
                         "download" => $TPLMSG["DOWNLOAD"],
                         "news" => $TPLMSG["NEWS"],
                         "faq" => $TPLMSG["FAQ"],
@@ -45,6 +46,7 @@ $ws_array["main"]=array("aboutus" => $TPLMSG["ABOUT_US"],
                     );
 $ws_array["left"]=array("aboutus" => $TPLMSG["ABOUT_US"],
                         "products" => $TPLMSG["PRODUCTS"],
+                        "application" => $TPLMSG["APPLICATION"],
                         "download" => $TPLMSG["DOWNLOAD"],
                         "news" => $TPLMSG["NEWS"],
                         "faq" => $TPLMSG["FAQ"],
