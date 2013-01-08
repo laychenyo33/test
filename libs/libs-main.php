@@ -924,7 +924,7 @@ class MAINFUNC{
         $tpl->assignGlobal("TAG_MOUSE_DISABLE", $str);
     }
     //取得最大排序值
-    function get_max_sort_value($table_name,$table_prefix,$field,$id,$cate){
+    function get_max_sort_value($table_name,$table_prefix,$field=null,$id=null,$cate=false){
         global $db;
         if($cate){ //是否有上層分類
             $sql="select MAX(".$table_prefix."_sort) as max_value from ".$table_name." where ".$field."='".$id."'";

@@ -441,7 +441,8 @@ class EPAPER{
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
                                   "STR_E_STATUS_CK1" => "",
                                   "STR_E_STATUS_CK0" => "checked",
-                                  "VALUE_ACTION_MODE" => $action_mode
+                                  "VALUE_ACTION_MODE" => $action_mode,
+                                  "VALUE_E_SORT" => $main->get_max_sort_value($cms_cfg['tb_prefix']."_epaper","e"),
         ));
         //相關參數
         if(!empty($_REQUEST['nowp'])){
