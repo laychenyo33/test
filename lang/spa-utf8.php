@@ -48,7 +48,7 @@ $TPLMSG['VIEWS'] = "Ver";
 $TPLMSG['FILE'] = "Archivo";
 $TPLMSG['PUBLISH_ON'] = "Restante del Cargo";
 $TPLMSG['PUBLISH_OFF'] = "Caducado";
-$TPLMSG['PAGE_BACK'] = "de nuevo";
+$TPLMSG['PAGE_BACK'] = "Atrás";
 $TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
