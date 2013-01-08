@@ -240,4 +240,5 @@ $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
 
 $TPLMSG['SUBMIT'] = "Submit";
 $TPLMSG['COMPANY_ADDRESS'] = "Адрес";
+$TPLMSG['PRODUCTS_FAVORITE'] = "Favorite";
 ?>
