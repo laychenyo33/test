@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css">
+            .product_list{
+                width:300px;
+                float:left;
+                margin:10px;
+            }
+            .product_list .product_pic{
+                width:300px;
+                overflow: hidden;
+            }
+            .product_list .product_desc{
+                
+            }
+        </style>
+        <title>{EPAPER_PAGE_TITLE}</title>
+    </head>
+<body>
+    {EPAPER_CONTENT}
+    <!-- START BLOCK : ATTACH_PRODUCT_LIST -->
+    <div class="product_list">
+        <div class="product_pic">
+            <a href="{VALUE_P_LINK}"><img src="{VALUE_P_SMALL_IMG}"/></a>
+        </div>
+        <div class="product_desc">
+            <a href="{VALUE_P_LINK}">{VALUE_P_NAME}</a>            
+        </div>
+    </div>
+    <!-- END BLOCK : ATTACH_PRODUCT_LIST -->
+</body>
+</html>

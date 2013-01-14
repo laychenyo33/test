@@ -55,7 +55,7 @@
             <th>公司名稱:</td>
             <td bgcolor="#FBF8E6"><input name="m_company_name" size="42" value="{VALUE_M_COMPANY_NAME}" type="text" />
         </td>
-            <th>聯絡人:</th>
+            <th>姓名:</th>
             <td>
                 <select name="m_contact_s">
                   <option value="Mr." {STR_M_CS_CK1}>Mr.</option>
@@ -65,6 +65,20 @@
                 <input name="m_name" type="text" value="{VALUE_M_NAME}" size="12" />
             </td>
         </tr>
+          <!-- START BLOCK : SELECT_COUNTRY -->
+          <tr>
+              <th><font color="red">*</font>{MSG_COUNTRY}</th>
+              <td colspan="3"><select name="m_country" id="m_country" class="validate[required]">
+                  {TAG_SELECT_OPTION_COUNTRY}
+                  </select></td>
+          </tr>
+          <!-- END BLOCK : SELECT_COUNTRY -->    
+          <tr>
+              <th>生日</th>
+              <td colspan="3">
+                  <input type="text" name="m_birthday" id="m_birthday" size="20" value="{VALUE_M_BIRTHDAY}"/><a href="#" onclick="displayCalendar(document.getElementById('m_birthday'),'yyyy-mm-dd',this);return false">選擇</a>
+              </td>
+          </tr>  
         <tr>
             <th>住址:</th>
             <td colspan="3">

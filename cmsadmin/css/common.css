@@ -611,3 +611,18 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
 .related_table  tr.altrow {
 	background-color: #EAEAEA;
 }
+.attach_product{
+    float:left;
+    width:50px;
+    margin:3px;
+}
+.member_export_mcate,.member_export_column{
+    display:inline-block;float:left;
+    margin: 5px 10px;
+}
+.member_export_mcate input,.member_export_column input{
+    margin:3px;   
+}
+.mem_im_desc{
+    color:#09F;
+}

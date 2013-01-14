@@ -1001,7 +1001,9 @@ class PRODUCTS{
                                    "VALUE_P_CHARACTER" => $row["p_character"],
                                    "TAG_CHARACTER_SHOW" => (trim($row["p_character"]))?"":"none" ,
                                    "VALUE_P_DESC" => $row["p_desc"],
-                                   "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none"
+                                   "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none",
+                                   "VALUE_P_CERT" => $row["p_certificate"],
+                                   "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
         ));
         if($cms_cfg["ws_module"]['ws_products_application']){
             $this->application_checkbox($row["p_id"]);

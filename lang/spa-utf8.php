@@ -48,7 +48,7 @@ $TPLMSG['VIEWS'] = "Ver";
 $TPLMSG['FILE'] = "Archivo";
 $TPLMSG['PUBLISH_ON'] = "Restante del Cargo";
 $TPLMSG['PUBLISH_OFF'] = "Caducado";
-$TPLMSG['PAGE_BACK'] = "Atrás";
+$TPLMSG['PAGE_BACK'] = "de nuevo";
 $TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
@@ -261,7 +261,12 @@ $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
 $TPLMSG['SUBMIT'] = "Submit";
 $TPLMSG['COMPANY_ADDRESS'] = "Dirección";
 $TPLMSG['PRODUCTS_FAVORITE'] = "Favorite";
+
 $TPLMSG["APPLICATION"] = "Application";
-$TPLMSG['PRODUCTS_SEARCH'] = "Products Search";
+$TPLMSG['PRODUCTS_SEARCH'] = "PRODUCTS SEARCH";
 $TPLMSG['ENTER_KEYWORD'] = "Enter Keyword";
+$TPLMSG['NEXT'] = "NEXT";
+$TPLMSG['PREV'] = "PREV";
+$TPLMSG['BACK_TO_LIST']="BACK TO LIST";
+$TPLMSG['RELATED_PRODUCTS'] = "Related Products";
 ?>

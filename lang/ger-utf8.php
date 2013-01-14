@@ -259,9 +259,14 @@ $TPLMSG['SLIDE_BOX_CLICK_VIEW_LIST'] = "Click view images list";
 $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
 
 $TPLMSG['SUBMIT'] = "Submit";
-$TPLMSG['COMPANY_ADDRESS'] = "Adresse";
+$TPLMSG['COMPANY_ADDRESS'] = "Address";
 $TPLMSG['PRODUCTS_FAVORITE'] = "Favorite";
+
 $TPLMSG["APPLICATION"] = "Application";
-$TPLMSG['PRODUCTS_SEARCH'] = "Products Search";
+$TPLMSG['PRODUCTS_SEARCH'] = "PRODUCTS SEARCH";
 $TPLMSG['ENTER_KEYWORD'] = "Enter Keyword";
+$TPLMSG['NEXT'] = "NEXT";
+$TPLMSG['PREV'] = "PREV";
+$TPLMSG['BACK_TO_LIST']="BACK TO LIST";
+$TPLMSG['RELATED_PRODUCTS'] = "Related Products";
 ?>

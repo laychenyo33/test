@@ -26,6 +26,27 @@
                 </div>&nbsp;
             </td>
         </tr>
+        <!-- START BLOCK : ATTACH_PRODUCTS_ZONE -->
+        <tr>
+            <th>勾選產品</th>
+            <td>
+                <!-- START BLOCK : PRODUCTS_LIST -->
+                <div class="attach_product">
+                    <label for="attach_p_id_{VALUE_P_ID}"><img src="{VALUE_P_SMALL_IMG}" width="50" height="50"/></label>
+                    <input type="checkbox" name="attach_p_id[]" id="attach_p_id_{VALUE_P_ID}" value="{VALUE_P_ID}"/>
+                </div>
+                <!-- START BLOCK : PRODUCTS_LIST -->
+            </td>
+        </tr>
+        <!-- END BLOCK : ATTACH_PRODUCTS_ZONE -->
+        <!-- START BLOCK : SENDING_SCHEDULE -->
+        <tr>
+            <th>發送時間</th>
+            <td>
+                <input type="text" name="eq_send_time" id="eq_send_time" value="" size="20"/><a href="#" onclick="displayCalendar(document.getElementById('eq_send_time'),'yyyy-mm-dd hh:ii',this,true);return false">選擇</a>
+            </td>
+        </tr>
+        <!-- END BLOCK : SENDING_SCHEDULE -->
         <tr>
             <th>&nbsp;</th>
             <td>
@@ -55,7 +76,7 @@
         </tr>
     </table>
     <input type="hidden" name="e_id" value="{VALUE_E_ID}">
-    <input type="hidden" name="action_mode" value="send">
+    <input type="hidden" name="action_mode" value="{VALUE_E_ACTION_TYPE}">
     <input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
     <input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
     <input name="nowp" type="hidden" id="nowp" value="{VALUE_NOW_PAGE}">

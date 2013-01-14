@@ -261,8 +261,13 @@ $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
 
 $TPLMSG['SUBMIT'] = "Submit";
 $TPLMSG['COMPANY_ADDRESS'] = "住所";
-$TPLMSG['PRODUCTS_FAVORITE'] = "お気に入りに追加";
-$TPLMSG["APPLICATION"] = "応用領域";
-$TPLMSG['PRODUCTS_SEARCH'] = "製品検索";
-$TPLMSG['ENTER_KEYWORD'] = "キーワード";
+$TPLMSG['PRODUCTS_FAVORITE'] = "Favorite";
+
+$TPLMSG["APPLICATION"] = "Application";
+$TPLMSG['PRODUCTS_SEARCH'] = "PRODUCTS SEARCH";
+$TPLMSG['ENTER_KEYWORD'] = "Enter Keyword";
+$TPLMSG['NEXT'] = "NEXT";
+$TPLMSG['PREV'] = "PREV";
+$TPLMSG['BACK_TO_LIST']="BACK TO LIST";
+$TPLMSG['RELATED_PRODUCTS'] = "Related Products";
 ?>

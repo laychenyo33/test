@@ -6,33 +6,37 @@ $cms_cfg["ws_module"]=array(
         "ws_aboutus"=>1,            //關於我們(公司簡介)
         "ws_blog"=>0,               //部落格管理(留言版)
         "ws_contactus"=>1,          //聯絡我們
-        "ws_download"=>1,           //檔案下載
-        "ws_ebook"=>0,              //電子型錄管理
-        "ws_faq"=>1,                //FAQ管理
+        "ws_download"=>0,           //檔案下載
+        "ws_ebook"=>1,              //電子型錄管理
+        "ws_faq"=>0,                //FAQ管理
         "ws_forum"=>0,              //討論區管理
-        "ws_gallery"=>1,            //活動剪影
-        "ws_goodlink"=>1,           //好站連結
+        "ws_gallery"=>0,            //活動剪影
+        "ws_goodlink"=>0,           //好站連結
         "ws_guestbook"=>0,          //留言版管理
-        "ws_inquiry"=>0,            //詢問信管理
+        "ws_inquiry"=>1,            //詢問信管理
         "ws_inquiry_type"=>0,       //0=>批次詢問車, 1=>單一詢問車
         "ws_news"=>1,               //最新消息
-        "ws_new_product"=>0,        //最新產品
+        "ws_new_product"=>1,        //最新產品
         "ws_products"=>1,           //產品管理
-        "ws_products_related"=>0,   //產品詳細頁--相關產品
+        "ws_products_related"=>1,   //產品詳細頁--相關產品
         "ws_products_nextlink"=>1,  //產品詳細頁--上下筆連結
         "ws_products_title"=>0,     //自訂產品說明標題(產品敘述、規格、特性) 0 =>預設語系 1 => 自定說明
         "ws_products_application"=>1, //產品應用領域
 
 /*      IPC SETUP                   */
-        "ws_ad"=>1,                 //廣告管理(IPC專用)
-        "ws_bonus"=>0,              //紅利點數(IPC專用)
-        "ws_epaper"=>0,             //電子報管理
-        "ws_order"=>1,              //訂單管理
-        "ws_service"=>0,            //服務條款(IPC專用)
-        "ws_vaccount"=>0,           //台銀虛擬帳號
+        "ws_ad"=>1,                     //廣告管理(IPC專用)
+        "ws_bonus"=>0,                  //紅利點數(IPC專用)
+        "ws_epaper"=>1,                 //電子報管理
+        "ws_epaper_attach_products"=>1, //電子報夾帶產品列表
+        "ws_epaper_queue"=>1,           //電子報使用佇列發送
+        "ws_order"=>0,                  //訂單管理
+        "ws_service"=>0,                //服務條款(IPC專用)
+        "ws_vaccount"=>0,               //台銀虛擬帳號
 
 /*      MEMBER SETUP                */
         "ws_member"=>1,             //會員管理
+        "ws_member_manipulate"=>0,  //會員資料匯出匯入
+        "ws_member_country"   =>1,  //會員表單顯示國家下拉式選單
         "ws_cart_login"=>0,         //購物車或詢價車是否需要會員登入
         "ws_download_login"=>0,     //檔案下載是否需要會員登入
         "ws_new_product_login"=>0,  //最新產品是否需要會員登入
@@ -46,11 +50,11 @@ $cms_cfg["ws_module"]=array(
         "ws_left_main_pc"=>1,       //左方menu顯示產品主分類
         "ws_left_sub_pc"=>1,        //左方menu顯示產品次分類
         "ws_left_products" =>0,     //左方menu顯示產品
-        "ws_listpage_cart"=>0,      //產品列表直接勾選inquiry項目
+        "ws_listpage_cart"=>1,      //產品列表直接勾選inquiry項目
         "ws_pop_bigimg"=>0,         //產品列表小圖,點選後彈跳出視窗顯示大圖
         "ws_sitemap_product"=>1,    //sitemap 是否顯示產品連結
         "ws_security"=>1,           //驗証碼(聯絡我們、留言版)
-        "ws_country"=>0,            //國家下拉選單(會員,聯絡我們,詢價車,購物車)
+        "ws_country"=>1,            //國家下拉選單(會員,聯絡我們,詢價車,購物車)
         "ws_left_menu_effects"=>0,  //左方產品選單下拉開合特效
         "ws_left_menu_type"=>1,     //0=>over menu,1=>click menu (左方menu顯示產品次分類時啟用)
         "ws_on_contextmenu"=>0,     //禁滑鼠右鍵

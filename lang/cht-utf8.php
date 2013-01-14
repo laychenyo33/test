@@ -267,7 +267,12 @@ $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "關閉圖片清單";
 $TPLMSG['SUBMIT'] = "提交";
 $TPLMSG['COMPANY_ADDRESS'] = "地址";
 $TPLMSG['PRODUCTS_FAVORITE'] = "加為最愛";
+
 $TPLMSG["APPLICATION"] = "應用領域";
-$TPLMSG['PRODUCTS_SEARCH'] = "產品搜尋";
+$TPLMSG['PRODUCTS_SEARCH'] = "搜尋產品";
 $TPLMSG['ENTER_KEYWORD'] = "輸入關鍵字";
+$TPLMSG['NEXT'] = "下一筆";
+$TPLMSG['PREV'] = "上一筆";
+$TPLMSG['BACK_TO_LIST']="回到列表";
+$TPLMSG['RELATED_PRODUCTS'] = "相關產品";
 ?>

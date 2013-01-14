@@ -10,9 +10,48 @@ if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[
 include_once("../libs/libs-manage-sysconfig.php");
 $member = new MEMBER;
 class MEMBER{
+    //會員資料欄位
+    protected $columns = array(
+        'm_company_name' => array('name'=>"公司",'gc'=>"Company"),
+        'm_name'         => array('name'=>"名字",'gc'=>"First Name"),
+        'm_birthday'     => array('name'=>"生日",'gc'=>'Birthday'),
+        'm_sex'          => array("name"=>"性別","gc"=>"Gender","map"=>array(0=>'女',1=>'男')),
+        'm_country'      => array("name"=>"國家","gc"=>"Home Country"),
+        'm_zip'          => array("name"=>"郵遞區號","gc"=>"Home Postal Code"),
+        'm_address'      => array("name"=>"地址","gc"=>"Home Address"),
+        'm_tel'          => array("name"=>"電話","gc"=>"Home Phone"),
+        'm_fax'          => array("name"=>"傳真","gc"=>"Home Fax"),
+        'm_cellphone'    => array('name'=>'手機',"gc"=>"Mobile Phone"),
+        'm_url'          => array("name"=>"主機","gc"=>"Web Page"),          
+        'm_email'        => array('name'=>"電子郵件","gc"=>"E-mail Address"),   
+    );
     function MEMBER(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
+            case "m_import":
+                if($cms_cfg['module']['ws_member_manipulate']!=1){
+                    header("location:member.php?func=m_list");
+                    die();
+                }                
+                $this->current_class="M_IM";
+                $this->ws_tpl_file = "templates/ws-manage-member-data-import-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $this->member_data_import($_GET['act']);
+                $this->ws_tpl_type=1;                
+                break;
+            case "m_export":
+                if($cms_cfg['module']['ws_member_manipulate']!=1){
+                    header("location:member.php?func=m_list");
+                    die();
+                }
+                $this->current_class="M_EX";
+                $this->ws_tpl_file = "templates/ws-manage-member-data-export-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $this->member_data_export();
+                $this->ws_tpl_type=1;                
+                break;
             case "mc_list"://會員分類列表
                 $this->current_class="MC";
                 $this->ws_tpl_file = "templates/ws-manage-member-cate-list-tpl.html";
@@ -469,6 +508,10 @@ class MEMBER{
         }else{
             $tpl->newBlock( "MEMBER_ADD_MODE" );
         }
+        //國家下拉選單
+        if($cms_cfg["ws_module"]["ws_member_country"]==1) {
+            $main->country_select($row["m_country"]);
+        }        
         //會員分類
         $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
         $selectrs = $db->query($sql);
@@ -495,6 +538,7 @@ class MEMBER{
                         m_account,
                         m_password,
                         m_company_name,
+                        m_country,
                         m_contact_s,
                         m_name,
                         m_birthday,
@@ -514,6 +558,7 @@ class MEMBER{
                         '".$_REQUEST["m_account"]."',
                         '".$_REQUEST["m_password"]."',
                         '".$_REQUEST["m_company_name"]."',
+                        '".$_REQUEST["m_country"]."',
                         '".$_REQUEST["m_contact_s"]."',
                         '".$_REQUEST["m_name"]."',
                         '".$_REQUEST["m_birthday"]."',
@@ -536,6 +581,7 @@ class MEMBER{
                         m_modifydate='".date("Y-m-d H:i:s")."',
                         m_password='".$_REQUEST["m_password"]."',
                         m_company_name='".$_REQUEST["m_company_name"]."',
+                        m_country='".$_REQUEST["m_country"]."',
                         m_contact_s='".$_REQUEST["m_contact_s"]."',
                         m_name='".$_REQUEST["m_name"]."',
                         m_birthday='".$_REQUEST["m_birthday"]."',
@@ -789,6 +835,242 @@ class MEMBER{
                 break;
         }
     }
+    //會員資料匯入
+    function member_data_import($act){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        $target_csv = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root']."upload_files/wait_to_map.csv";
+        switch($act){
+            case "preview":
+                $tpl->assignGlobal("IMPORT_ACTION","選擇匯入筆數");                
+                $tpl->newBlock("PREVIEW_LIST");
+                if(is_array($_POST['mapto'])){
+                    $tpl->newBlock("SEND_TO_SAVE");
+                    $tpl->assign("COL_SPAN",count($_POST['mapto'])+1);
+                    $colkeys = array_keys($_POST['mapto']);
+                    $res = fopen($target_csv,'r');
+                    $s=0;
+                    while($tmp = fgets($res, 3000)){
+                        $csv_row = explode(',',$tmp);
+                        if($s==0){
+                            $row_type = "TITLE_ROW";
+                            $data_type = "SELECTED_COLUMN";
+                        }else{
+                            $row_type = "DATA_ROW";
+                            $data_type = "SELECTED_DATA";
+                        }
+                        $tpl->newBlock($row_type);
+                        $tpl->assign("VALUE_ROW_INDEX",$s);
+                        foreach($colkeys as $k){
+                            $tpl->newBlock($data_type);
+                            $tpl->assign("VALUE_COL_DATA",  $csv_row[$k]);
+                            if($s==0){
+                                $tpl->assign(array(
+                                   "VALUE_MAPTO_CNAME" => $_POST['mapto'][$k],
+                                   "VALUE_COL_INDEX" => $k,
+                                ));
+                            }
+                        }
+                        $s++;
+                    }                    
+                }else{ //沒有選擇任何對應欄位
+                    $tpl->newBlock("NO_COLUMN_SELECTED");
+                }
+                break;
+            case "select":
+                $tpl->assignGlobal("IMPORT_ACTION","選擇匯入欄位");
+                if($this->_save_csv_file($_FILES['csvfile']['tmp_name'],$target_csv)){
+                    $tpl->newBlock("SELECT_IMPORT_COLUMN");
+                    $res = fopen($target_csv,'r');
+                    $tmp = fgets($res, 3000);
+                    $csv_title = explode(',',$tmp);
+                    $nums_csv_col = count($csv_title);
+                    if($nums_csv_col){
+                        foreach($csv_title as $k=>$title){
+                            $tpl->newBlock("CSV_COLUMNS");
+                            $tpl->assign(array(
+                                "VALUE_COL_INDEX" => $k,
+                                "VALUE_COL_NAME"  => $title,
+                            ));
+                        }
+                        //顯示資料欄位
+                        $dbcol = array();
+                        foreach($this->columns as $info){
+                            $dbcol[] = $info['name'];
+                        }
+                        if(count($dbcol)){
+                            $tpl->newBlock("DATA_COLUMN");
+                            $tpl->assign("VALUE_DATA_COLUMN",implode(",",$dbcol));
+                        }
+                        fclose($res);                        
+                        $tpl->newBlock("SEND_TO_MAP");
+                    }else{
+                        $tpl->newBlock("NO_DATA_TO_IMPORT");
+                    }
+                }else{
+                    header("location:member.php?func=m_list");
+                    die();
+                }                
+                break;
+            case "save":
+                if($_POST['mapto'] && $_POST['row_id']){
+                    $tpl->assignGlobal("IMPORT_ACTION","儲存對應");
+                    $tpl->newBlock("SAVING_RESULT");
+                    $msg="";
+                    $res = fopen($target_csv,'r');
+                    $i=0;
+                    $wNums = 0; //寫入筆數
+                    $cNums = 0; //衝突筆數
+                    while($tmp = fgets($res, 2000)){
+                        //$enc_type = mb_detect_encoding($tmp)?mb_detect_encoding($tmp):"big-5";
+                        if($i>0 && in_array($i,$_POST['row_id'])){
+                            $csv = explode(',',$tmp);
+                            $columns = array('mc_id','m_status');
+                            $values = array('1','0');
+                            $conflic = false;
+                            foreach($_POST['mapto'] as $idx => $col){
+                                if($col=="m_email" && $csv[$idx]!=''){
+                                    $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".$csv[$idx]."'";
+                                    $res_m = $db->query($sql,true);
+                                    $conflic = ($db->numRows($res_m))?true:false;
+                                    $columns[] = 'm_account';
+                                    $values[] = "'".$csv[$idx]."'";
+                                }
+                                $columns[] = $col;
+                                $values[] = "'".$csv[$idx]."'";
+                            }
+                            if($conflic){
+                                $tpl->newBlock("CONFLIC_RECORD");
+                                $cNums++;
+                            }else{
+                                $tpl->newBlock("WRITED_RECORD");
+                                $wNums++;
+                                $sql = "insert into ".$cms_cfg['tb_prefix']."_member(".implode(',',$columns).")values(".implode(',',$values).")";
+                                $db->query($sql,true);
+//                                $tpl->assign("VALUE_QUERY",$sql);
+                            }
+                            $tpl->assign("VALUE_RECORD",implode(',',$values));
+                        }
+                        $i++;
+                    }
+                    $tpl->gotoBlock("SAVING_RESULT");
+                    $tpl->assign(array(
+                        "VALUE_SUCCESS_NUMS"  => $wNums, 
+                        "VALUE_CONFLICT_NUMS" => $cNums 
+                    ));
+                    unlink($target_csv);
+                }else{
+                    unlink($target_csv);
+                    header('location:member.php?func=m_list');
+                    die();
+                }
+                break;
+            case "map":
+                if( file_exists($target_csv) && is_array($_POST['csvcol'])){
+                    $tpl->assignGlobal("IMPORT_ACTION","csv欄位對應");
+                    $tpl->newBlock("COLUMN_MAP");
+                    $res = fopen($target_csv,'r');
+                    $tmp = fgets($res, 3000);
+                    $csv_title = explode(',',$tmp);
+                    $columns = array_keys($this->columns);
+                    foreach($_POST['csvcol'] as $colkey){
+                        $tpl->newBlock("CSV_COLUMN");
+                        $tpl->assign(array(
+                            "VALUE_COL_INDEX" => $colkey,
+                            "VALUE_COL_NAME"  => $csv_title[$colkey],
+                        ));
+                        foreach($columns as $s => $col){
+                            $tpl->newBlock('MAPTO_LIST');
+                            $tpl->assign(array(
+                               "SERIAL"            => $s, 
+                               "VALUE_COL_INDEX"   => $colkey, 
+                               "VALUE_MAPTO_CNAME" => $col, 
+                               "VALUE_MAPTO_NAME"  => $this->columns[$col]['name'], 
+                            ));
+                        }
+                    }                    
+                }else{
+                    header("location:member.php?func=m_list");
+                    die();
+                }
+                break;
+            default:
+                $tpl->assignGlobal("IMPORT_ACTION","上傳csv");
+                $tpl->newBlock("SELECT_CSV_FILE");
+        }
+    }
+    //會員資料匯出
+    function member_data_export(){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        if($_POST){
+            //有勾選mc_id才繼續處理
+            if($_POST['mc_id'] && $_POST['columns']){
+                //取得勾選的欄位及匯出抬頭
+                header('content-type:text/csv');
+                header("content-disposition: attachment; filename=memberdata.csv");                
+                $wanted_column = $_POST['columns'];
+                array_walk($wanted_column,array($this,"_format_csv_title"),$this->columns);
+                $this->_format_csv_line($wanted_column);
+                //取得欲匯出的會員類別
+                $sql = "select m.* from ".$cms_cfg['tb_prefix']."_member as m inner join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id=mc.mc_id where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
+                $res = $db->query($sql);
+                while($row = $db->fetch_array($res,1)){
+                    $wanted_column = array();
+                    foreach($_POST['columns'] as $col){
+                        $value = (is_array($this->columns[$col]['map']))?$this->columns[$col]['map'][$row[$col]]:$row[$col];
+                        $wanted_column[] = "".$value."";
+                    }
+                    //匯出資料
+                    $this->_format_csv_line($wanted_column);
+                }
+            }
+            die();   
+        }
+        //會員分類
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_status='1' order by mc_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("MEMBER_CATE_LIST");
+            $tpl->assign(array(
+                "VALUE_MC_ID"      => $row['mc_id'],
+                "VALUE_MC_SUBJECT" => $row['mc_subject'],
+            ));
+        }
+        foreach($this->columns as $col=>$info){
+            $tpl->newBlock("DATA_COLUMN_LIST");
+            $tpl->assign(array(
+                "VALUE_M_COLUMN"      => $col, 
+                "VALUE_M_COLUMN_NAME" => $info['name'], 
+            ));
+        }
+    }
+
+    function _format_csv_title(&$value,$key,$columns){
+        $column_name = ($columns[$value]['gc'])?$columns[$value]['gc']:$columns[$value]['name'];
+        $value = $column_name;
+    }
+    
+    function _format_csv_column(&$value,$key){
+        $value = "".$value."";
+    }
+    
+    function _format_csv_line($line_data){
+        echo implode(',',$line_data)."\r\n";
+    }
+    
+    function _save_csv_file($tmp_name,$new_file_name){
+        //$_POST['charset_of_file'];
+        if(is_uploaded_file($tmp_name)){
+            $fp = fopen($tmp_name,'r');
+            $fp2 = fopen($new_file_name,'w');
+            while($str = fgets($fp, 3000)){
+                fwrite($fp2, mb_convert_encoding($str, "utf-8",$_POST['charset_of_file']));
+            }
+            fclose($fp);
+            fclose($fp2);
+            return $new_file_name;
+        }
+    }
+    
 }
 //ob_end_flush();
 ?>

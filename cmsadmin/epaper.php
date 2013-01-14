@@ -500,6 +500,7 @@ class EPAPER{
                 $tpl->assignGlobal( array("MSG_MODE"  => $TPLMSG["SEND"],
                                           "VALUE_E_ID"  => $row["e_id"],
                                           "VALUE_E_SUBJECT" => $row["e_subject"],
+                                          "VALUE_E_ACTION_TYPE" => "send",
                 ));
             }else{
                 header("location : epaper.php?func=e_list");
@@ -551,6 +552,16 @@ class EPAPER{
                                     "VALUE_ES_SERIAL" => $i,
                 ));
             }
+            //夾帶產品
+            if($cms_cfg['ws_module']['ws_epaper_attach_products']){
+                $tpl->newBlock("ATTACH_PRODUCTS_ZONE");
+                $this->attach_product_checkbox();
+            }
+            if($cms_cfg['ws_module']['ws_epaper_queue']){
+                $tpl->newBlock("JS_CALENDAR");                
+                $tpl->newBlock("SENDING_SCHEDULE");
+                $tpl->assignGlobal("VALUE_E_ACTION_TYPE" ,"queue");
+            }
         }
     }
 
@@ -601,6 +612,70 @@ class EPAPER{
                         e_modifydate='".date("Y-m-d H:i:s")."'
                     where e_id='".$_REQUEST["e_id"]."'";
                 break;
+            case "queue":
+                //取得寄送名單
+                if($_REQUEST["e_st"]="1"){
+                    $sql="select m.m_email,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id = mc.mc_id  where m.m_epaper_status='1'";
+                }
+                if($_REQUEST["e_st"]="2" && !empty($_REQUEST["mc_id"])){
+                    $mc_id_str=" and m.mc_id in (".implode(",",$_REQUEST["mc_id"]).")";
+                    $sql="select m.m_email,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id = mc.mc_id  where m.m_epaper_status='1'".$mc_id_str ;
+                }
+                $selectrs = $db->query($sql);
+                $rsnum    = $db->numRows($selectrs);
+                if($rsnum > 0){
+                    $mail_array=array();
+                    while($row = $db->fetch_array($selectrs,1)){
+                        $piece=explode(",",$row["m_email"]);
+                        foreach($piece as $key => $value){
+                            $mail_array[$value]=1;
+                        }
+                        $member_cate[$row["mc_subject"]]=1;
+                        unset($piece);
+                    }
+                    foreach ($mail_array as $key =>$value){
+                        $new_mail_array[]=$key;
+                    }
+                    foreach ($member_cate as $key =>$value){
+                        $new_member_cate[]=$key;
+                    }
+                    if(!empty($new_mail_array)){
+                        $mail_str=implode(",",$new_mail_array);
+                        $member_cate_str=implode(",",$new_member_cate);
+                        unset($new_mail_array);
+                        //取得電子報內容
+                        $sql="select e_subject,e_content from ".$cms_cfg['tb_prefix']."_epaper where e_id='".$_REQUEST["e_id"]."'";
+                        $selectrs = $db->query($sql);
+                        $row = $db->fetch_array($selectrs,1);
+                        $rsnum    = $db->numRows($selectrs);
+                        $goto_url=$cms_cfg["manage_url"]."epaper.php?func=e_list";
+                        if($rsnum > 0){
+                            $mail_subject=$row["e_subject"];
+                            $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",$row["e_content"]);
+                            $p_id_str = is_array($_POST['attach_p_id'])?implode(',',$_POST['attach_p_id']):'';
+                            //寫入佇列
+                            $sql="
+                                insert into ".$cms_cfg['tb_prefix']."_epaper_queue (
+                                    e_id,
+                                    eq_modifydate,
+                                    eq_group,e_subject,eq_content,eq_send_time,eq_attach_products
+                                ) values (
+                                    '".$_REQUEST["e_id"]."',
+                                    '".date("Y-m-d H:i:s")."',
+                                    '".$member_cate_str."',
+                                    '".$row["e_subject"]."',
+                                    '".$mail_content."',
+                                    '".$_POST["eq_send_time"]."',
+                                    '".$p_id_str."'
+                                )";
+                            $rs = $db->query($sql);
+                        }
+                        $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                        $this->goto_target_page($goto_url);
+                        return ;
+                    }
+                }                
+                break;
             case "send":
                 //取得寄送名單
                 if($_REQUEST["e_st"]="1"){
@@ -647,6 +722,30 @@ class EPAPER{
                         if($rsnum > 0){
                             $mail_subject=$row["e_subject"];
                             $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",$row["e_content"]);
+                            //初始化電子報樣版
+                            $mtpl = new TemplatePower('./templates/ws-manage-epaper-template-tpl.html');
+                            $mtpl->prepare();
+                            $mtpl->assign("_ROOT.EPAPER_PAGE_TITLE",$row["e_subject"]);
+                            $mtpl->assign("_ROOT.EPAPER_CONTENT",$mail_content);
+                            if(is_array($_POST['attach_p_id'])){
+                                $sql = "select p.*,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_status='1' and p_id in(".implode(',',$_POST['attach_p_id']).")";
+                                $p_rs = $db->query($sql);
+                                while($p_row = $db->fetch_array($p_rs,1)){
+                                    $mtpl->newBlock("ATTACH_PRODUCT_LIST");
+                                    if($cms_cfg['ws_module']['ws_seo']){
+                                        $dirname = ($p_row['pc_seo_filename']?$p_row['pc_seo_filename']:"products")."/";
+                                        $p_link = $cms_cfg['base_url'].$dirname. $p_row['p_seo_filename'].".html";
+                                    }else{
+                                        $p_link = $cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_row['p_id'];
+                                    }
+                                    $mtpl->assign(array(
+                                       "VALUE_P_LINK"      => $p_link, 
+                                       "VALUE_P_SMALL_IMG" => $p_row['p_small_img']?$cms_cfg['file_url'].$p_row['p_small_img']:$cms_cfg['server_url'].$cms_cfg['default_preview_pic'], 
+                                       "VALUE_P_NAME"      => $p_row['p_name'], 
+                                    ));
+                                }
+                            }
+                            $mail_content = $mtpl->getOutputContent();
                             //寫入發送記錄
                             $sql="
                                 insert into ".$cms_cfg['tb_prefix']."_epaper_send (
@@ -991,6 +1090,19 @@ class EPAPER{
             case "sort":
                 $this->change_sort($_REQUEST["ws_table"]);
                 break;
+        }
+    }
+    //attach product checkbox
+    function attach_product_checkbox(){
+        global $db,$cms_cfg,$tpl;
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_products where p_status='1' order by p_sort ".$cms_cfg['sort_pos'];
+        $rs = $db->query($sql);
+        while($row = $db->fetch_array($rs,1)){
+            $tpl->newBlock("PRODUCTS_LIST");
+            $tpl->assign(array(
+                "VALUE_P_SMALL_IMG" => $row['p_small_img']?$cms_cfg['file_root'].$row['p_small_img']:$cms_cfg['default_preview_pic'], 
+                "VALUE_P_ID"        => $row['p_id'], 
+            ));
         }
     }
 }

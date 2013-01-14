@@ -515,6 +515,7 @@ class MAINFUNC{
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_guestbook"] && $cms_cfg["ws_module"]["ws_guestbook"])?$tpl->newBlock( "AUTHORITY_GUESTBOOK" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_inquiry"] && $cms_cfg["ws_module"]["ws_inquiry"])?$tpl->newBlock( "AUTHORITY_INQUIRY" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_member"] && $cms_cfg["ws_module"]["ws_member"])?$tpl->newBlock( "AUTHORITY_MEMBER" ):"";
+        ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_member"] && $cms_cfg["ws_module"]["ws_member_manipulate"])?$tpl->newBlock( "AUTHORITY_MEMBER_MANIUPULATE" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_news"] && $cms_cfg["ws_module"]["ws_news"])?$tpl->newBlock( "AUTHORITY_NEWS" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_order"] && $cms_cfg["ws_module"]["ws_order"])?$tpl->newBlock( "AUTHORITY_ORDER" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_products"])?$tpl->newBlock( "AUTHORITY_PRODUCTS" ):"";
@@ -682,6 +683,40 @@ class MAINFUNC{
         echo "document.location='".$goto_url."'";
         echo "</script>";
     }
+    function ws_mail_send_simple($from,$to,$mail_content,$mail_subject,$from_name=""){
+        global $TPLMSG,$cms_cfg;
+        $from_email=explode(",",$from);
+        $from_name=(trim($from_name))?$from_name:$from_email[0];
+        $mail_subject = "=?UTF-8?B?".base64_encode($mail_subject)."?=";
+        //寄給送信者
+        $MAIL_HEADER   = "MIME-Version: 1.0\n";
+        $MAIL_HEADER  .= "Content-Type: text/html; charset=\"utf-8\"\n";
+        $MAIL_HEADER  .= "From: =?UTF-8?B?".base64_encode($from_name)."?= <".$from_email[0].">"."\n";
+        $MAIL_HEADER  .= "Reply-To: ".$from_email[0]."\n";
+        $MAIL_HEADER  .= "Return-Path: ".$from_email[0]."\n";    // these two to set reply address
+        $MAIL_HEADER  .= "X-Priority: 1\n";
+        $MAIL_HEADER  .= "Message-ID: <".time()."-".$from_email[0].">\n";
+        $MAIL_HEADER  .= "X-Mailer: PHP v".phpversion()."\n";          // These two to help avoid spam-filters
+        $to_email = explode(",",$to);
+        for($i=0;$i<count($to_email);$i++){
+            if($i!=0 && $i%2==0){
+                sleep(2);
+            }
+            if($i!=0 && $i%5==0){
+                sleep(10);
+            }
+            if($i!=0 && $i%60==0){
+                sleep(300);
+            }
+            if($i!=0 && $i%600==0){
+                sleep(2000);
+            }
+            if($i!=0 && $i%1000==0){
+                sleep(10000);
+            }
+            @mail($to_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
+        }
+    }    
     function CreateLayer($id,$relative,$top,$left,$width,$height,$css,$bgColor,$bgImage,$visible,$zIndex,$html,$events){
         $src = "";
         $src.="<div ";
