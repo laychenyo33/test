@@ -239,7 +239,7 @@
 	
 	
 	// jQuery plugin implementation
-	$.fn.tabs = function(query, conf) {
+	$.fn.tabss = function(query, conf) {
 		
 		// return existing instance
 		var el = this.eq(typeof conf == 'number' ? conf : 0).data("tabs");

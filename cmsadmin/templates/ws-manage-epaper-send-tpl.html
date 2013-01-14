@@ -30,12 +30,19 @@
         <tr>
             <th>勾選產品</th>
             <td>
-                <!-- START BLOCK : PRODUCTS_LIST -->
-                <div class="attach_product">
-                    <label for="attach_p_id_{VALUE_P_ID}"><img src="{VALUE_P_SMALL_IMG}" width="50" height="50"/></label>
-                    <input type="checkbox" name="attach_p_id[]" id="attach_p_id_{VALUE_P_ID}" value="{VALUE_P_ID}"/>
+                <div id="epaper-accordion">
+                    <!-- START BLOCK : PRODUCTS_CATE_LIST -->
+                        <h3>{VALUE_PC_NAME}</h3>
+                        <div>
+                            <!-- START BLOCK : PRODUCTS_LIST -->
+                            <div class="attach_product">
+                                <label for="attach_p_id_{VALUE_P_ID}"><img src="{VALUE_P_SMALL_IMG}" width="50" height="50"/></label>
+                                <input type="checkbox" name="attach_p_id[]" id="attach_p_id_{VALUE_P_ID}" value="{VALUE_P_ID}"/>
+                            </div>
+                            <!-- START BLOCK : PRODUCTS_LIST -->
+                        </div>
+                    <!-- END BLOCK : PRODUCTS_CATE_LIST -->
                 </div>
-                <!-- START BLOCK : PRODUCTS_LIST -->
             </td>
         </tr>
         <!-- END BLOCK : ATTACH_PRODUCTS_ZONE -->

@@ -83,6 +83,7 @@ class EPAPER{
                 $this->current_class="ES";
                 $this->ws_tpl_file = "templates/ws-manage-epaper-send-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_JQ_UI");
                 $this->epaper_send();
                 $this->ws_tpl_type=1;
                 break;
@@ -555,6 +556,7 @@ class EPAPER{
             //夾帶產品
             if($cms_cfg['ws_module']['ws_epaper_attach_products']){
                 $tpl->newBlock("ATTACH_PRODUCTS_ZONE");
+                $tpl->newBlock("JS_JQ_ACCORDION");
                 $this->attach_product_checkbox();
             }
             if($cms_cfg['ws_module']['ws_epaper_queue']){
@@ -1095,14 +1097,22 @@ class EPAPER{
     //attach product checkbox
     function attach_product_checkbox(){
         global $db,$cms_cfg,$tpl;
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_products where p_status='1' order by p_sort ".$cms_cfg['sort_pos'];
-        $rs = $db->query($sql);
-        while($row = $db->fetch_array($rs,1)){
-            $tpl->newBlock("PRODUCTS_LIST");
-            $tpl->assign(array(
-                "VALUE_P_SMALL_IMG" => $row['p_small_img']?$cms_cfg['file_root'].$row['p_small_img']:$cms_cfg['default_preview_pic'], 
-                "VALUE_P_ID"        => $row['p_id'], 
-            ));
+        $sql = "select pc_id,pc_name,pc_layer from ".$cms_cfg['tb_prefix']."_products_cate where  pc_status='1' order by pc_layer ".$cms_cfg['sort_pos'];
+        $pcrs = $db->query($sql);
+        while($pc_row = $db->fetch_array($pcrs,1)){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$pc_row['pc_id']."' and p_status='1' order by p_sort ".$cms_cfg['sort_pos'];
+            $rs = $db->query($sql);
+            if($db->numRows($rs)){
+                $tpl->newBlock("PRODUCTS_CATE_LIST");
+                $tpl->assign("VALUE_PC_NAME",$pc_row['pc_name']);
+                while($row = $db->fetch_array($rs,1)){
+                    $tpl->newBlock("PRODUCTS_LIST");
+                    $tpl->assign(array(
+                        "VALUE_P_SMALL_IMG" => $row['p_small_img']?$cms_cfg['file_root'].$row['p_small_img']:$cms_cfg['default_preview_pic'], 
+                        "VALUE_P_ID"        => $row['p_id'], 
+                    ));
+                }
+            }
         }
     }
 }

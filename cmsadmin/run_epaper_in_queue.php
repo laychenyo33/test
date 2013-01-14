@@ -79,7 +79,7 @@ if($db->numRows($res)){
                         '".$qRow["e_id"]."',
                         '".date("Y-m-d H:i:s")."',
                         '".$qRow['eq_group']."',
-                        '".$row["eq_subject"]."'
+                        '".$qRow["e_subject"]."'
                     )";
                 $rs = $db->query($sql);
                 $main->ws_mail_send_simple($from_mail,$mail_str,$mail_content,$mail_subject,$from_name);
