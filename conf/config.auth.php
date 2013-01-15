@@ -21,7 +21,8 @@ $cms_cfg["ws_module"]=array(
         "ws_products_related"=>1,   //產品詳細頁--相關產品
         "ws_products_nextlink"=>1,  //產品詳細頁--上下筆連結
         "ws_products_title"=>0,     //自訂產品說明標題(產品敘述、規格、特性) 0 =>預設語系 1 => 自定說明
-        "ws_products_application"=>1, //產品應用領域
+        "ws_products_application" =>1, //產品應用領域
+        "ws_products_desc_style"  =>0, //前台產品敘述的格式，0是預設樣式，1是domtab,
 
 /*      IPC SETUP                   */
         "ws_ad"=>1,                     //廣告管理(IPC專用)

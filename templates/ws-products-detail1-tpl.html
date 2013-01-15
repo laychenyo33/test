@@ -79,20 +79,27 @@
           
         </div>    
 
-        <!-- START BLOCK : PRODUCT_DESC1 -->
-        <div class="products_show_title">{MSG_PRODUCT_DESC}</div>
-        <div class="products_show_introduction">{VALUE_P_DESC}</div>
-        <!-- END BLOCK : PRODUCT_DESC1 -->
-
-        <!-- START BLOCK : PRODUCT_CHARACTER1 -->
-        <div class="products_show_title">{MSG_PRODUCT_CHARACTER}</div>
-        <div class="products_show_introduction">{VALUE_P_CHARACTER}</div>
-        <!-- END BLOCK : PRODUCT_CHARACTER1 -->
-
-        <!-- START BLOCK : PRODUCT_SPEC1 -->
-        <div class="products_show_title">{MSG_PRODUCT_SPEC}</div>
-        <div class="products_show_introduction">{VALUE_P_SPEC}</div>
-        <!-- END BLOCK : PRODUCT_SPEC1 -->
+    <div class="wrap">
+        <div class="domtab">
+            <ul class="domtabs">
+                <!-- START BLOCK : DOMTAB_TITLE -->
+                <li><a href="#p{SERIAL}">{VALUE_DOMTAB_TITLE}</a></li>
+                <!-- END BLOCK : DOMTAB_TITLE -->
+            </ul>            
+        </div>
+        <!-- START BLOCK : DOMTAB_DATA -->
+        <div class="page-word" style="display: none; "><h2><a name="p{SERIAL}" id="p{SERIAL}"> </a></h2>
+            <div class="products_show_introduction">
+                {VALUE_DOMTAB_DATA}
+            </div>            
+        </div>        
+        <!-- END BLOCK : DOMTAB_DATA -->    
+    </div>
+    
+    <!-- START BLOCK : PRODUCT_DESC_LIST -->
+    <div class="products_show_title">{TAG_DESC_TITLE}</div>
+    <div class="products_show_introduction">{VALUE_DESC_CONTENT}</div>
+    <!-- END BLOCK : PRODUCT_DESC_LIST -->
 
     <!-- END BLOCK : PRODUCTS_DETAIL_DEFAULT -->
 
