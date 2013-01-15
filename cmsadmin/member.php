@@ -29,7 +29,7 @@ class MEMBER{
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
             case "m_import":
-                if($cms_cfg['module']['ws_member_manipulate']!=1){
+                if($cms_cfg['ws_module']['ws_member_manipulate']!=1){
                     header("location:member.php?func=m_list");
                     die();
                 }                
@@ -41,7 +41,7 @@ class MEMBER{
                 $this->ws_tpl_type=1;                
                 break;
             case "m_export":
-                if($cms_cfg['module']['ws_member_manipulate']!=1){
+                if($cms_cfg['ws_module']['ws_member_manipulate']!=1){
                     header("location:member.php?func=m_list");
                     die();
                 }

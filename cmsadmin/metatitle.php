@@ -226,7 +226,7 @@ class METATITLE{
                 where mt_name='products'";
             $rs = $db->query($sql);
         }
-        //產品主頁 seo欄位更新
+        //產品應用領域 seo欄位更新
         if($cms_cfg["ws_module"]["ws_products_application"]==1){
             $sql="
                 update ".$cms_cfg['tb_prefix']."_metatitle set
