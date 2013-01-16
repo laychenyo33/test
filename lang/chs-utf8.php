@@ -273,4 +273,5 @@ $TPLMSG['NEXT'] = "下一笔";
 $TPLMSG['PREV'] = "上一笔";
 $TPLMSG['BACK_TO_LIST']="回到列表";
 $TPLMSG['RELATED_PRODUCTS'] = "相关产品";
+$TPLMSG["VIDEO"] = "Video";
 ?>

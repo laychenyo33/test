@@ -4,6 +4,7 @@ $cms_cfg['ws_level'] = 20;
 $cms_cfg["ws_module"]=array(
 /*      BASIC(IPB&IPS) SETUP        */
         "ws_aboutus"=>1,            //關於我們(公司簡介)
+        "ws_video"=>0,            //youtube影片
         "ws_blog"=>0,               //部落格管理(留言版)
         "ws_contactus"=>1,          //聯絡我們
         "ws_download"=>0,           //檔案下載

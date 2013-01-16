@@ -93,6 +93,11 @@
                         "alertTextOk":"* 這個檔名可以使用", 
                         "alertTextLoad":"* 載入中請稍候",
                         "alertText":"* 這個檔名已被使用"},
+                    "ajaxVfilename":{
+                        "file":"validateFilename.php?func=v",
+                        "alertTextOk":"* 這個檔名可以使用", 
+                        "alertTextLoad":"* 載入中請稍候",
+                        "alertText":"* 這個檔名已被使用"},                    
                     "ajaxFCfilename":{
                         "file":"validateFilename.php?func=fc",
                         "alertTextOk":"* 這個檔名可以使用", 

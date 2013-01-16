@@ -270,4 +270,5 @@ $TPLMSG['NEXT'] = "NEXT";
 $TPLMSG['PREV'] = "PREV";
 $TPLMSG['BACK_TO_LIST']="BACK TO LIST";
 $TPLMSG['RELATED_PRODUCTS'] = "Related Products";
+$TPLMSG["VIDEO"] = "Video";
 ?>

@@ -69,6 +69,15 @@ class METATITLE{
                                    "VALUE_AU_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
                                    "VALUE_AU_SEO_H1" => $row["mt_seo_h1"]
                 ));
+            }elseif($row["mt_name"]=="video"){
+                $tpl->newBlock("SEO_ZONE_VIDEO_T");
+                $tpl->newBlock("SEO_ZONE_VIDEO");
+                $tpl->assign(array("VALUE_V_SEO_TITLE" => $row["mt_seo_title"],
+                                   "VALUE_V_SEO_KEYWORD" => $row["mt_seo_keyword"],
+                                   "VALUE_V_SEO_DESCRIPTION" => $row["mt_seo_description"],
+                                   "VALUE_V_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
+                                   "VALUE_V_SEO_H1" => $row["mt_seo_h1"]
+                ));
             }elseif($cms_cfg["ws_module"]["ws_contactus"]==1 && $row["mt_name"]=="contactus"){
                 //聯絡我們seo欄位
                 $tpl->newBlock("SEO_ZONE_CONTACTUS_T");
@@ -165,6 +174,18 @@ class METATITLE{
                 where mt_name='aboutus'";
             $rs = $db->query($sql);
         }
+        //影片seo欄位更新
+        if(true){
+            $sql="
+                update ".$cms_cfg['tb_prefix']."_metatitle set
+                    mt_seo_title='".htmlspecialchars($_REQUEST["v_seo_title"])."',
+                    mt_seo_keyword='".htmlspecialchars($_REQUEST["v_seo_keyword"])."',
+                    mt_seo_description='".htmlspecialchars($_REQUEST["v_seo_description"])."',
+                    mt_seo_short_desc='".htmlspecialchars($_REQUEST["v_seo_short_desc"])."',
+                    mt_seo_h1='".htmlspecialchars($_REQUEST["v_seo_h1"])."'
+                where mt_name='video'";
+            $rs = $db->query($sql);
+        }        
         //聯絡我們seo欄位更新
         if($cms_cfg["ws_module"]["ws_contactus"]==1){
             $sql="

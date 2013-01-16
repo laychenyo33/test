@@ -500,6 +500,7 @@ class MAINFUNC{
                                  "TAG_USER_ACCOUNT"   => $_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]
                           ));
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_aboutus"] && $cms_cfg["ws_module"]["ws_aboutus"])?$tpl->newBlock( "AUTHORITY_ABOUTUS" ):"";
+        ($cms_cfg["ws_module"]["ws_video"])?$tpl->newBlock( "AUTHORITY_VIDEO" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_ad"]  && $cms_cfg["ws_module"]["ws_ad"])?$tpl->newBlock( "AUTHORITY_AD" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_admin"])?$tpl->newBlock( "AUTHORITY_ADMIN" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_blog"] && $cms_cfg["ws_module"]["ws_blog"])?$tpl->newBlock( "AUTHORITY_BLOG" ):"";
