@@ -48,7 +48,14 @@ if($db->numRows($res)){
                 //初始化電子報樣版
                 $mtpl = new TemplatePower('./templates/ws-manage-epaper-template-tpl.html');
                 $mtpl->prepare();
+                $mtpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+                $mtpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
+                $mtpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
+                $mtpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
+                $mtpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
+                $mtpl->assignGlobal("TAG_LANG",$cms_cfg['language']);                
                 $mtpl->assign("_ROOT.EPAPER_PAGE_TITLE",$qRow["e_subject"]);
+                $mtpl->assign("_ROOT.EPAPER_TITLE",$qRow["e_subject"]);
                 $mtpl->assign("_ROOT.EPAPER_CONTENT",$mail_content);
                 if(trim($qRow['eq_attach_products'])){
                     $sql = "select p.*,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_status='1' and p_id in(".$qRow['eq_attach_products'].")";
@@ -61,10 +68,15 @@ if($db->numRows($res)){
                         }else{
                             $p_link = $cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_row['p_id'];
                         }
+                        $simg = $p_row['p_small_img']?$cms_cfg['file_root'].$p_row['p_small_img']:$cms_cfg['default_preview_pic'];
+                        $dimension = $main->resizeto($simg,219,171);
                         $mtpl->assign(array(
                            "VALUE_P_LINK"      => $p_link, 
                            "VALUE_P_SMALL_IMG" => $p_row['p_small_img']?$cms_cfg['file_url'].$p_row['p_small_img']:$cms_cfg['server_url'].$cms_cfg['default_preview_pic'], 
+                           "VALUE_P_SMALL_IMG_W" => $dimension['width'], 
+                           "VALUE_P_SMALL_IMG_H" => $dimension['height'], 
                            "VALUE_P_NAME"      => $p_row['p_name'], 
+                           "VALUE_P_DESC"      => $p_row['p_desc'], 
                         ));
                     }
                 }
