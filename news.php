@@ -60,6 +60,7 @@ class NEWS{
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["NEWS"]);
         $tpl->assignGlobal("TAG_PAGE_BACK", $TPLMSG['PAGE_BACK']);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["news"]);//左方menu title
+        $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["news"]);//左方menu title
         $tpl->assignGlobal( "TAG_NEWS_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["news"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-news"); //主要顯示區域的css設定

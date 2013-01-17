@@ -52,6 +52,7 @@ class GOODLINK{
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , "相關網站");
         $tpl->assignGlobal( "TAG_GOODLINK_CURRENT" , "class='current'");
         $tpl->assignGlobal( "TAG_CATE_TITLE", "相關網站");
+        $tpl->assignGlobal( "TAG_CATE_DESC", "相關網站-說明");
         $tpl->assignGlobal( "TAG_LAYER" , "相關網站");
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["goodlink"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "about"); //主要顯示區域的css設定

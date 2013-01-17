@@ -39,6 +39,7 @@ $ws_array["main"]=array("aboutus" => $TPLMSG["ABOUT_US"],
                         "application" => $TPLMSG["APPLICATION"],
                         "download" => $TPLMSG["DOWNLOAD"],
                         "news" => $TPLMSG["NEWS"],
+                        "video" => $TPLMSG["VIDEO"],
                         "faq" => $TPLMSG["FAQ"],
                         "service" => $TPLMSG["SERVICE"],
                         "contactus" => $TPLMSG["CONTACT_US"],
@@ -49,10 +50,22 @@ $ws_array["left"]=array("aboutus" => $TPLMSG["ABOUT_US"],
                         "application" => $TPLMSG["APPLICATION"],
                         "download" => $TPLMSG["DOWNLOAD"],
                         "news" => $TPLMSG["NEWS"],
+                        "video" => $TPLMSG["VIDEO"],
                         "faq" => $TPLMSG["FAQ"],
                         "service" => $TPLMSG["SERVICE"],
                         "contactus" => $TPLMSG["CONTACT_US"],
                         "sitemap" => $TPLMSG["SITEMAP"]
+                    );
+$ws_array["left_desc"]=array("aboutus" => $TPLMSG["ABOUT_US_CATE_DESC"],
+                        "products" => $TPLMSG["PRODUCTS_CATE_DESC"],
+                        "application" => $TPLMSG["APPLICATION_CATE_DESC"],
+                        "download" => $TPLMSG["DOWNLOAD_CATE_DESC"],
+                        "news" => $TPLMSG["NEWS_CATE_DESC"],
+                        "video" => $TPLMSG["VIDEO_CATE_DESC"],
+                        "faq" => $TPLMSG["FAQ_CATE_DESC"],
+                        "service" => $TPLMSG["SERVICE_CATE_DESC"],
+                        "contactus" => $TPLMSG["CONTACT_US_CATE_DESC"],
+                        "sitemap" => $TPLMSG["SITEMAP_CATE_DESC"]
                     );
 
 $ws_array["country_array"]=array(

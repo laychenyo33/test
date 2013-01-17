@@ -27,6 +27,7 @@ class SERVICE{
         $tpl->assignInclude( "AD_TXT", "templates/ws-fn-ad-txt-tpl.html"); //文字廣告模板        
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["service"]);//左方menu title
+        $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["service"]);//左方menu title
         $tpl->assignGlobal( "TAG_SERVICE_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["service"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-service"); //主要顯示區域的css設定

@@ -74,6 +74,7 @@ class MEMBER{
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["member"]);//左方menu title
+        $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["member"]);//左方menu title
         $tpl->assignGlobal( "TAG_MEMBER_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["member"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-member"); //主要顯示區域的css設定

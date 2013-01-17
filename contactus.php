@@ -46,7 +46,8 @@ class CONTACTUS{
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["CONTACT_US"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["CONTACT_US"]);
-        $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["contactus"]);//左方menu title
+        $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
+        $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["products"]);//左方menu title
         $tpl->assignGlobal( "TAG_CONTACTUS_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["contactus"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-contactus"); //主要顯示區域的css設定

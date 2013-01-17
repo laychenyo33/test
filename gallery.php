@@ -55,6 +55,7 @@ class GALLERY{
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['GALLERY']);
         $tpl->assignGlobal( "TAG_GALLERY_CURRENT" , "class='current'");
         $tpl->assignGlobal( "TAG_CATE_TITLE", $TPLMSG['GALLERY']);
+        $tpl->assignGlobal( "TAG_CATE_DESC", $TPLMSG['GALLERY_CATE_DESC']);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['GALLERY']);
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "album"); //主要顯示區域的css設定
         $tpl->assignGlobal( "TAG_SUBMENU_TITLE_IMG" , $cms_cfg['default_theme']."left-title-activity.png"); //選單標題圖檔

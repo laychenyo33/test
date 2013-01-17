@@ -275,5 +275,15 @@ $TPLMSG['NEXT'] = "下一筆";
 $TPLMSG['PREV'] = "上一筆";
 $TPLMSG['BACK_TO_LIST']="回到列表";
 $TPLMSG['RELATED_PRODUCTS'] = "相關產品";
-$TPLMSG["VIDEO"] = "Video";
+$TPLMSG["VIDEO"] = "影片";
+$TPLMSG["ABOUT_US_CATE_DESC"] = "Company Information";
+$TPLMSG["PRODUCTS_CATE_DESC"] = "Products Catalogue";
+$TPLMSG["APPLICATION_CATE_DESC"] = "Products Appliction";
+$TPLMSG["DOWNLOAD_CATE_DESC"] = "download";
+$TPLMSG["NEWS_CATE_DESC"] = "Our News & Events";
+$TPLMSG["VIDEO_CATE_DESC"] = "video";
+$TPLMSG["FAQ_CATE_DESC"] = "faq";
+$TPLMSG["SERVICE_CATE_DESC"] = "service";
+$TPLMSG["CONTACT_US_CATE_DESC"] = "contact us";
+$TPLMSG["SITEMAP_CATE_DESC"] = "sitemap";
 ?>

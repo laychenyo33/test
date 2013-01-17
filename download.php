@@ -44,6 +44,7 @@ class DOWNLOAD{
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["DOWNLOAD"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["DOWNLOAD"]);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["download"]);//左方menu title
+        $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["download"]);//左方menu title
         $tpl->assignGlobal( "TAG_DOWNLOAD_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["download"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-download"); //主要顯示區域的css設定

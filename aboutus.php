@@ -35,8 +35,10 @@ class ABOUTUS{
         if($cms_cfg["ws_module"]["ws_left_main_au"]==0){
             $main->left_fix_cate_list();
             $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
+            $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["products"]);//左方menu title
         }else{
             $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["aboutus"]);//左方menu title
+            $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["aboutus"]);//左方menu title
         }
     }
     //前台關於我們--列表================================================================
