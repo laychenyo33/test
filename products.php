@@ -576,6 +576,16 @@ class PRODUCTS{
                     $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_SHOPPING']);
                     //$tpl->gotoBlock("BIG_IMG".$this->template_str);
                 }
+                //影片
+                if($cms_cfg['ws_module']['ws_products_mv'] && $row["p_mv"]){
+                    $mvId = $main->get_mv_code($row["p_mv"]);
+                    if($mvId){
+                        $tpl->newBlock("JQUERY_UI_SCRIPT");
+                        $tpl->newBlock("EMBED_MV_SCRIPT");
+                        $tpl->newBlock("BTN_MV_SHOW");
+                        $tpl->assignGlobal("VALUE_MV_ID",$mvId);
+                    }
+                }                
                 //附件檔案1
                 $ext_array= array("pdf","doc");
                 if($row["p_attach_file1"]){

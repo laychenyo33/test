@@ -10,6 +10,10 @@
 <link type="text/css" rel="stylesheet" href="{TAG_ROOT_PATH}css/cms-index.css" >
 <script type="text/javascript" src="{TAG_FILE_ROOT}tiny_mce/plugins/media/js/embed.js"></script> 
 <script src="{TAG_ROOT_PATH}js/jquery/jquery-1.8.2.js" type="text/javascript"></script>
+<!-- START BLOCK : JQUERY_UI_SCRIPT -->
+<link type="text/css" rel="stylesheet" href="{TAG_ROOT_PATH}js/jquery/jquery-ui-1.9.1.custom.css" />
+<script src="{TAG_ROOT_PATH}js/jquery/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
+<!-- END BLOCK : JQUERY_UI_SCRIPT -->
 <!-- START BLOCK : JS_LEFT_MENU -->
 <script src="{TAG_ROOT_PATH}js/jquery.clearfield.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -551,3 +555,79 @@
 <link type="text/css" rel="stylesheet" href="{TAG_ROOT_PATH}js/calendar/dhtmlgoodies_calendar.css" media="screen"/>
 <script type="text/javascript" src="{TAG_ROOT_PATH}js/calendar/dhtmlgoodies_calendar.js"></script>
 <!-- END BLOCK : CALENDAR_SCRIPT -->
+<!-- START BLOCK : EMBED_MV_SCRIPT -->
+<script>
+  // Load the IFrame Player API code asynchronously.
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/player_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  // Replace the 'ytplayer' element with an <iframe> and
+  // YouTube player after the API code downloads.
+  var player;
+  function onYouTubePlayerAPIReady() {
+    player = new YT.Player('ytplayer', {
+        height: '315',
+        width: '420',
+        videoId: '{VALUE_MV_ID}',
+        events: {
+            'onError': onError
+        }      
+    });
+  }
+
+function onYouTubePlayerReady(playerId){
+    alert('d');
+}
+
+function onError(event){
+    switch(event.data){
+      case 2:
+          alert('invalid parameter');
+          break;
+      case 5:
+          alert('HTML5 compatibility');
+          break;
+      case 100:
+          alert('video requested was not found');
+          break;
+      case 101:
+          alert('video does not allow to be played in embedded player('+101+")");
+          break;
+      case 150: //same as 101
+          alert('video does not allow to be played in embedded player('+150+")");
+    }
+}
+function playVideo(){
+    if(player.playVideo){
+        player.playVideo();
+    }else{
+        setTimeout(playVideo,100);
+    }
+}
+(function($){
+    $(document).ready(function(){
+        $(".video a").click(function(e){
+            e.preventDefault();
+            $("#movie").dialog({
+                modal: true,
+                position:{
+                    my:'center',
+                    at:'center',
+                    of:$('#show-pic')
+                },
+                width:600,
+                height:368,
+                beforeClose: function( event, ui ) {
+                    if(player) player.stopVideo();
+                },
+                open : function(event, ui){
+                    playVideo();
+                }
+            });
+        });
+    });
+})(jQuery);    
+</script>
+<!-- END BLOCK : EMBED_MV_SCRIPT -->

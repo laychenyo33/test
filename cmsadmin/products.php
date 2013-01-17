@@ -957,6 +957,11 @@ class PRODUCTS{
                                           "VALUE_SPEC_TITLE" =>$row["p_spec_title"],
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"]
                 ));
+                //影片
+                if($cms_cfg['ws_module']['ws_products_mv']){
+                    $tpl->newBlock("MV_COLUMN");
+                    $tpl->assign("VALUE_P_MV",$row['p_mv']);
+                }
                 if($this->seo){
                     $tpl->assignGlobal( array("VALUE_P_SEO_FILENAME" => $row["p_seo_filename"],
                                               "VALUE_P_SEO_TITLE" => $row["p_seo_title"],
@@ -969,16 +974,16 @@ class PRODUCTS{
                     $this->get_items_name($row["p_related_products"],"p"); //相關產品
                 }
                 //取得大圖資料
-				$sql="select * from ".$cms_cfg['tb_prefix']."_products_img where p_id='".$_REQUEST["p_id"]."'";
-				$selectrs = $db->query($sql);
-				$row2 = $db->fetch_array($selectrs,1);
-				for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){			
-					$tpl->newBlock("PRODUCTS_BIG_IMG");
-					$tpl->assign( array("VALUE_BIG_PIC_PREVIEW" => (trim($row2["p_big_img".$j])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row2["p_big_img".$j],
-										"VALUE_BIG_PIC" => (trim($row2["p_big_img".$j])=="")?"":$cms_cfg["file_root"].$row2["p_big_img".$j],					
-										"BIG_IMG_NO" =>$j,
-					));
-				}				
+                $sql="select * from ".$cms_cfg['tb_prefix']."_products_img where p_id='".$_REQUEST["p_id"]."'";
+                $selectrs = $db->query($sql);
+                $row2 = $db->fetch_array($selectrs,1);
+                for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){			
+                        $tpl->newBlock("PRODUCTS_BIG_IMG");
+                        $tpl->assign( array("VALUE_BIG_PIC_PREVIEW" => (trim($row2["p_big_img".$j])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row2["p_big_img".$j],
+                                                                "VALUE_BIG_PIC" => (trim($row2["p_big_img".$j])=="")?"":$cms_cfg["file_root"].$row2["p_big_img".$j],					
+                                                                "BIG_IMG_NO" =>$j,
+                        ));
+                }				
 
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
                 $pc_id=$row["pc_id"];
@@ -986,13 +991,13 @@ class PRODUCTS{
                 header("location : products.php?func=p_list");
             }
         }else{
-			for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//新增時載入大圖區域及預設值
-				$tpl->newBlock("PRODUCTS_BIG_IMG");
-				$tpl->assign( array("VALUE_BIG_PIC_PREVIEW" => $cms_cfg['default_preview_pic'],
-										  "BIG_IMG_NO" =>$j,
-				));
-			}		
-		}
+            for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//新增時載入大圖區域及預設值
+                    $tpl->newBlock("PRODUCTS_BIG_IMG");
+                    $tpl->assign( array("VALUE_BIG_PIC_PREVIEW" => $cms_cfg['default_preview_pic'],
+                                                                      "BIG_IMG_NO" =>$j,
+                    ));
+            }		
+        }
         $this->products_cate_select2($this->products_cate_select_option,$pc_id, $parent=0, $indent="");
         $tpl->assignGlobal("TAG_SELECT_PRODUCTS_CATE" ,$this->products_cate_select_option);
         $tpl->assignGlobal( array ("VALUE_P_CUSTOM" => $row["p_custom"],
@@ -1076,6 +1081,7 @@ class PRODUCTS{
                         p_desc_strip,
                         p_attach_file1,
                         p_attach_file2,
+                        p_mv,
                         p_modifydate,
                         ".$add_field_str."
                         p_cross_cate,
@@ -1107,6 +1113,7 @@ class PRODUCTS{
                         '".htmlspecialchars($p_desc_strip_str)."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
+                        '".$_REQUEST["p_mv"]."',
                         '".date("Y-m-d H:i:s")."',
                         ".$add_value_str."
                         '".$_REQUEST["p_cross_cate"]."',
@@ -1154,6 +1161,7 @@ class PRODUCTS{
                     p_desc_strip = '".htmlspecialchars($p_desc_strip_str)."',
                     p_attach_file1 = '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                     p_attach_file2 = '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
+                    p_mv = '".$_REQUEST["p_mv"]."',
                     p_modifydate = '".date("Y-m-d H:i:s")."',
                     ".$update_str."
                     p_cross_cate = '".$_REQUEST["p_cross_cate"]."',
