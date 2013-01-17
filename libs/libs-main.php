@@ -1248,5 +1248,13 @@ class MAINFUNC{
         }        
         return $dimensions;
     }
+    //取得來源裡的youtube影片識別碼
+    function get_mv_code($url){
+        if(strlen($url)==11){
+            return $url;
+        }elseif(preg_match("#http://www.youtube.com/watch?.*v=([^&\s]+)#i",$url,$match)){
+            return $match[1];
+        }        
+    }    
 }
 ?>
