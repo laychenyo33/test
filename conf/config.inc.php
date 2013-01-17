@@ -108,6 +108,7 @@ $cms_cfg['path_separator'] = " > ";    //麵包屑(網站路徑的分隔符號)
 
 //custom index banner numbers
 $cms_cfg['index_banner_nums'] = 4;
+$cms_cfg['contactus_upfiles_nums'] = 3;
 
 include_once("config.auth.php");
 

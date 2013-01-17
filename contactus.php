@@ -94,10 +94,29 @@ class CONTACTUS{
                                   "MSG_ADDRESS" => $TPLMSG['ADDRESS'],
                                   "MSG_TEL" => $TPLMSG['TEL'],
                                   "MSG_FAX" => $TPLMSG['FAX'],
+                                  "MSG_ATTACH_FILES" => $TPLMSG['CONTACT_US_ATTACH_FILES'],
                                   "MSG_CONTENT" => $TPLMSG['CONTENT']));
         //國家下拉選單
         if($cms_cfg["ws_module"]["ws_country"]==1) {
             $main->country_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_country"]);
+        }
+        //可附檔上傳
+        if($cms_cfg["ws_module"]["ws_contactus_upfiles"]==1) {
+            if($cms_cfg['contactus_upfiles_nums']){
+                $tpl->newBlock("ATTACH_FILES");
+                for($i=1;$i<=$cms_cfg['contactus_upfiles_nums'];$i++){
+                    if($i==1){
+                        $tpl->newBlock("AF_FIRST_ROW");
+                        $tpl->assign(array(
+                            "AF_ROWS" =>  $cms_cfg['contactus_upfiles_nums'],
+                            "SERIAL" => $i
+                        ));
+                    }else{
+                        $tpl->newBlock("AF_OTHER_ROW");
+                        $tpl->assign("SERIAL" ,$i);
+                    }
+                }
+            }
         }
         //聯絡我們資料
         $sql="select st_contactus_term from ".$cms_cfg['tb_prefix']."_service_term  where st_id='1'";
@@ -130,6 +149,7 @@ class CONTACTUS{
                 $pass=1;
             }
             if($pass){
+                $file = $this->file_upload();
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_contactus (
                         m_id,
@@ -144,6 +164,7 @@ class CONTACTUS{
                         cu_address,
                         cu_email,
                         cu_content,
+                        cu_file,
                         cu_modifydate
                     ) values (
                         '".$this->m_id."',
@@ -158,6 +179,7 @@ class CONTACTUS{
                         '".mysql_real_escape_string($_REQUEST["cu_address"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_email"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_content"])."',
+                        '".$file."',
                         '".date("Y-m-d H:i:s")."'
                     )";
                 $rs = $db->query($sql);
@@ -176,6 +198,7 @@ class CONTACTUS{
                             "MSG_TEL" => $TPLMSG['TEL'],
                             "MSG_FAX" => $TPLMSG['FAX'],
                             "MSG_CONTENT" => $TPLMSG['CONTENT'],
+                            "MSG_ATTACH_FILES" => $TPLMSG['CONTACT_US_ATTACH_FILES'],
                             "VALUE_CUC_SUBJECT"  => $ws_array["contactus_cate"][$_REQUEST["cu_cate"]],
                             "VALUE_CU_COMPANY_NAME" => $_REQUEST["cu_company_name"],
                             "VALUE_CU_CONTACT_S" => $_REQUEST["cu_contact_s"],
@@ -184,8 +207,12 @@ class CONTACTUS{
                             "VALUE_CU_TEL" => $_REQUEST["cu_tel"],
                             "VALUE_CU_ADDRESS" => $_REQUEST["cu_address"],
                             "VALUE_CU_EMAIL" => $_REQUEST["cu_email"],
-                            "VALUE_CU_CONTENT" => (get_magic_quotes_gpc())?stripcslashes($_REQUEST["cu_content"]):$_REQUEST["cu_content"]
+                            "VALUE_CU_CONTENT" => (get_magic_quotes_gpc())?stripcslashes($_REQUEST["cu_content"]):$_REQUEST["cu_content"],
                     ));
+                    if($file){
+                        $tpl->newBlock("UPFILE_ROW");
+                        $tpl->assign("VALUE_CU_FILE",$this->cu_file);
+                    }
                     //國家欄位
                     if($cms_cfg["ws_module"]["ws_country"]==1) {
                         $tpl->newBlock("CONTACTUS_COUNTRY_ZONE");
@@ -226,5 +253,43 @@ class CONTACTUS{
             $tpl->assignGlobal( "TAG_META_REFRESH" , "<meta http-equiv=\"refresh\" content=\"$sec;URL=$url\">");
         }
     }
+
+    function file_upload(){
+        global $db,$tpl,$cms_cfg;
+        if($_FILES["cu_file"]){
+                $file = $_FILES["cu_file"];
+                foreach($file as $key => $V){
+                        $text = "file_".$key;
+                        $$text = $V;
+                }
+
+                $num = 1;
+                $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root']."upload_files/cu_file/";
+                if(!is_dir($dir)){
+                    mkdir($dir, 0777, true) || die("can't create dir of cu_file");
+                    chmod($dir, 0777);
+                }
+                for($i=0;$i<count($file_name);$i++){
+                        $file_name_array = explode(".",$file_name[$i]);
+                        $sub_name = $file_name_array[count($file_name_array) - 1];
+
+                        if($file_error[$i] == 0 && $file_name[$i] != "" && $sub_name != "exe"){
+                                $date_name[$i] = date("Y-m-d-H-i-s")."-file".$num.".".$sub_name;
+                                $route = $dir . $date_name[$i];
+                                move_uploaded_file($file_tmp_name[$i],$route);
+                                chmod($route, 0777);
+                                $num++;
+                        }
+                }
+
+                if(!empty($date_name)){
+                        foreach($date_name as $key => $V){
+                                $file_str[] = "<a href=\"http://".$cms_cfg['server_name'].$cms_cfg['file_root']."upload_files/cu_file/".$V."\" target=\"_blank\">".$V."</a>";
+                        }
+                        $this->cu_file = implode(" , ",$file_str);
+                        return implode("|",$date_name);
+                }
+        }
+    }       
 }
 ?>

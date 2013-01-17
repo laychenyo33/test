@@ -223,6 +223,7 @@ class CONTACTUS{
         if(!empty($cu_id)){
             $cu_id_str = implode(",",$cu_id);
             //刪除勾選的聯絡我們
+            $this->file_del($cu_id_str);
             $sql="delete from ".$cms_cfg['tb_prefix']."_contactus where cu_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
             $sql="delete from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id in (".$cu_id_str.")";
@@ -261,6 +262,7 @@ class CONTACTUS{
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
+                $file = $this->file_load($row["cu_file"]);
                 $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_CUC_SUBJECT"  => $ws_array["contactus_cate"][$row["cu_cate"]],
                                           "VALUE_CU_ID"  => $row["cu_id"],
@@ -273,6 +275,10 @@ class CONTACTUS{
                                           "VALUE_CU_STATUS" => ($row["cu_status"]==1)?$TPLMSG['REPLY_YES']:$TPLMSG['REPLY_NO'],
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
+                if($file){
+                    $tpl->newBlock("UPFILE_ROW");
+                    $tpl->assign("VALUE_CU_FILE" , $file);
+                }
                 //回覆資料列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id='".$_REQUEST["cu_id"]."' order by cur_modifydate desc limit 1";
                 $selectrs = $db->query($sql);
@@ -373,7 +379,40 @@ class CONTACTUS{
         }
                 return true;
     }
+	function file_load($file = 0){
+		global $cms_cfg;
+		if($file != ""){
+			$file_array = explode("|",$file);
+			foreach($file_array as $key => $V){
+				$file_link[$key] = "<a href=\"".$cms_cfg['file_root']."upload_files/cu_file/".$V."\" target=\"_blank\">".$V."</a>";
+			}
+			return implode(" , ",$file_link);
+		}
+	}
+	
+	function file_del($cu_id = 0){
+		global $db,$cms_cfg;
+		if($cu_id != ""){
+                    $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where cu_id in (".$cu_id.")";
+                    $selectrs = $db->query($sql);
+                    $rsnum    = $db->numRows($selectrs);
 
+                    if($rsnum > 0){
+                        $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root']."upload_files/cu_file/";
+                        while($row = $db->fetch_array($selectrs,1)){
+                            if($row["cu_file"]){
+                                $file_array = explode("|",$row["cu_file"]);
+                                foreach($file_array as $key => $V){
+                                    $path = $dir . $V;
+                                    if(file_exists($path)){
+                                        unlink($path);
+                                    }
+                                }
+                            }
+                        }
+                    }
+		}
+	}
 }
 //ob_end_flush();
 ?>

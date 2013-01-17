@@ -284,4 +284,5 @@ $TPLMSG["FAQ_CATE_DESC"] = "faq";
 $TPLMSG["SERVICE_CATE_DESC"] = "service";
 $TPLMSG["CONTACT_US_CATE_DESC"] = "contact us";
 $TPLMSG["SITEMAP_CATE_DESC"] = "sitemap";
+$TPLMSG['CONTACT_US_ATTACH_FILES'] = "上传档案";
 ?>

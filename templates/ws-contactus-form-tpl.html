@@ -60,6 +60,19 @@
             <th><font color="#ff0000">*</font>{MSG_CONTENT}</th>
             <td><textarea name="cu_content" id="cu_content" class="validate[required]" cols="50" rows="5" class="text_area">{VALUE_CU_CONTENT}</textarea></td>
           </tr>
+          <!-- START BLOCK : ATTACH_FILES -->
+              <!-- START BLOCK : AF_FIRST_ROW -->
+              <tr class="altrow">
+                <th rowspan="{AF_ROWS}">{MSG_ATTACH_FILES}</th>
+                <td><input type="file" class="hide_file" id="file_{SERIAL}" name="cu_file[]" /></td>
+              </tr>
+              <!-- END BLOCK : AF_FIRST_ROW -->
+              <!-- START BLOCK : AF_OTHER_ROW -->
+              <tr>
+                <td><input type="file" class="hide_file" id="file_{SERIAL}" name="cu_file[]" /></td>
+                </tr>
+              <!-- END BLOCK : AF_OTHER_ROW -->
+          <!-- END BLOCK : ATTACH_FILES -->       
           <!-- START BLOCK : MATH_SECURITY_ZONE -->
           <tr>
             <th>{MSG_LOGIN_SECURITY}</th>
