@@ -949,14 +949,20 @@ class PRODUCTS{
                                           "STR_P_CUSTOM_STATUS_CK0" => ($row["p_custom_status"]==0)?"checked":"",
                                           "STR_P_CUSTOM_STATUS_DISPLAY" => ($row["p_custom_status"]==1)?" ":"none",
                                           "MSG_MODE" => "修改",
-                                          "VALUE_P_ATTACH_FILE1" => $row["p_attach_file1"],
-                                          "VALUE_P_ATTACH_FILE2" => $row["p_attach_file2"],
                                           "VALUE_P_RELATED_PRODUCTS" => $row["p_related_products"],
                                           "VALUE_DESC_TITLE" =>$row["p_desc_title"],
                                           "VALUE_CHARACTER_TITLE" =>$row["p_character_title"],
                                           "VALUE_SPEC_TITLE" =>$row["p_spec_title"],
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"]
                 ));
+                //附加檔案
+                if($cms_cfg['ws_module']['ws_products_upfiles']){
+                    $tpl->newBlock("PRODUCTS_ATTACH_FILES");
+                    $tpl->assign(array(
+                        "VALUE_P_ATTACH_FILE1" => $row["p_attach_file1"],
+                        "VALUE_P_ATTACH_FILE2" => $row["p_attach_file2"],                        
+                    ));
+                }
                 //影片
                 if($cms_cfg['ws_module']['ws_products_mv']){
                     $tpl->newBlock("MV_COLUMN");

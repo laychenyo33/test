@@ -585,23 +585,26 @@ class PRODUCTS{
                         $tpl->newBlock("BTN_MV_SHOW");
                         $tpl->assignGlobal("VALUE_MV_ID",$mvId);
                     }
-                }                
-                //附件檔案1
-                $ext_array= array("pdf","doc");
-                if($row["p_attach_file1"]){
-                    $icon = $this->select_icon($row["p_attach_file1"]);
-                    $tpl->newBlock("ATTACH_FILE1");
-                    $tpl->assign("VALUE_PAF_LINK",$cms_cfg["file_root"].$row["p_attach_file1"]);
-                    $tpl->assign("ATTACH_ICON", $icon);
-                    //$tpl->gotoBlock("BIG_IMG".$this->template_str);
-                }
-                //附件檔案2
-                if($row["p_attach_file2"]){
-                    $icon = $this->select_icon($row["p_attach_file2"]);
-                    $tpl->newBlock("ATTACH_FILE2");
-                    $tpl->assign("VALUE_PAF_LINK",$cms_cfg["file_root"].$row["p_attach_file2"]);
-                    $tpl->assign("ATTACH_ICON", $icon);
-                    //$tpl->gotoBlock("BIG_IMG".$this->template_str);
+                }         
+                //附件檔案區域
+                if($cms_cfg['ws_module']['ws_products_upfiles']){
+                    //附件檔案1
+                    $ext_array= array("pdf","doc");
+                    if($row["p_attach_file1"]){
+                        $icon = $this->select_icon($row["p_attach_file1"]);
+                        $tpl->newBlock("ATTACH_FILE1");
+                        $tpl->assign("VALUE_PAF_LINK",$cms_cfg["file_root"].$row["p_attach_file1"]);
+                        $tpl->assign("ATTACH_ICON", $icon);
+                        //$tpl->gotoBlock("BIG_IMG".$this->template_str);
+                    }
+                    //附件檔案2
+                    if($row["p_attach_file2"]){
+                        $icon = $this->select_icon($row["p_attach_file2"]);
+                        $tpl->newBlock("ATTACH_FILE2");
+                        $tpl->assign("VALUE_PAF_LINK",$cms_cfg["file_root"].$row["p_attach_file2"]);
+                        $tpl->assign("ATTACH_ICON", $icon);
+                        //$tpl->gotoBlock("BIG_IMG".$this->template_str);
+                    }
                 }
                 //批次處理domtab資料
                 $domtabData = array();
