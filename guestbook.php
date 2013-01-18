@@ -52,9 +52,12 @@ class GUESTBOOK{
         $tpl->assignInclude( "AD_H", "templates/ws-fn-ad-h-tpl.html"); //橫式廣告模板
         $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板     
         $tpl->prepare();
-        $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["GUESTBOOK"]);
+        $tpl->assignGlobal( "TAG_MAIN_IMG" , $ws_array["main_img"]["guestbook"]); //此頁面對應的flash及圖檔名稱
+        $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["GUEST_BOOK"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["GUESTBOOK"]);
+        $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
         $main->header_footer("");
+        $main->left_fix_cate_list();
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
     }
@@ -79,6 +82,7 @@ class GUESTBOOK{
             $i++;
             $tpl->newBlock( "GUESTBOOK_LIST" );
             $tpl->assign( array("VALUE_GB_ID"  => $row["gb_id"],
+                                "VALUE_GB_SUBJECT" => $row["gb_subject"],
                                 "VALUE_GB_NAME" => $row["gb_name"],
                                 "VALUE_GB_SEX" => ($row["gb_sex"]==0)?"w":"m",
                                 "VALUE_GB_EMAIL" => $row["gb_email"],
@@ -92,10 +96,12 @@ class GUESTBOOK{
             ));
             if(trim($row["gb_email"])!=""){
                 $tpl->newBlock( "GUESTBOOK_EMAIL" );
+                $tpl->assign("VALUE_GB_EMAIL" , $row["gb_email"]);
                 $tpl->gotoBlock( "GUESTBOOK_LIST" );
             }
             if(trim($row["gb_url"])!=""){
                 $tpl->newBlock( "GUESTBOOK_URL" );
+                $tpl->assign("VALUE_GB_URL" , $row["gb_url"]);
                 $tpl->gotoBlock( "GUESTBOOK_LIST" );
             }
             $sql2="select * from ".$cms_cfg['tb_prefix']."_guestbook  where gb_reply_type !=0 and gb_parent='".$row["gb_id"]."' order by gb_id";
@@ -140,7 +146,7 @@ class GUESTBOOK{
 
 //留言版--資料更新================================================================
     function guestbook_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         if(!ereg($cms_cfg['base_url'],$_SERVER['HTTP_REFERER'])){
             exit;
         }
@@ -156,6 +162,7 @@ class GUESTBOOK{
             $sql="
                 insert into ".$cms_cfg['tb_prefix']."_guestbook (
                     gb_parent,
+                    gb_subject,
                     gb_name,
                     gb_sex,
                     gb_textcolor,
@@ -169,6 +176,7 @@ class GUESTBOOK{
                     gb_ip
                 ) values (
                     '".$_REQUEST["gb_parent"]."',
+                    '".$_REQUEST["gb_subject"]."',
                     '".$_REQUEST["gb_name"]."',
                     '".$_REQUEST["gb_sex"]."',
                     '".$_REQUEST["gb_textcolor"]."',
@@ -192,6 +200,7 @@ class GUESTBOOK{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
         }else{
+            $main->magic_gpc($_REQUEST);
             foreach($_REQUEST as $key => $value){
                 if(eregi("gb_",$key)){
                     $_SESSION["guestbook"]["$key"]=$value;
