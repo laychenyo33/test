@@ -27,6 +27,7 @@ class SITEMAP{
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["sitemap"]);//左方menu title
         $tpl->assignGlobal( "TAG_SITEMAP_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["sitemap"]); //此頁面對應的flash及圖檔名稱
+        $tpl->assignGlobal( "TAG_MAIN_IMG" , $ws_array["main_img"]["sitemap"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-sitemap"); //主要顯示區域的css設定
         $main->header_footer("sitemap", $TPLMSG["SITEMAP"]);
         $main->left_fix_cate_list(); //顯示產品分類
@@ -43,9 +44,11 @@ class SITEMAP{
         ($cms_cfg["ws_module"]["ws_news"])?$tpl->newBlock( "SITEMAP_NEWS" ):"";
         ($cms_cfg["ws_module"]["ws_products"])?$tpl->newBlock( "SITEMAP_PRODUCTS" ):"";
         ($cms_cfg["ws_module"]["ws_new_product"])?$tpl->newBlock( "SITEMAP_NEW_PRODUCT" ):"";
+        ($cms_cfg["ws_module"]["ws_video"])?$tpl->newBlock( "SITEMAP_VIDEO" ):"";
         $tpl->assignGlobal(array("VALUE_STR_ABOUTUS" =>$TPLMSG["ABOUT_US"],
                                  "VALUE_STR_DOWNLOAD" =>$TPLMSG["DOWNLOAD"],
                                  "VALUE_STR_FAQ" =>$TPLMSG["FAQ"],
+                                 "VALUE_STR_VIDEO" =>$TPLMSG["VIDEO"],
                                  "VALUE_STR_NEWS" =>$TPLMSG["NEWS"],
                                  "VALUE_STR_PRODUCTS" =>$TPLMSG["PRODUCTS"],
                                  "VALUE_STR_NEW_PRODUCT" =>$TPLMSG["PRODUCT_NEW"],
@@ -55,6 +58,7 @@ class SITEMAP{
                                  "VALUE_ABOUTUS_LINK" =>$cms_cfg["base_root"]."aboutus".$ext,
                                  "VALUE_DOWNLOAD_LINK" =>$cms_cfg["base_root"]."download".$ext,
                                  "VALUE_FAQ_LINK" =>$cms_cfg["base_root"]."faq".$ext,
+                                 "VALUE_VIDEO_LINK" =>$cms_cfg["base_root"]."video".$ext,
                                  "VALUE_NEWS_LINK" =>$cms_cfg["base_root"]."news".$ext,
                                  "VALUE_PRODUCTS_LINK" =>$cms_cfg["base_root"]."products".$ext,
                                  "VALUE_NEW_PRODUCT_LINK" =>$cms_cfg["base_root"]."new-products".$ext,
