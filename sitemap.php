@@ -46,11 +46,13 @@ class SITEMAP{
         ($cms_cfg["ws_module"]["ws_new_product"])?$tpl->newBlock( "SITEMAP_NEW_PRODUCT" ):"";
         ($cms_cfg["ws_module"]["ws_video"])?$tpl->newBlock( "SITEMAP_VIDEO" ):"";
         ($cms_cfg["ws_module"]["ws_ebook"])?$tpl->newBlock( "SITEMAP_EBOOK" ):"";
+        ($cms_cfg["ws_module"]["ws_guestbook"])?$tpl->newBlock( "SITEMAP_GUESTBOOK" ):"";
         $tpl->assignGlobal(array("VALUE_STR_ABOUTUS" =>$TPLMSG["ABOUT_US"],
                                  "VALUE_STR_DOWNLOAD" =>$TPLMSG["DOWNLOAD"],
                                  "VALUE_STR_FAQ" =>$TPLMSG["FAQ"],
                                  "VALUE_STR_VIDEO" =>$TPLMSG["VIDEO"],
                                  "VALUE_STR_EBOOK" =>$TPLMSG["EBOOK"],
+                                 "VALUE_STR_GUESTBOOK" =>$TPLMSG["GUESTBOOK"],
                                  "VALUE_STR_NEWS" =>$TPLMSG["NEWS"],
                                  "VALUE_STR_PRODUCTS" =>$TPLMSG["PRODUCTS"],
                                  "VALUE_STR_NEW_PRODUCT" =>$TPLMSG["PRODUCT_NEW"],
@@ -62,6 +64,7 @@ class SITEMAP{
                                  "VALUE_FAQ_LINK" =>$cms_cfg["base_root"]."faq".$ext,
                                  "VALUE_VIDEO_LINK" =>$cms_cfg["base_root"]."video".$ext,
                                  "VALUE_EBOOK_LINK" =>$cms_cfg["base_root"]."ebook/",
+                                 "VALUE_GUESTBOOK_LINK" =>$cms_cfg["base_root"]."guestbook".$ext,
                                  "VALUE_NEWS_LINK" =>$cms_cfg["base_root"]."news".$ext,
                                  "VALUE_PRODUCTS_LINK" =>$cms_cfg["base_root"]."products".$ext,
                                  "VALUE_NEW_PRODUCT_LINK" =>$cms_cfg["base_root"]."new-products".$ext,
