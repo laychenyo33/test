@@ -287,4 +287,7 @@ $TPLMSG["SERVICE_CATE_DESC"] = "service";
 $TPLMSG["CONTACT_US_CATE_DESC"] = "contact us";
 $TPLMSG["SITEMAP_CATE_DESC"] = "sitemap";
 $TPLMSG['CONTACT_US_ATTACH_FILES'] = "上傳檔案";
+$TPLMSG["STORES"] = "門市介紹";
+$TPLMSG['GUESTBOOK'] = "線上留言";
+$TPLMSG["FACTORY"] = "觀光工廠";
 ?>

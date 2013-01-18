@@ -46,6 +46,7 @@ default image
 */
 $cms_cfg['default_theme']	= $cms_cfg['base_images'];
 $cms_cfg['default_preview_pic']	= $cms_cfg['default_theme']."ws-no-image.jpg";
+$cms_cfg['default_ebook_pic']	= $cms_cfg['default_theme']."ebook-pic.jpg";
 $cms_cfg['default_text_pic'] = $cms_cfg['manage_images']."ws-text-file.gif";
 $cms_cfg['default_img_pic'] = $cms_cfg['manage_images']."ws-img-file.gif";
 $cms_cfg['default_status_on'] = "icon-on2.gif";

@@ -67,7 +67,7 @@ class SITEMAP{
                                  "VALUE_DOWNLOAD_LINK" =>$cms_cfg["base_root"]."download".$ext,
                                  "VALUE_FAQ_LINK" =>$cms_cfg["base_root"]."faq".$ext,
                                  "VALUE_VIDEO_LINK" =>$cms_cfg["base_root"]."video".$ext,
-                                 "VALUE_EBOOK_LINK" =>$cms_cfg["base_root"]."ebook/",
+                                 "VALUE_EBOOK_LINK" =>$cms_cfg["base_root"]."ebook".$ext,
                                  "VALUE_GUESTBOOK_LINK" =>$cms_cfg["base_root"]."guestbook".$ext,
                                  "VALUE_STORES_LINK" =>$cms_cfg["base_root"]."stores".$ext,
 //                                 "VALUE_FACTORY_LINK" =>$cms_cfg["base_root"]."factory".$ext,

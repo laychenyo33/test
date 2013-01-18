@@ -39,7 +39,7 @@ RewriteRule ^.*$ - [NC,L]
 
 RewriteRule ^new-products.html$  products.php?func=p_new [L]
 #主功能頁
-RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|guestbook|stores|factory|goodlink|gallery|application|video).htm$  $1.php [L]
+RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|guestbook|stores|factory|goodlink|gallery|application|video|ebook).htm$  $1.php [L]
 #主功能列表頁-無檔名
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)list-([0-9]+).htm$  $1.php?func=$2_list&$2c_id=$3 [L]
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)list-([0-9]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?func=$2_list&$2c_id=$3&nowp=$4&jp=$5 [L]
