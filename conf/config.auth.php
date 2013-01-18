@@ -15,6 +15,8 @@ $cms_cfg["ws_module"]=array(
         "ws_gallery"=>0,            //活動剪影
         "ws_goodlink"=>0,           //好站連結
         "ws_guestbook"=>0,          //留言版管理
+        "ws_stores"=>0,             //門市介紹
+        "ws_factory"=>0,            //觀光工廠    
         "ws_inquiry"=>1,            //詢問信管理
         "ws_inquiry_type"=>0,       //0=>批次詢問車, 1=>單一詢問車
         "ws_news"=>1,               //最新消息
