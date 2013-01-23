@@ -76,9 +76,10 @@ function addBookmarkForBrowser(sTitle, sUrl) {
           addBookmarkForBrowser = function(sTitle, sUrl) {
               window.sidebar.addPanel(sTitle, sUrl, "");
           }
+      }else{
+          alert('do it your self!');
       }
   }
-  return addBookmarkForBrowser(sTitle, sUrl);
 }
 /* 勾選詢價車時之檢查事項 */
 function CheckProducts_eng(form) {  
