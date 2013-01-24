@@ -290,5 +290,6 @@ $TPLMSG['CONTACT_US_ATTACH_FILES'] = "上傳檔案";
 $TPLMSG["STORES"] = "門市介紹";
 $TPLMSG["STORES_CATE_DESC"] = "門市介紹";
 $TPLMSG['GUESTBOOK'] = "線上留言";
+$TPLMSG['GUESTBOOK_CATE_DESC'] = "線上留言";
 $TPLMSG["FACTORY"] = "觀光工廠";
 ?>
