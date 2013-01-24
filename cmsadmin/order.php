@@ -211,6 +211,9 @@ class ORDER{
 
             ));
         }
+        if($cms_cfg["ws_module"]['ws_delivery_timesec']){ //是否顯示配送區間
+            $tpl->newBlock("DELIVERY_TIMESEC");
+        }
         //帶入要回覆的訂單資料
         if(!empty($_REQUEST["o_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."'";
@@ -218,6 +221,7 @@ class ORDER{
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
+                $dts = strtotime($row['o_deliver_date']);
                 $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_O_ID"  => $row["o_id"],
                                           "VALUE_O_NAME" => $row["o_name"],
@@ -231,7 +235,9 @@ class ORDER{
                                           "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                                           "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                           "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
-										  "VALUE_O_PAYMENT_TYPE"=>$row["o_payment_type"],
+                                          "VALUE_O_PAYMENT_TYPE"=>$ws_array["payment_type"][$row["o_payment_type"]],
+                                          "VALUE_O_ATM_LAST5" => $row["o_atm_last5"],
+                                          "VALUE_O_DELIVERY_STR" => sprintf("%s %s",date("Y年m月d日",$dts),$ws_array["deliery_timesec"][$row['o_deliver_time_sec']]),
                 ));
                 if($cms_cfg["ws_module"]["ws_vaccount"] & $row["o_virtual_account"]) {
                 $tpl->newBlock("ATM_DATA");

@@ -388,6 +388,19 @@ class CART{
                                 "MSG_FAX" => $TPLMSG["FAX"],
                                 "MSG_EMAIL" => $TPLMSG["EMAIL"],
                                 "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"]));
+            if($cms_cfg['ws_module']['ws_delivery_timesec']){
+                $tpl->newBlock("TIME_SEC_ZONE");
+                //到貨日期
+                $tpl->newBlock("CALENDAR_SCRIPT");
+                //配送時段
+                foreach($ws_array["deliery_timesec"] as $k=>$timesec){
+                    $tpl->newBlock("TIME_SEC_LIST");
+                    $tpl->assign(array(
+                       "TS_ID"  => $k,
+                       "TS_SEC" => $timesec,
+                    ));
+                }
+            }
             if($this->m_id){
                 $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
                 $selectrs = $db->query($sql);
@@ -412,6 +425,7 @@ class CART{
                 $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
                 for($i=0;$i<count($ws_array["payment_type"]);$i++){
                     $tpl->newBlock("PAYMENT_TYPE_ITEMS");
+                    $tpl->assign("VALUE_PAYMENT_TYPE_ID" , $i);
                     $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$i]);
                 }
                 $tpl->gotoBlock("PAYMENT_TYPE");
@@ -431,7 +445,7 @@ class CART{
     }
     //資料更新================================================================
     function cart_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
         $this->ws_tpl_file = "templates/ws-mail-tpl.html";
         $tpl = new TemplatePower( $this->ws_tpl_file );
         $tpl->prepare();
@@ -458,6 +472,20 @@ class CART{
                             "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"],
                             "VALUE_CONTENT" => $_REQUEST["content"],
         ));
+        //付款方式是atm時顯示客戶匯款帳號後五碼
+        if($_POST['o_payment_type']=='0'){
+            $tpl->newBlock("ATM_LAST_FIVE");
+            $tpl->assign("VALUE_ATM_LAST5",$_POST['o_atm_last5']);
+        }
+        //是否顯示配送欄位
+        if($cms_cfg['ws_module']['ws_delivery_timesec']){
+            $tpl->newBlock("DELIVERY_ZONE");
+            $dt_key = $_POST['o_deliver_time_sec'];
+            $tpl->assign(array(
+               "VALUE_M_DELIVER_DATE"    => $_POST['o_deliver_date'], 
+               "VALUE_M_DELIVER_TIMESEC" => $ws_array["deliery_timesec"][$dt_key], 
+            ));
+        }
         //國家欄位
         if($cms_cfg["ws_module"]["ws_country"]==1) {
             $tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
@@ -535,7 +563,10 @@ class CART{
                     o_subtotal_price,
                     o_total_price,
                     o_content,
-                    o_payment_type
+                    o_payment_type,
+                    o_atm_last5,
+                    o_deliver_date,
+                    o_deliver_time_sec
                 ) values (
                     '".$this->m_id."',
                     '0',
@@ -555,9 +586,12 @@ class CART{
                     '".$_REQUEST["o_subtotal_price"]."',
                     '".$_REQUEST["o_total_price"]."',
                     '".$_REQUEST["content"]."',
-                    '".$_REQUEST["o_payment_type"]."'
+                    '".$_REQUEST["o_payment_type"]."',
+                    '".$_REQUEST["o_atm_last5"]."',
+                    '".$_REQUEST["o_deliver_date"]."',
+                    '".$_REQUEST["o_deliver_time_sec"]."'
                 )";
-            $rs = $db->query($sql);
+            $rs = $db->query($sql,true);
             $this->o_id=$db->get_insert_id();
             //產生ATM虛擬帳號
             if($cms_cfg["ws_module"]["ws_vaccount"]==1 & $TPLMSG["PAYMENT_ATM"]==$_REQUEST["o_payment_type"]) {
@@ -605,7 +639,7 @@ class CART{
             //顯示付款方式
             $tpl->newBlock("PAYMENT_TYPE");
             $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
-            $tpl->assign("VALUE_PAYMENT_TYPE" , $_REQUEST["o_payment_type"]);
+            $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$_REQUEST["o_payment_type"]]);
             $tpl->gotoBlock( "MEMBER_DATA_FORM" );
 
             $func_str="func=m_zone&mzt=order";
