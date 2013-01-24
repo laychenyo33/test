@@ -47,6 +47,9 @@ switch($_REQUEST["func"]){
     case "lc":
         $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_goodlink_cate where lc_seo_filename='".$validateValue."' and lc_id!='".$validateId."' ";
         break;
+    case "sdc":
+        $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_seo_filename='".$validateValue."' and sdc_id!='".$validateId."' ";
+        break;
 }
 $selectrs = $db->query($sql);
 $row = $db->fetch_array($selectrs,1);

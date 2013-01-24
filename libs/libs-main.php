@@ -541,6 +541,7 @@ class MAINFUNC{
         }
         ($cms_cfg["ws_module"]["ws_statistic"])?$tpl->newBlock( "AUTHORITY_STATISTIC" ):"";
         ($cms_cfg["ws_module"]["ws_service"])?$tpl->newBlock( "AUTHORITY_SERVICE" ):"";
+        ($cms_cfg["ws_module"]["ws_stores"])?$tpl->newBlock( "AUTHORITY_STORES" ):"";
         ($cms_cfg["ws_module"]["ws_index_banner"])?$tpl->newBlock( "INDEX_BANNER" ):"";//自訂首頁banner管理
         ($cms_cfg["ws_module"]["ws_products_application"])?$tpl->newBlock( "AUTHORITY_PRODUCTS_APPLICATION" ):"";//產品應用領域
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);

@@ -118,6 +118,11 @@
                         "alertTextOk":"* 這個檔名可以使用", 
                         "alertTextLoad":"* 載入中請稍候",
                         "alertText":"* 這個檔名已被使用"},
+                    "ajaxSDCfilename":{
+                        "file":"validateFilename.php?func=sdc",
+                        "alertTextOk":"* 這個檔名可以使用", 
+                        "alertTextLoad":"* 載入中請稍候",
+                        "alertText":"* 這個檔名已被使用"},                    
                     "onlyLetter":{
                         "regex":"/^[a-zA-Z\ \']+$/",
                         "alertText":"* 請輸入英文字母(大小寫不限)"}

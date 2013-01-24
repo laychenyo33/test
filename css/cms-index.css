@@ -428,6 +428,8 @@ h2 {
 	margin: 10 0 15 0;
 	font-size: 12px
 }
+.products_show_introduction ul li{list-style:  disc outside;margin-left: 20px;}
+.products_show_introduction ol li{list-style: decimal outside;margin-left: 20px;}
 .product_table {
 	font-size: 12px;
 	line-height: 1.2;
@@ -1122,4 +1124,36 @@ h2 {
     display:block;
     padding:3px 5px;
     border-bottom:1px #939393 dotted;
+}
+/* e-book */
+.ebook_left_list {
+	border-style: none;
+	float: left;
+	height: auto;
+	padding-top: 10px;
+	text-align: center;
+	width: 180px;
+	margin-left: 30px;
+}
+.ebook_left_pic {
+	padding-top: 0px;
+	width: 158px;
+}
+.ebook_left_title {
+	clear: both;
+	color: #666666;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 12px;
+	height: auto;
+	padding: 5px 0px 10px 0px;
+	text-align: center;
+	text-decoration: none;
+}
+.ebook_left_title a:link, .ebook_left_title a:visited {
+	color: #666666;
+	text-decoration: none;
+}
+.ebook_left_title a:hover, .ebook_left_title a:active {
+	color: #666666;
+	text-decoration: none;
 }

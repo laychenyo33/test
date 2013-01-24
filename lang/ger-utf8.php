@@ -281,7 +281,8 @@ $TPLMSG["SERVICE_CATE_DESC"] = "service";
 $TPLMSG["CONTACT_US_CATE_DESC"] = "contact us";
 $TPLMSG["SITEMAP_CATE_DESC"] = "sitemap";
 $TPLMSG['CONTACT_US_ATTACH_FILES'] = "Attach files";
-$TPLMSG["STORES"] = "門市介紹";
-$TPLMSG['GUESTBOOK'] = "線上留言";
-$TPLMSG["FACTORY"] = "觀光工廠";
+$TPLMSG["STORES"] = "Stores";
+$TPLMSG["STORES_CATE_DESC"] = "Stores";
+$TPLMSG['GUESTBOOK'] = "guestbook";
+$TPLMSG["FACTORY"] = "Factory";
 ?>
