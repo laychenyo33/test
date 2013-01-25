@@ -255,6 +255,10 @@ class CONTACTUS{
                                       "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
             ));
         }
+        //是否記錄ip國家
+        if($cms_cfg['ws_module']['ws_contactus_ipmap']){
+            $tpl->newBlock("IP_COUNTRY_ROW");
+        }
         //帶入要回覆的聯絡我們資料
         if(!empty($_REQUEST["cu_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where cu_id='".$_REQUEST["cu_id"]."'";
@@ -272,6 +276,8 @@ class CONTACTUS{
                                           "VALUE_CU_ADDRESS" => $row["cu_address"],
                                           "VALUE_CU_EMAIL" => $row["cu_email"],
                                           "VALUE_CU_CONTENT" => $row["cu_content"],
+                                          "VALUE_CU_IP" => $row["cu_ip"],
+                                          "VALUE_CU_IP_COUNTRY" => $row["cu_ip_country"],
                                           "VALUE_CU_STATUS" => ($row["cu_status"]==1)?$TPLMSG['REPLY_YES']:$TPLMSG['REPLY_NO'],
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));

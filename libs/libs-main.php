@@ -1257,5 +1257,17 @@ class MAINFUNC{
             return $match[1];
         }        
     }    
+    //由ip取得國家
+    function get_ip_country($ip){
+        global $cms_cfg;
+        require_once $_SERVER['DOCUMENT_ROOT'] .$cms_cfg['base_root']."class/dbip/dbip-client.class.php";
+        $api_key = "0a1739288ac4c4bfd287242a24db992d46ce98b5";
+        $dbip = new DBIP_Client($api_key);
+        $data = array();
+        foreach ($dbip->Get_Address_Info($ip) as $k => $v) {
+            $data[$k] = $v;
+	}
+        return $data;
+    }    
 }
 ?>

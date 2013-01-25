@@ -150,6 +150,11 @@ class CONTACTUS{
             }
             if($pass){
                 $file = $this->file_upload();
+                //取得ip對應國家
+                $ip_country = array();
+                if($cms_cfg['ws_module']['ws_contactus_ipmap']){
+                    $ip_country = array_merge($ip_country,$main->get_ip_country($_SERVER['REMOTE_ADDR']));                
+                }
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_contactus (
                         m_id,
@@ -165,6 +170,8 @@ class CONTACTUS{
                         cu_email,
                         cu_content,
                         cu_file,
+                        cu_ip,
+                        cu_ip_country,                        
                         cu_modifydate
                     ) values (
                         '".$this->m_id."',
@@ -180,6 +187,8 @@ class CONTACTUS{
                         '".mysql_real_escape_string($_REQUEST["cu_email"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_content"])."',
                         '".$file."',
+                        '".$ip_country['address']."',
+                        '".$ip_country['country']."',                            
                         '".date("Y-m-d H:i:s")."'
                     )";
                 $rs = $db->query($sql);

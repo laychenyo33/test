@@ -8,6 +8,7 @@ $cms_cfg["ws_module"]=array(
         "ws_blog"=>0,               //部落格管理(留言版)
         "ws_contactus"=>1,          //聯絡我們
         "ws_contactus_upfiles"=>0,  //聯絡我們表單可附檔上傳
+        "ws_contactus_ipmap"=>0,    //聯絡我們表單記錄ip國家對映
         "ws_download"=>0,           //檔案下載
         "ws_ebook"=>1,              //電子型錄管理
         "ws_faq"=>0,                //FAQ管理
