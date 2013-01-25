@@ -159,7 +159,7 @@ class APPLICATON{
                     $and_str = " and p.p_id in (select p_id from ".$cms_cfg['tb_prefix']."_products_application_map where pa_id='".$app_row['pa_id']."' and checked='1') order by p.p_up_sort desc,p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
 
                     $sql .= $and_str;
-                    $prod_link=false;                    
+                    $prod_link=true;                    
                 }
 
                 //取得總筆數
