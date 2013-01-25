@@ -103,7 +103,7 @@ class ABOUTUS{
         if($_REQUEST["st"]=="au_content"){
             $and_str .= " and au_content like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc ";
+        $sql .= $and_str." order by au_cate,au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
@@ -190,6 +190,10 @@ class ABOUTUS{
 
             ));
         }
+        //有獨立類別
+        if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
+            $tpl->newBlock("UNIQUE_CATE");
+        }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["au_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus where au_id='".$_REQUEST["au_id"]."'";
@@ -217,6 +221,7 @@ class ABOUTUS{
                 header("location : aboutus.php?func=au_list");
             }
         }
+        $this->get_au_cate_option($row);
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_AU_CONTENT" , $row["au_content"] );
@@ -242,12 +247,16 @@ class ABOUTUS{
                          au_seo_filename='".htmlspecialchars($_REQUEST["au_seo_filename"])."',
                          au_seo_h1='".htmlspecialchars($_REQUEST["au_seo_h1"])."',";
         }
+        //設定類別
+        $addtion_au_cate = $_REQUEST['au_cate_input']?$_REQUEST['au_cate_input']:$_REQUEST['au_cate_select'];
+        $au_cate = $addtion_au_cate?strtolower($addtion_au_cate):'aboutus';
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_aboutus (
                         au_status,
                         au_sort,
+                        au_cate,
                         au_subject,
                         au_content,
                         ".$add_field_str."
@@ -255,6 +264,7 @@ class ABOUTUS{
                     ) values (
                         '".$_REQUEST["au_status"]."',
                         '".$_REQUEST["au_sort"]."',
+                        '".$au_cate."',
                         '".$_REQUEST["au_subject"]."',
                         '".$_REQUEST["au_content"]."',
                         ".$add_value_str."
@@ -266,6 +276,7 @@ class ABOUTUS{
                     update ".$cms_cfg['tb_prefix']."_aboutus set
                         au_status='".$_REQUEST["au_status"]."',
                         au_sort='".$_REQUEST["au_sort"]."',
+                        au_cate='".$au_cate."',
                         au_subject='".$_REQUEST["au_subject"]."',
                         au_content='".$_REQUEST["au_content"]."',
                         ".$update_str."
@@ -419,6 +430,20 @@ class ABOUTUS{
             case "sort":
                 $this->change_sort($_REQUEST["ws_table"]);
                 break;
+        }
+    }
+    
+    //取得au_cate
+    function get_au_cate_option($rdata){
+        global $db,$tpl,$cms_cfg;
+        $tpl->assign("_ROOT.CATE_AREA_TYPE",($rdata && $rdata['au_cate']!='aboutus')?"block":"none");
+        $tpl->assign("_ROOT.AU_CATE_CHECKED",($rdata && $rdata['au_cate']!='aboutus')?"checked":"");
+        $sql = "select distinct au_cate from ".$cms_cfg['tb_prefix']."_aboutus where au_cate<>'aboutus'";
+        $res = $db->query($sql,true);
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("AU_CATE_OPTION");
+            $tpl->assign("VALUE_AU_CATE",$row['au_cate']);
+            $tpl->assign("VALUE_AU_OPTION_SELECTED",($row['au_cate']==$rdata['au_cate'])?"selected":"");
         }
     }
 }

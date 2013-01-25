@@ -45,7 +45,8 @@ class ABOUTUS{
     function aboutus_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //前台關於我們列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
+        $au_cate = $_REQUEST['au_cate']?$_REQUEST['au_cate']:'aboutus';
+        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' and au_cate = '".$au_cate."' order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if(empty($_REQUEST["au_id"]) && empty($_REQUEST["f"])){
@@ -55,7 +56,7 @@ class ABOUTUS{
             $i++;
             if($cms_cfg["ws_module"]["ws_left_main_au"]==1){
                 if($this->ws_seo==1 ){
-                    $cate_link=$cms_cfg["base_root"]."aboutus/".$row["au_seo_filename"].".html";
+                    $cate_link=$cms_cfg["base_root"].$au_cate."/".$row["au_seo_filename"].".html";
                     $ext="htm";
                 }else{
                     $cate_link=$cms_cfg["base_root"]."aboutus.php?au_id=".$row["au_id"];
@@ -63,7 +64,7 @@ class ABOUTUS{
                 }
                 $tpl->newBlock( "LEFT_CATE_LIST" );
                 $tpl->assign( array( "VALUE_CATE_NAME" => $row["au_subject"],
-                                     "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"]."aboutus.".$ext:$cate_link,
+                                     "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"].$au_cate.".".$ext:$cate_link,
                 ));
             }
             if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
@@ -79,7 +80,7 @@ class ABOUTUS{
                     $main->header_footer("aboutus",$TPLMSG["ABOUT_US"]);
                 }
                 //$tpl->assignGlobal( "TAG_SUB_FUNC"  , "--&nbsp;&nbsp;".$row["au_subject"]);
-                $row["au_content"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["au_content"]);
+                $row["au_content"]=preg_replace("/upload_files/",$cms_cfg["file_root"]."upload_files",$row["au_content"]);
                 //$row["au_content"]=preg_replace("/..\/upload_files/",$cms_cfg["file_root"]."upload_files",$row["au_content"]);
                 $tpl->assignGlobal( "TAG_LAYER" , $row["au_subject"]);
                 $tpl->assignGlobal( "VALUE_AU_CONTENT" , $row["au_content"]);
