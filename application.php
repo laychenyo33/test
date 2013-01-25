@@ -37,6 +37,7 @@ class APPLICATON{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["application"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-products"); //主要顯示區域的css設定
         $main->google_code(); //google analystics code , google sitemap code
+        $main->hot_products_list(); //熱門產品     
         $this->left_fix_cate_list();
     }
 
@@ -147,7 +148,6 @@ class APPLICATON{
                 if($cms_cfg['ws_module']['ws_application_cates']){  //應用領域產品分類
                     //分類列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id in (select pc_id from ".$cms_cfg['tb_prefix']."_products_cate_application_map where pa_id='".$app_row['pa_id']."' and checked='1')";
-                    $prod_link=false;
                 }elseif($cms_cfg['ws_module']['ws_application_products']){ //應用領域產品
                     //產品列表
                     $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' ";
@@ -158,8 +158,7 @@ class APPLICATON{
                     //附加條件
                     $and_str = " and p.p_id in (select p_id from ".$cms_cfg['tb_prefix']."_products_application_map where pa_id='".$app_row['pa_id']."' and checked='1') order by p.p_up_sort desc,p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
 
-                    $sql .= $and_str;
-                    $prod_link=true;                    
+                    $sql .= $and_str;       
                 }
 
                 //取得總筆數
@@ -189,39 +188,49 @@ class APPLICATON{
                 $j=0;
                 $k=$page["start_serial"];
                 while ( $row = $db->fetch_array($selectrs,1) ) {
-                    $p_link = $this->get_link($row,$prod_link);
-                    //收集第二頁以後pc_name 做為 meta title
-                    if(!empty($_REQUEST["nowp"]) && $j<3){
-                        $meta_title .=$row["p_name"];
-                    }
-                    if(!empty($_REQUEST["nowp"]) && $j<6){
-                        $meta_description .=$row["p_name"];
-                    }
                     $j++;
                     $k++;
-                    $col_img = $row["p_small_img"]?$row["p_small_img"]:$row["pc_cate_img"];
-                    $p_img=(trim($col_img)=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$col_img;
-                    $tpl->newBlock( $show_style_str_p."_APP" );
-                    $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
-                                        "VALUE_P_ID" =>$row["p_id"],
-                                        "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
-                                        "VALUE_P_LINK"  => $p_link,
-                                        "VALUE_P_SMALL_IMG" => $p_img,
-                                        "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"],
-                                        "VALUE_P_SERIAL" => $row["p_serial"],
-                                        "VALUE_P_NO" => $k,
-                    ));
-                    $dimensions["width"]=$cms_cfg['small_img_width'];
-                    $dimensions["height"]=$cms_cfg['small_img_height'];
-                    if(is_file($_SERVER['DOCUMENT_ROOT'].$p_img)){
-                        list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$p_img);
-                        $dimensions = $main->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
+                    if($cms_cfg['ws_module']['ws_application_cates']){
+                        $tpl->newBlock( $show_style_str_pc."_APP" );
+                        $pc_link = $this->get_link($row);                        
+                        $pc_img=(trim($row["pc_cate_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pc_cate_img"];
+                        $tpl->assign( array( "VALUE_PC_NAME"  => $row["pc_name"],
+                                             "VALUE_PC_NAME_ALIAS" =>$row["pc_name_alias"],
+                                             "VALUE_PC_LINK"  => $pc_link,
+                                             "VALUE_PC_ID" => $row["pc_id"],
+                                             "VALUE_PC_SHOW_STYLE" => $row["pc_show_style"],
+                                             "VALUE_PC_CATE_IMG" => $pc_img,
+                        ));
+                        $dimensions["width"]=$cms_cfg['small_img_width'];
+                        $dimensions["height"]=$cms_cfg['small_img_height'];
+                        if(is_file($_SERVER['DOCUMENT_ROOT'].$pc_img)){
+                            $dimensions = $main->resizeto($pc_img,$cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
+                        }
+                        $tpl->assign("VALUE_PC_SMALL_IMG_W",$dimensions["width"]);
+                        $tpl->assign("VALUE_PC_SMALL_IMG_H",$dimensions["height"]);                        
+                    }elseif($cms_cfg['ws_module']['ws_application_products']){
+                        $p_link = $this->get_link($row,true);                        
+                        $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
+                        $tpl->newBlock( $show_style_str_p."_APP" );
+                        $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
+                                            "VALUE_P_ID" =>$row["p_id"],
+                                            "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
+                                            "VALUE_P_LINK"  => $p_link,
+                                            "VALUE_P_SMALL_IMG" => $p_img,
+                                            "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"],
+                                            "VALUE_P_SERIAL" => $row["p_serial"],
+                                            "VALUE_P_NO" => $k,
+                        ));
+                        $dimensions["width"]=$cms_cfg['small_img_width'];
+                        $dimensions["height"]=$cms_cfg['small_img_height'];
+                        if(is_file($_SERVER['DOCUMENT_ROOT'].$p_img)){
+                            $dimensions = $main->resizeto($p_img,$cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
+                        }
+                        $tpl->assign("VALUE_P_SMALL_IMG_W",$dimensions["width"]);
+                        $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions["height"]);
                     }
-                    $tpl->assign("VALUE_P_SMALL_IMG_W",$dimensions["width"]);
-                    $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions["height"]);
-                    
                 }
-                if($k==0 && $i==0){
+                if($k==0 && $j==0){
                     if($custom){
                         $tpl->assignGlobal("MSG_NO_DATA","");
                     }else{
