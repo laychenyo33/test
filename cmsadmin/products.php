@@ -454,7 +454,7 @@ class PRODUCTS{
             $tpl->assign( "VALUE_PC_CUSTOM" , $row["pc_custom"] );
         }
         if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_cates']){
-            $this->application_checkbox($row["pc_id"]);
+            $this->application_checkbox($row["pc_id"],true);
         }
     }
     //產品管理分類--資料更新
