@@ -69,6 +69,7 @@ class EBOOK{
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal( "TAG_MAIN_IMG" , $ws_array["main_img"]["ebook"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["ebook"]);//左方menu title
+        $tpl->assignGlobal( "TAG_EBOOK_CURRENT" , "class='current'"); //上方menu current
         $main->header_footer("");
     }
     //EBOOK--列表================================================================
@@ -230,6 +231,8 @@ class EBOOK{
                 $tpl->assign( array( "VALUE_CATE_NAME" => $row["ebc_name"],
                     "VALUE_CATE_IMG" => (trim($row["ebc_cate_img"])=="")?$cms_cfg['default_ebook_pic']:$cms_cfg["file_root"].$row["ebc_cate_img"],
                     "VALUE_CATE_LINK"  => $ebc_link,
+                    "VALUE_CATE_NAME"  => $row['ebc_name'],
+                    "TAG_CURRENT_CLASS"  => ($_GET['ebc_parent']==$row['ebc_id'])?"class='current'":"",
                 ));
             }
         }

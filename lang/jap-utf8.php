@@ -287,4 +287,5 @@ $TPLMSG["STORES_CATE_DESC"] = "Stores";
 $TPLMSG['GUESTBOOK'] = "guestbook";
 $TPLMSG['GUESTBOOK_CATE_DESC'] = "guestbook";
 $TPLMSG["FACTORY"] = "Factory";
+$TPLMSG['EBOOK_CATE_DESC'] = "E-catalog";
 ?>

@@ -1157,3 +1157,35 @@ h2 {
 	color: #666666;
 	text-decoration: none;
 }
+
+.ebook_list {
+	border-style: none;
+	float: left;
+	height: 300px;
+	padding-top: 10px;
+	text-align: center;
+	width: 180px;
+	margin-left: 30px;
+}
+.ebook_pic {
+	padding-top: 0px;
+	width: 158px;
+}
+.ebook_list_title {
+	clear: both;
+	color: #666666;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 12px;
+	height: auto;
+	padding: 5px 0px 10px 0px;
+	text-align: center;
+	text-decoration: none;
+}
+.ebook_list_title a:link, .ebook_list_title a:visited {
+	color: #666666;
+	text-decoration: none;
+}
+.ebook_list_title a:hover, .ebook_list_title a:active {
+	color: #666666;
+	text-decoration: none;
+}

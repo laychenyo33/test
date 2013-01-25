@@ -290,4 +290,5 @@ $TPLMSG["STORES_CATE_DESC"] = "门市介绍";
 $TPLMSG['GUESTBOOK'] = "线上留言";
 $TPLMSG['GUESTBOOK_CATE_DESC'] = "线上留言";
 $TPLMSG["FACTORY"] = "观光工厂";
+$TPLMSG['EBOOK_CATE_DESC'] = "电子型录";
 ?>
