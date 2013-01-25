@@ -26,6 +26,8 @@ $cms_cfg["ws_module"]=array(
         "ws_products_nextlink"=>1,  //產品詳細頁--上下筆連結
         "ws_products_title"=>0,     //自訂產品說明標題(產品敘述、規格、特性) 0 =>預設語系 1 => 自定說明
         "ws_products_application" =>1, //產品應用領域
+        "ws_application_cates"    =>1, //產品應用領域用在分類
+        "ws_application_products" =>0, //產品應用領域用在產品    
         "ws_products_desc_style"  =>0, //前台產品敘述的格式，0是預設樣式，1是domtab,
         "ws_products_mv"          =>0, //產品影片，只適用youtube影片,
         "ws_products_upfiles"     =>1, //產品附檔,

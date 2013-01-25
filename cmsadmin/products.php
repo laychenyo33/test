@@ -453,6 +453,9 @@ class PRODUCTS{
             $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_PC_CUSTOM" , $row["pc_custom"] );
         }
+        if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_cates']){
+            $this->application_checkbox($row["pc_id"]);
+        }
     }
     //產品管理分類--資料更新
     function products_cate_replace(){
@@ -583,6 +586,12 @@ class PRODUCTS{
                     pc_layer='".$pc_layer."'
                 where pc_id='".$_REQUEST["now_pc_id"]."'";
             $rs = $db->query($sql);
+            if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_cates']){//有應用領域
+                if($_POST['pa_id_str']){
+                    $pc_id = $_REQUEST["now_pc_id"]?$_REQUEST["now_pc_id"]:$this->pc_id;
+                    $db_msg .= $this->write_application($pc_id,$_POST['pa_id_str'],true);
+                }
+            }            
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $this->goto_target_page($goto_url);
@@ -845,10 +854,10 @@ class PRODUCTS{
                                   "STR_NEW_SORT_DISPLAY" => "none",
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
-		for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//大圖區域TAB
+        for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//大圖區域TAB
             $tpl->newBlock("PRODUCTS_BIG_IMG_TAB");
-			$tpl->assign("BIG_IMG_NO",$j);
-		}		
+            $tpl->assign("BIG_IMG_NO",$j);
+        }		
         // 無新產品不顯示產品類型欄位
         ($cms_cfg["ws_module"]["ws_new_product"])?$tpl->newBlock( "PRODUCTS_TYPE_FIELD" ):"";
         switch($row["sc_cart_type"]){
@@ -1016,7 +1025,7 @@ class PRODUCTS{
                                    "VALUE_P_CERT" => $row["p_certificate"],
                                    "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
         ));
-        if($cms_cfg["ws_module"]['ws_products_application']){
+        if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_products']){
             $this->application_checkbox($row["p_id"]);
         }
     }
@@ -1193,23 +1202,9 @@ class PRODUCTS{
             ";
             $rs = $db->query($sql);
             $db_msg = $db->report();
-            if($cms_cfg["ws_module"]['ws_products_application']){//有應用領域
+            if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_products']){//有應用領域
                 if($_POST['pa_id_str']){
-                    $pa_id_arr = explode(',',$_POST['pa_id_str']);
-                    $sql = "replace into ".$cms_cfg['tb_prefix']."_products_application_map(p_id,pa_id,checked)values";
-                    $values = array();
-                    for($i=0;$i<count($pa_id_arr);$i++){
-                        $pa_id = $pa_id_arr[$i];
-                        $checked = $_POST['pa_id'][$pa_id_arr[$i]]?1:0;
-                        $values[] = "('".$this->p_id."','".$pa_id."','".$checked."')";
-                    }
-                    if(count($values)){
-                        $sql .= implode(",",$values);
-                        $db->query($sql);
-                        if($err=$db->report()){
-                            $db_msg.=$err;
-                        }
-                    }
+                    $db_msg .= $this->write_application($this->p_id,$_POST['pa_id_str']);
                 }
             }
             if ( $db_msg == "" ) {
@@ -2285,10 +2280,14 @@ class PRODUCTS{
         }
     }    
     //應用領域核取方塊
-    function application_checkbox($p_id){
+    function application_checkbox($id,$is_cate=false){
         global $db,$cms_cfg,$tpl;
         $tpl->newBlock("PRODUCTS_APPLICATION_ZONE");
-        $sql = "select pa.*,pam.checked as `checked` from ".$cms_cfg['tb_prefix']."_products_application as pa left join (select * from ".$cms_cfg['tb_prefix']."_products_application_map where p_id='".$p_id."') as pam on pa.pa_id=pam.pa_id where pa.pa_status='1' order by pa.pa_sort ".$cms_cfg['sort_pos'];
+        if(!$is_cate){
+            $sql = "select pa.*,pam.checked as `checked` from ".$cms_cfg['tb_prefix']."_products_application as pa left join (select * from ".$cms_cfg['tb_prefix']."_products_application_map where p_id='".$id."') as pam on pa.pa_id=pam.pa_id where pa.pa_status='1' order by pa.pa_sort ".$cms_cfg['sort_pos'];
+        }else{
+            $sql = "select pa.*,pam.checked as `checked` from ".$cms_cfg['tb_prefix']."_products_application as pa left join (select * from ".$cms_cfg['tb_prefix']."_products_cate_application_map where pc_id='".$id."') as pam on pa.pa_id=pam.pa_id where pa.pa_status='1' order by pa.pa_sort ".$cms_cfg['sort_pos'];
+        }
         $res = $db->query($sql);
         $s=1;
         $pa_id_arr = array();
@@ -2307,6 +2306,26 @@ class PRODUCTS{
             $tpl->gotoBlock("PRODUCTS_APPLICATION_ZONE");
             $tpl->assign("VALUE_PA_ID_STR",implode(',',$pa_id_arr));
         }
+    }
+    function write_application($id,$paids,$is_cate=false){
+        global $db,$cms_cfg;
+        $pa_id_arr = explode(',',$paids);
+        if(!$is_cate){
+            $sql = "replace into ".$cms_cfg['tb_prefix']."_products_application_map(p_id,pa_id,checked)values";
+        }else{
+            $sql = "replace into ".$cms_cfg['tb_prefix']."_products_cate_application_map(pc_id,pa_id,checked)values";
+}
+        $values = array();
+        for($i=0;$i<count($pa_id_arr);$i++){
+            $pa_id = $pa_id_arr[$i];
+            $checked = $_POST['pa_id'][$pa_id]?1:0;
+            $values[] = "('".$id."','".$pa_id."','".$checked."')";
+        }
+        if(count($values)){
+            $sql .= implode(",",$values);
+            $db->query($sql,true);
+            return $db->report();
+        }        
     }
 }
 //ob_end_flush();

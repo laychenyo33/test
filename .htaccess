@@ -38,6 +38,7 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
 RewriteRule ^new-products.html$  products.php?func=p_new [L]
+RewriteRule ^application-(\d+).htm$  application.php?pa_id=$1 [L]
 #主功能頁
 RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|guestbook|stores|factory|goodlink|gallery|application|video|ebook).htm$  $1.php [L]
 #主功能列表頁-無檔名

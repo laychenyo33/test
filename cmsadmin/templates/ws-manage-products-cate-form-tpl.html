@@ -36,6 +36,17 @@
             <br><font color="red">請輸入數字如：0,1,2,3...數字『愈大』<br>前台的{MSG_PRODUCT_CATE}排列會愈前面</font>
         </td>
       </tr>
+        <!-- START BLOCK : PRODUCTS_APPLICATION_ZONE -->
+      <tr>
+            <th>應用領域</th>
+            <td colspan="3">
+                <!-- START BLOCK : APPLICATION_ITEM -->
+                <input type="checkbox" name="pa_id[{VALUE_PA_ID}]" id="pa_id_{SERIAL}" value="{VALUE_PA_ID}" {TAG_PA_ID_CHK}/><label for="pa_id_{SERIAL}">{VALUE_PA_NAME}</label>
+                <!-- END BLOCK : APPLICATION_ITEM -->
+                <input type="hidden" name="pa_id_str" value="{VALUE_PA_ID_STR}"/>
+            </td>
+        </tr>
+        <!-- END BLOCK : PRODUCTS_APPLICATION_ZONE -->      
       <tr>
         <th>自訂頁面:</th>
         <td colspan="3">

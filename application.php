@@ -133,7 +133,7 @@ class APPLICATON{
                                   "meta_keyword"=>$app_row["pa_seo_keyword"],
                                   "meta_description"=>$app_row["pa_seo_description"],
                 );
-                $seo_H1=(trim($app_row["pa_seo_h1"])!="")?$app_row["pa_seo_h1"]:$app_row["pa_name"];
+                $seo_H1=(trim($app_row["pa_seo_h1"]))?$app_row["pa_seo_h1"]:$app_row["pa_name"];
                 $main->header_footer($meta_array,$seo_H1);
                 //顯示產品主頁SEO簡述
                 if(trim($app_row["pa_seo_short_desc"])){
@@ -142,18 +142,26 @@ class APPLICATON{
                     $tpl->assign("VALUE_PC_SHORT_DESC",$app_row["pa_seo_short_desc"]);
                 }                 
                 //layer link
-                $layer_link = $this->top_layer_link . $cms_cfg['path_separator'] . $app_row['pa_seo_filename'];
+                $layer_link = $this->top_layer_link . $cms_cfg['path_separator'] . $app_row['pa_name'];
                 $tpl->assignGlobal("TAG_LAYER",$layer_link);
-                //產品列表
-                $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' ";
+                if($cms_cfg['ws_module']['ws_application_cates']){  //應用領域產品分類
+                    //分類列表
+                    $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id in (select pc_id from ".$cms_cfg['tb_prefix']."_products_cate_application_map where pa_id='".$app_row['pa_id']."' and checked='1')";
+                    $prod_link=false;
+                }elseif($cms_cfg['ws_module']['ws_application_products']){ //應用領域產品
+                    //產品列表
+                    $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' ";
 
-                if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
-                    $sql .=  " and p.p_type not in ('1','3','5','7') ";
+                    if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
+                        $sql .=  " and p.p_type not in ('1','3','5','7') ";
+                    }
+                    //附加條件
+                    $and_str = " and p.p_id in (select p_id from ".$cms_cfg['tb_prefix']."_products_application_map where pa_id='".$app_row['pa_id']."' and checked='1') order by p.p_up_sort desc,p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
+
+                    $sql .= $and_str;
+                    $prod_link=false;                    
                 }
-                //附加條件
-                $and_str = " and p.p_id in (select p_id from ".$cms_cfg['tb_prefix']."_products_application_map where pa_id='".$app_row['pa_id']."' and checked='1') order by p.p_up_sort desc,p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
 
-                $sql .= $and_str;
                 //取得總筆數
                 $selectrs = $db->query($sql);
                 $total_records    = $db->numRows($selectrs);
@@ -181,7 +189,7 @@ class APPLICATON{
                 $j=0;
                 $k=$page["start_serial"];
                 while ( $row = $db->fetch_array($selectrs,1) ) {
-                    $p_link = $this->get_link($row,true);
+                    $p_link = $this->get_link($row,$prod_link);
                     //收集第二頁以後pc_name 做為 meta title
                     if(!empty($_REQUEST["nowp"]) && $j<3){
                         $meta_title .=$row["p_name"];
@@ -278,13 +286,25 @@ class APPLICATON{
             }      
         }else{
             if($this->ws_seo){
-                if(trim($row["pa_seo_filename"]) !=""){
-                    $link=$cms_cfg["base_root"].'application/'.$row["pa_seo_filename"].".htm";
+                if($row['pc_id']){
+                    if(trim($row["pc_seo_filename"]) !=""){
+                        $link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
+                    }else{
+                        $link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
+                    }
                 }else{
-                    $link=$cms_cfg["base_root"]."application-".$row["pa_id"].".htm";
+                    if(trim($row["pa_seo_filename"]) !=""){
+                        $link=$cms_cfg["base_root"].'application/'.$row["pa_seo_filename"].".htm";
+                    }else{
+                        $link=$cms_cfg["base_root"]."application-".$row["pa_id"].".htm";
+                    }
                 }
             }else{
-                $link=$cms_cfg["base_root"]."application.php?pa_id=".$row["pa_id"];
+                if($row['pc_id']){
+                    $link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
+                }else{
+                    $link=$cms_cfg["base_root"]."application.php?pa_id=".$row["pa_id"];
+                }
             }
         }
         return $link;                  
