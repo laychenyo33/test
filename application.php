@@ -199,7 +199,8 @@ class APPLICATON{
                     }
                     $j++;
                     $k++;
-                    $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
+                    $col_img = $row["p_small_img"]?$row["p_small_img"]:$row["pc_cate_img"];
+                    $p_img=(trim($col_img)=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$col_img;
                     $tpl->newBlock( $show_style_str_p."_APP" );
                     $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                         "VALUE_P_ID" =>$row["p_id"],
