@@ -436,8 +436,8 @@ class ABOUTUS{
     //取得au_cate
     function get_au_cate_option($rdata){
         global $db,$tpl,$cms_cfg;
-        $tpl->assign("_ROOT.CATE_AREA_TYPE",($rdata && $rdata['au_cate']!='aboutus')?"block":"none");
-        $tpl->assign("_ROOT.AU_CATE_CHECKED",($rdata && $rdata['au_cate']!='aboutus')?"checked":"");
+        $tpl->assignGlobal("CATE_AREA_TYPE",($rdata && $rdata['au_cate']!='aboutus')?"block":"none");
+        $tpl->assignGlobal("AU_CATE_CHECKED",($rdata && $rdata['au_cate']!='aboutus')?"checked":"");
         $sql = "select distinct au_cate from ".$cms_cfg['tb_prefix']."_aboutus where au_cate<>'aboutus'";
         $res = $db->query($sql,true);
         while($row = $db->fetch_array($res,1)){
