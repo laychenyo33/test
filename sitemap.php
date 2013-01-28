@@ -43,6 +43,7 @@ class SITEMAP{
         ($cms_cfg["ws_module"]["ws_faq"])?$tpl->newBlock( "SITEMAP_FAQ" ):"";
         ($cms_cfg["ws_module"]["ws_news"])?$tpl->newBlock( "SITEMAP_NEWS" ):"";
         ($cms_cfg["ws_module"]["ws_products"])?$tpl->newBlock( "SITEMAP_PRODUCTS" ):"";
+        ($cms_cfg["ws_module"]["ws_products_application"])?$tpl->newBlock( "SITEMAP_APPLICATION" ):"";
         ($cms_cfg["ws_module"]["ws_new_product"])?$tpl->newBlock( "SITEMAP_NEW_PRODUCT" ):"";
         ($cms_cfg["ws_module"]["ws_video"])?$tpl->newBlock( "SITEMAP_VIDEO" ):"";
         ($cms_cfg["ws_module"]["ws_ebook"])?$tpl->newBlock( "SITEMAP_EBOOK" ):"";
@@ -59,6 +60,7 @@ class SITEMAP{
                                  "VALUE_STR_FACTORY" =>$TPLMSG["FACTORY"],
                                  "VALUE_STR_NEWS" =>$TPLMSG["NEWS"],
                                  "VALUE_STR_PRODUCTS" =>$TPLMSG["PRODUCTS"],
+                                 "VALUE_STR_APPLICATION" =>$TPLMSG["APPLICATION"],
                                  "VALUE_STR_NEW_PRODUCT" =>$TPLMSG["PRODUCT_NEW"],
                                  "VALUE_STR_SITEMAP" =>$TPLMSG["SITEMAP"],
                                  "VALUE_STR_CONTACTUS" =>$TPLMSG["CONTACT_US"],
@@ -74,6 +76,7 @@ class SITEMAP{
                                  "VALUE_FACTORY_LINK" =>"#",
                                  "VALUE_NEWS_LINK" =>$cms_cfg["base_root"]."news".$ext,
                                  "VALUE_PRODUCTS_LINK" =>$cms_cfg["base_root"]."products".$ext,
+                                 "VALUE_APPLICATION_LINK" =>$cms_cfg["base_root"]."application".$ext,
                                  "VALUE_NEW_PRODUCT_LINK" =>$cms_cfg["base_root"]."new-products".$ext,
                                  "VALUE_SITEMAP_LINK" =>$cms_cfg["base_root"]."sitemap".$ext,
                                  "VALUE_CONTACTUS_LINK" =>$cms_cfg["base_root"]."contactus".$ext,
