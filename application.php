@@ -37,7 +37,6 @@ class APPLICATON{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["application"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-products"); //主要顯示區域的css設定
         $main->google_code(); //google analystics code , google sitemap code
-        $main->hot_products_list(); //熱門產品     
         $this->left_fix_cate_list();
     }
 
