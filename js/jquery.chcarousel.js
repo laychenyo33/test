@@ -68,13 +68,13 @@
             }
             if(_options.toLeftId){
                $('#'+_options.toLeftId).click(go_left);
-                if(!_options.recycle && curp>=p){
+                if(p<=1 || (!_options.recycle && curp>=p)){
                     $('#'+_options.toLeftId).hide();
                 }               
             }
             if(_options.toRightId){
                $('#'+_options.toRightId).click(go_right);
-               if(!_options.recycle && curp<=1){
+               if(p<=1 || (!_options.recycle && curp<=1)){
                    $('#'+_options.toRightId).hide();
                }                 
             }
