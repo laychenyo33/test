@@ -14,6 +14,24 @@
 <link type="text/css" rel="stylesheet" href="{TAG_ROOT_PATH}js/jquery/jquery-ui-1.9.1.custom.css" />
 <script src="{TAG_ROOT_PATH}js/jquery/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
 <!-- END BLOCK : JQUERY_UI_SCRIPT -->
+<!-- START BLOCK : JQUERY_CLEARFIELD_SCRIPT -->
+<script src="{TAG_ROOT_PATH}js/jquery.clearfield.js" type="text/javascript"></script>
+<script>
+(function($){
+    $(document).ready(function(){
+        $("#psearch").clearField();
+     <!-- START BLOCK : SEARCH_FIELD_AUTOCOMPLETE -->   
+        $( "#psearch" ).autocomplete({
+            source: "{TAG_ROOT_PATH}products.php?func=p_ajax_get_p_name",
+            minLength: 2,
+            select: function( event, ui ) {
+            }
+        });        
+     <!-- END BLOCK : SEARCH_FIELD_AUTOCOMPLETE -->   
+    });
+})(jQuery);    
+</script>
+<!-- END BLOCK : JQUERY_CLEARFIELD_SCRIPT -->
 <!-- START BLOCK : JS_LEFT_MENU -->
 <script src="{TAG_ROOT_PATH}js/jquery.clearfield.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -39,8 +57,6 @@
         });
         $("#secondpane>p").eq({OVER_NUM1}).mouseover();
     <!-- END BLOCK : OVER_MODE -->
-        
-        $("#psearch").clearField();
     });    
 })(jQuery);
 </script>

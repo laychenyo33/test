@@ -266,6 +266,7 @@ class MAINFUNC{
                 $this->login_zone();
             }
             $this->mouse_disable(); //鎖滑鼠右鍵功能
+            $this->clearfield(); //搜尋區塊, 投入true值啟用autocomplete 
             //$this->dropdown_menu();
             //$this->float_menu();
             //$this->goodlink_select();
@@ -1268,6 +1269,15 @@ class MAINFUNC{
             $data[$k] = $v;
 	}
         return $data;
+    }    
+    //啟用搜尋欄位的提示文字功能，及自動完成
+    function clearfield($autocomplete=false){
+        global $tpl;
+        $tpl->newBlock("JQUERY_CLEARFIELD_SCRIPT");    
+        if($autocomplete){
+            $tpl->newBlock('JQUERY_UI_SCRIPT');
+            $tpl->newBlock("SEARCH_FIELD_AUTOCOMPLETE");    
+        }
     }    
 }
 ?>
