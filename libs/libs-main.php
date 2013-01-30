@@ -946,10 +946,7 @@ class MAINFUNC{
     //圖檔檔案路徑替換避免破圖
     function file_str_replace($input_path){
         global $cms_cfg;
-        $non_www_url=str_replace("www.","",$cms_cfg['file_url']);
-        $input_path=str_replace($cms_cfg['file_url'],"",$input_path);
-        $input_path=str_replace($non_www_url,"",$input_path);
-        $input_path=str_replace($cms_cfg['file_root']."upload_files/","upload_files/",$input_path);
+        $input_path=preg_replace("#(.+/)(upload_files/.+)$#i", "$2", $input_path);
         return $input_path;
     }
     //鎖滑鼠右鍵功能
