@@ -332,7 +332,7 @@ class CART{
                 }
                 $tpl->assign( array("VALUE_P_ID"  => $inquiry[$i]["p_id"],
                                     "VALUE_P_NAME"  => $inquiry[$i]["p_name"],
-                                    "VALUE_P_SMALL_IMG" => (trim($inquiry[$i]["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$inquiry[$i]["p_small_img"],
+                                    "VALUE_P_SMALL_IMG" => (trim($inquiry[$i]["p_small_img"])=="")?"http://".$cms_cfg['server_name'].$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$inquiry[$i]["p_small_img"],
                                     "VALUE_P_AMOUNT"  => $amount,
                                     "VALUE_P_LINK" => $p_link,
                                     "VALUE_P_SERIAL"  => $i+1,
