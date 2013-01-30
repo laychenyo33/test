@@ -529,6 +529,9 @@ class MAINFUNC{
             $tpl->newBlock("AUTHORITY_NEW_PRODUCTS");
             $tpl->gotoBlock( "AUTHORITY_PRODUCTS" );
         }
+        if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_products_ca"]){
+            $tpl->newBlock("AUTHORITY_CERTIFICATE_AUTHEN");
+        }        
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_systool"] && $cms_cfg["ws_module"]["ws_systool"])?$tpl->newBlock( "AUTHORITY_SYSTOOL" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_sysconfig"]  && $cms_cfg["ws_module"]["ws_sysconfig"])?$tpl->newBlock( "AUTHORITY_SYSCONFIG" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?$tpl->newBlock( "AUTHORITY_SEO" ):"";

@@ -17,6 +17,46 @@ class PRODUCTS{
         $this->op_limit=10;
         $this->jp_limit=10;
         switch($_REQUEST["func"]){
+            case "ca_list"://認證標章列表
+                $this->current_class="CA";
+                $this->ws_tpl_file = "templates/ws-manage-products-ca-list-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $this->products_ca_list();
+                $this->ws_tpl_type=1;
+                break;
+            case "ca_add":
+                $this->current_class="CA";
+                $this->ws_tpl_file = "templates/ws-manage-products-ca-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_PREVIEWS_PIC");
+                $tpl->newBlock("JS_MAIN");
+                $this->products_ca_form("add");
+                $this->ws_tpl_type=1;     
+                break;
+            case "ca_mod":
+                $this->current_class="CA";
+                $this->ws_tpl_file = "templates/ws-manage-products-ca-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_PREVIEWS_PIC");
+                $tpl->newBlock("JS_MAIN");
+                $this->products_ca_form("mod");
+                $this->ws_tpl_type=1;                    
+                break;
+            case "ca_replace"://認證標章(replace)
+                $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->products_ca_replace();
+                $this->ws_tpl_type=1;
+                break;            
+            case "ca_del":             
+                $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->products_ca_del();
+                $this->ws_tpl_type=1;
+                break;               
             case "pa_list"://應用領域分類列表
                 $this->current_class="PA";
                 $this->ws_tpl_file = "templates/ws-manage-products-application-list-tpl.html";
@@ -1028,6 +1068,9 @@ class PRODUCTS{
         if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_products']){
             $this->application_checkbox($row["p_id"]);
         }
+        if($cms_cfg['ws_module']['ws_products_ca']){
+            $this->ca_checkbox($row['p_ca']);        
+        }
     }
 //產品管理--資料更新================================================================
     function products_replace(){
@@ -1097,6 +1140,7 @@ class PRODUCTS{
                         p_attach_file1,
                         p_attach_file2,
                         p_mv,
+                        p_ca,
                         p_modifydate,
                         ".$add_field_str."
                         p_cross_cate,
@@ -1129,6 +1173,7 @@ class PRODUCTS{
                         '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                         '".$_REQUEST["p_mv"]."',
+                        '".implode(',',(array)$_REQUEST["p_ca"])."',
                         '".date("Y-m-d H:i:s")."',
                         ".$add_value_str."
                         '".$_REQUEST["p_cross_cate"]."',
@@ -1177,6 +1222,7 @@ class PRODUCTS{
                     p_attach_file1 = '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                     p_attach_file2 = '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                     p_mv = '".$_REQUEST["p_mv"]."',
+                    p_ca = '".implode(',',(array)$_REQUEST["p_ca"])."',
                     p_modifydate = '".date("Y-m-d H:i:s")."',
                     ".$update_str."
                     p_cross_cate = '".$_REQUEST["p_cross_cate"]."',
@@ -1379,6 +1425,8 @@ class PRODUCTS{
                 $table_name=$cms_cfg['tb_prefix']."_products";
             }elseif($ws_table=="pa"){
                 $table_name=$cms_cfg['tb_prefix']."_products_application";
+            }elseif($ws_table=="ca"){
+                $table_name=$cms_cfg['tb_prefix']."_products_ca";
             }
             foreach($_REQUEST["id"] as $key => $value){
                 if($ws_table == "p_new") {
@@ -1871,6 +1919,8 @@ class PRODUCTS{
                     $this->products_del();
                 }elseif($_REQUEST["ws_table"]=="pa"){
                     $this->products_application_del();
+                }elseif($_REQUEST["ws_table"]=="ca"){
+                    $this->products_ca_del();
                 }
                 break;
             case "copy":
@@ -2326,6 +2376,222 @@ class PRODUCTS{
             $db->query($sql,true);
             return $db->report();
         }        
+    }
+    //產品表單裡的應用領域checkbox
+    function application_checkbox($p_id){
+        global $db,$tpl,$cms_cfg;
+        $sql = "select app.*,map.ap_id as checked from ".$cms_cfg['tb_prefix']."_products_app as app left join (select * from ".$cms_cfg['tb_prefix']."_products_app_map where p_id='".$p_id."') as map on app.ap_id=map.ap_id ";
+        $res = $db->query($sql,true);
+        $i=1;
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("APP_MAP_CHECKBOX");
+            $tpl->assign(array(
+                "VALUE_APP_ID"   => $row['ap_id'],
+                "VALUE_APP_NAME" => $row['ap_name'],
+                "TAG_CHECKED"    => $row['checked']?"checked":"", 
+                "SERIAL"         => $i
+            ));
+            $i++;
+        }
+    }
+    //產品認證標章列表
+    function products_ca_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        if(trim($_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"])!=""){
+            $tpl->assignGlobal("TAG_BACK_PRE_EDIT_ZONE","<a href='".$_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]."'><font color='blue'>回到上次分類列表</font></a>");
+            unset($_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]);
+        }
+        //相關參數
+        if(!empty($_REQUEST['nowp'])){
+            $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
+                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
+                                      "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
+                                      "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
+
+            ));
+        }
+        $sql="select * from ".$cms_cfg['tb_prefix']."_products_ca ";
+        $and_str = "";
+        if(!empty($_REQUEST["sk"])){
+            $and_str .= " where  ca_name like '%".$_REQUEST["sk"]."%'";
+        }
+        $sql .= $and_str." order by ca_sort ".$cms_cfg['sort_pos'].",ca_modifydate desc ";
+        //取得總筆數
+        $total_records=$main->count_total_records($sql);
+        //取得分頁連結
+        $func_str="products.php?func=ca_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+        $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+        //重新組合包含limit的sql語法
+        $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        $tpl->assignGlobal( array("VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
+                                  "VALUE_TOTAL_BOX" => $rsnum,
+                                  "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                                  "VALUE_NOW_PAGE" => $_REQUEST['nowp']
+        ));
+        //認證標章列表
+        $i=$page["start_serial"];
+        while ( $row = $db->fetch_array($selectrs,1) ) {
+            $i++;
+            $tpl->newBlock( "PRODUCTS_CA_LIST" );
+            if($i%2){
+                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+            }
+            $ca_img = $row['ca_img']?$cms_cfg['file_root'].$row['ca_img']:$cms_cfg['default_preview_pic'];
+            $tpl->assign( array("VALUE_CA_ID"  => $row["ca_id"],
+                                "VALUE_CA_SORT"  => $row["ca_sort"],
+                                "VALUE_CA_NAME" => $row["ca_name"],
+                                "VALUE_CA_IMG" => $ca_img,
+                                "VALUE_CA_MODIFYDATE" => $row["ca_modifydate"],
+                                "VALUE_CA_SERIAL" => $i,
+            ));
+        }
+        if($i==0){
+            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
+        }else{
+            //分頁顯示項目
+            $tpl->newBlock( "PAGE_DATA_SHOW" );
+            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
+                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
+                                "VALUE_PAGES_STR"  => $page["pages_str"],
+                                "VALUE_PAGES_LIMIT"=>$this->op_limit
+            ));
+            if($page["bj_page"]){
+                $tpl->newBlock( "PAGE_BACK_SHOW" );
+                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }
+            if($page["nj_page"]){
+                $tpl->newBlock( "PAGE_NEXT_SHOW" );
+                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }
+        }
+    }    
+    //認證標章表單
+    function products_ca_form($action_mode){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        //欄位名稱
+        $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
+                                  "VALUE_CA_SORT" => 1,
+                                  "NOW_CA_ID"  => 0,
+                                  "VALUE_CA_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_products_ca","ca","","",0),
+                                  "VALUE_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
+                                  "STR_CA_STATUS_CK1" => "checked",
+                                  "STR_CA_STATUS_CK0" => "",
+                                  "VALUE_ACTION_MODE" => $action_mode
+        ));
+        //相關參數
+        if(!empty($_REQUEST['nowp'])){
+            $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
+                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
+                                      "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
+                                      "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
+
+            ));
+        }
+        //如果為修改模式,帶入資料庫資料
+        if($action_mode=="mod" && !empty($_REQUEST["ca_id"])){
+            $sql="select * from ".$cms_cfg['tb_prefix']."_products_ca where ca_id='".$_REQUEST["ca_id"]."'";
+            $selectrs = $db->query($sql);
+            $row = $db->fetch_array($selectrs,1);
+            $rsnum    = $db->numRows($selectrs);
+            if ($rsnum > 0) {
+                $tpl->assignGlobal( array("NOW_CA_ID"  => $row["ca_id"],
+                                          "VALUE_CA_SORT"  => $row["ca_sort"],
+                                          "VALUE_CA_NAME" => $row["ca_name"],
+                                          "VALUE_CA_IMG" => (trim($row["ca_img"])=="")?"":$cms_cfg["file_root"].$row["ca_img"],
+                                          "VALUE_PIC_PREVIEW1" => (trim($row["ca_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["ca_img"],
+                                          "MSG_MODE" => $TPLMSG['MODIFY']
+                ));
+                $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
+            }else{
+                header("location : products.php?func=ca_list");
+            }
+        }
+    }        
+    //認證標章儲存
+    function products_ca_replace(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        switch ($_REQUEST["action_mode"]){
+            case "add":
+                $sql="
+                insert into ".$cms_cfg['tb_prefix']."_products_ca(
+                    ca_sort,
+                    ca_name,
+                    ca_img,
+                    ca_modifydate
+                ) values (
+                    '".$_REQUEST["ca_sort"]."',
+                    '".htmlspecialchars($_REQUEST["ca_name"])."',
+                    '".$main->file_str_replace($_REQUEST["ca_img"])."',
+                    '".date("Y-m-d H:i:s")."'
+                )";
+                $rs = $db->query($sql,true);
+                $db_msg = $db->report();
+                if ( $db_msg == "" ) {
+                    $this->ca_id=$db->get_insert_id();
+                }
+                break;
+            case "mod":
+                $sql="
+                update ".$cms_cfg['tb_prefix']."_products_ca set
+                    ca_sort='".$_REQUEST["ca_sort"]."',
+                    ca_name='".htmlspecialchars($_REQUEST["ca_name"])."',
+                    ca_img='".$main->file_str_replace($_REQUEST["ca_img"])."',
+                    ca_modifydate='".date("Y-m-d H:i:s")."'
+                where ca_id='".$_REQUEST["now_ca_id"]."'";
+                $rs = $db->query($sql,true);
+                $db_msg = $db->report();
+                break;
+        }
+        if ( $db_msg == "" ) {
+            $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+            $goto_url=$cms_cfg["manage_url"]."products.php?func=ca_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            $this->goto_target_page($goto_url);
+        }else{
+            $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+        }
+    }
+    function products_ca_del(){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        if($_REQUEST["ca_id"]){
+            $ca_id=array(0=>$_REQUEST["ca_id"]);
+        }else{
+            $ca_id=$_REQUEST["id"];
+        }
+        if(!empty($ca_id)){
+            $ca_id_str = implode(",",$ca_id);
+            //刪除勾選的產品管理
+            $sql="delete from ".$cms_cfg['tb_prefix']."_products_ca where ca_id in (".$ca_id_str.")";
+            $rs = $db->query($sql);
+            $db_msg = $db->report();
+            if ( $db_msg == "" ) {
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                $goto_url=$cms_cfg["manage_url"]."products.php?func=ca_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $this->goto_target_page($goto_url);
+            }else{
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            }
+        }        
+    }    
+    function ca_checkbox($ca_str){
+        global $db,$tpl,$cms_cfg;
+        $tpl->newBlock("CA_ROW");
+        $ca_arr = explode(',',$ca_str);
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_products_ca order by ca_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql,true);
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("CA_CHECKBOX_LIST");
+            $ca_img = ($row['ca_img'])?$cms_cfg['file_root'].$row['ca_img']:$cms_cfg['default_preview_pic'];
+            $tpl->assign(array(
+                "VALUE_CA_ID"   => $row['ca_id'],
+                "VALUE_CA_NAME" => $row['ca_name'],
+                "VALUE_CA_IMG" => $ca_img,
+                "TAG_CHECKED"    => (in_array($row['ca_id'],$ca_arr))?"checked":"", 
+            ));
+        }
     }
 }
 //ob_end_flush();

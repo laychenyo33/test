@@ -27,7 +27,7 @@
                 <input type="radio" name="p_status" value="1" {STR_P_STATUS_CK1}> 上架
                 <input type="radio" name="p_status" value="0" {STR_P_STATUS_CK0}> 下架
             </td>
-        </tr>
+        </tr>    
         <tr>
         <th>資料權限:</th>
         <td>
@@ -51,6 +51,16 @@
             </td>
         </tr>
         <!-- END BLOCK : PRODUCTS_APPLICATION_ZONE -->
+        <!-- START BLOCK : CA_ROW -->
+        <tr>
+            <th>產品標章</th>
+            <td colspan="3">
+                <!-- START BLOCK : CA_CHECKBOX_LIST -->
+                <input type="checkbox" name="p_ca[]" id="CA_{VALUE_CA_ID}" value="{VALUE_CA_ID}" {TAG_CHECKED}/><label for="CA_{VALUE_CA_ID}"><img src="{VALUE_CA_IMG}" width="25" height="25"/></label>
+                <!-- END BLOCK : CA_CHECKBOX_LIST -->
+            </td>
+        </tr>
+        <!-- END BLOCK : CA_ROW -->            
         <tr>
             <th>自行定義頁面:</th>
             <td colspan="3">

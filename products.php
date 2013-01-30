@@ -662,6 +662,10 @@ class PRODUCTS{
                         ));
                     }
                 }
+                //產品標章
+                if($cms_cfg["ws_module"]["ws_products_ca"]==1){
+                    $this->products_ca($row['p_ca']);
+                }                
                 //相關產品
                 if($cms_cfg["ws_module"]["ws_products_related"]==1){
                     $this->related_products($row["p_related_products"],$row["pc_id"]);
@@ -943,5 +947,20 @@ class PRODUCTS{
         }
         return $link;                  
     }    	
+    //產品標章
+    function products_ca($ca_str){
+        global $db,$tpl,$cms_cfg;
+        if($ca_str){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_products_ca where ca_id in (".$ca_str.") order by ca_sort ".$cms_cfg['sort_pos'];
+            $res = $db->query($sql,true);
+            while($row=$db->fetch_array($res,1)){
+                $tpl->newBlock("CA_LIST");
+                $tpl->assign(array(
+                   "VALUE_CA_NAME"=>$row['ca_name'], 
+                   "VALUE_CA_IMG"=>$row['ca_name']?$cms_cfg['file_root'].$row['ca_img']:$cms_cfg['default_preview_pic'], 
+                ));
+            }
+        }
+    }    
 }
 ?>
