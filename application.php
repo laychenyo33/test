@@ -272,7 +272,7 @@ class APPLICATON{
                 $tpl->newBlock( "LEFT_CATE_LIST" );
                 $tpl->assign( array( "VALUE_CATE_NAME" => $row["pa_name"],
                                      "VALUE_CATE_LINK"  => $pa_link,
-                                     "TAG_CURRENT_CLASS" => $_GET['f']==$row['pa_seo_filename']?"class='current'":"",
+                                     "TAG_CURRENT_CLASS" => (($_GET['f'] && $_GET['f']==$row['pa_seo_filename'])||($_GET['pa_id']==$row['pa_id']))?"class='current'":"",
                 ));
             }
         }
