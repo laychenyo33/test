@@ -1279,5 +1279,16 @@ class MAINFUNC{
             $tpl->newBlock("SEARCH_FIELD_AUTOCOMPLETE");    
         }
     }    
+    //增加左側主選單
+    function new_left_menu(array $menu_items){
+        global $tpl;
+        foreach($menu_items as $itme){
+            $tpl->newBlock( "LEFT_CATE_LIST" );
+            $tpl->assign( array( 
+                "VALUE_CATE_NAME" => $itme['name'],
+                "VALUE_CATE_LINK"  => $itme['link'],
+            ));        
+        }
+    }    
 }
 ?>
