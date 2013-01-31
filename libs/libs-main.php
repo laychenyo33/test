@@ -1290,5 +1290,48 @@ class MAINFUNC{
             ));        
         }
     }    
+    //建立html a標籤
+    function mk_link($text,$link,$extra=null){
+        if(is_array($extra)){
+            $attr_arr = array();
+            $attr_str = '';
+            foreach($extra as $k=>$v){
+               $attr_arr[] = sprintf("%s=\"%s\"",$k,$v); 
+            }
+            $attr_str = implode(' ',$attr_arr);
+        }
+        return "<a href=\"{$link}\" {$attr_str}>{$text}</a>";
+    }
+    //麵包屑的路徑
+    /* 參數數量說明
+     * 數量0:直接指定給樣版變數TAG_LAYER
+     * 數量1:陣列或字串，如是陣列必須包括名稱索引為name及link的項目以建立連結，字串則直接加入項目
+     * 數量2:第1個參數是連結的文字，第二個是是連結的url
+     */
+    function layer_link(){
+        global $tpl,$cms_cfg;
+        static $_layers = array();
+        switch(func_num_args()){
+            case 0: //輸出layer
+                $tpl->assignGlobal("TAG_LAYER",implode($cms_cfg['path_separator'] ,$_layers));
+                break;
+            case 1:
+                $tmp = func_get_arg(0);
+                if(is_array($tmp)){
+                    $_layers[] = $this->mk_link($tmp['name'],$tmp['link']);                        
+                }else{
+                    $_layers[] = $tmp;                        
+                }
+                break;
+            case 2:
+                $txt = func_get_arg(0);
+                $link = func_get_arg(1);
+                $_layers[] = $this->mk_link($txt,$link);
+                break;
+            default:
+                throw new Exception('argument type or argument nums error!');
+        }
+        return $this;
+    }       
 }
 ?>

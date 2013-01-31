@@ -43,6 +43,7 @@ class NEWS{
                 break;
         }
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -65,71 +66,47 @@ class NEWS{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["news"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-news"); //主要顯示區域的css設定
         $main->google_code(); //google analystics code , google sitemap code
+        $ext=($this->ws_seo)?".htm":".php";
+        $main->layer_link("<a href=\"".$cms_cfg["base_root"]."news".$ext."\">".$TPLMSG["NEWS"]."</a>");
     }
-
-//最新消息--列表================================================================
+    
     function news_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $nc_id=0;
-        $ext=($this->ws_seo)?".htm":".php";
-        $news_link="<a href=\"".$cms_cfg["base_root"]."news".$ext."\">".$TPLMSG["NEWS"]."</a>";
-        //最新消息分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql);
-        $i=0;
-        while($row = $db->fetch_array($selectrs,1)){
-            $i++;
-//            if($this->ws_seo==1 ){
-//                if(trim($row["nc_seo_filename"])==""){
-//                    $cate_link=$cms_cfg["base_root"]."news/nlist-".$row["nc_id"].".htm";
-//                }else{
-//                    $cate_link=$cms_cfg["base_root"]."news/".$row["nc_seo_filename"].".htm";
-//                }
-//            }else{
-//                $cate_link=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$row["nc_id"];
-//            }
-            $cate_link = $this->get_link($row);
-            //顯示左方分類
-            $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["nc_subject"],
-                                 "VALUE_CATE_LINK"  => $cate_link,
-            ));
-            if($_REQUEST["nc_id"]==$row["nc_id"] || ($_REQUEST["f"]==$row["nc_seo_filename"])){
-                $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
-                $news_link .= $this->ps."<a href=\"".$cate_link."\">".$row["nc_subject"]."</a>";
-                if($this->ws_seo){
-                    $meta_array=array("meta_title"=>$row["nc_seo_title"],
-                                      "meta_keyword"=>$row["nc_seo_keyword"],
-                                      "meta_description"=>$row["nc_seo_description"],
-                                      "seo_short_desc" => $row["nc_seo_short_desc"],
-                                      "seo_h1"=>(trim($row["nc_seo_h1"])=="")?$row["nc_subject"]:$row["nc_seo_h1"],
-                    );
-                    $main->header_footer($meta_array);
-                }else{
-                    $main->header_footer("news",$TPLMSG["NEWS"]);
-                }
-                $nc_id=$row["nc_id"];
-            }
-        }
+        //左側選單
+        $cate_row = $this->left_cate_list();
         //最新消息首頁適用的 header_footer
         if(!isset($_GET['nc_id']) && !isset($_GET['f']) ){
             $main->header_footer("news",$TPLMSG["NEWS"]);
+        }else{
+            if($this->ws_seo){
+                $meta_array=array(
+                    "meta_title"=>$row["nc_seo_title"],
+                    "meta_keyword"=>$row["nc_seo_keyword"],
+                    "meta_description"=>$row["nc_seo_description"],
+                    "seo_short_desc" => $row["nc_seo_short_desc"],
+                    "seo_h1"=>(trim($row["nc_seo_h1"])=="")?$row["nc_subject"]:$row["nc_seo_h1"],
+                );
+                $main->header_footer($meta_array);
+            }else{
+                $main->header_footer("news",$TPLMSG["NEWS"]);
+            }            
         }        
-        $tpl->assignGlobal("TAG_LAYER",$news_link);
+
         //最新消息列表
-        if($nc_id!=0){
-            $and_str="and nc_id='".$nc_id."'";
+        if($cate_row){
+            $and_str="and nc_id='".$cate_row['nc_id']."'";
+            $main->layer_link($cate_row['nc_subject'],$this->get_link($cate_row));
         }
         $sql="select * from ".$cms_cfg['tb_prefix']."_news where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_sort ".$cms_cfg['sort_pos'].",n_modifydate desc";
         $selectrs = $db->query($sql);
-        $total_records    = $db->numRows($selectrs);
+        $total_records = $db->numRows($selectrs);
         //取得分頁連結
         if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
             //$func_str=$cms_cfg['base_root']."news/".$_REQUEST["f"];
             $func_str=$this->func_str;
             $page=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
         }else{
-            $func_str=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$nc_id;
+            $func_str=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$cate_row['nc_id'];
             $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
         }
         //重新組合包含limit的sql語法
@@ -140,15 +117,6 @@ class NEWS{
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             if($row["n_content_type"]==1) {
-//                if($this->ws_seo==1 ){
-//                    if(trim($row["n_seo_filename"])==""){
-//                        $n_link=$cms_cfg["base_root"]."news/ndetail-".$row["nc_id"]."-".$row["n_id"].".html";
-//                    }else{
-//                        $n_link=$cms_cfg["base_root"]."news/".$row["n_seo_filename"].".html";
-//                    }
-//                }else{
-//                    $n_link="news.php?func=n_show&nc_id=".$row["nc_id"]."&n_id=".$row["n_id"];
-//                }
                 $n_link = $this->get_link($row, true);
             }else{
                 $n_link = $row["n_url"];
@@ -191,35 +159,10 @@ class NEWS{
                 $tpl->gotoBlock("PAGE_DATA_SHOW");
             }
         }
-    }
+    }    
 //最新消息--顯示================================================================
     function news_show(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        //最新消息分類
-        $ext=($this->ws_seo)?".htm":".php";
-        $news_link="<a href=\"".$cms_cfg["base_root"]."news".$ext."\">".$TPLMSG["NEWS"]."</a>";
-        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql);
-        $i=0;
-        while($row = $db->fetch_array($selectrs,1)){
-            $i++;
-//            if($this->ws_seo==1 ){
-//                if(trim($row["nc_seo_filename"])==""){
-//                    $cate_link=$cms_cfg["base_root"]."news/nlist-".$row["nc_id"].".htm";
-//                }else{
-//                    $cate_link=$cms_cfg["base_root"]."news/".$row["nc_seo_filename"].".htm";
-//                }
-//            }else{
-//                $cate_link=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$row["nc_id"];
-//            }
-            $cate_link = $this->get_link($row);
-            $cate_link_array[$row["nc_id"]]=$cate_link;
-            $cate_subject_array[$row["nc_id"]]=$row["nc_subject"];
-            $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["nc_subject"],
-                                 "VALUE_CATE_LINK"  => $cate_link,
-            ));
-        }
         //最新消息內容
         if(!empty($_REQUEST["n_id"])){
             $and_str="n_id='".$_REQUEST["n_id"]."'";
@@ -230,6 +173,9 @@ class NEWS{
         $sql="select * from ".$cms_cfg['tb_prefix']."_news where ".$and_str;
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
+        //左側選單
+        $cate_row = $this->left_cate_list($row['nc_id']);
+        //header footer
         if($this->ws_seo){
             $meta_array=array("meta_title"=>$row["n_seo_title"],
                               "meta_keyword"=>$row["n_seo_keyword"],
@@ -240,7 +186,7 @@ class NEWS{
         }else{
             $main->header_footer("news",$TPLMSG["NEWS"]);
         }
-        $news_link .= $this->ps."<a href=\"".$cate_link_array[$row["nc_id"]]."\">".$cate_subject_array[$row["nc_id"]]."</a>".$this->ps.$row["n_subject"];
+        //顯示內容
         $tpl->newBlock( "NEWS_SHOW" );
         $row["n_content"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["n_content"]);
         $tpl->assign( array("VALUE_N_ID"  => $row["n_id"],
@@ -248,7 +194,8 @@ class NEWS{
                             "VALUE_N_CONTENT" => $row["n_content"],
                             "VALUE_N_MODIFYDATE" => $row["n_modifydate"],
         ));
-        $tpl->assignGlobal("TAG_LAYER",$news_link);
+        //指定TAG_LAYER
+        $main->layer_link($cate_row['nc_subject'],$this->get_link($cate_row))->layer_link($row["n_subject"]);
     }
     
     /*由$row取得該筆記錄的url
@@ -279,5 +226,30 @@ class NEWS{
         }
         return $link;                  
     }      
+    //左側選單
+    function left_cate_list($cur_nc_id=null){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
+        $selectrs = $db->query($sql);
+        $i=0;
+        while($row = $db->fetch_array($selectrs,1)){
+            $i++;
+            $cate_link = $this->get_link($row);
+            //顯示左方分類
+            $tpl->newBlock( "LEFT_CATE_LIST" );
+            if($cur_nc_id == $row["nc_id"] ||  $_REQUEST["nc_id"]==$row["nc_id"] || ($_REQUEST["f"]==$row["nc_seo_filename"])){
+                $currentRow=$row;
+                $current_class = "class='current'";
+            }else{
+                $current_class = "";
+            }
+            $tpl->assign( array( 
+                "VALUE_CATE_NAME"    => $row["nc_subject"],
+                "VALUE_CATE_LINK"    => $cate_link,
+                "TAG_CURRENT_CLASS"  => $current_class, 
+            ));
+        }
+        return $currentRow;
+    }
 }
 ?>
