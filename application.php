@@ -91,7 +91,7 @@ class APPLICATON{
                 }
                 $pa_img=(trim($row["pa_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pa_small_img"];
                 $i++;
-                $tpl->newBlock( $show_style_str_pc );
+                $tpl->newBlock( $show_style_str_pc."_APP" );
                 $tpl->assign( array( "VALUE_PC_NAME"  => $row["pa_name"],
                                      "VALUE_PC_NAME_ALIAS" =>$row["pa_name_alias"],
                                      "VALUE_PC_LINK"  => $pa_link,
