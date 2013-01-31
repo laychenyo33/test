@@ -37,6 +37,11 @@ RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
+#獨立aboutus類別
+#showroom
+#RewriteRule ^showroom.htm$  aboutus.php?au_cate=showroom [L]
+#RewriteRule ^showroom/([^/]+).html$  aboutus.php?au_cate=showroom&f=$1 [L]
+
 RewriteRule ^new-products.html$  products.php?func=p_new [L]
 RewriteRule ^application-(\d+).htm$  application.php?pa_id=$1 [L]
 #主功能頁
