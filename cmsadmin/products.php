@@ -2377,23 +2377,6 @@ class PRODUCTS{
             return $db->report();
         }        
     }
-    //產品表單裡的應用領域checkbox
-    function application_checkbox($p_id){
-        global $db,$tpl,$cms_cfg;
-        $sql = "select app.*,map.ap_id as checked from ".$cms_cfg['tb_prefix']."_products_app as app left join (select * from ".$cms_cfg['tb_prefix']."_products_app_map where p_id='".$p_id."') as map on app.ap_id=map.ap_id ";
-        $res = $db->query($sql,true);
-        $i=1;
-        while($row = $db->fetch_array($res,1)){
-            $tpl->newBlock("APP_MAP_CHECKBOX");
-            $tpl->assign(array(
-                "VALUE_APP_ID"   => $row['ap_id'],
-                "VALUE_APP_NAME" => $row['ap_name'],
-                "TAG_CHECKED"    => $row['checked']?"checked":"", 
-                "SERIAL"         => $i
-            ));
-            $i++;
-        }
-    }
     //產品認證標章列表
     function products_ca_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
