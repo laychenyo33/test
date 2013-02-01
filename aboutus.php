@@ -7,8 +7,9 @@ class ABOUTUS{
         global $db,$cms_cfg,$tpl,$main;
         //show page
         $this->ws_tpl_file = "templates/ws-aboutus-tpl.html";
-        $this->ws_load_tp($this->ws_tpl_file);
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->au_cate = $_REQUEST['au_cate']?$_REQUEST['au_cate']:'aboutus';        
+        $this->ws_load_tp($this->ws_tpl_file);
         $this->aboutus_list();
         //page view record --ph_type,ph_type_id,m_id
         $main->pageview_history("au",$_REQUEST["au_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
@@ -26,7 +27,7 @@ class ABOUTUS{
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["ABOUT_US"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["ABOUT_US"]);
-        $tpl->assignGlobal( "TAG_ABOUTUS_CURRENT" , "class='current'"); //上方menu current
+        $tpl->assignGlobal( "TAG_".  strtoupper($this->au_cate)."_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["aboutus"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-aboutus"); //主要顯示區域的css設定
         //$main->header_footer("aboutus");
@@ -37,16 +38,15 @@ class ABOUTUS{
             $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
             $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["products"]);//左方menu title
         }else{
-            $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["aboutus"]);//左方menu title
-            $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["aboutus"]);//左方menu title
+            $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"][$this->au_cate]);//左方menu title
+            $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"][$this->au_cate]);//左方menu title
         }
     }
     //前台關於我們--列表================================================================
     function aboutus_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //前台關於我們列表
-        $au_cate = $_REQUEST['au_cate']?$_REQUEST['au_cate']:'aboutus';
-        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' and au_cate = '".$au_cate."' order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' and au_cate = '".$this->au_cate."' order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if(empty($_REQUEST["au_id"]) && empty($_REQUEST["f"])){
@@ -56,7 +56,7 @@ class ABOUTUS{
             $i++;
             if($cms_cfg["ws_module"]["ws_left_main_au"]==1){
                 if($this->ws_seo==1 ){
-                    $cate_link=$cms_cfg["base_root"].$au_cate."/".$row["au_seo_filename"].".html";
+                    $cate_link=$cms_cfg["base_root"].$this->au_cate."/".$row["au_seo_filename"].".html";
                     $ext="htm";
                 }else{
                     $cate_link=$cms_cfg["base_root"]."aboutus.php?au_id=".$row["au_id"];
@@ -64,7 +64,7 @@ class ABOUTUS{
                 }
                 $tpl->newBlock( "LEFT_CATE_LIST" );
                 $tpl->assign( array( "VALUE_CATE_NAME" => $row["au_subject"],
-                                     "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"].$au_cate.".".$ext:$cate_link,
+                                     "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"].$this->au_cate.".".$ext:$cate_link,
                 ));
             }
             if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
