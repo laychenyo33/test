@@ -1144,20 +1144,88 @@ class MAINFUNC{
         return  preg_replace("#^".preg_quote($cms_cfg['base_root'],"/")."#","",preg_replace("/\.php$/","", $_SERVER['SCRIPT_NAME']));
     }
     function dropdown_menu(){
-        global $cms_cfg,$tpl,$db;
+        global $cms_cfg,$tpl,$db,$TPLMSG;
         $tpl->newBlock("DROPDOWN_MENU");//載入下拉式功能的JS
         //撈取下拉式功能表項目
-        /////產品介紹 的下拉式選單
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent = '0' order by pc_sort ".$cms_cfg['sort_pos']." ";
+        ////關於我們 & SHOWROOM
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_aboutus where au_cate='aboutus' order by au_cate,au_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        $had_au_cate = array();
+        while($row=$db->fetch_array($res,1)){
+            if(!in_array($row['au_cate'],$had_au_cate)){
+                $tpl->newBlock("DROPDOWN_".strtoupper($row['au_cate']));
+                array_push($had_au_cate, $row['au_cate']);
+            }
+            $tpl->newBlock("DROPDOWN_".strtoupper($row['au_cate'])."_LIST");
+            $tpl->assign(array(
+                "LIST_LINK" => $cms_cfg['base_root'].$row['au_cate'].'/'.$row['au_seo_filename'].".html",
+                "LIST_NAME" => $row['au_subject']
+            ));
+        }
+        ////產品
+        /////主分類
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1' order by pc_sort ".$cms_cfg['sort_pos'];
         $res = $db->query($sql);
         if($db->numRows($res)){
-            while($row = $db->fetch_array($res,true)){
-                $tpl->newBlock("DROPDOWN_MENU_PRODUCT");
-                $tpl->assign("MENU_ITEM_NAME",$row['pc_name']);
-                $tpl->assign("MENU_ITEM_LINK","products.php?func=p_list&pc_parent=".$row['pc_id']);
+            $tpl->newBlock("DROPDOWN_PRODUCTS");
+            while($row=$db->fetch_array($res,1)){
+                $tpl->newBlock("DROPDOWN_PRODUCTS_LIST");
+                //次分類
+                $sql = "select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='".$row['pc_id']."' and pc_status='1' order by pc_sort ".$cms_cfg['sort_pos'];
+                $sub_res = $db->query($sql);
+                $submenu="<ul>";
+                while($row2=$db->fetch_array($sub_res,1)){
+                    //產品
+                    $sql = "select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$row2['pc_id']."' and p_status='1' order by p_sort ".$cms_cfg['sort_pos'];
+                    $p_res = $db->query($sql);
+                    $p_n = $db->numRows($p_res);
+                    $submenu.="<li><span>".$row2['pc_name']."</span>\n ";
+                    if($p_n){
+                        $submenu.="<ul>\n";
+                        while($row3=$db->fetch_array($p_res,1)){
+                            $p_link=$cms_cfg['base_root'].$row2['pc_seo_filename']."/".$row3['p_seo_filename'].".html";
+                            $p_name=$row3['p_name'];
+                            $submenu.="<li><span rel='".$p_link."'>".$p_name."</span></li>\n";
+                        }
+                        $submenu.="<div class=\"dd_background\"></div></ul>\n";
+                    }
+                    $submenu.="</li>\n";
+                }
+                $submenu.="<div class=\"dd_background\"></div></ul>\n";
+                $tpl->assign(array(
+                    "LIST_LINK"     => "#",
+                    "LIST_NAME"     => $row['pc_name'],
+                    "SUB_MENU_LIST" => $submenu
+                ));
             }
-        }        
-    }        
+        }
+        ////最新消息
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_news_cate order by nc_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        if($db->numRows($res)){
+            $tpl->newBlock("DROPDOWN_NEWS");
+            while($row=$db->fetch_array($res,1)){
+                $tpl->newBlock("DROPDOWN_NEWS_LIST");
+                $tpl->assign(array(
+                   "LIST_LINK"=>$cms_cfg['base_root']."news/".$row['nc_seo_filename'].".htm", 
+                   "LIST_NAME"=>$row['nc_subject'], 
+                ));
+            }
+        }  
+        //service
+        $tpl->newBlock("DROPDOWN_SERVICE");
+        $tpl->newBlock("DROPDOWN_SERVICE_LIST");
+        $tpl->assign(array(
+           "LIST_LINK"=>$cms_cfg['base_root']."member.php?func=m_add", 
+           "LIST_NAME"=>$TPLMSG['CUSTOMER_APPLICATION'], 
+        ));  
+        $tpl->newBlock("DROPDOWN_SERVICE_LIST");
+        $tpl->assign(array(
+           "LIST_LINK"=>$cms_cfg['base_root']."download.htm", 
+           "LIST_NAME"=>$TPLMSG['DOWNLOAD'], 
+        ));
+        
+    }             
     /*相關網站
     **將 tempaltes/ws-fn-goodlink-select-tpl 引入為區塊
     */

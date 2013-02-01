@@ -13,7 +13,7 @@
                 var obj_height = $(this).height();
                 var parent = this;
                 //設定起始位置
-                $("#"+menuid).css({ 'top':(offset.top+obj_height)+'px','left':offset.left+'px' });
+                $("#"+menuid).css({ 'top':(offset.top+obj_height)+'px','left':(offset.left-12)+'px' });
                 //設定handler
                 $("#"+menuid).mouseleave(function(e){
                     if(e.relatedTarget !== parent){
@@ -25,7 +25,30 @@
                 });
                 $("#"+menuid).bind('open',function(){
                     $(this).slideDown(); 
-                });                   
+                });
+                $("#"+menuid).find('a').each(function(){
+                   if(/#/.test(this.href)){
+                       $(this).bind('click',function(e){
+                          e.preventDefault(); 
+                       });
+                   } 
+                });
+                $("#"+menuid).find('a').mouseenter(function(){
+                    $(this).children('ul').slideDown();
+                });
+                $("#"+menuid).find('a').mouseleave(function(){
+                    $(this).find('ul').hide();
+                });            
+                $("#"+menuid).find('li').mouseenter(function(){
+                    $(this).children('ul').slideDown();
+                });
+                $("#"+menuid).find('li').mouseleave(function(){
+                    $(this).children('ul').hide();
+                });
+                $("#"+menuid).find('span[rel]').click(function(){
+                    var url = $(this).attr('rel');
+                    location.href=url;
+                });
                 $(this).mouseenter(function(){
                     $("#"+menuid).trigger('open');
                 });
