@@ -110,6 +110,16 @@ $cms_cfg['path_separator'] = " > ";    //麵包屑(網站路徑的分隔符號)
 //custom index banner numbers
 $cms_cfg['index_banner_nums'] = 4;
 $cms_cfg['contactus_upfiles_nums'] = 3;
+//自訂下拉式選單項目
+//====範例====
+//$cms_cfg['extra_dd_menu'] = array(
+//    //台灣麻糬主題館         
+//    'pavilion' => array(
+//        array('name'=>"台灣麻糬主題館官網","link"=>"http://www.taiwanmochi.com.tw/"),
+//        array('name'=>"台灣麻糬主題館購物中心","link"=>"http://www.taiwanmochi.com.tw/shopping/"),
+//    ),
+//);
+$cms_cfg['extra_dd_menu'] = array();
 
 include_once("config.auth.php");
 
