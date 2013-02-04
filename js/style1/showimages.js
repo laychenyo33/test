@@ -92,7 +92,8 @@
                 for(var i=0;i<_settings.img_limit;i++){
                     if(listLength>=(i+1)) {
                          iFocusBtns[i].index = i;
-                         $(iFocusBtns[i]).bind(_settings.on, function() {
+                         $(iFocusBtns[i]).bind(_settings.on, function(e) {
+                             if($(this).is('a'))e.preventDefault();
                              var index = this.index;
                              moveElement(_settings.piclist_id,0,-_settings.img_height*index,5,caller);
                              classNormal(_settings.btn_id,_settings.txt_id,caller);
