@@ -578,12 +578,18 @@ class PRODUCTS{
                 }
                 //影片
                 if($cms_cfg['ws_module']['ws_products_mv'] && $row["p_mv"]){
-                    $mvId = $main->get_mv_code($row["p_mv"]);
-                    if($mvId){
-                        $tpl->newBlock("JQUERY_UI_SCRIPT");
-                        $tpl->newBlock("EMBED_MV_SCRIPT");
-                        $tpl->newBlock("BTN_MV_SHOW");
-                        $tpl->assignGlobal("VALUE_MV_ID",$mvId);
+                    if($cms_cfg['ws_module']['ws_products_mv_youtube']){
+                        $mvId = $main->get_mv_code($row["p_mv"]);
+                        if($mvId){
+                            $tpl->newBlock("JQUERY_UI_SCRIPT");
+                            $tpl->newBlock("EMBED_MV_SCRIPT");
+                            $tpl->newBlock("MV_CONTAINER");
+                            $tpl->newBlock("BTN_YOUTUBE_MV_SHOW");
+                            $tpl->assignGlobal("VALUE_MV_ID",$mvId);
+                        }
+                    }elseif($cms_cfg['ws_module']['ws_products_link']){
+                        $tpl->newBlock("BTN_LINK_MV_SHOW");
+                        $tpl->assign("VALUE_P_MV_URL",$row["p_mv"]);
                     }
                 }         
                 //附件檔案區域

@@ -59,27 +59,33 @@
                 <img src="{VALUE_CA_IMG}" title="{VALUE_CA_NAME}" alt="{VALUE_CA_NAME}" width="26" height="26"/>
                 <!-- END BLOCK : CA_LIST -->
             </div>  
-          <!-- START BLOCK : CART_TYPE_SHOPPING -->
-          <div>{MSG_PRODUCT_LIST_PRICE}:<s>{VALUE_P_LIST_PRICE}</s></div>
-          <div>{MSG_PRODUCT_SPECIAL_PRICE}:<span class="red">{VALUE_P_SPECIAL_PRICE}</span></div>
-          <!-- END BLOCK : CART_TYPE_SHOPPING -->
-          
-          <!-- START BLOCK : SHOW_DISCOUNT -->
-          <div>{MSG_PRODUCT_DISCOUNT_PRICE}:<span class="red">{VALUE_P_DISCOUNT_PRICE}</span></div>
-          <!-- END BLOCK : SHOW_DISCOUNT -->
+            <!-- START BLOCK : BTN_YOUTUBE_MV_SHOW -->
+            <div class="icon01 video"><a href="#">VIDEO</a></div>       
+            <!-- END BLOCK : BTN_YOUTUBE_MV_SHOW -->            
+            <!-- START BLOCK : BTN_LINK_MV_SHOW -->
+            <div class="icon01 video"><a href="{VALUE_P_MV_URL}" target="_blank">VIDEO</a></div>       
+            <!-- END BLOCK : BTN_LINK_MV_SHOW -->            
+            <!-- START BLOCK : CART_TYPE_SHOPPING -->
+            <div>{MSG_PRODUCT_LIST_PRICE}:<s>{VALUE_P_LIST_PRICE}</s></div>
+            <div>{MSG_PRODUCT_SPECIAL_PRICE}:<span class="red">{VALUE_P_SPECIAL_PRICE}</span></div>
+            <!-- END BLOCK : CART_TYPE_SHOPPING -->
 
-          <input type="image" src="{TAG_THEME_PATH}{TAG_LANG}_inquire.jpg" border="0" />&nbsp;<a href="#" onClick="javascript:addBookmarkForBrowser(document.title,document.URL);"><img src="{TAG_THEME_PATH}{TAG_LANG}_favorite.jpg"  border="0" /></a>
-          <!-- START BLOCK : ATTACH_FILE1 -->
-            <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
-          <!-- END BLOCK : ATTACH_FILE1 -->
-          
-          <!-- START BLOCK : ATTACH_FILE2 -->
-            <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
-          <!-- END BLOCK : ATTACH_FILE2 -->
+            <!-- START BLOCK : SHOW_DISCOUNT -->
+            <div>{MSG_PRODUCT_DISCOUNT_PRICE}:<span class="red">{VALUE_P_DISCOUNT_PRICE}</span></div>
+            <!-- END BLOCK : SHOW_DISCOUNT -->
 
-          <!-- START BLOCK : SINGLE_INQUIRY -->
-          <div><a href="#" onClick="javascript:popinquiry({VALUE_P_ID})"><img src="{TAG_THEME_PATH}ws-product-inquire.jpg" border="0" /></a></div>
-          <!-- END BLOCK : SINGLE_INQUIRY -->
+            <input type="image" src="{TAG_THEME_PATH}{TAG_LANG}_inquire.jpg" border="0" />&nbsp;<a href="#" onClick="javascript:addBookmarkForBrowser(document.title,document.URL);"><img src="{TAG_THEME_PATH}{TAG_LANG}_favorite.jpg"  border="0" /></a>
+            <!-- START BLOCK : ATTACH_FILE1 -->
+            <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
+            <!-- END BLOCK : ATTACH_FILE1 -->
+
+            <!-- START BLOCK : ATTACH_FILE2 -->
+            <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
+            <!-- END BLOCK : ATTACH_FILE2 -->
+
+            <!-- START BLOCK : SINGLE_INQUIRY -->
+            <div><a href="#" onClick="javascript:popinquiry({VALUE_P_ID})"><img src="{TAG_THEME_PATH}ws-product-inquire.jpg" border="0" /></a></div>
+            <!-- END BLOCK : SINGLE_INQUIRY -->
           
         </div>    
 
@@ -131,3 +137,8 @@
     <!-- END BLOCK : RELATED_PRODUCTS_ZONE -->
     <div id="back"><a href="javascript:void(0);history.back();"><img src="{TAG_THEME_PATH}{TAG_LANG}_back.jpg" border="0"></a></div>
 </form>
+<!-- START BLOCK : MV_CONTAINER -->
+<div id="movie" title="Video of Products" style="display:none">
+       <div id="ytplayer"></div>
+</div>
+<!-- END BLOCK : MV_CONTAINER -->

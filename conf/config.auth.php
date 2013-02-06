@@ -31,7 +31,9 @@ $cms_cfg["ws_module"]=array(
         "ws_application_cates"    =>1, //產品應用領域用在分類
         "ws_application_products" =>0, //產品應用領域用在產品    
         "ws_products_desc_style"  =>0, //前台產品敘述的格式，0是預設樣式，1是domtab,
-        "ws_products_mv"          =>0, //產品影片，只適用youtube影片,
+        "ws_products_mv"          =>0, //產品影片,
+        "ws_products_mv_youtube"  =>0, //產品影片，只適用youtube影片,
+        "ws_products_mv_link"     =>0, //產品影片，連到影片網站觀看,
         "ws_products_upfiles"     =>1, //產品附檔,
         "ws_products_ca"=>0,           //產品認證標章管理
 
