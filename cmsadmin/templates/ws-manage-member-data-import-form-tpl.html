@@ -3,6 +3,7 @@
 <h1>{IMPORT_ACTION}</h1>
 <!-- START BLOCK : PREVIEW_LIST -->
 <form name="myform" id="myform" action="member.php?func=m_import&act=save" method="post">
+    <input type="hidden" name="mc_id" value="{VALUE_MC_ID}"/>
     <!-- START BLOCK : MAP_TO_LIST -->
     <input type="hidden" name="mapto[{VALUE_COL_INDEX}]" value="{VALUE_MAPTO_CNAME}"/>
     <!-- END BLOCK : MAP_TO_LIST -->
@@ -11,7 +12,7 @@
         <tr>
             <th><a href="javascript:click_all(myform);"><img src="images/ico-markers.gif" width="12" height="12" border="0" /></a></th>
             <!-- START BLOCK : SELECTED_COLUMN -->
-            <th><input type="checkbox" name="mapto[{VALUE_COL_INDEX}]" value="{VALUE_MAPTO_CNAME}" checked/>{VALUE_COL_DATA}</th>
+            <th><input type="checkbox" name="mapto[{VALUE_COL_INDEX}]" value="{VALUE_MAPTO_CNAME}" checked/>{VALUE_COL_DATA}({ORIGIN_COLUMN_NAME})</th>
             <!-- END BLOCK : SELECTED_COLUMN -->
         </tr>
         <!-- END BLOCK : TITLE_ROW -->
@@ -40,6 +41,7 @@
 <!-- END BLOCK : PREVIEW_LIST -->
 <!-- START BLOCK : SELECT_IMPORT_COLUMN -->
 <form name="myform" id="myform" action="member.php?func=m_import&act=map" method="post"> 
+    <input type="hidden" name="mc_id" value="{VALUE_MC_ID}"/>
     <table class="formtable">
         <tr>
             <th width="150">資料庫欄位
@@ -60,6 +62,9 @@
                 <label for="csvcol_{VALUE_COL_INDEX}" style="word-break:  keep-all;display:inline-block"><input type="checkbox" name="csvcol[]" id="csvcol_{VALUE_COL_INDEX}" value="{VALUE_COL_INDEX}"/>
                 {VALUE_COL_NAME}</label>
                 <!-- END BLOCK : CSV_COLUMNS -->
+                <!-- START BLOCK : SELECT_ALL_BUTTON -->
+                <div style="marign:0 5px;"><a href="javascript:click_all(myform);"><img src="images/ico-markers.gif" width="12" height="12" border="0" />全選</a></div>
+                <!-- END BLOCK : SELECT_ALL_BUTTON -->
                 <!-- START BLOCK : NO_DATA_TO_IMPORT -->
                 沒有資料可以匯入
                 <!-- END BLOCK : NO_DATA_TO_IMPORT -->
@@ -111,6 +116,16 @@
     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
         <tr>
             <td>
+                匯入類別：<select name="mc_id">
+                            <!-- START BLOCK : SELECT_OPTION_MEMBER_CATE -->
+                            <option value="{OPTION_MEMBER_CATE_VALUE}">{OPTION_MEMBER_CATE_NAME}</option>
+                            <!-- END BLOCK : SELECT_OPTION_MEMBER_CATE -->
+                         </select>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <input type="file" name="csvfile"/><input type="submit" value="載入"/><br/>
                 csv編碼：<select id="charset_of_file" name="charset_of_file" size="1">
                     <option value="iso-8859-1">iso-8859-1</option>
@@ -158,6 +173,7 @@
 
 <!-- START BLOCK : COLUMN_MAP -->
 <form name="myform" method="post" action="member.php?func=m_import&act=preview"  class="formular" id="formID">
+    <input type="hidden" name="mc_id" value="{VALUE_MC_ID}"/>
     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
         <tr>
             <th>csv欄位</th>

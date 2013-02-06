@@ -512,17 +512,7 @@ class MEMBER{
         if($cms_cfg["ws_module"]["ws_member_country"]==1) {
             $main->country_select($row["m_country"]);
         }        
-        //會員分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
-        $selectrs = $db->query($sql);
-        $rsnum    = $db->numRows($selectrs);
-        while($row1 = $db->fetch_array($selectrs,1)){
-            $tpl->newBlock( "SELECT_OPTION_MEMBER_CATE" );
-            $tpl->assign( array( "OPTION_MEMBER_CATE_NAME"  => $row1["mc_subject"],
-                                 "OPTION_MEMBER_CATE_VALUE" => $row1["mc_id"],
-                                 "STR_MC_SEL"       => ($row1["mc_id"]==$row["mc_id"])?"selected":""
-            ));
-        }
+        $this->member_cate_select($row['mc_id']);
     }
 //會員--資料更新================================================================
     function member_replace(){
@@ -837,8 +827,9 @@ class MEMBER{
     }
     //會員資料匯入
     function member_data_import($act){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $target_csv = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root']."upload_files/wait_to_map.csv";
+        $tpl->assignGlobal("VALUE_MC_ID",$_POST['mc_id']);
         switch($act){
             case "preview":
                 $tpl->assignGlobal("IMPORT_ACTION","選擇匯入筆數");                
@@ -867,6 +858,7 @@ class MEMBER{
                                 $tpl->assign(array(
                                    "VALUE_MAPTO_CNAME" => $_POST['mapto'][$k],
                                    "VALUE_COL_INDEX" => $k,
+                                   "ORIGIN_COLUMN_NAME" => $this->columns[$_POST['mapto'][$k]]['name'],
                                 ));
                             }
                         }
@@ -901,6 +893,7 @@ class MEMBER{
                             $tpl->newBlock("DATA_COLUMN");
                             $tpl->assign("VALUE_DATA_COLUMN",implode(",",$dbcol));
                         }
+                        $tpl->newBlock("SELECT_ALL_BUTTON");
                         fclose($res);                        
                         $tpl->newBlock("SEND_TO_MAP");
                     }else{
@@ -920,12 +913,13 @@ class MEMBER{
                     $i=0;
                     $wNums = 0; //寫入筆數
                     $cNums = 0; //衝突筆數
+                    $sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member","m");
                     while($tmp = fgets($res, 2000)){
                         //$enc_type = mb_detect_encoding($tmp)?mb_detect_encoding($tmp):"big-5";
                         if($i>0 && in_array($i,$_POST['row_id'])){
                             $csv = explode(',',$tmp);
-                            $columns = array('mc_id','m_status');
-                            $values = array('1','0');
+                            $columns = array('mc_id','m_status','m_sort');
+                            $values = array($_POST['mc_id'],'1',$sort++);
                             $conflic = false;
                             foreach($_POST['mapto'] as $idx => $col){
                                 if($col=="m_email" && $csv[$idx]!=''){
@@ -996,6 +990,7 @@ class MEMBER{
             default:
                 $tpl->assignGlobal("IMPORT_ACTION","上傳csv");
                 $tpl->newBlock("SELECT_CSV_FILE");
+                $this->member_cate_select();
         }
     }
     //會員資料匯出
@@ -1070,7 +1065,20 @@ class MEMBER{
             return $new_file_name;
         }
     }
-    
+    //會員分類
+    function member_cate_select($mcid=null){
+        global $db,$cms_cfg,$tpl;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        while($row1 = $db->fetch_array($selectrs,1)){
+            $tpl->newBlock( "SELECT_OPTION_MEMBER_CATE" );
+            $tpl->assign( array( "OPTION_MEMBER_CATE_NAME"  => $row1["mc_subject"],
+                                 "OPTION_MEMBER_CATE_VALUE" => $row1["mc_id"],
+                                 "STR_MC_SEL"       => ($row1["mc_id"]==$mcid)?"selected":""
+            ));
+        }        
+    }
 }
 //ob_end_flush();
 ?>
