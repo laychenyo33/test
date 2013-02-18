@@ -22,4 +22,8 @@ $main = new MAINFUNC;
 include_once("TP/class.TemplatePower.inc.php");
 include_once("lang/".$cms_cfg['language']."-utf8.php");
 include_once("conf/default-items.php");
+//autoload class
+require "class/autoloader.php";
+$autoloader = new autoloader();
+spl_autoload_register(array($autoloader,"load"));
 ?>

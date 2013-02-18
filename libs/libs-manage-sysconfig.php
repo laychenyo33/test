@@ -18,4 +18,8 @@ if($rsnum >0 ){
 		$_SESSION[$cms_cfg['sess_cookie_name']][$key]=$value;
 	}
 }
+//autoload class
+require "../class/autoloader.php";
+$autoloader = new autoloader();
+spl_autoload_register(array($autoloader,"load"));
 ?>
