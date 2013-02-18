@@ -272,6 +272,7 @@ class MEMBER{
                 header("location : member.php?func=mc_list");
             }
         }
+        $this->download_of_cate($row['mc_id']);
     }
     //會員分類--資料更新
     function member_cate_replace(){
@@ -303,7 +304,29 @@ class MEMBER{
         }
         if(!empty($sql)){
             $rs = $db->query($sql);
+            $mc_id = $_REQUEST['mc_id']?$_REQUEST['mc_id']:$db->get_insert_id();
             $db_msg = $db->report();
+            //有會員download
+            if($cms_cfg['ws_module']['ws_member_download']){
+                $db->query("start transaction");
+                $db->query("delete from ".$cms_cfg['tb_prefix']."_member_download_map where mc_id='".$mc_id."'");
+                if(is_array($_POST['d_files'])){
+                    $sql = "insert into ".$cms_cfg['tb_prefix']."_member_download_map values";
+                    foreach($_POST['d_files'] as $d_id){
+                        $values[] = "('".$mc_id."','".$d_id."')";
+                    }
+                    $sql.=implode(',',$values);
+                    $db->query($sql,true);
+                    if($err=$db->report()){
+                        $db_msg.=$err;
+                        $db->query("rollback");
+                    }else{
+                        $db->query("commit");
+                    }
+                }else{
+                    $db->query("commit");
+                }
+            }
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 $goto_url=$cms_cfg["manage_url"]."member.php?func=mc_list&mc_id=".$_REQUEST["mc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
@@ -1079,6 +1102,39 @@ class MEMBER{
             ));
         }        
     }
+    //下載檔案列表，並判斷是否為類別可下載的檔案
+    function download_of_cate($mc_id){
+        global $db,$cms_cfg,$tpl;
+        if($cms_cfg['ws_module']['ws_member_download']){
+            $tpl->newBlock("MEMBER_DOWNLOAD");
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
+            $res_dc = $db->query($sql,true);
+            while($dc_row = $db->fetch_array($res_dc,1)){
+                $tpl->newBlock("DOWNLOAD_CATE_LIST");
+                $tpl->assign("VALUE_DC_SUBJECT",$dc_row['dc_subject']);
+                $tpl->assign("TAG_FILE_DS","none");
+                //下載分類下的檔案
+                $sql = "select d.*,mc_id as `checked` from ".$cms_cfg['tb_prefix']."_download as d left join (select * from ".$cms_cfg['tb_prefix']."_member_download_map where mc_id='".$mc_id."') as mdm on d.d_id=mdm.d_id where d_public='0' and dc_id='".$dc_row['dc_id']."' order by d_sort ".$cms_cfg['sort_pos'];
+                $d_res = $db->query($sql,true);
+                $i=1;
+                $chk=0;
+                while($row = $db->fetch_array($d_res,1)){
+                    $chk += $row['checked']?1:0;
+                    $tpl->newBlock("DOWNLOAD_FILE_LIST");
+                    $tpl->assign(array(
+                        "SERIAL"          => $i,
+                        "VALUE_D_ID"      => $row['d_id'],
+                        "TAG_DOWN_CHK"    => $row['checked']?"checked":"",
+                        "VALUE_D_SUBJECT" => $row['d_subject']
+                    ));
+                    $i++;
+                }
+                if($chk){
+                    $tpl->assign("DOWNLOAD_CATE_LIST.TAG_FILE_DS","block");
+                }
+            }
+        }
+    }    
 }
 //ob_end_flush();
 ?>

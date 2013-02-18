@@ -7,6 +7,12 @@ class MEMBER{
         global $db,$cms_cfg,$tpl;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         switch($_REQUEST["func"]){
+            case "m_download":
+                $this->ws_tpl_file = "templates/ws-download-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->member_download();
+                $this->ws_tpl_type=1;
+                break;
             case "m_zone"://會員專區
                 if(empty($this->m_id)){
                     header("Location: member.php?func=m_add");
@@ -780,6 +786,32 @@ class MEMBER{
         global $tpl;
         if(!empty($url)){
             $tpl->assignGlobal( "TAG_META_REFRESH" , "<meta http-equiv=\"refresh\" content=\"$sec;URL=$url\">");
+        }
+    }
+    //會員的檔案下載
+    function member_download(){
+        global $tpl,$TPLMSG,$cms_cfg,$db,$main;
+        $tpl->assignGlobal( array("MSG_SUBJECT"  => $TPLMSG['SUBJECT'],
+                                  "MSG_CATE" => $TPLMSG['CATE'],
+                                  "MSG_DATE" => $TPLMSG['DATE'],
+                                  "MSG_CONTENT" => $TPLMSG['CONTENT']
+        ));   
+        $mc_id = $_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_CATE_ID'];
+        $sql = "select d.*,dc.* from ".$cms_cfg['tb_prefix']."_download as d inner join ".$cms_cfg['tb_prefix']."_member_download_map as mdm inner join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.d_id=mdm.d_id and d.dc_id=dc.dc_id where d.d_public='0' and mdm.mc_id='".$mc_id."'";
+        $res = $db->query($sql,true);
+        $i=1;
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock('DOWNLOAD_LIST');
+            $tpl->assign(array(
+                "TAG_TR_CLASS"       =>($i%2==0)?"class='odd'":'',
+                "VALUE_D_SERIAL"     =>$i,
+                "VALUE_DC_LINK"      =>"#",
+                "VALUE_DC_SUBJECT"   =>$row['dc_subject'],
+                "VALUE_D_SUBJECT"    =>$row['d_subject'],
+                "VALUE_D_MODIFYDATE" =>$row['d_modifydate'],
+                "VALUE_D_FILEPATH"   =>$cms_cfg['file_root'].$row['d_filepath'],
+            ));
+            $i++;
         }
     }
 }

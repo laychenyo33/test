@@ -184,6 +184,10 @@ class MAINFUNC{
             $tpl->assign("TAG_LOGIN_MEMBER_ORDER",$TPLMSG['MEMBER_ZONE_ORDER']);
             $tpl->assign("TAG_LOGIN_MEMBER_INQUIRY",$TPLMSG['MEMBER_ZONE_INQUIRY']);
             $tpl->assign("TAG_LOGIN_MEMBER_CONTACTUS",$TPLMSG['MEMBER_ZONE_CONTACTUS']);
+            if($cms_cfg['ws_module']['ws_member_download']){
+                $tpl->newBlock("MEMBER_DOWNLOAD");
+                $tpl->assign("TAG_LOGIN_MEMBER_DOWNLOAD",$TPLMSG['DOWNLOAD']);
+            }
         }
     }
     function security_zone($si_w="90", $si_h="25"){

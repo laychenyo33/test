@@ -104,7 +104,7 @@ class DOWNLOAD{
             $and_str="and d.dc_id='".$dc_id."'";
         }
         $sql="select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id
-                  where  d.d_status='1' ".$and_str." order by d.d_sort ".$cms_cfg['sort_pos']." ";
+                  where  d.d_status='1' and d.d_public='1' ".$and_str." order by d.d_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);

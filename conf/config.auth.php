@@ -51,6 +51,7 @@ $cms_cfg["ws_module"]=array(
         "ws_member"=>1,             //會員管理
         "ws_member_manipulate"=>0,  //會員資料匯出匯入
         "ws_member_country"   =>1,  //會員表單顯示國家下拉式選單
+        "ws_member_download"  =>0,  //會員下載
         "ws_cart_login"=>0,         //購物車或詢價車是否需要會員登入
         "ws_delivery_timesec"=>0,   //購物車或詢價車是否顯示配送欄位
         "ws_download_login"=>0,     //檔案下載是否需要會員登入

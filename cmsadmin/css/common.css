@@ -611,6 +611,22 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
 .related_table  tr.altrow {
 	background-color: #EAEAEA;
 }
+.member_dl_cate{
+    border-bottom:1px dotted greenyellow;
+    border-top:1px dotted greenyellow;
+    padding:3px 0 0 0;
+    margin-bottom:3px;
+    background-color:#bae2ef;
+    color:#555;
+}
+.member_dl_cate span{cursor: pointer;display:inline-block;margin-bottom:3px;}
+.member_dl_wrapper{border-top:1px dotted greenyellow;background-color:#F1F8FA;padding:3px}
+.member_dl_file{
+    display:inline-block;    
+}
+.member_dl_note{
+    color:#0075C4;
+}
 .attach_product{
     float:left;
     width:50px;
