@@ -1428,5 +1428,40 @@ class MAINFUNC{
         }
         return $this;
     }       
+    //multiple checkbox
+    /*參數說明
+     * $blockname，樣版區塊名稱
+     * $datas，所有內容的集合陣列
+     * $values，指定內容的陣列，值是$datas的索引值
+     */
+    function multiple_checkbox($blockname,$datas,$values){
+        global $tpl;
+        if(is_string($values)){
+            $values = explode(',',$values);
+        }
+        foreach($datas as $k => $v){
+            $tpl->newBlock(strtoupper($blockname)."_CHECKBOX");
+            $tpl->assign(array(
+                "VALUE_".$blockname."_KEY"  => $k, 
+                "VALUE_".$blockname."_NAME" => $v, 
+                "CHECKED"                   => (in_array($k,$values))?"checked":"",
+            ));
+        }
+    }
+    //參數說明
+    /*$datas，所有值的陣列
+     *$values，指定值的陣列，內容是上述陣列的索引值範圍
+     *$sp，預設使用的分隔字元 
+     */
+    function multi_map_value($datas,$values,$sp=','){
+        $tmp = array();
+        if(is_string($values)){
+            $values = explode($sp,$values);
+        }
+        foreach($values as $k){
+            $tmp[] = $datas[$k];
+        }
+        return implode(',',$tmp);
+    }    
 }
 ?>
