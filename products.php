@@ -735,7 +735,7 @@ class PRODUCTS{
         if(trim($_REQUEST["kw"])!=""){
             $tpl->newBlock( "TAG_PRODUCTS_SEARCH" );
             //產品管理列表
-            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id > '0' and p.p_status=1";
+            $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id > '0' and p.p_status=1";
             //附加條件
             $and_str .= " and (p.p_name like '%".$_REQUEST["kw"]."%' or p.p_spec like '%".$_REQUEST["kw"]."%' or p.p_character like '%".$_REQUEST["kw"]."%' or p.p_desc like '%".$_REQUEST["kw"]."%')";
             $sql .= $and_str;
@@ -769,8 +769,8 @@ class PRODUCTS{
                                     "VALUE_P_NAME" => $row["p_name"],
                                     "VALUE_P_SERIAL" => $i,
                                     "VALUE_PC_NAME"  => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
-                                    "VALUE_PC_LINK" => $cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"],
-                                    "VALUE_P_LINK" => $cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"],
+                                    "VALUE_PC_LINK" => $this->get_link($row),
+                                    "VALUE_P_LINK" => $this->get_link($row,true),
                 ));
             }
             $tpl->gotoBlock("TAG_PRODUCTS_SEARCH");
