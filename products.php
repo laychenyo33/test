@@ -482,7 +482,7 @@ class PRODUCTS{
         }
         //如果是rewrite過的網址,先取得pc_parent
         if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_products where p_seo_filename='".$_REQUEST["f"]."' and p_status='1' ";
+            $sql="select p.*,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p inner join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_seo_filename='".$_REQUEST["f"]."' and p_status='1' ";
         }else{
             $sql="select * from ".$cms_cfg['tb_prefix']."_products where p_id='".$_REQUEST["p_id"]."' and p_status='1' ";
         }
@@ -511,6 +511,8 @@ class PRODUCTS{
                        "TAG_BACK_TO_LIST_NAME" => $TPLMSG['BACK_TO_LIST'], 
                     ));
             }			
+            //回到列表連結
+            $tpl->assignGlobal("VALUE_BACK_LINK",$this->get_link($row));
             //是否為自訂頁面
             if($row["p_custom_status"]){
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
