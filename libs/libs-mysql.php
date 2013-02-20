@@ -111,11 +111,11 @@ class DB {
     }
   }
 
-  function query_firstrow($query = "") {
+  function query_firstrow($query = "",$assoc=true) {
     if ($query != "") {
       $this->query($query);
     }
-    $result = $this->fetch_array($this->query_result);
+    $result = $this->fetch_array($this->query_result,$assoc);
     $this->freeResult();
     return $result;
   }
