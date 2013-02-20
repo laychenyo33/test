@@ -639,7 +639,7 @@ class MAINFUNC{
         return $Layer;
     }
     //寄送確認信,電子報
-    function ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url){
+    function ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null){
         global $TPLMSG,$cms_cfg;
         if($mail_type =="epaper"){
             set_time_limit(0);
@@ -685,7 +685,11 @@ class MAINFUNC{
             $MAIL_HEADER  .= "X-Priority: 1\n";
             $MAIL_HEADER  .= "Message-ID: <".time()."-".$to_email[0].">\n";
             $MAIL_HEADER  .= "X-Mailer: PHP v".phpversion()."\n";          // These two to help avoid spam-filters
-            $mail_subject .= " from ".$_SERVER["HTTP_HOST"]."--[For Administrator]";
+            if($admin_subject){
+                $mail_subject = $admin_subject;
+            }else{
+                $mail_subject .= " from ".$_SERVER["HTTP_HOST"]."--[For Administrator]";
+            }
             for($i=0;$i<count($from_email);$i++){
                 @mail($from_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
             }
