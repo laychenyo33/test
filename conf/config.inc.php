@@ -87,6 +87,7 @@ $cms_cfg['dlop_limit']=12;  //Download一頁筆數限制
 // AD limit
 $cms_cfg['ad_up_banner_limit']=1;
 $cms_cfg['ad_left_button_limit']=2;
+$cms_cfg['ad_marquee_limit']=16;
 
 // front security image
 $cms_cfg['security_image_width'] = "90";

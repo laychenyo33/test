@@ -991,6 +991,9 @@ class MAINFUNC{
     
     function ad_list($id){
         global $db,$tpl,$cms_cfg;
+        //篩選條件
+        $ex_where_clause = "  and (ad_status='1' or (ad_status='2' and ad_startdate <= '".date("Y-m-d")."' and ad_enddate >= '".date("Y-m-d")."') ) ";
+        $ex_where_clause .= "  and (ad_show_type='0' or (ad_show_type='1' and find_in_set('".$id."',ad_show_zone)>0 )) ";
         //排序方式
         switch($_SESSION[$cms_cfg['sess_cookie_name']]["sc_ad_sort_type"]){
             case 2 :
@@ -1005,7 +1008,8 @@ class MAINFUNC{
         }
         //上方橫幅廣告 寬580 X 高120
         $ad_up_banner_limit=($cms_cfg['ad_up_banner_limit'])?$cms_cfg['ad_up_banner_limit']:1;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='1' and (ad_status='1' or (ad_status='2' and ad_startdate <= '".date("Y-m-d")."' and ad_enddate >= '".date("Y-m-d")."') ) ".$orderby." limit 0,".$ad_up_banner_limit;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='1' ".$ex_where_clause.$orderby." limit 0,".$ad_up_banner_limit;
+        echo $sql;
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
@@ -1048,7 +1052,7 @@ class MAINFUNC{
         }
         //側邊廣告 寬150 X 高150
         $ad_left_button_limit=($cms_cfg['ad_left_button_limit'])?$cms_cfg['ad_left_button_limit']:1;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='2' and (ad_status='1' or (ad_status='2' and ad_startdate <= '".date("Y-m-d")."' and ad_enddate >= '".date("Y-m-d")."') ) ".$orderby." limit 0,".$ad_left_button_limit;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='2' ".$ex_where_clause.$orderby." limit 0,".$ad_left_button_limit;
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
@@ -1091,7 +1095,7 @@ class MAINFUNC{
         }
         //側邊廣告 寬150 X 高50
         $ad_left_button_limit=($cms_cfg['ad_left_button_limit'])?$cms_cfg['ad_left_button_limit']:1;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='3' and (ad_status='1' or (ad_status='2' and ad_startdate <= '".date("Y-m-d")."' and ad_enddate >= '".date("Y-m-d")."') ) ".$orderby." limit 0,".$ad_left_button_limit;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='3' ".$ex_where_clause.$orderby." limit 0,".$ad_left_button_limit;
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
@@ -1133,18 +1137,18 @@ class MAINFUNC{
             }
         }
         //首頁跑馬燈
-        $ad_left_button_limit=($cms_cfg['ad_left_button_limit'])?$cms_cfg['ad_left_button_limit']:1;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='4' and (ad_status='1' or (ad_status='2' and ad_startdate <= '".date("Y-m-d")."' and ad_enddate >= '".date("Y-m-d")."') ) ".$orderby." limit 0,".$ad_left_button_limit;
+        $ad_left_button_limit=($cms_cfg['ad_marquee_limit'])?$cms_cfg['ad_marquee_limit']:1;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='4' ".$ex_where_clause.$orderby." limit 0,".$ad_left_button_limit;
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
+            $tpl->newBlock("AD_ZONE_MARQUEE");
             while($row = $db->fetch_array($selectrs,1)){
-                $tpl->newBlock("AD_ZONE_MARQUEE");
                 switch($row["ad_file_type"]){
                     case "txt" :
                         $tpl->newBlock("AD_TYPE_TXT_MARQUEE");
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_file"]);
-                        $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
+                        $tpl->assign("VALUE_AD_LINK",trim($row["ad_link"])?$row["ad_link"]:"#");
                         break;
                 }
                 $tpl->gotoBlock("AD_ZONE_MARQUEE");
