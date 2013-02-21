@@ -20,15 +20,6 @@
                 <input type="radio" name="d_status" value="0" {STR_D_STATUS_CK0}> 停用
             </td>
         </tr>
-        <!-- START BLOCK : MEMBER_DOWNLOAD -->
-        <tr>
-            <th>公開下載:</th>
-            <td>
-                <input type="radio" name="d_public" id="d_public_1" value="1" {PUBLIC_RAD_1_CHK}/><label for="d_public_1">公開</label>
-                <input type="radio" name="d_public" id="d_public_0" value="0" {PUBLIC_RAD_0_CHK}/><label for="d_public_0">限制</label>
-            </td>
-        </tr>
-        <!-- END BLOCK : MEMBER_DOWNLOAD -->
         <tr>
             <th>排序:</th>
             <td>
@@ -39,6 +30,27 @@
             <td>
                 <input name="d_subject" type="text" value="{VALUE_D_SUBJECT}" class="validate[required]" size="56"></td>
         </tr>
+        <!-- START BLOCK : THUMB_ROW -->
+        <tr>
+            <th>小圖</th>
+            <td>
+                <input type="hidden" size="60" name="d_thumb" value="{VALUE_D_THUMB}" id="d_thumb" onchange="Javascript:onImageSelect(this,'d_thumb_preview1');">
+                <table border="0" cellpadding="0" cellspacing="0" width="120">
+                    <tr>
+                        <td align="center">
+                            <div>
+                                <a href="javascript:mcImageManager.open('myform','d_thumb');">
+                                <img src="{VALUE_D_THUMB_PREVIEW1}" border="0" width="120" name="d_thumb_preview1" id="d_thumb_preview1">
+                                </a>
+                            </div>
+                            <font color="red">點選圖框更換圖片</font>
+                            <a href="javascript:LoadDefaultPic('d_thumb','d_thumb_preview1')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <!-- END BLOCK : THUMB_ROW -->
         <tr>
             <th>內容:</th>
             <td>

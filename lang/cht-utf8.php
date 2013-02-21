@@ -293,4 +293,5 @@ $TPLMSG['GUESTBOOK'] = "線上留言";
 $TPLMSG['GUESTBOOK_CATE_DESC'] = "線上留言";
 $TPLMSG["FACTORY"] = "觀光工廠";
 $TPLMSG['EBOOK_CATE_DESC'] = "電子型錄";
+$TPLMSG['THUMB'] = "縮圖";
 ?>

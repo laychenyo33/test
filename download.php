@@ -48,6 +48,7 @@ class DOWNLOAD{
         $tpl->assignGlobal( "TAG_DOWNLOAD_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["download"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-download"); //主要顯示區域的css設定
+        $tpl->assignGlobal( "SUBMENU_TYPE" , "submenu02"); //左側選單的容器類別
         if($_REQUEST["f"]=="download"){
             $main->header_footer("download", $TPLMSG["DOWNLOAD"]);
         }
@@ -104,7 +105,7 @@ class DOWNLOAD{
             $and_str="and d.dc_id='".$dc_id."'";
         }
         $sql="select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id
-                  where  d.d_status='1' and d.d_public='1' ".$and_str." order by d.d_sort ".$cms_cfg['sort_pos']." ";
+                  where  d.d_status='1' ".$and_str." order by d.d_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
@@ -121,12 +122,16 @@ class DOWNLOAD{
         $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
-        $tpl->assignGlobal( array("MSG_SUBJECT"  => $TPLMSG['SUBJECT'],
-                                  "MSG_CATE" => $TPLMSG['CATE'],
-                                  "MSG_DATE" => $TPLMSG['DATE'],
+        $tpl->assignGlobal( array("MSG_SUBJECT" => $TPLMSG['SUBJECT'],
+                                  "MSG_CATE"    => $TPLMSG['CATE'],
+                                  "MSG_THUMB"   => $TPLMSG['THUMB'],
+                                  "MSG_DATE"    => $TPLMSG['DATE'],
                                   "MSG_CONTENT" => $TPLMSG['CONTENT']
-
         ));
+        //如果下載顯示縮圖，開啟縮圖標題
+        if($cms_cfg['ws_module']['ws_download_thumb']){
+            $tpl->newBlock("THUMB_TITLE");
+        }
         $i=$page["start_serial"];
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
@@ -154,6 +159,13 @@ class DOWNLOAD{
                                 "VALUE_D_SERIAL" => $i,
                                 "VALUE_DC_SUBJECT"  => $row["dc_subject"],
             ));
+            //如果下載顯示縮圖，開啟縮圖欄位
+            if($cms_cfg['ws_module']['ws_download_thumb']){
+                $tpl->newBlock("THUMB_TITLE");
+                $tpl->assign(array(
+                    "VALUE_D_THUMB" => trim($row["d_thumb"])?$cms_cfg['file_root'].$row["d_thumb"]:$cms_cfg['default_ebook_pic'],                    
+                ));
+            }
         }
         //分頁
         if($i==0){

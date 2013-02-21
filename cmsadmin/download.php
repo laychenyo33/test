@@ -66,6 +66,7 @@ class DOWNLOAD{
                 $this->current_class="D";
                 $this->ws_tpl_file = "templates/ws-manage-download-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_TINYMCE_FILE");
@@ -76,6 +77,7 @@ class DOWNLOAD{
                 $this->current_class="D";
                 $this->ws_tpl_file = "templates/ws-manage-download-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_TINYMCE_FILE");
@@ -455,11 +457,11 @@ class DOWNLOAD{
         //欄位名稱
         $cate=(trim($_REQUEST["dc_id"])!="")?1:0;
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
-                                  "VALUE_D_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_download","d","dc_id",$_REQUEST["dc_id"],$cate),
-                                  "STR_D_STATUS_CK1" => "checked",
-                                  "STR_D_STATUS_CK0" => "",
-                                  "VALUE_ACTION_MODE" => $action_mode,
-                                  "PUBLIC_RAD_1_CHK" => "checked"
+                                  "VALUE_D_SORT"           => $main->get_max_sort_value($cms_cfg['tb_prefix']."_download","d","dc_id",$_REQUEST["dc_id"],$cate),
+                                  "STR_D_STATUS_CK1"       => "checked",
+                                  "STR_D_STATUS_CK0"       => "",
+                                  "VALUE_D_THUMB_PREVIEW1" => $cms_cfg['default_preview_pic'],
+                                  "VALUE_ACTION_MODE"      => $action_mode
         ));
         //相關參數
         if(!empty($_REQUEST['nowp'])){
@@ -484,8 +486,6 @@ class DOWNLOAD{
                                           "VALUE_D_FILEPATH" => $row["d_filepath"],
                                           "STR_D_STATUS_CK1" => ($row["d_status"]==1)?"checked":"",
                                           "STR_D_STATUS_CK0" => ($row["d_status"]==0)?"checked":"",
-                                          "PUBLIC_RAD_1_CHK" => ($row['d_public']==1)?"checked":"", 
-                                          "PUBLIC_RAD_0_CHK" => ($row['d_public']==0)?"checked":"", 
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
@@ -503,15 +503,17 @@ class DOWNLOAD{
                                  "STR_DC_SEL"       => ($row1["dc_id"]==$row["dc_id"])?"selected":""
             ));
         }
-        //如果是會員下載模式，顯示公開限制選項
-        if($cms_cfg['ws_module']['ws_member_download']){
-            $tpl->newBlock("MEMBER_DOWNLOAD");
+        if($cms_cfg['ws_module']['ws_download_thumb']){
+            $tpl->newBlock("THUMB_ROW");
+            $tpl->assign(array(
+                "VALUE_D_THUMB"          => $row["d_thumb"],
+                "VALUE_D_THUMB_PREVIEW1" => trim($row["d_thumb"])?$cms_cfg['file_root'].$row["d_thumb"]:$cms_cfg['default_preview_pic'],                
+            ));
         }
     }
 //檔案下載--資料更新================================================================
     function download_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $d_public = (isset($_REQUEST["d_public"]))?$_REQUEST["d_public"]:1;
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
@@ -519,7 +521,7 @@ class DOWNLOAD{
                         dc_id,
                         d_status,
                         d_sort,
-                        d_public,
+                        d_thumb,
                         d_subject,
                         d_content,
                         d_filepath,
@@ -528,7 +530,7 @@ class DOWNLOAD{
                         '".$_REQUEST["dc_id"]."',
                         '".$_REQUEST["d_status"]."',
                         '".$_REQUEST["d_sort"]."',
-                        '".$d_public."',
+                        '".$main->file_str_replace($_REQUEST["d_thumb"])."',
                         '".$_REQUEST["d_subject"]."',
                         '".$_REQUEST["d_content"]."',
                         '".$main->file_str_replace($_REQUEST["d_filepath"])."',
@@ -541,7 +543,7 @@ class DOWNLOAD{
                         dc_id='".$_REQUEST["dc_id"]."',
                         d_status='".$_REQUEST["d_status"]."',
                         d_sort='".$_REQUEST["d_sort"]."',
-                        d_public='".$d_public."',
+                        d_thumb='".$main->file_str_replace($_REQUEST["d_thumb"])."',
                         d_subject='".$_REQUEST["d_subject"]."',
                         d_content='".$_REQUEST["d_content"]."',
                         d_filepath='".$main->file_str_replace($_REQUEST["d_filepath"])."',
@@ -573,9 +575,7 @@ class DOWNLOAD{
             $d_id_str = implode(",",$d_id);
             //刪除勾選的檔案下載
             $sql="delete from ".$cms_cfg['tb_prefix']."_download where d_id in (".$d_id_str.")";
-            $db->query($sql);
-            $sql="delete from ".$cms_cfg['tb_prefix']."_member_download_map where d_id in (".$d_id_str.")";
-            $db->query($sql);
+            $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
