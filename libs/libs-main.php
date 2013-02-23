@@ -339,15 +339,15 @@ class MAINFUNC{
                     $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
                 }
                 $tpl->newBlock( "LEFT_CATE_LIST" );
-                $tpl->assign( array( "VALUE_CATE_NAME" => $row["pc_name"],
-                                     "VALUE_CATE_LINK"  => $pc_link,
+                $tpl->assign( array( "VALUE_CATE_NAME"       => $row["pc_name"],
+                                     "VALUE_CATE_LINK"       => $pc_link,
                                      "VALUE_CATE_LINK_CLASS" => (($_REQUEST['pc_parent']==$row['pc_id'] || $_REQUEST['f']==$row['pc_seo_filename'])?"current":""),
+                                     "TAG_CURRENT_CLASS"     => (($_REQUEST['pc_parent']==$row['pc_id'] || $_REQUEST['f']==$row['pc_seo_filename']))?"class='current'":"",
                 ));
                 //左方產品次分類為click menu
                 if($cms_cfg['ws_module']['ws_seo']==1){
                     if($_REQUEST["d"] || $_REQUEST["f"]) {
                         if($row["pc_seo_filename"]==$_REQUEST["d"] || $row["pc_seo_filename"]==$_REQUEST["f"]){
-                            $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
                             if($cms_cfg["ws_module"]["ws_left_menu_type"]==1  ) {
                                 $tpl->assignGlobal("CLICK_NUM1", $i);
                             }else{
@@ -355,13 +355,21 @@ class MAINFUNC{
                             }
                         }
                     }else{
-                        if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && $row["pc_id"]==$_REQUEST["pc_parent"]) {
-                            $tpl->assignGlobal("CLICK_NUM1", $i);
+                        if($cms_cfg["ws_module"]["ws_left_menu_effects"]==1 && $row["pc_id"]==$_REQUEST["pc_parent"]) {
+                            if($cms_cfg["ws_module"]["ws_left_menu_type"]==1  ) {
+                                $tpl->assignGlobal("CLICK_NUM1", $i);
+                            }else{
+                                $tpl->assignGlobal("OVER_NUM1", $i);
+                            }
                         }
                     }
                 }else{
-                    if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && $row["pc_id"]==$_REQUEST["pc_parent"]) {
-                        $tpl->assignGlobal("CLICK_NUM1", $i);
+                    if($cms_cfg["ws_module"]["ws_left_menu_effects"]==1 && $row["pc_id"]==$_REQUEST["pc_parent"]) {
+                        if($cms_cfg["ws_module"]["ws_left_menu_type"]==1  ) {
+                            $tpl->assignGlobal("CLICK_NUM1", $i);
+                        }else{
+                            $tpl->assignGlobal("OVER_NUM1", $i);
+                        }
                     }
                 }
                 //判斷是否顯示次分類
@@ -411,8 +419,12 @@ class MAINFUNC{
                                 }
                             }
                         }else{
-                            if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 && $row1["pc_id"]==$_REQUEST["pc_parent"]) {
-                                $tpl->assignGlobal("CLICK_NUM1", $i);
+                            if($cms_cfg["ws_module"]["ws_left_menu_effects"]==1 && $row1["pc_id"]==$_REQUEST["pc_parent"]){
+                                if($cms_cfg["ws_module"]["ws_left_menu_type"]==1) {
+                                    $tpl->assignGlobal("CLICK_NUM1", $i);
+                                }else{
+                                    $tpl->assignGlobal("OVER_NUM1", $i);
+                                }
                             }
                         }
                     }
