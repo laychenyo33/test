@@ -400,13 +400,13 @@ class MAINFUNC{
                         }
                         $tpl->newBlock("LEFT_SUBCATE_LIST");
                         $tpl->assign( array( "VALUE_SUBCATE_NAME" => $row1["pc_name"],
-                                             "VALUE_SUBCATE_LINK"  => $pc_link1,
+                                             "VALUE_SUBCATE_LINK" => $pc_link1,
+                                             "TAG_CURRENT_CLASS"  => ($row1["pc_seo_filename"]==$_REQUEST["d"] || $row1["pc_seo_filename"]==$_REQUEST["f"] || $_REQUEST['pc_parent']==$row1['pc_id'])?"class='current'":"",
                         ));
                         //左方產品次分類為click menu
                         if($cms_cfg['ws_module']['ws_seo']==1){
                             if($_REQUEST["d"] || $_REQUEST["f"]) {
                                 if($row1["pc_seo_filename"]==$_REQUEST["d"] || $row1["pc_seo_filename"]==$_REQUEST["f"]){
-                                    $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
                                     if($cms_cfg["ws_module"]["ws_left_menu_type"]==1 ) {
                                         $tpl->assignGlobal("CLICK_NUM1", $i);
                                     }else{
