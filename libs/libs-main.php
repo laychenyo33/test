@@ -2,13 +2,13 @@
 class MAINFUNC{
     //分頁
     function pagination($op_limit=10,$jp_limit=10,$nowp=1,$jp=0,$func_str,$total){
-        $Page["total_records"]=$total;
+        $Page["total_records"]=$total; //總筆數
         //Total Pages
-        $Page["total_pages"]=($total%$op_limit)? $total/$op_limit +1 : $total/$op_limit;
+        $Page["total_pages"]=($total%$op_limit)? $total/$op_limit +1 : $total/$op_limit; //總頁數
         //New Sql
         $start_pages=($nowp>=1)?$nowp-1:0;
-        $Page["start_serial"]=$start_pages*$op_limit;
-        $ppages=floor($Page["total_pages"]/$jp_limit);
+        $Page["start_serial"]=$start_pages*$op_limit;//目前頁面第一筆索引
+        $ppages=floor($Page["total_pages"]/$jp_limit);//頁碼的總頁數
         if($jp<$ppages){
             $page_start=$jp*$jp_limit+1;
             $page_end=$page_start+$jp_limit;
@@ -17,21 +17,21 @@ class MAINFUNC{
             $page_end=$page_start+$Page["total_pages"]%$jp_limit;
         }
         //沒有上跳頁也沒有下跳頁
-        if($ppages <= 1 && $Page["total_pages"]<$jp_limit+1){
+        if($ppages <= 0 && $Page["total_pages"]<$jp_limit+1){
             $Page["bj_page"]="";
             $Page["nj_page"]="";
             $page_start=1;
             $page_end=($total%$op_limit)?$Page["total_pages"] : $Page["total_pages"]+1;
         }else{
             //有上跳頁沒有下跳頁
-            if($jp>= $ppages-1){ //最後下跳頁
+            if($jp>= $ppages){ //最後下跳頁
                 $bp=$jp-1;
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
                 $Page["nj_page"]="";
             }
             //有上跳頁也有下跳頁
-            if($jp < $ppages-1 && $jp!=0){
+            if($jp < $ppages && $jp!=0){
                 $bp=$jp-1;
                 $np=$jp+1;
                 $prev=$page_start-1;
