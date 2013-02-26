@@ -12,7 +12,7 @@ class PRODUCTS{
         $this->ws_load_tp($this->ws_tpl_file);
         $this->products_list();
         //有廣告模組才啟動廣告
-        //if($cms_cfg["ws_module"]["ws_ad"]==1) $main->ad_list();
+        if($cms_cfg["ws_module"]["ws_ad"]==1) $main->ad_list(0);
         $tpl->printToScreen();
     }
     //載入對應的樣板
