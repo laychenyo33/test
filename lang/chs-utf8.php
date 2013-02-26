@@ -292,4 +292,5 @@ $TPLMSG['GUESTBOOK_CATE_DESC'] = "线上留言";
 $TPLMSG["FACTORY"] = "观光工厂";
 $TPLMSG['EBOOK_CATE_DESC'] = "电子型录";
 $TPLMSG['THUMB'] = "缩图";
+$TPLMSG['CART_QUICK_SHOPPING'] = "快速购物";
 ?>

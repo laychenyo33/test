@@ -27,7 +27,7 @@ class PRODUCTS{
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['CART_QUICK_SHOPPING']);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['CART_QUICK_SHOPPING']);
-        $main->header_footer("");
+        $main->header_footer("products",$TPLMSG['CART_QUICK_SHOPPING']);
         $main->login_zone();
         $main->left_fix_cate_list();
         $main->google_code(); //google analystics code , google sitemap code

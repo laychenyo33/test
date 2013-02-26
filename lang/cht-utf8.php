@@ -294,4 +294,5 @@ $TPLMSG['GUESTBOOK_CATE_DESC'] = "線上留言";
 $TPLMSG["FACTORY"] = "觀光工廠";
 $TPLMSG['EBOOK_CATE_DESC'] = "電子型錄";
 $TPLMSG['THUMB'] = "縮圖";
+$TPLMSG['CART_QUICK_SHOPPING'] = "快速購物";
 ?>
