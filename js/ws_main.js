@@ -48,38 +48,13 @@ function popinquiry(txt){
 function addBookmarkForBrowser(sTitle, sUrl) {
 // Returns the version of Internet Explorer or a -1
 // (indicating the use of another browser).
-  var rv = -1; // Return value assumes failure.
-  if(navigator.appName == 'Microsoft Internet Explorer') {
-    var ua = navigator.userAgent;
-    var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
-    if (re.exec(ua) != null) rv = parseFloat( RegExp.$1 );
-    if( rv > -1 ) {
-      if ( rv >= 8.0 ) {
-        //for ie8 
-        if(window.external) {
-            addBookmarkForBrowser = function(sTitle, sUrl) {
-                window.external.AddToFavoritesBar(sUrl, sTitle);
-            }
-        }
-      }else{
-        //for ie7,6,5
-        if(window.external) {
-            addBookmarkForBrowser = function(sTitle, sUrl) {
-                window.external.AddFavorite(sUrl, sTitle);
-            }
-        }
-      }
+    if(window.sidebar && window.sidebar.addPanel){
+        window.sidebar.addPanel(sTitle, sUrl, "");
+    }else if(window.external) {
+        window.external.AddFavorite(sUrl, sTitle);
+    }else{
+        alert('do it your self!');
     }
-  }else{
-      //for firefox
-      if(window.sidebar && window.sidebar.addPanel) {
-          addBookmarkForBrowser = function(sTitle, sUrl) {
-              window.sidebar.addPanel(sTitle, sUrl, "");
-          }
-      }else{
-          alert('do it your self!');
-      }
-  }
 }
 /* 勾選詢價車時之檢查事項 */
 function CheckProducts_eng(form) {  
