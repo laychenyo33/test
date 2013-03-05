@@ -36,7 +36,7 @@ class PRODUCTS{
     function products_list(){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
         //商品列表
-        $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' order by p.pc_id ";
+        $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' order by p.pc_id ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
@@ -60,11 +60,13 @@ class PRODUCTS{
                 $pc_name=$row["pc_name"];
                 $tpl->gotoBlock("PRODUCTS_LIST");
             }
-            $tpl->assign( array("VALUE_PC_ID"  => $row["pc_id"],
-                                "VALUE_P_ID"  => $row["p_id"],
-                                "VALUE_P_NAME" => $row["p_name"],
-                                "VALUE_P_SERIAL" => $i,
-                                "VALUE_PC_NAME"  => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
+            $tpl->assign( array("VALUE_PC_ID"       => $row["pc_id"],
+                                "VALUE_P_ID"        => $row["p_id"],
+                                "VALUE_P_LINK"      => $cms_cfg['base_root'].$row['pc_seo_filename']."/".$row['p_seo_filename'].".html",
+                                "VALUE_P_NAME"      => $row["p_name"],
+                                "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['base_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
+                                "VALUE_P_SERIAL"    => $i,
+                                "VALUE_PC_NAME"     => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
                                 "VALUE_P_SPECIAL_PRICE" => $row["p_list_price"],
             ));
             //購物車
