@@ -1198,7 +1198,7 @@ class MAINFUNC{
                             $tpl->newBlock("AD_TYPE_IMAGE_INSIDE_MARQUEE_LINK");
                         }else{
                             $tpl->newBlock("AD_TYPE_IMAGE_INSIDE_MARQUEE_NOLINK");
-    }
+                        }
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
                         $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
                         $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$row["ad_file"]);                        
