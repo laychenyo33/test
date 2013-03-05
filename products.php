@@ -10,6 +10,9 @@ class PRODUCTS{
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->ps = $cms_cfg['path_separator'];
         switch($_REQUEST["func"]){
+            case "p_ajax_get_p_name":
+                $this->ajax_get_p_name($_GET['term']);
+                break;
             case "p_list"://產品列表
                 $this->ws_tpl_file = "templates/ws-products-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -971,6 +974,16 @@ class PRODUCTS{
                 ));
             }
         }
+    }    
+    function ajax_get_p_name($t){
+       global $db,$cms_cfg;
+       $sql = "select p_name from ".$cms_cfg['tb_prefix']."_products where p_status='1' and p_name like '%".mysql_real_escape_string($t)."%'";
+       $res = $db->query($sql,true);
+       $tmp = array();
+       while(list($p_name)=$db->fetch_array($res)){
+           $tmp[]=$p_name;
+       }
+       echo json_encode($tmp);
     }    
 }
 ?>
