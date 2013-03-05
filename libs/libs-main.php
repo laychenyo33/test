@@ -1483,5 +1483,10 @@ class MAINFUNC{
         }
         return implode(',',$tmp);
     }    
+    //anythingSlider switch
+    function anything_slider(){
+        global $tpl;
+        $tpl->newBlock("ANYTHING_SLIDER_SCRIPT");
+    }
 }
 ?>
