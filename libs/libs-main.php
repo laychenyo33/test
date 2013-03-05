@@ -1021,7 +1021,6 @@ class MAINFUNC{
         //上方橫幅廣告 寬580 X 高120
         $ad_up_banner_limit=($cms_cfg['ad_up_banner_limit'])?$cms_cfg['ad_up_banner_limit']:1;
         $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='1' ".$ex_where_clause.$orderby." limit 0,".$ad_up_banner_limit;
-        echo $sql;
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
@@ -1157,6 +1156,24 @@ class MAINFUNC{
             $tpl->newBlock("AD_ZONE_MARQUEE");
             while($row = $db->fetch_array($selectrs,1)){
                 switch($row["ad_file_type"]){
+                    case "image":
+                        $tpl->newBlock("AD_TYPE_IMAGE_MARQUEE");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_IMAGE_MARQUEE_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_IMAGE_MARQUEE_NOLINK");
+                        }
+                        $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
+                        $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
+                        $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$row["ad_file"]);                        
+                        break;
+                    case "flash":
+                        $tpl->newBlock("AD_TYPE_FLASH_MARQUEE");
+                        if(!empty($row["ad_file"])){
+                            $piece=explode(".swf",$row["ad_file"]);
+                            $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$piece[0]);
+                        }                        
+                        break;
                     case "txt" :
                         $tpl->newBlock("AD_TYPE_TXT_MARQUEE");
                         $tpl->assign("VALUE_AD_SUBJECT",$row["ad_file"]);
@@ -1166,7 +1183,42 @@ class MAINFUNC{
                 $tpl->gotoBlock("AD_ZONE_MARQUEE");
             }
         }
-
+        //內頁跑馬燈
+        $ad_left_button_limit=($cms_cfg['ad_marquee_limit'])?$cms_cfg['ad_marquee_limit']:1;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_ad where ad_cate='5' ".$ex_where_clause.$orderby." limit 0,".$ad_left_button_limit;
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        if($rsnum >0){
+            $tpl->newBlock("AD_ZONE_INSIDE_MARQUEE");
+            while($row = $db->fetch_array($selectrs,1)){
+                switch($row["ad_file_type"]){
+                    case "image":
+                        $tpl->newBlock("AD_TYPE_IMAGE_INSIDE_MARQUEE");
+                        if($row["ad_link"]){
+                            $tpl->newBlock("AD_TYPE_IMAGE_INSIDE_MARQUEE_LINK");
+                        }else{
+                            $tpl->newBlock("AD_TYPE_IMAGE_INSIDE_MARQUEE_NOLINK");
+    }
+                        $tpl->assign("VALUE_AD_SUBJECT",$row["ad_subject"]);
+                        $tpl->assign("VALUE_AD_LINK",$row["ad_link"]);
+                        $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$row["ad_file"]);                        
+                        break;
+                    case "flash":
+                        $tpl->newBlock("AD_TYPE_FLASH_INSIDE_MARQUEE");
+                        if(!empty($row["ad_file"])){
+                            $piece=explode(".swf",$row["ad_file"]);
+                            $tpl->assign("VALUE_AD_FILE",$cms_cfg["file_root"].$piece[0]);
+                        }                        
+                        break;
+                    case "txt" :
+                        $tpl->newBlock("AD_TYPE_TXT_INSIDE_MARQUEE");
+                        $tpl->assign("VALUE_AD_SUBJECT",$row["ad_file"]);
+                        $tpl->assign("VALUE_AD_LINK",trim($row["ad_link"])?$row["ad_link"]:"#");
+                        break;
+                }
+                $tpl->gotoBlock("AD_ZONE_INSIDE_MARQUEE");
+            }
+        }
     }
     //取得主功能類別，如：abouts,service,products,news,faq,case,contactus
     function get_main_fun(){     
