@@ -34,19 +34,19 @@
                         "regex":"none",
                         "alertText":"* Su campo no se pongan en venta"},        
                     "telephone":{
-                        "regex":"/^[0-9\-\(\)\ ]+$/",
+                        "regex":"/^([0-9\-\(\)\ ]+)*$/",
                         "alertText":"* Número de teléfono no válido"},  
                     "email":{
                         "regex":"/^([a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4})*$/",
                         "alertText":"* Dirección de correo electrónico no válido"}, 
                     "date":{
-                         "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",
+                         "regex":"/^([0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2})*$/",
                          "alertText":"* Fecha no válida, debe estar en AAAA-MM-DD"},
                     "onlyNumber":{
-                        "regex":"/^[0-9\ ]+$/",
+                        "regex":"/^([0-9\ ]+)*$/",
                         "alertText":"* Sólo números"},  
                     "noSpecialCaracters":{
-                        "regex":"/^[0-9a-zA-Z]+$/",
+                        "regex":"/^([0-9a-zA-Z]+)*$/",
                         "alertText":"* N carácteres especiales permiten"},  
                     "ajaxUser":{
                         "file":"validateUser.php",
@@ -59,7 +59,7 @@
                         "alertTextLoad":"* Cargando, espere por favor",
                         "alertText":"* Este nombre ya está en uso"},
                     "onlyLetter":{
-                        "regex":"/^[a-zA-Z\ \']+$/",
+                        "regex":"/^([a-zA-Z\ \']+)*$/",
                         "alertText":"* Sólo letras"}
                     }   
     }
@@ -542,4 +542,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jjQuery);
+})(jQuery);

@@ -34,19 +34,19 @@
                         "regex":"none",
                         "alertText":"* Ihr Feld ist nicht passend"},        
                     "telephone":{
-                        "regex":"/^[0-9\-\(\)\ ]+$/",
+                        "regex":"/^([0-9\-\(\)\ ]+)*$/",
                         "alertText":"* Ungültige Telefonnummer"},  
                     "email":{
                         "regex":"/^([a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4})*$/",
                         "alertText":"* Ungültige E-Mail-Adresse"}, 
                     "date":{
-                         "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",
+                         "regex":"/^([0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2})*$/",
                          "alertText":"* Ungültiges Datum muss in YYYY-MM-DD Format"},
                     "onlyNumber":{
-                        "regex":"/^[0-9\ ]+$/",
+                        "regex":"/^([0-9\ ]+)*$/",
                         "alertText":"* Nur Zahlen"},  
                     "noSpecialCaracters":{
-                        "regex":"/^[0-9a-zA-Z]+$/",
+                        "regex":"/^([0-9a-zA-Z]+)*$/",
                         "alertText":"* Keine besonderen caracters erlaubt"},  
                     "ajaxUser":{
                         "file":"validateUser.php",
@@ -59,7 +59,7 @@
                         "alertTextLoad":"* Lade, bitte warten",
                         "alertText":"* Dieser Name ist bereits vergeben"},
                     "onlyLetter":{
-                        "regex":"/^[a-zA-Z\ \']+$/",
+                        "regex":"/^([a-zA-Z\ \']+)*$/",
                         "alertText":"* Briefe nur"}
                     }   
     }
@@ -542,4 +542,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jjQuery);
+})(jQuery);

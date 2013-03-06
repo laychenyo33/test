@@ -34,19 +34,19 @@
                         "regex":"none",
                         "alertText":"* 你的密碼驗証不符合"},        
                     "telephone":{
-                        "regex":"/^[0-9\-\(\)\ ]+$/",
+                        "regex":"/^([0-9\-\(\)\ ]+)*$/",
                         "alertText":"* 不符合規定的電話"},  
                     "email":{
                         "regex":"/^([a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4})*$/",
                         "alertText":"* 不符合規定的e-mail"},    
                     "date":{
-                         "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",
+                         "regex":"/^([0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2})*$/",
                          "alertText":"* Invalid date, must be in YYYY-MM-DD format"},
                     "onlyNumber":{
-                        "regex":"/^[0-9\ ]+$/",
+                        "regex":"/^([0-9\ ]+)*$/",
                         "alertText":"* 請輸入數字"},    
                     "noSpecialCaracters":{
-                        "regex":"/^[0-9a-zA-Z]+$/",
+                        "regex":"/^([0-9a-zA-Z]+)*$/",
                         "alertText":"* 請勿輸入特殊字元"},  
                     "ajaxUser":{
                         "file":"validateUser.php",
@@ -124,7 +124,7 @@
                         "alertTextLoad":"* 載入中請稍候",
                         "alertText":"* 這個檔名已被使用"},                    
                     "onlyLetter":{
-                        "regex":"/^[a-zA-Z\ \']+$/",
+                        "regex":"/^([a-zA-Z\ \']+)*$/",
                         "alertText":"* 請輸入英文字母(大小寫不限)"}
                     }   
     }
@@ -526,7 +526,6 @@ $.validationEngine = {
             }
         }
         function _length(caller,rules,position){          // VALIDATE LENGTH
-        
             startLength = eval(rules[position+1]);
             endLength = eval(rules[position+2]);
             feildLength = $(caller).attr('value').length;
@@ -607,4 +606,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jjQuery);
+})(jQuery);

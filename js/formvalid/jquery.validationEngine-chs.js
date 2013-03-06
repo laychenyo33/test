@@ -34,19 +34,19 @@
                         "regex":"none",
                         "alertText":"* 你的密码验证不符合"},        
                     "telephone":{
-                        "regex":"/^[0-9\-\(\)\ ]+$/",
+                        "regex":"/^([0-9\-\(\)\ ]+)*$/",
                         "alertText":"* 不符合规定的电话"},  
                     "email":{
                         "regex":"/^([a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4})*$/",
                         "alertText":"* 不符合规定的e-mail"},    
                     "date":{
-                         "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",
+                         "regex":"/^([0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2})*$/",
                          "alertText":"* Invalid date, must be in YYYY-MM-DD format"},
                     "onlyNumber":{
-                        "regex":"/^[0-9\ ]+$/",
+                        "regex":"/^([0-9\ ]+)*$/",
                         "alertText":"* 请输入数字"},    
                     "noSpecialCaracters":{
-                        "regex":"/^[0-9a-zA-Z]+$/",
+                        "regex":"/^([0-9a-zA-Z]+)*$/",
                         "alertText":"* 请勿输入特殊字元"},  
                     "ajaxUser":{
                         "file":"validateUser.php",
@@ -109,7 +109,7 @@
                         "alertTextLoad":"* 载入中请稍候",
                         "alertText":"* 这个档名已被使用"},	
                     "onlyLetter":{
-                        "regex":"/^[a-zA-Z\ \']+$/",
+                        "regex":"/^([a-zA-Z\ \']+)*$/",
                         "alertText":"* 请输入英文字母(大小写不限)"}
                     }   
     }
@@ -592,4 +592,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jjQuery);
+})(jQuery);

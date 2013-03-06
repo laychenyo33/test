@@ -34,19 +34,19 @@
                         "regex":"none",
                         "alertText":"* あなたのフィールドが一致されていない"},        
                     "telephone":{
-                        "regex":"/^[0-9\-\(\)\ ]+$/",
+                        "regex":"/^([0-9\-\(\)\ ]+)*$/",
                         "alertText":"* 無効な電話番号"},  
                     "email":{
                         "regex":"/^([a-zA-Z0-9_\.\-]+\@([a-zA-Z0-9\-]+\.)+[a-zA-Z0-9]{2,4})*$/",
                         "alertText":"* 無効なメール"}, 
                     "date":{
-                         "regex":"/^[0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2}$/",
+                         "regex":"/^([0-9]{4}\-\[0-9]{1,2}\-\[0-9]{1,2})*$/",
                          "alertText":"* 日付が無効です、YYYY - MM - DDの形式である必要があります"},
                     "onlyNumber":{
-                        "regex":"/^[0-9\ ]+$/",
+                        "regex":"/^([0-9\ ]+)*$/",
                         "alertText":"* 数値のみ"},  
                     "noSpecialCaracters":{
-                        "regex":"/^[0-9a-zA-Z]+$/",
+                        "regex":"/^([0-9a-zA-Z]+)*$/",
                         "alertText":"* 許可されて特殊文字"},  
                     "ajaxUser":{
                         "file":"validateUser.php",
@@ -59,7 +59,7 @@
                         "alertTextLoad":"* 読み込んでいます、しばらくお待ちください",
                         "alertText":"* この名前は既に使用されています"},
                     "onlyLetter":{
-                        "regex":"/^[a-zA-Z\ \']+$/",
+                        "regex":"/^([a-zA-Z\ \']+)*$/",
                         "alertText":"* 文字のみ"}
                     }   
     }
@@ -542,4 +542,4 @@ $.validationEngine = {
         }
     }
 }   
-})(jjQuery);
+})(jQuery);
