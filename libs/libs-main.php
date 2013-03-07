@@ -975,7 +975,7 @@ class MAINFUNC{
     //圖檔檔案路徑替換避免破圖
     function file_str_replace($input_path){
         global $cms_cfg;
-        $input_path=preg_replace("#(.+/)(upload_files/.+)$#i", "$2", $input_path);
+        $input_path=preg_replace("#(.*/)(upload_files/.+)$#i", "$2", $input_path);
         return $input_path;
     }
     //鎖滑鼠右鍵功能
