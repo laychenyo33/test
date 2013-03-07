@@ -151,7 +151,7 @@ class PRODUCTS{
                     $this->parent=$row["pc_id"];
                 }
                 $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                if($ws_array['ws_module']['ws_seo']){
+                if($cms_cfg['ws_module']['ws_seo']){
                     //顯示上方簡述資料
                     if(trim($row["pc_seo_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示上方簡述資料
                         $row["pc_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_seo_short_desc"]);
