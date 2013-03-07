@@ -934,17 +934,25 @@ class MAINFUNC{
         global $tpl,$ws_array,$cms_cfg,$TPLMSG;
         $digital1 = rand(1,10);
         $digital2 = rand(1,10);
-        $_SESSION["securityCode_math"] = $digital1+$digital2;
+        $_SESSION["securityCode"] = $digital1+$digital2;
+        $_SESSION["keyCode"] = time();
+        $ems_code= $this->encode_math_security($_SESSION["keyCode"]);
         $math_str = $digital1." + ".$digital2." =";
         $tpl->assignGlobal( array("MSG_LOGIN_SECURITY" => $TPLMSG["LOGIN_SECURITY"],
                                   "TAG_MATH_SECURITY" => $math_str,
-                                  "TAG_MATH_INPUT" => "<input type=\"text\" name=\"security\" size=\"4\" />"
+                                  "TAG_MATH_INPUT" => "<input type=\"text\" name=\"security".$ems_code."\" size=\"4\" />"
         ));
     }
     //Mathematics security code is value
     function math_security_isvalue() {
         global $tpl,$ws_array,$cms_cfg,$TPLMSG;
-        return $_REQUEST["security"] == $_SESSION["securityCode_math"];
+        $ems_code= $this->encode_math_security($_SESSION["keyCode"]);
+        return $_REQUEST["security".$ems_code] == $_SESSION["securityCode"];
+    }
+    function encode_math_security($keyCode) {
+        global $tpl,$ws_array,$cms_cfg,$TPLMSG;
+        $code=substr(md5($keyCode),15,2);
+        return $code;
     }
     //國家下拉選單
     function country_select($country="") {
