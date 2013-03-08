@@ -14,6 +14,7 @@ class APPLICATON{
         $this->products_list();
         $this->ws_tpl_type=1;
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -50,6 +51,7 @@ class APPLICATON{
         $show_style_str_p_desc="SHOW_STYLE_P1_DESC";
  
         if(!$_GET['f'] && !$_GET['pa_id']){
+            $main->layer_link($TPLMSG['APPLICATION']);
             $dirname="application";
             //顯示產品主頁 SEO H1 標題
             $sql = "select * from ".$cms_cfg['tb_prefix']."_metatitle where mt_name ='application' ";
@@ -99,11 +101,8 @@ class APPLICATON{
                                      "VALUE_PC_CATE_IMG" => $pa_img,
                                      "VALUE_PC_SERIAL" => $i,
                 ));
-                $dimensions["width"]=$cms_cfg['small_img_width'];
-                $dimensions["height"]=$cms_cfg['small_img_height'];
                 if(is_file($_SERVER['DOCUMENT_ROOT'].$pa_img)){
-                    list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$pa_img);
-                    $dimensions = $main->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
+                    $dimensions = $main->resizeto($pa_img,$cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
                 }
                 $tpl->assign("VALUE_PC_SMALL_IMG_W",$dimensions["width"]);
                 $tpl->assign("VALUE_PC_SMALL_IMG_H",$dimensions["height"]);
@@ -142,8 +141,7 @@ class APPLICATON{
                     $tpl->assign("VALUE_PC_SHORT_DESC",$app_row["pa_seo_short_desc"]);
                 }                 
                 //layer link
-                $layer_link = $this->top_layer_link . $cms_cfg['path_separator'] . $app_row['pa_name'];
-                $tpl->assignGlobal("TAG_LAYER",$layer_link);
+                $main->layer_link($TPLMSG['APPLICATION'],$cms_cfg['base_root']."application.htm")->layer_link($app_row['pa_name']);
                 if($cms_cfg['ws_module']['ws_application_cates']){  //應用領域產品分類
                     //分類列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id in (select pc_id from ".$cms_cfg['tb_prefix']."_products_cate_application_map where pa_id='".$app_row['pa_id']."' and checked='1')";
@@ -200,8 +198,6 @@ class APPLICATON{
                                              "VALUE_PC_SHOW_STYLE" => $row["pc_show_style"],
                                              "VALUE_PC_CATE_IMG" => $pc_img,
                         ));
-                        $dimensions["width"]=$cms_cfg['small_img_width'];
-                        $dimensions["height"]=$cms_cfg['small_img_height'];
                         if(is_file($_SERVER['DOCUMENT_ROOT'].$pc_img)){
                             $dimensions = $main->resizeto($pc_img,$cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
                         }
@@ -220,8 +216,6 @@ class APPLICATON{
                                             "VALUE_P_SERIAL" => $row["p_serial"],
                                             "VALUE_P_NO" => $k,
                         ));
-                        $dimensions["width"]=$cms_cfg['small_img_width'];
-                        $dimensions["height"]=$cms_cfg['small_img_height'];
                         if(is_file($_SERVER['DOCUMENT_ROOT'].$p_img)){
                             $dimensions = $main->resizeto($p_img,$cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
                         }
