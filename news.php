@@ -66,8 +66,6 @@ class NEWS{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["news"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-news"); //主要顯示區域的css設定
         $main->google_code(); //google analystics code , google sitemap code
-        $ext=($this->ws_seo)?".htm":".php";
-        $main->layer_link("<a href=\"".$cms_cfg["base_root"]."news".$ext."\">".$TPLMSG["NEWS"]."</a>");
     }
     
     function news_list(){
@@ -95,7 +93,11 @@ class NEWS{
         //最新消息列表
         if($cate_row){
             $and_str="and nc_id='".$cate_row['nc_id']."'";
+            $ext=($this->ws_seo)?".htm":".php";        
+            $main->layer_link($TPLMSG["NEWS"],$cms_cfg["base_root"]."news".$ext);
             $main->layer_link($cate_row['nc_subject'],$this->get_link($cate_row));
+        }else{
+            $main->layer_link($TPLMSG["NEWS"]);
         }
         $sql="select * from ".$cms_cfg['tb_prefix']."_news where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_sort ".$cms_cfg['sort_pos'].",n_modifydate desc";
         $selectrs = $db->query($sql);
