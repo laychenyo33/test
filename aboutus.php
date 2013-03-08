@@ -13,6 +13,7 @@ class ABOUTUS{
         $this->aboutus_list();
         //page view record --ph_type,ph_type_id,m_id
         $main->pageview_history("au",$_REQUEST["au_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
+        $main->layer_link();
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -33,6 +34,7 @@ class ABOUTUS{
         //$main->header_footer("aboutus");
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
+        $main->layer_link($TPLMSG['ABOUT_US'],$cms_cfg['base_root']."aboutus.htm");
         if($cms_cfg["ws_module"]["ws_left_main_au"]==0){
             $main->left_fix_cate_list();
             $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
@@ -45,13 +47,22 @@ class ABOUTUS{
     //前台關於我們--列表================================================================
     function aboutus_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        //左側選單
+        $row = $this->left_cate_list();
+        $row["au_content"]=preg_replace("/upload_files/",$cms_cfg["file_root"]."upload_files",$row["au_content"]);
+        $main->layer_link($row["au_subject"]);
+        $tpl->assignGlobal( "VALUE_AU_CONTENT" , $row["au_content"]);
+    }
+    function left_cate_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //前台關於我們列表
         $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' and au_cate = '".$this->au_cate."' order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
         $selectrs = $db->query($sql);
-        $rsnum    = $db->numRows($selectrs);
         if(empty($_REQUEST["au_id"]) && empty($_REQUEST["f"])){
            $sel_top_record=true;
         }
+        $current_row = null;
+        $i=0;
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             if($cms_cfg["ws_module"]["ws_left_main_au"]==1){
@@ -68,7 +79,8 @@ class ABOUTUS{
                 ));
             }
             if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
-                 $tpl->assign("TAG_CURRENT_CLASS", "class=\"current\"");
+                $tpl->assign("TAG_CURRENT_CLASS", "class=\"current\"");
+                $current_row = $row;
                 if($this->ws_seo){
                     $meta_array=array("meta_title"=>$row["au_seo_title"],
                                       "meta_keyword"=>$row["au_seo_keyword"],
@@ -79,13 +91,9 @@ class ABOUTUS{
                 }else{
                     $main->header_footer("aboutus",$TPLMSG["ABOUT_US"]);
                 }
-                //$tpl->assignGlobal( "TAG_SUB_FUNC"  , "--&nbsp;&nbsp;".$row["au_subject"]);
-                $row["au_content"]=preg_replace("/upload_files/",$cms_cfg["file_root"]."upload_files",$row["au_content"]);
-                //$row["au_content"]=preg_replace("/..\/upload_files/",$cms_cfg["file_root"]."upload_files",$row["au_content"]);
-                $tpl->assignGlobal( "TAG_LAYER" , $row["au_subject"]);
-                $tpl->assignGlobal( "VALUE_AU_CONTENT" , $row["au_content"]);
             }
-        }
+        }     
+        return $current_row;
     }
 }
 ?>
