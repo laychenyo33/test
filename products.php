@@ -215,17 +215,6 @@ class PRODUCTS{
                 }
                 $i=0;
                 while($row = $db->fetch_array($selectrs,1)){
-//                    if($this->ws_seo){
-//                        if(trim($row["pc_seo_filename"]) !=""){
-//                            //$dirname=$row["pc_seo_filename"];
-//                            $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
-//                        }else{
-//                            //$dirname=$row["pc_id"];
-//                            $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
-//                        }
-//                    }else{
-//                        $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
-//                    }
                     $pc_link = $this->get_link($row);
                     //收集第二頁以後pc_name 做為 meta title
                     if(!empty($_REQUEST["nowp"]) && $i<3){
@@ -340,22 +329,13 @@ class PRODUCTS{
             if($rsnum > 0){
                 $tpl->newBlock( "TAG_PRODUCTS_LIST" );
                 if($cms_cfg["ws_module"]["ws_listpage_cart"]==1){
-                    $tpl->newBlock( "TAG_ADD_CART" );
+                    $tpl->newBlock( "TAG_ADD_CART_TOP" );
+                    $tpl->newBlock( "TAG_ADD_CART_BOTTOM" );
                 }
             }
             $j=0;
             $k=$page["start_serial"];
             while ( $row = $db->fetch_array($selectrs,1) ) {
-//                if($this->ws_seo){
-//                    $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-//                    if(trim($row["p_seo_filename"]) !=""){
-//                        $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-//                    }else{
-//                        $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-//                    }
-//                }else{
-//                    $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-//                }
                 $p_link = $this->get_link($row,true);
                 //收集第二頁以後pc_name 做為 meta title
                 if(!empty($_REQUEST["nowp"]) && $j<3){
@@ -719,15 +699,6 @@ class PRODUCTS{
                     $pc_subtotal=$main->count_total_records($sql);
                     $sql2="select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$row["pc_id"]."' and p_status='1'";
                     $p_total=$main->count_total_records($sql2)+$pc_subtotal; //次分類及所屬產品總合
-//                    if($this->ws_seo){
-//                        if(trim($row["pc_seo_filename"]) !=""){
-//                            $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
-//                        }else{
-//                            $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
-//                        }
-//                    }else{
-//                        $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
-//                    }
                     $pc_link = $this->get_link($row);
                     $tpl->newBlock( "LEFT_CATE_LIST" );
                     $tpl->assign( array( "VALUE_CATE_NAME" => $row["pc_name"]."(".$p_total.")",
