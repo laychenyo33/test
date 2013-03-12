@@ -631,6 +631,7 @@ class PRODUCTS{
                 if($cms_cfg['ws_module']['ws_products_desc_style']==1){
                     //載入dombtab libs
                     $tpl->newBlock("DOMTAB_SCRIPT");
+                    $tpl->newBlock("DOMTAB_AREA");
                     //domtab開關
                     $domtab=true;
                 }
