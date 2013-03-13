@@ -13,7 +13,8 @@ class MEMBER{
     //會員資料欄位
     protected $columns = array(
         'm_company_name' => array('name'=>"公司",'gc'=>"Company"),
-        'm_name'         => array('name'=>"名字",'gc'=>"First Name"),
+        'm_fname'         => array('name'=>"姓",'gc'=>"First Name"),
+        'm_lname'         => array('name'=>"名",'gc'=>"Last Name"),
         'm_birthday'     => array('name'=>"生日",'gc'=>'Birthday'),
         'm_sex'          => array("name"=>"性別","gc"=>"Gender","map"=>array(0=>'女',1=>'男')),
         'm_country'      => array("name"=>"國家","gc"=>"Home Country"),
@@ -25,8 +26,10 @@ class MEMBER{
         'm_url'          => array("name"=>"主機","gc"=>"Web Page"),          
         'm_email'        => array('name'=>"電子郵件","gc"=>"E-mail Address"),   
     );
+    protected $showDiscount = 1;
     function MEMBER(){
         global $db,$cms_cfg,$tpl;
+        $this->showDiscount = $cms_cfg['ws_module']['ws_member_show_discount'];
         switch($_REQUEST["func"]){
             case "m_import":
                 if($cms_cfg['ws_module']['ws_member_manipulate']!=1){
@@ -166,7 +169,7 @@ class MEMBER{
     function member_cate_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //IPB 不顯示會員折扣
-        if($cms_cfg["ws_module"]["ws_version"]!="ipb") {
+        if($cms_cfg["ws_module"]["ws_version"]!="ipb" && $this->showDiscount) {
             $tpl->newBlock("SHOW_LIST_MC_DISCOUNT"); //會員分類列表折扣欄位
         }
         $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
@@ -200,7 +203,7 @@ class MEMBER{
                                 "VALUE_STATUS_IMG" => ($row["mc_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
                                 "VALUE_STATUS_IMG_ALT" => ($row["mc_status"])?$TPLMSG['ON']:$TPLMSG['OFF']));
             //IPB 不顯示會員折扣
-            if($cms_cfg["ws_module"]["ws_version"]!="ipb") {
+            if($cms_cfg["ws_module"]["ws_version"]!="ipb" && $this->showDiscount) {
                 $tpl->newBlock("SHOW_VALUE_MC_DISCOUNT");
                 $tpl->assign("VALUE_MC_DISCOUNT", $row["mc_discount"]);
             }
@@ -231,7 +234,7 @@ class MEMBER{
     function member_cate_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //IPB 不顯示會員折扣
-        if($cms_cfg["ws_module"]["ws_version"]!="ipb") {
+        if($cms_cfg["ws_module"]["ws_version"]!="ipb" && $this->showDiscount) {
             $tpl->newBlock("SHOW_FORM_MC_DISCOUNT"); //會員分類表單折扣欄位
         }else{
             $tpl->newBlock("SHOW_DEFAULT_FORM_MC_DISCOUNT");
@@ -382,6 +385,7 @@ class MEMBER{
             //會員分類
             $i=0;
             $tpl->assignGlobal("TAG_NOW_CATE" ,$TPLMSG["NO_CATE"]);
+            $tpl->assignGlobal("VALUE_MC_ID",$_GET['mc_id']);
             while($row = $db->fetch_array($selectrs,1)){
                 $i++;
                 $tpl->newBlock( "MEMBER_CATE_LIST" );
@@ -399,14 +403,14 @@ class MEMBER{
                 }
             }
             //會員列表
-            $sql="select m.*,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id=mc.mc_id where m.m_id > '0'";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_member as m where m.m_id > '0'";
             //附加條件
             $and_str="";
             if(!empty($_REQUEST["mc_id"])){
-                $and_str .= " and m.mc_id = '".$_REQUEST["mc_id"]."'";
+                $and_str .= " and find_in_set('".$_REQUEST["mc_id"]."',m.mc_id) >0 ";
             }
             if($_REQUEST["st"]=="m_name"){
-                $and_str .= " and m.m_name like '%".$_REQUEST["sk"]."%'";
+                $and_str .= " and (m.m_lname like '%".$_REQUEST["sk"]."%' or m.m_fname like '%".$_REQUEST["sk"]."%')";
             }
             $sql .= $and_str." order by m.m_sort ".$cms_cfg['sort_pos'].",m.m_modifydate desc ";
             //取得總筆數
@@ -435,12 +439,12 @@ class MEMBER{
                 if($i%2){
                     $tpl->assign("TAG_TR_CLASS","class='altrow'");
                 }
-                $tpl->assign( array("VALUE_MC_ID"  => $row["mc_id"],
+                $tpl->assign( array(
                                     "VALUE_M_ID"  => $row["m_id"],
                                     "VALUE_M_SORT"  => $row["m_sort"],
-                                    "VALUE_M_NAME" => $row["m_name"],
+                    "VALUE_M_NAME" => $row["m_fname"]."&nbsp;".$row['m_lname'],
                                     "VALUE_M_SERIAL" => $i,
-                                    "VALUE_MC_SUBJECT"  => $row["mc_subject"],
+                    "VALUE_MC_SUBJECT"  => $this->get_mc_name($row['mc_id']),
                                     "VALUE_STATUS_IMG" => ($row["m_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
                                     "VALUE_STATUS_IMG_ALT" => ($row["m_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
 
@@ -485,7 +489,8 @@ class MEMBER{
                                   "STR_M_CS_CK3" => "",
                                   "STR_M_EPAPER_STATUS_CK1" => "checked",
                                   "STR_M_EPAPER_STATUS_CK0" => "",
-                                  "VALUE_ACTION_MODE" => $action_mode
+                                  "VALUE_ACTION_MODE" => $action_mode,
+                                  "VALUE_MC_ID" => $_GET['mc_id'],
         ));
         //相關參數
         if(!empty($_REQUEST['nowp'])){
@@ -509,7 +514,8 @@ class MEMBER{
                                           "VALUE_M_ACCOUNT" => $row["m_account"],
                                           "VALUE_M_PASSWORD" => $row["m_password"],
                                           "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
-                                          "VALUE_M_NAME" => $row["m_name"],
+                                          "VALUE_M_FNAME" => $row["m_fname"],
+                                          "VALUE_M_LNAME" => $row["m_lname"],
                                           "VALUE_M_BIRTHDAY" => $row["m_birthday"],
                                           "VALUE_M_ZIP" => $row["m_zip"],
                                           "VALUE_M_ADDRESS" => $row["m_address"],
@@ -555,7 +561,8 @@ class MEMBER{
                         m_company_name,
                         m_country,
                         m_contact_s,
-                        m_name,
+                        m_fname,
+                        m_lname,
                         m_birthday,
                         m_sex,
                         m_zip,
@@ -566,7 +573,7 @@ class MEMBER{
                         m_email,
                         m_epaper_status
                     ) values (
-                        '".$_REQUEST["mc_id"]."',
+                        '".implode(',',(array)$_REQUEST["mc_id"])."',
                         ".$_REQUEST["m_status"].",
                         '".$_REQUEST["m_sort"]."',
                         '".date("Y-m-d H:i:s")."',
@@ -575,7 +582,8 @@ class MEMBER{
                         '".$_REQUEST["m_company_name"]."',
                         '".$_REQUEST["m_country"]."',
                         '".$_REQUEST["m_contact_s"]."',
-                        '".$_REQUEST["m_name"]."',
+                        '".$_REQUEST["m_fname"]."',
+                        '".$_REQUEST["m_lname"]."',
                         '".$_REQUEST["m_birthday"]."',
                         '".$_REQUEST["m_sex"]."',
                         '".$_REQUEST["m_zip"]."',
@@ -590,7 +598,7 @@ class MEMBER{
             case "mod":
                 $sql="
                     update ".$cms_cfg['tb_prefix']."_member set
-                        mc_id='".$_REQUEST["mc_id"]."',
+                        mc_id='".implode(',',(array)$_REQUEST["mc_id"])."',
                         m_status='".$_REQUEST["m_status"]."',
                         m_sort='".$_REQUEST["m_sort"]."',
                         m_modifydate='".date("Y-m-d H:i:s")."',
@@ -598,7 +606,8 @@ class MEMBER{
                         m_company_name='".$_REQUEST["m_company_name"]."',
                         m_country='".$_REQUEST["m_country"]."',
                         m_contact_s='".$_REQUEST["m_contact_s"]."',
-                        m_name='".$_REQUEST["m_name"]."',
+                        m_fname='".$_REQUEST["m_fname"]."',
+                        m_lname='".$_REQUEST["m_lname"]."',
                         m_birthday='".$_REQUEST["m_birthday"]."',
                         m_sex='".$_REQUEST["m_sex"]."',
                         m_zip='".$_REQUEST["m_zip"]."',
@@ -616,7 +625,7 @@ class MEMBER{
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."member.php?func=m_list&mc_id=".$_REQUEST["mc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $goto_url=$cms_cfg["manage_url"]."member.php?func=m_list&mc_id=".$_POST['return_mc_id']."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
                 $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -976,9 +985,9 @@ class MEMBER{
                         "VALUE_SUCCESS_NUMS"  => $wNums, 
                         "VALUE_CONFLICT_NUMS" => $cNums 
                     ));
-                    unlink($target_csv);
+                    @unlink($target_csv);
                 }else{
-                    unlink($target_csv);
+                    @unlink($target_csv);
                     header('location:member.php?func=m_list');
                     die();
                 }
@@ -1096,11 +1105,19 @@ class MEMBER{
         $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
+        $mcid_arr = explode(',',$mcid);
+        if($cms_cfg['ws_module']['ws_member_multi_cate']){
+            $tpl->newBlock("MULTIPLE_CATE");
+            $block_str = "MULTI";
+        }else{
+            $tpl->newBlock("SINGLE_CATE");        
+            $block_str = "SINGLE";
+        }
         while($row1 = $db->fetch_array($selectrs,1)){
-            $tpl->newBlock( "SELECT_OPTION_MEMBER_CATE" );
+            $tpl->newBlock( "SELECT_OPTION_MEMBER_".$block_str."_CATE" );
             $tpl->assign( array( "OPTION_MEMBER_CATE_NAME"  => $row1["mc_subject"],
                                  "OPTION_MEMBER_CATE_VALUE" => $row1["mc_id"],
-                                 "STR_MC_SEL"       => ($row1["mc_id"]==$mcid)?"selected":""
+                                 "STR_MC_SEL"       => (in_array($row1["mc_id"],$mcid_arr))?"selected":""
             ));
         }        
     }
@@ -1135,6 +1152,18 @@ class MEMBER{
                     $tpl->assign("DOWNLOAD_CATE_LIST.TAG_FILE_DS","block");
                 }
             }
+        }
+    }    
+    //取得會員類別名稱
+    function get_mc_name($mc_id_str){
+        global $db,$cms_cfg;
+        if($mc_id_str){
+            $sql = "select mc_subject from ".$cms_cfg['tb_prefix']."_member_cate where mc_id in(".$mc_id_str.")";
+            $rs = $db->query($sql,true);
+            while(list($ms) = $db->fetch_array($rs)){
+                $tmp[]=$ms;
+            }
+            return implode(', ',$tmp);       
         }
     }    
 }

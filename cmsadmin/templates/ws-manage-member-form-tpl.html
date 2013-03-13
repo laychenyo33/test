@@ -3,29 +3,65 @@
 <h1>會員{MSG_MODE}</h1>
 <form name="myform" method="post" action="member.php?func=m_replace"  class="formular" id="formID">
     <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
+        <!-- START BLOCK : MULTIPLE_CATE -->
         <tr>
-            <th>會員分類:</th>
-            <td colspan="3">
-                <select name="mc_id" >
-                    <!-- START BLOCK : SELECT_OPTION_MEMBER_CATE -->
-                    <option value="{OPTION_MEMBER_CATE_VALUE}" {STR_MC_SEL}>
-                    {OPTION_MEMBER_CATE_NAME}
-                    </option>
-                    <!-- END BLOCK : SELECT_OPTION_MEMBER_CATE -->
+            <th rowspan="3">會員分類:</th>
+            <td rowspan="3">
+                <select name="mc_id[]" multiple="true" size="8" style="width:150px">
+                    <!-- START BLOCK : SELECT_OPTION_MEMBER_MULTI_CATE -->
+                    <option value="{OPTION_MEMBER_CATE_VALUE}" {STR_MC_SEL}>{OPTION_MEMBER_CATE_NAME}</option>
+                    <!-- END BLOCK : SELECT_OPTION_MEMBER_MULTI_CATE -->
                 </select>
+                <div>會員分類可多選，請搭配shift或control鍵選取</div>
             </td>
-        </tr>
-        <tr>
             <th>狀態:</th>
             <td>
                 <input type="radio" name="m_status" value="1" {STR_M_STATUS_CK1}> 啟用
                 <input type="radio" name="m_status" value="0" {STR_M_STATUS_CK0}> 停用
             </td>
+        </tr>
+        <tr>
             <th>排序:</th>
             <td>
                 <input name="m_sort" id="m_sort" type="text" class="validate[custom[onlyNumber]]"  value="{VALUE_M_SORT}" size="4" maxlength="4">
             </td>
         </tr>
+        <tr>
+            <th>訂閱電子報</th>
+            <td>
+                <input type="radio" name="m_epaper_status" value="0" {STR_M_EPAPER_STATUS_CK0} /> 否
+                <input type="radio" name="m_epaper_status" value="1" {STR_M_EPAPER_STATUS_CK1} /> 是
+            </td>            
+        </tr>
+        <!-- END BLOCK : MULTIPLE_CATE -->        
+        <!-- START BLOCK : SINGLE_CATE -->    
+        <tr>
+            <th>會員分類:</th>
+            <td>
+                <select name="mc_id">
+                    <!-- START BLOCK : SELECT_OPTION_MEMBER_SINGLE_CATE -->
+                    <option value="{OPTION_MEMBER_CATE_VALUE}" {STR_MC_SEL}>{OPTION_MEMBER_CATE_NAME}</option>
+                    <!-- END BLOCK : SELECT_OPTION_MEMBER_SINGLE_CATE -->
+                </select>
+            </td>
+            <th>狀態:</th>
+            <td>
+                <input type="radio" name="m_status" value="1" {STR_M_STATUS_CK1}> 啟用
+                <input type="radio" name="m_status" value="0" {STR_M_STATUS_CK0}> 停用
+            </td>
+        </tr>
+        <tr>
+            <th>排序:</th>
+            <td>
+                <input name="m_sort" id="m_sort" type="text" class="validate[custom[onlyNumber]]"  value="{VALUE_M_SORT}" size="4" maxlength="4">
+            </td>
+            <th>訂閱電子報</th>
+            <td>
+                <input type="radio" name="m_epaper_status" value="0" {STR_M_EPAPER_STATUS_CK0} /> 否
+                <input type="radio" name="m_epaper_status" value="1" {STR_M_EPAPER_STATUS_CK1} /> 是
+            </td>            
+        </tr>    
+        <!-- END BLOCK : SINGLE_CATE -->        
         <tr>
             <th><font color="red">*</font>帳號(e-mail):</th>
             <td>
@@ -57,12 +93,13 @@
         </td>
             <th>姓名:</th>
             <td>
-                <select name="m_contact_s">
+<!--                <select name="m_contact_s">
                   <option value="Mr." {STR_M_CS_CK1}>Mr.</option>
                   <option value="Miss." {STR_M_CS_CK2}>Miss.</option>
                   <option value="Mrs." {STR_M_CS_CK3}>Mrs.</option>
-                </select>
-                <input name="m_name" type="text" value="{VALUE_M_NAME}" size="12" />
+                </select>-->
+                姓:<input name="m_fname" type="text" value="{VALUE_M_FNAME}" size="12" />
+                名:<input name="m_lname" type="text" value="{VALUE_M_LNAME}" size="12" />
             </td>
         </tr>
           <!-- START BLOCK : SELECT_COUNTRY -->
@@ -101,21 +138,15 @@
             <td>
                 <input name="m_fax" type="text" value="{VALUE_M_FAX}" size="50" >
             </td>
-            <th>訂閱電子報</th>
-            <td>
-                <input type="radio" name="m_epaper_status" value="0" {STR_M_EPAPER_STATUS_CK0} /> 否
-                <input type="radio" name="m_epaper_status" value="1" {STR_M_EPAPER_STATUS_CK1} /> 是
-            </td>
-        </tr>
-        <tr>
             <th>&nbsp;</th>
-            <td colspan="3">
+            <td>
                 <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" />
             </td>
         </tr>
     </table>
     <input type="hidden" name="action_mode" value="{VALUE_ACTION_MODE}">
     <input type="hidden" name="m_id" value="{VALUE_M_ID}">
+    <input type="hidden" name="return_mc_id" value="{VALUE_MC_ID}"/>
     <input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
     <input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
     <input name="nowp" type="hidden" id="nowp" value="{VALUE_NOW_PAGE}">

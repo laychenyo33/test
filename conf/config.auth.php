@@ -4,7 +4,7 @@ $cms_cfg['ws_level'] = 20;
 $cms_cfg["ws_module"]=array(
 /*      BASIC(IPB&IPS) SETUP        */
         "ws_aboutus"=>1,            //關於我們(公司簡介)
-        "ws_aboutus_au_cate"=>0,    //關於我們(公司簡介)設為獨立類別
+        "ws_aboutus_au_cate"=>1,    //關於我們(公司簡介)設為獨立類別
         "ws_video"=>0,            //youtube影片
         "ws_blog"=>0,               //部落格管理(留言版)
         "ws_contactus"=>1,          //聯絡我們
@@ -23,14 +23,14 @@ $cms_cfg["ws_module"]=array(
         "ws_inquiry"=>1,            //詢問信管理
         "ws_inquiry_type"=>0,       //0=>批次詢問車, 1=>單一詢問車
         "ws_news"=>1,               //最新消息
-        "ws_new_product"=>1,        //最新產品
+        "ws_new_product"=>0,        //最新產品
         "ws_products"=>1,           //產品管理
         "ws_products_related"=>1,   //產品詳細頁--相關產品
-        "ws_products_nextlink"=>1,  //產品詳細頁--上下筆連結
+        "ws_products_nextlink"=>0,  //產品詳細頁--上下筆連結
         "ws_products_title"=>0,     //自訂產品說明標題(產品敘述、規格、特性) 0 =>預設語系 1 => 自定說明
         "ws_products_application" =>1, //產品應用領域
-        "ws_application_cates"    =>1, //產品應用領域用在分類
-        "ws_application_products" =>0, //產品應用領域用在產品    
+        "ws_application_cates"    =>0, //產品應用領域用在分類
+        "ws_application_products" =>1, //產品應用領域用在產品    
         "ws_products_desc_style"  =>0, //前台產品敘述的格式，0是預設樣式，1是domtab,
         "ws_products_mv"          =>0, //產品影片,
         "ws_products_mv_youtube"  =>0, //產品影片，只適用youtube影片,
@@ -39,7 +39,7 @@ $cms_cfg["ws_module"]=array(
         "ws_products_ca"=>0,           //產品認證標章管理
 
 /*      IPC SETUP                   */
-        "ws_ad"=>1,                     //廣告管理(IPC專用)
+        "ws_ad"=>0,                     //廣告管理(IPC專用)
         "ws_bonus"=>0,                  //紅利點數(IPC專用)
         "ws_epaper"=>1,                 //電子報管理
         "ws_epaper_attach_products"=>1, //電子報夾帶產品列表
@@ -48,15 +48,17 @@ $cms_cfg["ws_module"]=array(
         "ws_service"=>0,                //服務條款(IPC專用)
         "ws_vaccount"=>0,               //台銀虛擬帳號
 
-/*      MEMBER SETUP                */
-        "ws_member"=>1,             //會員管理
-        "ws_member_manipulate"=>0,  //會員資料匯出匯入
-        "ws_member_country"   =>1,  //會員表單顯示國家下拉式選單
-        "ws_member_download"  =>0,  //會員下載
-        "ws_cart_login"=>0,         //購物車或詢價車是否需要會員登入
-        "ws_delivery_timesec"=>0,   //購物車或詢價車是否顯示配送欄位
-        "ws_download_login"=>0,     //檔案下載是否需要會員登入
-        "ws_new_product_login"=>0,  //最新產品是否需要會員登入
+/*      MEMBER SETUP                   */
+        "ws_member"=>1,                 //會員管理
+        "ws_member_manipulate"=>1,      //會員資料匯出匯入
+        "ws_member_country"   =>0,      //會員表單顯示國家下拉式選單
+        "ws_member_download"  =>0,      //會員下載
+        "ws_member_show_discount" => 0, //後台會員類別不顯示折扣欄位
+        "ws_member_multi_cate"    => 0, //會員使用多重類別
+        "ws_cart_login"=>0,             //購物車或詢價車是否需要會員登入
+        "ws_delivery_timesec"=>0,       //購物車或詢價車是否顯示配送欄位
+        "ws_download_login"=>0,         //檔案下載是否需要會員登入
+        "ws_new_product_login"=>0,      //最新產品是否需要會員登入
 
 /*      OTHER SETUP                 */
         "ws_admin"=>1,              //後台管理員管理
