@@ -37,6 +37,7 @@
         <ul>
           <li>
                 <select name="st" class="seinput">
+                    <option value="">全部</option>   
                   <option value="m_name" {STR_SELECT_SEARCH_TARGET_CK1}>會員姓名</option>
                 </select>
             關鍵字<input type="text" id="sk" name="sk" class="seinput" value="{VALUE_SEARCH_KEYWORD}"/><input type="button" value="搜尋" Onclick="Javascript:return FormCheckQuery(myform)" />
@@ -69,6 +70,8 @@
     <!-- END BLOCK : MEMBER_LIST -->
     <input type="hidden" name="total_box" value="{VALUE_TOTAL_BOX}" />
     <input type="hidden" name="box_check" value="1" />
+    <input type="hidden" name="nowp" value="{VALUE_STR_NOWP}" />
+    <input type="hidden" name="jp" value="{VALUE_STR_JP}" />
     <input type="hidden" name="ws_table" value="m" />
   </table>
     </form>

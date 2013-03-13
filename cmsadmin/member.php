@@ -423,7 +423,9 @@ class MEMBER{
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
                                       "TAG_SELECT_SEARCH_TARGET_NAME" => $TPLMSG['NAME'],
                                       "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
-
+                                      "VALUE_STR_NOWP"       => $_GET['nowp'],
+                                      "VALUE_STR_JP"         => $_GET['jp'],
+                                      "STR_SELECT_SEARCH_TARGET_CK1" => ($_POST['st']=="m_name")?"selected":"",
             ));
             $tpl->assignGlobal( "VALUE_NOW_MC_ID" , $_REQUEST["mc_id"]);
             $i=$page["start_serial"];
@@ -946,14 +948,14 @@ class MEMBER{
                             $conflic = false;
                             foreach($_POST['mapto'] as $idx => $col){
                                 if($col=="m_email" && $csv[$idx]!=''){
-                                    $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".$csv[$idx]."'";
+                                    $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".mysql_real_escape_string($csv[$idx])."'";
                                     $res_m = $db->query($sql,true);
                                     $conflic = ($db->numRows($res_m))?true:false;
                                     $columns[] = 'm_account';
-                                    $values[] = "'".$csv[$idx]."'";
+                                    $values[] = "'".mysql_real_escape_string($csv[$idx])."'";
                                 }
                                 $columns[] = $col;
-                                $values[] = "'".$csv[$idx]."'";
+                                $values[] = "'".mysql_real_escape_string($csv[$idx])."'";
                             }
                             if($conflic){
                                 $tpl->newBlock("CONFLIC_RECORD");
