@@ -77,7 +77,7 @@ class SITEMAP{
                                  "VALUE_NEWS_LINK" =>$cms_cfg["base_root"]."news".$ext,
                                  "VALUE_PRODUCTS_LINK" =>$cms_cfg["base_root"]."products".$ext,
                                  "VALUE_APPLICATION_LINK" =>$cms_cfg["base_root"]."application".$ext,
-                                 "VALUE_NEW_PRODUCT_LINK" =>$cms_cfg["base_root"]."new-products".$ext,
+                                 "VALUE_NEW_PRODUCT_LINK" =>$cms_cfg["base_root"]."new-products.html",
                                  "VALUE_SITEMAP_LINK" =>$cms_cfg["base_root"]."sitemap".$ext,
                                  "VALUE_CONTACTUS_LINK" =>$cms_cfg["base_root"]."contactus".$ext,
         ));
