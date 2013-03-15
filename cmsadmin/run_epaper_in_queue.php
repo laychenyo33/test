@@ -19,7 +19,7 @@ if($db->numRows($res)){
         foreach($mgArr as $k=>$v){
             $mgArr[$k] = "'".$v."'";
         }
-        $sql="select m.m_email,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id = mc.mc_id  where m.m_epaper_status='1' and mc.mc_subject in(".implode(',',$mgArr).")";
+        $sql="select m.m_email,group_concat(mc.mc_subject) as mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on find_in_set(mc.mc_id,m.mc_id) where m.m_epaper_status='1' and mc.mc_subject in(".implode(',',$mgArr).") group by m_id";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum > 0){
@@ -41,7 +41,7 @@ if($db->numRows($res)){
             if(!empty($new_mail_array)){
                 $mail_str=implode(",",$new_mail_array);
                 $member_cate_str=implode(",",$new_member_cate);
-                unset($new_mail_array);
+                unset($new_mail_array);            
                 //取得電子報內容
                 $mail_subject=$qRow["e_subject"];
                 $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",$qRow["eq_content"]);
@@ -54,6 +54,7 @@ if($db->numRows($res)){
                 $mtpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
                 $mtpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
                 $mtpl->assignGlobal("TAG_LANG",$cms_cfg['language']);                
+                $mtpl->assignGlobal("SC_COMPANY",$from_name);                
                 $mtpl->assign("_ROOT.EPAPER_PAGE_TITLE",$qRow["e_subject"]);
                 $mtpl->assign("_ROOT.EPAPER_TITLE",$qRow["e_subject"]);
                 $mtpl->assign("_ROOT.EPAPER_CONTENT",$mail_content);

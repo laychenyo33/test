@@ -1177,7 +1177,7 @@ class MEMBER{
             }
             return @implode(', ',$tmp);       
         }
-    }    
+    }
     
     function _read_csv_row($row_str){
         $tmp = preg_replace($this->_read_csv_pattern['pattern'], $this->_read_csv_pattern['replacement'], $row_str);

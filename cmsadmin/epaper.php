@@ -519,10 +519,9 @@ class EPAPER{
                 ));
             }
             //列出分類表單
-            $sql="select mc.mc_id,mc.mc_subject,count(*) as e_subtotal from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on mc.mc_id=m.mc_id where m.m_epaper_status='1' group by mc.mc_id order by m.mc_id";
+            $sql="SELECT mc.mc_id, mc_subject, COUNT( m_id ) AS e_subtotal FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) GROUP BY mc.mc_id order by mc.mc_id";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
-            $total= 0;
             while($row = $db->fetch_array($selectrs,1)){
                 //未分類會員不顯示
                 if($row["mc_id"] != NULL){
@@ -532,9 +531,11 @@ class EPAPER{
                                         "VALUE_E_SUBTOTAL" => $row["e_subtotal"],
                     ));
                 }
-                //總數包含未分類會員
-                $total= $total+$row["e_subtotal"];
             }
+                //總數包含未分類會員
+            $sql = "select count(*) from ".$cms_cfg['tb_prefix']."_member where m_epaper_status='1'";
+            $rs = $db->query($sql,true);
+            list($total)=$db->fetch_array($rs);
             $tpl->assignGlobal("VALUE_E_TOTAL" , $total);
             //顯示發送記錄
             //取得記錄
@@ -619,13 +620,7 @@ class EPAPER{
                 break;
             case "queue":
                 //取得寄送名單
-                if($_REQUEST["e_st"]="1"){
-                    $sql="select m.m_email,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id = mc.mc_id  where m.m_epaper_status='1'";
-                }
-                if($_REQUEST["e_st"]="2" && !empty($_REQUEST["mc_id"])){
-                    $mc_id_str=" and m.mc_id in (".implode(",",$_REQUEST["mc_id"]).")";
-                    $sql="select m.m_email,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id = mc.mc_id  where m.m_epaper_status='1'".$mc_id_str ;
-                }
+                $sql = $this->get_maillist_sql();
                 $selectrs = $db->query($sql);
                 $rsnum    = $db->numRows($selectrs);
                 if($rsnum > 0){
@@ -656,8 +651,8 @@ class EPAPER{
                         $goto_url=$cms_cfg["manage_url"]."epaper.php?func=e_list";
                         if($rsnum > 0){
                             $mail_subject=$row["e_subject"];
-                            $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",$row["e_content"]);
-                            $p_id_str = is_array($_POST['attach_p_id'])?implode(',',$_POST['attach_p_id']):'';
+                            $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",  mysql_real_escape_string($row["e_content"]));
+                            $p_id_str = is_array($_POST['attach_p_id'])?  mysql_real_escape_string(implode(',',$_POST['attach_p_id'])):'';
                             //寫入佇列
                             $sql="
                                 insert into ".$cms_cfg['tb_prefix']."_epaper_queue (
@@ -665,12 +660,12 @@ class EPAPER{
                                     eq_modifydate,
                                     eq_group,e_subject,eq_content,eq_send_time,eq_attach_products
                                 ) values (
-                                    '".$_REQUEST["e_id"]."',
+                                    '".mysql_real_escape_string($_REQUEST["e_id"])."',
                                     '".date("Y-m-d H:i:s")."',
-                                    '".$member_cate_str."',
-                                    '".$row["e_subject"]."',
+                                    '".mysql_real_escape_string($member_cate_str)."',
+                                    '".mysql_real_escape_string($row["e_subject"])."',
                                     '".$mail_content."',
-                                    '".$_POST["eq_send_time"]."',
+                                    '".mysql_real_escape_string($_POST["eq_send_time"])."',
                                     '".$p_id_str."'
                                 )";
                             $rs = $db->query($sql);
@@ -683,13 +678,7 @@ class EPAPER{
                 break;
             case "send":
                 //取得寄送名單
-                if($_REQUEST["e_st"]="1"){
-                    $sql="select m.m_email,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id = mc.mc_id  where m.m_epaper_status='1'";
-                }
-                if($_REQUEST["e_st"]="2" && !empty($_REQUEST["mc_id"])){
-                    $mc_id_str=" and m.mc_id in (".implode(",",$_REQUEST["mc_id"]).")";
-                    $sql="select m.m_email,mc.mc_subject from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id = mc.mc_id  where m.m_epaper_status='1'".$mc_id_str ;
-                }
+                $sql = $this->get_maillist_sql();
                 $selectrs = $db->query($sql);
                 $rsnum    = $db->numRows($selectrs);
                 if($rsnum > 0){
@@ -730,7 +719,15 @@ class EPAPER{
                             //初始化電子報樣版
                             $mtpl = new TemplatePower('./templates/ws-manage-epaper-template-tpl.html');
                             $mtpl->prepare();
+                            $mtpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+                            $mtpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
+                            $mtpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
+                            $mtpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
+                            $mtpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
+                            $mtpl->assignGlobal("TAG_LANG",$cms_cfg['language']);                              
+                            $mtpl->assignGlobal("SC_COMPANY",$_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]);   
                             $mtpl->assign("_ROOT.EPAPER_PAGE_TITLE",$row["e_subject"]);
+                            $mtpl->assign("_ROOT.EPAPER_TITLE",$row["e_subject"]);                         
                             $mtpl->assign("_ROOT.EPAPER_CONTENT",$mail_content);
                             if(is_array($_POST['attach_p_id'])){
                                 $sql = "select p.*,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_status='1' and p_id in(".implode(',',$_POST['attach_p_id']).")";
@@ -743,10 +740,15 @@ class EPAPER{
                                     }else{
                                         $p_link = $cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_row['p_id'];
                                     }
+                                    $simg = $p_row['p_small_img']?$cms_cfg['file_root'].$p_row['p_small_img']:$cms_cfg['default_preview_pic'];
+                                    $dimension = $main->resizeto($simg,219,171);                                    
                                     $mtpl->assign(array(
                                        "VALUE_P_LINK"      => $p_link, 
                                        "VALUE_P_SMALL_IMG" => $p_row['p_small_img']?$cms_cfg['file_url'].$p_row['p_small_img']:$cms_cfg['server_url'].$cms_cfg['default_preview_pic'], 
+                                       "VALUE_P_SMALL_IMG_W" => $dimension['width'], 
+                                       "VALUE_P_SMALL_IMG_H" => $dimension['height'], 
                                        "VALUE_P_NAME"      => $p_row['p_name'], 
+                                       "VALUE_P_DESC"      => $p_row['p_desc'], 
                                     ));
                                 }
                             }
@@ -1117,6 +1119,17 @@ class EPAPER{
                 }
             }
         }
+    }
+    function get_maillist_sql(){
+        global $cms_cfg;
+        switch($_REQUEST["e_st"]){
+            case "2":
+                $mc_id_str=" and mc.mc_id in (".implode(",",$_REQUEST["mc_id"]).")";
+            case "1":
+            default:
+                $sql="SELECT mc.mc_id, mc_subject, group_concat(m_email) as m_email FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) where m_epaper_status='1' ".$mc_id_str." GROUP BY mc.mc_subject order by mc.mc_subject";                
+        }
+        return $sql;
     }
 }
 //ob_end_flush();
