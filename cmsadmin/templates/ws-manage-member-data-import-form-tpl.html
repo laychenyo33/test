@@ -114,16 +114,18 @@
 <!-- START BLOCK : SELECT_CSV_FILE -->
 <form name="myform" method="post" action="member.php?func=m_import&act=select" class="formular" id="formID" enctype="multipart/form-data">
     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
+        <!-- START BLOCK : SINGLE_CATE -->
         <tr>
             <td>
                 匯入類別：<select name="mc_id">
-                            <!-- START BLOCK : SELECT_OPTION_MEMBER_CATE -->
-                            <option value="{OPTION_MEMBER_CATE_VALUE}">{OPTION_MEMBER_CATE_NAME}</option>
-                            <!-- END BLOCK : SELECT_OPTION_MEMBER_CATE -->
+                            <!-- START BLOCK : SELECT_OPTION_MEMBER_SINGLE_CATE -->
+                            <option value="{OPTION_MEMBER_CATE_VALUE}" {STR_MC_SEL}>{OPTION_MEMBER_CATE_NAME}</option>
+                            <!-- END BLOCK : SELECT_OPTION_MEMBER_SINGLE_CATE -->
                          </select>
                 
             </td>
         </tr>
+        <!-- END BLOCK : SINGLE_CATE -->
         <tr>
             <td>
                 <input type="file" name="csvfile"/><input type="submit" value="載入"/><br/>
