@@ -89,6 +89,7 @@ class ABOUTUS{
                     );
                     $main->header_footer($meta_array);
                 }else{
+                    $tpl->assignGlobal( "TAG_MAIN_FUNC" , $row["au_subject"]);
                     $main->header_footer("aboutus",$TPLMSG["ABOUT_US"]);
                 }
             }
