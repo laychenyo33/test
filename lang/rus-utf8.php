@@ -271,4 +271,7 @@ $TPLMSG["FACTORY"] = "Factory";
 $TPLMSG['EBOOK_CATE_DESC'] = "E-catalog";
 $TPLMSG['THUMB'] = "Thumb";
 $TPLMSG['CART_QUICK_SHOPPING'] = "Quick Shopping";
+$TPLMSG['CONTACT_S_1']="Mr.";
+$TPLMSG['CONTACT_S_2']="Mrs.";
+$TPLMSG['CONTACT_S_3']="Miss";
 ?>

@@ -30,6 +30,7 @@ $ws_array["front_page"]=array("index.html" => $TPLMSG["CUSTOM_INDEX_PAGE"],
                              );
 
 $ws_array["contactus_cate"]=array( 1 =>$TPLMSG['CONTACT_US_PRODUCTS'],2 =>$TPLMSG['CONTACT_ERROR_REPORTING'],3 =>$TPLMSG['CONTACT_SUGGESTION'],10=>$TPLMSG['CONTACT_US_OTHERS']);
+$ws_array["contactus_s"]=array( 1 =>$TPLMSG['CONTACT_S_1'],2 =>$TPLMSG['CONTACT_S_2'],3 =>$TPLMSG['CONTACT_S_3']);
 
 $ws_array["epaper_order_cate"]=array( 1 =>$TPLMSG['EPAPER_ORDER_NORMAL'],2 =>$TPLMSG['EPAPER_ORDER_MEMBER'],3 =>$TPLMSG['EPAPER_ORDER_FIRST']);
 $ws_array["ad_cate"]=array( 1 =>$TPLMSG['AD_UP_BANNER_580_120'],2 =>$TPLMSG['AD_SIDE_BUTTON_150_150'],3 =>$TPLMSG['AD_SIDE_BUTTON_150_50'],4 =>"首頁跑馬燈",5 =>"內頁跑馬燈");

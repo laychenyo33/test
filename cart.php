@@ -7,6 +7,7 @@ class CART{
         global $db,$cms_cfg,$tpl,$main;
         $this->m_id =$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
+        $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
             case "c_list"://購物車列表
                 $this->ws_tpl_file = "templates/ws-cart-tpl.html";
@@ -102,6 +103,7 @@ class CART{
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
         $tpl->assignInclude( "AD_H", "templates/ws-fn-ad-h-tpl.html"); //橫式廣告模板
         $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板
+        $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["products"]);//左方menu title
@@ -378,7 +380,7 @@ class CART{
             $this->cart_list();
             //顯示表單資料
             $tpl->newBlock( "MEMBER_DATA_FORM" );
-            $tpl->assign( array("MSG_MODE"  => $TPLMSG['SEND'],
+            $tpl->assignGlobal( array("MSG_MODE"  => $TPLMSG['SEND'],
                                 "MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
                                 "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
                                 "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
@@ -419,6 +421,8 @@ class CART{
             if($cms_cfg["ws_module"]["ws_country"]==1) {
                 $main->country_select($row["m_country"]);
             }
+            //稱謂下拉選單
+            $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART");
             if(!empty($shopping)){
                 //顯示付款方式
                 $tpl->newBlock("PAYMENT_TYPE");
@@ -453,7 +457,6 @@ class CART{
         $this->cart_list();
         $tpl->newBlock( "MEMBER_DATA_FORM" );
         $tpl->assign( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
-                            "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
                             "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
                             "MSG_ZIP" => $TPLMSG["ZIP"],
                             "MSG_ADDRESS" => $TPLMSG["ADDRESS"],
@@ -462,8 +465,6 @@ class CART{
                             "MSG_EMAIL" => $TPLMSG["EMAIL"],
                             "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"],
                             "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
-                            "VALUE_M_CONTACT_S" => $_REQUEST["m_contact_s"],
-                            "VALUE_M_NAME" => $_REQUEST["m_name"],
                             "VALUE_M_ZIP" => $_REQUEST["m_zip"],
                             "VALUE_M_ADDRESS" => $_REQUEST["m_address"],
                             "VALUE_M_TEL" => $_REQUEST["m_tel"],
@@ -472,6 +473,16 @@ class CART{
                             "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"],
                             "VALUE_CONTENT" => $_REQUEST["content"],
         ));
+        if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
+            $tpl->newBlock("CART_S_STYLE_1");
+        }elseif($cms_cfg['ws_module']['ws_contactus_s_style']==2){//中式稱謂
+            $tpl->newBlock("CART_S_STYLE_2");
+        }
+        $tpl->assign(array(
+            "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
+            "VALUE_M_NAME"       => $_REQUEST["m_name"],    
+            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_contact_s"]],                    
+        ));        
         //付款方式是atm時顯示客戶匯款帳號後五碼
         if($_POST['o_payment_type']=='0'){
             $tpl->newBlock("ATM_LAST_FIVE");

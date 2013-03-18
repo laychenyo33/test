@@ -14,12 +14,7 @@
             <tr class="altrow">
               <td width="128">{MSG_CONTACT_PERSON}</td>
               <td width="222">
-                 <select name="cu_contact_s"  style="width:60px">
-                  <option value="Mr." {STR_M_CS_CK1}>Mr.</option>
-                  <option value="Miss." {STR_M_CS_CK2}>Miss.</option>
-                  <option value="Mrs." {STR_M_CS_CK3}>Mrs.</option>
-                 </select>
-                <input name="cu_name" id="cu_name" type="text" class="validate[required]" value="{VALUE_CU_NAME}" size="12" style="width:120px" />
+                   <!-- INCLUDE BLOCK : CONTACT_S -->
                 </td>
             </tr>
           <!-- START BLOCK : SELECT_COUNTRY -->
@@ -47,7 +42,7 @@
             <td><input name="cu_fax" type="text" class="input" value="{VALUE_CU_FAX}" size="50"></td>
           </tr>-->
           <tr>
-            <td><font color="#ff0000">*</font>e-mail</td>
+            <td><font color="#ff0000">*</font>E-mail</td>
             <td><input name="cu_email" type="text" id="cu_email" class="validate[required,custom[email]]" class="input" value="{VALUE_CU_EMAIL}" size="50"></td>
           </tr>
           <!-- START BLOCK : ATTACH_FILES -->

@@ -295,4 +295,7 @@ $TPLMSG["FACTORY"] = "观光工厂";
 $TPLMSG['EBOOK_CATE_DESC'] = "电子型录";
 $TPLMSG['THUMB'] = "缩图";
 $TPLMSG['CART_QUICK_SHOPPING'] = "快速购物";
+$TPLMSG['CONTACT_S_1']="先生";
+$TPLMSG['CONTACT_S_2']="女士";
+$TPLMSG['CONTACT_S_3']="小姐";
 ?>

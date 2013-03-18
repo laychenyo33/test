@@ -7,6 +7,7 @@ class CONTACTUS{
         global $db,$cms_cfg,$tpl;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         $this->security_mode = 1;//表單安全驗證模式:0=>math_security,1=>security_zone
+        $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
             case "cu_add"://聯絡我們新增
                 $this->ws_tpl_file = "templates/ws-contactus-form-tpl.html";
@@ -43,6 +44,7 @@ class CONTACTUS{
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
         $tpl->assignInclude( "AD_H", "templates/ws-fn-ad-h-tpl.html"); //橫式廣告模板
         $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板      
+        $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["CONTACT_US"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["CONTACT_US"]);
@@ -100,6 +102,8 @@ class CONTACTUS{
         if($cms_cfg["ws_module"]["ws_country"]==1) {
             $main->country_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_country"]);
         }
+        //稱謂下拉選單
+        $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"]);
         //可附檔上傳
         if($cms_cfg["ws_module"]["ws_contactus_upfiles"]==1) {
             if($cms_cfg['contactus_upfiles_nums']){
@@ -178,7 +182,7 @@ class CONTACTUS{
                         '".mysql_real_escape_string($_REQUEST["cu_cate"])."',
                         '0',
                         '".mysql_real_escape_string($_REQUEST["cu_company_name"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_contact_s"])."',
+                        '".$ws_array["contactus_s"][$_REQUEST["cu_contact_s"]]."',
                         '".mysql_real_escape_string($_REQUEST["cu_name"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_tel"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_fax"])."',
@@ -199,9 +203,7 @@ class CONTACTUS{
                     //寄送訊息
                     $tpl->newBlock("CONTACTUS_MAIL");
                     $tpl->assign(array(
-                            "MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
                             "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
-                            "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
                             "MSG_CATE" => $TPLMSG['CATE'],
                             "MSG_ADDRESS" => $TPLMSG['ADDRESS'],
                             "MSG_TEL" => $TPLMSG['TEL'],
@@ -210,13 +212,21 @@ class CONTACTUS{
                             "MSG_ATTACH_FILES" => $TPLMSG['CONTACT_US_ATTACH_FILES'],
                             "VALUE_CUC_SUBJECT"  => $ws_array["contactus_cate"][$_REQUEST["cu_cate"]],
                             "VALUE_CU_COMPANY_NAME" => $_REQUEST["cu_company_name"],
-                            "VALUE_CU_CONTACT_S" => $_REQUEST["cu_contact_s"],
-                            "VALUE_CU_NAME" => $_REQUEST["cu_name"],
                             "VALUE_CU_FAX" => $_REQUEST["cu_fax"],
                             "VALUE_CU_TEL" => $_REQUEST["cu_tel"],
                             "VALUE_CU_ADDRESS" => $_REQUEST["cu_address"],
                             "VALUE_CU_EMAIL" => $_REQUEST["cu_email"],
                             "VALUE_CU_CONTENT" => (get_magic_quotes_gpc())?stripcslashes($_REQUEST["cu_content"]):$_REQUEST["cu_content"],
+                    ));
+                    if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
+                        $tpl->newBlock("CONTACT_S_STYLE_1");
+                    }elseif($cms_cfg['ws_module']['ws_contactus_s_style']==2){//中式稱謂
+                        $tpl->newBlock("CONTACT_S_STYLE_2");
+                    }
+                    $tpl->assign(array(
+                        "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],     
+                        "VALUE_CU_NAME"      => $_REQUEST["cu_name"],      
+                        "VALUE_CU_CONTACT_S" => $ws_array["contactus_s"][$_REQUEST["cu_contact_s"]],                        
                     ));
                     if($file){
                         $tpl->newBlock("UPFILE_ROW");

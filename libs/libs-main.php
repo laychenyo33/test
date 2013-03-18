@@ -1548,5 +1548,18 @@ class MAINFUNC{
         global $tpl;
         $tpl->newBlock("ANYTHING_SLIDER_SCRIPT");
     }
+    //contact_s select
+    function contact_s_select($sid,$zone="CONTACT"){
+        global $ws_array,$tpl;
+        $tpl->newBlock($zone."_S_ZONE");
+        foreach($ws_array["contactus_s"] as $id=>$sname){
+            $tpl->newBlock($zone."_S_LIST");
+            $tpl->assign(array(
+                "VALUE_CONTACT_S_ID"   => $id,
+                "VALUE_CONTACT_S_NAME" => $sname,
+                "TAG_SELECTED"         => ($sid==$id)?"selected":"",
+            ));
+        }
+    }
 }
 ?>

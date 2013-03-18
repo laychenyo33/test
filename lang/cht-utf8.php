@@ -297,4 +297,7 @@ $TPLMSG["FACTORY"] = "觀光工廠";
 $TPLMSG['EBOOK_CATE_DESC'] = "電子型錄";
 $TPLMSG['THUMB'] = "縮圖";
 $TPLMSG['CART_QUICK_SHOPPING'] = "快速購物";
+$TPLMSG['CONTACT_S_1']="先生";
+$TPLMSG['CONTACT_S_2']="女士";
+$TPLMSG['CONTACT_S_3']="小姐";
 ?>

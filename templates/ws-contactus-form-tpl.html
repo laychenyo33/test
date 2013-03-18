@@ -24,12 +24,7 @@
             <tr class="altrow">
               <th>{MSG_CONTACT_PERSON}</th>
               <td>
-                 <select name="cu_contact_s">
-                  <option value="Mr." {STR_M_CS_CK1}>Mr.</option>
-                  <option value="Miss." {STR_M_CS_CK2}>Miss.</option>
-                  <option value="Mrs." {STR_M_CS_CK3}>Mrs.</option>
-                 </select>
-                <font color="#ff0000">*</font>{MSG_NAME}<input name="cu_name" id="cu_name" type="text" class="validate[required]" value="{VALUE_CU_NAME}" size="12" />
+                 <!-- INCLUDE BLOCK : CONTACT_S -->
                 </td>
             </tr>
           <!-- START BLOCK : SELECT_COUNTRY -->
@@ -53,7 +48,7 @@
             <td><input name="cu_address" type="text" class="input" value="{VALUE_CU_ADDRESS}" size="50"></td>
           </tr>
           <tr>
-            <th><font color="#ff0000">*</font>e-mail</th>
+            <th><font color="#ff0000">*</font>E-mail</th>
             <td><input name="cu_email" type="text" id="cu_email" class="validate[required,custom[email]]" class="input" value="{VALUE_CU_EMAIL}" size="50"></td>
           </tr>
           <tr class="altrow">
