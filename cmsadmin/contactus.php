@@ -270,6 +270,7 @@ class CONTACTUS{
                 $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_CUC_SUBJECT"  => $ws_array["contactus_cate"][$row["cu_cate"]],
                                           "VALUE_CU_ID"  => $row["cu_id"],
+                                          "VALUE_CU_COMPANY" => $row["cu_company_name"],
                                           "VALUE_CU_NAME" => $row["cu_name"],
                                           "VALUE_CU_TEL" => $row["cu_tel"],
                                           "VALUE_CU_FAX" => $row["cu_fax"],
