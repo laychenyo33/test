@@ -1064,6 +1064,7 @@ class PRODUCTS{
                                    "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none",
                                    "VALUE_P_CERT" => $row["p_certificate"],
                                    "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
+                                   "TAG_SHORT_DESC_SHOW" => (trim($row["p_seo_short_desc"]))?"":"none",
         ));
         if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_products']){
             $this->application_checkbox($row["p_id"]);
