@@ -1561,5 +1561,43 @@ class MAINFUNC{
             ));
         }
     }
+    //自設的fgetcsv
+    function fgetcsv($fp,$limit=',',$enc='"'){
+        $str_mode = false;
+        $arr = array();
+        $k=0;  //陣列索引
+        $ik=0; //陣列元素長度
+        $tmp_str="";
+        while(($c=fgetc($fp))!==FALSE){
+            if($c=="\n" && !$str_mode)break;
+            if($c==$enc && !$str_mode && $ik==0){
+                $str_mode = true;
+                continue;
+            }
+            //非字串模式，且逗號的話，索引值加1，然後繼續找下一個字元
+            if(!$str_mode && $c==$limit){
+                $k++;         //索引值加1
+                $ik=0;        //陣列元素長度重計
+                $arr[$k] =""; //建立新陣列
+                continue; 
+            }
+            if($str_mode){//在字串模式下就集中處理字串
+                if(substr($tmp_str,-1).$c==($enc.$limit)){ //如果當前字串結尾取得",，當作是字串的結束，重設所有相關變數
+                    $arr[$k] = substr($tmp_str,0,strlen($tmp_str)-1); //移除字串後的"，取得當前累積字串
+                    $str_mode=false; //切換回非字串模式
+                    $k++;  //陣列索引加1
+                    $ik=0; //重設陣列元素長度
+                    $arr[$k] = ""; //新增陣列元素
+                    continue;
+                }else{
+                    $tmp_str .= $c;
+                }
+            }else{ //非字串模式就逐一累積字元
+                $arr[$k] .= $c;
+            }
+            $ik++;
+        }
+        return $arr;
+    }        
 }
 ?>

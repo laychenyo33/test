@@ -245,7 +245,10 @@ class DB {
       }
     }
   }
-
+  
+  function quote($str){
+      return mysql_real_escape_string($str);
+  }
 } // end of class
 
 ?>

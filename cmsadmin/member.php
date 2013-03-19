@@ -26,15 +26,6 @@ class MEMBER{
         'm_url'          => array("name"=>"主機","gc"=>"Web Page"),          
         'm_email'        => array('name'=>"電子郵件","gc"=>"E-mail Address"),   
     );
-    protected $_read_csv_pattern = array(
-        'pattern'     => array('/\.,/'),
-        'replacement' => array('.&:44:&')
-    );
-    protected $_restore_csv_pattern = array(
-        'pattern'     => array('/\.&:44:&/'),
-        'replacement' => array('.,') 
-    );    
-    protected $showDiscount = 1;
     function MEMBER(){
         global $db,$cms_cfg,$tpl;
         $this->showDiscount = $cms_cfg['ws_module']['ws_member_show_discount'];
@@ -417,8 +408,15 @@ class MEMBER{
             if(!empty($_REQUEST["mc_id"])){
                 $and_str .= " and find_in_set('".$_REQUEST["mc_id"]."',m.mc_id) >0 ";
             }
+            $_REQUEST["sk"] = trim($db->quote($_REQUEST["sk"]));
             if($_REQUEST["st"]=="m_name"){
-                $and_str .= " and (m.m_lname like '%".$_REQUEST["sk"]."%' or m.m_fname like '%".$_REQUEST["sk"]."%')";
+                $and_str .= " and (m.m_lname like '%".$_REQUEST["sk"]."%' or m.m_fname like '%".$_REQUEST["sk"]."%' or concat(m.m_fname,' ',m.m_lname) like '%".$_REQUEST["sk"]."%')";
+            }elseif($_REQUEST["st"]=="m_email"){
+                $and_str .= " and (m_email like '%".$_REQUEST["sk"]."%')";
+            }elseif($_REQUEST["st"]=="m_company"){
+                $and_str .= " and (m_company_name like '%".$_REQUEST["sk"]."%')";
+            }elseif($_REQUEST["st"]=="m_country"){
+                $and_str .= " and (m_country like '%".$_REQUEST["sk"]."%')";
             }
             $sql .= $and_str." order by m.m_sort ".$cms_cfg['sort_pos'].",m.m_modifydate desc ";
             //取得總筆數
@@ -428,7 +426,11 @@ class MEMBER{
             $func_str="member.php?func=m_list&mc_id=".$_REQUEST["mc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
             $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
             //重新組合包含limit的sql語法
+            if($_REQUEST["st"]){
+                $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],'',$sql);
+            }else{
             $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
+            }
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
@@ -438,6 +440,9 @@ class MEMBER{
                                       "VALUE_STR_NOWP"       => $_GET['nowp'],
                                       "VALUE_STR_JP"         => $_GET['jp'],
                                       "STR_SELECT_SEARCH_TARGET_CK1" => ($_POST['st']=="m_name")?"selected":"",
+                                      "STR_SELECT_SEARCH_TARGET_CK2" => ($_POST['st']=="m_email")?"selected":"",
+                                      "STR_SELECT_SEARCH_TARGET_CK3" => ($_POST['st']=="m_company")?"selected":"",
+                                      "STR_SELECT_SEARCH_TARGET_CK4" => ($_POST['st']=="m_country")?"selected":"",
             ));
             $tpl->assignGlobal( "VALUE_NOW_MC_ID" , $_REQUEST["mc_id"]);
             $i=$page["start_serial"];
@@ -526,6 +531,7 @@ class MEMBER{
                                           "VALUE_M_LNAME" => $row["m_lname"],
                                           "VALUE_M_BIRTHDAY" => $row["m_birthday"],
                                           "VALUE_M_ZIP" => $row["m_zip"],
+                                          "VALUE_M_COUNTRY" => $row["m_country"],
                                           "VALUE_M_ADDRESS" => $row["m_address"],
                                           "VALUE_M_TEL" => $row["m_tel"],
                                           "VALUE_M_FAX" => $row["m_fax"],
@@ -882,9 +888,7 @@ class MEMBER{
                     $colkeys = array_keys($_POST['mapto']);
                     $res = fopen($target_csv,'r');
                     $s=0;
-                    while($tmp = fgets($res, 3000)){
-                        //$csv_row = explode(',',$tmp);
-                        $csv_row = $this->_read_csv_row($tmp);
+                    while($csv_row = $main->fgetcsv($res)){
                         if($s==0){
                             $row_type = "TITLE_ROW";
                             $data_type = "SELECTED_COLUMN";
@@ -896,7 +900,7 @@ class MEMBER{
                         $tpl->assign("VALUE_ROW_INDEX",$s);
                         foreach($colkeys as $k){
                             $tpl->newBlock($data_type);
-                            $tpl->assign("VALUE_COL_DATA",  $this->_restore_col_value($csv_row[$k]));
+                            $tpl->assign("VALUE_COL_DATA",  $csv_row[$k]);
                             if($s==0){
                                 $tpl->assign(array(
                                    "VALUE_MAPTO_CNAME" => $_POST['mapto'][$k],
@@ -907,6 +911,7 @@ class MEMBER{
                         }
                         $s++;
                     }                    
+                    fclose($res);
                 }else{ //沒有選擇任何對應欄位
                     $tpl->newBlock("NO_COLUMN_SELECTED");
                 }
@@ -916,16 +921,14 @@ class MEMBER{
                 if($this->_save_csv_file($_FILES['csvfile']['tmp_name'],$target_csv)){
                     $tpl->newBlock("SELECT_IMPORT_COLUMN");
                     $res = fopen($target_csv,'r');
-                    $tmp = fgets($res, 3000);
-//                    $csv_title = explode(',',$tmp);
-                    $csv_title = $this->_read_csv_row($tmp);
+                    $csv_title = $main->fgetcsv($res);
                     $nums_csv_col = count($csv_title);
                     if($nums_csv_col){
                         foreach($csv_title as $k=>$title){
                             $tpl->newBlock("CSV_COLUMNS");
                             $tpl->assign(array(
                                 "VALUE_COL_INDEX" => $k,
-                                "VALUE_COL_NAME"  => $this->_restore_col_value($title),
+                                "VALUE_COL_NAME"  => $title,
                             ));
                         }
                         //顯示資料欄位
@@ -938,11 +941,11 @@ class MEMBER{
                             $tpl->assign("VALUE_DATA_COLUMN",implode(",",$dbcol));
                         }
                         $tpl->newBlock("SELECT_ALL_BUTTON");
-                        fclose($res);                        
                         $tpl->newBlock("SEND_TO_MAP");
                     }else{
                         $tpl->newBlock("NO_DATA_TO_IMPORT");
                     }
+                    fclose($res);                        
                 }else{
                     header("location:member.php?func=m_list");
                     die();
@@ -958,24 +961,21 @@ class MEMBER{
                     $wNums = 0; //寫入筆數
                     $cNums = 0; //衝突筆數
                     $sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member","m");
-                    while($tmp = fgets($res, 2000)){
-                        //$enc_type = mb_detect_encoding($tmp)?mb_detect_encoding($tmp):"big-5";
+                    while($csv = $main->fgetcsv($res)){
                         if($i>0 && in_array($i,$_POST['row_id'])){
-//                            $csv = explode(',',$tmp);
-                            $csv = $this->_read_csv_row($tmp);
                             $columns = array('mc_id','m_status','m_sort');
                             $values = array($_POST['mc_id'],'1',$sort++);
                             $conflic = false;
                             foreach($_POST['mapto'] as $idx => $col){
                                 if($col=="m_email" && $csv[$idx]!=''){
-                                    $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".mysql_real_escape_string($this->_restore_col_value($csv[$idx]))."'";
+                                    $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".mysql_real_escape_string($csv[$idx])."'";
                                     $res_m = $db->query($sql,true);
                                     $conflic = ($db->numRows($res_m))?true:false;
                                     $columns[] = 'm_account';
-                                    $values[] = "'".mysql_real_escape_string($this->_restore_col_value($csv[$idx]))."'";
+                                    $values[] = "'".mysql_real_escape_string($csv[$idx])."'";
                                 }
                                 $columns[] = $col;
-                                $values[] = "'".mysql_real_escape_string($this->_restore_col_value($csv[$idx]))."'";
+                                $values[] = "'".mysql_real_escape_string($csv[$idx])."'";
                             }
                             if($conflic){
                                 $tpl->newBlock("CONFLIC_RECORD");
@@ -997,6 +997,7 @@ class MEMBER{
                         "VALUE_CONFLICT_NUMS" => $cNums 
                     ));
                     @unlink($target_csv);
+                    fclose($res);
                 }else{
                     @unlink($target_csv);
                     header('location:member.php?func=m_list');
@@ -1008,15 +1009,13 @@ class MEMBER{
                     $tpl->assignGlobal("IMPORT_ACTION","csv欄位對應");
                     $tpl->newBlock("COLUMN_MAP");
                     $res = fopen($target_csv,'r');
-                    $tmp = fgets($res, 3000);
-//                    $csv_title = explode(',',$tmp);
-                    $csv_title = $this->_read_csv_row($tmp);
+                    $csv_title = $main->fgetcsv($res);
                     $columns = array_keys($this->columns);
                     foreach($_POST['csvcol'] as $colkey){
                         $tpl->newBlock("CSV_COLUMN");
                         $tpl->assign(array(
                             "VALUE_COL_INDEX" => $colkey,
-                            "VALUE_COL_NAME"  => $this->_restore_col_value($csv_title[$colkey]),
+                            "VALUE_COL_NAME"  => $csv_title[$colkey],
                         ));
                         foreach($columns as $s => $col){
                             $tpl->newBlock('MAPTO_LIST');
@@ -1028,6 +1027,7 @@ class MEMBER{
                             ));
                         }
                     }                    
+                    fclose($res);
                 }else{
                     header("location:member.php?func=m_list");
                     die();
@@ -1178,14 +1178,6 @@ class MEMBER{
             return @implode(', ',$tmp);       
         }
     }
-    
-    function _read_csv_row($row_str){
-        $tmp = preg_replace($this->_read_csv_pattern['pattern'], $this->_read_csv_pattern['replacement'], $row_str);
-        return explode(',',$tmp);
-    }
-    function _restore_col_value($v){
-        return preg_replace($this->_restore_csv_pattern['pattern'],$this->_restore_csv_pattern['replacement'],$v);
-    }    
 }
 //ob_end_flush();
 ?>
