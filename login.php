@@ -39,7 +39,7 @@ class LOGIN {
         global $db,$tpl,$TPLMSG,$cms_cfg,$si;
 
         if (isset($_POST['callback']) && $this->valid_pass) {
-            $sql="select m.m_id,m.m_account,m.m_fname,m.m_lname,mc.mc_subject,mc.mc_discount from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on mc.mc_id=m.mc_id
+            $sql="select m.m_id,m.m_account,m.m_fname,m.m_lname,mc.mc_id,mc.mc_subject,mc.mc_discount from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on mc.mc_id=m.mc_id
                      where m.m_account='".$_REQUEST["mm_account"]."' and
                            m.m_password='".$_REQUEST["mm_password"]."' and
                            m.m_status='1'";
@@ -50,6 +50,7 @@ class LOGIN {
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"]=$row["m_id"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"]=$row["m_account"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_NAME"]=$row["m_fname"].$row["m_lname"];
+                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE_ID"]=$row["mc_id"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE"]=$row["mc_subject"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=$row["mc_discount"];
                 //寫入登入記錄
