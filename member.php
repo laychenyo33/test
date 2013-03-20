@@ -51,10 +51,10 @@ class MEMBER{
                 $this->ws_tpl_type=1;
                 break;
             case "m_replace"://會員管理更新資料(replace)
-                //$this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
-                //$this->ws_load_tp($this->ws_tpl_file);
+                $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
                 $this->member_replace();
-                //$this->ws_tpl_type=1;
+                $this->ws_tpl_type=1;
                 break;
             default:    //會員專區
                 if(!empty($this->m_id)){
@@ -232,7 +232,8 @@ class MEMBER{
                         m_password,
                         m_company_name,
                         m_contact_s,
-                        m_name,
+                        m_fname,
+                        m_lname,
                         m_birthday,
                         m_sex,
                         m_country,
@@ -251,7 +252,8 @@ class MEMBER{
                         '".$_REQUEST["m_password"]."',
                         '".$_REQUEST["m_company_name"]."',
                         '".$_REQUEST["m_contact_s"]."',
-                        '".$_REQUEST["m_name"]."',
+                        '".$_REQUEST["m_fname"]."',
+                        '".$_REQUEST["m_lname"]."',
                         '".$_REQUEST["m_birthday"]."',
                         '".$_REQUEST["m_sex"]."',
                         '".$_REQUEST["m_country"]."',
@@ -272,7 +274,8 @@ class MEMBER{
                         m_password='".$_REQUEST["m_password"]."',
                         m_company_name='".$_REQUEST["m_company_name"]."',
                         m_contact_s='".$_REQUEST["m_contact_s"]."',
-                        m_name='".$_REQUEST["m_name"]."',
+                        m_fname='".$_REQUEST["m_fname"]."',
+                        m_lname='".$_REQUEST["m_lname"]."',
                         m_birthday='".$_REQUEST["m_birthday"]."',
                         m_sex='".$_REQUEST["m_sex"]."',
                         m_country='".$_REQUEST["m_country"]."',
