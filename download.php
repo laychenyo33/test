@@ -62,8 +62,8 @@ class DOWNLOAD{
         $ext=($this->ws_seo)?".htm":".php";
         $download_link="<a href=\"".$cms_cfg["base_root"]."download".$ext."\">".$TPLMSG["DOWNLOAD"]."</a>";
         //檔案下載分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql);
+        $sql="select dc.*,count(d.d_id) as nums from ".$cms_cfg['tb_prefix']."_download_cate as dc left join ".$cms_cfg['tb_prefix']."_download as d on dc.dc_id=d.dc_id where dc.dc_status='1' and d.d_public='1' group by dc.dc_id order by dc.dc_sort ".$cms_cfg['sort_pos']." ";
+        $selectrs = $db->query($sql,true);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
@@ -105,7 +105,7 @@ class DOWNLOAD{
             $and_str="and d.dc_id='".$dc_id."'";
         }
         $sql="select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id
-                  where  d.d_status='1' ".$and_str." order by d.d_sort ".$cms_cfg['sort_pos']." ";
+                  where  d.d_status='1' and d.d_public='1' ".$and_str." order by d.d_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
