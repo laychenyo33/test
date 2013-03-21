@@ -3,12 +3,20 @@
 include_once("libs/libs-sysconfig.php");
 $download = new DOWNLOAD;
 class DOWNLOAD{
+    protected $need_login;
+    protected $member_download;
+    protected $download_on;
+    protected $is_login;
     function DOWNLOAD(){
         global $db,$cms_cfg,$tpl,$main,$TPLMSG;
         $this->op_limit=$cms_cfg["dlop_limit"];
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->ps = $cms_cfg['path_separator'];
+        $this->need_login = $cms_cfg['ws_module']['ws_download_login'];
+        $this->member_download = $cms_cfg['ws_module']['ws_member_download'];
+        $this->download_on = $cms_cfg['ws_module']['ws_member_download_on'];
+        $this->is_login = isset($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]);
         if(!empty($_REQUEST["type"])){
             $_REQUEST["func"]="d_".$_REQUEST["type"];
             $this->func_str=$cms_cfg['base_root']."download/".$_REQUEST["f"];
@@ -17,9 +25,10 @@ class DOWNLOAD{
             $this->func_str=$cms_cfg['base_root'].$_REQUEST["f"];
         }
         //需要會員權限,則顯示登入表單
-        if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_download_login"]==1){
+        if(!$this->is_login && $this->need_login){
             $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
             $this->ws_load_tp($this->ws_tpl_file);
+            $main->layer_link($TPLMSG["MEMBER_LOGIN"]);
             $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG["MEMBER_LOGIN"]);
             $tpl->assignGlobal( "MSG_LOGIN_NOTICE1",$TPLMSG['LOGIN_NOTICE1']);
         }else{
@@ -29,6 +38,7 @@ class DOWNLOAD{
         }
         //page view record --ph_type,ph_type_id,m_id
         $main->pageview_history("dc",$_REQUEST["dc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
+        $main->layer_link();
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -58,56 +68,47 @@ class DOWNLOAD{
 //檔案下載--列表================================================================
     function download_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $dc_id=0;
-        $ext=($this->ws_seo)?".htm":".php";
-        $download_link="<a href=\"".$cms_cfg["base_root"]."download".$ext."\">".$TPLMSG["DOWNLOAD"]."</a>";
-        //檔案下載分類
-        $sql="select dc.*,count(d.d_id) as nums from ".$cms_cfg['tb_prefix']."_download_cate as dc left join ".$cms_cfg['tb_prefix']."_download as d on dc.dc_id=d.dc_id where dc.dc_status='1' and d.d_public='1' group by dc.dc_id order by dc.dc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql,true);
-        $i=0;
-        while($row = $db->fetch_array($selectrs,1)){
-            $i++;
-            if($this->ws_seo==1 ){
-                if(trim($row["dc_seo_filename"])==""){
-                    $cate_link=$cms_cfg["base_root"]."download/dlist-".$row["dc_id"].".htm";
-                }else{
-                    $cate_link=$cms_cfg["base_root"]."download/".$row["dc_seo_filename"].".htm";
-                }
-            }else{
-                $cate_link=$cms_cfg["base_root"]."download.php?func=d_list&dc_id=".$row["dc_id"];
-            }
-            //顯示左方分類
-            $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["dc_subject"],
-                                 "VALUE_CATE_LINK"  => $cate_link,
-            ));
-            if($_REQUEST["dc_id"]==$row["dc_id"]  || ($_REQUEST["f"]==$row["dc_seo_filename"])){
-                $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
-                $download_link .= $this->ps."<a href=\"".$cate_link."\">".$row["dc_subject"]."</a>";
-                if($this->ws_seo){
-                    $meta_array=array("meta_title"=>$row["dc_seo_title"],
-                                      "meta_keyword"=>$row["dc_seo_keyword"],
-                                      "meta_description"=>$row["dc_seo_description"],
-                                      "seo_short_desc" => $row["dc_seo_short_desc"],
-                                      "seo_h1"=>(trim($row["dc_seo_h1"])=="")?$row["dc_subject"]:$row["dc_seo_h1"],
-                    );
-                    echo $row["dc_seo_short_desc"];
-                    $main->header_footer($meta_array);
-                }else{
-                    $main->header_footer("download",$TPLMSG["DOWNLOAD"]);
-                }
-                $dc_id=$row["dc_id"];
-            }
-        }
-        $tpl->assignGlobal("TAG_LAYER",$download_link);
         //檔案下載列表
-        if($dc_id!=0){
-            $and_str="and d.dc_id='".$dc_id."'";
+        $crow = $this->left_cate_list();
+        if($crow && $this->ws_seo){
+            $meta_array=array(
+                "meta_title"=>$crow["dc_seo_title"],
+                "meta_keyword"=>$crow["dc_seo_keyword"],
+                "meta_description"=>$crow["dc_seo_description"],
+                "seo_short_desc" => $crow["dc_seo_short_desc"],
+                "seo_h1"=>(trim($crow["dc_seo_h1"])=="")?$crow["dc_subject"]:$crow["dc_seo_h1"],
+            );
+            $main->header_footer($meta_array);
+        }else{
+            $main->header_footer("download",$TPLMSG["DOWNLOAD"]);
         }
-        $sql="select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id
-                  where  d.d_status='1' and d.d_public='1' ".$and_str." order by d.d_sort ".$cms_cfg['sort_pos']." ";
+        $dc_id=$crow["dc_id"];        
+        
+        if($dc_id!=0){
+            $and_str=" and d.dc_id='".$dc_id."'";
+            $ext=($this->ws_seo)?".htm":".php";
+            $main->layer_link($TPLMSG['DOWNLOAD'],$cms_cfg['base_root']."download".$ext)->layer_link($crow['dc_subject']);
+        }else{
+            $main->layer_link($TPLMSG['DOWNLOAD']);
+        }
+        $sql="select d.*,dc.*,'0' as dtype from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id
+                  where  d.d_status='1' and d.d_public='1' ".$and_str;
+        if($this->member_download && $this->is_login){
+            if($this->download_on=="member"){
+                $m_id = $_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID'];
+                $sql .= " union select d.*,dc.*,'1' as dtype from ".$cms_cfg['tb_prefix']."_download as d inner join ".$cms_cfg['tb_prefix']."_member_download_map as mdm 
+                        inner join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.d_id=mdm.d_id and d.dc_id=dc.dc_id 
+                        where d.d_public='0' and mdm.m_id='".$m_id."'".$and_str;                        
+            }else{
+                $mc_id = $_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_CATE_ID'];
+                $sql .= " union select d.*,dc.*,'2' as dtype from ".$cms_cfg['tb_prefix']."_download as d inner join ".$cms_cfg['tb_prefix']."_member_download_map as mdm 
+                        inner join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.d_id=mdm.d_id and d.dc_id=dc.dc_id 
+                        where d.d_public='0' and mdm.mc_id='".$mc_id."'".$and_str;         
+            }
+        }
+        $sql .= " order by dtype desc,d_sort ".$cms_cfg['sort_pos'];
         //取得總筆數
-        $selectrs = $db->query($sql);
+        $selectrs = $db->query($sql,true);
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
         if($this->ws_seo==1  && trim($_REQUEST["f"])!=""){
@@ -158,10 +159,11 @@ class DOWNLOAD{
                                 "VALUE_D_MODIFYDATE" => $row["d_modifydate"],
                                 "VALUE_D_SERIAL" => $i,
                                 "VALUE_DC_SUBJECT"  => $row["dc_subject"],
+                                "TAG_DTYPE"         => $row['dtype']?"<span class='dtype'>*</span>":"",
             ));
             //如果下載顯示縮圖，開啟縮圖欄位
             if($cms_cfg['ws_module']['ws_download_thumb']){
-                $tpl->newBlock("THUMB_TITLE");
+                $tpl->newBlock("THUMB_COLUMN");
                 $tpl->assign(array(
                     "VALUE_D_THUMB" => trim($row["d_thumb"])?$cms_cfg['file_root'].$row["d_thumb"]:$cms_cfg['default_ebook_pic'],                    
                 ));
@@ -188,6 +190,42 @@ class DOWNLOAD{
                 $tpl->gotoBlock("PAGE_DATA_SHOW");
             }
         }
+    }
+    function left_cate_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        //檔案下載分類
+//        $sql="select dc.* from ".$cms_cfg['tb_prefix']."_download_cate as dc left join ".$cms_cfg['tb_prefix']."_download as d on dc.dc_id=d.dc_id where dc.dc_status='1' and d.d_public='1' group by dc.dc_id ";
+//        if($this->member_download && $this->is_login){
+//            $sql.=" union ";
+//            $sql.="select dc.* from ".$cms_cfg['tb_prefix']."_download_cate as dc left join ".$cms_cfg['tb_prefix']."_download as d on dc.dc_id=d.dc_id where dc.dc_status='1' and d.d_public='0' group by dc.dc_id order by dc_sort ".$cms_cfg['sort_pos']." ";
+//        }       
+        $sql="select dc.* from ".$cms_cfg['tb_prefix']."_download_cate as dc  where dc.dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
+        $selectrs = $db->query($sql,true);
+        $i=0;
+        $menu=array();
+        while($row = $db->fetch_array($selectrs,1)){
+            $i++;
+            if($this->ws_seo==1 ){
+                if(trim($row["dc_seo_filename"])==""){
+                    $cate_link=$cms_cfg["base_root"]."download/dlist-".$row["dc_id"].".htm";
+                }else{
+                    $cate_link=$cms_cfg["base_root"]."download/".$row["dc_seo_filename"].".htm";
+                }
+            }else{
+                $cate_link=$cms_cfg["base_root"]."download.php?func=d_list&dc_id=".$row["dc_id"];
+            }
+            $tmp=array(
+                'name'=>$row["dc_subject"],
+                'link'=>$cate_link
+            );
+            if($_REQUEST["dc_id"]==$row["dc_id"]  || $_REQUEST["f"]==$row["dc_seo_filename"]){
+                $tmp['tag_cur'] = "class='current'";
+                $current_row = $row;
+            }
+            $menu[] = $tmp;
+        }
+        $main->new_left_menu($menu);
+        return $current_row;     
     }
 }
 ?>
