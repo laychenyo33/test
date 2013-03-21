@@ -54,6 +54,7 @@ $cms_cfg["ws_module"]=array(
         "ws_member_manipulate"=>1,      //會員資料匯出匯入
         "ws_member_country"   =>0,      //會員表單顯示國家下拉式選單
         "ws_member_download"  =>0,      //會員下載
+        "ws_member_download_on"   => "", //會員下載依類別cate或會員member，預設是類別(cate)，留空也是類別
         "ws_member_show_discount" => 0, //後台會員類別不顯示折扣欄位
         "ws_member_multi_cate"    => 0, //會員使用多重類別
         "ws_cart_login"=>0,             //購物車或詢價車是否需要會員登入
