@@ -240,6 +240,7 @@ class DOWNLOAD{
                 }
             }else{
                 header("location : download.php?func=dc_list");
+                die();
             }
         }
     }
@@ -461,8 +462,13 @@ class DOWNLOAD{
                                   "STR_D_STATUS_CK1"       => "checked",
                                   "STR_D_STATUS_CK0"       => "",
                                   "VALUE_D_THUMB_PREVIEW1" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_ACTION_MODE"      => $action_mode
+                                  "VALUE_ACTION_MODE"      => $action_mode,
+                                  "PUBLIC_RAD_0_CHK"       => "checked"
         ));
+        //是否顯示公開下載欄位
+        if($cms_cfg['ws_module']['ws_member_download']){
+            $tpl->newBlock("DOWNLOAD_PUBLIC_OR_NOT");
+        }
         //相關參數
         if(!empty($_REQUEST['nowp'])){
             $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
@@ -486,10 +492,13 @@ class DOWNLOAD{
                                           "VALUE_D_FILEPATH" => $row["d_filepath"],
                                           "STR_D_STATUS_CK1" => ($row["d_status"]==1)?"checked":"",
                                           "STR_D_STATUS_CK0" => ($row["d_status"]==0)?"checked":"",
+                                          "PUBLIC_RAD_1_CHK" => ($row['d_public']==1)?"checked":"", 
+                                          "PUBLIC_RAD_0_CHK" => ($row['d_public']==0)?"checked":"", 
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
                 header("location : download.php?func=d_list");
+                die();
             }
         }
         //檔案下載分類
@@ -522,6 +531,7 @@ class DOWNLOAD{
                         d_status,
                         d_sort,
                         d_thumb,
+                        d_public,
                         d_subject,
                         d_content,
                         d_filepath,
@@ -531,6 +541,7 @@ class DOWNLOAD{
                         '".$_REQUEST["d_status"]."',
                         '".$_REQUEST["d_sort"]."',
                         '".$main->file_str_replace($_REQUEST["d_thumb"])."',
+                        '".$_REQUEST["d_public"]."',
                         '".$_REQUEST["d_subject"]."',
                         '".$_REQUEST["d_content"]."',
                         '".$main->file_str_replace($_REQUEST["d_filepath"])."',
@@ -544,6 +555,7 @@ class DOWNLOAD{
                         d_status='".$_REQUEST["d_status"]."',
                         d_sort='".$_REQUEST["d_sort"]."',
                         d_thumb='".$main->file_str_replace($_REQUEST["d_thumb"])."',
+                        d_public='".$_REQUEST["d_public"]."',
                         d_subject='".$_REQUEST["d_subject"]."',
                         d_content='".$_REQUEST["d_content"]."',
                         d_filepath='".$main->file_str_replace($_REQUEST["d_filepath"])."',

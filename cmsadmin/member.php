@@ -26,9 +26,13 @@ class MEMBER{
         'm_url'          => array("name"=>"主機","gc"=>"Web Page"),          
         'm_email'        => array('name'=>"電子郵件","gc"=>"E-mail Address"),   
     );
+    protected $member_download;
+    protected $download_on;
     function MEMBER(){
         global $db,$cms_cfg,$tpl;
         $this->showDiscount = $cms_cfg['ws_module']['ws_member_show_discount'];
+        $this->member_download = $cms_cfg['ws_module']['ws_member_download'];
+        $this->download_on = $cms_cfg['ws_module']['ws_member_download_on'];
         switch($_REQUEST["func"]){
             case "m_import":
                 if($cms_cfg['ws_module']['ws_member_manipulate']!=1){
@@ -106,6 +110,7 @@ class MEMBER{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->member_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -115,6 +120,7 @@ class MEMBER{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->member_form("mod");
                 $this->ws_tpl_type=1;
                 break;
@@ -274,7 +280,9 @@ class MEMBER{
                 header("location : member.php?func=mc_list");
             }
         }
-        $this->download_of_cate($row['mc_id']);
+        if($this->member_download && ($this->download_on=="" || $this->download_on=="cate")){
+            $this->download_of_cate($row['mc_id']);
+        }
     }
     //會員分類--資料更新
     function member_cate_replace(){
@@ -308,26 +316,9 @@ class MEMBER{
             $rs = $db->query($sql);
             $mc_id = $_REQUEST['mc_id']?$_REQUEST['mc_id']:$db->get_insert_id();
             $db_msg = $db->report();
-            //有會員download
-            if($cms_cfg['ws_module']['ws_member_download']){
-                $db->query("start transaction");
-                $db->query("delete from ".$cms_cfg['tb_prefix']."_member_download_map where mc_id='".$mc_id."'");
-                if(is_array($_POST['d_files'])){
-                    $sql = "insert into ".$cms_cfg['tb_prefix']."_member_download_map values";
-                    foreach($_POST['d_files'] as $d_id){
-                        $values[] = "('".$mc_id."','".$d_id."')";
-                    }
-                    $sql.=implode(',',$values);
-                    $db->query($sql,true);
-                    if($err=$db->report()){
-                        $db_msg.=$err;
-                        $db->query("rollback");
-                    }else{
-                        $db->query("commit");
-                    }
-                }else{
-                    $db->query("commit");
-                }
+            //有會員download，且是依會員類別
+            if($this->member_download && ($this->download_on=="" || $this->download_on=="cate")){
+                $db_msg .= $this->_write_download($_POST['d_files'],'mc_id',$mc_id);
             }
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
@@ -558,6 +549,9 @@ class MEMBER{
             $main->country_select($row["m_country"]);
         }        
         $this->member_cate_select($row['mc_id']);
+        if($this->member_download && $this->download_on=="member"){
+            $this->download_of_member($row['m_id']);
+        }
     }
 //會員--資料更新================================================================
     function member_replace(){
@@ -637,6 +631,11 @@ class MEMBER{
         if(!empty($sql)){
             $rs = $db->query($sql);
             $db_msg = $db->report();
+            $m_id = $_REQUEST["m_id"]?$_REQUEST["m_id"]:$db->get_insert_id();
+            //有會員download
+            if($this->member_download && $this->download_on=="member"){
+                $db_msg .= $this->_write_download($_POST['d_files'],'m_id',$m_id);
+            }
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 $goto_url=$cms_cfg["manage_url"]."member.php?func=m_list&mc_id=".$_POST['return_mc_id']."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
@@ -1135,8 +1134,15 @@ class MEMBER{
     }
     //下載檔案列表，並判斷是否為類別可下載的檔案
     function download_of_cate($mc_id){
+         $this->download_checkbox_using("mc_id",$mc_id);
+    }    
+    //下載檔案列表，並判斷是否為會員帳號可下載的檔案
+    function download_of_member($m_id){
+         $this->download_checkbox_using("m_id",$m_id);
+    }    
+    function download_checkbox_using($col,$val){
         global $db,$cms_cfg,$tpl;
-        if($cms_cfg['ws_module']['ws_member_download']){
+        if($this->member_download){
             $tpl->newBlock("MEMBER_DOWNLOAD");
             $sql = "select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
             $res_dc = $db->query($sql,true);
@@ -1145,7 +1151,7 @@ class MEMBER{
                 $tpl->assign("VALUE_DC_SUBJECT",$dc_row['dc_subject']);
                 $tpl->assign("TAG_FILE_DS","none");
                 //下載分類下的檔案
-                $sql = "select d.*,mc_id as `checked` from ".$cms_cfg['tb_prefix']."_download as d left join (select * from ".$cms_cfg['tb_prefix']."_member_download_map where mc_id='".$mc_id."') as mdm on d.d_id=mdm.d_id where d_public='0' and dc_id='".$dc_row['dc_id']."' order by d_sort ".$cms_cfg['sort_pos'];
+                $sql = "select d.*,".$col." as `checked` from ".$cms_cfg['tb_prefix']."_download as d left join (select * from ".$cms_cfg['tb_prefix']."_member_download_map where ".$col."='".$val."') as mdm on d.d_id=mdm.d_id where d_public='0' and dc_id='".$dc_row['dc_id']."' order by d_sort ".$cms_cfg['sort_pos'];
                 $d_res = $db->query($sql,true);
                 $i=1;
                 $chk=0;
@@ -1176,6 +1182,29 @@ class MEMBER{
                 $tmp[]=$ms;
             }
             return @implode(', ',$tmp);       
+        }
+    }
+    function _write_download($d_files,$col,$col_value){
+        global $db,$tpl,$cms_cfg;
+        if($this->member_download){
+            $db->query("start transaction");
+            $db->query("delete from ".$cms_cfg['tb_prefix']."_member_download_map where ".$col."='".$col_value."'");
+            if(is_array($d_files)){
+                $sql = "insert into ".$cms_cfg['tb_prefix']."_member_download_map (".$col.",d_id)values";
+                foreach($d_files as $d_id){
+                    $values[] = "('".$col_value."','".$d_id."')";
+                }
+                $sql.=implode(',',$values);
+                $db->query($sql,true);
+                if($err=$db->report()){
+                    $db->query("rollback");
+                    return $err;
+                }else{
+                    $db->query("commit");
+                }
+            }else{
+                $db->query("commit");
+            }
         }
     }
 }
