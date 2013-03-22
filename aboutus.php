@@ -49,7 +49,7 @@ class ABOUTUS{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //左側選單
         $row = $this->left_cate_list();
-        $row["au_content"]=preg_replace("/upload_files/",$cms_cfg["file_root"]."upload_files",$row["au_content"]);
+        $row["au_content"]=preg_replace("/([^\"])*upload_files/",$cms_cfg["file_root"]."upload_files",$row["au_content"]);
         $main->layer_link($row["au_subject"]);
         $tpl->assignGlobal( "VALUE_AU_CONTENT" , $row["au_content"]);
     }
