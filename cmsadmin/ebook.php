@@ -196,7 +196,7 @@ class EBOOK{
         }else{
             $and_str = " and ebc_parent='".$this->parent."'";
         }
-        $sql .= $and_str." order by ebc_sort asc,ebc_modifydate desc ";
+        $sql .= $and_str." order by ebc_sort ".$cms_cfg['sort_pos'].",ebc_modifydate desc ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結
@@ -267,7 +267,7 @@ class EBOOK{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //欄位名稱
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
-                                  "VALUE_EBC_SORT" => 1,
+                                  "VALUE_EBC_SORT" => $main->get_max_sort_value($cms_cfg['tb_prefix'].'_ebook_cate','ebc'),
                                   "NOW_EBC_ID"  => 0,
                                   "STR_EBC_STATUS_CK1" => "checked",
                                   "STR_EBC_STATUS_CK0" => "",
@@ -495,7 +495,7 @@ class EBOOK{
             if($_REQUEST["st"]=="eb_name"){
                 $and_str .= " and eb.eb_name like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by eb.eb_sort asc,eb.eb_modifydate desc ";
+            $sql .= $and_str." order by eb.eb_sort ".$cms_cfg['sort_pos'].",eb.eb_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -581,7 +581,7 @@ class EBOOK{
         $row = $db->fetch_array($selectrs,1);
         //欄位名稱
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
-                                  "VALUE_EB_SORT" => 1,
+                                  "VALUE_EB_SORT" => $main->get_max_sort_value($cms_cfg['tb_prefix'].'_ebook','eb','ebc_id',$this->parent,true),
                                   "NOW_EB_ID" => 0,
                                   "VALUE_SMALL_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
                                   "VALUE_BIG_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],

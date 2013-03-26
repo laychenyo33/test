@@ -76,7 +76,7 @@ class EBOOK{
     function ebook_list($mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //預設EBOOK列表
-        $sql="select ebc_id from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_status='1' order by ebc_sort asc ";
+        $sql="select ebc_id from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_status='1' order by ebc_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         $this->parent=($_REQUEST["ebc_parent"])?$_REQUEST["ebc_parent"]:$row["ebc_id"];
@@ -119,7 +119,7 @@ class EBOOK{
         }
 
         //EBOOK列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_ebook where eb_status='1' and ebc_id ='".$this->parent."' order by eb_sort asc, eb_modifyaccount desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_ebook where eb_status='1' and ebc_id ='".$this->parent."' order by eb_sort ".$cms_cfg['sort_pos'].", eb_modifyaccount desc";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records = $db->numRows($selectrs);
