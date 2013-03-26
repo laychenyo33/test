@@ -51,9 +51,13 @@ function addBookmarkForBrowser(sTitle, sUrl) {
     if(window.sidebar && window.sidebar.addPanel){
         window.sidebar.addPanel(sTitle, sUrl, "");
     }else if(window.external) {
-        window.external.AddFavorite(sUrl, sTitle);
+        if(window.external.AddFavorite){
+            window.external.AddFavorite(sUrl, sTitle);
+        }else{
+            alert('do it your self!');         
+        }
     }else{
-        alert('do it your self!');
+        alert('do it your self!');         
     }
 }
 /* 勾選詢價車時之檢查事項 */
