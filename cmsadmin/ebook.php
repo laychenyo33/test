@@ -336,7 +336,7 @@ class EBOOK{
                         '".$_REQUEST["ebc_sort"]."',
                         '".htmlspecialchars($_REQUEST["ebc_name"])."',
                         '".htmlspecialchars($_REQUEST["ebc_name_alias"])."',
-                        '".$this->file_str_replace($_REQUEST["ebc_cate_img"])."',
+                        '".$main->file_str_replace($_REQUEST["ebc_cate_img"])."',
                         '".date("Y-m-d m:i:s")."',
                         '".$_REQUEST["ebc_locked"]."',
                         '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
@@ -384,7 +384,7 @@ class EBOOK{
                     ebc_name='".htmlspecialchars($_REQUEST["ebc_name"])."',
                     ebc_name_alias='".htmlspecialchars($_REQUEST["ebc_name_alias"])."',
                     ebc_level='".$ebc_level."',
-                    ebc_cate_img='".$this->file_str_replace($_REQUEST["ebc_cate_img"])."',
+                    ebc_cate_img='".$main->file_str_replace($_REQUEST["ebc_cate_img"])."',
                     ebc_modifydate='".date("Y-m-d m:i:s")."',
                     ebc_locked='".$_REQUEST["ebc_locked"]."',
                     ebc_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
@@ -662,8 +662,8 @@ class EBOOK{
                         '".$_REQUEST["eb_sort"]."',
                         '".htmlspecialchars($_REQUEST["eb_name"])."',
                         '".htmlspecialchars($_REQUEST["eb_name_alias"])."',
-                        '".$this->file_str_replace($_REQUEST["eb_small_img"])."',
-                        '".$this->file_str_replace($_REQUEST["eb_big_img"])."',
+                        '".$main->file_str_replace($_REQUEST["eb_small_img"])."',
+                        '".$main->file_str_replace($_REQUEST["eb_big_img"])."',
                         '".date("Y-m-d H:i:s")."',
                         '".$_REQUEST["eb_locked"]."',
                         '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
@@ -688,8 +688,8 @@ class EBOOK{
                     eb_sort = '".$_REQUEST["eb_sort"]."',
                     eb_name = '".htmlspecialchars($_REQUEST["eb_name"])."',
                     eb_name_alias = '".htmlspecialchars($_REQUEST["eb_name_alias"])."',
-                    eb_small_img = '".$this->file_str_replace($_REQUEST["eb_small_img"])."',
-                    eb_big_img = '".$this->file_str_replace($_REQUEST["eb_big_img"])."',
+                    eb_small_img = '".$main->file_str_replace($_REQUEST["eb_small_img"])."',
+                    eb_big_img = '".$main->file_str_replace($_REQUEST["eb_big_img"])."',
                     eb_modifydate = '".date("Y-m-d H:i:s")."',
                     eb_locked = '".$_REQUEST["eb_locked"]."',
                     eb_modifyaccount = '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
