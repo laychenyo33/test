@@ -601,7 +601,7 @@ class PRODUCTS{
                 }
                 //批次處理domtab資料
                 $domtabData = array();
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<iframe><script>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<img><iframe>"));
                 //產品敘述
                 if(trim($ck_str)!=""){
                     $tmp = array(
@@ -610,7 +610,7 @@ class PRODUCTS{
                     );
                     array_push($domtabData, $tmp);
                 }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_character"],"<iframe><script>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_character"],"<img><iframe>"));
                 //產品特性
                 if(trim($ck_str)!=""){
                     $tmp = array(
@@ -619,7 +619,7 @@ class PRODUCTS{
                     );
                     array_push($domtabData, $tmp);                    
                 }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_spec"],"<iframe><script>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_spec"],"<img><iframe>"));
                 //產品規格
                 if(trim($ck_str)!=""){
                     $tmp = array(
