@@ -341,8 +341,8 @@ class MAINFUNC{
                 $tpl->newBlock( "LEFT_CATE_LIST" );
                 $tpl->assign( array( "VALUE_CATE_NAME"       => $row["pc_name"],
                                      "VALUE_CATE_LINK"       => $pc_link,
-                                     "VALUE_CATE_LINK_CLASS" => (($_REQUEST['pc_parent']==$row['pc_id'] || $_REQUEST['f']==$row['pc_seo_filename'])?"current":""),
-                                     "TAG_CURRENT_CLASS"     => (($_REQUEST['pc_parent']==$row['pc_id'] || $_REQUEST['f']==$row['pc_seo_filename']))?"class='current'":"",
+                                     "VALUE_CATE_LINK_CLASS" => (($_REQUEST['pc_parent']==$row['pc_id'] || ($cms_cfg['ws_module']['ws_seo']==1 && $_REQUEST['f']==$row['pc_seo_filename']))?"current":""),
+                                     "TAG_CURRENT_CLASS"     => ($_REQUEST['pc_parent']==$row['pc_id'] || ($cms_cfg['ws_module']['ws_seo']==1 && $_REQUEST['f']==$row['pc_seo_filename']))?"class='current'":"",
                 ));
                 //左方產品次分類為click menu
                 if($cms_cfg['ws_module']['ws_seo']==1){
