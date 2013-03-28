@@ -986,6 +986,11 @@ class MAINFUNC{
         $input_path=preg_replace("#(.*/)(upload_files/.+)$#i", "$2", $input_path);
         return $input_path;
     }
+    function content_file_str_replace($content){
+        global $cms_cfg;
+        $content=preg_replace("#([^\"]+/)*(upload_files/[^\"]+)#i", $cms_cfg['file_root']."$2", $content);
+        return $content;
+    }
     //鎖滑鼠右鍵功能
     function mouse_disable() {
         global $tpl,$cms_cfg;
