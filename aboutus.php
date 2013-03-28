@@ -34,7 +34,7 @@ class ABOUTUS{
         //$main->header_footer("aboutus");
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
-        $main->layer_link($this->au_cate,$cms_cfg['base_root'].$this->au_cate.".htm");
+        $main->layer_link($ws_array["main"][$this->au_cate],$cms_cfg['base_root'].$this->au_cate.".htm");
         if($cms_cfg["ws_module"]["ws_left_main_au"]==0){
             $main->left_fix_cate_list();
             $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
