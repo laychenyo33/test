@@ -601,30 +601,30 @@ class PRODUCTS{
                 }
                 //批次處理domtab資料
                 $domtabData = array();
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<img><iframe><script>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<iframe><script>"));
                 //產品敘述
                 if(trim($ck_str)!=""){
                     $tmp = array(
                         'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row["p_desc_title"]:$TPLMSG['PRODUCT_DESCRIPTION'],
-                        'data'=>$row["p_desc"]
+                        'data'=>$main->content_file_str_replace($row["p_desc"])
                     );
                     array_push($domtabData, $tmp);
                 }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_character"],"<img><iframe><script>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_character"],"<iframe><script>"));
                 //產品特性
                 if(trim($ck_str)!=""){
                     $tmp = array(
                         'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row["p_character_title"]:$TPLMSG['PRODUCT_CHARACTER'],
-                        'data'=>$row["p_character"]
+                        'data'=>$main->content_file_str_replace($row["p_character"])
                     );
                     array_push($domtabData, $tmp);                    
                 }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_spec"],"<img><iframe><script>"));
+                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_spec"],"<iframe><script>"));
                 //產品規格
                 if(trim($ck_str)!=""){
                     $tmp = array(
                         'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row["p_spec_title"]:$TPLMSG['PRODUCT_SPEC'],
-                        'data'=>$row["p_spec"]
+                        'data'=>$main->content_file_str_replace($row["p_spec"])
                     );
                     array_push($domtabData, $tmp);                       
                 }
