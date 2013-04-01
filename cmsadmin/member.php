@@ -540,6 +540,7 @@ class MEMBER{
                 ));
             }else{
                 header("location : member.php?func=m_list");
+                die();
             }
         }else{
             $tpl->newBlock( "MEMBER_ADD_MODE" );
