@@ -17,13 +17,6 @@ class DOWNLOAD{
         $this->member_download = $cms_cfg['ws_module']['ws_member_download'];
         $this->download_on = $cms_cfg['ws_module']['ws_member_download_on'];
         $this->is_login = isset($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]);
-        if(!empty($_REQUEST["type"])){
-            $_REQUEST["func"]="d_".$_REQUEST["type"];
-            $this->func_str=$cms_cfg['base_root']."download/".$_REQUEST["f"];
-        }else{
-            $_REQUEST["f"]="download";
-            $this->func_str=$cms_cfg['base_root'].$_REQUEST["f"];
-        }
         //需要會員權限,則顯示登入表單
         if(!$this->is_login && $this->need_login){
             $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
@@ -31,15 +24,33 @@ class DOWNLOAD{
             $main->layer_link($TPLMSG["MEMBER_LOGIN"]);
             $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG["MEMBER_LOGIN"]);
             $tpl->assignGlobal( "MSG_LOGIN_NOTICE1",$TPLMSG['LOGIN_NOTICE1']);
+            $this->ws_tpl_type = 1;
         }else{
-            $this->ws_tpl_file = "templates/ws-download-tpl.html";
-            $this->ws_load_tp($this->ws_tpl_file);
-            $this->download_list();
+            switch($_GET['func']){
+                case "dl":
+                    $this->ws_tpl_type=0;
+                    $this->download_file($_GET['d_id']);
+                    break;
+                default:
+                    $this->ws_tpl_type=1;
+                    if(!empty($_REQUEST["type"])){
+                        $_REQUEST["func"]="d_".$_REQUEST["type"];
+                        $this->func_str=$cms_cfg['base_root']."download/".$_REQUEST["f"];
+                    }else{
+                        $_REQUEST["f"]="download";
+                        $this->func_str=$cms_cfg['base_root'].$_REQUEST["f"];
+                    }
+                    $this->ws_tpl_file = "templates/ws-download-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $this->download_list();
+            }
+        }        
+        if($this->ws_tpl_type){
+            //page view record --ph_type,ph_type_id,m_id
+            $main->pageview_history("dc",$_REQUEST["dc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
+            $main->layer_link();
+            $tpl->printToScreen();
         }
-        //page view record --ph_type,ph_type_id,m_id
-        $main->pageview_history("dc",$_REQUEST["dc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
-        $main->layer_link();
-        $tpl->printToScreen();
     }
     //載入對應的樣板
     function ws_load_tp($ws_tpl_file){
@@ -59,9 +70,9 @@ class DOWNLOAD{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["download"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-download"); //主要顯示區域的css設定
         $tpl->assignGlobal( "SUBMENU_TYPE" , "submenu02"); //左側選單的容器類別
-        if($_REQUEST["f"]=="download"){
-            $main->header_footer("download", $TPLMSG["DOWNLOAD"]);
-        }
+//        if($_REQUEST["f"]=="download"){
+//        }
+        $main->header_footer("download", $TPLMSG["DOWNLOAD"]);
         $main->google_code(); //google analystics code , google sitemap code
     }
 
@@ -160,6 +171,7 @@ class DOWNLOAD{
                                 "VALUE_D_SERIAL" => $i,
                                 "VALUE_DC_SUBJECT"  => $row["dc_subject"],
                                 "TAG_DTYPE"         => $row['dtype']?"<span class='dtype'>*</span>":"",
+                                "VALUE_D_LINK"  => $cms_cfg['base_root']."download.php?func=dl&d_id=".$row['d_id'],
             ));
             //如果下載顯示縮圖，開啟縮圖欄位
             if($cms_cfg['ws_module']['ws_download_thumb']){
@@ -226,6 +238,23 @@ class DOWNLOAD{
         }
         $main->new_left_menu($menu);
         return $current_row;     
+    }
+    //下載檔案
+    function download_file($d_id){
+        global $db,$cms_cfg,$main;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_download where d_status='1' and d_id='".$d_id."'";
+        $row = $db->query_firstrow($sql,true);
+        if($row){
+            if($row['d_public']=='1' || ($row['d_public']=='0' && $this->user_is_valid)){
+                $filepath = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row['d_filepath'];
+                if(file_exists($filepath)){
+                    $file = str_replace("upload_files/","",$main->file_str_replace($filepath));
+                    header("content-type: application/force-download");
+                    header("content-disposition: attachment; filename=".$file);
+                    readfile($filepath);
+                }
+            }
+        }
     }
 }
 ?>
