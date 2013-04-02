@@ -217,9 +217,11 @@ class MEMBER{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         switch ($_REQUEST["action_mode"]){
             case "add":
+                $max_sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member",'m');
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_member (
                         mc_id,
+                        m_sort,
                         m_status,
                         m_modifydate,
                         m_account,
@@ -239,7 +241,8 @@ class MEMBER{
                         m_email,
                         m_epaper_status
                     ) values (
-                        '0',
+                        '1',
+                        '".$max_sort."',
                         '1',
                         '".date("Y-m-d H:i:s")."',
                         '".$_REQUEST["m_account"]."',
