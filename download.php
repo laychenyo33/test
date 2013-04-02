@@ -248,7 +248,7 @@ class DOWNLOAD{
             if($row['d_public']=='1' || ($row['d_public']=='0' && $this->user_is_valid)){
                 $filepath = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row['d_filepath'];
                 if(file_exists($filepath)){
-                    $file = str_replace("upload_files/","",$main->file_str_replace($filepath));
+                    $file = $main->file_str_replace($filepath,"#(.+/)([^/]+)$#i");
                     header("content-type: application/force-download");
                     header("content-disposition: attachment; filename=".$file);
                     readfile($filepath);

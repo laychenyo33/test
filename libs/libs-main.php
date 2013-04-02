@@ -981,9 +981,9 @@ class MAINFUNC{
         }
     }
     //圖檔檔案路徑替換避免破圖
-    function file_str_replace($input_path){
+    function file_str_replace($input_path,$pattern="#(.*/)(upload_files/.+)$#i",$replacement="$2"){
         global $cms_cfg;
-        $input_path=preg_replace("#(.*/)(upload_files/.+)$#i", "$2", $input_path);
+        $input_path=preg_replace( $pattern, $replacement, $input_path);
         return $input_path;
     }
     function content_file_str_replace($content){
@@ -1467,6 +1467,7 @@ class MAINFUNC{
             $tpl->assign( array( 
                 "VALUE_CATE_NAME" => $itme['name'],
                 "VALUE_CATE_LINK"  => $itme['link'],
+                "TAG_CURRENT_CLASS"  => $itme['tag_cur'],
             ));        
         }
     }    
