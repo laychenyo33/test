@@ -290,6 +290,8 @@ class MEMBER{
         if(!empty($sql)){
             $rs = $db->query($sql);
             $db_msg = $db->report();
+            $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
+            $this->ws_load_tp($this->ws_tpl_file);            
             if ( $db_msg == "" ) {
                 if($_REQUEST["action_mode"]=="add"){
                     //已有購物或詢價時直接登入
@@ -302,18 +304,18 @@ class MEMBER{
                         $goto_url=$cms_cfg["base_url"]."cart.php?func=c_finish";
                     }
                     $this->ws_tpl_file = "templates/ws-mail-tpl.html";
-                    $tpl = new TemplatePower( $this->ws_tpl_file );
-                    $tpl->prepare();
+                    $mtpl = new TemplatePower( $this->ws_tpl_file );
+                    $mtpl->prepare();
                     //寄送訊息
                     $sql="select st_join_member_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
                     $selectrs = $db->query($sql);
                     $row = $db->fetch_array($selectrs,1);
                     //如果有詢問信管理，顯示公司及傳真欄位
                     if($cms_cfg["ws_module"]["ws_inquiry"]){
-                        $tpl->newBlock( "COMPANY_ZONE" );
+                        $mtpl->newBlock( "COMPANY_ZONE" );
                     }
-                    $tpl->newBlock( "MEMBER_MAIL" );
-                    $tpl->assignGlobal( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
+                    $mtpl->newBlock( "MEMBER_MAIL" );
+                    $mtpl->assignGlobal( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
                                               "MSG_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
                                               "MSG_PASSWORD" => $TPLMSG["LOGIN_PASSWORD"],
                                               "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
@@ -344,17 +346,15 @@ class MEMBER{
                     ));
                     //國家欄位
                     if($cms_cfg["ws_module"]["ws_country"]==1) {
-                        $tpl->newBlock("MEMBER_COUNTRY_ZONE");
-                        $tpl->assign(array("MSG_COUNTRY" =>$TPLMSG['COUNTRY'],
+                        $mtpl->newBlock("MEMBER_COUNTRY_ZONE");
+                        $mtpl->assign(array("MSG_COUNTRY" =>$TPLMSG['COUNTRY'],
                                            "VALUE_M_COUNTRY" =>$_REQUEST["m_country"]
                         ));
                     }
-                    $tpl->assignGlobal( "VALUE_TERM" , $row['st_join_member_mail']);
-                    $mail_content=$tpl->getOutputContent();
+                    $mtpl->assignGlobal( "VALUE_TERM" , $row['st_join_member_mail']);
+                    $mail_content=$mtpl->getOutputContent();
                     $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_account"],$mail_content,$TPLMSG['MEMBER_CONFIRM_MAIL'],"m",$goto_url);
                 }else{
-                  $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
-                  $this->ws_load_tp($this->ws_tpl_file);
                   $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                   $this->goto_target_page($goto_url);
                 }
