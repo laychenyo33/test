@@ -101,7 +101,7 @@ class VIDEO{
         if($_REQUEST["st"]=="v_content"){
             $and_str .= " and v_content like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by v_sort desc,v_modifydate desc ";
+        $sql .= $and_str." order by v_sort ".$cms_cfg['sort_pos'].",v_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
