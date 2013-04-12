@@ -988,7 +988,7 @@ class MAINFUNC{
     }
     function content_file_str_replace($content){
         global $cms_cfg;
-        $content=preg_replace('#([\w\.]+/)*(upload_files/[\w\.]+)#i', $cms_cfg['file_root']."$2", $content);
+        $content=preg_replace('#([\w\.]*/)*(upload_files/[\w\.]+)#i', $cms_cfg['file_root']."$2", $content);
         return $content;
     }
     //鎖滑鼠右鍵功能
