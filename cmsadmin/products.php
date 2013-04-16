@@ -1826,7 +1826,7 @@ class PRODUCTS{
         global $tpl,$db,$main,$cms_cfg;
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $id_array=explode(",",$pc_id_str);
-        $sql="select pc_id,pc_name,pc_layer from ".$cms_cfg['tb_prefix']."_products_cate order by pc_layer";
+        $sql="select pc_id,pc_name,pc_layer from ".$cms_cfg['tb_prefix']."_products_cate where pc_status='1' order by pc_layer,pc_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
         $rsnum = $db->numRows($selectrs);
         $pc_name_tabs="";
@@ -1871,7 +1871,7 @@ class PRODUCTS{
         global $tpl,$db,$main,$cms_cfg;
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $id_array=explode(",",$p_id_str);
-        $sql="select pc_id,pc_name,pc_layer from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' order by pc_layer";
+        $sql="select pc_id,pc_name,pc_layer from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' order by pc_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
         $rsnum = $db->numRows($selectrs);
         if($rsnum > 0){
@@ -1884,8 +1884,8 @@ class PRODUCTS{
                 $tpl->assign("VALUE_PC_MAIN_NAME",$row["pc_name"]);
                 $tpl->assign("VALUE_PC_ID",$row["pc_id"]);
                 $tpl->assign("TAG_DIV_DISPLAY","none");//預設為隱藏
-                $sql1="select p_id,p_name from ".$cms_cfg['tb_prefix']."_products where pc_layer like '".$row["pc_layer"]."%' order by p_sort ".$cms_cfg['sort_pos']." ";
-                $selectrs1 = $db->query($sql1);
+                $sql1="select p_id,p_serial,p_name from ".$cms_cfg['tb_prefix']."_products where p_status='1' and pc_layer regexp '".$row["pc_layer"]."(-[0-9]+)*$' order by p_sort ".$cms_cfg['sort_pos']." ";
+                $selectrs1 = $db->query($sql1,true);
                 while ( $row1 = $db->fetch_array($selectrs1,1) ) {
                     $tpl->newBlock("PRODUCT_CATE_SUB");
                     $tpl->assign("VALUE_PC_SUB_NAME",$row1["p_name"]);
