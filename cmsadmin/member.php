@@ -1148,27 +1148,30 @@ class MEMBER{
             $sql = "select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
             $res_dc = $db->query($sql,true);
             while($dc_row = $db->fetch_array($res_dc,1)){
-                $tpl->newBlock("DOWNLOAD_CATE_LIST");
-                $tpl->assign("VALUE_DC_SUBJECT",$dc_row['dc_subject']);
-                $tpl->assign("TAG_FILE_DS","none");
-                //下載分類下的檔案
                 $sql = "select d.*,".$col." as `checked` from ".$cms_cfg['tb_prefix']."_download as d left join (select * from ".$cms_cfg['tb_prefix']."_member_download_map where ".$col."='".$val."') as mdm on d.d_id=mdm.d_id where d_public='0' and dc_id='".$dc_row['dc_id']."' order by d_sort ".$cms_cfg['sort_pos'];
                 $d_res = $db->query($sql,true);
-                $i=1;
-                $chk=0;
-                while($row = $db->fetch_array($d_res,1)){
-                    $chk += $row['checked']?1:0;
-                    $tpl->newBlock("DOWNLOAD_FILE_LIST");
-                    $tpl->assign(array(
-                        "SERIAL"          => $i,
-                        "VALUE_D_ID"      => $row['d_id'],
-                        "TAG_DOWN_CHK"    => $row['checked']?"checked":"",
-                        "VALUE_D_SUBJECT" => $row['d_subject']
-                    ));
-                    $i++;
-                }
-                if($chk){
-                    $tpl->assign("DOWNLOAD_CATE_LIST.TAG_FILE_DS","block");
+                //分類下有限制性檔案才輸出類別
+                if($db->numRows($d_res)){
+                    $tpl->newBlock("DOWNLOAD_CATE_LIST");
+                    $tpl->assign("VALUE_DC_SUBJECT",$dc_row['dc_subject']);
+                    $tpl->assign("TAG_FILE_DS","none");
+                    //下載分類下的檔案
+                    $i=1;
+                    $chk=0;
+                    while($row = $db->fetch_array($d_res,1)){
+                        $chk += $row['checked']?1:0;
+                        $tpl->newBlock("DOWNLOAD_FILE_LIST");
+                        $tpl->assign(array(
+                            "SERIAL"          => $i,
+                            "VALUE_D_ID"      => $row['d_id'],
+                            "TAG_DOWN_CHK"    => $row['checked']?"checked":"",
+                            "VALUE_D_SUBJECT" => $row['d_subject']
+                        ));
+                        $i++;
+                    }
+                    if($chk){
+                        $tpl->assign("DOWNLOAD_CATE_LIST.TAG_FILE_DS","block");
+                    }
                 }
             }
         }
