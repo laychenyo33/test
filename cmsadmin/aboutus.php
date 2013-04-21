@@ -229,7 +229,7 @@ class ABOUTUS{
     }
 //關於我們--資料更新================================================================
     function aboutus_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         if($this->seo){
             $add_field_str="au_seo_title,
                             au_seo_keyword,
@@ -266,7 +266,7 @@ class ABOUTUS{
                         '".$_REQUEST["au_sort"]."',
                         '".$au_cate."',
                         '".$_REQUEST["au_subject"]."',
-                        '".$_REQUEST["au_content"]."',
+                        '".$main->content_file_str_replace($_REQUEST["au_content"])."',
                         ".$add_value_str."
                         '".date("Y-m-d H:i:s")."'
                     )";
@@ -278,7 +278,7 @@ class ABOUTUS{
                         au_sort='".$_REQUEST["au_sort"]."',
                         au_cate='".$au_cate."',
                         au_subject='".$_REQUEST["au_subject"]."',
-                        au_content='".$_REQUEST["au_content"]."',
+                        au_content='".$main->content_file_str_replace($_REQUEST["au_content"])."',
                         ".$update_str."
                         au_modifydate='".date("Y-m-d H:i:s")."'
                     where au_id='".$_REQUEST["au_id"]."'";
