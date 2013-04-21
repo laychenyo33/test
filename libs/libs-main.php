@@ -988,10 +988,10 @@ class MAINFUNC{
     }
     function content_file_str_replace($content){
         global $cms_cfg;
-        $content=preg_replace('#([^"\']*/)*(upload_files/[^"\']+)#i', $cms_cfg['file_root']."$2", $content);
-        $content=preg_replace('#([^"\']*/)*(images/[^"\']+)#i', $cms_cfg['base_root']."$2", $content);
+        $content=preg_replace('#([^"\'\s]*/)*(upload_files/[^"\']+)#i', $cms_cfg['file_root']."$2", $content);
+        $content=preg_replace('#([^"\'\s]*/)*(images/[^"\']+)#i', $cms_cfg['base_root']."$2", $content);
         return $content;
-    }   
+    }    
     //鎖滑鼠右鍵功能
     function mouse_disable() {
         global $tpl,$cms_cfg;
