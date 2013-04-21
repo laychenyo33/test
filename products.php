@@ -264,7 +264,7 @@ class PRODUCTS{
             $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link . $this->ps . implode($this->ps,$products_cate_layer));
         }
         if($row["pc_custom_status"]==1){//自訂頁面
-                $row["pc_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_custom"]);
+//                $row["pc_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_custom"]);
                 $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
                 $tpl->assign("VALUE_PC_CUSTOM",$row["pc_custom"]);
         }else{
@@ -501,7 +501,7 @@ class PRODUCTS{
             //是否為自訂頁面
             if($row["p_custom_status"]){
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
-                $row["p_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["p_custom"]);
+//                $row["p_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["p_custom"]);
                 $tpl->assign("VALUE_P_CUSTOM",$row["p_custom"]);
             }else{
                 $this->show_style=($row["p_show_style"])?$row["p_show_style"]:1;
