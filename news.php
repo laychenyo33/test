@@ -190,7 +190,7 @@ class NEWS{
         }
         //顯示內容
         $tpl->newBlock( "NEWS_SHOW" );
-        $row["n_content"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["n_content"]);
+//        $row["n_content"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["n_content"]);
         $tpl->assign( array("VALUE_N_ID"  => $row["n_id"],
                             "VALUE_N_SUBJECT" => $row["n_subject"],
                             "VALUE_N_CONTENT" => $row["n_content"],
