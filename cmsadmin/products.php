@@ -318,8 +318,16 @@ class PRODUCTS{
             ));
         }
         $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
-        //分類樹狀結構--pc type
-        $this->products_cate_tree($this->parent,"pc");
+        //分類樹狀結構
+//            $this->products_cate_tree($this->parent,"p");
+        require "../class/catetree/".$cms_cfg['tb_prefix']."/productsCate.php";
+        $catetreeClass = "catetree_".$cms_cfg['tb_prefix']."_productsCate";
+        $cateTree = new $catetreeClass(array(
+            "db"            => $db,
+            "cfg"           => $cms_cfg,
+            "cate_link_str" => "products.php?func=pc_list",
+        ));
+        $tpl->assign("_ROOT.PRODUCTS_CATE_TREE",$cateTree->get_tree());
         //系統跳回參數
         $tpl->assignGlobal( "VALUE_PC_PARENT", $this->parent);
         $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
@@ -688,8 +696,16 @@ class PRODUCTS{
         }else{
             //產品管理分類
             $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
-            //分類樹狀結構--p type
-            $this->products_cate_tree($this->parent,"p");
+            //分類樹狀結構
+//            $this->products_cate_tree($this->parent,"p");
+            require "../class/catetree/".$cms_cfg['tb_prefix']."/productsCate.php";
+            $catetreeClass = "catetree_".$cms_cfg['tb_prefix']."_productsCate";
+            $cateTree = new $catetreeClass(array(
+                "db"            => $db,
+                "cfg"           => $cms_cfg,
+                "cate_link_str" => "products.php?func=p_list",
+            ));
+            $tpl->assign("_ROOT.PRODUCTS_CATE_TREE",$cateTree->get_tree());
             //系統跳回參數
             $tpl->assignGlobal( "VALUE_PC_PARENT", $this->parent);
             $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
