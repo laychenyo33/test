@@ -29,6 +29,7 @@ class VIDEO{
         $tpl->assignGlobal( "TAG_VIDEO_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["video"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-video"); //主要顯示區域的css設定
+        $main->header_footer("video");
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
     }
