@@ -988,8 +988,8 @@ class MAINFUNC{
     }
     function content_file_str_replace($content){
         global $cms_cfg;
-        $content=preg_replace('#([^"\'\s]*/)*(upload_files/[^"\']+)#i', $cms_cfg['file_root']."$2", $content);
-        $content=preg_replace('#([^"\'\s]*/)*(images/[^"\']+)#i', $cms_cfg['base_root']."$2", $content);
+        $content=preg_replace('#([^"\'\S]*/)*(upload_files/[^"\']+)#i', $cms_cfg['file_root']."$2", $content);
+        $content=preg_replace('#([^"\'\S]*/)*(images/[^"\']+)#i', $cms_cfg['base_root']."$2", $content);
         return $content;
     }    
     //鎖滑鼠右鍵功能
