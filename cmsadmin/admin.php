@@ -165,7 +165,7 @@ class ADMIN{
                                   "STR_AI_STATUS_CK1" => "checked",
                                   "STR_AI_STATUS_CK0" => "",
                                   "NOW_AI_ID"  => 0,
-                                  "VALUE_AI_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_admin","ai","","",0),
+                                  "VALUE_AI_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_admin_info","ai","","",0),
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
         //相關參數
