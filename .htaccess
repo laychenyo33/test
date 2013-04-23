@@ -52,7 +52,7 @@ RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)list-([0-9]+)-p
 #主功能詳細頁-無檔名
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)detail-([0-9]+)-([0-9]+).html$  $1.php?func=$2_show&$2c_id=$3&$2_id=$4 [L]
 #主功能詳細頁-有檔名
-RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?type=list&f=$2&nowp=$3&jp=$4 [L]
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery|application)/([^/]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?type=list&f=$2&nowp=$3&jp=$4 [L]
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery|video)/([^/]+).html$  $1.php?type=show&f=$2 [L]
 #主功能詳細頁-有檔名-功能主頁分頁
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)-pages-([0-9]+)-([0-9]+).htm$  $1.php?nowp=$2&jp=$3 [L]
