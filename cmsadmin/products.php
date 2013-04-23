@@ -1510,7 +1510,7 @@ class PRODUCTS{
                 ) values (
                     '".$row["pc_parent"]."',
                     '".$row["pc_status"]."',
-                    '".$row["pc_sort"]."',
+                    '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_products_cate","pc","pc_parent",$row['pc_parent'],true)."',
                     '".addslashes($row["pc_name"])." (copy)',
                     '".$row["pc_custom_status"]."',
                     '".addslashes($row["pc_custom"])."',
@@ -1609,7 +1609,7 @@ class PRODUCTS{
                     '".$row["pc_id"]."',
                     '".$row["pc_layer"]."',
                     '".$row["p_status"]."',
-                    '".$row["p_sort"]."',
+                    '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_products","p","pc_id",$row['pc_id'],true)."',
                     '".$row["p_new_sort"]."',
                     '".addslashes($row["p_name"])." (copy)',
                     '".$row["p_custom_status"]."',
