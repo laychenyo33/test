@@ -50,9 +50,12 @@ class PRODUCTS{
                 //$this->ws_load_tp($this->ws_tpl_file);
                 $this->load_product_detail_template();
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_POP_IMG");
-//                $tpl->newBlock("JQUERY_UI_SCRIPT");
-//                $tpl->newBlock("JS_CLOUD_ZOOM");
+                if($cms_cfg['ws_module']['ws_pop_bigimg']==1){
+                    $tpl->newBlock("JS_POP_IMG");
+                }elseif($cms_cfg['ws_module']['ws_pop_bigimg']==2){
+                    $tpl->newBlock("JQUERY_UI_SCRIPT");
+                    $tpl->newBlock("JS_CLOUD_ZOOM");
+                }
                 $this->products_show();
                 $this->ws_tpl_type=1;
                 break;
