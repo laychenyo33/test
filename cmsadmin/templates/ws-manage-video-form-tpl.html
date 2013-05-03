@@ -17,6 +17,16 @@
         </td>
   </tr>
     <tr>
+        <th><font color="#cc0000">*</font>分類</th>
+        <td>
+            <select name="vc_id" id="vc_id">
+                <!-- START BLOCK : VIDEO_CATE_LIST -->
+                <option value="{VALUE_VC_ID}" {TAG_SELECTED}>{VALUE_VC_SUBJECT}</option>
+                <!-- END BLOCK : VIDEO_CATE_LIST -->
+            </select>
+        </td>
+    </tr>
+    <tr>
         <th><font color="#cc0000">*</font>標題</th>
         <td>
             <input name="v_subject" type="text" class="validate[required]" value="{VALUE_V_SUBJECT}" size="50">
