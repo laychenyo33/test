@@ -51,9 +51,9 @@ function addBookmarkForBrowser(sTitle, sUrl) {
     if(window.sidebar && window.sidebar.addPanel){
         window.sidebar.addPanel(sTitle, sUrl, "");
     }else if(window.external) {
-        if(window.external.AddFavorite){
+        try{
             window.external.AddFavorite(sUrl, sTitle);
-        }else{
+        }catch(e){
             alert('do it your self!');         
         }
     }else{
