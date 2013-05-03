@@ -35,6 +35,9 @@ switch($_REQUEST["func"]){
     case "v":
         $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_video where v_seo_filename='".$validateValue."' and v_id!='".$validateId."' ";
         break;    
+    case "vc":
+        $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_video_cate where vc_seo_filename='".$validateValue."' and vc_id!='".$validateId."' ";
+        break;    
     case "fc":
         $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_faq_cate where fc_seo_filename='".$validateValue."' and fc_id!='".$validateId."' ";
         break;
