@@ -1435,10 +1435,11 @@ class MAINFUNC{
     function get_mv_code($url){
         if(strlen($url)==11){
             return $url;
-        }elseif(preg_match("#http://www.youtube.com/watch?.*v=([^&\s]+)#i",$url,$match)){
-            return $match[1];
+            //http://www.youtube.com/embed/S3f-riH1Q_A
+        }elseif(preg_match("#(http://www.youtube.com/|http://youtu.be/)(embed/|watch?.*v=)*([^&\s\"]+)#i",$url,$match)){
+            return $match[3];
         }        
-    }    
+    }     
     //由ip取得國家
     function get_ip_country($ip){
         global $cms_cfg;
