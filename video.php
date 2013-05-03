@@ -9,9 +9,15 @@ class VIDEO{
         $this->ws_tpl_file = "templates/ws-video-tpl.html";
         $this->ws_load_tp($this->ws_tpl_file);
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
-        $this->video_list();
+        $defaultAction = "video_list";
+        $type = $_GET['type'];
+        $type = (!$type && $_GET['v_id'])?"show":$type;
+        $type = (!$type && $_GET['vc_id'])?"list":$type;
+        $action = ($type)?"video_".$type:$defaultAction;
+        $this->$action();
         //page view record --ph_type,ph_type_id,m_id
         $main->pageview_history("v",$_REQUEST["v_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
+        $main->layer_link();
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -23,7 +29,7 @@ class VIDEO{
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["VIDEO"]);
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["VIDEO"]);
+//        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["VIDEO"]);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["video"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["video"]);//左方menu title
         $tpl->assignGlobal( "TAG_VIDEO_CURRENT" , "class='current'"); //上方menu current
@@ -32,49 +38,143 @@ class VIDEO{
         $main->header_footer("video");
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
+        $tpl->newBlock("HOME_LINK");
     }
-    //前台關於我們--列表================================================================
+    //前台youtube影片--列表================================================================
     function video_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        //前台關於我們列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_video  where v_status='1' order by v_sort ".$cms_cfg['sort_pos'].",v_modifydate desc";
+        $crow = $this->left_cate_list();
+        if($crow){
+            $ext = $this->ws_seo?"htm":"php";
+            $main->layer_link($TPLMSG['VIDEO'],$cms_cfg['base_root']."video.".$ext)->layer_link($crow['vc_subject']);
+            if($this->ws_seo){
+                $meta_array=array("meta_title"       =>$crow["vc_seo_title"],
+                                  "meta_keyword"     =>$crow["vc_seo_keyword"],
+                                  "meta_description" =>$crow["vc_seo_description"],
+                                  "seo_h1"           =>(trim($crow["vc_seo_h1"])=="")?$crow["vc_subject"]:$crow["vc_seo_h1"],
+                );
+                $main->header_footer($meta_array);
+            }else{
+                $main->header_footer("video",$TPLMSG["VIDEO"]);
+            }     
+            $vc_id = $crow['vc_id'];
+        }
+        if($vc_id){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_video where v_status='1' and vc_id='".$vc_id."' order by v_sort ".$cms_cfg['sort_pos'];
+            $res = $db->query($sql,1);
+            if($db->numRows($res)){
+                while($row = $db->fetch_array($res,1)){
+                    $row['vc_seo_filename'] = $crow['vc_seo_filename'];
+                    $tpl->newBlock("VIDEO_LIST");
+                    $tpl->assign(array(
+                        "VALUE_V_SUBJECT" => $row['v_subject'],
+                        "VALUE_V_LINK"    => $this->get_link($row),
+                        "VALUE_V_CODE"    => $main->get_mv_code($row['v_content']),
+                    ));
+                }
+            }else{
+                $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
+            }
+        }else{
+            $main->layer_link($TPLMSG['VIDEO']);            
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_video_cate where vc_status='1' order by vc_sort ".$cms_cfg['sort_pos'];
+            $res = $db->query($sql,1);
+            if($db->numRows($res)){
+                while($row = $db->fetch_array($res,1)){
+                    $tpl->newBlock("VIDEO_CATE_LIST");
+                    $tpl->assign(array(
+                        "VALUE_VC_SUBJECT" => $row['vc_subject'],
+                        "VALUE_VC_LINK"    => $this->get_link($row,true),
+                        "VALUE_VC_IMG"     => $row['vc_img']?$cms_cfg['file_root'].$row['vc_img']:$cms_cfg['default_preview_pic'],
+                    ));
+                }
+            }else{
+                $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);                
+            }
+        }
+    }
+    //前台youtube影片--內容================================================================
+    function video_show(){
+        global $db,$cms_cfg,$main,$TPLMSG,$tpl;
+        $crow = $this->left_cate_list();    
+        $ext = $this->ws_seo?"htm":"php";
+        $main->layer_link($TPLMSG['VIDEO'],$cms_cfg['base_root']."video.".$ext)->layer_link($crow['vc_subject'],$this->get_link($crow,true));
+        if($_GET['f']){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_video where v_status='1' and v_seo_filename='".$db->quote($_GET['f'])."' limit 1";
+        }elseif($_GET['v_id']){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_video where v_status='1' and v_id='".$db->quote($_GET['v_id'])."' limit 1";
+        }
+        if($sql){
+            $row = $db->query_firstrow($sql);
+            if($this->ws_seo){
+                $meta_array=array("meta_title"       =>$row["v_seo_title"],
+                                  "meta_keyword"     =>$row["v_seo_keyword"],
+                                  "meta_description" =>$row["v_seo_description"],
+                                  "seo_h1"           =>(trim($row["v_seo_h1"])=="")?$row["v_subject"]:$row["v_seo_h1"],
+                );
+                $main->header_footer($meta_array);
+            }else{
+                $main->header_footer("video",$row["v_subject"]);
+            }            
+            $tpl->newBlock("VIDEO_CONTENT");
+            $tpl->assign("VALUE_V_CONTENT",$row['v_content']);
+            $main->layer_link($row["v_subject"]);
+        }else{
+            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);            
+        }
+    }    
+    function left_cate_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        //前台左側影片分類
+        $sql="select * from ".$cms_cfg['tb_prefix']."_video_cate  where vc_status='1' order by vc_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
-        $rsnum    = $db->numRows($selectrs);
-        if(empty($_REQUEST["v_id"]) && empty($_REQUEST["f"])){
+        if(empty($_REQUEST["vc_id"]) && empty($_REQUEST["f"])){
            $sel_top_record=true;
         }
+        $current_row = null;
+        $i=0;
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             if($this->ws_seo==1 ){
-                $cate_link=$cms_cfg["base_root"]."video/".$row["v_seo_filename"].".html";
+                $cate_link=$cms_cfg["base_root"]."video/".$row["vc_seo_filename"].".htm";
                 $ext="htm";
             }else{
-                $cate_link=$cms_cfg["base_root"]."video.php?v_id=".$row["v_id"];
+                $cate_link=$cms_cfg["base_root"]."video.php?vc_id=".$row["vc_id"];
                 $ext="php";
             }
             $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["v_subject"],
-                                 "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"]."video.".$ext:$cate_link,
+            $tpl->assign( array( "VALUE_CATE_NAME" => $row["vc_subject"],
+                                 "VALUE_CATE_LINK"  => $cate_link,
             ));
-            if(($i==1 && $sel_top_record) || ($_REQUEST["v_id"]==$row["v_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["v_seo_filename"]))){
-                if($this->ws_seo){
-                    $meta_array=array("meta_title"=>$row["v_seo_title"],
-                                      "meta_keyword"=>$row["v_seo_keyword"],
-                                      "meta_description"=>$row["v_seo_description"],
-                                      "seo_h1"=>(trim($row["v_seo_h1"])=="")?$row["v_subject"]:$row["v_seo_h1"],
-                    );
-                    $main->header_footer($meta_array);
-                }else{
-                    $main->header_footer("video",$TPLMSG["VIDEO"]);
-                }
-                //$tpl->assignGlobal( "TAG_SUB_FUNC"  , "--&nbsp;&nbsp;".$row["v_subject"]);
-                $row["v_content"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["v_content"]);
-                //$row["v_content"]=preg_replace("/..\/upload_files/",$cms_cfg["file_root"]."upload_files",$row["v_content"]);
-                $tpl->assignGlobal( "TAG_LAYER" , "<a href='".$cms_cfg['base_root']."video.htm'>".$TPLMSG['VIDEO']."</a>" . $cms_cfg['path_separator'] . $row["v_subject"]);
-                $tpl->assignGlobal( "VALUE_V_CONTENT" , $row["v_content"]);
+            if(($_REQUEST["vc_id"]==$row["vc_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["vc_seo_filename"] || $_REQUEST["d"]==$row["vc_seo_filename"]))){
+                $tpl->assign("TAG_CURRENT_CLASS", "class=\"current\"");
+                $current_row = $row;
             }
         }
+        return $current_row;
+    } 
+    function get_link($row,$cate=false){
+        global $cms_cfg;
+        if($this->ws_seo){
+            $base="video/";
+            if($cate){
+                $ext      = ".htm";
+                $filename = $row['vc_seo_filename'];
+            }else{
+                $base.=$row['vc_seo_filename']."/";
+                $ext      = ".html";
+                $filename = $row['v_seo_filename'];
+            }
+            return $cms_cfg['base_root'].$base.$filename.$ext;
+        }else{
+            $var = "vc_id";
+            $id  = $row['vc_id'];     
+            $qs = "vc_id=".$row['vc_id'];
+            if(!$cate){
+                $qs .= "&v_id=".$row['v_id'];                        
+            }
+            return $cms_cfg['base_root']."video.php?func=v_list&".$qs;
+        }
     }
- 
 }
 ?>
