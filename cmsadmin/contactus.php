@@ -279,7 +279,7 @@ class CONTACTUS{
                                           "VALUE_CU_CONTENT" => $row["cu_content"],
                                           "VALUE_CU_IP" => $row["cu_ip"],
                                           "VALUE_CU_IP_COUNTRY" => $row["cu_ip_country"],
-                                          "VALUE_CU_STATUS" => ($row["cu_status"]==1)?$TPLMSG['REPLY_YES']:$TPLMSG['REPLY_NO'],
+                                          "VALUE_CU_STATUS" => $ws_array["contactus_status"][$row["cu_status"]],
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
                 if($file){
