@@ -79,6 +79,7 @@ class PRODUCTS{
             if($cms_cfg["ws_module"]["ws_ad"]==1){
                 $main->ad_list($this->parent);
             }
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -142,6 +143,7 @@ class PRODUCTS{
             $rsnum    = $db->numRows($selectrs);
             if($rsnum > 0){
                 $row = $db->fetch_array($selectrs,1);
+                $main->layer_link($TPLMSG['PRODUCTS'],$cms_cfg['base_root']."products.htm")->layer_link($row['pc_name']);                
                 $seo_H1=$row["pc_name"];//預設h1
                 //第一頁才顯示設定的meta,第二頁以後抓分類名稱或產品名稱做為meta title
                 if(empty($_REQUEST["nowp"])){
@@ -175,6 +177,7 @@ class PRODUCTS{
                     include_once("404.htm");
                     exit();
                 }
+                $main->layer_link($TPLMSG['PRODUCTS']);
                 $dirname="products";
                 //顯示產品主頁 SEO H1 標題
                 $sql = "select * from ".$cms_cfg['tb_prefix']."_metatitle where mt_name ='products' ";
@@ -264,10 +267,6 @@ class PRODUCTS{
         }
         //階層
         $func_str="";
-        $products_cate_layer=$main->get_layer_rewrite($cms_cfg['tb_prefix']."_products_cate","pc_name","pc",$this->parent,$func_str);
-        if(!empty($products_cate_layer)){
-            $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link . $this->ps . implode($this->ps,$products_cate_layer));
-        }
         if($row["pc_custom_status"]==1){//自訂頁面
 //                $row["pc_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_custom"]);
                 $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
@@ -472,9 +471,9 @@ class PRODUCTS{
         }
         //如果是rewrite過的網址,先取得pc_parent
         if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
-            $sql="select p.*,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p inner join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_seo_filename='".$_REQUEST["f"]."' and p_status='1' ";
+            $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p inner join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_seo_filename='".$_REQUEST["f"]."' and p_status='1' ";
         }else{
-            $sql="select * from ".$cms_cfg['tb_prefix']."_products where p_id='".$_REQUEST["p_id"]."' and p_status='1' ";
+            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p inner join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_id='".$_REQUEST["p_id"]."' and p_status='1' ";
         }
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
@@ -484,10 +483,7 @@ class PRODUCTS{
             //$this->left_cate_list($row["pc_id"]);
             $seo_H1=(trim($row["p_seo_h1"]))?$row["p_seo_h1"]:$row["p_name"];
             $func_str="";
-            $products_cate_layer=$main->get_layer_rewrite($cms_cfg['tb_prefix']."_products_cate","pc_name","pc",$row["pc_id"],$func_str,1);
-            if(!empty($products_cate_layer)){
-                $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link . $this->ps . implode($this->ps,$products_cate_layer) . $this->ps . $row["p_name"]);
-            }
+            $main->layer_link($TPLMSG['PRODUCTS'],$cms_cfg['base_root']."products.htm")->layer_link($row['pc_name'],$this->get_link($row))->layer_link($row['p_name']);
             $meta_array = array("meta_title"=>$row["p_seo_title"],
                                 "meta_keyword"=>$row["p_seo_keyword"],
                                 "meta_description"=>$row["p_seo_description"],
