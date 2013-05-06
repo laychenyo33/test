@@ -8,6 +8,8 @@ abstract class Dbtable_Abstract {
     protected $post_cols = array(); 
     protected $values = array();
     protected $con = array();
+    protected $query_resource;
+    protected $order_status = array();
     
     public function __construct(DB $db,$prefix) {
         $this->db = $db;
@@ -25,17 +27,17 @@ abstract class Dbtable_Abstract {
         }else{
             $sql = $this->_mk_insert_sql();
         }
-        $this->db->query($sql,true);
+        $this->query_resource = $this->db->query($sql,true);
     }
     
     public function getData($pk,$cols="*"){
         if(is_array($cols)){
             $cols = implode(',',$cols);
         }
-        $sql_tpl = "select %s from ".$this->tablename()." where `%s`='%s'";
-        $sql = sprintf($sql_tpl,$cols,$this->pk,$pk);
-        $res = $this->db->query($sql,true);
-        $row = $this->db->fetch_array($res, 1);
+        $con = sprintf("`%s`='%s'",$this->pk,$pk);
+        $sql = $this->_mk_select_sql($con, $cols);
+        $this->query_resource = $this->db->query($sql,true);
+        $row = $this->db->fetch_array($this->query_resource, 1);
         $this->values = $row;
         return $this;
     }
@@ -54,8 +56,19 @@ abstract class Dbtable_Abstract {
                 if(is_array($v)){
                     $this->values[$k] = implode(',',$v);
                 }else{
-                    $this->values[$k] = mysql_real_escape_string(trim($v));
+                    $v = trim($v);
+                    if(preg_match("/(seo_title|seo_keyword|seo_description|seo_filename|seo_h1)$/i", $k)){
+                        $v = htmlspecialchars($v);
+                    }
+                    $this->values[$k] = $this->db->quote($v);
                 }
+            }
+        }
+        $keys = array_keys($this->post_cols);
+        $md = preg_grep('/modifydate$/i',$keys);
+        if(!empty($md)){
+            foreach($md as $v){
+                $this->values[$v] = date("Y-m-d H:i:s");
             }
         }
     }
@@ -72,7 +85,6 @@ abstract class Dbtable_Abstract {
     
     //製作新增sql
     protected function _mk_update_sql(){
-        global $cms_cfg;
         $sql_tpl = "update ".$this->tablename()." set %s where %s";
         foreach($this->values as $k=>$v){
             if($k!=$this->pk){
@@ -83,8 +95,29 @@ abstract class Dbtable_Abstract {
         return sprintf($sql_tpl,implode(',',$updates),implode(' and ',$this->con));
     } 
     
+    protected function _mk_select_sql($con,$col="*",$order=null,$limit=null){
+        $sql = "select ".$col." from ".$this->tablename()." where ".$con;
+        if($order)$sql.=" order by ".$order;
+        if($limit)$sql.=" ".$limit;
+        return $sql;
+    }
+    
     protected function tablename(){
         return $this->prefix."_".$this->table;
+    }
+    
+    public function getDataList($con,$order=null,$limit=null){
+        $sql = $this->_mk_select_sql($con, $col, $order, $limit);
+        $this->query_resource = $db->query($sql);
+        $this->values = array();
+        if($this->db->numRows($this->query_resource)){
+            while($row = $this->db->fetch_array($this->query_resource, 1)){
+                $this->values[] = $row;
+            }
+        }
+        if(!empty($this->values)){
+            return $this->values;
+        }
     }
 }
 
