@@ -35,7 +35,7 @@ class ABOUTUS{
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
         if($this->au_cate!="aboutus"){
-        $main->layer_link($ws_array["main"][$this->au_cate],$cms_cfg['base_root'].$this->au_cate.".htm");
+            $main->layer_link($ws_array["main"][$this->au_cate],$cms_cfg['base_root'].$this->au_cate.".htm");
         }
         if($cms_cfg["ws_module"]["ws_left_main_au"]==0){
             $main->left_fix_cate_list();
