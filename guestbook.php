@@ -141,6 +141,15 @@ class GUESTBOOK{
                                       "VALUE_PAGES_STR"  => $page["pages_str"],
                                       "VALUE_PAGES_LIMIT"=>$cms_cfg["op_limit"]
             ));
+            if($page['bj_page']){
+                $tpl->newBlock("PAGE_BACK_SHOW");
+                $tpl->assign("VALUE_PAGES_BACK",$page['bj_page']);
+            }
+            if($page['nj_page']){
+                $tpl->newBlock("PAGE_NEXT_SHOW");
+                $tpl->assign("VALUE_NEXT_BACK",$page['nj_page']);
+                
+            }
         }
     }
 
