@@ -947,7 +947,7 @@ class MAINFUNC{
     function math_security_isvalue() {
         global $tpl,$ws_array,$cms_cfg,$TPLMSG;
         $ems_code= $this->encode_math_security($_SESSION["keyCode"]);
-        return $_REQUEST["security".$ems_code] == $_SESSION["securityCode"];
+        return (!empty($_SESSION["securityCode"]) && $_REQUEST["security".$ems_code] == $_SESSION["securityCode"]);
     }
     function encode_math_security($keyCode) {
         global $tpl,$ws_array,$cms_cfg,$TPLMSG;

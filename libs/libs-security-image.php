@@ -162,7 +162,7 @@ function showFormImage() {
 }
 
 function isValid() {
-	return $_POST["$this->name"] == $this->userSecurityCode;
+	return (!empty($this->userSecurityCode) && $_POST["$this->name"] == $this->userSecurityCode);
 }
 
 function setCodeLength($p) {
