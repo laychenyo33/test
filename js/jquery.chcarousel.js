@@ -38,7 +38,7 @@
                     $('#'+_options.toLeftId).hide();
                 }
                 $('#'+_options.toRightId).show();
-                container.children().filter(":lt("+lid+")").clone().appendTo(container);
+                container.children().filter(":lt("+lid+")").clone(true).appendTo(container);
                 container.animate({ marginLeft:(0-gow) },1000,function(){
                      container.children().filter(":lt("+lid+")").remove();
                      $(this).css({ marginLeft:'' }); 
@@ -59,7 +59,7 @@
                     $('#'+_options.toRightId).hide();
                 }      
                 $('#'+_options.toLeftId).show();
-                container.children().filter(":gt("+gid+")").clone().prependTo(container);
+                container.children().filter(":gt("+gid+")").clone(true).prependTo(container);
                 container.css({ marginLeft:(0-gow) });
                 container.animate({ marginLeft:0 },1000,function(){
                     container.children().filter(":gt("+(nums-1)+")").remove();
