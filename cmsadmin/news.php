@@ -781,7 +781,7 @@ class NEWS{
     }
     //複製單筆資料
     function copy_data($ws_table){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //最新消息分類複製
         if($ws_table=="nc"){
             $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_id='".$_REQUEST["id"][0]."'";
@@ -796,7 +796,7 @@ class NEWS{
                         nc_subject
                     ) values (
                         '".$row["nc_status"]."',
-                        '".$row["nc_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_news_cate","nc")."',
                         '".addslashes($row["nc_subject"])." (copy)'
                     )";
                 $rs = $db->query($sql);
@@ -837,7 +837,7 @@ class NEWS{
                     ) values (
                         '".$row["nc_id"]."',
                         '".$row["n_status"]."',
-                        '".$row["n_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_news","n")."',
                         '".$row["n_hot"]."',
                         '".$row["n_pop"]."',
                         '".addslashes($row["n_subject"])." (copy)',
