@@ -679,3 +679,18 @@ function nav_formatter(idx,pan){
     });
 </script>
 <!-- END BLOCK : NIVO_SLIDER_SCRIPT -->
+<!-- START BLOCK : CHCAROUSEL_SCRIPT -->
+<script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery.chcarousel.js"></script>
+<script type="text/javascript">
+    jQuery(function($){
+        $(document).ready(function(){
+             $("#news-wraper").chcarousel({
+                nums:1,   //單一頁的項目
+                toLeftId:'go-left',
+                toRightId:'go-right',
+                recycle:false                 
+             });
+        });
+    });
+</script>
+<!-- END BLOCK : CHCAROUSEL_SCRIPT -->
