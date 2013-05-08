@@ -870,6 +870,35 @@ class PRODUCTS{
             $tpl->assignGlobal("TAG_NEXT_PRODUCT","<a href='".$p_link."'><img src=\"".$cms_cfg['base_images'].$cms_cfg['language']."_next.jpg\" border=\"0\" /></a>");
         }
     }
+    //上下筆分類區域
+    function products_next_previous_cate($pc_id,$pc_sort){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        if(strtolower($cms_cfg['sort_pos'])=="asc"){
+            $pre_sql="select * from ".$cms_cfg['tb_prefix']."_products_cate 
+                where pc_id!='".$pc_id."' and pc_sort <= '".$pc_sort."' order by pc_sort desc limit 0,1 ";
+            $next_sql="select * from ".$cms_cfg['tb_prefix']."_products_cate 
+                where pc_id!='".$pc_id."' and pc_sort >= '".$pc_sort."' order by pc_sort limit 0,1 ";
+        }else{
+            $next_sql="select * from ".$cms_cfg['tb_prefix']."_products_cate 
+                where pc_id!='".$pc_id."' and pc_sort <= '".$pc_sort."' order by pc_sort desc limit 0,1 ";
+            $pre_sql="select * from ".$cms_cfg['tb_prefix']."_products_cate 
+                where pc_id!='".$pc_id."' and pc_sort >= '".$pc_sort."' order by pc_sort limit 0,1 ";
+        }
+        $selectrs = $db->query($pre_sql);
+        $row = $db->fetch_array($selectrs,1);
+        $rsnum  = $db->numRows($selectrs);
+        if ($rsnum > 0) {
+            $p_link = $this->get_link($row);
+            $tpl->assignGlobal("TAG_PREVIOUS_PRODUCT","<a href='".$p_link."'>".$TPLMSG['PREV']."</a>");
+        }
+        $selectrs = $db->query($next_sql);
+        $row = $db->fetch_array($selectrs,1);
+        $rsnum  = $db->numRows($selectrs);
+        if ($rsnum > 0) {
+            $p_link = $this->get_link($row);
+            $tpl->assignGlobal("TAG_NEXT_PRODUCT","<a href='".$p_link."'>".$TPLMSG['NEXT']."</a>");
+        }
+    }
     //相關產品
     function related_products($p_id_str,$pc_id){
         global $db,$cms_cfg,$tpl,$TPLMSG,$main;
