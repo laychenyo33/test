@@ -37,6 +37,7 @@ class MAINDEFAULT{
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
         $main->left_fix_cate_list();
+        $this->nivo_slider();
         /*
         //取得目前的 cart type
         $sql="select sc_cart_type from ws_sysconfig where ws_id='".$this->ws_id."'";
@@ -345,6 +346,11 @@ class MAINDEFAULT{
                 }
             }
         }
+    }
+    //nivo slider scripts
+    function nivo_slider(){
+        global $tpl;
+        $tpl->newBlock("NIVO_SLIDER_SCRIPT");
     }
 }
 ?>
