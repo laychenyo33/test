@@ -39,7 +39,7 @@
 	$mcFileManagerConfig['filesystem.include_file_pattern'] = '';
 	$mcFileManagerConfig['filesystem.exclude_file_pattern'] = '/^\.|mcic_/i';
 	$mcFileManagerConfig['filesystem.invalid_file_name_msg'] = "";
-	$mcFileManagerConfig['filesystem.extensions'] = "gif,jpg,htm,html,pdf,doc,docx,xls,xlsx,zip,txt,php,png,swf,dcr,mov,qt,ram,rm,avi,mpg,mpeg,asf,flv";
+	$mcFileManagerConfig['filesystem.extensions'] = "gif,jpg,htm,html,pdf,doc,docx,xls,xlsx,zip,txt,php,png,swf,dcr,mov,qt,ram,rm,avi,mpg,mpeg,wmv,asf,flv";
 	$mcFileManagerConfig['filesystem.file_templates'] = '${rootpath}/templates/document.htm,${rootpath}/templates/another_document.htm';
 	$mcFileManagerConfig['filesystem.directory_templates'] = '${rootpath}/templates/directory,${rootpath}/templates/another_directory';
 	$mcFileManagerConfig['filesystem.readable'] = true;
