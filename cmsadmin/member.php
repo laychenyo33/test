@@ -1211,6 +1211,27 @@ class MEMBER{
             }
         }
     }
+    //取得未分類的會員id
+    function get_uncated_mid(){
+        global $db,$cms_cfg;
+        //先取得當前有效的分類id
+        $sql = "select group_concat(mc_id) as mc_id_str from ".$cms_cfg['tb_prefix']."_member_cate where mc_status='1' group by mc_status";
+        list($mc_id_str) = $db->query_firstrow($sql,false);
+        $mc_id_arr = explode(',',$mc_id_str);
+        //抓取所有的會員
+        $sql = "select m_id,mc_id from ".$cms_cfg['tb_prefix']."_member ";
+        $res = $db->query($sql,true);
+        $m_id_arr = array();
+        while($row = $db->fetch_array($res,1)){
+            $cnt=0;
+            $mcid = explode(',',$row['mc_id']);
+            foreach($mcid as $v){
+                if(in_array($v,$mc_id_arr))$cnt++;
+            }
+            if(!$cnt)$m_id_arr[] = $row['m_id'];
+        }
+        if(!empty($m_id_arr))return $m_id_arr;
+    }    
 }
 //ob_end_flush();
 ?>
