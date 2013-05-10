@@ -10,10 +10,10 @@
             $(this).find("a[rel]").each(function(e){
                 var offset = $(this).offset();
                 var menuid = $(this).attr('rel');
-                var obj_height = $(this).height();
+                var obj_height = $(this).outerHeight(true);
                 var parent = this;
                 //設定起始位置
-                $("#"+menuid).css({ 'top':(offset.top+obj_height)+'px','left':(offset.left-12)+'px' });
+                $("#"+menuid).css({ 'top':(offset.top+obj_height)+'px','left':(offset.left)+'px' });
                 //設定handler
                 $("#"+menuid).mouseleave(function(e){
                     if(e.relatedTarget !== parent){
