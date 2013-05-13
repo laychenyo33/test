@@ -7,9 +7,16 @@ class MEMBER{
         global $db,$cms_cfg,$tpl;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         switch($_REQUEST["func"]){
+            case "activate":
+                $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->account_activate();
+                $this->ws_tpl_type=1;
+                break;
             case "m_zone"://會員專區
                 if(empty($this->m_id)){
                     header("Location: member.php?func=m_add");
+                    die();
                 }
                 $this->ws_tpl_file = "templates/ws-member-zone-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -20,7 +27,8 @@ class MEMBER{
                 $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("CALENDAR_SCRIPT");
+                $tpl->newBlock("JQUERY_UI_SCRIPT");
+                $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->member_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -31,7 +39,8 @@ class MEMBER{
                 $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("CALENDAR_SCRIPT");
+                $tpl->newBlock("JQUERY_UI_SCRIPT");
+                $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->member_form("mod");
                 $this->ws_tpl_type=1;
                 break;
@@ -351,8 +360,12 @@ class MEMBER{
                                            "VALUE_M_COUNTRY" =>$_REQUEST["m_country"]
                         ));
                     }
-                    $mtpl->assignGlobal( "VALUE_TERM" , $row['st_join_member_mail']);
-                    $mail_content=$mtpl->getOutputContent();
+                    $tpl->assignGlobal( "VALUE_TERM" , $row['st_join_member_mail']);
+//                    //帳號啟用連結
+//                    $m_id = $db->get_insert_id();
+//                    $act_link = $this->get_activate_link($_POST['m_account'],$m_id);      
+//                    $tpl->assignGlobal("ACTIVATE_LINK",$act_link);
+                    $mail_content=$tpl->getOutputContent();
                     $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_account"],$mail_content,$TPLMSG['MEMBER_CONFIRM_MAIL'],"m",$goto_url);
                 }else{
                   $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
@@ -790,6 +803,37 @@ class MEMBER{
         if(!empty($url)){
             $tpl->assignGlobal( "TAG_META_REFRESH" , "<meta http-equiv=\"refresh\" content=\"$sec;URL=$url\">");
         }
+    }
+    //啟用帳號
+    function account_activate(){
+        global $db,$cms_cfg,$main,$TPLMSG,$tpl;
+        if($_GET['account'] && $_GET['code']){
+            $sql = "select m_id,m_account from ".$cms_cfg['tb_prefix']."_member where m_account='".$db->quote($_GET['account'])."'";
+            $mRow = $db->query_firstRow($sql);
+            if($mRow){
+                $code = $this->_generate_activate_code($mRow['m_account'],$mRow['m_id']);
+                if($code == $_GET['code']){
+                    $sql = "update ".$cms_cfg['tb_prefix']."_member set m_status='1' where m_id='".$mRow['m_id']."'";
+                    $res = $db->query($sql,1);
+                    if(!$db->report()){
+                        $main->meta_refresh($cms_cfg['base_root']."member.php",3);
+                        $tpl->assignGlobal("MSG_ACTION_TERM",$TPLMSG['ACCOUNT_ACTIVATED']);
+                        return;                        
+                    }
+                }
+            }
+        }
+        $tpl->assignGlobal("MSG_ACTION_TERM",$TPLMSG['ACCOUNT_ACTIVATE_FAILED']);
+    }
+    function get_activate_link($acc,$mid){
+        global $cms_cfg;
+        $code = $this->_generate_activate_code($acc, $mid);
+        return $cms_cfg['base_url']."member.php?func=activate&account=".urlencode($acc)."&code=".urlencode($code);
+    }
+    function _generate_activate_code($acc,$mid){
+        $accPart = substr(md5($acc),0,10);
+        $midPart = substr(md5($mid),0,10);
+        return $accPart.$midPart;
     }
 }
 

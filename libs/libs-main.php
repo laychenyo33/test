@@ -1607,5 +1607,10 @@ class MAINFUNC{
         }
         return $arr;
     }        
+    //meta_refresh
+    function meta_refresh($url,$secs){
+        global $tpl;
+        $tpl->assignGlobal("TAG_META_REFRESH","<meta http-equiv=\"Refresh\" content=\"".$secs.";url=".$url."\">");
+    }    
 }
 ?>

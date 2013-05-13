@@ -1,4 +1,4 @@
-
+{REGISTER_NOTIFICATION}
 <form name="myform" method="post" action="member.php?func=m_replace" id="formID" class="formular" >
         <table width="90%" border="0" cellpadding="4" cellspacing="1" class="member_table">
             <tr class="altrow">
@@ -90,8 +90,8 @@
             <tr>
                 <th>{MSG_BIRTHDAY}</th>
                 <td>
-                    <input type="text" name="m_birthday" id="m_birthday" value="{VALUE_M_BIRTHDAY}"/>
-                    <a href="#m_birthday" onclick="displayCalendar(document.myform.m_birthday,'yyyy-mm-dd',this)"><img src="{TAG_ROOT_PATH}js/calendar/calendar.gif" border="0"></a>
+                    <input type="text" name="m_birthday" id="m_birthday" class="datepicker" value="{VALUE_M_BIRTHDAY}"/>
+                    <!--<a href="#m_birthday" onclick="displayCalendar(document.myform.m_birthday,'yyyy-mm-dd',this)"><img src="{TAG_ROOT_PATH}js/calendar/calendar.gif" border="0"></a>-->
                 </td>
             </tr>
             <tr>

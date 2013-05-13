@@ -300,4 +300,7 @@ $TPLMSG['CART_QUICK_SHOPPING'] = "快速購物";
 $TPLMSG['CONTACT_S_1']="先生";
 $TPLMSG['CONTACT_S_2']="女士";
 $TPLMSG['CONTACT_S_3']="小姐";
+$TPLMSG['ACCOUNT_ACTIVATED'] = "您的帳號已啟用!!請重新登入";
+$TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "帳號啟用失敗";
+$TPLMSG['REGISTER_NOTIFICATION'] = "在送出註冊資訊後，系統會寄一封驗證信到您的信箱。您需要點擊其中的驗證連結才能啟用您的帳號";
 ?>
