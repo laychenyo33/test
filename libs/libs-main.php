@@ -1462,17 +1462,33 @@ class MAINFUNC{
         }
     }    
     //增加左側主選單
-    function new_left_menu(array $menu_items){
+    function new_left_menu(array $menu_items,$blockname="CATE",$sub=false,$deep=""){
         global $tpl;
+        $subul1=array(
+            "CATE"    => "<div class=\"menu_body\">",
+            "SUBCATE" => "<ul id=\"\" class=\"menu_prod_body\">",
+        );
+        $subul2=array(
+            "CATE"    => "</div>",
+            "SUBCATE" => "</ul>",
+        );
+        $deep = $deep?"S".$deep:"SUB";
+        $sub_cate_name = $deep."CATE";        
         foreach($menu_items as $itme){
-            $tpl->newBlock( "LEFT_CATE_LIST" );
+            $tpl->newBlock( "LEFT_".$blockname."_LIST" );
             $tpl->assign( array( 
-                "VALUE_CATE_NAME" => $itme['name'],
-                "VALUE_CATE_LINK"  => $itme['link'],
-                "TAG_CURRENT_CLASS"  => $itme['tag_cur'],
+                "VALUE_".$blockname."_NAME" => $itme['name'],
+                "VALUE_".$blockname."_LINK" => $itme['link'],
+                "WRAPPER_CLASS"             => $itme['class'],
+                "TAG_CURRENT_CLASS"         => $itme['tag_cur'],
             ));        
+            if($itme['sub']){
+                $tpl->assign("TAG_".$deep."_UL1",$subul1[$blockname]);
+                $tpl->assign("TAG_".$deep."_UL2",$subul2[$blockname]);
+                $this->new_left_menu($itme['sub'],$sub_cate_name,true,$deep);
+            }
         }
-    }    
+    }   
     //建立html a標籤
     function mk_link($text,$link,$extra=null){
         if(is_array($extra)){
