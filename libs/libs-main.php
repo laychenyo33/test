@@ -1532,7 +1532,7 @@ class MAINFUNC{
             $tpl->assign(array(
                 "VALUE_".strtoupper($blockname)."_KEY"  => $k, 
                 "VALUE_".strtoupper($blockname)."_NAME" => $v, 
-                "CHECKED"                   => (in_array($k,$values))?"checked":"",
+                "CHECKED"                   => (@in_array($k,$values))?"checked":"",
             ));
         }
     }
