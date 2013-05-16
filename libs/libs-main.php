@@ -1530,8 +1530,8 @@ class MAINFUNC{
         foreach($datas as $k => $v){
             $tpl->newBlock(strtoupper($blockname)."_CHECKBOX");
             $tpl->assign(array(
-                "VALUE_".$blockname."_KEY"  => $k, 
-                "VALUE_".$blockname."_NAME" => $v, 
+                "VALUE_".strtoupper($blockname)."_KEY"  => $k, 
+                "VALUE_".strtoupper($blockname)."_NAME" => $v, 
                 "CHECKED"                   => (in_array($k,$values))?"checked":"",
             ));
         }
