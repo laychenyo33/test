@@ -2,44 +2,41 @@
 class MAINFUNC{
     //分頁
     function pagination($op_limit=10,$jp_limit=10,$nowp=1,$jp=0,$func_str,$total){
-        $Page["total_records"]=$total; //總筆數
+        $Page["total_records"]=$total;
+        $Page["page_limit"] = $op_limit;
         //Total Pages
-        $Page["total_pages"]=($total%$op_limit)? $total/$op_limit +1 : $total/$op_limit; //總頁數
+        $Page["total_pages"]=ceil($total/$op_limit);
         //New Sql
         $start_pages=($nowp>=1)?$nowp-1:0;
-        $Page["start_serial"]=$start_pages*$op_limit;//目前頁面第一筆索引
-        $ppages=floor($Page["total_pages"]/$jp_limit);//頁碼的總頁數
-        if($jp<$ppages){
+        $Page["start_serial"]=$start_pages*$op_limit;
+        $ppages=ceil($Page["total_pages"]/$jp_limit);
+        if($jp<$ppages-1){//非最後一頁跳頁
             $page_start=$jp*$jp_limit+1;
             $page_end=$page_start+$jp_limit;
-        }else{
+        }else{//最後一頁跳頁
             $page_start=$jp*$jp_limit+1;
             $page_end=$page_start+$Page["total_pages"]%$jp_limit;
         }
         //沒有上跳頁也沒有下跳頁
-        if($ppages <= 0 && $Page["total_pages"]<$jp_limit+1){
+        if($ppages <= 1 && $Page["total_pages"]<$jp_limit+1){
             $Page["bj_page"]="";
             $Page["nj_page"]="";
             $page_start=1;
-            $page_end=($total%$op_limit)?$Page["total_pages"] : $Page["total_pages"]+1;
+            $page_end=($total%$op_limit)?$Page["total_pages"]+1 : $Page["total_pages"];
         }else{
             //有上跳頁沒有下跳頁
-            if($jp>= $ppages){ //最後下跳頁
+            if($jp>= $ppages-1){ //最後下跳頁
                 $bp=$jp-1;
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
                 $Page["nj_page"]="";
-            }
-            //有上跳頁也有下跳頁
-            if($jp < $ppages && $jp!=0){
+            }elseif($jp < $ppages-1 && $jp!=0){//有上跳頁也有下跳頁           
                 $bp=$jp-1;
                 $np=$jp+1;
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
                 $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
-            }
-            //沒有上跳頁有下跳頁
-            if($jp ==0){//第1頁
+            }elseif($jp ==0){////沒有上跳頁有下跳頁，第1頁
                 $np=$jp+1;
                 $Page["bj_page"]="";
                 $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
@@ -57,7 +54,12 @@ class MAINFUNC{
             $page_option="";
         }
         $Page["pages_str"]=$page_option;
-        $Page["total_pages"]=floor($Page["total_pages"]);
+        if($ppages>1){
+            if($jp>0)$Page["first_page"] = $func_str."&nowp=1&jp=0";
+            if($jp<$ppages-1){
+                $Page["last_page"] = $func_str."&nowp=".$Page["total_pages"]."&jp=".(ceil($Page["total_pages"]/$jp_limit)-1);
+            }
+        }
         return $Page;
     }
     //SEO rewrite分頁
@@ -65,6 +67,7 @@ class MAINFUNC{
         $nowp=($nowp)?$nowp:0;
         $jp=($jp)?$jp:0;
         $Page["total_records"]=$total;
+        $Page["page_limit"] = $op_limit;
         //Total Pages
         $Page["total_pages"]=($total%$op_limit)? $total/$op_limit +1 : $total/$op_limit;
         //New Sql
@@ -112,12 +115,12 @@ class MAINFUNC{
         for($i=$page_start;$i<$page_end;$i++){
             //$line1=($i==floor($page_end))?"":" | ";
             if($i==$nowp || ($i==$page_start && $nowp==0)){
-                $nowp_option[] = "<span class='current'>P".$i."</span>";
+                $nowp_option[] = "<span class='current'>".$i."</span>";
             }else{
                 if($i==1){
-                    $nowp_option[] = "<a href=\"".$func_str.".htm\"> P".$i." </a>";
+                    $nowp_option[] = "<a href=\"".$func_str.".htm\"> ".$i." </a>";
                 }else{
-                    $nowp_option[] = "<a href=\"".$func_str."-pages-".$i."-".$jp.".htm\"> P".$i." </a>";
+                    $nowp_option[] = "<a href=\"".$func_str."-pages-".$i."-".$jp.".htm\"> ".$i." </a>";
                 }
             }
         }
@@ -128,6 +131,12 @@ class MAINFUNC{
         }
         $Page["pages_str"]=$page_option;
         $Page["total_pages"]=floor($Page["total_pages"]);
+        if($ppages>1){
+            if($jp>0)$Page["first_page"] = $func_str."&nowp=1&jp=0";
+            if($jp<$ppages-1){
+                $Page["last_page"] = $func_str."&nowp=".$Page["total_pages"]."&jp=".(ceil($Page["total_pages"]/$jp_limit)-1);
+            }
+        }        
         return $Page;
     }
     function sqlstr_add_limit($op_limit=10,$nowp=1,$sql){
@@ -1627,6 +1636,41 @@ class MAINFUNC{
     function meta_refresh($url,$secs){
         global $tpl;
         $tpl->assignGlobal("TAG_META_REFRESH","<meta http-equiv=\"Refresh\" content=\"".$secs.";url=".$url."\">");
+    }
+    function showPagination($Page,$showNoData){
+        global $tpl,$TPLMSG;
+        if($Page["total_records"]){ //直接指定分頁內容
+            $tpl->newBlock( "PAGE_DATA_SHOW" );
+            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $Page["total_records"],
+                                "VALUE_TOTAL_PAGES"  => $Page["total_pages"],
+                                "VALUE_PAGES_STR"  => $Page["pages_str"],
+                                "VALUE_PAGES_LIMIT"=> $Page["page_limit"],
+            ));
+            if($Page["bj_page"]){
+                $tpl->newBlock( "PAGE_BACK_SHOW" );
+                $tpl->assign( "VALUE_PAGES_BACK"  , $Page["bj_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }
+            if($Page["nj_page"]){
+                $tpl->newBlock( "PAGE_NEXT_SHOW" );
+                $tpl->assign( "VALUE_PAGES_NEXT"  , $Page["nj_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }
+            if($Page["first_page"]){
+                $tpl->newBlock( "PAGE_FIRST_SHOW" );
+                $tpl->assign( "VALUE_PAGES_FIRST"  , $Page["first_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }
+            if($Page["last_page"]){
+                $tpl->newBlock( "PAGE_LAST_SHOW" );
+                $tpl->assign( "VALUE_PAGES_LAST"  , $Page["last_page"]);
+                $tpl->gotoBlock("PAGE_DATA_SHOW");
+            }            
+        }else{
+            if($showNoData){
+                $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);            
+            }
+        }        
     }    
 }
 ?>
