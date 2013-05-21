@@ -64,7 +64,7 @@ class PRODUCTS{
                                 "VALUE_P_ID"        => $row["p_id"],
                                 "VALUE_P_LINK"      => $cms_cfg['base_root'].$row['pc_seo_filename']."/".$row['p_seo_filename'].".html",
                                 "VALUE_P_NAME"      => $row["p_name"],
-                                "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['base_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
+                                "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['file_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
                                 "VALUE_P_SERIAL"    => $i,
                                 "VALUE_PC_NAME"     => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
                                 "VALUE_P_SPECIAL_PRICE" => $row["p_list_price"],
