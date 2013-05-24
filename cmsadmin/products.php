@@ -1082,6 +1082,19 @@ class PRODUCTS{
                                    "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
                                    "TAG_SHORT_DESC_SHOW" => (trim($row["p_seo_short_desc"]))?"":"none",
         ));
+        if($cms_cfg['ws_module']['ws_products_info_fields']){
+            for($j=1;$j<=$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
+                $tpl->newBlock("INFO_FIELD_LIST");
+                $tpl->assign(array(
+                   "SERIAL"           => $j,
+                   "TITLE_SERIAL"     => $j+3,
+                   "ELM_SERIAL"       => $j+5,
+                   "INFO_FIELD_TITLE" => $row["p_info_field".$j."_title"],
+                   "INFO_FIELD_VALUE" => $row["p_info_field".$j],
+                   "INFO_FIELD_SHOW"  => (trim($row["p_info_field".$j]))?"":"none",
+                ));
+            }
+        }
         if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_products']){
             $this->application_checkbox($row["p_id"]);
         }

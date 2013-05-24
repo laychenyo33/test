@@ -204,6 +204,18 @@
                 </div>
             </td>
         </tr>
+        <!-- START BLOCK : INFO_FIELD_LIST -->
+        <tr>
+            <th>
+            <input type="text" size="25" name="p_info_field{SERIAL}_title" value="{INFO_FIELD_TITLE}">:<br>&nbsp;(產品說明標題{TITLE_SERIAL})
+            </th>
+            <td colspan="3"><a name="info_field{SERIAL}" href="#info_field{SERIAL}" onClick="document.getElementById('div_info_field{SERIAL}').style.display='';">展開</a> <a href="#info_field{SERIAL}" onClick="document.getElementById('div_info_field{SERIAL}').style.display='none';">隱藏</a>
+                <div id="div_info_field{SERIAL}" style="display:{INFO_FIELD_SHOW}">
+                <textarea id="elm{ELM_SERIAL}" name="p_info_field{SERIAL}" cols="50" rows="15">{INFO_FIELD_VALUE}</textarea>
+                </div>
+            </td>
+        </tr>
+        <!-- END BLOCK : INFO_FIELD_LIST -->
         <!-- START BLOCK : PRODUCTS_ATTACH_FILES -->
         <tr>
             <th>附件檔案(1):</th>

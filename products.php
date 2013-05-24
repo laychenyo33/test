@@ -629,6 +629,19 @@ class PRODUCTS{
                     );
                     array_push($domtabData, $tmp);                       
                 }
+                //新增的產品訊息欄位
+                if($cms_cfg['ws_module']['ws_products_info_fields']){
+                    for($j=1;$j<=$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
+                        $ck_str=str_replace("&nbsp;","",strip_tags($row["p_info_field".$j],"<img><iframe><script>"));
+                        if(trim($ck_str)!=""){
+                            $tmp = array(
+                                'title' => $row["p_info_field".$j."_title"],
+                                'data'  => $row["p_info_field".$j]
+                            );
+                            array_push($domtabData, $tmp);                       
+                        }                    
+                    }
+                }
                 if($cms_cfg['ws_module']['ws_products_desc_style']==1){
                     //載入dombtab libs
                     $tpl->newBlock("DOMTAB_SCRIPT");

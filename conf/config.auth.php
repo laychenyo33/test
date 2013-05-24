@@ -38,6 +38,7 @@ $cms_cfg["ws_module"]=array(
         "ws_products_mv_link"     =>0, //產品影片，連到影片網站觀看,
         "ws_products_upfiles"     =>1, //產品附檔,
         "ws_products_ca"=>0,           //產品認證標章管理
+        "ws_products_info_fields" =>0, //額外的產品敘述欄位數量
 
 /*      IPC SETUP                   */
         "ws_ad"=>0,                     //廣告管理(IPC專用)
