@@ -22,7 +22,7 @@ abstract class Dbtable_Abstract {
     
     public function writeData($post){
         $this->_retrieve_cols($post); 
-        if(isset($this->values[$this->pk])){
+        if(!empty($this->values[$this->pk])){
             $sql = $this->_mk_update_sql();
         }else{
             $sql = $this->_mk_insert_sql();
@@ -52,6 +52,10 @@ abstract class Dbtable_Abstract {
     //取得post資料欄位
     protected function _retrieve_cols($post){
         foreach($post as $k=>$v){
+            if(get_magic_quotes_gpc()){
+                $v = stripslashes($v);
+                $post[$k] = $v;
+            }
             if(isset($this->post_cols[$k])){
                 if(is_array($v)){
                     $this->values[$k] = implode(',',$v);
@@ -77,7 +81,7 @@ abstract class Dbtable_Abstract {
         $sql_tpl = "insert into ".$this->tablename()."(%s)values(%s)";
         foreach($this->values as $k=>$v){
             $columns[]=sprintf("`%s`",$k);
-            $values[]=sprintf('%s',$v);
+            $values[]=sprintf("'%s'",$v);
         }
         return sprintf($sql_tpl,implode(',',$columns),implode(',',$values));
         

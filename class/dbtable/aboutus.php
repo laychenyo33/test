@@ -17,5 +17,11 @@ class Dbtable_Aboutus extends Dbtable_Abstract{
         'au_seo_filename'    => "",
         'au_seo_h1'          => "",        
     );     
+    protected function _retrieve_cols($post){
+        parent::_retrieve_cols($post);
+        $au_cate = $post['au_cate_input']?$post['au_cate_input']:$post['au_cate_select'];
+        $au_cate = $au_cate?$au_cate:"aboutus";
+        $this->values['au_cate'] = $this->db->quote($au_cate);
+    }    
 }
 ?>
