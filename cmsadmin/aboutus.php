@@ -190,10 +190,6 @@ class ABOUTUS{
 
             ));
         }
-        //有獨立類別
-        if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
-            $tpl->newBlock("UNIQUE_CATE");
-        }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["au_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus where au_id='".$_REQUEST["au_id"]."'";
@@ -221,7 +217,14 @@ class ABOUTUS{
                 header("location : aboutus.php?func=au_list");
             }
         }
+        //有獨立類別
+        if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
+            $tpl->newBlock("UNIQUE_CATE");
         $this->get_au_cate_option($row);
+            if($cms_cfg['ws_module']['ws_aboutus_au_cate_input']){
+                $tpl->newblock("AU_CATE_INPUT");
+            }
+        }        
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_AU_CONTENT" , $row["au_content"] );

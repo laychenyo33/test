@@ -5,6 +5,7 @@ $cms_cfg["ws_module"]=array(
 /*      BASIC(IPB&IPS) SETUP        */
         "ws_aboutus"=>1,            //關於我們(公司簡介)
         "ws_aboutus_au_cate"=>1,    //關於我們(公司簡介)設為獨立類別
+        "ws_aboutus_au_cate_input"=>0,    //關於我們(公司簡介)設為獨立類別輸入區塊
         "ws_video"=>0,            //youtube影片
         "ws_blog"=>0,               //部落格管理(留言版)
         "ws_contactus" =>1,          //聯絡我們
