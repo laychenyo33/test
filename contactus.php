@@ -8,6 +8,7 @@ class CONTACTUS{
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         $this->security_mode = 1;//表單安全驗證模式:0=>math_security,1=>security_zone
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
+        $this->contact_inquiry = $cms_cfg['ws_module']['ws_contactus_inquiry'];
         switch($_REQUEST["func"]){
             case "cu_add"://聯絡我們新增
                 $this->ws_tpl_file = "templates/ws-contactus-form-tpl.html";
@@ -93,6 +94,8 @@ class CONTACTUS{
                                   "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
                                   "MSG_MODE" => $TPLMSG['SEND'],
                                   "MSG_CATE" => $TPLMSG['CATE'],
+                                  "MSG_PRODUCT_LIST" => $TPLMSG['CONTACTUS_PRODUCT_LIST'],
+                                  "MSG_POSITION" => $TPLMSG['CONTACTUS_POSITION'],
                                   "MSG_ADDRESS" => $TPLMSG['ADDRESS'],
                                   "MSG_TEL" => $TPLMSG['TEL'],
                                   "MSG_FAX" => $TPLMSG['FAX'],
@@ -104,6 +107,10 @@ class CONTACTUS{
         }
         //稱謂下拉選單
         $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"]);
+        //產品清單checkbox
+        if($this->contact_inquiry){
+            $main->contactus_product_list_checkbox($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_pid"]);
+        }
         //可附檔上傳
         if($cms_cfg["ws_module"]["ws_contactus_upfiles"]==1) {
             if($cms_cfg['contactus_upfiles_nums']){
@@ -159,6 +166,9 @@ class CONTACTUS{
                 if($cms_cfg['ws_module']['ws_contactus_ipmap']){
                     $ip_country = array_merge($ip_country,$main->get_ip_country($_SERVER['REMOTE_ADDR']));                
                 }
+                if(is_array($_POST['cu_pid'])){
+                    $pid_str = implode(",",$_POST['cu_pid']);
+                }
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_contactus (
                         m_id,
@@ -167,6 +177,7 @@ class CONTACTUS{
                         cu_company_name,
                         cu_contact_s,
                         cu_name,
+                        cu_position,
                         cu_tel,
                         cu_fax,
                         cu_country,
@@ -176,6 +187,7 @@ class CONTACTUS{
                         cu_file,
                         cu_ip,
                         cu_ip_country,                        
+                        cu_pid_str,                        
                         cu_modifydate
                     ) values (
                         '".$this->m_id."',
@@ -184,6 +196,7 @@ class CONTACTUS{
                         '".mysql_real_escape_string($_REQUEST["cu_company_name"])."',
                         '".$ws_array["contactus_s"][$_REQUEST["cu_contact_s"]]."',
                         '".mysql_real_escape_string($_REQUEST["cu_name"])."',
+                        '".mysql_real_escape_string($_REQUEST["cu_position"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_tel"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_fax"])."',
                         '".mysql_real_escape_string($_REQUEST["cu_country"])."',
@@ -193,6 +206,7 @@ class CONTACTUS{
                         '".$file."',
                         '".$ip_country['address']."',
                         '".$ip_country['country']."',                            
+                        '".$pid_str."',                            
                         '".date("Y-m-d H:i:s")."'
                     )";
                 $rs = $db->query($sql);
@@ -204,6 +218,7 @@ class CONTACTUS{
                     $tpl->newBlock("CONTACTUS_MAIL");
                     $tpl->assign(array(
                             "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
+                            "MSG_POSITION" =>$TPLMSG['CONTACTUS_POSITION'],
                             "MSG_CATE" => $TPLMSG['CATE'],
                             "MSG_ADDRESS" => $TPLMSG['ADDRESS'],
                             "MSG_TEL" => $TPLMSG['TEL'],
@@ -212,6 +227,7 @@ class CONTACTUS{
                             "MSG_ATTACH_FILES" => $TPLMSG['CONTACT_US_ATTACH_FILES'],
                             "VALUE_CUC_SUBJECT"  => $ws_array["contactus_cate"][$_REQUEST["cu_cate"]],
                             "VALUE_CU_COMPANY_NAME" => $_REQUEST["cu_company_name"],
+                            "VALUE_CU_POSITION" => $_REQUEST["cu_position"],
                             "VALUE_CU_FAX" => $_REQUEST["cu_fax"],
                             "VALUE_CU_TEL" => $_REQUEST["cu_tel"],
                             "VALUE_CU_ADDRESS" => $_REQUEST["cu_address"],
@@ -239,6 +255,14 @@ class CONTACTUS{
                                             "VALUE_CU_COUNTRY" =>$_REQUEST["cu_country"]
                         ));
                     }
+                    if($this->contact_inquiry){
+                        $prod_arr = $main->contactus_product_list($_POST['cu_pid']);
+                        if(!empty($prod_arr)){
+                            $tpl->newBlock("PROD_LIST_ROW");
+                            $tpl->assign("MSG_PRODUCT_LIST" , $TPLMSG['CONTACTUS_PRODUCT_LIST']);
+                            $tpl->assign("VALUE_CU_PRODUCT_LIST",implode(',',$prod_arr));
+                        }
+                    }
                     //引入聯絡我們自動回覆說明
                     $sql="select st_inquiry_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
                     $selectrs = $db->query($sql);
@@ -263,6 +287,7 @@ class CONTACTUS{
                 }
                 $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["security_error"]=1;
                 header("location:contactus.php");
+                die();
             }
     }
     //顯示訊息並重新導向

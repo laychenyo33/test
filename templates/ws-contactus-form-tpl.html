@@ -17,6 +17,18 @@
             <!-- END BLOCK : TAG_SELECT_CONTACTUS_CATE -->
             </select></td>
           </tr>
+          <!-- START BLOCK : PRODUCTS_LIST -->
+          <tr>
+              <th>{MSG_PRODUCT_LIST}</th>
+              <td>
+                  <ul class="contact_prod_list">
+                      <!-- START BLOCK : PRODUCT_LIST_CHECKBOX -->
+                      <li><input type="checkbox" name="cu_pid[]" id="cu_pid_{VALUE_PRODUCT_LIST_KEY}" value="{VALUE_PRODUCT_LIST_KEY}" {CHECKED}/><label for="cu_pid_{VALUE_PRODUCT_LIST_KEY}">{VALUE_PRODUCT_LIST_NAME}</label></li>
+                      <!-- END BLOCK : PRODUCT_LIST_CHECKBOX -->                      
+                  </ul>
+              </td>
+          </tr>
+          <!-- END BLOCK : PRODUCTS_LIST -->
           <tr>
               <th>{MSG_COMPANY_NAME}</th>
               <td><input name="cu_company_name" size="42" value="{VALUE_CU_COMPANY_NAME}" type="text" /></td>
@@ -26,6 +38,10 @@
               <td>
                  <!-- INCLUDE BLOCK : CONTACT_S -->
                 </td>
+            </tr>
+          <tr>
+              <th>{MSG_POSITION}</th>
+              <td><input name="cu_position" size="42" value="{VALUE_CU_POSITION}" type="text" /></td>
             </tr>
           <!-- START BLOCK : SELECT_COUNTRY -->
           <tr>

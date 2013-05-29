@@ -303,4 +303,6 @@ $TPLMSG['CONTACT_S_3']="小姐";
 $TPLMSG['ACCOUNT_ACTIVATED'] = "您的帳號已啟用!!請重新登入";
 $TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "帳號啟用失敗";
 $TPLMSG['REGISTER_NOTIFICATION'] = "在送出註冊資訊後，系統會寄一封驗證信到您的信箱。您需要點擊其中的驗證連結才能啟用您的帳號";
+$TPLMSG['CONTACTUS_PRODUCT_LIST'] = "產品清單";
+$TPLMSG['CONTACTUS_POSITION'] = "部門與職稱";
 ?>

@@ -11,6 +11,7 @@ $cms_cfg["ws_module"]=array(
         "ws_contactus_s_style" =>1,  //聯絡我們稱謂樣式1為西式(尊稱在前)，2為中式(尊稱在後)
         "ws_contactus_upfiles" =>0,  //聯絡我們表單可附檔上傳
         "ws_contactus_ipmap"   =>0,    //聯絡我們表單記錄ip國家對映
+        "ws_contactus_inquiry" =>0,    //聯絡我們表單也顯示產品
         "ws_download"          =>0,    //檔案下載
         "ws_download_thumb"    =>0,    //檔案下載顯示縮圖
         "ws_ebook"=>1,              //電子型錄管理

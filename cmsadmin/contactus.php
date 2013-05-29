@@ -272,6 +272,7 @@ class CONTACTUS{
                                           "VALUE_CU_ID"  => $row["cu_id"],
                                           "VALUE_CU_COMPANY" => $row["cu_company_name"],
                                           "VALUE_CU_NAME" => $row["cu_name"],
+                                          "VALUE_CU_POSITION" => $row["cu_position"],
                                           "VALUE_CU_TEL" => $row["cu_tel"],
                                           "VALUE_CU_FAX" => $row["cu_fax"],
                                           "VALUE_CU_ADDRESS" => $row["cu_address"],
@@ -285,6 +286,13 @@ class CONTACTUS{
                 if($file){
                     $tpl->newBlock("UPFILE_ROW");
                     $tpl->assign("VALUE_CU_FILE" , $file);
+                }
+                if($row['cu_pid_str']){
+                    $prod_arr = $main->contactus_product_list($row['cu_pid_str']);
+                    if($prod_arr){
+                        $tpl->newBlock('INQUIRY_PRODUCT_LIST');
+                        $tpl->assign("PRODUCT_STR",implode(',',$prod_arr));
+                    }
                 }
                 //回覆資料列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id='".$_REQUEST["cu_id"]."' order by cur_modifydate desc limit 1";

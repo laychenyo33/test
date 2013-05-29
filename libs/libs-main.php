@@ -1672,5 +1672,29 @@ class MAINFUNC{
             }
         }        
     }    
+    function contactus_product_list($value){
+        global $db,$tpl,$cms_cfg;
+        if(is_array($value)){
+            $value = implode(",",$value);
+        }
+        $sql = "select p_name from ".$cms_cfg['tb_prefix']."_products where p_status='1' and p_id in (".$value.") order by p_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql,1);    
+        while($row = $db->fetch_array($res,1)){
+            $prod_arr[] = $row['p_name'];
+        }
+        return $prod_arr;
+    }
+    function contactus_product_list_checkbox($value){
+        global $db,$tpl,$cms_cfg;
+        $tpl->newBlock("PRODUCTS_LIST");
+        $sql = "select p_id,p_name from ".$cms_cfg['tb_prefix']."_products where p_status='1' order by p_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql,1);
+        if($db->numRows($res)){
+            while($row = $db->fetch_array($res,1)){
+                $prod_arr[$row['p_id']]=$row['p_name'];
+            }
+            $this->multiple_checkbox("PRODUCT_LIST",$prod_arr,$value);
+        }        
+    }    
 }
 ?>

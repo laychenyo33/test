@@ -298,4 +298,6 @@ $TPLMSG['CONTACT_S_3']="Miss";
 $TPLMSG['ACCOUNT_ACTIVATED'] = "Your account have been activated!!! Please login again.";
 $TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "Account activating failed!";
 $TPLMSG['REGISTER_NOTIFICATION'] = "Please click on the link in the mail send by system after you submit the info , which is process of activating your account.";
+$TPLMSG['CONTACTUS_PRODUCT_LIST'] = "Product List";
+$TPLMSG['CONTACTUS_POSITION'] = "Department & Position";
 ?>

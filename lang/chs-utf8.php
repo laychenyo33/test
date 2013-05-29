@@ -298,4 +298,9 @@ $TPLMSG['CART_QUICK_SHOPPING'] = "快速购物";
 $TPLMSG['CONTACT_S_1']="先生";
 $TPLMSG['CONTACT_S_2']="女士";
 $TPLMSG['CONTACT_S_3']="小姐";
+$TPLMSG['ACCOUNT_ACTIVATED'] = "您的帐号已启用!!请重新登入";
+$TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "帐号启用失败";
+$TPLMSG['REGISTER_NOTIFICATION'] = "在送出注册资讯后，系统会寄一封验证信到您的信箱。您需要点击其中的验证连结才能启用您的帐号";
+$TPLMSG['CONTACTUS_PRODUCT_LIST'] = "产品清单";
+$TPLMSG['CONTACTUS_POSITION'] = "部门与职称";
 ?>
