@@ -125,6 +125,7 @@ class PRODUCTS{
         $show_style_str_pc="SHOW_STYLE_PC1";
         $show_style_str_pc_desc="SHOW_STYLE_PC1_DESC";
         $show_style_str_p="SHOW_STYLE_P1";
+        $show_style_str_p2="SHOW_STYLE_P2";
         $show_style_str_p_desc="SHOW_STYLE_P1_DESC";
         //一列顯示筆數
         $row_num=$cms_cfg["ws_products_row"];
@@ -335,6 +336,9 @@ class PRODUCTS{
                 if($cms_cfg["ws_module"]["ws_listpage_cart"]==1){
                     $tpl->newBlock( "TAG_ADD_CART_TOP" );
                     $tpl->newBlock( "TAG_ADD_CART_BOTTOM" );
+                    $blockname = $show_style_str_p2;
+                }else{
+                    $blockname = $show_style_str_p;
                 }
             }
             $j=0;
@@ -351,7 +355,7 @@ class PRODUCTS{
                 $j++;
                 $k++;
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
-                $tpl->newBlock( $show_style_str_p );
+                $tpl->newBlock( $blockname );
                 $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                     "VALUE_P_ID" =>$row["p_id"],
                                     "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
