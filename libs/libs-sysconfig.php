@@ -18,7 +18,8 @@ if($rsnum >0 ){
 	}
 }
 include_once("libs/libs-main.php");
-$main = new MAINFUNC;
+$mainfunc_class = class_exists("MAINFUNC_NEW")?"MAINFUNC_NEW":"MAINFUNC";
+$main = new $mainfunc_class;
 include_once("TP/class.TemplatePower.inc.php");
 include_once("lang/".$cms_cfg['language']."-utf8.php");
 include_once("conf/default-items.php");

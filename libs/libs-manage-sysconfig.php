@@ -6,7 +6,8 @@ include_once("../TP/class.TemplatePower.inc.php");
 include_once("../lang/cht-utf8.php");
 include_once("../conf/default-items.php");
 $db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name']);
-$main = new MAINFUNC;
+$mainfunc_class = class_exists("MAINFUNC_NEW")?"MAINFUNC_NEW":"MAINFUNC";
+$main = new $mainfunc_class;
 
 //取得網站的設定
 $sql="select * from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
