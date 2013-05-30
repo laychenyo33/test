@@ -83,22 +83,24 @@ class catetree_abstract {
         $tpl = new TemplatePower($this->_templates);
         $tpl->prepare();
         $tpl->newBlock("SUB_CATE");
-        foreach($id_tree as $k => $item){
-            if(is_numeric($k)){
-                $tpl->newBlock("SUB_CATE_LIST");
-                $tpl->assign(array(
-                    "VALUE_CATE_ID"             => $item['id'],
-                    "VALUE_CATE_TREE_LINK_NAME" => $item['name'],
-                    "VALUE_CATE_TREE_LINK"      => $this->_get_cate_link($item['id']),
-                    "OPEN_CLASS"                => ($item['active'] || $item['sub']['open'])?"open":"",
-                    "ACTIVE_CLASS"              => ($item['active'] && !$item['sub']['open'])?"active":"text",
-                ));
-                if($item['sub']){
-                    $tpl->assign("VALUE_SUB_CATE_TREE",$this->_build_sub_tree($item['sub']));
+        if($id_tree){
+            foreach($id_tree as $k => $item){
+                if(is_numeric($k)){
+                    $tpl->newBlock("SUB_CATE_LIST");
+                    $tpl->assign(array(
+                        "VALUE_CATE_ID"             => $item['id'],
+                        "VALUE_CATE_TREE_LINK_NAME" => $item['name'],
+                        "VALUE_CATE_TREE_LINK"      => $this->_get_cate_link($item['id']),
+                        "OPEN_CLASS"                => ($item['active'] || $item['sub']['open'])?"open":"",
+                        "ACTIVE_CLASS"              => ($item['active'] && !$item['sub']['open'])?"active":"text",
+                    ));
+                    if($item['sub']){
+                        $tpl->assign("VALUE_SUB_CATE_TREE",$this->_build_sub_tree($item['sub']));
+                    }
                 }
             }
+            return $tpl->getOutputContent();
         }
-        return $tpl->getOutputContent();
     }
     protected function _get_cate_link($id){
         return $this->_cate_link_str."&".$this->_varname."=".$id;
