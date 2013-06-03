@@ -477,7 +477,7 @@ class PRODUCTS{
         if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
             $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p inner join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_seo_filename='".$_REQUEST["f"]."' and p_status='1' ";
         }else{
-            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p inner join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_id='".$_REQUEST["p_id"]."' and p_status='1' ";
+            $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p inner join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_id='".$_REQUEST["p_id"]."' and p_status='1' ";
         }
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
