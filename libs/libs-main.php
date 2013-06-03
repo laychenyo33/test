@@ -21,8 +21,6 @@ class MAINFUNC{
         if($ppages <= 1 && $Page["total_pages"]<$jp_limit+1){
             $Page["bj_page"]="";
             $Page["nj_page"]="";
-            $page_start=1;
-            $page_end=($total%$op_limit)?$Page["total_pages"]+1 : $Page["total_pages"];
         }else{
             //有上跳頁沒有下跳頁
             if($jp>= $ppages-1){ //最後下跳頁
@@ -85,8 +83,6 @@ class MAINFUNC{
         if($ppages <= 1 && $Page["total_pages"]<$jp_limit+1){
             $Page["bj_page"]="";
             $Page["nj_page"]="";
-            $page_start=1;
-            $page_end=($total%$op_limit)?$Page["total_pages"] : $Page["total_pages"]+1;
         }else{
             //有上跳頁沒有下跳頁
             if($jp>= $ppages){ //最後下跳頁
