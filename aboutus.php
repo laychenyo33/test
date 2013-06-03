@@ -66,7 +66,7 @@ class ABOUTUS{
             $main->header_footer("");
         }
         $main->layer_link($row["au_subject"]);
-        $tpl->assignGlobal( "VALUE_AU_CONTENT" , $row["au_content"]);
+        $tpl->assignGlobal( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"]));
     }
     function left_cate_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
