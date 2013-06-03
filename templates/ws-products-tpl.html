@@ -106,20 +106,4 @@
             })(jQuery);
         </script>
         <!-- END BLOCK : TAG_ADD_CART_BOTTOM -->
-        <div id="nodata">{MSG_NO_DATA}</div>
-
-            <!-- START BLOCK : PAGE_DATA_SHOW -->
-            <table width="100%" border="0" cellpadding="2" cellspacing="2">
-              <tr>
-                <td align="center">
-                <!-- START BLOCK : PAGE_BACK_SHOW -->
-                <a href="{VALUE_PAGES_BACK}"> << </a>
-                <!-- END BLOCK : PAGE_BACK_SHOW -->
-                {VALUE_PAGES_STR}
-                <!-- START BLOCK : PAGE_NEXT_SHOW -->
-                <a href="{VALUE_NEXT_BACK}"> >> </a>
-                <!-- END BLOCK : PAGE_NEXT_SHOW -->   
-                </td>
-              </tr>
-            </table>
-            <!-- END BLOCK : PAGE_DATA_SHOW -->
+        <!-- INCLUDE BLOCK : ./templates/ws-fn-pagination-tpl.html -->

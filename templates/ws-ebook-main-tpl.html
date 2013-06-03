@@ -11,18 +11,4 @@
 <div class="ebook_title"><a href="{VALUE_EB_LINK}">{VALUE_EB_NAME}</a></div>
 </div>
 <!-- END BLOCK : SHOW_STYLE_EB1 -->
-<div align="center">
-<font size='3' color="#ff0000"> {MSG_NO_DATA} </font>
-</div>
-<!-- START BLOCK : PAGE_DATA_SHOW -->
-<div id="page">
-<!-- START BLOCK : PAGE_BACK_SHOW -->
-<a href="{VALUE_PAGES_BACK}"><img src="{TAG_THEME_PATH}bt-page02.gif" ></a>
-<!-- END BLOCK : PAGE_BACK_SHOW -->
-{VALUE_PAGES_STR}
-<!-- START BLOCK : PAGE_NEXT_SHOW -->
-<a href="{VALUE_PAGES_NEXT}"><img src="{TAG_THEME_PATH}bt-page03.gif" ></a>
-<!-- END BLOCK : PAGE_NEXT_SHOW -->
-</div>
-<!-- END BLOCK : PAGE_DATA_SHOW -->
-</div>
+<!-- INCLUDE BLOCK : ./templates/ws-fn-pagination-tpl.html -->
