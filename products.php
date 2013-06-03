@@ -680,7 +680,7 @@ class PRODUCTS{
                 }                
                 //相關產品
                 if($cms_cfg["ws_module"]["ws_products_related"]==1){
-                    $this->related_products($row["p_related_products"],$row["pc_id"]);
+                    $this->related_products($row["p_related_products"],$row["pc_id"],$cms_cfg['ws_module']['ws_products_related_effect']);
                 }
             }
         }else{
@@ -917,25 +917,32 @@ class PRODUCTS{
         }
     }
     //相關產品
-    function related_products($p_id_str,$pc_id){
+    function related_products($p_id_str,$pc_id,$effect=1){
         global $db,$cms_cfg,$tpl,$TPLMSG,$main;
         if(trim($p_id_str)!=""){
-            $sql="select p.p_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
+            $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
             where p.p_id in (".$p_id_str.") and p.p_status='1' order by rand()";
         }else{
-            $sql="select p.p_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
+            $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
             where p.pc_id='".$pc_id."' and p.p_status='1' order by rand() limit 0,8";
         }
         $selectrs = $db->query($sql);
         $rsnum  = $db->numRows($selectrs);
         if ($rsnum > 0) {
+            switch($effect){
+                case 0:
             $tpl->newBlock("JS_IMAGE_FLOW");
+                    break;
+                case 1:
+                default:
+                    $tpl->newBlock("CHCAROUSEL_SCRIPT");
+            }
             $tpl->newBlock("RELATED_PRODUCTS_ZONE");
             while($row = $db->fetch_array($selectrs,1)){
                 $tpl->newBlock("RELATED_PRODUCTS");
                 $p_link = $this->get_link($row,true);
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
-                $dimension = $main->resizeto($p_img,171,134);
+                $dimension = $main->resizeto($p_img,$cms_cfg['related_img_width'],$cms_cfg['related_img_height']);
                 $tpl->assign( array("VALUE_PC_NAME"  => $row["pc_name"],
                                     "VALUE_P_ID"  => $row["p_id"],
                                     "VALUE_P_NAME" => $row["p_name"],

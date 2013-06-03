@@ -73,6 +73,8 @@ $cms_cfg['single_img_width']="340"; //單張大圖圖框限制--寬
 $cms_cfg['single_img_height']="225";//單張大圖圖框限制--高
 $cms_cfg['small_img_width']="167"; //小圖圖框限制--寬
 $cms_cfg['small_img_height']="111";//小圖圖框限制--高
+$cms_cfg['related_img_width']="143"; //小圖圖框限制--寬
+$cms_cfg['related_img_height']="141";//小圖圖框限制--高
 
 
 //News page limit
