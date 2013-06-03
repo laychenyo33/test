@@ -78,11 +78,11 @@ class NEWS{
         }else{
             if($this->ws_seo){
                 $meta_array=array(
-                    "meta_title"=>$row["nc_seo_title"],
+                    "meta_title"=>$cate_row["nc_seo_title"],
                     "meta_keyword"=>$row["nc_seo_keyword"],
-                    "meta_description"=>$row["nc_seo_description"],
-                    "seo_short_desc" => $row["nc_seo_short_desc"],
-                    "seo_h1"=>(trim($row["nc_seo_h1"])=="")?$row["nc_subject"]:$row["nc_seo_h1"],
+                    "meta_description"=>$cate_row["nc_seo_description"],
+                    "seo_short_desc" => $cate_row["nc_seo_short_desc"],
+                    "seo_h1"=>(trim($cate_row["nc_seo_h1"])=="")?$cate_row["nc_subject"]:$cate_row["nc_seo_h1"],
                 );
                 $main->header_footer($meta_array);
             }else{
@@ -165,6 +165,8 @@ class NEWS{
 //最新消息--顯示================================================================
     function news_show(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        //左側選單
+        $cate_row = $this->left_cate_list($row['nc_id']);        
         //最新消息內容
         if(!empty($_REQUEST["n_id"])){
             $and_str="n_id='".$_REQUEST["n_id"]."'";
@@ -175,8 +177,6 @@ class NEWS{
         $sql="select * from ".$cms_cfg['tb_prefix']."_news where ".$and_str;
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
-        //左側選單
-        $cate_row = $this->left_cate_list($row['nc_id']);
         //header footer
         if($this->ws_seo){
             $meta_array=array("meta_title"=>$row["n_seo_title"],
