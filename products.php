@@ -422,8 +422,8 @@ class PRODUCTS{
                 //$seo_H1  預設抓分類名稱
                 $main->header_footer($meta_array,$seo_H1);
             }
-                }
-                }
+        }
+    }
 //產品詳細資料================================================================
     function products_show(){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
@@ -745,8 +745,8 @@ class PRODUCTS{
                 ));
             }
             $tpl->gotoBlock("TAG_PRODUCTS_SEARCH");
-                }
-                }
+        }
+    }
     //顯示大圖資料
     function products_show_pic($p_id) {
         global $db,$tpl,$cms_cfg,$main;

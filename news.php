@@ -138,7 +138,7 @@ class NEWS{
                 $tpl->assign("VALUE_N_LINK" , $row["n_url"]);
             }
         }
-            }
+    }
 //最新消息--顯示================================================================
     function news_show(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;

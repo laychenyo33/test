@@ -385,7 +385,7 @@ class PRODUCTS{
 
             ));
         }
-            }
+    }
     //產品管理分類--表單
     function products_cate_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
@@ -805,8 +805,8 @@ class PRODUCTS{
 
                 ));
             }
-                }
-                }
+        }
+    }
 //產品管理--表單================================================================
     function products_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
@@ -2027,8 +2027,8 @@ class PRODUCTS{
                                     "VALUE_STATUS_IMG_ALT" => ($row["p_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
                 ));
             }
-                }
-                }
+        }
+    }
     //應用領域列表
     function products_application_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
@@ -2080,7 +2080,7 @@ class PRODUCTS{
                                 "VALUE_PA_MODIFYACCOUNT" => $row["pa_modifyaccount"],
             ));
         }
-            }
+    }
     //應用領域表單
     function products_application_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
@@ -2373,7 +2373,7 @@ class PRODUCTS{
                                 "VALUE_CA_SERIAL" => $i,
             ));
         }
-            }
+    }
     //認證標章表單
     function products_ca_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
