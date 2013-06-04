@@ -88,16 +88,14 @@ class STORES{
         $sql="select * from ".$cms_cfg['tb_prefix']."_stores where sd_status='1' ".$and_str." order by sd_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
-        //取得分頁連結
+        //取得分頁連結，且重新組合包含limit的sql語法
         if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
             $func_str=$cms_cfg['base_root']."stores/".$_REQUEST["f"];
-            $page=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+            $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }else{
             $func_str=$cms_cfg["base_root"]."stores.php?func=sd_list&sd_type=".$_GET['sd_type']."&sdc_id=".$sdc_id;
-            $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+            $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }
-        //重新組合包含limit的sql語法
-        $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $i=0;
@@ -116,27 +114,6 @@ class STORES{
             if($row['sd_gmurl']){
                 $tpl->newBlock("GMURL_BLOCK");
                 $tpl->assign("VALUE_SD_ID",$row["sd_id"]);
-            }
-        }
-        //分頁
-        if($i==0){
-            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-        }else{
-            $tpl->newBlock( "PAGE_DATA_SHOW" );
-            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                "VALUE_PAGES_STR"  => $page["pages_str"],
-                                "VALUE_PAGES_LIMIT"=>$this->op_limit
-            ));
-            if($page["bj_page"]){
-                $tpl->newBlock( "PAGE_BACK_SHOW" );
-                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
-            if($page["nj_page"]){
-                $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
             }
         }
     }

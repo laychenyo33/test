@@ -107,9 +107,8 @@ class INQUIRY{
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
         $func_str="inquiry.php?func=i_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
-        $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-        //重新組合包含limit的sql語法
-        $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
+        //分頁且重新組合包含limit的sql語法
+        $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
@@ -130,26 +129,6 @@ class INQUIRY{
                                 "VALUE_I_STATUS" => $ws_array["inquiry_status"][$row["i_status"]],
                                 "VALUE_I_SERIAL" => $i,
             ));
-        }
-        if($i==0){
-            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-        }else{
-            $tpl->newBlock( "PAGE_DATA_SHOW" );
-            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                "VALUE_PAGES_STR"  => $page["pages_str"],
-                                "VALUE_PAGES_LIMIT"=>$cms_cfg["op_limit"]
-            ));
-            if($page["bj_page"]){
-                $tpl->newBlock( "PAGE_BACK_SHOW" );
-                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
-            if($page["nj_page"]){
-                $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
         }
     }
 

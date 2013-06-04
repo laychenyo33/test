@@ -161,16 +161,14 @@ class APPLICATON{
                 //取得總筆數
                 $selectrs = $db->query($sql);
                 $total_records    = $db->numRows($selectrs);
-                //取得分頁連結
+                //取得分頁連結且重新組合包含limit的sql語法
                 if($this->ws_seo==1 && trim($_GET["f"])!=""){
                     $func_str=$_GET["f"];
-                    $page=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+                    $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,!$custom);
                 }else{
                     $func_str="application.php?pa_id=".$app_row['pa_id'];
-                    $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+                    $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,!$custom);
                 }
-                //重新組合包含limit的sql語法
-                $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
                 $selectrs = $db->query($sql);
                 $rsnum    = $db->numRows($selectrs);
                 $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['NAME'],
@@ -223,30 +221,6 @@ class APPLICATON{
                         $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions["height"]);
                     }
                 }
-                if($k==0 && $j==0){
-                    if($custom){
-                        $tpl->assignGlobal("MSG_NO_DATA","");
-                    }else{
-                        $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-                    }
-                }elseif($j!=0){
-                    $tpl->newBlock( "PAGE_DATA_SHOW" );
-                    $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                        "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                        "VALUE_PAGES_STR"  => $page["pages_str"],
-                                        "VALUE_PAGES_LIMIT"=>$this->op_limit
-                    ));
-                    if($page["bj_page"]){
-                        $tpl->newBlock( "PAGE_BACK_SHOW" );
-                        $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                        $tpl->gotoBlock("PAGE_DATA_SHOW");
-                    }
-                    if($page["nj_page"]){
-                        $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                        $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                        $tpl->gotoBlock("PAGE_DATA_SHOW");
-                    }
-                }                          
             }else{//找不到項目
                 include_once("404.htm");
                 exit();                

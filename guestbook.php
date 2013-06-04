@@ -72,9 +72,8 @@ class GUESTBOOK{
         $total_records = $db->numRows($selectrs);
         //取得分頁連結
         $func_str="guestbook.php?func=gb_list";
-        $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-        //重新組合包含limit的sql語法
-        $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
+        //分頁且重新組合包含limit的sql語法
+        $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $i=$page["start_serial"];
@@ -128,28 +127,6 @@ class GUESTBOOK{
                 ));
             }
             $tpl->gotoBlock( "GUESTBOOK_LIST" );
-        }
-        if($i==0){
-            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-            $tpl->assignGlobal( array("VALUE_TOTAL_RECORDS"  => 0,
-                                      "VALUE_TOTAL_PAGES"  => 0,
-                ));
-        }else{
-            $tpl->newBlock( "PAGE_DATA_SHOW" );
-            $tpl->assignGlobal( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                      "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                      "VALUE_PAGES_STR"  => $page["pages_str"],
-                                      "VALUE_PAGES_LIMIT"=>$cms_cfg["op_limit"]
-            ));
-            if($page['bj_page']){
-                $tpl->newBlock("PAGE_BACK_SHOW");
-                $tpl->assign("VALUE_PAGES_BACK",$page['bj_page']);
-            }
-            if($page['nj_page']){
-                $tpl->newBlock("PAGE_NEXT_SHOW");
-                $tpl->assign("VALUE_NEXT_BACK",$page['nj_page']);
-                
-            }
         }
     }
 

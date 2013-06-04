@@ -126,9 +126,8 @@ class EBOOK{
 
         //取得分頁連結
         $func_str="ebook.php?func=eb_list&ebc_parent=".$this->parent;
-        $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-        //重新組合包含limit的sql語法
-        $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
+        //分頁重新組合包含limit的sql語法
+        $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
 
         //EBOOK列表------------------------
@@ -146,27 +145,6 @@ class EBOOK{
             $i++;
             $k++;
         }
-        //分頁選單
-        if($k==0 && $i==0){
-            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-        }elseif($i!=0){
-            $tpl->newBlock( "PAGE_DATA_SHOW" );
-            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                "VALUE_PAGES_STR"  => $page["pages_str"],
-                                "VALUE_PAGES_LIMIT"=>$this->op_limit
-            ));
-            if($page["bj_page"]){
-                $tpl->newBlock( "PAGE_BACK_SHOW" );
-                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
-            if($page["nj_page"]){
-                $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
-        }
     }
     //EBOOK詳細頁
     function ebook_show() {
@@ -178,9 +156,8 @@ class EBOOK{
         $total_records = $db->numRows($selectrs);
         //取得分頁連結
         $func_str="ebook.php?func=eb_detail&ebc_parent=".$this->parent;
-        $page=$this->pagination($this->op_limit2,$this->jp_limit2,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-        //重新組合包含limit的sql語法
-        $sql=$main->sqlstr_add_limit($this->op_limit2,$_REQUEST["nowp"],$sql);
+        //分頁且重新組合包含limit的sql語法
+        $sql=$this->pagination($this->op_limit2,$this->jp_limit2,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         //EBOOK列表------------------------
@@ -200,21 +177,6 @@ class EBOOK{
             $ebook_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_ebook_cate","ebc_name","ebc",$row["ebc_id"],$func_str,1);
             if(!empty($ebook_cate_layer)){
                 $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link.$cms_cfg['path_separator'].implode($cms_cfg['path_separator'],$ebook_cate_layer).$cms_cfg['path_separator'].$row["eb_name"]);
-            }
-        }
-        if($j!=0){
-            $tpl->assignGlobal( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                    "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                    "VALUE_PAGES_STR"  => $page["pages_str"],
-                    "VALUE_PAGES_LIMIT"=>$this->op_limit2
-            ));
-            if($page["bj_page"]){
-                $tpl->newBlock( "PAGE_BACK_SHOW" );
-                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-            }
-            if($page["nj_page"]){
-                $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
             }
         }
     }

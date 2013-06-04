@@ -305,21 +305,20 @@ class PRODUCTS{
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
-            //取得分頁連結
+            $showNoData = ($i==0 && $total_records==0);
+            //取得分頁連結並重新組合包含limit的sql語法
             if($mode==""){
                 if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
                     $func_str=$_REQUEST["f"];
-                    $page=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+                    $sql = $main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoData);
                 }else{
                     $func_str="products.php?func=p_list&pc_parent=".$this->parent;
-                    $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+                    $sql = $main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoData);
                 }
             }else{
                     $func_str="products.php?func=".$mode;
-                    $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+                    $sql = $main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoDatas);
             }
-            //重新組合包含limit的sql語法
-            $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['NAME'],
@@ -423,32 +422,8 @@ class PRODUCTS{
                 //$seo_H1  預設抓分類名稱
                 $main->header_footer($meta_array,$seo_H1);
             }
-            if($k==0 && $i==0){
-                if($custom){
-                    $tpl->assignGlobal("MSG_NO_DATA","");
-                }else{
-                    $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
                 }
-            }elseif($j!=0){
-                $tpl->newBlock( "PAGE_DATA_SHOW" );
-                $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                    "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                    "VALUE_PAGES_STR"  => $page["pages_str"],
-                                    "VALUE_PAGES_LIMIT"=>$this->op_limit
-                ));
-                if($page["bj_page"]){
-                    $tpl->newBlock( "PAGE_BACK_SHOW" );
-                    $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                    $tpl->gotoBlock("PAGE_DATA_SHOW");
                 }
-                if($page["nj_page"]){
-                    $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                    $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                    $tpl->gotoBlock("PAGE_DATA_SHOW");
-                }
-            }
-        }
-    }
 //產品詳細資料================================================================
     function products_show(){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
@@ -741,9 +716,8 @@ class PRODUCTS{
             $total_records    = $db->numRows($selectrs);
             //取得分頁連結
             $func_str="products.php?func=search&kw=".$_REQUEST["kw"];
-            $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-            //重新組合包含limit的sql語法
-            $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
+            //分頁且重新組合包含limit的sql語法
+            $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['PRODUCT_NAME'],
@@ -771,28 +745,8 @@ class PRODUCTS{
                 ));
             }
             $tpl->gotoBlock("TAG_PRODUCTS_SEARCH");
-            if($i==0){
-                $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-            }else{
-                $tpl->newBlock( "PAGE_DATA_SHOW" );
-                $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                    "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                    "VALUE_PAGES_STR"  => $page["pages_str"],
-                                    "VALUE_PAGES_LIMIT"=>$this->op_limit
-                ));
-                if($page["bj_page"]){
-                    $tpl->newBlock( "PAGE_BACK_SHOW" );
-                    $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                    $tpl->gotoBlock("PAGE_DATA_SHOW");
                 }
-                if($page["nj_page"]){
-                    $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                    $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                    $tpl->gotoBlock("PAGE_DATA_SHOW");
                 }
-            }
-        }
-    }
     //顯示大圖資料
     function products_show_pic($p_id) {
         global $db,$tpl,$cms_cfg,$main;

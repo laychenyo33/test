@@ -114,17 +114,15 @@ class FAQ{
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
-        //取得分頁連結
+        //取得分頁連結，且重新組合包含limit的sql語法
         if($this->ws_seo==1  && trim($_REQUEST["f"])!=""){
             //$func_str="faq-flist-".$fc_id;
             $func_str=$this->func_str;
-            $page=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+            $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }else{
             $func_str=$cms_cfg["base_root"]."faq.php?func=f_list&fc_id=".$fc_id;;
-            $page=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
+            $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }
-        //重新組合包含limit的sql語法
-        $sql=$main->sqlstr_add_limit($this->op_limit,$_REQUEST["nowp"],$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $i=0;
@@ -139,27 +137,6 @@ class FAQ{
                                 "VALUE_F_MODIFYDATE" => $row["f_modifydate"],
                                 "VALUE_F_SERIAL" => $i
             ));
-        }
-        //分頁
-        if($i==0){
-            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-        }else{
-            $tpl->newBlock( "PAGE_DATA_SHOW" );
-            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                "VALUE_PAGES_STR"  => $page["pages_str"],
-                                "VALUE_PAGES_LIMIT"=>$this->op_limit
-            ));
-            if($page["bj_page"]){
-                $tpl->newBlock( "PAGE_BACK_SHOW" );
-                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
-            if($page["nj_page"]){
-                $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
         }
     }
 }
