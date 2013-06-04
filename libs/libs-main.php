@@ -1,7 +1,7 @@
 <?php
 class MAINFUNC{
     //分頁
-    function pagination($op_limit=10,$jp_limit=10,$nowp=1,$jp=0,$func_str,$total){
+    function pagination($op_limit=10,$jp_limit=10,$nowp=1,$jp=0,$func_str,$total,$sql,$showNoData=true){
         $Page["total_records"]=$total;
         $Page["page_limit"] = $op_limit;
         //Total Pages
@@ -58,10 +58,17 @@ class MAINFUNC{
                 $Page["last_page"] = $func_str."&nowp=".$Page["total_pages"]."&jp=".(ceil($Page["total_pages"]/$jp_limit)-1);
             }
         }
-        return $Page;
+        $this->showPagination($Page,$showNoData);
+        if($_GET["st"]){
+            $sql=$main->sqlstr_add_limit($op_limit,'',$sql);
+        }else{
+            $sql=$main->sqlstr_add_limit($op_limit,$nowp,$sql);
+        }        
+//        $sql = $this->sqlstr_add_limit($op_limit,$nowp,$sql);
+        return $sql;
     }
     //SEO rewrite分頁
-    function pagination_rewrite($op_limit=10,$jp_limit=10,$nowp=1,$jp=0,$func_str,$total){
+    function pagination_rewrite($op_limit=10,$jp_limit=10,$nowp=1,$jp=0,$func_str,$total,$sql,$showNoData=true){
         $nowp=($nowp)?$nowp:0;
         $jp=($jp)?$jp:0;
         $Page["total_records"]=$total;
@@ -133,7 +140,14 @@ class MAINFUNC{
                 $Page["last_page"] = $func_str."&nowp=".$Page["total_pages"]."&jp=".(ceil($Page["total_pages"]/$jp_limit)-1);
             }
         }        
-        return $Page;
+        $this->showPagination($Page,$showNoData);
+        if($_GET["st"]){
+            $sql=$main->sqlstr_add_limit($op_limit,'',$sql);
+        }else{
+            $sql=$main->sqlstr_add_limit($op_limit,$nowp,$sql);
+        }        
+//        $sql = $this->sqlstr_add_limit($op_limit,$nowp,$sql);
+        return $sql;
     }
     function sqlstr_add_limit($op_limit=10,$nowp=1,$sql){
         $p=($nowp>=1)?$nowp-1:0;
