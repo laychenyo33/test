@@ -60,9 +60,9 @@ class MAINFUNC{
         }
         $this->showPagination($Page,$showNoData);
         if($_GET["st"]){
-            $sql=$main->sqlstr_add_limit($op_limit,'',$sql);
+            $sql=$this->sqlstr_add_limit($op_limit,'',$sql);
         }else{
-            $sql=$main->sqlstr_add_limit($op_limit,$nowp,$sql);
+            $sql=$this->sqlstr_add_limit($op_limit,$nowp,$sql);
         }        
 //        $sql = $this->sqlstr_add_limit($op_limit,$nowp,$sql);
         return $sql;
@@ -142,9 +142,9 @@ class MAINFUNC{
         }        
         $this->showPagination($Page,$showNoData);
         if($_GET["st"]){
-            $sql=$main->sqlstr_add_limit($op_limit,'',$sql);
+            $sql=$this->sqlstr_add_limit($op_limit,'',$sql);
         }else{
-            $sql=$main->sqlstr_add_limit($op_limit,$nowp,$sql);
+            $sql=$this->sqlstr_add_limit($op_limit,$nowp,$sql);
         }        
 //        $sql = $this->sqlstr_add_limit($op_limit,$nowp,$sql);
         return $sql;
