@@ -145,7 +145,7 @@ class ABOUTUS{
 
             ));
         }
-            }
+    }
 //關於我們--表單================================================================
     function aboutus_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
