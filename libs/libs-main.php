@@ -1531,6 +1531,11 @@ class MAINFUNC{
         static $_layers = array();
         switch(func_num_args()){
             case 0: //輸出layer
+                if(empty($cms_cfg['path_separator'])){
+                    foreach($_layers as $k=>$v){
+                        $_layers[$k] = sprintf($cms_cfg['path_wraper'],$v);
+                    }                    
+                }                
                 $tpl->assignGlobal("TAG_LAYER",implode($cms_cfg['path_separator'] ,$_layers));
                 break;
             case 1:
