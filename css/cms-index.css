@@ -247,8 +247,8 @@ body {
 	width: 600px;
 	font-size: 13px;
 	letter-spacing: 1px;
-	float: left;
-	margin: 0px;
+	/*float: left;*/
+	margin: 0px auto;
 	height: 40px;
 	padding-top: 10px;
 	color: #666666;
