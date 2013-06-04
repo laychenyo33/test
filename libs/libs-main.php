@@ -514,7 +514,7 @@ class MAINFUNC{
                     $tpl->newBlock("LEFT_PRODUCTS_LIST");
                     $tpl->assign( array( "VALUE_PRODUCTS_NAME" => $row3["p_name"],
                                          "VALUE_PRODUCTS_LINK"  => $p_link,
-                                         "VALUE_CATE_LINK_CLASS" => ($_REQUEST['pc_parent']==$row3['pc_id']?"current":""),
+                                         "VALUE_CATE_LINK_CLASS" => (($_REQUEST['p_id']==$row3['p_id'] || $_GET['f']==$row3['p_seo_filename'])?"class='current'":""),
                     ));
                 }
             }
