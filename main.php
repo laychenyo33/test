@@ -33,6 +33,7 @@ class MAINDEFAULT{
         //$tpl->assignInclude( "FOOTER", $cms_cfg['base_footer_tpl']); //尾檔功能列表
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["PRODUCTS"]);
+        $tpl->assignGlobal( "TAG_INDEX_CURRENT" , "class='current'");
         $main->header_footer("");
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
