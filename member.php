@@ -761,34 +761,46 @@ class MEMBER{
             $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
             $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["FORGOT_PASSWORD"] );
             $tpl->newBlock(strtoupper( $cms_cfg['language'])."_REGISTER_FORGET_PASSWORD" );
+            $main->security_zone();
             $tpl->printToScreen();
         }else{
-            $sql="select m_name,m_account,m_password,m_email from ".$cms_cfg["tb_prefix"]."_member where m_account='".$_REQUEST["m_email"]."'";
-            $selectrs = $db->query($sql);
-            $row = $db->fetch_array($selectrs,1);
-            $rsnum    = $db->numRows($selectrs);
-            if ($rsnum > 0) {
-                $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
-                $tpl->prepare();
-                $tpl->newBlock( "MEMBER_FORGET_PASSWORD" );
-                $tpl->assignGlobal( array("MSG_TITLE"  => $TPLMSG['MEMBER_FORGET_TITLE'],
-                                          "MSG_M_ACCOUNT" => $TPLMSG['MEMBER_FORGET_ACCOUNT'],
-                                          "MSG_M_PASSWORD" => $TPLMSG['MEMBER_FORGET_PASSWORD'],
-                                          "VALUE_M_NAME"  => $row["m_name"],
-                                          "VALUE_M_ACCOUNT"  => $row["m_account"],
-                                          "VALUE_M_PASSWORD"  => $row["m_password"],
-                                          "TAG_BASE_URL"=>$cms_cfg["base_url"]
-                ));
-                $mail_content=$tpl->getOutputContent();
-                $goto_url=$cms_cfg["base_root"]."member.php?func=m_sps";
-                $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$row["m_account"],$mail_content,"Member's Password","pw",$goto_url);
+            require_once("./libs/libs-security-image.php");
+            $si = new securityImage();  
+            if($si->isValid()){
+                $sql="select m_name,m_account,m_password,m_email from ".$cms_cfg["tb_prefix"]."_member where m_account='".$_REQUEST["m_email"]."'";
+                $selectrs = $db->query($sql);
+                $row = $db->fetch_array($selectrs,1);
+                $rsnum    = $db->numRows($selectrs);
+                if ($rsnum > 0) {
+                    //重設密碼
+                    $row['m_password'] = $main->rand_str(17);
+                    $sql = "update ".$cms_cfg['tb_prefix']."_member set m_password=md5('".$db->quote($row['m_password'])."') where m_account='".$db->quote($row['m_email'])."'";
+                    $db->query($sql,true);
+                    //寄出通知信
+                    $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
+                    $tpl->prepare();
+                    $tpl->newBlock( "MEMBER_FORGET_PASSWORD" );
+                    $tpl->assignGlobal( array("MSG_TITLE"  => $TPLMSG['MEMBER_FORGET_TITLE'],
+                                              "MSG_M_ACCOUNT" => $TPLMSG['MEMBER_FORGET_ACCOUNT'],
+                                              "MSG_M_PASSWORD" => $TPLMSG['MEMBER_FORGET_PASSWORD'],
+                                              "VALUE_M_NAME"  => $row["m_name"],
+                                              "VALUE_M_ACCOUNT"  => $row["m_account"],
+                                              "VALUE_M_PASSWORD"  => $row["m_password"],
+                                              "TAG_BASE_URL"=>$cms_cfg["base_url"]
+                    ));
+                    $mail_content=$tpl->getOutputContent();
+                    $goto_url=$cms_cfg["base_root"]."member.php?func=m_sps";
+                    $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$row["m_email"],$mail_content,"Member's Password","pw",$goto_url);
+                }else{
+                    $goto_url=$cms_cfg["base_root"]."member.php?func=m_forget";
+                    $main->js_notice("Account not exist!!",$goto_url);
+                }
             }else{
                 $goto_url=$cms_cfg["base_root"]."member.php?func=m_forget";
-                $main->js_notice("Account not exist!!",$goto_url);
+                $main->js_notice("Security Error!!",$goto_url);
             }
-
         }
-    }
+    }    
      //寄送密碼完成訊息
     function member_send_password_success_str(){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
