@@ -1711,5 +1711,17 @@ class MAINFUNC{
             $this->multiple_checkbox("PRODUCT_LIST",$prod_arr,$value);
         }        
     }    
+    //隨機產生密碼
+    function rand_str($len=8){
+        $no_arr = array(34,39,44,46,96);
+        $str = "";
+        for($i=1;$i<$len;$i++){
+            do{
+                $c = rand(33,126);
+            }while(in_array($c,$no_arr));
+            $str.=chr($c);
+        }
+        return $str;        
+    }    
 }
 ?>
