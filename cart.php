@@ -57,11 +57,16 @@ class CART{
                 $this->ws_tpl_type=1;
                 break;
             case "c_finish"://結帳
-                $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
-                $this->ws_load_tp($this->ws_tpl_file);
-                $tpl->newBlock("JS_FORMVALID");
-                //$tpl->newBlock("JS_POP_IMG");
-                $this->cart_finish();
+                if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1){
+                    $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);                    
+                }else{
+                    $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $tpl->newBlock("JS_FORMVALID");
+                    //$tpl->newBlock("JS_POP_IMG");
+                    $this->cart_finish();
+                }
                 $this->ws_tpl_type=1;
                 break;
             case "c_replace"://存成訂單或詢價單
@@ -365,85 +370,73 @@ class CART{
     }
     function cart_finish(){
         global $db,$tpl,$TPLMSG,$ws_array,$shopping,$inquiry,$cms_cfg,$main;
-        //無登入會員,顯示登入表單
-        if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1){
-            //驗証碼
-            $tpl->newBlock( "MEMBER_LOGIN_FORM" );
-            $tpl->assignGlobal("MSG_ERROR_MESSAGE", $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]);
-            $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]=""; //清空錯誤訊息
-            $tpl->assignGlobal( "MSG_LOGIN_ACCOUNT",$TPLMSG["LOGIN_ACCOUNT"]);
-            $tpl->assignGlobal( "MSG_LOGIN_PASSWORD",$TPLMSG["LOGIN_PASSWORD"]);
-            //載入驗証碼
-            $main->security_zone();
-        }else{
-            //載入購物車列表
-            $this->cart_list();
-            //顯示表單資料
-            $tpl->newBlock( "MEMBER_DATA_FORM" );
-            $tpl->assignGlobal( array("MSG_MODE"  => $TPLMSG['SEND'],
-                                "MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
-                                "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
-                                "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
-                                "MSG_ZIP" => $TPLMSG["ZIP"],
-                                "MSG_ADDRESS" => $TPLMSG["ADDRESS"],
-                                "MSG_TEL" => $TPLMSG["TEL"],
-                                "MSG_FAX" => $TPLMSG["FAX"],
-                                "MSG_EMAIL" => $TPLMSG["EMAIL"],
-                                "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"]));
-            if($cms_cfg['ws_module']['ws_delivery_timesec']){
-                $tpl->newBlock("TIME_SEC_ZONE");
-                //到貨日期
-                $tpl->newBlock("CALENDAR_SCRIPT");
-                //配送時段
-                foreach($ws_array["deliery_timesec"] as $k=>$timesec){
-                    $tpl->newBlock("TIME_SEC_LIST");
-                    $tpl->assign(array(
-                       "TS_ID"  => $k,
-                       "TS_SEC" => $timesec,
-                    ));
-                }
+        //載入購物車列表
+        $this->cart_list();
+        //顯示表單資料
+        $tpl->newBlock( "MEMBER_DATA_FORM" );
+        $tpl->assignGlobal( array("MSG_MODE"  => $TPLMSG['SEND'],
+                            "MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
+                            "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
+                            "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
+                            "MSG_ZIP" => $TPLMSG["ZIP"],
+                            "MSG_ADDRESS" => $TPLMSG["ADDRESS"],
+                            "MSG_TEL" => $TPLMSG["TEL"],
+                            "MSG_FAX" => $TPLMSG["FAX"],
+                            "MSG_EMAIL" => $TPLMSG["EMAIL"],
+                            "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"]));
+        if($cms_cfg['ws_module']['ws_delivery_timesec']){
+            $tpl->newBlock("TIME_SEC_ZONE");
+            //到貨日期
+            $tpl->newBlock("CALENDAR_SCRIPT");
+            //配送時段
+            foreach($ws_array["deliery_timesec"] as $k=>$timesec){
+                $tpl->newBlock("TIME_SEC_LIST");
+                $tpl->assign(array(
+                   "TS_ID"  => $k,
+                   "TS_SEC" => $timesec,
+                ));
             }
-            if($this->m_id){
-                $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
-                $selectrs = $db->query($sql);
-                $row = $db->fetch_array($selectrs,1);
-                $tpl->assign( array( "VALUE_M_NAME" => $row["m_name"],
-                                     "VALUE_M_CONTACT_S" => $row["m_contact_s"],
-                                     "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
-                                     "VALUE_M_ZIP" => $row["m_zip"],
-                                     "VALUE_M_ADDRESS" => $row["m_address"],
-                                     "VALUE_M_TEL" => $row["m_tel"],
-                                     "VALUE_M_FAX" => $row["m_fax"],
-                                     "VALUE_M_EMAIL" => $row["m_email"],
-                                     "VALUE_M_CELLPHONE" => $row["m_cellphone"]));
+        }
+        if($this->m_id){
+            $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
+            $selectrs = $db->query($sql);
+            $row = $db->fetch_array($selectrs,1);
+            $tpl->assign( array( "VALUE_M_NAME" => $row["m_name"],
+                                 "VALUE_M_CONTACT_S" => $row["m_contact_s"],
+                                 "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
+                                 "VALUE_M_ZIP" => $row["m_zip"],
+                                 "VALUE_M_ADDRESS" => $row["m_address"],
+                                 "VALUE_M_TEL" => $row["m_tel"],
+                                 "VALUE_M_FAX" => $row["m_fax"],
+                                 "VALUE_M_EMAIL" => $row["m_email"],
+                                 "VALUE_M_CELLPHONE" => $row["m_cellphone"]));
+        }
+        //國家下拉選單
+        if($cms_cfg["ws_module"]["ws_country"]==1) {
+            $main->country_select($row["m_country"]);
+        }
+        //稱謂下拉選單
+        $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART");
+        if(!empty($shopping)){
+            //顯示付款方式
+            $tpl->newBlock("PAYMENT_TYPE");
+            $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
+            for($i=0;$i<count($ws_array["payment_type"]);$i++){
+                $tpl->newBlock("PAYMENT_TYPE_ITEMS");
+                $tpl->assign("VALUE_PAYMENT_TYPE_ID" , $i);
+                $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$i]);
             }
-            //國家下拉選單
-            if($cms_cfg["ws_module"]["ws_country"]==1) {
-                $main->country_select($row["m_country"]);
-            }
-            //稱謂下拉選單
-            $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART");
-            if(!empty($shopping)){
-                //顯示付款方式
-                $tpl->newBlock("PAYMENT_TYPE");
-                $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
-                for($i=0;$i<count($ws_array["payment_type"]);$i++){
-                    $tpl->newBlock("PAYMENT_TYPE_ITEMS");
-                    $tpl->assign("VALUE_PAYMENT_TYPE_ID" , $i);
-                    $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$i]);
-                }
-                $tpl->gotoBlock("PAYMENT_TYPE");
-                $tpl->gotoBlock("MEMBER_DATA_FORM");
-                //付款說明
-                $sql="select st_payment_term,st_shopping_term from ".$cms_cfg['tb_prefix']."_service_term  where st_id='1'";
-                $selectrs = $db->query($sql);
-                $rsnum    = $db->numRows($selectrs);
-                $row = $db->fetch_array($selectrs,1);
-                $payment_term=trim($row["st_payment_term"]);
-                if(!empty($payment_term)){
-                    $tpl->assignGlobal("MSG_PAYMENT_TERM",$row["st_payment_term"]);
-                    $tpl->assignGlobal("MSG_SHOPPING_TERM",$row["st_shopping_term"]);
-                }
+            $tpl->gotoBlock("PAYMENT_TYPE");
+            $tpl->gotoBlock("MEMBER_DATA_FORM");
+            //付款說明
+            $sql="select st_payment_term,st_shopping_term from ".$cms_cfg['tb_prefix']."_service_term  where st_id='1'";
+            $selectrs = $db->query($sql);
+            $rsnum    = $db->numRows($selectrs);
+            $row = $db->fetch_array($selectrs,1);
+            $payment_term=trim($row["st_payment_term"]);
+            if(!empty($payment_term)){
+                $tpl->assignGlobal("MSG_PAYMENT_TERM",$row["st_payment_term"]);
+                $tpl->assignGlobal("MSG_SHOPPING_TERM",$row["st_shopping_term"]);
             }
         }
     }
