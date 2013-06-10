@@ -303,4 +303,7 @@ $TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "帐号启用失败";
 $TPLMSG['REGISTER_NOTIFICATION'] = "在送出注册资讯后，系统会寄一封验证信到您的信箱。您需要点击其中的验证连结才能启用您的帐号";
 $TPLMSG['CONTACTUS_PRODUCT_LIST'] = "产品清单";
 $TPLMSG['CONTACTUS_POSITION'] = "部门与职称";
+$TPLMSG['EPAPER_HEADER'] = "电子报页首";
+$TPLMSG['EPAPER_FOOTER'] = "电子报页尾";
+$TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已经从邮件清单里移除了!";
 ?>

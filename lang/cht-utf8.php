@@ -305,4 +305,7 @@ $TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "帳號啟用失敗";
 $TPLMSG['REGISTER_NOTIFICATION'] = "在送出註冊資訊後，系統會寄一封驗證信到您的信箱。您需要點擊其中的驗證連結才能啟用您的帳號";
 $TPLMSG['CONTACTUS_PRODUCT_LIST'] = "產品清單";
 $TPLMSG['CONTACTUS_POSITION'] = "部門與職稱";
+$TPLMSG['EPAPER_HEADER'] = "電子報頁首";
+$TPLMSG['EPAPER_FOOTER'] = "電子報頁尾";
+$TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已經從郵件清單裡移除了!";
 ?>
