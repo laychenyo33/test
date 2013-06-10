@@ -1,6 +1,7 @@
 <?php
 include_once("../conf/config.inc.php");
 include_once("../libs/libs-manage-sysconfig.php");
+include_once("../lang/".$cms_cfg['language']."-utf8.php");
 set_time_limit(0);
 //取得佇列項目
 $sql = "select * from ".$cms_cfg['tb_prefix']."_epaper_queue where eq_send_time <= now()";
@@ -24,37 +25,40 @@ if($db->numRows($res)){
         $rsnum    = $db->numRows($selectrs);
         if($rsnum > 0){
             $mail_array=array();
+            $mx_arr=array();
             while($row = $db->fetch_array($selectrs,1)){
                 $piece=explode(",",$row["m_email"]);
                 foreach($piece as $key => $value){
-                    $mail_array[$value]=1;
+                    if(trim($value) && strpos($value, '@')!==false){
+                        $mail_array[$value] += 1;
+                        if($mail_array[$value]==1){
+                            $tmp = explode('@',$value);
+                            $mx_arr[$tmp[1]][] = $value;
+                        }
+                    }
                 }
-                $member_cate[$row["mc_subject"]]=1;
                 unset($piece);
-            }
-            foreach ($mail_array as $key =>$value){
-                $new_mail_array[]=$key;
-            }
-            foreach ($member_cate as $key =>$value){
-                $new_member_cate[]=$key;
-            }
-            if(!empty($new_mail_array)){
-                $mail_str=implode(",",$new_mail_array);
-                $member_cate_str=implode(",",$new_member_cate);
-                unset($new_mail_array);            
+            }           
+            if(!empty($mx_arr)){
                 //取得電子報內容
                 $mail_subject=$qRow["e_subject"];
                 $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",$qRow["eq_content"]);
                 //初始化電子報樣版
                 $mtpl = new TemplatePower('./templates/ws-manage-epaper-template-tpl.html');
                 $mtpl->prepare();
+                //取得電子報頁首、頁尾
+                $sql = "select st_epaper_header,st_epaper_footer from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
+                list($e_header,$e_footer) = $db->query_firstrow($sql,0);
+                $mtpl->assignGlobal("MSG_EPAPER_HEADER",$e_header);
+                $mtpl->assignGlobal("MSG_EPAPER_FOOTER",$e_footer);                
+                $mtpl->assignGlobal("MSG_COMPANY",$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']);
                 $mtpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+                $mtpl->assignGlobal("MSG_CONTACTUS",$TPLMSG['CONTACT_US']);
                 $mtpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
                 $mtpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
                 $mtpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
                 $mtpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
                 $mtpl->assignGlobal("TAG_LANG",$cms_cfg['language']);                
-                $mtpl->assignGlobal("SC_COMPANY",$from_name);                
                 $mtpl->assign("_ROOT.EPAPER_PAGE_TITLE",$qRow["e_subject"]);
                 $mtpl->assign("_ROOT.EPAPER_TITLE",$qRow["e_subject"]);
                 $mtpl->assign("_ROOT.EPAPER_CONTENT",$mail_content);
@@ -81,7 +85,6 @@ if($db->numRows($res)){
                         ));
                     }
                 }
-                $mail_content = $mtpl->getOutputContent();
                 //寫入發送記錄
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_epaper_send (
@@ -95,12 +98,33 @@ if($db->numRows($res)){
                         '".$qRow["e_subject"]."'
                     )";
                 $rs = $db->query($sql);
-                $main->ws_mail_send_simple($from_mail,$mail_str,$mail_content,$mail_subject,$from_name);
+                while(!empty($mx_arr)){
+                    foreach($mx_arr as $mx => $email_list){
+                        $i=0;
+                        $nums = count($email_list);
+                        while(($mail_str = array_shift($email_list))!==null){
+                            $i++;
+                            $mtpl->assignGlobal("CURRENT_RECEIVER",$mail_str);
+                            $mail_content = $mtpl->getOutputContent();
+                            $main->ws_mail_send_simple($from_mail,$mail_str,$mail_content,$mail_subject,$from_name);
+                            if($i==50 && $i<$nums){
+                                $mx_arr[$mx] = $email_list;
+                                sleep(60);
+                                continue 2;
+                            }
+                            if($i==$nums)break;
+                        }
+                        unset($mx_arr[$mx]);
+                        sleep(3);
+                    }
+                }                
             }
         }
     }
     //刪除過期的佇列
     $sql = "delete from ".$cms_cfg['tb_prefix']."_epaper_queue where eq_send_time <= now()";
+    $db->query($sql);
+    $sql = "OPTIMIZE TABLE  `".$cms_cfg['tb_prefix']."_epaper_queue`";
     $db->query($sql);
 }
 ?>

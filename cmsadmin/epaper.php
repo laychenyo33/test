@@ -88,7 +88,7 @@ class EPAPER{
                 $this->ws_tpl_type=1;
                 break;
             case "e_preview"://電子報預覽
-                $this->ws_tpl_file = "templates/ws-manage-epaper-preview-tpl.html";
+                $this->ws_tpl_file = "templates/ws-manage-epaper-template-tpl.html";
                 $tpl = new TemplatePower( $this->ws_tpl_file );
                 $tpl->prepare();
                 $this->epaper_preview();
@@ -159,21 +159,21 @@ class EPAPER{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $sql="select * from ".$cms_cfg['tb_prefix']."_epaper_cate where ec_id > '0'";
         $and_str = "";
-        if(!empty($_REQUEST["sk"])){
-            $and_str = " and ec_subject like '%".$_REQUEST["sk"]."%'";
-        }
-        $sql .= $and_str." order by ec_sort  ";
+        $sf = new searchFields_epaperCate();
+        $and_str = $sf->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
+        $sql .= ($and_str?" and ".$and_str:"")." order by ec_sort  ";
         //取得總筆數
         $total_records=$main->count_total_records($sql);
         //取得分頁連結
         $func_str="epaper.php?func=ec_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
-        //分頁且重新組合包含limit的sql語法
-        $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+        //分頁並重新組合包含limit的sql語法
+        $sql = $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $tpl->assignGlobal( array("VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
                                   "VALUE_TOTAL_BOX" => $rsnum,
-                                  "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR']
+                                  "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                                  "TAG_SEARCH_FIELDS" => $sf->list_search_fields($_GET['st'], $_GET['sk']),
         ));
         //分類列表
         $i=$page["start_serial"];
@@ -332,31 +332,25 @@ class EPAPER{
             $sql="select e.*,ec.ec_subject from ".$cms_cfg['tb_prefix']."_epaper as e left join ".$cms_cfg['tb_prefix']."_epaper_cate as ec on e.ec_id=ec.ec_id where e.e_id > '0'";
             //附加條件
             $and_str="";
+            $sf = new searchFields_epaper();
             if(!empty($_REQUEST["ec_id"])){
-                $and_str .= " and e.ec_id = '".$_REQUEST["ec_id"]."'";
+                $and_str .= " e.ec_id = '".$_REQUEST["ec_id"]."'";
             }
-            if($_REQUEST["st"]=="all"){
-                $and_str .= " and (e.e_subject like '%".$_REQUEST["sk"]."%' or e.e_content like '%".$_REQUEST["sk"]."%')";
-            }
-            if($_REQUEST["st"]=="e_subject"){
-                $and_str .= " and e.e_subject like '%".$_REQUEST["sk"]."%'";
-            }
-            if($_REQUEST["st"]=="e_content"){
-                $and_str .= " and e.e_content like '%".$_REQUEST["sk"]."%'";
-            }
-            $sql .= $and_str." order by e.e_sort ".$cms_cfg['sort_pos'].",e.e_modifydate desc ";
+            $and_str = $sf->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
+            $sql .= ($and_str?" and ".$and_str:"")." order by e.e_sort ".$cms_cfg['sort_pos'].",e.e_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
             //取得分頁連結
             $func_str="epaper.php?func=e_list&ec_id=".$_REQUEST["ec_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
-            //分頁且重新組合包含limit的sql語法
-            $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+            //分頁並重新組合包含limit的sql語法
+            $sql = $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
-                                      "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR']
+                                      "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                                      "TAG_SEARCH_FIELDS" => $sf->list_search_fields($_GET['st'], $_GET['sk']),
 
             ));
             switch($_REQUEST["st"]){
@@ -529,14 +523,29 @@ class EPAPER{
     }
 
     function epaper_preview(){
-        global $db,$tpl,$cms_cfg;
+        global $db,$tpl,$cms_cfg,$TPLMSG;
         if(!empty($_REQUEST["e_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_epaper where e_id='".$_REQUEST["e_id"]."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
-                $tpl->assignGlobal("VALUE_E_CONTENT" , $row["e_content"]);
+                //取得電子報頁首、頁尾
+                $sql = "select st_epaper_header,st_epaper_footer from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
+                list($e_header,$e_footer) = $db->query_firstrow($sql,0);
+                $tpl->assignGlobal("MSG_EPAPER_HEADER",$e_header);
+                $tpl->assignGlobal("MSG_EPAPER_FOOTER",$e_footer);
+                $tpl->assignGlobal("MSG_COMPANY",$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']);
+                $tpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+                $tpl->assignGlobal("MSG_CONTACTUS",$TPLMSG['CONTACT_US']);
+                $tpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
+                $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
+                $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
+                $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
+                $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);                
+                $tpl->assignGlobal("EPAPER_PAGE_TITLE",$row["e_subject"]);
+                $tpl->assignGlobal("EPAPER_TITLE",$row["e_subject"]);            
+                $tpl->assignGlobal("EPAPER_CONTENT" , $row["e_content"]);
             }else{
                 header("location : epaper.php?func=e_list");
             }
@@ -676,15 +685,17 @@ class EPAPER{
                             //初始化電子報樣版
                             $mtpl = new TemplatePower('./templates/ws-manage-epaper-template-tpl.html');
                             $mtpl->prepare();
+                            $mtpl->assignGlobal("MSG_COMPANY",$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']);
                             $mtpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+                            $mtpl->assignGlobal("MSG_CONTACTUS",$TPLMSG['CONTACT_US']);
+                            $mtpl->assignGlobal("MSG_FOOTER",$TPLMSG['EPAPER_FOOTER']);
                             $mtpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
                             $mtpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
                             $mtpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
                             $mtpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
                             $mtpl->assignGlobal("TAG_LANG",$cms_cfg['language']);                              
-                            $mtpl->assignGlobal("SC_COMPANY",$_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]);   
-                            $mtpl->assign("_ROOT.EPAPER_PAGE_TITLE",$row["e_subject"]);
-                            $mtpl->assign("_ROOT.EPAPER_TITLE",$row["e_subject"]);                         
+                            $mtpl->assign("_ROOT.EPAPER_PAGE_TITLE",$qRow["e_subject"]);
+                            $mtpl->assign("_ROOT.EPAPER_TITLE",$qRow["e_subject"]);
                             $mtpl->assign("_ROOT.EPAPER_CONTENT",$mail_content);
                             if(is_array($_POST['attach_p_id'])){
                                 $sql = "select p.*,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_status='1' and p_id in(".implode(',',$_POST['attach_p_id']).")";
