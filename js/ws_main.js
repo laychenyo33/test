@@ -54,10 +54,10 @@ function addBookmarkForBrowser(sTitle, sUrl) {
         try{
             window.external.AddFavorite(sUrl, sTitle);
         }catch(e){
-            alert('do it your self!');         
+            alert('Please help yourself to add this page into bookmarks');         
         }
     }else{
-        alert('do it your self!');         
+        alert('Please help yourself to add this page into bookmarks');         
     }
 }
 /* 勾選詢價車時之檢查事項 */
