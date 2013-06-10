@@ -47,6 +47,14 @@ class SERVICE{
         $tpl->assignInclude( "MAIN", $ws_tpl_file);
         $tpl->prepare();
         switch($_REQUEST["term_type"]){
+            case "st_epaper_header" :
+                $tpl->assignGlobal("TAG_ESH_CURRENT","class=\"current\"");
+                $tpl->assignGlobal("CSS_BLOCK_EPAPER","style=\"display:block\"");
+                break;
+            case "st_epaper_footer" :
+                $tpl->assignGlobal("TAG_ESF_CURRENT","class=\"current\"");
+                $tpl->assignGlobal("CSS_BLOCK_EPAPER","style=\"display:block\"");
+                break;
             case "st_inquiry_mail" :
                 $tpl->assignGlobal("TAG_ST_INQUIRY_CURRENT","class=\"current\"");
                 $tpl->assignGlobal("CSS_BLOCK_INQUIRY","style=\"display:block\"");
