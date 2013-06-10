@@ -479,6 +479,8 @@ class DOWNLOAD{
 //檔案下載--資料更新================================================================
     function download_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        //設定d_public
+        $d_public = ($cms_cfg['ws_module']['ws_member_download'])?$_REQUEST["d_public"]:1;
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
@@ -497,7 +499,7 @@ class DOWNLOAD{
                         '".$_REQUEST["d_status"]."',
                         '".$_REQUEST["d_sort"]."',
                         '".$main->file_str_replace($_REQUEST["d_thumb"])."',
-                        '".$_REQUEST["d_public"]."',
+                        '".$d_public."',
                         '".$_REQUEST["d_subject"]."',
                         '".$_REQUEST["d_content"]."',
                         '".$main->file_str_replace($_REQUEST["d_filepath"])."',
@@ -511,7 +513,7 @@ class DOWNLOAD{
                         d_status='".$_REQUEST["d_status"]."',
                         d_sort='".$_REQUEST["d_sort"]."',
                         d_thumb='".$main->file_str_replace($_REQUEST["d_thumb"])."',
-                        d_public='".$_REQUEST["d_public"]."',
+                        d_public='".$d_public."',
                         d_subject='".$_REQUEST["d_subject"]."',
                         d_content='".$_REQUEST["d_content"]."',
                         d_filepath='".$main->file_str_replace($_REQUEST["d_filepath"])."',
