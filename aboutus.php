@@ -34,9 +34,9 @@ class ABOUTUS{
         //$main->header_footer("aboutus");
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
-        if($this->au_cate!="aboutus"){
-            $main->layer_link($ws_array["main"][$this->au_cate],$cms_cfg['base_root'].$this->au_cate.".htm");
-        }
+//        if($this->au_cate!="aboutus"){
+//            $main->layer_link($ws_array["main"][$this->au_cate],$cms_cfg['base_root'].$this->au_cate.".htm");
+//        }
         if($cms_cfg["ws_module"]["ws_left_main_au"]==0){
             $main->left_fix_cate_list();
             $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
@@ -81,16 +81,9 @@ class ABOUTUS{
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             if($cms_cfg["ws_module"]["ws_left_main_au"]==1){
-                if($this->ws_seo==1 ){
-                    $cate_link=$cms_cfg["base_root"].$this->au_cate."/".$row["au_seo_filename"].".html";
-                    $ext="htm";
-                }else{
-                    $cate_link=$cms_cfg["base_root"]."aboutus.php?au_id=".$row["au_id"];
-                    $ext="php";
-                }
                 $tpl->newBlock( "LEFT_CATE_LIST" );
                 $tpl->assign( array( "VALUE_CATE_NAME" => $row["au_subject"],
-                                     "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"].$this->au_cate.".".$ext:$cate_link,
+                                     "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"].$this->au_cate.".htm":$this->get_link($row),
                 ));
             }
             if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
@@ -99,6 +92,19 @@ class ABOUTUS{
             }
         }
         return $current_row;
+    }
+    //取得aboutus連結
+    function get_link($row){
+        if($this->ws_seo==1 ){
+            $cate_link=$cms_cfg["base_root"].$this->au_cate."/".$row["au_seo_filename"].".html";
+        }else{
+            if($cms_cfg["ws_module"]['ws_aboutus_au_cate']){
+                $cate_link=$cms_cfg["base_root"]."aboutus.php?au_cate=".$row['au_cate']."&au_id=".$row["au_id"];
+            }else{
+                $cate_link=$cms_cfg["base_root"]."aboutus.php?au_id=".$row["au_id"];
+            }
+        } 
+        return $cate_link;
     }
 }
 ?>
