@@ -17,7 +17,7 @@
 
 class securityImage {
 
-var $inputParam = "style='color:blue;' class='search_product'";			// Public; $x->inputParam = "style='color:blue'"
+var $inputParam = "style='color:blue;width:70px' class='search_product'";			// Public; $x->inputParam = "style='color:blue'"
 var $name 	= "security";		// Public; $x->name = "mySecurityInputField"
 
 var $codeLength = 4;			// Private; use setCodeLength()
