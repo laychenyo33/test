@@ -282,4 +282,5 @@ $TPLMSG['CONTACTUS_POSITION'] = "Department & Position";
 $TPLMSG['EPAPER_HEADER'] = "電子報頁首";
 $TPLMSG['EPAPER_FOOTER'] = "電子報頁尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "You've been remove from mail list";
+$TPLMSG['GALLERY'] = "Gallery";
 ?>

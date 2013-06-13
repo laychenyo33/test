@@ -306,4 +306,5 @@ $TPLMSG['CONTACTUS_POSITION'] = "部门与职称";
 $TPLMSG['EPAPER_HEADER'] = "电子报页首";
 $TPLMSG['EPAPER_FOOTER'] = "电子报页尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已经从邮件清单里移除了!";
+$TPLMSG['GALLERY'] = "活动剪影";
 ?>
