@@ -13,6 +13,7 @@ class CONTACTUS{
     function CONTACTUS(){
         global $db,$cms_cfg,$tpl;
         $this->current_class="CU";
+        $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
             case "cu_list"://聯絡我們列表
                 $this->ws_tpl_file = "templates/ws-manage-contactus-list-tpl.html";
@@ -251,6 +252,7 @@ class CONTACTUS{
                                           "VALUE_CU_ID"  => $row["cu_id"],
                                           "VALUE_CU_COMPANY" => $row["cu_company_name"],
                                           "VALUE_CU_NAME" => $row["cu_name"],
+                                          "VALUE_CU_CONTACT_S" => $ws_array['contactus_s'][$row["cu_contact_s"]],
                                           "VALUE_CU_POSITION" => $row["cu_position"],
                                           "VALUE_CU_TEL" => $row["cu_tel"],
                                           "VALUE_CU_FAX" => $row["cu_fax"],
@@ -262,6 +264,8 @@ class CONTACTUS{
                                           "VALUE_CU_STATUS" => $ws_array["contactus_status"][$row["cu_status"]],
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
+                //稱謂類型
+                $tpl->newBlock("CONTACT_S_".$this->contact_s_style);
                 if($file){
                     $tpl->newBlock("UPFILE_ROW");
                     $tpl->assign("VALUE_CU_FILE" , $file);

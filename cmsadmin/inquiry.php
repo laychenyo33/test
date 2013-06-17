@@ -13,6 +13,7 @@ class INQUIRY{
     function INQUIRY(){
         global $db,$cms_cfg,$tpl;
         $this->current_class="I";
+        $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
             case "i_list"://詢問單列表
                 $this->ws_tpl_file = "templates/ws-manage-inquiry-list-tpl.html";
@@ -181,6 +182,7 @@ class INQUIRY{
                 $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_I_ID"  => $row["i_id"],
                                           "VALUE_I_NAME" => $row["i_name"],
+                                          "VALUE_I_CONTACT_S" => $ws_array['contactus_s'][$row["i_contact_s"]],
                                           "VALUE_I_TEL" => $row["i_tel"],
                                           "VALUE_I_CELLPHONE" => $row["i_cellphone"],
                                           "VALUE_I_ZIP" => $row["i_zip"],
@@ -190,6 +192,8 @@ class INQUIRY{
                                           "VALUE_I_REPLY" => $row["i_reply"],
                                           "VALUE_I_STATUS" => $ws_array["inquiry_status"][$row["i_status"]],
                 ));
+                //稱謂類型
+                $tpl->newBlock("I_CONTACT_S_".$this->contact_s_style);
                 //訂購產品列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry_items where i_id='".$_REQUEST["i_id"]."'";
                 $selectrs = $db->query($sql);

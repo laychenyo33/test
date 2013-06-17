@@ -6,6 +6,7 @@ class MEMBER{
     function MEMBER(){
         global $db,$cms_cfg,$tpl;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
+        $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
             case "activate":
                 $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
@@ -587,8 +588,6 @@ class MEMBER{
                     $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                               "VALUE_I_ID"  => $row["i_id"],
                                               "VALUE_I_COMPANY_NAME" => $row["i_company_name"],
-                                              "VALUE_I_CONTACT_S" => $row["i_contact_s"],
-                                              "VALUE_I_NAME" => $row["i_name"],
                                               "VALUE_I_TEL" => $row["i_tel"],
                                               "VALUE_I_CELLPHONE" => $row["i_cellphone"],
                                               "VALUE_I_ZIP" => $row["i_zip"],
@@ -596,9 +595,15 @@ class MEMBER{
                                               "VALUE_I_EMAIL" => $row["i_email"],
                                               "VALUE_I_CONTENT" => $row["i_content"],
                                               "VALUE_I_REPLY" => $row["i_reply"],
-                                              "VALUE_I_STATUS_SUBJECT" => ($row["i_status"])?$TPLMSG["INQUIRY_REPLY"]:$TPLMSG["INQUIRY_NO_REPLY"],
+                                              "VALUE_I_STATUS_SUBJECT" => $ws_array["inquiry_status"][$row["i_status"]],
+//                                              "VALUE_I_STATUS_SUBJECT" => ($row["i_status"])?$TPLMSG["INQUIRY_REPLY"]:$TPLMSG["INQUIRY_NO_REPLY"],
                     ));
-
+//                    $main->contact_s_select($row["i_contact_s"],"CART");
+                    $tpl->newBlock("INQUIRY_S_".$this->contact_s_style);
+                    $tpl->assign(array(
+                          "VALUE_I_NAME"      => $row["i_name"],
+                          "VALUE_I_CONTACT_S" => $ws_array['contactus_s'][$row["i_contact_s"]],
+                    ));
                     //訂購產品列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry_items where i_id='".$_REQUEST["i_id"]."'";
                     $selectrs = $db->query($sql);
