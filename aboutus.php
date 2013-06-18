@@ -95,6 +95,7 @@ class ABOUTUS{
     }
     //取得aboutus連結
     function get_link($row){
+        global $cms_cfg;
         if($this->ws_seo==1 ){
             $cate_link=$cms_cfg["base_root"].$this->au_cate."/".$row["au_seo_filename"].".html";
         }else{
