@@ -681,8 +681,13 @@ class VIDEO{
     function data_processing(){
         switch ($_REQUEST["process_type"]){
             case "del":
-                if($_REQUEST["ws_table"]=="v"){
+                switch($_REQUEST["ws_table"]){
+                    case "v":
                     $this->video_del();
+                        break;
+                    case "vc":
+                        $this->video_cate_del();
+                        break;
                 }
                 break;
             case "copy":
