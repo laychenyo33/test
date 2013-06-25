@@ -916,8 +916,8 @@ class MEMBER{
                     $sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member","m");
                     while($csv = $main->fgetcsv($res)){
                         if($i>0 && in_array($i,$_POST['row_id'])){
-                            $columns = array('mc_id','m_status','m_sort');
-                            $values = array($_POST['mc_id'],'1',$sort++);
+                            $columns = array('mc_id','m_status','m_sort','m_modifydate');
+                            $values = array($_POST['mc_id'],'1',$sort++,date("Y-m-d"));
                             $conflic = false;
                             foreach($_POST['mapto'] as $idx => $col){
                                 if($col=="m_email" && $csv[$idx]!=''){
