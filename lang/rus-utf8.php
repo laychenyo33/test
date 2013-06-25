@@ -59,6 +59,9 @@ $TPLMSG['LOGIN_PASSWORD'] = "Пароль";
 $TPLMSG['LOGIN_SECURITY'] = "Кодекса";
 $TPLMSG['LOGIN_LANGUAGE'] = "язык";
 $TPLMSG['LOGIN_NOTICE1'] = "Пожалуйста, Войти, чтобы просмотреть эту страницу!";
+$TPLMSG['LOGIN_FORGOT_PASSWORD'] = "Забыли пароль?";
+$TPLMSG['LOGIN_REGISTER'] = "Зарегистрироваться";
+$TPLMSG["LOGIN_BUTTON"] = "Логин";
 //NEWS
 $TPLMSG['NEWS'] = "Новости";
 //FAQ
