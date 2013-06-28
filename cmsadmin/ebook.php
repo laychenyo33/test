@@ -841,7 +841,7 @@ class EBOOK{
                     ) values (
                         '".$row["ebc_parent"]."',
                         '".$row["ebc_status"]."',
-                        '".$row["ebc_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_ebook_cate","ebc","ebc_parent",$row['ebc_parent'],true)."',
                         '".addslashes($row["ebc_name"])."',
                         '".addslashes($row["ebc_name_alias"])."',
                         '".$row["ebc_cate_img"]."',
@@ -899,7 +899,7 @@ class EBOOK{
                         '".$row["ebc_id"]."',
                         '".$row["ebc_layer"]."',
                         '".$row["eb_status"]."',
-                        '".$row["eb_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_ebook","eb")."',
                         '".addslashes($row["eb_name"])."',
                         '".addslashes($row["eb_name_alias"])."',
                         '".$row["eb_small_img"]."',
