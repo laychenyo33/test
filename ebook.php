@@ -36,6 +36,7 @@ class EBOOK{
                 $this->base_all_tpl ="templates/ws-fn-all-tpl.html";
                 $this->ws_tpl_file = "templates/ws-ebook-page-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_POP_IMG");
                 $this->left_fix_cate_list();
                 $this->ebook_show();
                 $this->ws_tpl_type=1;
