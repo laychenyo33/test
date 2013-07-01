@@ -19,3 +19,4 @@ Thumbs.db
 /nbproject/private/
 /conf/database.php
 /upload_files/*
+/conf/counter.txt
