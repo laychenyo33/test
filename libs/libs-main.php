@@ -15,7 +15,7 @@ class MAINFUNC{
             $page_end=$page_start+$jp_limit;
         }else{//最後一頁跳頁
             $page_start=$jp*$jp_limit+1;
-            $page_end=$page_start+$Page["total_pages"]%$jp_limit;
+            $page_end=$page_start+($Page["total_pages"]-$page_start)+1;
         }
         //沒有上跳頁也沒有下跳頁
         if($ppages <= 1 && $Page["total_pages"]<$jp_limit+1){
@@ -78,13 +78,13 @@ class MAINFUNC{
         //New Sql
         $start_pages=($nowp>=1)?$nowp-1:0;
         $Page["start_serial"]=$start_pages*$op_limit;
-        $ppages=floor($Page["total_pages"]/$jp_limit);
-        if($jp<$ppages){
+        $ppages=ceil($Page["total_pages"]/$jp_limit);
+        if($jp<$ppages-1){//非最後一頁跳頁
             $page_start=$jp*$jp_limit+1;
             $page_end=$page_start+$jp_limit;
-        }else{
+        }else{//最後一頁跳頁
             $page_start=$jp*$jp_limit+1;
-            $page_end=$page_start+$Page["total_pages"]%$jp_limit;
+            $page_end=$page_start+($Page["total_pages"]-$page_start)+1;
         }
         //沒有上跳頁也沒有下跳頁
         if($ppages <= 1 && $Page["total_pages"]<$jp_limit+1){
