@@ -136,7 +136,7 @@ class CONTACTUS{
         $row = $db->fetch_array($selectrs,1);
         $contentus_term=trim($row["st_contactus_term"]);
         if(!empty($contentus_term)){
-            $row["st_contactus_term"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["st_contactus_term"]);
+            $row["st_contactus_term"]=$main->content_file_str_replace($row["st_contactus_term"]);
             $tpl->assignGlobal("MSG_CONTACTUS_TERM",$row["st_contactus_term"]);
         }
         //啟用驗証碼顯示錯誤訊息
