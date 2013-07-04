@@ -52,6 +52,7 @@ class MAINFUNC{
             $page_option="";
         }
         $Page["pages_str"]=$page_option;
+        $Page['current_page_id'] = $nowp;
         if($ppages>1){
             if($jp>0)$Page["first_page"] = $func_str."&nowp=1&jp=0";
             if($jp<$ppages-1){
@@ -69,12 +70,12 @@ class MAINFUNC{
     }
     //SEO rewrite分頁
     function pagination_rewrite($op_limit=10,$jp_limit=10,$nowp=1,$jp=0,$func_str,$total,$sql,$showNoData=true){
-        $nowp=($nowp)?$nowp:0;
-        $jp=($jp)?$jp:0;
+        $nowp = $nowp?$nowp:1;
+        $jp = $jp?$jp:0;
         $Page["total_records"]=$total;
         $Page["page_limit"] = $op_limit;
         //Total Pages
-        $Page["total_pages"]=($total%$op_limit)? $total/$op_limit +1 : $total/$op_limit;
+        $Page["total_pages"]=ceil($total/$op_limit);
         //New Sql
         $start_pages=($nowp>=1)?$nowp-1:0;
         $Page["start_serial"]=$start_pages*$op_limit;
@@ -133,6 +134,7 @@ class MAINFUNC{
             $page_option="";
         }
         $Page["pages_str"]=$page_option;
+        $Page['current_page_id'] = $nowp;
         $Page["total_pages"]=floor($Page["total_pages"]);
         if($ppages>1){
             if($jp>0)$Page["first_page"] = $func_str."&nowp=1&jp=0";
@@ -1660,6 +1662,7 @@ class MAINFUNC{
                                 "VALUE_TOTAL_PAGES"  => $Page["total_pages"],
                                 "VALUE_PAGES_STR"  => $Page["pages_str"],
                                 "VALUE_PAGES_LIMIT"=> $Page["page_limit"],
+                                "VALUE_CUR_PAGE_ID"=> $Page["current_page_id"],
             ));
             if($Page["bj_page"]){
                 $tpl->newBlock( "PAGE_BACK_SHOW" );
