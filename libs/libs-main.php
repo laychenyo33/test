@@ -1726,5 +1726,11 @@ class MAINFUNC{
         }
         return $str;        
     }    
+    function print_server(){
+        echo "<pre>";
+        print_r($_SERVER);
+        echo "</pre>";
+        die();
+    }    
 }
 ?>
