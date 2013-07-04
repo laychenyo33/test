@@ -79,7 +79,7 @@ class NEWS{
             if($this->ws_seo){
                 $meta_array=array(
                     "meta_title"=>$cate_row["nc_seo_title"],
-                    "meta_keyword"=>$row["nc_seo_keyword"],
+                    "meta_keyword"=>$cate_row["nc_seo_keyword"],
                     "meta_description"=>$cate_row["nc_seo_description"],
                     "seo_short_desc" => $cate_row["nc_seo_short_desc"],
                     "seo_h1"=>(trim($cate_row["nc_seo_h1"])=="")?$cate_row["nc_subject"]:$cate_row["nc_seo_h1"],
@@ -167,7 +167,7 @@ class NEWS{
         }
         //顯示內容
         $tpl->newBlock( "NEWS_SHOW" );
-//        $row["n_content"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["n_content"]);
+        $row["n_content"]=$main->content_file_str_replace($row["n_content"]);
         $tpl->assign( array("VALUE_N_ID"  => $row["n_id"],
                             "VALUE_N_SUBJECT" => $row["n_subject"],
                             "VALUE_N_CONTENT" => $row["n_content"],
