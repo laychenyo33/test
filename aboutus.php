@@ -51,20 +51,6 @@ class ABOUTUS{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //左側選單
         $row = $this->left_cate_list();
-        if($row){
-            if($this->ws_seo){
-                $meta_array=array("meta_title"=>$row["au_seo_title"],
-                                  "meta_keyword"=>$row["au_seo_keyword"],
-                                  "meta_description"=>$row["au_seo_description"],
-                                  "seo_h1"=>(trim($row["au_seo_h1"])=="")?$row["au_subject"]:$row["au_seo_h1"],
-                );
-                $main->header_footer($meta_array);
-            }else{
-                $main->header_footer("aboutus",$row["au_subject"]);
-            }            
-        }else{
-            $main->header_footer("");
-        }
         $main->layer_link($row["au_subject"]);
         $tpl->assignGlobal( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"]));
     }
@@ -89,8 +75,19 @@ class ABOUTUS{
             if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
                 $tpl->assign("TAG_CURRENT_CLASS", "class=\"current\"");
                 $current_row = $row;
+                if($this->ws_seo){
+                    $meta_array=array("meta_title"=>$row["au_seo_title"],
+                                      "meta_keyword"=>$row["au_seo_keyword"],
+                                      "meta_description"=>$row["au_seo_description"],
+                                      "seo_h1"=>(trim($row["au_seo_h1"])=="")?$row["au_subject"]:$row["au_seo_h1"],
+                    );
+                    $main->header_footer($meta_array);
+                }else{
+                    $tpl->assignGlobal( "TAG_MAIN_FUNC" , $row["au_subject"]);
+                    $main->header_footer("aboutus",$TPLMSG["ABOUT_US"]);
+                }
             }
-        }
+        }     
         return $current_row;
     }
     //取得aboutus連結
