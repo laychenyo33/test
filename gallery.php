@@ -113,6 +113,8 @@ class GALLERY{
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "GALLERY_LIST" );
+            $simg = $row["g_s_pic"]?$cms_cfg['file_root'].$row["g_s_pic"]:$cms_cfg['default_preview_pic'];
+            $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
             $tpl->assign( array("VALUE_GC_ID"  => $row["gc_id"],
                                 "VALUE_G_ID"  => $row["g_id"],
                                 "VALUE_G_SUBJECT" => $row["g_subject"],
@@ -120,7 +122,9 @@ class GALLERY{
                                 "VALUE_G_MODIFYDATE" => substr($row["g_modifydate"],0,10),
                                 "VALUE_G_TARGET" => ($row["g_pop"])?"_blank":"_parent",
                                 "VALUE_G_SERIAL" => $i,
-                                "VALUE_G_S_PIC" => $row["g_s_pic"],
+                                "VALUE_G_S_PIC" => $simg,
+                                "VALUE_G_S_PIC_W" => $dimension['width'],
+                                "VALUE_G_S_PIC_H" => $dimension['height'],
                                 "VALUE_G_STRIP_CONTENT" => str_replace("\r\n","",strip_tags($row["g_content"])),
             ));
             if($i%3==0){
@@ -176,7 +180,11 @@ class GALLERY{
             foreach($big_img_array as $key => $value){
                //顯示大圖
                $tpl->newBlock("GALLERY_PIC_LIST");
-               $tpl->assign("VALUE_BIG_PIC",$cms_cfg["file_root"].$value);
+               $img = $value?$cms_cfg["file_root"].$value:$cms_cfg['default_preview_pic'];
+               $dimensions = $main->resizeto($img,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+               $tpl->assign("VALUE_BIG_PIC",$img);
+               $tpl->assign("VALUE_BIG_PIC_W",$dimensions['width']);
+               $tpl->assign("VALUE_BIG_PIC_H",$dimensions['height']);
                if($k%3==0){
                     $tpl->assign("TAG_TR","</tr><tr>");
                }

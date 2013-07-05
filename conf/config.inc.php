@@ -55,6 +55,7 @@ $cms_cfg['default_key'] = "icon-key.gif";
 $cms_cfg['default_lock'] = "icon-lock.gif";
 
 require_once dirname(__FILE__)."/database.php";
+require_once dirname(__FILE__)."/creditcard.php";
 
 //default language
 $cms_cfg['language'] = "eng";
@@ -75,10 +76,15 @@ $cms_cfg['small_img_width']="167"; //小圖圖框限制--寬
 $cms_cfg['small_img_height']="111";//小圖圖框限制--高
 $cms_cfg['related_img_width']="143"; //小圖圖框限制--寬
 $cms_cfg['related_img_height']="141";//小圖圖框限制--高
+$cms_cfg['gallery_img_width']="199"; //活動剪影小圖圖框限制--寬
+$cms_cfg['gallery_img_height']="126";//活動剪影小圖圖框限制--高
 
 
 //News page limit
 $cms_cfg['newsop_limit']=12;  //最新消息一頁筆數限制
+
+//stores page limit
+$cms_cfg['storesop_limit']=16;  //門市管理一頁筆數限制
 
 //FAQ page limit
 $cms_cfg['faqsop_limit']=8;  //FAQ一頁筆數限制
