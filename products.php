@@ -192,7 +192,8 @@ class PRODUCTS{
                 $main->header_footer($meta_array,$seo_H1);
                 //顯示產品主頁自訂頁
                 if(trim($row["mt_seo_custom"])) {
-                        $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
+//                        $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
+                        $row["mt_seo_custom"]=$main->content_file_str_replace($row["mt_seo_custom"]);
                         $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
                         $tpl->assign("VALUE_PC_CUSTOM",$row["mt_seo_custom"]);
                         $custom=1;
@@ -671,7 +672,7 @@ class PRODUCTS{
         $row2 = $db->fetch_array($selectrs,1);
         $rsnum  = $db->numRows($selectrs);
         $big_img1_path="";
-        if ($rsnum > 0) {
+        if ($row2["p_big_img1"]) {
             $big_img1_path=$cms_cfg["file_root"].$row2["p_big_img1"];
         }
         return $big_img1_path;
