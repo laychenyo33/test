@@ -1088,6 +1088,22 @@ class PRODUCTS{
                          p_seo_h1='".htmlspecialchars($_REQUEST["p_seo_h1"])."',
                          p_up_sort='".$_REQUEST["p_up_sort"]."',";
         }
+        if($cms_cfg['ws_module']['ws_products_info_fields']){
+            for($j=1;$j<=$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
+                switch($_REQUEST["action_mode"]){
+                    case "add":
+                        $add_extra_fields .= "p_info_field".$j."_title,";
+                        $add_extra_fields .= "p_info_field".$j.",";
+                        $add_extra_values .= "'".$_POST['p_info_field'.$j.'_title']."',";
+                        $add_extra_values .= "'".$_POST['p_info_field'.$j]."',";
+                        break;
+                    case "mod":
+                        $update_extra_fields .= "p_info_field".$j."_title ='".$_POST['p_info_field'.$j.'_title']."',";
+                        $update_extra_fields .= "p_info_field".$j."='".$_POST['p_info_field'.$j]."',";
+                        break;
+                }
+            }
+        }
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $this->p_type=$_REQUEST["p_type1"]+$_REQUEST["p_type2"]+$_REQUEST["p_type3"];
@@ -1128,6 +1144,7 @@ class PRODUCTS{
                         p_attach_file2,
                         p_mv,
                         p_ca,
+                        ".$add_extra_fields."
                         p_modifydate,
                         ".$add_field_str."
                         p_cross_cate,
@@ -1161,6 +1178,7 @@ class PRODUCTS{
                         '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                         '".$_REQUEST["p_mv"]."',
                         '".implode(',',(array)$_REQUEST["p_ca"])."',
+                        ".$add_extra_values."    
                         '".date("Y-m-d H:i:s")."',
                         ".$add_value_str."
                         '".$_REQUEST["p_cross_cate"]."',
@@ -1210,6 +1228,7 @@ class PRODUCTS{
                     p_attach_file2 = '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                     p_mv = '".$_REQUEST["p_mv"]."',
                     p_ca = '".implode(',',(array)$_REQUEST["p_ca"])."',
+                    ".$update_extra_fields."    
                     p_modifydate = '".date("Y-m-d H:i:s")."',
                     ".$update_str."
                     p_cross_cate = '".$_REQUEST["p_cross_cate"]."',
