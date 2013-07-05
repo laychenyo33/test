@@ -615,7 +615,7 @@ class MAINFUNC{
                 }elseif($last_link==2){
                     $Layer[$j] =$row[$show_fieldname];
                 }else{
-                    $Layer[$j] = "<a href=\"".$func_str."&".$id_parent."=".$row[$id_fieldname]."\">".$row[$show_fieldname]."</a>";
+                    $Layer[$j] = $this->mk_link($row[$show_fieldname], $func_str."&".$id_parent."=".$row[$id_fieldname]);;
                 }
             }
             unset($row);
@@ -645,20 +645,16 @@ class MAINFUNC{
                 $k=0;
             }else{
                 if($j==0 && $last_link==0){
-                    $Layer[$j] = "<a href='javascript:avoid(0)'>".$row[$show_fieldname]."</a>";
+                    $Layer[$j] = $this->mk_link($row[$show_fieldname], "javascript:avoid(0)");
                 }elseif($last_link==2){
-                    $Layer[$j] ="<a href='javascript:avoid(0)'>".$row[$show_fieldname]."</a>";
+                    $Layer[$j] = $this->mk_link($row[$show_fieldname],"javascript:avoid(0)");
                 }else{
-                    if($cms_cfg["ws_module"]["ws_seo"]==1){
-                        if(trim($row["pc_seo_filename"]) !=""){
-                            $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
-                        }else{
-                            $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
-                        }
+                    if(trim($row["pc_seo_filename"]) !=""){
+                        $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
                     }else{
-                        $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
+                        $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
                     }
-                    $Layer[$j] = "<a href=\"".$pc_link."\">".$row[$show_fieldname]."</a>";
+                    $Layer[$j] = $this->mk_link($row[$show_fieldname],$pc_link);
                 }
             }
             unset($row);
