@@ -1574,6 +1574,26 @@ class MAINFUNC{
             ));
         }
     }
+    //multiple radio
+    /*參數說明
+     * $blockname，樣版區塊名稱
+     * $datas，所有內容的集合陣列
+     * $values，指定內容的值，值是$datas的索引值，若是陣列，則取第一個值
+     */
+    function multiple_radio($blockname,$datas,$values){
+        global $tpl;
+        if(is_array($values)){
+            $values = $values[0];
+        }
+        foreach($datas as $k => $v){
+            $tpl->newBlock(strtoupper($blockname)."_RADIO");
+            $tpl->assign(array(
+                "VALUE_".strtoupper($blockname)."_KEY"  => $k, 
+                "VALUE_".strtoupper($blockname)."_NAME" => $v, 
+                "CHECKED"                   => ($k==$values)?"checked":"",
+            ));
+        }
+    }        
     //參數說明
     /*$datas，所有值的陣列
      *$values，指定值的陣列，內容是上述陣列的索引值範圍
