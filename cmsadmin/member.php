@@ -236,7 +236,6 @@ class MEMBER{
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
                                       "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
                                       "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
-
             ));
         }
         //如果為修改模式,帶入資料庫資料
@@ -417,16 +416,14 @@ class MEMBER{
                     $tpl->assign("TAG_TR_CLASS","class='altrow'");
                 }
                 $tpl->assign( array(
-                                    "VALUE_M_ID"  => $row["m_id"],
-                                    "VALUE_M_SORT"  => $row["m_sort"],
+                    "VALUE_M_ID"  => $row["m_id"],
+                    "VALUE_M_SORT"  => $row["m_sort"],
                     "VALUE_M_NAME" => $row["m_fname"]."&nbsp;".$row['m_lname'],
-                                    "VALUE_M_SERIAL" => $i,
+                    "VALUE_M_SERIAL" => $i,
                     "VALUE_MC_SUBJECT"  => $this->get_mc_name($row['mc_id']),
-                                    "VALUE_STATUS_IMG" => ($row["m_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
-                                    "VALUE_STATUS_IMG_ALT" => ($row["m_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
-
+                    "VALUE_STATUS_IMG" => ($row["m_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
+                    "VALUE_STATUS_IMG_ALT" => ($row["m_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
                 ));
-
             }
         }
     }
@@ -510,6 +507,9 @@ class MEMBER{
 //會員--資料更新================================================================
     function member_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
+        //使用國家值
+        $country = $_POST['m_new_country']?$_POST['m_new_country']:$_POST['m_country'];
+        $mc_id_str = @implode(',',$_REQUEST["mc_id"]);
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
@@ -535,7 +535,7 @@ class MEMBER{
                         m_email,
                         m_epaper_status
                     ) values (
-                        '".implode(',',(array)$_REQUEST["mc_id"])."',
+                        '".$mc_id_str."',
                         ".$_REQUEST["m_status"].",
                         '".$_REQUEST["m_sort"]."',
                         '".date("Y-m-d H:i:s")."',
@@ -560,7 +560,7 @@ class MEMBER{
             case "mod":
                 $sql="
                     update ".$cms_cfg['tb_prefix']."_member set
-                        mc_id='".implode(',',(array)$_REQUEST["mc_id"])."',
+                        mc_id='".$mc_id_str."',
                         m_status='".$_REQUEST["m_status"]."',
                         m_sort='".$_REQUEST["m_sort"]."',
                         m_modifydate='".date("Y-m-d H:i:s")."',
@@ -919,11 +919,24 @@ class MEMBER{
                             $columns = array('mc_id','m_status','m_sort','m_modifydate');
                             $values = array($_POST['mc_id'],'1',$sort++,date("Y-m-d"));
                             $conflic = false;
+                            $update = false;
                             foreach($_POST['mapto'] as $idx => $col){
                                 if($col=="m_email" && $csv[$idx]!=''){
                                     $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".mysql_real_escape_string($csv[$idx])."'";
                                     $res_m = $db->query($sql,true);
                                     $conflic = ($db->numRows($res_m))?true:false;
+                                    if($conflic){ //email已存在就更新mc_id
+                                        $row = $db->fetch_array($res_m,1);
+                                        $mc_id_arr = explode(',',$row['mc_id']);
+                                        array_push($mc_id_arr, $_POST['mc_id']);
+                                        $mc_id_arr = array_unique($mc_id_arr);
+                                        $sql = "update ".$cms_cfg['tb_prefix']."_member set mc_id='".implode(',',$mc_id_arr)."' where m_account='".mysql_real_escape_string($csv[$idx])."' limit 1";
+                                        $res_s = $db->query($sql);
+                                        if($db->report()==""){
+                                            $conflic = false;
+                                            $update = true;
+                                        }
+                                    }
                                     $columns[] = 'm_account';
                                     $values[] = "'".mysql_real_escape_string($csv[$idx])."'";
                                 }
@@ -936,9 +949,11 @@ class MEMBER{
                             }else{
                                 $tpl->newBlock("WRITED_RECORD");
                                 $wNums++;
-                                $sql = "insert into ".$cms_cfg['tb_prefix']."_member(".implode(',',$columns).")values(".implode(',',$values).")";
-                                $db->query($sql,true);
-//                                $tpl->assign("VALUE_QUERY",$sql);
+                                if(!$update){
+                                    $sql = "insert into ".$cms_cfg['tb_prefix']."_member(".implode(',',$columns).")values(".implode(',',$values).")";
+                                    $db->query($sql,true);
+//                                    $tpl->assign("VALUE_QUERY",$sql);
+                                }
                             }
                             $tpl->assign("VALUE_RECORD",implode(',',$values));
                         }
