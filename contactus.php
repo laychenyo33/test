@@ -74,6 +74,7 @@ class CONTACTUS{
         global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array,$main;
         $tpl->assignGlobal(array("VALUE_CU_NAME" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_name"],
                                  "VALUE_CU_COMPANY_NAME" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_company_name"],
+                                 "VALUE_CU_POSITION" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_position"],
                                  "VALUE_CU_ADDRESS" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_address"],
                                  "VALUE_CU_TEL" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_tel"],
                                  "VALUE_CU_FAX" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_fax"],
