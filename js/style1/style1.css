@@ -59,7 +59,7 @@
 	width: 75px; 
 	height: 50px;
 	list-style: none;
-	background: url('../images/index/store-pic-s-bg.gif') no-repeat left top; 
+	background: url('../../images/index/store-pic-s-bg.gif') no-repeat left top; 
 	cursor: pointer; 
 	filter: alpha(opacity=50); 
 	float: left; 
