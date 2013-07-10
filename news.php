@@ -143,7 +143,7 @@ class NEWS{
     function news_show(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //左側選單
-        $cate_row = $this->left_cate_list($row['nc_id']);        
+        $cate_row = $this->left_cate_list($_GET['nc_id']);        
         //最新消息內容
         if(!empty($_REQUEST["n_id"])){
             $and_str="n_id='".$_REQUEST["n_id"]."'";
