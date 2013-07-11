@@ -137,7 +137,7 @@ class GALLERY{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //活動剪影分類
         $ext=($this->ws_seo)?".html":".php";
-        $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">Gallery</a>";
+        $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">".$TPLMSG['GALLERY']."</a>";
         $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' order by gc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql);
         $i=0;
