@@ -866,11 +866,7 @@ class PRODUCTS{
                                   "STR_P_CUSTOM_STATUS_DISPLAY" => "none",
                                   "STR_NEW_SORT_DISPLAY" => "none",
                                   "VALUE_ACTION_MODE" => $action_mode
-        ));
-        for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//大圖區域TAB
-            $tpl->newBlock("PRODUCTS_BIG_IMG_TAB");
-            $tpl->assign("BIG_IMG_NO",$j);
-        }		
+        ));		
         // 無新產品不顯示產品類型欄位
         ($cms_cfg["ws_module"]["ws_new_product"])?$tpl->newBlock( "PRODUCTS_TYPE_FIELD" ):"";
         switch($row["sc_cart_type"]){
@@ -1004,27 +1000,24 @@ class PRODUCTS{
                 //取得大圖資料
                 $sql="select * from ".$cms_cfg['tb_prefix']."_products_img where p_id='".$_REQUEST["p_id"]."'";
                 $selectrs = $db->query($sql);
-                $row2 = $db->fetch_array($selectrs,1);
-                for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){			
-                        $tpl->newBlock("PRODUCTS_BIG_IMG");
-                        $tpl->assign( array("VALUE_BIG_PIC_PREVIEW" => (trim($row2["p_big_img".$j])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row2["p_big_img".$j],
-                                                                "VALUE_BIG_PIC" => (trim($row2["p_big_img".$j])=="")?"":$cms_cfg["file_root"].$row2["p_big_img".$j],					
-                                                                "BIG_IMG_NO" =>$j,
-                        ));
-                }				
-
+                $row2 = $db->fetch_array($selectrs,1);				
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
                 $pc_id=$row["pc_id"];
             }else{
                 header("location : products.php?func=p_list");
+                die();
             }
-        }else{
-            for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//新增時載入大圖區域及預設值
-                    $tpl->newBlock("PRODUCTS_BIG_IMG");
-                    $tpl->assign( array("VALUE_BIG_PIC_PREVIEW" => $cms_cfg['default_preview_pic'],
-                                                                      "BIG_IMG_NO" =>$j,
-                    ));
-            }		
+        }
+        for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//新增時載入大圖區域及預設值
+            //大圖區域TAB
+            $tpl->newBlock("PRODUCTS_BIG_IMG_TAB");
+            $tpl->assign("BIG_IMG_NO",$j);
+            $tpl->newBlock("PRODUCTS_BIG_IMG");
+            $tpl->assign( array(
+                "VALUE_BIG_PIC_PREVIEW" => (trim($row2["p_big_img".$j])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row2["p_big_img".$j],
+                "VALUE_BIG_PIC" => (trim($row2["p_big_img".$j])=="")?"":$cms_cfg["file_root"].$row2["p_big_img".$j],
+                "BIG_IMG_NO" =>$j,
+            ));
         }
         $this->products_cate_select2($this->products_cate_select_option,$pc_id, $parent=0, $indent="");
         $tpl->assignGlobal("TAG_SELECT_PRODUCTS_CATE" ,$this->products_cate_select_option);
