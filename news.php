@@ -123,6 +123,7 @@ class NEWS{
             }
             $tpl->newBlock( "NEWS_LIST" );
             $n_img=(trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["n_s_pic"];
+            $dimensions = $main->resizeto($n_img,$cms_cfg['news_img_width'],$cms_cfg['news_img_height']);
             $tpl->assign( array("VALUE_NC_ID"  => $row["nc_id"],
                                 "VALUE_N_ID"  => $row["n_id"],
                                 "VALUE_N_SUBJECT" => $row["n_subject"],
@@ -133,6 +134,8 @@ class NEWS{
                                 "VALUE_N_TARGET" => ($row["n_pop"])?"_blank":"_parent",
                                 "VALUE_N_SERIAL" => $i,
                                 "VALUE_N_S_PIC" => $n_img,
+                                "VALUE_N_S_PIC_W" => $dimensions['width'],
+                                "VALUE_N_S_PIC_H" => $dimensions['height'],
             ));
             if($row["n_content_type"]==2){
                 $tpl->assign("VALUE_N_LINK" , $row["n_url"]);

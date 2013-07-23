@@ -78,6 +78,8 @@ $cms_cfg['related_img_width']="143"; //小圖圖框限制--寬
 $cms_cfg['related_img_height']="141";//小圖圖框限制--高
 $cms_cfg['gallery_img_width']="199"; //活動剪影小圖圖框限制--寬
 $cms_cfg['gallery_img_height']="126";//活動剪影小圖圖框限制--高
+$cms_cfg['news_img_width']="166"; //最新消息小圖圖框限制--寬
+$cms_cfg['news_img_height']="89";//最新消息小圖圖框限制--高
 
 
 //News page limit

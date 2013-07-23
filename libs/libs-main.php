@@ -256,8 +256,10 @@ class MAINFUNC{
                                      "HEADER_SHORT_DESC" => ($meta_array["seo_short_desc"])?$meta_array["seo_short_desc"]:"",
                                      "TAG_MAIN_FUNC" => ($meta_array["seo_h1"])?$meta_array["seo_h1"]:$seo_h1,
             ));
+            if($meta_array["seo_short_desc"]){
             $tpl->newBlock("SEO_SHORT_DESC");
             $tpl->assign("VALUE_SEO_SHORT_DESC",$meta_array["seo_short_desc"]);
+        }
         }
         if($e==1){  //第一次執行才做
             if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_status"]==1 && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_starttime"] < date("H:i:s") && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_endtime"] > date("H:i:s")){
