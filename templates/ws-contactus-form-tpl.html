@@ -1,11 +1,5 @@
 
-        <table width="92%" border="0" cellpadding="4" cellspacing="1" >
-        <tr>
-          <td>
-          <h2>{MSG_CONTACTUS_TERM}</h2>
-          </td>
-        </tr>
-        </table>
+          {MSG_CONTACTUS_TERM}
         <form name="myform" method="post" action="contactus.php?func=cu_replace"  id="formID" class="formular" >
           <table width="560" border="0" cellpadding="0" cellspacing="0" class="contact_table">
           <tr class="altrow">
@@ -39,10 +33,12 @@
                  <!-- INCLUDE BLOCK : CONTACT_S -->
                 </td>
             </tr>
+            <!-- START BLOCK : POSITION_FIELD -->
           <tr>
               <th>{MSG_POSITION}</th>
               <td><input name="cu_position" size="42" value="{VALUE_CU_POSITION}" type="text" /></td>
             </tr>
+            <!-- END BLOCK : POSITION_FIELD -->
           <!-- START BLOCK : SELECT_COUNTRY -->
           <tr>
               <th><font color="#ff0000">*</font>{MSG_COUNTRY}</th>

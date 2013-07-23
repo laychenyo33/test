@@ -239,6 +239,14 @@ class CONTACTUS{
         if($cms_cfg['ws_module']['ws_contactus_ipmap']){
             $tpl->newBlock("IP_COUNTRY_ROW");
         }
+        //顯示稱職欄位
+        if($cms_cfg["ws_module"]["ws_contactus_position"]==1) {
+            $tpl->newBlock("POSITION_FIELD");
+        }           
+        //國家欄位
+        if($cms_cfg["ws_module"]["ws_country"]==1) {
+            $tpl->newBlock("CONTACTUS_COUNTRY_ZONE");
+        }        
         //帶入要回覆的聯絡我們資料
         if(!empty($_REQUEST["cu_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where cu_id='".$_REQUEST["cu_id"]."'";
@@ -259,6 +267,7 @@ class CONTACTUS{
                                           "VALUE_CU_ADDRESS" => $row["cu_address"],
                                           "VALUE_CU_EMAIL" => $row["cu_email"],
                                           "VALUE_CU_CONTENT" => $row["cu_content"],
+                                          "VALUE_CU_COUNTRY" => $row["cu_country"],
                                           "VALUE_CU_IP" => $row["cu_ip"],
                                           "VALUE_CU_IP_COUNTRY" => $row["cu_ip_country"],
                                           "VALUE_CU_STATUS" => $ws_array["contactus_status"][$row["cu_status"]],
@@ -289,6 +298,7 @@ class CONTACTUS{
                 }
             }else{
                 header("location : contactus.php?func=cu_list");
+                die();
             }
         }
     }

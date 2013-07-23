@@ -13,6 +13,7 @@ $cms_cfg["ws_module"]=array(
         "ws_contactus_upfiles" =>0,  //聯絡我們表單可附檔上傳
         "ws_contactus_ipmap"   =>0,    //聯絡我們表單記錄ip國家對映
         "ws_contactus_inquiry" =>0,    //聯絡我們表單也顯示產品
+        "ws_contactus_position"=>0,    //聯絡我們表單顯示職稱&部門欄位
         "ws_download"          =>0,    //檔案下載
         "ws_download_thumb"    =>0,    //檔案下載顯示縮圖
         "ws_ebook"=>0,              //電子型錄管理

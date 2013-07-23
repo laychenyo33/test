@@ -75,7 +75,6 @@ class CONTACTUS{
         global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array,$main;
         $tpl->assignGlobal(array("VALUE_CU_NAME" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_name"],
                                  "VALUE_CU_COMPANY_NAME" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_company_name"],
-                                 "VALUE_CU_POSITION" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_position"],
                                  "VALUE_CU_ADDRESS" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_address"],
                                  "VALUE_CU_TEL" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_tel"],
                                  "VALUE_CU_FAX" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_fax"],
@@ -97,7 +96,6 @@ class CONTACTUS{
                                   "MSG_MODE" => $TPLMSG['SEND'],
                                   "MSG_CATE" => $TPLMSG['CATE'],
                                   "MSG_PRODUCT_LIST" => $TPLMSG['CONTACTUS_PRODUCT_LIST'],
-                                  "MSG_POSITION" => $TPLMSG['CONTACTUS_POSITION'],
                                   "MSG_ADDRESS" => $TPLMSG['ADDRESS'],
                                   "MSG_TEL" => $TPLMSG['TEL'],
                                   "MSG_FAX" => $TPLMSG['FAX'],
@@ -131,6 +129,14 @@ class CONTACTUS{
                 }
             }
         }
+        //顯示稱職欄位
+        if($cms_cfg["ws_module"]["ws_contactus_position"]==1) {
+            $tpl->newBlock("POSITION_FIELD");
+            $tpl->assign(array(
+                "MSG_POSITION"      => $TPLMSG['CONTACTUS_POSITION'],
+                "VALUE_CU_POSITION" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_position"],
+            ));
+        }        
         //聯絡我們資料
         $sql="select st_contactus_term from ".$cms_cfg['tb_prefix']."_service_term  where st_id='1'";
         $selectrs = $db->query($sql);
@@ -220,7 +226,6 @@ class CONTACTUS{
                     $tpl->newBlock("CONTACTUS_MAIL");
                     $tpl->assign(array(
                             "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
-                            "MSG_POSITION" =>$TPLMSG['CONTACTUS_POSITION'],
                             "MSG_CATE" => $TPLMSG['CATE'],
                             "MSG_ADDRESS" => $TPLMSG['ADDRESS'],
                             "MSG_TEL" => $TPLMSG['TEL'],
@@ -229,7 +234,6 @@ class CONTACTUS{
                             "MSG_ATTACH_FILES" => $TPLMSG['CONTACT_US_ATTACH_FILES'],
                             "VALUE_CUC_SUBJECT"  => $ws_array["contactus_cate"][$_REQUEST["cu_cate"]],
                             "VALUE_CU_COMPANY_NAME" => $_REQUEST["cu_company_name"],
-                            "VALUE_CU_POSITION" => $_REQUEST["cu_position"],
                             "VALUE_CU_FAX" => $_REQUEST["cu_fax"],
                             "VALUE_CU_TEL" => $_REQUEST["cu_tel"],
                             "VALUE_CU_ADDRESS" => $_REQUEST["cu_address"],
@@ -265,6 +269,14 @@ class CONTACTUS{
                             $tpl->assign("VALUE_CU_PRODUCT_LIST",implode(',',$prod_arr));
                         }
                     }
+                    //顯示稱職欄位
+                    if($cms_cfg["ws_module"]["ws_contactus_position"]==1) {
+                        $tpl->newBlock("POSITION_FIELD");
+                        $tpl->assign(array(
+                            "MSG_POSITION"      => $TPLMSG['CONTACTUS_POSITION'],
+                            "VALUE_CU_POSITION" => $_REQUEST["cu_position"],
+                        ));
+                    }                    
                     //引入聯絡我們自動回覆說明
                     $sql="select st_inquiry_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
                     $selectrs = $db->query($sql);
