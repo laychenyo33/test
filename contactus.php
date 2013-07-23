@@ -4,7 +4,7 @@ include_once("libs/libs-sysconfig.php");
 $cus = new CONTACTUS;
 class CONTACTUS{
     function CONTACTUS(){
-        global $db,$cms_cfg,$tpl;
+        global $db,$cms_cfg,$tpl,$main;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         $this->security_mode = 1;//表單安全驗證模式:0=>math_security,1=>security_zone
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
@@ -33,6 +33,7 @@ class CONTACTUS{
                 break;
         }
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -48,12 +49,12 @@ class CONTACTUS{
         $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["CONTACT_US"]);
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["CONTACT_US"]);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["products"]);//左方menu title
         $tpl->assignGlobal( "TAG_CONTACTUS_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["contactus"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-contactus"); //主要顯示區域的css設定
+        $main->layer_link( $TPLMSG["CONTACT_US"]);
         $main->header_footer("contactus", $TPLMSG["CONTACT_US"]);
         $main->google_code(); //google analystics code , google sitemap code
         if($this->security_mode){
