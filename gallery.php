@@ -37,6 +37,7 @@ class GALLERY{
                 break;
         }
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -56,39 +57,15 @@ class GALLERY{
         $tpl->assignGlobal( "TAG_GALLERY_CURRENT" , "class='current'");
         $tpl->assignGlobal( "TAG_CATE_TITLE", $TPLMSG['GALLERY']);
         $tpl->assignGlobal( "TAG_CATE_DESC", $TPLMSG['GALLERY_CATE_DESC']);
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['GALLERY']);
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "album"); //主要顯示區域的css設定
         $tpl->assignGlobal( "TAG_SUBMENU_TITLE_IMG" , $cms_cfg['default_theme']."left-title-activity.png"); //選單標題圖檔
         $main->header_footer("",$TPLMSG['GALLERY']);
+        $this->left_cate_list();
     }
 
 //活動剪影--列表================================================================
     function gallery_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $ext=($this->ws_seo)?".html":".php";
-        $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">".$TPLMSG['GALLERY']."</a>";
-        //活動剪影分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' order by gc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql,true);
-        $i=0;
-        while($row = $db->fetch_array($selectrs,1)){
-            $i++;
-            if($this->ws_seo==1 ){
-                $cate_link="gallery-glist-".$row["gc_id"].".htm";
-            }else{
-                $cate_link="gallery.php?func=g_list&gc_id=".$row["gc_id"];
-            }
-            $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["gc_subject"],
-                                 "VALUE_CATE_LINK"  => $cate_link,
-            ));
-            if($_REQUEST["gc_id"]==$row["gc_id"]){
-                //$tpl->assignGlobal("TAG_SUB_FUNC"  , "--&nbsp;&nbsp;".$row["gc_subject"]);
-                $gallery_link .= $this->ps."<a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
-                $main->header_footer("",$row["gc_subject"]);
-            }
-        }
-        $tpl->assignGlobal("TAG_LAYER",$gallery_link);
         //活動剪影列表
         if(!empty($_REQUEST["gc_id"])){
             $gc_id=$_REQUEST["gc_id"];
@@ -118,7 +95,7 @@ class GALLERY{
             $tpl->assign( array("VALUE_GC_ID"  => $row["gc_id"],
                                 "VALUE_G_ID"  => $row["g_id"],
                                 "VALUE_G_SUBJECT" => $row["g_subject"],
-                                "VALUE_G_LINK" => ($this->ws_seo)?$cms_cfg["base_root"]."gallery-gdetail-".$row["gc_id"]."-".$row["g_id"].".html":"gallery.php?func=g_show&gc_id=".$row["gc_id"]."&g_id=".$row["g_id"],
+                                "VALUE_G_LINK" => $this->get_link($row,true),
                                 "VALUE_G_MODIFYDATE" => substr($row["g_modifydate"],0,10),
                                 "VALUE_G_TARGET" => ($row["g_pop"])?"_blank":"_parent",
                                 "VALUE_G_SERIAL" => $i,
@@ -127,44 +104,18 @@ class GALLERY{
                                 "VALUE_G_S_PIC_H" => $dimension['height'],
                                 "VALUE_G_STRIP_CONTENT" => str_replace("\r\n","",strip_tags($row["g_content"])),
             ));
-            if($i%3==0){
-                $tpl->assign("TAG_TR","</tr><tr>");
             }
         }
-    }
 //活動剪影--顯示================================================================
     function gallery_show(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        //活動剪影分類
-        $ext=($this->ws_seo)?".html":".php";
-        $gallery_link="<a href=\"".$cms_cfg["base_root"]."gallery".$ext."\">".$TPLMSG['GALLERY']."</a>";
-        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' order by gc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql);
-        $i=0;
-        while($row = $db->fetch_array($selectrs,1)){
-            $i++;
-            if($this->ws_seo==1 ){
-                $cate_link="news-nlist-".$row["gc_id"].".htm";
-            }else{
-                $cate_link="gallery.php?func=g_list&gc_id=".$row["gc_id"];
-            }
-            $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["gc_subject"],
-                                 "VALUE_CATE_LINK"  => $cate_link,
-            ));
-            if($_REQUEST["gc_id"]==$row["gc_id"]){
-                $tpl->assignGlobal("TAG_SUB_TITLE"  , "--&nbsp;&nbsp;".$row["gc_subject"]);
-                $gallery_link .= $this->ps."<a href=\"".$cate_link."\">".$row["gc_subject"]."</a>";
-                $main->header_footer("",$row["gc_subject"]);
-            }
-        }
         //活動剪影內容
         $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where g_id='".$_REQUEST["g_id"]."'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
-        $gallery_link .= $this->ps.$row["g_subject"];
+        $main->header_footer("gallery",$row["g_subject"]);
+        $main->layer_link($row["g_subject"]);
         $tpl->newBlock( "GALLERY_SHOW" );
-        //$row["g_content"]=preg_replace("/src=\"(.*)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["g_content"]);
         $tpl->assign( array("VALUE_G_ID"  => $row["g_id"],
                             "VALUE_G_SUBJECT" => $row["g_subject"],
                             "VALUE_G_CONTENT" => $row["g_content"],
@@ -191,8 +142,47 @@ class GALLERY{
                $k++;
             }
         }
-        $tpl->assignGlobal("TAG_LAYER",$gallery_link);
         $tpl->assignGlobal("GO_BACK",$TPLMSG['PAGE_BACK']);
+    }
+    function left_cate_list(){
+        global $db,$cms_cfg,$tpl,$main,$TPLMSG;
+        //先判斷有沒有gc_id
+        if(isset($_REQUEST["gc_id"])){
+            $main->layer_link($TPLMSG['GALLERY'],$cms_cfg['base_root']."gallery.htm");
+        }else{
+            $main->layer_link($TPLMSG['GALLERY']);
+}
+        //活動剪影分類
+        $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' order by gc_sort ".$cms_cfg['sort_pos']." ";
+        $selectrs = $db->query($sql,true);
+        $i=0;
+        while($row = $db->fetch_array($selectrs,1)){
+            $i++;
+            $tpl->newBlock( "LEFT_CATE_LIST" );
+            $tpl->assign( array( "VALUE_CATE_NAME" => $row["gc_subject"],
+                                 "VALUE_CATE_LINK"  => $this->get_link($row),
+            ));
+            if($_REQUEST["gc_id"]==$row["gc_id"]){
+                $main->layer_link($row["gc_subject"],$this->get_link($row));
+                $main->header_footer("",$row["gc_subject"]);
+            }
+        }        
+    }
+    function get_link($row,$item=false){
+        if($item){
+            if($this->ws_seo){
+                $link = $cms_cfg["base_root"]."gallery-gdetail-".$row["gc_id"]."-".$row["g_id"].".html";
+            }else{
+                $link = $cms_cfg['base_root']."gallery.php?func=g_show&gc_id=".$row["gc_id"]."&g_id=".$row["g_id"];
+            }
+        }else{
+            if($this->ws_seo==1 ){
+                $link="gallery-glist-".$row["gc_id"].".htm";
+            }else{
+                $link="gallery.php?func=g_list&gc_id=".$row["gc_id"];
+            }        
+        }
+        return $link;
     }
 }
 ?>
