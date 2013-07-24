@@ -486,6 +486,7 @@ class PRODUCTS{
     //產品管理分類--資料更新
     function products_cate_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $main->magic_gpc($_REQUEST);
         if($this->seo){
             $add_field_str="pc_name_alias,
                             pc_seo_filename,
@@ -501,7 +502,7 @@ class PRODUCTS{
                             '".htmlspecialchars($_REQUEST["pc_seo_title"])."',
                             '".htmlspecialchars($_REQUEST["pc_seo_keyword"])."',
                             '".htmlspecialchars($_REQUEST["pc_seo_description"])."',
-                            '".$_REQUEST["pc_seo_short_desc"]."',
+                            '".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"]))."',
                             '".$_REQUEST["pc_seo_down_short_desc"]."',
                             '".htmlspecialchars($_REQUEST["pc_seo_h1"])."',
                             '".$_REQUEST["pc_up_sort"]."',";
@@ -510,7 +511,7 @@ class PRODUCTS{
                          pc_seo_title='".htmlspecialchars($_REQUEST["pc_seo_title"])."',
                          pc_seo_keyword='".htmlspecialchars($_REQUEST["pc_seo_keyword"])."',
                          pc_seo_description='".htmlspecialchars($_REQUEST["pc_seo_description"])."',
-                         pc_seo_short_desc='".$_REQUEST["pc_seo_short_desc"]."',
+                         pc_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"]))."',
                          pc_seo_down_short_desc='".$_REQUEST["pc_seo_down_short_desc"]."',
                          pc_seo_h1='".htmlspecialchars($_REQUEST["pc_seo_h1"])."',
                          pc_up_sort='".$_REQUEST["pc_up_sort"]."',";
@@ -1055,6 +1056,7 @@ class PRODUCTS{
 //產品管理--資料更新================================================================
     function products_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $main->magic_gpc($_REQUEST);
         if($this->seo){
             $add_field_str="p_name_alias,
                             p_seo_filename,
@@ -1069,7 +1071,7 @@ class PRODUCTS{
                             '".htmlspecialchars($_REQUEST["p_seo_title"])."',
                             '".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
                             '".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                            '".$_REQUEST["p_seo_short_desc"]."',
+                            '".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
                             '".htmlspecialchars($_REQUEST["p_seo_h1"])."',
                             '".$_REQUEST["p_up_sort"]."',";
             $update_str="p_name_alias = '".htmlspecialchars($_REQUEST["p_name_alias"])."',
@@ -1077,7 +1079,7 @@ class PRODUCTS{
                          p_seo_title='".htmlspecialchars($_REQUEST["p_seo_title"])."',
                          p_seo_keyword='".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
                          p_seo_description='".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                         p_seo_short_desc='".$_REQUEST["p_seo_short_desc"]."',
+                         p_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
                          p_seo_h1='".htmlspecialchars($_REQUEST["p_seo_h1"])."',
                          p_up_sort='".$_REQUEST["p_up_sort"]."',";
         }
@@ -2166,6 +2168,7 @@ class PRODUCTS{
     //應用領域儲存
     function products_application_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $main->magic_gpc($_REQUEST);
         if($this->seo){
             $seo_fields = array(
                 "pa_name_alias"=>array(
@@ -2431,6 +2434,7 @@ class PRODUCTS{
     //認證標章儲存
     function products_ca_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $main->magic_gpc($_REQUEST);
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="

@@ -134,7 +134,7 @@ class PRODUCTS{
             //$this->show_style=1; //顯示模式固定為 圖文
             $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
             //顯示SEO 項目
-            $sql="select pc_id,pc_name,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
+            $sql="select pc_id,pc_name,pc_parent,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
             if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
                 $sql .= " and pc_seo_filename='".$_REQUEST["f"]."' and pc_status='1' ";
             }else{
@@ -144,7 +144,7 @@ class PRODUCTS{
             $rsnum    = $db->numRows($selectrs);
             if($rsnum > 0){
                 $row = $db->fetch_array($selectrs,1);
-                $main->layer_link($TPLMSG['PRODUCTS'],$cms_cfg['base_root']."products.htm")->layer_link($row['pc_name']);                
+                $this->layer_link($row);
                 $seo_H1=$row["pc_name"];//預設h1
                 //第一頁才顯示設定的meta,第二頁以後抓分類名稱或產品名稱做為meta title
                 if(empty($_REQUEST["nowp"])){
@@ -463,7 +463,8 @@ class PRODUCTS{
             //$this->left_cate_list($row["pc_id"]);
             $seo_H1=(trim($row["p_seo_h1"]))?$row["p_seo_h1"]:$row["p_name"];
             $func_str="";
-            $main->layer_link($TPLMSG['PRODUCTS'],$cms_cfg['base_root']."products.htm")->layer_link($row['pc_name'],$this->get_link($row))->layer_link($row['p_name']);
+            //設定TAG_LAYER
+            $this->layer_link($row,true);
             $meta_array = array("meta_title"=>$row["p_seo_title"],
                                 "meta_keyword"=>$row["p_seo_keyword"],
                                 "meta_description"=>$row["p_seo_description"],
@@ -965,6 +966,53 @@ class PRODUCTS{
            $tmp[]=$p_name;
        }
        echo json_encode($tmp);
+    }    
+    //產品自訂layer_link
+    function layer_link($row,$is_product=false){
+        global $main,$cms_cfg,$db,$TPLMSG;
+        if($is_product){
+            $item_name = "p_name";
+            $parent_name = "pc_id";
+            $row['pc_seo_filename'] = $_GET['d'];
+            $parent_link = $this->get_link($row,true);
+        }else{
+            $item_name = "pc_name";
+            $parent_name = "pc_parent";
+}
+        if(!isset($row[$parent_name])){
+             trigger_error("pc_parent field missing!"); 
+        }
+        $parent_id = $row[$parent_name];
+        $layer[]['name'] = $row[$item_name];
+        //取得上層分類
+        while($parent_id>0){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id='".$parent_id."'";
+            $row = $db->query_firstrow($sql);
+            $parent_id = $row['pc_parent'];
+            if($parent_link){
+                $tmp = array(
+                    'name' => $row['pc_name'],
+                    'link' => $parent_link,
+                );
+                unset($parent_link);
+            }else{
+                $tmp = array(
+                    'name' => $row['pc_name'],
+                    'link' => $this->get_link($row),
+                );
+            }
+            $layer[] = $tmp;
+        }
+        //寫入階層
+        $main->layer_link($TPLMSG['PRODUCTS'],$cms_cfg['base_root']."products.htm");
+        while($layer){
+            $item = array_pop($layer);
+            if($item['link']){
+                $main->layer_link($item['name'],$item['link']);
+            }else{
+                $main->layer_link($item['name']);  
+            }
+        }
     }    
 }
 ?>
