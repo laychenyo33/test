@@ -263,7 +263,7 @@ class GALLERY{
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 //刪除分類
-                $sql="delete from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_id in (".$nc_id_str.")";
+                $sql="delete from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_id in (".$gc_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
@@ -469,6 +469,7 @@ class GALLERY{
                 ));
             }else{
                 header("location : gallery.php?func=g_list");
+                die();
             }
         }
         //Gallery分類
@@ -482,11 +483,10 @@ class GALLERY{
                                  "STR_GC_SEL"       => ($row1["gc_id"]==$row["gc_id"])?"selected":""
             ));
         }
-		if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
-            $tpl->newBlock("TINYMCE_JS");
-			$tpl->newBlock("WYSIWYG_TINYMCE1");
+        if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
+            $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_G_CONTENT" , $row["g_content"] );
-		}
+        }
     }
 //Gallery--資料更新================================================================
     function gallery_replace(){
@@ -625,8 +625,8 @@ class GALLERY{
             }else{
                 $gc_id=$_REQUEST["id"];
             }
-            if(!empty($nc_id)){
-                $nc_id_str = implode(",",$nc_id);
+            if(!empty($gc_id)){
+                $gc_id_str = implode(",",$gc_id);
                 //更改分類底下的Gallery狀態
                 $sql="update ".$cms_cfg['tb_prefix']."_gallery set g_status=".$value." where gc_id in (".$gc_id_str.")";
                 $rs = $db->query($sql);
@@ -698,7 +698,7 @@ class GALLERY{
     }
     //複製單筆資料
     function copy_data($ws_table){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //Gallery分類複製
         if($ws_table=="gc"){
             $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_id='".$_REQUEST["id"][0]."'";
@@ -713,7 +713,7 @@ class GALLERY{
                         gc_subject
                     ) values (
                         '".$row["gc_status"]."',
-                        '".$row["gc_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_gallery_cate","gc")."',
                         '".addslashes($row["gc_subject"])."'
                     )";
                 $rs = $db->query($sql);
@@ -762,7 +762,7 @@ class GALLERY{
                     ) values (
                         '".$row["gc_id"]."',
                         '".$row["g_status"]."',
-                        '".$row["g_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_gallery","g")."',
                         '".$row["g_hot"]."',
                         '".$row["g_pop"]."',
                         '".addslashes($row["g_subject"])."',
