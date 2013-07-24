@@ -104,8 +104,8 @@ class GALLERY{
                                 "VALUE_G_S_PIC_H" => $dimension['height'],
                                 "VALUE_G_STRIP_CONTENT" => str_replace("\r\n","",strip_tags($row["g_content"])),
             ));
-            }
         }
+    }
 //活動剪影--顯示================================================================
     function gallery_show(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
@@ -121,7 +121,7 @@ class GALLERY{
                             "VALUE_G_CONTENT" => $row["g_content"],
                             "VALUE_G_MODIFYDATE" => $row["g_modifydate"],
         ));
-        for($i=1;$i<=10;$i++){
+        for($i=1;$i<=$cms_cfg['gallery_img_limit'];$i++){
             if(trim($row["g_b_pic".$i])!=""){
                 $big_img_array[]=$row["g_b_pic".$i];
             }
@@ -136,10 +136,6 @@ class GALLERY{
                $tpl->assign("VALUE_BIG_PIC",$img);
                $tpl->assign("VALUE_BIG_PIC_W",$dimensions['width']);
                $tpl->assign("VALUE_BIG_PIC_H",$dimensions['height']);
-               if($k%3==0){
-                    $tpl->assign("TAG_TR","</tr><tr>");
-               }
-               $k++;
             }
         }
         $tpl->assignGlobal("GO_BACK",$TPLMSG['PAGE_BACK']);
@@ -151,7 +147,7 @@ class GALLERY{
             $main->layer_link($TPLMSG['GALLERY'],$cms_cfg['base_root']."gallery.htm");
         }else{
             $main->layer_link($TPLMSG['GALLERY']);
-}
+        }
         //活動剪影分類
         $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' order by gc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql,true);

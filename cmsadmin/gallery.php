@@ -396,16 +396,6 @@ class GALLERY{
                                   "STR_G_POP_CK1" => "",
                                   "STR_G_POP_CK0" => "checked",
                                   "VALUE_PIC_PREVIEW" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW2" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW3" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW4" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW5" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW6" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW7" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW8" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW9" => $cms_cfg['default_preview_pic'],
-                                  "VALUE_BIG_PIC_PREVIEW10" => $cms_cfg['default_preview_pic'],
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
         //相關參數
@@ -446,27 +436,17 @@ class GALLERY{
                                           "VALUE_PIC_PREVIEW" => (trim($row["g_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["base_root"].$row["g_s_pic"],
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
-                $tpl->assignGlobal( array("VALUE_BIG_PIC_PREVIEW1" => (trim($row["g_b_pic1"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic1"],
-                                          "VALUE_BIG_PIC_PREVIEW2" => (trim($row["g_b_pic2"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic2"],
-                                          "VALUE_BIG_PIC_PREVIEW3" => (trim($row["g_b_pic3"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic3"],
-                                          "VALUE_BIG_PIC_PREVIEW4" => (trim($row["g_b_pic4"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic4"],
-                                          "VALUE_BIG_PIC_PREVIEW5" => (trim($row["g_b_pic5"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic5"],
-                                          "VALUE_BIG_PIC_PREVIEW6" => (trim($row["g_b_pic6"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic6"],
-                                          "VALUE_BIG_PIC_PREVIEW7" => (trim($row["g_b_pic7"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic7"],
-                                          "VALUE_BIG_PIC_PREVIEW8" => (trim($row["g_b_pic8"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic8"],
-                                          "VALUE_BIG_PIC_PREVIEW9" => (trim($row["g_b_pic9"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic9"],
-                                          "VALUE_BIG_PIC_PREVIEW10" => (trim($row["g_b_pic10"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic10"],
-                                          "VALUE_BIG_PIC1" => (trim($row["g_b_pic1"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic1"],
-                                          "VALUE_BIG_PIC2" => (trim($row["g_b_pic2"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic2"],
-                                          "VALUE_BIG_PIC3" => (trim($row["g_b_pic3"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic3"],
-                                          "VALUE_BIG_PIC4" => (trim($row["g_b_pic4"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic4"],
-                                          "VALUE_BIG_PIC5" => (trim($row["g_b_pic5"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic5"],
-                                          "VALUE_BIG_PIC6" => (trim($row["g_b_pic6"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic6"],
-                                          "VALUE_BIG_PIC7" => (trim($row["g_b_pic7"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic7"],
-                                          "VALUE_BIG_PIC8" => (trim($row["g_b_pic8"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic8"],
-                                          "VALUE_BIG_PIC9" => (trim($row["g_b_pic9"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic9"],
-                                          "VALUE_BIG_PIC10" => (trim($row["g_b_pic10"])=="")?"":$cms_cfg["file_root"].$row["g_b_pic10"],
-                ));
+                for($j=1;$j<=$cms_cfg['gallery_img_limit'];$j++){	//新增時載入大圖區域及預設值
+                    //大圖區域TAB
+                    $tpl->newBlock("GALLERY_BIG_IMG_TAB");
+                    $tpl->assign("BIG_IMG_NO",$j);
+                    $tpl->newBlock("GALLERY_BIG_IMG");
+                    $tpl->assign( array(
+                        "VALUE_BIG_PIC_PREVIEW" => (trim($row["g_b_pic".$j])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic".$j],
+                        "VALUE_BIG_PIC" => (trim($row["g_b_pic".$j])=="")?"":$cms_cfg["file_root"].$row["g_b_pic".$j],
+                        "BIG_IMG_NO" =>$j,
+                    ));
+                }                
             }else{
                 header("location : gallery.php?func=g_list");
                 die();

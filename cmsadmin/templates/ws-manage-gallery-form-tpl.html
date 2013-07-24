@@ -38,232 +38,45 @@
             <th>大圖:</th>
             <td>
              <ul class="tabs">
-               <li><a href="#pic1">大圖1</a></li>
-               <li><a href="#pic2">大圖2</a></li>
-               <li><a href="#pic3">大圖3</a></li>
-               <li><a href="#pic4">大圖4</a></li>
-               <li><a href="#pic5">大圖5</a></li>
-               <li><a href="#pic6">大圖6</a></li>
-               <li><a href="#pic7">大圖7</a></li>
-               <li><a href="#pic8">大圖8</a></li>
-               <li><a href="#pic9">大圖9</a></li>
-               <li><a href="#pic10">大圖10</a></li>
+			   <!-- START BLOCK : GALLERY_BIG_IMG_TAB -->
+               <li><a href="#pic{BIG_IMG_NO}">大圖{BIG_IMG_NO}</a></li>
+			   <!-- END BLOCK : GALLERY_BIG_IMG_TAB -->
              </ul>
                <div class="panes">
+			   <!-- START BLOCK : GALLERY_BIG_IMG -->				
                 <div>
-                  <br>
                   <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
                   <tr>
                     <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic1');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW1}" border="0" width="120" name="big_pic_preview1" id="big_pic_preview1" /></a>
+                      <a href="javascript:mcImageManager.open('myform','g_b_pic{BIG_IMG_NO}');">
+                    <img src="{VALUE_BIG_PIC_PREVIEW}" border="0" width="120" name="big_pic_preview{BIG_IMG_NO}" id="big_pic_preview{BIG_IMG_NO}" />
                       </a>
                       <br>
                       <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔一</td>
+                    </th>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;大圖{BIG_IMG_NO}</td>
                   </tr>
                   <tr>
-                    <td><input type="text" size="60" name="g_b_pic1" value="{VALUE_BIG_PIC1}" id="g_b_pic1" onchange="Javascript:onImageSelect(this,'big_pic_preview1');"></td>
+                    <td><input type="text" size="60" name="g_b_pic{BIG_IMG_NO}" value="{VALUE_BIG_PIC}" id="p_big_img{BIG_IMG_NO}" onchange="Javascript:onImageSelect(this,'big_pic_preview{BIG_IMG_NO}');"></td>
                   </tr>
                   <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic1','big_pic_preview1')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
+                    <td><a href="javascript:LoadDefaultPic('p_big_img{BIG_IMG_NO}','big_pic_preview{BIG_IMG_NO}')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
                   </tr>
                   </table>
                 </div>
-                <div>
-                                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic2');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW2}" border="0" width="120" name="big_pic_preview2" id="big_pic_preview2" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔二</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" size="60" name="g_b_pic2" value="{VALUE_BIG_PIC2}" id="g_b_pic2" onchange="Javascript:onImageSelect(this,'big_pic_preview2');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic2','big_pic_preview2')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                  </table>
+			   <!-- END BLOCK : GALLERY_BIG_IMG -->
                 </div>
-                <div>
-                                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic3');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW3}" border="0" width="120" name="big_pic_preview3" id="big_pic_preview3" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
                     </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔三</td>
                   </tr>
+        <!-- START BLOCK : WYSIWYG_TINYMCE1 -->
                   <tr>
-                    <td><input type="text" size="60" name="g_b_pic3" value="{VALUE_BIG_PIC3}" id="g_b_pic3" onchange="Javascript:onImageSelect(this,'big_pic_preview3');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic3','big_pic_preview3')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                  </table>
-                </div>
-                <div>
-                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic4');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW4}" border="0" width="120" name="big_pic_preview4" id="big_pic_preview4" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
+            <th width="100">說明:</th>
+            <td>
+                <textarea name="g_content" id="elm1" type="textarea">{VALUE_G_CONTENT}</textarea>
                     </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔四</td>
                   </tr>
+        <!-- END BLOCK : WYSIWYG_TINYMCE1 -->
                   <tr>
-                    <td><input type="text" size="60" name="g_b_pic4" value="{VALUE_BIG_PIC4}" id="g_b_pic4" onchange="Javascript:onImageSelect(this,'big_pic_preview4');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic4','big_pic_preview4')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                </table>
-                </div>
-                <div>
-                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic5');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW5}" border="0" width="120" name="big_pic_preview5" id="big_pic_preview5" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔五</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" size="60" name="g_b_pic5" value="{VALUE_BIG_PIC5}" id="g_b_pic5" onchange="Javascript:onImageSelect(this,'big_pic_preview5');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic5','big_pic_preview5')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                </table>
-                </div>
-                <div>
-                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic6');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW6}" border="0" width="120" name="big_pic_preview6" id="big_pic_preview6" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔六</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" size="60" name="g_b_pic6" value="{VALUE_BIG_PIC6}" id="g_b_pic6" onchange="Javascript:onImageSelect(this,'big_pic_preview6');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic6','big_pic_preview6')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                </table>
-                </div>
-                <div>
-                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic7');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW7}" border="0" width="120" name="big_pic_preview7" id="big_pic_preview7" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔七</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" size="60" name="g_b_pic7" value="{VALUE_BIG_PIC7}" id="g_b_pic7" onchange="Javascript:onImageSelect(this,'big_pic_preview7');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic7','big_pic_preview7')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                </table>
-                </div>
-                <div>
-                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic8');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW8}" border="0" width="120" name="big_pic_preview8" id="big_pic_preview8" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔八</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" size="60" name="g_b_pic8" value="{VALUE_BIG_PIC8}" id="g_b_pic8" onchange="Javascript:onImageSelect(this,'big_pic_preview8');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic8','big_pic_preview8')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                </table>
-                </div>
-                <div>
-                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic9');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW9}" border="0" width="120" name="big_pic_preview9" id="big_pic_preview9" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔九</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" size="60" name="g_b_pic9" value="{VALUE_BIG_PIC9}" id="g_b_pic9" onchange="Javascript:onImageSelect(this,'big_pic_preview9');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic9','big_pic_preview9')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                </table>
-                </div>
-                <div>
-                  <br>
-                  <table border="0" cellpadding="0" cellspacing="0" width="200" class="pictable">
-                  <tr>
-                    <th rowspan="3" align="center">
-                      <a href="javascript:mcImageManager.open('myform','g_b_pic10');">
-                    <img src="{VALUE_BIG_PIC_PREVIEW10}" border="0" width="120" name="big_pic_preview10" id="big_pic_preview10" /></a>
-                      </a>
-                      <br>
-                      <font color="red">點選圖框更換圖片</font>
-                    </td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;圖檔十</td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" size="60" name="g_b_pic10" value="{VALUE_BIG_PIC10}" id="g_b_pic10" onchange="Javascript:onImageSelect(this,'big_pic_preview10');"></td>
-                  </tr>
-                  <tr>
-                    <td><a href="javascript:LoadDefaultPic('g_b_pic10','big_pic_preview10')">&nbsp;&nbsp;&nbsp;&nbsp;取消圖片</a></td>
-                  </tr>
-                </table>
-                </div>
-              </div>
-            </td>
-        </tr>
-        <tr>
             <th>&nbsp;</th>
             <td>
             <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" />

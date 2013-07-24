@@ -66,6 +66,7 @@ $cms_cfg['op_limit']=12;  //一頁筆數限制
 $cms_cfg['jp_limit']=10;  //跳頁筆數限制
 $cms_cfg["ws_products_row"]=3;
 $cms_cfg['big_img_limit']=4;  //大圖筆數 /*資料表欄位有8個欄位 預設開4張圖即可 */
+$cms_cfg['gallery_img_limit'] = 10; //活動剪影圖片數量
 $cms_cfg['big_img_width'][1]="340";   //大圖圖框限制--寬
 $cms_cfg['big_img_height'][1]="225";  //大圖圖框限制--高
 $cms_cfg['big_img_width'][2]="620";   //大圖圖框限制--寬
