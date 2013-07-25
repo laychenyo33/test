@@ -1,3 +1,12 @@
+#<FilesMatch "\.(css)">  
+#    ForceType application/x-httpd-php  
+#    php_value auto_prepend_file "/home/httpd/vhosts/jefu.com.tw/httpdocs/libs/libs-gzip-css.php"
+#</FilesMatch>
+#<FilesMatch "\.(js)">  
+#    ForceType application/x-httpd-php  
+#    php_value auto_prepend_file "/home/httpd/vhosts/jefu.com.tw/httpdocs/libs/libs-gzip-js.php"
+#</FilesMatch>
+
 Options ExecCGI Includes IncludesNOEXEC SymLinksIfOwnerMatch -Indexes
 
 RewriteEngine On
