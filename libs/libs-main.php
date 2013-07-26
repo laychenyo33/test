@@ -1527,8 +1527,12 @@ class MAINFUNC{
      * 數量2:第1個參數是連結的文字，第二個是是連結的url
      */
     function layer_link(){
-        global $tpl,$cms_cfg;
+        global $tpl,$cms_cfg,$TPLMSG;
         static $_layers = array();
+        static $call = 0;
+        if($call==0){
+            $_layers[$call] = $this->mk_link($TPLMSG['HOME'] , $cms_cfg['base_root']);
+        }                
         switch(func_num_args()){
             case 0: //輸出layer
                 if(empty($cms_cfg['path_separator'])){
@@ -1554,6 +1558,7 @@ class MAINFUNC{
             default:
                 throw new Exception('argument type or argument nums error!');
         }
+        $call++;
         return $this;
     }       
     //multiple checkbox
