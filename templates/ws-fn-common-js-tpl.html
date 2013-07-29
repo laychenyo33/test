@@ -732,3 +732,24 @@ function nav_formatter(idx,pan){
     });                
 </script>
 <!-- END BLOCK : AJAX_GET_VIDEO_CONTENT -->
+<!-- START BLOCK : JS_YOUTUBEDIALOG -->
+        <script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery.youtubedialog.js"></script>
+        <script type="text/javascript">
+            jQuery(function($){
+               $(document).ready(function(){
+                  $("a[rel^=youtubedialog]").youtubedialog({
+                        autoImage:true,
+                        container_id: '#movie',
+                        container_width:520,
+                        container_height:420,
+                        container_title:'youtubedialog',
+                        video_width:450,
+                        video_height:320,
+                        dialog_options:{
+                            resizable:false
+                        }
+                  }); 
+               });
+            });
+        </script>
+<!-- END BLOCK : JS_YOUTUBEDIALOG -->
