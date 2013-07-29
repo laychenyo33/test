@@ -1455,10 +1455,10 @@ class MAINFUNC{
         if(strlen($url)==11){
             return $url;
             //http://www.youtube.com/embed/S3f-riH1Q_A
-        }elseif(preg_match("#(http:)*(//www.youtube.com/|//youtu.be/)(embed/|watch?.*v=)*([^&\s\"]+)#i",$url,$match)){
+        }elseif(preg_match("#(http:)*(//www.youtube.com/|//youtu.be/)(embed/|watch?.*v=)*([^&\s\"?]+)#i",$url,$match)){
             return $match[4];
         }        
-    }     
+    }      
     //由ip取得國家
     function get_ip_country($ip){
         global $cms_cfg;
