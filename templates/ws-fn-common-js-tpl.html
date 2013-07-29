@@ -705,3 +705,30 @@ function nav_formatter(idx,pan){
     });                        
 </script>
 <!-- END BLOCK : DATEPICKER_SCRIPT -->
+<!-- START BLOCK : AJAX_GET_VIDEO_CONTENT -->
+<script type="text/javascript">
+    jQuery(function($){
+        $(document).ready(function(){
+            $("#movie").dialog({
+                autoOpen:false,
+                modal: true,
+                width:520,
+                height:410,
+                beforeClose: function( event, ui ) {
+                    $("#movie").empty();
+                }
+            });  
+            $(".video a").click(function(e){
+                e.preventDefault();
+                var v_id = $(this).attr('rel');
+                $.get("{TAG_ROOT_PATH}video.php",{ func:'ajax_get_video_content',v_id:v_id },function(req){
+                    if(req.res){
+                        var player = $("<iframe></iframe>").attr("src","http://www.youtube.com/embed/"+req.content+"?autoplay=1").width(480).height(360);
+                        $("#movie").dialog("open").dialog('option','title',req.subject).append(player);   
+                    }
+                },'json');
+            });
+        });
+    });                
+</script>
+<!-- END BLOCK : AJAX_GET_VIDEO_CONTENT -->

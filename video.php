@@ -9,16 +9,26 @@ class VIDEO{
         $this->ws_tpl_file = "templates/ws-video-tpl.html";
         $this->ws_load_tp($this->ws_tpl_file);
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
-        $defaultAction = "video_list";
-        $type = $_GET['type'];
-        $type = (!$type && $_GET['v_id'])?"show":$type;
-        $type = (!$type && $_GET['vc_id'])?"list":$type;
-        $action = ($type)?"video_".$type:$defaultAction;
-        $this->$action();
-        //page view record --ph_type,ph_type_id,m_id
-        $main->pageview_history("v",$_REQUEST["v_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
-        $main->layer_link();
-        $tpl->printToScreen();
+        switch($_GET['func']){
+            case "ajax_get_video_content":
+                $this->ajax_get_video_content($_GET['v_id']);
+                break;            
+            default:
+                $this->ws_tpl_type = 1;
+                $defaultAction = "video_list";
+                $type = $_GET['type'];
+                $type = (!$type && $_GET['v_id'])?"show":$type;
+                $type = (!$type && $_GET['vc_id'])?"list":$type;
+                $action = ($type)?"video_".$type:$defaultAction;
+                $this->$action();
+                break;
+        }
+        if($this->ws_tpl_type){
+            //page view record --ph_type,ph_type_id,m_id
+            $main->pageview_history("v",$_REQUEST["v_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
+            $main->layer_link();
+            $tpl->printToScreen();
+        }        
     }
     //載入對應的樣板
     function ws_load_tp($ws_tpl_file){
@@ -176,5 +186,14 @@ class VIDEO{
             return $cms_cfg['base_root']."video.php?func=v_list&".$qs;
         }
     }
+    function ajax_get_video_content($v_id){
+        global $db,$cms_cfg;
+        $sql = "select v_content,v_subject from ".$cms_cfg['tb_prefix']."_video where v_id='".$v_id."'";
+        $row = $db->query_firstrow($sql);
+        $res['res'] = ($row['v_content'])?true:false;
+        $res['content'] = $row['v_content'];
+        $res['subject'] = $row['v_subject'];
+        echo json_encode($res);
+    }    
 }
 ?>
