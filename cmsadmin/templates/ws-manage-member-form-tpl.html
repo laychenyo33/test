@@ -98,8 +98,8 @@
                   <option value="Miss." {STR_M_CS_CK2}>Miss.</option>
                   <option value="Mrs." {STR_M_CS_CK3}>Mrs.</option>
                 </select>-->
-                姓:<input name="m_fname" type="text" value="{VALUE_M_FNAME}" size="12" />
-                名:<input name="m_lname" type="text" value="{VALUE_M_LNAME}" size="12" />
+                姓:<input name="m_lname" type="text" value="{VALUE_M_LNAME}" size="12" />
+                名:<input name="m_fname" type="text" value="{VALUE_M_FNAME}" size="12" />
             </td>
         </tr>
           <!-- START BLOCK : SELECT_COUNTRY -->
@@ -113,7 +113,7 @@
           <tr>
               <th>生日</th>
               <td colspan="3">
-                  <input type="text" name="m_birthday" id="m_birthday" size="20" value="{VALUE_M_BIRTHDAY}"/><a href="#" onclick="displayCalendar(document.getElementById('m_birthday'),'yyyy-mm-dd',this);return false">選擇</a>
+                  <input type="text" name="m_birthday" id="m_birthday" size="20" value="{VALUE_M_BIRTHDAY}" class="datepicker"/>
               </td>
           </tr>  
         <tr>

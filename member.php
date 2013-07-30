@@ -4,7 +4,7 @@ include_once("libs/libs-sysconfig.php");
 $member = new MEMBER;
 class MEMBER{
     function MEMBER(){
-        global $db,$cms_cfg,$tpl;
+        global $db,$cms_cfg,$tpl,$main;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
@@ -47,6 +47,7 @@ class MEMBER{
                 break;
             case "m_forget"://忘記密碼
                 $this->member_forget_password();
+                $this->ws_tpl_type=1;
                 break;
             case "m_sps"://密碼寄送完成顯示訊息
                 $this->ws_tpl_file = "templates/ws-member-forget-tpl.html";
@@ -70,6 +71,7 @@ class MEMBER{
                 break;
         }
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -82,6 +84,7 @@ class MEMBER{
             $tpl->assignInclude( "LEFT", $cms_cfg['base_left_member_tpl']); //左方會員專區表單
         }
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
+        $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["member"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["member"]);//左方menu title
@@ -93,11 +96,15 @@ class MEMBER{
         //定義目前語系的表單檢查JS
         $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["MEMBER_ZONE"]);
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["MEMBER_ZONE"]);
         $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG["MEMBER_LOGIN"]);
         $tpl->assignGlobal( "TAG_MEMBER_LOGIN" , $TPLMSG["MEMBER_LOGIN"]);
         $tpl->assignGlobal( "TAG_MEMBER_JOIN" , $TPLMSG["MEMBER_JOIN"]);
         $tpl->assignGlobal( "TAG_MEMBER_LOGOUT" , $TPLMSG["MEMBER_LOGOUT"]);
+        if($_GET){
+            $main->layer_link($TPLMSG["MEMBER_ZONE"],$cms_cfg['base_root']."member.php");
+        }else{
+            $main->layer_link($TPLMSG["MEMBER_ZONE"]);
+        }
         //頁首會員登入區
         if(empty($_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID'])){
             $tpl->newBlock("INDEX_LOGIN_ZONE");
@@ -138,7 +145,6 @@ class MEMBER{
         $main->load_js_msg();
         //欄位名稱
         $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_JOIN'],
-                                  "TAG_LAYER"      => $TPLMSG['MEMBER_JOIN'],
                                   "MSG_MEMBER_FNAME"  => $TPLMSG['MEMBER_FNAME'],
                                   "MSG_MEMBER_LNAME"  => $TPLMSG['MEMBER_LNAME'],
                                   "MSG_CHECK_ACCOUNT" => $TPLMSG['MEMBER_CHECK_ACCOUNT'],
@@ -184,9 +190,9 @@ class MEMBER{
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
                 //修改會員，顯示e-mail欄位
+                $main->layer_link( $TPLMSG['MEMBER_DATA_MOD']);
                 $tpl->newBlock( "MOD_EMAIL" );
                 $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_DATA_MOD'],
-                                          "TAG_LAYER"      => $TPLMSG['MEMBER_DATA_MOD'],
                                           "VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_M_ACCOUNT" => $row["m_account"],
                                           "VALUE_M_PASSWORD" => $row["m_password"],
@@ -210,21 +216,24 @@ class MEMBER{
                 ));
             }else{
                 header("location : member.php?func=m_add");
+                die();
             }
         }else{
             //$tpl->newBlock( "MEMBER_ADD_PIC" );
             //新增模式顯示服務條款
             $tpl->newBlock( "MEMBER_ADD_MODE" );
+            $main->layer_link($TPLMSG['MEMBER_JOIN']);
             //$tpl->newBlock( "SERVICE_TERM_SHOW" );
         }
         //國家下拉選單
         if($cms_cfg["ws_module"]["ws_country"]==1) {
             $main->country_select($row["m_country"]);
         }
+        $main->contact_s_select($row['m_contact_s'],$zone="MEMBER");
     }
     //會員管理--資料更新================================================================
     function member_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $max_sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member",'m');
@@ -340,7 +349,7 @@ class MEMBER{
                                               "MSG_SUBSCRIBE" => $TPLMSG["SUBSCRIBE"],
                                               "VALUE_M_ACCOUNT" => $_REQUEST["m_account"],
                                               "VALUE_M_PASSWORD" => $_REQUEST["m_password"],
-                                              "VALUE_M_CONTACT_S" => $_REQUEST["m_contact_s"],
+                                              "VALUE_M_CONTACT_S" => $ws_array["contactus_s"][$_REQUEST["m_contact_s"]],
                                               "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
                                               "VALUE_M_FNAME" => $_REQUEST["m_fname"],
                                               "VALUE_M_LNAME" => $_REQUEST["m_lname"],
@@ -361,12 +370,14 @@ class MEMBER{
                                            "VALUE_M_COUNTRY" =>$_REQUEST["m_country"]
                         ));
                     }
-                    $tpl->assignGlobal( "VALUE_TERM" , $row['st_join_member_mail']);
+                    //稱謂
+                    $mtpl->newBlock("MEMBER_S_STYLE_".$this->contact_s_style);
+                    $mtpl->assignGlobal( "VALUE_TERM" , $row['st_join_member_mail']);
 //                    //帳號啟用連結
 //                    $m_id = $db->get_insert_id();
 //                    $act_link = $this->get_activate_link($_POST['m_account'],$m_id);      
 //                    $tpl->assignGlobal("ACTIVATE_LINK",$act_link);
-                    $mail_content=$tpl->getOutputContent();
+                    $mail_content=$mtpl->getOutputContent();
                     $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_account"],$mail_content,$TPLMSG['MEMBER_CONFIRM_MAIL'],"m",$goto_url);
                 }else{
                   $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
@@ -382,9 +393,8 @@ class MEMBER{
     function member_order($type="list",$o_id=""){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
         if($type=="list"){
-            $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_ZONE_ORDER'],
-                                      "TAG_LAYER"      => $TPLMSG['MEMBER_ZONE_ORDER'],
-            ));
+            $main->layer_link($TPLMSG['MEMBER_ZONE_ORDER']);
+            $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_ZONE_ORDER']  ));
             $tpl->newBlock( "ORDER_LIST_ZONE" );
             $tpl->assign( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
                                 "MSG_STATUS" => $TPLMSG['STATUS'],
@@ -400,9 +410,8 @@ class MEMBER{
             $total_records    = $db->numRows($selectrs);
             //取得分頁連結
             $func_str="member.php?func=m_zone&mzt=order&type=list";
-            $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
             //重新組合包含limit的sql語法
-            $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
+            $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             while ( $row = $db->fetch_array($selectrs,1) ) {
@@ -509,9 +518,8 @@ class MEMBER{
     function member_inquiry($type="list",$i_id=""){
        global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
         if($type=="list"){
-            $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_ZONE_INQUIRY'],
-                                      "TAG_LAYER"      => $TPLMSG['MEMBER_ZONE_INQUIRY'],
-            ));
+            $main->layer_link($TPLMSG['MEMBER_ZONE_INQUIRY']);
+            $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_ZONE_INQUIRY'] ));
             $tpl->newBlock( "INQUIRY_LIST_ZONE" );
             $tpl->assign( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
                                 "MSG_STATUS" => $TPLMSG['STATUS'],
@@ -526,9 +534,8 @@ class MEMBER{
             $total_records = $db->numRows($selectrs);
             //取得分頁連結
             $func_str="member.php?func=m_zone&mzt=inquiry&type=list";
-            $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
             //重新組合包含limit的sql語法
-            $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
+            $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             while ( $row = $db->fetch_array($selectrs,1) ) {
@@ -622,6 +629,7 @@ class MEMBER{
                     }
                 }else{
                     header("location : member.php");
+                    die();
                 }
             }
         }
@@ -648,9 +656,8 @@ class MEMBER{
             $total_records    = $db->numRows($selectrs);
             //取得分頁連結
             $func_str="contactus.php?func=cu_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
-            $page=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
             //重新組合包含limit的sql語法
-            $sql=$main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
+            $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
@@ -753,6 +760,7 @@ class MEMBER{
                     }
                 }else{
                     header("location : member.php");
+                    die();
                 }
             }
         }
@@ -763,11 +771,10 @@ class MEMBER{
         if(empty($_REQUEST["m_email"])){
             $this->ws_tpl_file = "templates/ws-member-forget-tpl.html";
             $this->ws_load_tp($this->ws_tpl_file);
+            $main->layer_link($TPLMSG["FORGOT_PASSWORD"] );
             $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
-            $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["FORGOT_PASSWORD"] );
             $tpl->newBlock(strtoupper( $cms_cfg['language'])."_REGISTER_FORGET_PASSWORD" );
             $main->security_zone();
-            $tpl->printToScreen();
         }else{
             require_once("./libs/libs-security-image.php");
             $si = new securityImage();  

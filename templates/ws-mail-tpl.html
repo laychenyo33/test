@@ -131,13 +131,19 @@ a:visited {
                 <td bgcolor="#D5D5D5">
                     {MSG_PASSWORD}</td>
                 <td>
-                    {VALUE_M_PASSWORD}</td>
+                    <span class="not_for_admin">{VALUE_M_PASSWORD}</span></td>
             </tr>
             <tr bgColor="#ffffff" class="body1">
                 <td bgcolor="#D5D5D5">
                     {MSG_CONTACT_PERSON}</td>
                 <td>
-                    {VALUE_M_CONTACT_S}&nbsp;{VALUE_M_FNAME}&&;{VALUE_M_LNAME}</td>
+                    <!-- START BLOCK : MEMBER_S_STYLE_1 -->
+                    {VALUE_M_CONTACT_S}&nbsp;{VALUE_M_FNAME}&nbsp;{VALUE_M_LNAME}
+                    <!-- END BLOCK : MEMBER_S_STYLE_1 -->
+                    <!-- START BLOCK : MEMBER_S_STYLE_2 -->
+                    {VALUE_M_LNAME}&nbsp;{VALUE_M_FNAME}&nbsp;{VALUE_M_CONTACT_S}
+                    <!-- END BLOCK : MEMBER_S_STYLE_2 -->
+                </td>
             </tr>
             <!-- START BLOCK : COMPANY_ZONE -->
             <tr bgColor="#ffffff" class="body1">

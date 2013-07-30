@@ -1,13 +1,7 @@
 <div id="login_form">
-    <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-            <td class="title">
-            {MSG_LOGIN_NOTICE1}</td>
-        </tr>
-        <tr>
-            <td valign="top">
-            <div class="member">
-            <form name="loginform" method="post" action="login.php?func=check_data" style="margin:0px;padding:0px;">
+    {MSG_LOGIN_NOTICE1}
+    <div class="member">
+        <form name="loginform" method="post" action="login.php?func=check_data" style="margin:0px;padding:0px;">
             <table cellpadding="2" cellspacing="0" border="0" class="login_table">
             <tr>
                 <th>{MSG_LOGIN_ACCOUNT}:</th>
@@ -28,9 +22,6 @@
             </tr>
             </table>
             <input type="hidden" name="callback" value="1">
-            </form>
-            </div>
-            </td>
-        </tr>
-    </table>
+        </form>
+    </div>
 </div>

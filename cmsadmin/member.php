@@ -111,6 +111,7 @@ class MEMBER{
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->member_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -121,6 +122,7 @@ class MEMBER{
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->member_form("mod");
                 $this->ws_tpl_type=1;
                 break;
