@@ -721,6 +721,7 @@ class MAINFUNC{
             }else{
                 $mail_subject .= " from ".$_SERVER["HTTP_HOST"]."--[For Administrator]";
             }
+            $mail_content = preg_replace("#<span class=\"not_for_admin\">.+</span>#", "******", $mail_content);
             for($i=0;$i<count($from_email);$i++){
                 @mail($from_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
             }
