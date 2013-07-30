@@ -684,11 +684,12 @@ function nav_formatter(idx,pan){
 <script type="text/javascript">
     jQuery(function($){
         $(document).ready(function(){
-             $("#news-wraper").chcarousel({
+             $("#activity-zone").chcarousel({
                 nums:1,   //單一頁的項目
                 toLeftId:'go-left',
                 toRightId:'go-right',
-                recycle:false                 
+                recycle:false,
+                pageId:'chcarouselpage'
              });
         });
     });
