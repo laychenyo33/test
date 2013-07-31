@@ -3,7 +3,7 @@
 //ob_start();
 session_start();
 include_once("../conf/config.inc.php");
-if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_blog"]==0){
+if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_guestbook"]==0){
     header("location: /");
     exit;
 }
