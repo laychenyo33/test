@@ -129,6 +129,9 @@ class ABOUTUS{
                 $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK2", "selected");
                 break;
         }
+        if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
+            $tpl->newBlock("AU_CATE_TITLE");
+        }
         $i=$page["start_serial"];
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
@@ -144,6 +147,10 @@ class ABOUTUS{
                                 "VALUE_STATUS_IMG_ALT" => ($row["au_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
 
             ));
+            if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
+                $tpl->newBlock("AU_CATE_FIELD");
+                $tpl->assign("VALUE_AU_CATE",$ws_array["main"][$row['au_cate']]);
+            }
         }
     }
 //關於我們--表單================================================================
