@@ -20,3 +20,4 @@ Thumbs.db
 /conf/database.php
 /upload_files/*
 /conf/counter.txt
+.git-ftp.log
