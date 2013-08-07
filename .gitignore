@@ -20,4 +20,5 @@ Thumbs.db
 /conf/database.php
 /upload_files/*
 /conf/counter.txt
+/conf/creditcard.php
 .git-ftp.log
