@@ -540,7 +540,7 @@ class PRODUCTS{
                     '".$_REQUEST["pc_sort"]."',
                     '".htmlspecialchars($_REQUEST["pc_name"])."',
                     '".$_REQUEST["pc_custom_status"]."',
-                    '".$main->content_file_str_replace($_REQUEST["pc_custom"])."',
+                    '".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"]))."',
                     '".$_REQUEST["pc_show_style"]."',
                     '".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
                     '".$_REQUEST["pc_related_cate"]."',
@@ -592,7 +592,7 @@ class PRODUCTS{
                     pc_name='".htmlspecialchars($_REQUEST["pc_name"])."',
                     pc_level='".$pc_level."',
                     pc_custom_status='".$_REQUEST["pc_custom_status"]."',
-                    pc_custom='".$main->content_file_str_replace($_REQUEST["pc_custom"])."',
+                    pc_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"]))."',
                     pc_show_style='".$_REQUEST["pc_show_style"]."',
                     pc_cate_img='".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
                     pc_related_cate='".$_REQUEST["pc_related_cate"]."',
@@ -1089,12 +1089,12 @@ class PRODUCTS{
                     case "add":
                         $add_extra_fields .= "p_info_field".$j."_title,";
                         $add_extra_fields .= "p_info_field".$j.",";
-                        $add_extra_values .= "'".$_POST['p_info_field'.$j.'_title']."',";
-                        $add_extra_values .= "'".$_POST['p_info_field'.$j]."',";
+                        $add_extra_values .= "'".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
+                        $add_extra_values .= "'".$db->quote($_REQUEST['p_info_field'.$j])."',";
                         break;
                     case "mod":
-                        $update_extra_fields .= "p_info_field".$j."_title ='".$_POST['p_info_field'.$j.'_title']."',";
-                        $update_extra_fields .= "p_info_field".$j."='".$_POST['p_info_field'.$j]."',";
+                        $update_extra_fields .= "p_info_field".$j."_title ='".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
+                        $update_extra_fields .= "p_info_field".$j."='".$db->quote($_REQUEST['p_info_field'.$j])."',";
                         break;
                 }
             }
@@ -1153,7 +1153,7 @@ class PRODUCTS{
                         '".$_REQUEST["p_new_sort"]."',
                         '".htmlspecialchars($_REQUEST["p_name"])."',
                         '".$_REQUEST["p_custom_status"]."',
-                        '".$main->content_file_str_replace($_REQUEST["p_custom"])."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"]))."',
                         '".$_REQUEST["p_show_style"]."',
                         '".$this->p_type."',
                         '".$_REQUEST["p_show_price"]."',
@@ -1162,16 +1162,16 @@ class PRODUCTS{
                         '".htmlspecialchars($_REQUEST["p_serial"])."',
                         '".$main->file_str_replace($_REQUEST["p_small_img"])."',
                         '".$_REQUEST["p_related_products"]."',
-                        '".$_REQUEST["p_spec_title"]."',
-                        '".$main->content_file_str_replace($_REQUEST["p_spec"])."',
-                        '".$_REQUEST["p_character_title"]."',
-                        '".$main->content_file_str_replace($_REQUEST["p_character"])."',
-                        '".$_REQUEST["p_desc_title"]."',
-                        '".$main->content_file_str_replace($_REQUEST["p_desc"])."',
-                        '".htmlspecialchars($p_desc_strip_str)."',
+                        '".$db->quote($_REQUEST["p_spec_title"])."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"]))."',
+                        '".$db->quote($_REQUEST["p_character_title"])."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"]))."',
+                        '".$db->quote($_REQUEST["p_desc_title"])."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"]))."',
+                        '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
-                        '".$_REQUEST["p_mv"]."',
+                        '".$db->quote($_REQUEST["p_mv"])."',
                         '".implode(',',(array)$_REQUEST["p_ca"])."',
                         ".$add_extra_values."    
                         '".date("Y-m-d H:i:s")."',
@@ -1203,7 +1203,7 @@ class PRODUCTS{
                     p_new_sort = '".$_REQUEST["p_new_sort"]."',
                     p_name = '".htmlspecialchars($_REQUEST["p_name"])."',
                     p_custom_status = '".$_REQUEST["p_custom_status"]."',
-                    p_custom = '".$main->content_file_str_replace($_REQUEST["p_custom"])."',
+                    p_custom = '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"]))."',
                     p_show_style = '".$_REQUEST["p_show_style"]."',
                     p_type = '".$this->p_type."',
                     p_show_price = '".$_REQUEST["p_show_price"]."',
@@ -1212,16 +1212,16 @@ class PRODUCTS{
                     p_serial = '".htmlspecialchars($_REQUEST["p_serial"])."',
                     p_small_img = '".$main->file_str_replace($_REQUEST["p_small_img"])."',
                     p_related_products = '".$_REQUEST["p_related_products"]."',
-                    p_spec_title = '".$_REQUEST["p_spec_title"]."',
-                    p_spec = '".$main->content_file_str_replace($_REQUEST["p_spec"])."',
-                    p_character_title = '".$_REQUEST["p_character_title"]."',
-                    p_character = '".$main->content_file_str_replace($_REQUEST["p_character"])."',
-                    p_desc_title = '".$_REQUEST["p_desc_title"]."',
-                    p_desc = '".$main->content_file_str_replace($_REQUEST["p_desc"])."',
-                    p_desc_strip = '".htmlspecialchars($p_desc_strip_str)."',
+                    p_spec_title = '".$db->quote($_REQUEST["p_spec_title"])."',
+                    p_spec = '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"]))."',
+                    p_character_title = '".$db->quote($_REQUEST["p_character_title"])."',
+                    p_character = '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"]))."',
+                    p_desc_title = '".$db->quote($_REQUEST["p_desc_title"])."',
+                    p_desc = '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"]))."',
+                    p_desc_strip = '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
                     p_attach_file1 = '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                     p_attach_file2 = '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
-                    p_mv = '".$_REQUEST["p_mv"]."',
+                    p_mv = '".$db->quote($_REQUEST["p_mv"])."',
                     p_ca = '".implode(',',(array)$_REQUEST["p_ca"])."',
                     ".$update_extra_fields."    
                     p_modifydate = '".date("Y-m-d H:i:s")."',
@@ -2228,7 +2228,7 @@ class PRODUCTS{
                     '".$_REQUEST["pa_sort"]."',
                     '".htmlspecialchars($_REQUEST["pa_name"])."',
                     '".$_REQUEST["pa_custom_status"]."',
-                    '".$_REQUEST["pa_custom"]."',
+                    '".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"]))."',
                     '".$main->file_str_replace($_REQUEST["pa_small_img"])."',
                     '".date("Y-m-d H:i:s")."',
                     ".$add_value_str."
@@ -2247,7 +2247,7 @@ class PRODUCTS{
                     pa_sort='".$_REQUEST["pa_sort"]."',
                     pa_name='".htmlspecialchars($_REQUEST["pa_name"])."',
                     pa_custom_status='".$_REQUEST["pa_custom_status"]."',
-                    pa_custom='".$_REQUEST["pa_custom"]."',
+                    pa_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"]))."',
                     pa_small_img='".$main->file_str_replace($_REQUEST["pa_small_img"])."',
                     pa_modifydate='".date("Y-m-d H:i:s")."',
                     ".$update_str."
