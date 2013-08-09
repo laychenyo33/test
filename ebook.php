@@ -133,7 +133,8 @@ class EBOOK{
 
         //EBOOK列表------------------------
         $i  = 0;
-        $k  = $page["start_serial"];
+        $start_serial = ($nowp=intval($_REQUEST["nowp"]))?($nowp-1)*$this->op_limit:$nowp;
+        $k  = $start_serial;
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $n= $k+1;
             $eb_link=$cms_cfg["base_root"]."ebook.php?func=eb_detail&ebc_parent=".$row["ebc_id"]."&eb_id=".$row["eb_id"]."&nowp=".$n."&jp=".$k;
@@ -157,30 +158,55 @@ class EBOOK{
         $total_records = $db->numRows($selectrs);
         //取得分頁連結
         $func_str="ebook.php?func=eb_detail&ebc_parent=".$this->parent;
-        //分頁且重新組合包含limit的sql語法
-        $sql=$this->pagination($this->op_limit2,$this->jp_limit2,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+        $page=$this->pagination($this->op_limit2,$this->jp_limit2,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         //EBOOK列表------------------------
         $tpl->assignGlobal("VALUE_PAGES_HOME", "ebook.php?func=eb_list&ebc_parent=" . $this->parent);
         $j=0;
         $k=$page["start_serial"];
-        while($row = $db->fetch_array($selectrs,1)) {
-            $j++;
-            $k++;
+        if($rsnum){
             $tpl->newBlock("SHOW_STYLE_EB1");
-            $tpl->assignGlobal(array(
-                "VALUE_EB_BIG_IMG" =>(trim($row["eb_big_img"])=="")?$cms_cfg['default_ebook_pic']:$cms_cfg["file_root"].$row["eb_big_img"],
-                "VALUE_EB_ID"      =>$row["eb_id"]
-            ));
-            $tpl->assignGlobal("TAG_MAIN_FUNC", $row["eb_name"]);
-            $func_str="ebook.php?func=eb_list";
-            $ebook_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_ebook_cate","ebc_name","ebc",$row["ebc_id"],$func_str,1);
-            if(!empty($ebook_cate_layer)){
-                $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link.$cms_cfg['path_separator'].implode($cms_cfg['path_separator'],$ebook_cate_layer).$cms_cfg['path_separator'].$row["eb_name"]);
+            while($row = $db->fetch_array($selectrs,1)) {
+                $j++;
+                $k++;
+                    $tpl->newBlock("EB_LIST");
+                    $img = (trim($row["eb_big_img"])=="")?$cms_cfg['default_ebook_pic']:$cms_cfg["file_root"].$row["eb_big_img"];
+                    $tpl->assign(array(
+                        "VALUE_EB_BIG_IMG" => $img,
+                        "VALUE_EB_ID"      => $row["eb_id"]
+                ));
+                if($j==$_GET['nowp']){
+                    $tpl->newBlock("SHOW_IMG");
+                    $tpl->assign(array(
+                        "VALUE_EB_BIG_IMG" => $img
+                    ));
+                    $tpl->assign("_ROOT.VALUE_EB_ID",$row['eb_id']);
+                    $tpl->assignGlobal("TAG_MAIN_FUNC", $row["eb_name"]);
+                    $func_str="ebook.php?func=eb_list";
+                    $ebook_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_ebook_cate","ebc_name","ebc",$row["ebc_id"],$func_str,1);
+                    if(!empty($ebook_cate_layer)){
+                        $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link.$cms_cfg['path_separator'].implode($cms_cfg['path_separator'],$ebook_cate_layer).$cms_cfg['path_separator'].$row["eb_name"]);
+                    }
+                }
             }
         }
-    }
+        if($j!=0){
+            $tpl->assignGlobal( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
+                    "VALUE_TOTAL_PAGES"  => $page["total_pages"],
+                    "VALUE_PAGES_STR"  => $page["pages_str"],
+                    "VALUE_PAGES_LIMIT"=>$this->op_limit2
+            ));
+            if($page["bj_page"]){
+                $tpl->newBlock( "PAGE_BACK_SHOW" );
+                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
+            }
+            if($page["nj_page"]){
+                $tpl->newBlock( "PAGE_NEXT_SHOW" );
+                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
+            }
+        }
+    }    
     //顯示EBOOK分類的左方menu
     function left_fix_cate_list(){
         global $tpl,$db,$main,$cms_cfg;
