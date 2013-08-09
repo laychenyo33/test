@@ -4,11 +4,12 @@ include_once("libs/libs-sysconfig.php");
 $sitemap = new SITEMAP;
 class SITEMAP{
     function SITEMAP(){
-        global $db,$cms_cfg,$tpl;
+        global $db,$cms_cfg,$tpl,$main;
         //等級大於10啟動seo
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->ws_load_tp("templates/ws-sitemap-tpl.html");
         $this->sitemap_list();
+        $main->layer_link();
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -22,13 +23,13 @@ class SITEMAP{
         $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板   
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["SITEMAP"]);
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["SITEMAP"]);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["sitemap"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["sitemap"]);//左方menu title
         $tpl->assignGlobal( "TAG_SITEMAP_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["sitemap"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_IMG" , $ws_array["main_img"]["sitemap"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-sitemap"); //主要顯示區域的css設定
+        $main->layer_link($TPLMSG["SITEMAP"]);
         $main->header_footer("sitemap", $TPLMSG["SITEMAP"]);
         $main->left_fix_cate_list(); //顯示產品分類
         $main->google_code(); //google analystics code , google sitemap code
