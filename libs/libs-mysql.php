@@ -249,6 +249,12 @@ class DB {
   function quote($str){
       return mysql_real_escape_string($str);
   }
+  function batch_quote(array $arr){
+      foreach($arr as $k => $v){
+          $arr[$k] = "'".mysql_real_escape_string($v)."'";
+      }
+      return $arr;
+  }
 } // end of class
 
 ?>
