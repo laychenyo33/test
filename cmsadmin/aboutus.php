@@ -268,7 +268,7 @@ class ABOUTUS{
                         au_sort='".$_REQUEST["au_sort"]."',
                         au_cate='".$au_cate."',
                         au_subject='".$_REQUEST["au_subject"]."',
-                        au_content='".$main->content_file_str_replace($_REQUEST["au_content"])."',
+                        au_content='".$db->quote($main->content_file_str_replace($_REQUEST["au_content"]))."',
                         ".$update_str."
                         au_modifydate='".date("Y-m-d H:i:s")."'
                     where au_id='".$_REQUEST["au_id"]."'";
