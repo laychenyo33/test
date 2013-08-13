@@ -1268,7 +1268,7 @@ class MAINFUNC{
             //撈取下拉式功能表項目
             ////關於我們 & SHOWROOM
             if(in_array('aboutus',$sw)){
-                $sql = "select * from ".$cms_cfg['tb_prefix']."_aboutus where au_cate='aboutus' order by au_cate,au_sort ".$cms_cfg['sort_pos'];
+                $sql = "select * from ".$cms_cfg['tb_prefix']."_aboutus where au_status='1' order by au_cate,au_sort ".$cms_cfg['sort_pos'];
                 $res = $db->query($sql);
                 $had_au_cate = array();
                 while($row=$db->fetch_array($res,1)){
@@ -1331,7 +1331,7 @@ class MAINFUNC{
                 if($db->numRows($res)){
                     $menu_arr['news']=array();
                     while($row=$db->fetch_array($res,1)){
-                        $menu_arr['news'] = array(
+                        $menu_arr['news'][] = array(
                             "name" => $row['nc_subject'],
                             "link" => $cms_cfg['base_root']."news/".$row['nc_seo_filename'].".htm",
                         );
