@@ -219,7 +219,7 @@ class NEWS{
             $cate_link = $this->get_link($row);
             //顯示左方分類
             $tpl->newBlock( "LEFT_CATE_LIST" );
-            if($cur_nc_id == $row["nc_id"] ||  $_REQUEST["nc_id"]==$row["nc_id"] || ($_REQUEST["f"]==$row["nc_seo_filename"])){
+            if($cur_nc_id == $row["nc_id"] ||  $_REQUEST["nc_id"]==$row["nc_id"] || ($this->ws_seo && $_REQUEST["f"]==$row["nc_seo_filename"])){
                 $currentRow=$row;
                 $current_class = "class='current'";
             }else{
