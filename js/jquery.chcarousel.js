@@ -20,7 +20,6 @@
             var gid=((nums-(_options.nums+1))<0)?0:nums-(_options.nums+1);
             var p=Math.ceil(nums/_options.nums);
             var curp=1;
-            console.log("lid:"+lid+";gid:"+gid+":gow:"+gow);
             //本身容器設定寬度及加上position:relative
             $(target).width(sw*_options.nums).css({position:'relative',overflow:'hidden'});
             //加上容器
