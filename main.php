@@ -37,7 +37,7 @@ class MAINDEFAULT{
         $main->header_footer("");
         $main->google_code(); //google analystics code , google sitemap code
         $main->login_zone();
-        $main->left_fix_cate_list();
+//        $main->left_fix_cate_list();
         $this->nivo_slider();
         /*
         //取得目前的 cart type
