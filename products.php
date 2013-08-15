@@ -306,7 +306,7 @@ class PRODUCTS{
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
-            $showNoData = ($i==0 && $total_records==0);
+            $showNoData = ($i==0 && $total_records==0 && !$custom);
             //取得分頁連結並重新組合包含limit的sql語法
             if($mode==""){
                 if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
