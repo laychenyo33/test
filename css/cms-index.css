@@ -578,6 +578,8 @@ h2 {
 	padding-top: 4px;
 	padding-right: 8px;
 }
+#news_files td{border-top:dotted 1px;padding:10px 5px 5px 5px}
+#news_files a{display:block}
 /* download */
 .download_table {
 	font-size: 12px;

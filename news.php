@@ -178,6 +178,19 @@ class NEWS{
         ));
         //指定TAG_LAYER
         $main->layer_link($cate_row['nc_subject'],$this->get_link($cate_row))->layer_link($row["n_subject"]);
+        //附檔
+        if($cms_cfg['ws_module']['ws_news_upfiles']){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_news_files where n_id='".$row['n_id']."'";
+            $res = $db->query($sql,true);
+            if($db->numRows($res)){
+                $tpl->newBlock("ATTACH_BLOCK");
+                while($nf = $db->fetch_array($res,1)){
+                    $tpl->newBlock("NEWS_FILE_LIST");
+                    $tpl->assign("TAG_LINK",$cms_cfg['file_root'].$nf['n_file']);
+                    $tpl->assign("TAG_NAME",basename($nf['n_file']));
+                }
+            }        
+        }
     }
     
     /*由$row取得該筆記錄的url

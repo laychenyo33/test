@@ -93,6 +93,17 @@
                 <img src="images/icon_004.gif" width="9" height="7"> 必需輸入包含 http:// 的完整網址
             </td>
         </tr>
+        <!-- START BLOCK : NEWS_UPFILES_BLOCK -->
+        <tr>
+            <th>&nbsp;</th>
+            <td>
+                <!-- START BLOCK : UPLOAD_NEWS_FILE -->
+                <a href="news.php?func=n_file&n_id={VALUE_N_ID}" rel="dialog">上傳檔案</a>
+                <!-- END BLOCK : UPLOAD_NEWS_FILE -->
+                <div style="color:#f00;{TAG_STYLE_HIDDEN}">上傳檔案需先儲存記錄才可使用</div>
+            </td>
+        </tr>
+        <!-- END BLOCK : NEWS_UPFILES_BLOCK -->
       <!-- START BLOCK : SEO_EDIT_ZONE -->
       <tr>
         <th colspan="2">SEO 設定區域</th>
@@ -144,5 +155,23 @@
     <input name="jp" type="hidden" id="jp" value="{VALUE_JUMP_PAGE}">
 </form>
 </div>
+<div id="dialog" title="上傳附檔" style="display:none"><iframe id="nfwin" style="border:none;width:430px;height:300px;overflow:auto" ></iframe></div>
+<script type="text/javascript">
+    jQuery(function($){
+       $(document).ready(function(){
+          var nfwin = $("#nfwin");
+          $("#dialog").dialog({
+             autoOpen:false,
+             width:460,
+             height:400
+          });
+          $("a[rel=dialog]").click(function(e){
+              e.preventDefault();
+              nfwin.attr('src',$(this).attr('href'));
+              $("#dialog").dialog("open");
+          });
+       });
+    });
+</script>
 
 <!-- INCLUDE BLOCK : FOOTER -->

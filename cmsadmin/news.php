@@ -14,6 +14,13 @@ class NEWS{
         global $db,$cms_cfg,$tpl;
         $this->seo=($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
+            case "ajax":
+                if(method_exists($this, "ajax_".$_GET['act'])){
+                    $method = "ajax_".$_GET['act'];
+                    $this->$method();
+                }    
+                $this->ws_tpl_type=0;
+                break;
             case "nc_list"://最新消息分類列表
                 $this->current_class="NC";
                 $this->ws_tpl_file = "templates/ws-manage-news-cate-list-tpl.html";
@@ -53,6 +60,9 @@ class NEWS{
                 $this->news_cate_del();
                 $this->ws_tpl_type=1;
                 break;
+            case "n_file":
+                $this->news_files();
+                break;             
             case "n_list"://最新消息列表
                 $this->current_class="N";
                 $this->ws_tpl_file = "templates/ws-manage-news-list-tpl.html";
@@ -83,6 +93,7 @@ class NEWS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_CALENDAR");
                 $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->news_form("mod");
                 $this->ws_tpl_type=1;
                 break;
@@ -470,6 +481,10 @@ class NEWS{
 
             ));
         }
+        //如果有開啟上傳附檔
+        if($cms_cfg['ws_module']['ws_news_upfiles']){
+            $tpl->newBlock("NEWS_UPFILES_BLOCK");
+        }        
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["n_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_news where n_id='".$_REQUEST["n_id"]."'";
@@ -510,8 +525,12 @@ class NEWS{
                                               "VALUE_N_SEO_H1" => $row["n_seo_h1"],
                     ));
                 }
+                //顯示上傳檔案按鈕
+                $tpl->newBlock("UPLOAD_NEWS_FILE");
+                $tpl->assignGlobal("TAG_STYLE_HIDDEN","display:none;");
             }else{
                 header("location : news.php?func=n_list");
+                die();
             }
         }
         //最新消息分類
@@ -525,11 +544,11 @@ class NEWS{
                                  "STR_NC_SEL"       => ($row1["nc_id"]==$row["nc_id"] || $row1["nc_id"]==$_REQUEST["nc_id"])?"selected":""
             ));
         }
-		if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
+        if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("TINYMCE_JS");
-			$tpl->newBlock("WYSIWYG_TINYMCE1");
+            $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_N_CONTENT" , $row["n_content"] );
-		}
+        }
     }
 //最新消息--資料更新================================================================
     function news_replace(){
@@ -841,6 +860,81 @@ class NEWS{
             case "sort":
                 $this->change_sort($_REQUEST["ws_table"]);
                 break;
+        }
+    }
+    function news_files(){
+        global $tpl,$db,$cms_cfg,$main;
+        if($_POST && $_GET['act']=="save"){
+            //新檔案
+            if($_POST['new_n_file']){
+                $sql = "insert into ".$cms_cfg['tb_prefix']."_news_files(n_id,n_file)values('".$db->quote($_POST['n_id'])."','".$db->quote($main->file_str_replace($_POST['new_n_file']))."')";
+                $res0 = $db->query($sql,true);
+}
+            //修改檔案
+            if($_POST['n_file']){
+                foreach($_POST['n_file'] as $nfid => $file){
+                    $sql = "update ".$cms_cfg['tb_prefix']."_news_files set n_file='".$db->quote($main->file_str_replace($file))."' where id='".$db->quote($nfid)."'";
+                    $db->query($sql,true);
+                }
+            }
+            $this->ws_tpl_type=0;
+            header("location: news.php?func=n_file&n_id=".$_POST['n_id']);
+            die();
+        }else{
+            $template = "templates/ws-manage-news-file-tpl.html";
+            $tpl = new TemplatePower($template);
+            $tpl->prepare();
+            $tpl->newBlock("JS_MAIN");
+            $tpl->newBlock("JS_PREVIEWS_PIC");
+            $tpl->newBlock("JS_FORMVALID");
+            $tpl->newBlock("JS_CALENDAR");
+            $tpl->newBlock("JS_TINYMCE");        
+            $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
+            $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);        
+            $tpl->assign("_ROOT.VALUE_N_ID",$_GET['n_id']);
+            $this->ws_tpl_type=1;
+            //顯示原有檔案列表
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_news_files where n_id='".$_GET['n_id']."'";
+            $res = $db->query($sql,true);
+            while($row = $db->fetch_array($res,1)){
+                $tpl->newBlock("NEWS_FILES_LIST");
+                $tpl->assign(array(
+                    "VALUE_N_FILE" => $row['n_file'],
+                    "VALUE_NF_ID"  => $row['id'],
+                ));
+            }
+            //新增檔案
+            filefield::setValues(array(
+                "TAG_FILE_FIELD_NAME"    => "new_n_file",
+                "TAG_FILE_FIELD_ID"      => "new_n_file",
+            ));
+            $tpl->assign("_ROOT.TAG_FILE_FIELD",filefield::get_html());        
+        }
+    }
+    function ajax_get_news_file(){
+        global $db,$cms_cfg;
+        if($_GET['nf_id']){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_news_files where id='".$_GET['nf_id']."'";
+            $file = $db->query_firstRow($sql);
+            if($file){
+                //新增檔案
+                filefield::setValues(array(
+                    "TAG_FILE_FIELD_NAME"    => "n_file[".$_GET['nf_id']."]",
+                    "TAG_FILE_FIELD_ID"      => "n_file_".$_GET['nf_id'],
+                    "TAG_FILE_FIELD_VALUE"   => $file['n_file'],
+                ));
+                echo filefield::get_html();  
+            }
+        }
+    }
+    function ajax_del_news_file(){
+        global $db,$cms_cfg;
+        if($_GET['nf_id']){
+            $sql = "delete from ".$cms_cfg['tb_prefix']."_news_files where id='".$_GET['nf_id']."'";
+            $res = $db->query($sql,true);
+            if($db->report()==""){
+                echo 1;
+            }
         }
     }
 }
