@@ -137,8 +137,13 @@ class EBOOK{
         $k  = $start_serial;
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $n= $k+1;
-            $eb_link=$cms_cfg["base_root"]."ebook.php?func=eb_detail&ebc_parent=".$row["ebc_id"]."&eb_id=".$row["eb_id"]."&nowp=".$n."&jp=".$k;
             $tpl->newBlock( $show_style_str_eb );
+            if($row['eb_link']){
+                $eb_link=$row['eb_link'];
+                $tpl->assign("TAG_TARGET_BLANK","target=\"_blank\"");
+            }else{
+            $eb_link=$cms_cfg["base_root"]."ebook.php?func=eb_detail&ebc_parent=".$row["ebc_id"]."&eb_id=".$row["eb_id"]."&nowp=".$n."&jp=".$k;
+            }
             $tpl->assign( array(
                 "VALUE_EB_NAME" => $row["eb_name"],
                 "VALUE_EB_LINK" => $eb_link,
