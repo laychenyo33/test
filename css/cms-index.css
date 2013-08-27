@@ -1194,5 +1194,6 @@ h2 {
 .dtype{color:#f00}
 
 /*gallery*/
-.gallery_list{float:left;width:199px;height:126px;margin:10px 7px;padding:2px;border:2px solid #aac6db}
-.gallery_list .wraper{width:199px;height:126px;display:table-cell;text-align: center;vertical-align: middle;}
+.gallery_list{float:left;width:199px;margin:10px 4px;padding:2px;border:2px solid #aac6db}
+.gallery_list_pic{width:199px;height:126px;display:table-cell;text-align: center;vertical-align: middle;}
+.gallery_title{text-align:center;padding:2px 0}

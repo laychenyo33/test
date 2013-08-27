@@ -1,18 +1,9 @@
-  <table width="90%" border="0" align="left" cellpadding="0" cellspacing="0">
-  <tr>
     <!-- START BLOCK : GALLERY_LIST -->
-    <td width="33%" align="center" valign="top" style="padding-bottom:20px">
-    <table width="1%" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td><a href="{VALUE_G_LINK}" target="{VALUE_G_TARGET}"><img src="{VALUE_G_S_PIC}" alt="" width="{VALUE_G_S_PIC_W}" height="{VALUE_G_S_PIC_H}" class="board-2" /></a></td>
-      </tr>
-      <tr>
-        <td>{VALUE_G_SUBJECT}</td>
-      </tr>
-    </table>
-    </td>
-    {TAG_TR}
+    <div class="gallery_list">
+        <div class="gallery_list_pic">
+               <a href="{VALUE_G_LINK}" target="{VALUE_G_TARGET}"><img src="{VALUE_G_S_PIC}" alt="" width="{VALUE_G_S_PIC_W}" height="{VALUE_G_S_PIC_H}" class="board-2" /></a> 
+        </div>
+        <div class="gallery_title">{VALUE_G_SUBJECT}</div>
+    </div>
     <!-- END BLOCK : GALLERY_LIST --> 
-  </tr>
-</table>
 <!-- INCLUDE BLOCK : ./templates/ws-fn-pagination-tpl.html -->
