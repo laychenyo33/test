@@ -161,7 +161,8 @@ class METATITLE{
     }
     //資料更新
     function meta_title_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $main->magic_gpc($_REQUEST);
         //關於我們seo欄位更新
         if($cms_cfg["ws_module"]["ws_aboutus"]==1){
             $sql="
@@ -169,7 +170,7 @@ class METATITLE{
                     mt_seo_title='".htmlspecialchars($_REQUEST["au_seo_title"])."',
                     mt_seo_keyword='".htmlspecialchars($_REQUEST["au_seo_keyword"])."',
                     mt_seo_description='".htmlspecialchars($_REQUEST["au_seo_description"])."',
-                    mt_seo_short_desc='".htmlspecialchars($_REQUEST["au_seo_short_desc"])."',
+                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["au_seo_short_desc"]))."',
                     mt_seo_h1='".htmlspecialchars($_REQUEST["au_seo_h1"])."'
                 where mt_name='aboutus'";
             $rs = $db->query($sql);
@@ -193,7 +194,7 @@ class METATITLE{
                     mt_seo_title='".htmlspecialchars($_REQUEST["cu_seo_title"])."',
                     mt_seo_keyword='".htmlspecialchars($_REQUEST["cu_seo_keyword"])."',
                     mt_seo_description='".htmlspecialchars($_REQUEST["cu_seo_description"])."',
-                    mt_seo_short_desc='".htmlspecialchars($_REQUEST["cu_seo_short_desc"])."',
+                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["cu_seo_short_desc"]))."',
                     mt_seo_h1='".htmlspecialchars($_REQUEST["cu_seo_h1"])."'
                 where mt_name='contactus'";
             $rs = $db->query($sql);
@@ -241,9 +242,9 @@ class METATITLE{
                     mt_seo_title='".htmlspecialchars($_REQUEST["p_seo_title"])."',
                     mt_seo_keyword='".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
                     mt_seo_description='".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                    mt_seo_short_desc='".$_REQUEST["p_seo_short_desc"]."',
+                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
                     mt_seo_h1='".htmlspecialchars($_REQUEST["p_seo_h1"])."',
-                    mt_seo_custom='".$_REQUEST["p_mt_seo_custom"]."'
+                    mt_seo_custom='".$db->quote($main->content_file_str_replace($_REQUEST["p_mt_seo_custom"]))."'
                 where mt_name='products'";
             $rs = $db->query($sql);
         }
@@ -266,7 +267,7 @@ class METATITLE{
                 mt_seo_title='".htmlspecialchars($_REQUEST["s_seo_title"])."',
                 mt_seo_keyword='".htmlspecialchars($_REQUEST["s_seo_keyword"])."',
                 mt_seo_description='".htmlspecialchars($_REQUEST["s_seo_description"])."',
-                mt_seo_short_desc='".htmlspecialchars($_REQUEST["s_seo_short_desc"])."',
+                mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["s_seo_short_desc"]))."',
                 mt_seo_h1='".htmlspecialchars($_REQUEST["s_seo_h1"])."'
             where mt_name='sitemap'";
         $rs = $db->query($sql);
