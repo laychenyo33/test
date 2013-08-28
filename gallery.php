@@ -167,7 +167,7 @@ class GALLERY{
     function get_link($row,$item=false){
         if($item){
             if($this->ws_seo){
-                $link = $cms_cfg["base_root"]."gallery-gdetail-".$row["gc_id"]."-".$row["g_id"].".html";
+                $link = $cms_cfg["base_root"]."gallery/gdetail-".$row["gc_id"]."-".$row["g_id"].".html";
             }else{
                 $link = $cms_cfg['base_root']."gallery.php?func=g_show&gc_id=".$row["gc_id"]."&g_id=".$row["g_id"];
             }
