@@ -436,22 +436,22 @@ class GALLERY{
                                           "VALUE_PIC_PREVIEW" => (trim($row["g_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["base_root"].$row["g_s_pic"],
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
-                for($j=1;$j<=$cms_cfg['gallery_img_limit'];$j++){	//新增時載入大圖區域及預設值
-                    //大圖區域TAB
-                    $tpl->newBlock("GALLERY_BIG_IMG_TAB");
-                    $tpl->assign("BIG_IMG_NO",$j);
-                    $tpl->newBlock("GALLERY_BIG_IMG");
-                    $tpl->assign( array(
-                        "VALUE_BIG_PIC_PREVIEW" => (trim($row["g_b_pic".$j])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic".$j],
-                        "VALUE_BIG_PIC" => (trim($row["g_b_pic".$j])=="")?"":$cms_cfg["file_root"].$row["g_b_pic".$j],
-                        "BIG_IMG_NO" =>$j,
-                    ));
-                }                
             }else{
                 header("location : gallery.php?func=g_list");
                 die();
             }
         }
+        for($j=1;$j<=$cms_cfg['gallery_img_limit'];$j++){	//新增時載入大圖區域及預設值
+            //大圖區域TAB
+            $tpl->newBlock("GALLERY_BIG_IMG_TAB");
+            $tpl->assign("BIG_IMG_NO",$j);
+            $tpl->newBlock("GALLERY_BIG_IMG");
+            $tpl->assign( array(
+                "VALUE_BIG_PIC_PREVIEW" => (trim($row["g_b_pic".$j])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["g_b_pic".$j],
+                "VALUE_BIG_PIC" => (trim($row["g_b_pic".$j])=="")?"":$cms_cfg["file_root"].$row["g_b_pic".$j],
+                "BIG_IMG_NO" =>$j,
+            ));
+        }                
         //Gallery分類
         $sql="select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_id > '0'";
         $selectrs = $db->query($sql);
