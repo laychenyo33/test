@@ -919,7 +919,7 @@ class MEMBER{
                     while($csv = $main->fgetcsv($res)){
                         if($i>0 && in_array($i,$_POST['row_id'])){
                             $columns = array('mc_id','m_status','m_sort','m_modifydate');
-                            $values = array($_POST['mc_id'],'1',$sort++,date("Y-m-d"));
+                            $values = array($_POST['mc_id'],'1',$sort++,"'".date("Y-m-d")."'");
                             $conflic = false;
                             $update = false;
                             foreach($_POST['mapto'] as $idx => $col){
@@ -1022,7 +1022,7 @@ class MEMBER{
                 array_walk($wanted_column,array($this,"_format_csv_title"),$this->columns);
                 $this->_format_csv_line($wanted_column);
                 //取得欲匯出的會員類別
-                $sql = "select m.* from ".$cms_cfg['tb_prefix']."_member as m inner join ".$cms_cfg['tb_prefix']."_member_cate as mc on m.mc_id=mc.mc_id where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
+                $sql = "select m.* from ".$cms_cfg['tb_prefix']."_member as m inner join ".$cms_cfg['tb_prefix']."_member_cate as mc on find_in_set(mc.mc_id,m.mc_id) where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
                 $res = $db->query($sql);
                 while($row = $db->fetch_array($res,1)){
                     $wanted_column = array();
@@ -1202,6 +1202,20 @@ class MEMBER{
         }
         if(!empty($m_id_arr))return $m_id_arr;
     }    
+    function mc_id_nums($mc_id){
+        global $db,$cms_cfg;
+        if($mc_id=='0'){
+            $mid = $this->get_uncated_mid(); //取得未分類的m_id
+            if($mid){
+                $and_str = " m_id in(".implode(",",$mid).") ";  
+            }
+        }else{
+            $and_str = " find_in_set('".$mc_id."',mc_id) >0 ";                
+        }        
+        $sql = "select count(*) as nums from ".$cms_cfg['tb_prefix']."_member where ". $and_str;
+        list($nums) = $db->query_firstrow($sql,false);
+        return $nums;
+    }      
 }
 //ob_end_flush();
 ?>
