@@ -558,6 +558,7 @@ class MAINFUNC{
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_faq"] && $cms_cfg["ws_module"]["ws_faq"])?$tpl->newBlock( "AUTHORITY_FAQ" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_forum"] && $cms_cfg["ws_module"]["ws_forum"])?$tpl->newBlock( "AUTHORITY_FORUM" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_gallery"] && $cms_cfg["ws_module"]["ws_gallery"])?$tpl->newBlock( "AUTHORITY_GALLERY" ):"";
+        if(!$cms_cfg['ws_module']['ws_gallery_scan_dir'])$tpl->newBlock("GALLERY_ITEM"); //非批次上傳圖片才顯示活動花絮項目管理
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_goodlink"] && $cms_cfg["ws_module"]["ws_goodlink"])?$tpl->newBlock( "AUTHORITY_GOODLINK" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_guestbook"] && $cms_cfg["ws_module"]["ws_guestbook"])?$tpl->newBlock( "AUTHORITY_GUESTBOOK" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_inquiry"] && $cms_cfg["ws_module"]["ws_inquiry"])?$tpl->newBlock( "AUTHORITY_INQUIRY" ):"";
