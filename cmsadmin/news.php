@@ -867,13 +867,13 @@ class NEWS{
         if($_POST && $_GET['act']=="save"){
             //新檔案
             if($_POST['new_n_file']){
-                $sql = "insert into ".$cms_cfg['tb_prefix']."_news_files(n_id,n_file)values('".$db->quote($_POST['n_id'])."','".$db->quote($main->file_str_replace($_POST['new_n_file']))."')";
+                $sql = "insert into ".$cms_cfg['tb_prefix']."_news_files(n_id,n_file,nf_desc)values('".$db->quote($_POST['n_id'])."','".$db->quote($main->file_str_replace($_POST['new_n_file']))."','".$db->quote($_POST['new_nf_desc'])."')";
                 $res0 = $db->query($sql,true);
 }
             //修改檔案
             if($_POST['n_file']){
                 foreach($_POST['n_file'] as $nfid => $file){
-                    $sql = "update ".$cms_cfg['tb_prefix']."_news_files set n_file='".$db->quote($main->file_str_replace($file))."' where id='".$db->quote($nfid)."'";
+                    $sql = "update ".$cms_cfg['tb_prefix']."_news_files set n_file='".$db->quote($main->file_str_replace($file))."',nf_desc='".$db->quote($_POST['nf_desc'][$nfid])."' where id='".$db->quote($nfid)."'";
                     $db->query($sql,true);
                 }
             }
@@ -900,6 +900,7 @@ class NEWS{
                 $tpl->newBlock("NEWS_FILES_LIST");
                 $tpl->assign(array(
                     "VALUE_N_FILE" => $row['n_file'],
+                    "VALUE_NF_DESC" => $row['nf_desc'],
                     "VALUE_NF_ID"  => $row['id'],
                 ));
             }
@@ -919,11 +920,12 @@ class NEWS{
             if($file){
                 //新增檔案
                 filefield::setValues(array(
-                    "TAG_FILE_FIELD_NAME"    => "n_file[".$_GET['nf_id']."]",
-                    "TAG_FILE_FIELD_ID"      => "n_file_".$_GET['nf_id'],
+                    "TAG_FILE_FIELD_NAME"    => "n_file[".$file['id']."]",
+                    "TAG_FILE_FIELD_ID"      => "n_file_".$file['id'],
                     "TAG_FILE_FIELD_VALUE"   => $file['n_file'],
                 ));
                 echo filefield::get_html();  
+                echo "<div>說明:<input type=\"text\" name=\"nf_desc[".$file['id']."]\" value=\"".$file['nf_desc']."\"/></div>";
             }
         }
     }

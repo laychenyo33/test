@@ -187,9 +187,9 @@ class NEWS{
                 while($nf = $db->fetch_array($res,1)){
                     $tpl->newBlock("NEWS_FILE_LIST");
                     $tpl->assign("TAG_LINK",$cms_cfg['file_root'].$nf['n_file']);
-                    $tpl->assign("TAG_NAME",basename($nf['n_file']));
+                    $tpl->assign("TAG_NAME",($nf['nf_desc'])?$nf['nf_desc']:basename($nf['n_file']));
                 }
-            }        
+            }      
         }
     }
     
