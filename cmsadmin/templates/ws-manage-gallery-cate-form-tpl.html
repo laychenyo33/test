@@ -21,6 +21,21 @@
                 <input name="gc_sort" type="text" id="gc_sort" class="validate[custom[onlyNumber]]"  value="{VALUE_GC_SORT}" size="4" maxlength="4"></td>
         </tr>
         <tr>
+            <th>說明:</th>
+            <td>
+                <textarea name="gc_desc" type="text" id="elm1" >{VALUE_GC_DESC}</textarea>
+            </td>
+        </tr>
+        <!-- START BLOCK : SETTING_DIR_ZONE -->
+        <tr>
+            <th>設定資料夾:</th>
+            <td>
+                <input name="gc_dir" type="text" id="gc_dir" class="validate[required]"  value="{VALUE_GC_DIR}" size="40" /><br/>
+                請指定此分類所屬圖片存放的資料夾，例如，upload_files/gallery
+            </td>
+        </tr>
+        <!-- END BLOCK : SETTING_DIR_ZONE -->
+        <tr>
             <th>&nbsp;</th>
             <td>
                 <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" /></td>

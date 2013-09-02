@@ -28,6 +28,7 @@ class GALLERY{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_TINYMCE");
                 $this->gallery_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -37,6 +38,7 @@ class GALLERY{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_TINYMCE");
                 $this->gallery_cate_form("mod");
                 $this->ws_tpl_type=1;
                 break;
@@ -201,29 +203,39 @@ class GALLERY{
                                           "VALUE_GC_STATUS"  => $row["gc_status"],
                                           "VALUE_GC_SORT"  => $row["gc_sort"],
                                           "VALUE_GC_SUBJECT" => $row["gc_subject"],
+                                          "VALUE_GC_DESC" => $row["gc_desc"],
+                                          "VALUE_GC_DIR" => $row["gc_dir"],
                                           "STR_GC_STATUS_CK1" => ($row["gc_status"])?"checked":"",
                                           "STR_GC_STATUS_CK0" => ($row["gc_status"])?"":"checked",
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
                 header("location : gallery.php?func=gc_list");
+                die();
             }
         }
+        if($cms_cfg['ws_module']['ws_gallery_scan_dir']){
+            $tpl->newBlock("SETTING_DIR_ZONE");
+    }
     }
     //Gallery分類--資料更新
     function gallery_cate_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_gallery_cate (
                         gc_status,
                         gc_sort,
-                        gc_subject
+                        gc_subject,
+                        gc_desc,
+                        gc_dir
                     ) values (
                         ".$_REQUEST["gc_status"].",
                         '".$_REQUEST["gc_sort"]."',
-                        '".htmlspecialchars($_REQUEST["gc_subject"])."'
+                        '".htmlspecialchars($_REQUEST["gc_subject"])."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"]))."',
+                        '".$main->file_str_replace($_REQUEST["gc_dir"])."'
                     )";
                 break;
             case "mod":
@@ -231,7 +243,9 @@ class GALLERY{
                     update ".$cms_cfg['tb_prefix']."_gallery_cate set
                         gc_status=".$_REQUEST["gc_status"].",
                         gc_sort='".$_REQUEST["gc_sort"]."',
-                        gc_subject='".htmlspecialchars($_REQUEST["gc_subject"])."'
+                        gc_subject='".htmlspecialchars($_REQUEST["gc_subject"])."',
+                        gc_desc='".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"]))."',
+                        gc_dir='".$main->file_str_replace($_REQUEST["gc_dir"])."'
                     where gc_id='".$_REQUEST["gc_id"]."'";
                 break;
         }

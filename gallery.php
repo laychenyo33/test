@@ -9,11 +9,12 @@ class GALLERY{
         $this->jp_limit=$cms_cfg['jp_limit'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->ps = $cms_cfg['path_separator'];
+        $list_method = ($cms_cfg['ws_module']['ws_gallery_scan_dir'])?"galler_dir_list":"gallery_list";
         switch($_REQUEST["func"]){
             case "g_list"://活動剪影列表
                 $this->ws_tpl_file = "templates/ws-gallery-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
-                $this->gallery_list();
+                $this->{$list_method}();
                 //page view record --ph_type,ph_type_id,m_id
                 $main->pageview_history("gc",$_REQUEST["gc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
@@ -30,7 +31,7 @@ class GALLERY{
             default:    //活動剪影列表
                 $this->ws_tpl_file = "templates/ws-gallery-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
-                $this->gallery_list();
+                $this->{$list_method}();
                 //page view record --ph_type,ph_type_id,m_id
                 $main->pageview_history("gc",$_REQUEST["gc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
@@ -155,11 +156,17 @@ class GALLERY{
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
             $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["gc_subject"],
-                                 "VALUE_CATE_LINK"  => $this->get_link($row),
+            $tpl->assign( array( "VALUE_CATE_NAME"   => $row["gc_subject"],
+                                 "VALUE_CATE_LINK"   => $this->get_link($row),
+                                 "TAG_CURRENT_CLASS" => "",
             ));
             if($_REQUEST["gc_id"]==$row["gc_id"]){
+                $tpl->assign("TAG_CURRENT_CLASS" ,"class='current'");
+                if($_GET['g_id']){
                 $main->layer_link($row["gc_subject"],$this->get_link($row));
+                }else{
+                    $main->layer_link($row["gc_subject"]);
+                }
                 $main->header_footer("",$row["gc_subject"]);
             }
         }        
@@ -179,6 +186,66 @@ class GALLERY{
             }        
         }
         return $link;
+    }
+    function galler_dir_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        if($_GET['gc_id']){
+            $and_str = " and gc_id='".$db->quote($_GET['gc_id'])."'";
+            $method = "dirshow";
+            $tpl->newBlock("JS_POP_IMG");
+            $tpl->newBlock("JS_LAZYLOAD");
+        }else{
+            $method = "dirlist";
+}
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' ".$and_str." order by gc_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql,true);
+        while($row = $db->fetch_array($res,1)){
+            $this->{$method}($row);
+        }
+    }
+    function dirlist($cate){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
+        if(is_dir($dir)){
+            $pattern = $dir . "/*.{jpg,jpeg,png}";
+            $imgs = glob($pattern,GLOB_BRACE);
+            $thumb = $main->file_str_replace($imgs[0]);
+            $tpl->newBlock( "GALLERY_CATE_LIST" );
+            $simg = $cms_cfg['file_root'].$thumb;
+            $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+            $tpl->assign( array(
+                "VALUE_GC_SUBJECT" => $cate['gc_subject'],
+                "VALUE_GC_LINK" => $this->get_link($cate),
+                "VALUE_GC_S_PIC" => $simg,
+                "VALUE_GC_S_PIC_W" => $dimension['width'],
+                "VALUE_GC_S_PIC_H" => $dimension['height'],
+            ));
+        }
+        
+    }
+    function dirshow($cate){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
+        if($cate['gc_desc']){
+            $tpl->newBlock("GALLERY_CATE_DESC");
+            $tpl->assign("VALUE_GC_DESC",$main->content_file_str_replace($cate['gc_desc']));
+        }
+        if(is_dir($dir)){
+            $pattern = $dir . "/*.{jpg,jpeg,png}";
+            $imgs = glob($pattern,GLOB_BRACE);
+            foreach($imgs  as $full_path_img){
+                $thumb = $main->file_str_replace($full_path_img);
+                $tpl->newBlock( "GALLERY_BATCH_LIST" );
+                $simg = $cms_cfg['file_root'].$thumb;
+                $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+                $tpl->assign( array(
+                    "VALUE_G_LINK" => $simg,
+                    "VALUE_G_S_PIC" => $simg,
+                    "VALUE_G_S_PIC_W" => $dimension['width'],
+                    "VALUE_G_S_PIC_H" => $dimension['height'],
+                ));
+            }
+        }
     }
 }
 ?>
