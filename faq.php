@@ -75,32 +75,23 @@ class FAQ{
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
-            if($this->ws_seo==1 ){
-                if(trim($row["fc_seo_filename"])==""){
-                    $cate_link=$cms_cfg["base_root"]."faq/flist-".$row["fc_id"].".htm";
-                }else{
-                    $cate_link=$cms_cfg["base_root"]."faq/".$row["fc_seo_filename"].".htm";
-                }
-            }else{
-                $cate_link=$cms_cfg["base_root"]."faq.php?func=f_list&fc_id=".$row["fc_id"];
-            }
             //顯示左方分類
             $tpl->newBlock( "LEFT_CATE_LIST" );
             $tpl->assign( array( "VALUE_CATE_NAME" => $row["fc_subject"],
-                                 "VALUE_CATE_LINK"  => $cate_link,
+                                 "VALUE_CATE_LINK"  => $this->get_link($row),
             ));
-            if($_REQUEST["fc_id"]==$row["fc_id"] || ($_REQUEST["f"]==$row["fc_seo_filename"])){
+            if($_REQUEST["fc_id"]==$row["fc_id"] || ($_REQUEST["f"] && $_REQUEST["f"]==$row["fc_seo_filename"])){
                 $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
                 $main->layer_link($row["fc_subject"]);
                 if($this->ws_seo){
-                    $meta_array=array("meta_title"=>$row["fc_seo_title"],
-                                      "meta_keyword"=>$row["fc_seo_keyword"],
-                                      "meta_description"=>$row["fc_seo_description"],
-                                      "seo_h1"=>(trim($row["fc_seo_h1"])=="")?$row["fc_subject"]:$row["fc_seo_h1"],
+                    $meta_array=array("meta_title"       => $row["fc_seo_title"],
+                                      "meta_keyword"     => $row["fc_seo_keyword"],
+                                      "meta_description" => $row["fc_seo_description"],
+                                      "seo_h1"           => (trim($row["fc_seo_h1"])=="")?$row["fc_subject"]:$row["fc_seo_h1"],
                     );
                     if(trim($row["fc_seo_short_desc"])!=""){
                         $tpl->newBlock("FAQ_CATE_SHORT_DESC");
-                        $tpl->assign("VALUE_FC_SEO_SHORT_DESC",$row["fc_seo_short_desc"]);
+                        $tpl->assign("VALUE_FC_SEO_SHORT_DESC",$main->content_file_str_replace($row["fc_seo_short_desc"]));
                     }
                     $main->header_footer($meta_array);
                 }else{
@@ -109,7 +100,6 @@ class FAQ{
                 $fc_id=$row["fc_id"];
             }
         }
-        $tpl->assignGlobal("TAG_LAYER",$faq_link);
         //問與答列表
         if($fc_id!=0){
             $and_str="and fc_id='".$fc_id."'";
@@ -133,15 +123,28 @@ class FAQ{
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "FAQ_LIST" );
-            $row["f_content"]=preg_replace("/src=\"(.*)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["f_content"]);
-            $tpl->assign( array("VALUE_FC_ID"  => $row["fc_id"],
-                                "VALUE_F_ID"  => $row["f_id"],
-                                "VALUE_F_SUBJECT" => $row["f_subject"],
-                                "VALUE_F_CONTENT" => $row["f_content"],
+            $row["f_content"]=$main->content_file_str_replace($row["f_content"]);
+            $tpl->assign( array("VALUE_FC_ID"        => $row["fc_id"],
+                                "VALUE_F_ID"         => $row["f_id"],
+                                "VALUE_F_SUBJECT"    => $row["f_subject"],
+                                "VALUE_F_CONTENT"    => $row["f_content"],
                                 "VALUE_F_MODIFYDATE" => $row["f_modifydate"],
-                                "VALUE_F_SERIAL" => $i
+                                "VALUE_F_SERIAL"     => $i
             ));
         }
+    }
+    function get_link($row){
+        global $cms_cfg;
+        if($this->ws_seo==1 ){
+            if(trim($row["fc_seo_filename"])==""){
+                $cate_link=$cms_cfg["base_root"]."faq/flist-".$row["fc_id"].".htm";
+            }else{
+                $cate_link=$cms_cfg["base_root"]."faq/".$row["fc_seo_filename"].".htm";
+            }
+        }else{
+            $cate_link=$cms_cfg["base_root"]."faq.php?func=f_list&fc_id=".$row["fc_id"];
+        }     
+        return $cate_link;
     }
 }
 ?>
