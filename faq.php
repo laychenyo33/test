@@ -35,6 +35,7 @@ class FAQ{
                 break;
         }
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -55,6 +56,11 @@ class FAQ{
         $tpl->assignGlobal( "TAG_FAQ_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["faq"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-faq"); //主要顯示區域的css設定
+        if(empty($_GET['fc_id'])){
+            $main->layer_link($TPLMSG["FAQ"]);
+        }else{
+            $main->layer_link($TPLMSG["FAQ"],$cms_cfg["base_root"]."faq.htm");
+        }
         $main->header_footer("faq", $TPLMSG["FAQ"]);
         $main->google_code(); //google analystics code , google sitemap code
     }
@@ -63,8 +69,6 @@ class FAQ{
     function faq_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         $fc_id=0;
-        $ext=($this->ws_seo)?".htm":".php";
-        $faq_link="<a href=\"".$cms_cfg["base_root"]."faq".$ext."\">".$TPLMSG["FAQ"]."</a>";
         //問與答分類
         $sql="select * from ".$cms_cfg['tb_prefix']."_faq_cate where fc_status='1' order by fc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql);
@@ -87,7 +91,7 @@ class FAQ{
             ));
             if($_REQUEST["fc_id"]==$row["fc_id"] || ($_REQUEST["f"]==$row["fc_seo_filename"])){
                 $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
-                $faq_link .= $this->ps."<a href=\"".$cate_link."\">".$row["fc_subject"]."</a>";
+                $main->layer_link($row["fc_subject"]);
                 if($this->ws_seo){
                     $meta_array=array("meta_title"=>$row["fc_seo_title"],
                                       "meta_keyword"=>$row["fc_seo_keyword"],
