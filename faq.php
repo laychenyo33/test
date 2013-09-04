@@ -68,41 +68,10 @@ class FAQ{
 //問與答--列表================================================================
     function faq_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $fc_id=0;
-        //問與答分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_faq_cate where fc_status='1' order by fc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql);
-        $i=0;
-        while($row = $db->fetch_array($selectrs,1)){
-            $i++;
-            //顯示左方分類
-            $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME" => $row["fc_subject"],
-                                 "VALUE_CATE_LINK"  => $this->get_link($row),
-            ));
-            if($_REQUEST["fc_id"]==$row["fc_id"] || ($_REQUEST["f"] && $_REQUEST["f"]==$row["fc_seo_filename"])){
-                $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
-                $main->layer_link($row["fc_subject"]);
-                if($this->ws_seo){
-                    $meta_array=array("meta_title"       => $row["fc_seo_title"],
-                                      "meta_keyword"     => $row["fc_seo_keyword"],
-                                      "meta_description" => $row["fc_seo_description"],
-                                      "seo_h1"           => (trim($row["fc_seo_h1"])=="")?$row["fc_subject"]:$row["fc_seo_h1"],
-                    );
-                    if(trim($row["fc_seo_short_desc"])!=""){
-                        $tpl->newBlock("FAQ_CATE_SHORT_DESC");
-                        $tpl->assign("VALUE_FC_SEO_SHORT_DESC",$main->content_file_str_replace($row["fc_seo_short_desc"]));
-                    }
-                    $main->header_footer($meta_array);
-                }else{
-                    $main->header_footer("faq",$TPLMSG["FAQ"]);
-                }
-                $fc_id=$row["fc_id"];
-            }
-        }
+        $cate = $this->left_cate_list();
         //問與答列表
-        if($fc_id!=0){
-            $and_str="and fc_id='".$fc_id."'";
+        if($cate){
+            $and_str="and fc_id='".$cate['fc_id']."'";
         }
         $sql="select * from ".$cms_cfg['tb_prefix']."_faq where f_status='1' ".$and_str." order by f_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
@@ -114,7 +83,7 @@ class FAQ{
             $func_str=$this->func_str;
             $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }else{
-            $func_str=$cms_cfg["base_root"]."faq.php?func=f_list&fc_id=".$fc_id;;
+            $func_str=$cms_cfg["base_root"]."faq.php?func=f_list&fc_id=".$cate['fc_id'];
             $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }
         $selectrs = $db->query($sql);
@@ -145,6 +114,41 @@ class FAQ{
             $cate_link=$cms_cfg["base_root"]."faq.php?func=f_list&fc_id=".$row["fc_id"];
         }     
         return $cate_link;
+    }
+    function left_cate_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        //問與答分類
+        $sql="select * from ".$cms_cfg['tb_prefix']."_faq_cate where fc_status='1' order by fc_sort ".$cms_cfg['sort_pos']." ";
+        $selectrs = $db->query($sql);
+        $i=0;
+        while($row = $db->fetch_array($selectrs,1)){
+            $i++;
+            //顯示左方分類
+            $tpl->newBlock( "LEFT_CATE_LIST" );
+            $tpl->assign( array( "VALUE_CATE_NAME" => $row["fc_subject"],
+                                 "VALUE_CATE_LINK"  => $this->get_link($row),
+            ));
+            if($_REQUEST["fc_id"]==$row["fc_id"] || ($_REQUEST["f"] && $_REQUEST["f"]==$row["fc_seo_filename"])){
+                $tpl->assign( "TAG_CURRENT_CLASS"  , "class='current'");
+                $main->layer_link($row["fc_subject"]);
+                if($this->ws_seo){
+                    $meta_array=array("meta_title"       => $row["fc_seo_title"],
+                                      "meta_keyword"     => $row["fc_seo_keyword"],
+                                      "meta_description" => $row["fc_seo_description"],
+                                      "seo_h1"           => (trim($row["fc_seo_h1"])=="")?$row["fc_subject"]:$row["fc_seo_h1"],
+                    );
+                    if(trim($row["fc_seo_short_desc"])!=""){
+                        $tpl->newBlock("FAQ_CATE_SHORT_DESC");
+                        $tpl->assign("VALUE_FC_SEO_SHORT_DESC",$main->content_file_str_replace($row["fc_seo_short_desc"]));
+                    }
+                    $main->header_footer($meta_array);
+                }else{
+                    $main->header_footer("faq",$TPLMSG["FAQ"]);
+                }
+                $current_row = $row;
+            }
+        }     
+        return $row;
     }
 }
 ?>
