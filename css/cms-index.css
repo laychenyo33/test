@@ -967,6 +967,7 @@ h2 {
 }
  /*login & logout*/ 
 .login_table img{vertical-align: middle}
+.login_table a{font-size:13px;text-decoration: none;}
 .login_msg_error {
 	font-size: 12px;
 	color: #ff0000;
