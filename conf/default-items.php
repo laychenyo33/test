@@ -5,6 +5,7 @@ $ws_array["order_status"]=array(0=>$TPLMSG["ORDER_NEW"],1=>$TPLMSG["ORDER_DEALIN
 $ws_array["inquiry_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
 $ws_array["contactus_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
 $ws_array["images_type"]=array(".jpg",".gif",".png",".bmp");
+$ws_array["cart_type"]=array(0=>$TPLMSG['CART_INQUIRY'],1=>$TPLMSG['CART_SHOPPING']);
 $ws_array["service_term"]=array("st_contactus_term"=>$TPLMSG["CONTACTUS_TERM"],
                                 "st_join_member_mail"=>$TPLMSG["JOIN_MEMBER_MAIL"],
                                 "st_payment_term" => $TPLMSG["PAYMENT_TERM"],

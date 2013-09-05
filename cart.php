@@ -96,6 +96,7 @@ class CART{
             //$this->new_products_list();   //最新產品
             //$this->hot_products_list();   //熱門產品
             //$this->promotion_products_list(); //促銷產品
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -180,12 +181,13 @@ class CART{
         $this->cart_list();
     }
     function cart_list(){
-        global $db,$tpl,$TPLMSG,$ws_array,$shopping,$inquiry,$cms_cfg;
+        global $db,$tpl,$TPLMSG,$ws_array,$shopping,$inquiry,$cms_cfg,$main;
         //取得目前的 cart type
         $sql="select sc_cart_type from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         $_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]=($row["sc_cart_type"]=="")?0:$row["sc_cart_type"];
+        $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);
         //欄位名稱
         $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
                                   "MSG_CONTENT"  => $TPLMSG['CONTENT'],
@@ -258,7 +260,6 @@ class CART{
         if(!empty($shopping)){
             //H1 TAG
             $tpl->assignGlobal("TAG_MAIN_FUNC" , $TPLMSG['CART_SHOPPING']);
-            $tpl->assignGlobal("TAG_LAYER" , $TPLMSG['CART_SHOPPING']);
             $tpl->newBlock( "SHOPPING_CART_ZONE" );
             $tpl->assign( array("MSG_CONTINUE_SHOPPING"  => $TPLMSG['CART_CONTINUE_SHOPPING'],
                                 "MSG_FINISH_SHOPPING"  => $TPLMSG['CART_FINISH_SHOPPING'],
@@ -317,7 +318,6 @@ class CART{
         if(!empty($inquiry)){
             //H1 TAG
             $tpl->assignGlobal("TAG_MAIN_FUNC" , $TPLMSG['CART_INQUIRY']);
-            $tpl->assignGlobal("TAG_LAYER" , $TPLMSG['CART_INQUIRY']);
             $tpl->newBlock( "INQUIRY_CART_ZONE" );
             $tpl->assign( array("MSG_CONTINUE_INQUIRY"  => $TPLMSG['CART_CONTINUE_INQUIRY'],
                                 "MSG_FINISH_INQUIRY"  => $TPLMSG['CART_FINISH_INQUIRY'],
