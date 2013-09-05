@@ -966,6 +966,7 @@ h2 {
 	background-color: #EAEAEA;
 }
  /*login & logout*/ 
+.login_table {width:50%;margin:0 auto}
 .login_table img{vertical-align: middle}
 .login_table a{font-size:13px;text-decoration: none;}
 .login_msg_error {
