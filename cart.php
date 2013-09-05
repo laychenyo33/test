@@ -59,7 +59,8 @@ class CART{
             case "c_finish"://結帳
                 if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1){
                     $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
-                    $this->ws_load_tp($this->ws_tpl_file);                    
+                    $this->ws_load_tp($this->ws_tpl_file);      
+                    $this->member_login();
                 }else{
                     $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
                     $this->ws_load_tp($this->ws_tpl_file);
@@ -997,7 +998,11 @@ class CART{
         }
         $tpl->printToScreen();
     }
-
+    function member_login(){
+        global $main,$ws_array,$cms_cfg,$tpl,$TPLMSG;
+        $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);  
+        $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_LOGIN']);        
+    }
 }
 
 class CART_WITH_SERIAL extends CART{
