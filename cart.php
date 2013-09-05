@@ -402,15 +402,17 @@ class CART{
             $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
-            $tpl->assign( array( "VALUE_M_NAME" => $row["m_name"],
-                                 "VALUE_M_CONTACT_S" => $row["m_contact_s"],
-                                 "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
-                                 "VALUE_M_ZIP" => $row["m_zip"],
-                                 "VALUE_M_ADDRESS" => $row["m_address"],
-                                 "VALUE_M_TEL" => $row["m_tel"],
-                                 "VALUE_M_FAX" => $row["m_fax"],
-                                 "VALUE_M_EMAIL" => $row["m_email"],
-                                 "VALUE_M_CELLPHONE" => $row["m_cellphone"]));
+            $tpl->assignGlobal( array( 
+                 "VALUE_M_NAME" => ($this->contact_s_style==1)?$row["m_fname"]." ".$row["m_lname"]:$row["m_lname"].$row["m_fname"],
+                 "VALUE_M_CONTACT_S" => $row["m_contact_s"],
+                 "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
+                 "VALUE_M_ZIP" => $row["m_zip"],
+                 "VALUE_M_ADDRESS" => $row["m_address"],
+                 "VALUE_M_TEL" => $row["m_tel"],
+                 "VALUE_M_FAX" => $row["m_fax"],
+                 "VALUE_M_EMAIL" => $row["m_email"],
+                 "VALUE_M_CELLPHONE" => $row["m_cellphone"]
+            ));
         }
         //國家下拉選單
         if($cms_cfg["ws_module"]["ws_country"]==1) {
