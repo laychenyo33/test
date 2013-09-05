@@ -965,7 +965,8 @@ h2 {
 .member_zone_table  tr.altrow {
 	background-color: #EAEAEA;
 }
-/* login & logout */
+ /*login & logout*/ 
+.login_table img{vertical-align: middle}
 .login_msg_error {
 	font-size: 12px;
 	color: #ff0000;
