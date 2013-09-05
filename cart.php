@@ -65,7 +65,8 @@ class CART{
                     $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
                     $this->ws_load_tp($this->ws_tpl_file);
                     $tpl->newBlock("JS_FORMVALID");
-                    //$tpl->newBlock("JS_POP_IMG");
+                    $tpl->newBlock("JQUERY_UI_SCRIPT");
+                    $tpl->newBlock("DATEPICKER_SCRIPT");
                     $this->cart_finish();
                 }
                 $this->ws_tpl_type=1;
