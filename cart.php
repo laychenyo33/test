@@ -66,7 +66,7 @@ class CART{
                     $this->ws_load_tp($this->ws_tpl_file);
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JQUERY_UI_SCRIPT");
-                    $tpl->newBlock("DATEPICKER_SCRIPT");
+                    $tpl->newBlock("DATEPICKER_SCRIPT_IN_CART");
                     $this->cart_finish();
                 }
                 $this->ws_tpl_type=1;

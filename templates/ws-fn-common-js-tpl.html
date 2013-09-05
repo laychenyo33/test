@@ -710,6 +710,23 @@ function nav_formatter(idx,pan){
     });                        
 </script>
 <!-- END BLOCK : DATEPICKER_SCRIPT -->
+<!-- START BLOCK : DATEPICKER_SCRIPT_IN_CART -->
+<script type="text/javascript">
+    jQuery(function($){
+        $(document).ready(function(){
+           //設定到貨日期
+           $("#o_deliver_date").datepicker({ 
+               dateFormat    : 'yy/mm/dd',
+               minDate       : '+3',
+               maxDate       : '+2M' ,
+               beforeShowDay : function(date){
+                   return [date.getDay()!=0 && date.getDay()!=1,''];
+               }
+           });
+        });
+    });                        
+</script>
+<!-- START BLOCK : DATEPICKER_SCRIPT_IN_CART -->
 <!-- START BLOCK : AJAX_GET_VIDEO_CONTENT -->
 <script type="text/javascript">
     jQuery(function($){
