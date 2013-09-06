@@ -384,7 +384,7 @@ class PRODUCTS{
                 if($cms_cfg["ws_module"]["ws_listpage_cart"]==1){
                     $tpl->newBlock( "CART_CHECK_BOX" );
                     $tpl->assign( "VALUE_P_ID",$row["p_id"]);
-                    $tpl->gotoBlock( $show_style_str_p );
+                    $tpl->gotoBlock( $blockname );
                 }
 
                 //當後台系統設定為詢價車,則強制把所有的價格隱藏
