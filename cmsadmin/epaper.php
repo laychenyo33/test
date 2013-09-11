@@ -503,7 +503,7 @@ class EPAPER{
                 }
                 $tpl->assign( array("VALUE_E_ID"  => $row["e_id"],
                                     "VALUE_ES_MODIFYDATE"  => $row["es_modifydate"],
-                                    "VALUE_ES_GROUP"  => $row["es_group"],
+                                    "VALUE_ES_GROUP"  => $row["es_group"]?$row["es_group"]:$TPLMSG['EPAPER_CUSTOM_FIELD'],
                                     "VALUE_E_SUBJECT" => $row["e_subject"],
                                     "VALUE_ES_SERIAL" => $i,
                 ));
@@ -589,6 +589,7 @@ class EPAPER{
                 $sql = $this->get_maillist_sql();
                 $selectrs = $db->query($sql);
                 $rsnum    = $db->numRows($selectrs);
+                $goto_url=$cms_cfg["manage_url"]."epaper.php?func=e_list";
                 if($rsnum > 0){
                     $mail_array=array();
                     while($row = $db->fetch_array($selectrs,1)){
@@ -606,15 +607,18 @@ class EPAPER{
                         $new_member_cate[]=$key;
                     }
                     if(!empty($new_mail_array)){
-                        $mail_str=implode(",",$new_mail_array);
-                        $member_cate_str=implode(",",$new_member_cate);
+                        if($_REQUEST["e_st"]==3){
+                            $mail_str=implode(",",$new_mail_array);
+                        }else{
+                            $member_cate_str=implode(",",$new_member_cate);
+                        }
                         unset($new_mail_array);
+                        unset($new_member_cate);
                         //取得電子報內容
                         $sql="select e_subject,e_content from ".$cms_cfg['tb_prefix']."_epaper where e_id='".$_REQUEST["e_id"]."'";
                         $selectrs = $db->query($sql);
                         $row = $db->fetch_array($selectrs,1);
                         $rsnum    = $db->numRows($selectrs);
-                        $goto_url=$cms_cfg["manage_url"]."epaper.php?func=e_list";
                         if($rsnum > 0){
                             $mail_subject=$row["e_subject"];
                             $mail_content=App::getHelper('main')->content_file_str_replace($row["e_content"],'out');
@@ -624,11 +628,12 @@ class EPAPER{
                                 insert into ".$cms_cfg['tb_prefix']."_epaper_queue (
                                     e_id,
                                     eq_modifydate,
-                                    eq_group,e_subject,eq_content,eq_send_time,eq_attach_products
+                                    eq_group,eq_mail,e_subject,eq_content,eq_send_time,eq_attach_products
                                 ) values (
                                     '".mysql_real_escape_string($_REQUEST["e_id"])."',
                                     '".date("Y-m-d H:i:s")."',
                                     '".mysql_real_escape_string($member_cate_str)."',
+                                    '".mysql_real_escape_string($mail_str)."',
                                     '".mysql_real_escape_string($row["e_subject"])."',
                                     '".$mail_content."',
                                     '".mysql_real_escape_string($_POST["eq_send_time"])."',
@@ -641,6 +646,8 @@ class EPAPER{
                         return ;
                     }
                 }                
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "Do not find any recipient !!");
+                $this->goto_target_page($goto_url);
                 break;
             case "send":
                 //取得寄送名單
@@ -669,6 +676,14 @@ class EPAPER{
                     }
                     if($mx_arr){
                         $member_cate_str=implode(",",$new_member_cate);
+                        $mail_str=implode(",",$new_mail_array);
+                        if($_REQUEST["e_st"]==3){
+                            $mail_str2=$mail_str;
+                        }else{
+                            $member_cate_str=implode(",",$new_member_cate);
+                        }
+                        unset($new_mail_array);
+                        unset($new_member_cate);
                         //取得寄件資訊
                         $from_sql="select sc_company,sc_email from ".$cms_cfg['tb_prefix']."_system_config where sc_id = '1'";
                         $from_res = $db->query($from_sql);
@@ -734,11 +749,12 @@ class EPAPER{
                                 insert into ".$cms_cfg['tb_prefix']."_epaper_send (
                                     e_id,
                                     es_modifydate,
-                                    es_group,e_subject
+                                    es_group,es_email,e_subject
                                 ) values (
                                     '".$_REQUEST["e_id"]."',
                                     '".date("Y-m-d H:i:s")."',
                                     '".$member_cate_str."',
+                                    '".$mail_str2."',
                                     '".$row["e_subject"]."'
                                 )";
                             $rs = $db->query($sql);
@@ -868,7 +884,7 @@ class EPAPER{
             }
             $tpl->assign( array("VALUE_E_ID"  => $row["e_id"],
                                 "VALUE_ES_MODIFYDATE"  => $row["es_modifydate"],
-                                "VALUE_ES_GROUP"  => $row["es_group"],
+                                "VALUE_ES_GROUP"  => $row["es_group"]?$row["es_group"]:$TPLMSG['EPAPER_CUSTOM_FIELD'],
                                 "VALUE_E_SUBJECT" => $row["e_subject"],
                                 "VALUE_ES_SERIAL" => $i,
             ));
@@ -1093,7 +1109,39 @@ class EPAPER{
                 $mc_id_str=" and mc.mc_id in (".implode(",",$_REQUEST["mc_id"]).")";
             case "1":
             default:
-                $sql="SELECT mc.mc_id, mc_subject, group_concat(m_email) as m_email FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) where m_epaper_status='1' ".$mc_id_str." GROUP BY mc.mc_subject order by mc.mc_subject";                
+                $sql="SELECT mc.mc_id, mc_subject, group_concat(m_email) as m_email FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) where m_epaper_status='1' ".$mc_id_str." GROUP BY mc.mc_subject order by mc.mc_subject";   
+                break;
+            case "3":
+                $con = $_POST['custom_field_with'];
+                if($_POST['m_modifydate1']){
+                    $ts = strtotime($_POST['m_modifydate1']);
+                    $and_str = " m_modifydate >='".date("Y-m-d",$ts)."'";
+                }
+                if($_POST['m_modifydate2']){
+                    $ts = strtotime($_POST['m_modifydate2'])+86400;
+                    $and_str .= ($and_str?" and ":"")." m_modifydate<'".date("Y-m-d",$ts)."'";
+                }
+                $and_str = $and_str?"(".$and_str.")":"";
+                //以上條件是一組，而且是最前面的條件，請勿變更位置
+                if($_POST['m_company_name']){ //搜尋公司條件
+                    $and_str .= ($and_str? " {$con} ":"")."m_company_name like '%".$_POST['m_company_name']."%'";
+                }
+                if($_POST['m_country']){ //搜尋國家條件
+                    $and_str .= ($and_str? " {$con} ":"")."m_country like '%".$_POST['m_country']."%'";
+                }
+                if($_POST['m_address']){ //搜尋住址條件
+                    $and_str .= ($and_str? " {$con} ":"")."m_address like '%".$_POST['m_address']."%'";
+                }
+                if($_POST['m_email']){ //搜尋email條件
+                    $and_str .= ($and_str? " {$con} ":"")."m_email like '%".$_POST['m_email']."%'";
+                }
+                if($_POST['m_cate']){ //搜尋類別條件
+                    $and_str .= ($and_str? " {$con} ":"")."m_cate like '%".$_POST['m_cate']."%'";
+                }
+                if($and_str){
+                    $sql="SELECT m_email FROM ".$cms_cfg['tb_prefix']."_member  where m_epaper_status='1' and (".$and_str.")";   
+                }
+                break;
         }
         return $sql;
     }

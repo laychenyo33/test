@@ -12,19 +12,34 @@
         <tr>
             <th>選擇發送對象</th>
             <td>
-                <INPUT type="radio" name="e_st" class="form-checkbox" value="2" onClick="document.getElementById('member_cate_checkbox').style.display='';" checked> 選擇會員群組發送
+                <INPUT type="radio" name="e_st" class="form-checkbox" value="2" onClick="document.getElementById('member_cate_checkbox').style.display='';document.getElementById('custom_field_checkbox').style.display='none'" checked> 選擇會員群組發送
+                <INPUT type="radio" name="e_st" class="form-checkbox" value="3" onClick="document.getElementById('member_cate_checkbox').style.display='none';document.getElementById('custom_field_checkbox').style.display='';"> 自訂條件發送
                 <INPUT type="radio" name="e_st" class="form-checkbox" value="1" onClick="document.getElementById('member_cate_checkbox').style.display='none';"> 全部發送(<font color="red">含未分類會員訂閱人數:{VALUE_E_TOTAL}</font>)
                 <div>因會員可能會跨群組，所以全部訂閱會員並非是所有群組的訂閱數加總</div>
             </td>
         </tr>
         <tr id="member_cate_checkbox" style="display:">
-            <th>&nbsp;</th>
+            <th>會員群組(類別)</th>
             <td>
                 <!--<div id="member_cate_checkbox" style="display:">-->
                 <!-- START BLOCK : MEMBER_CATE -->
                     <INPUT TYPE="checkbox" NAME="mc_id[]" class="form-checkbox" value="{VALUE_MC_ID}" >{VALUE_MC_SUBJECT}(<font color="red">訂閱人數:{VALUE_E_SUBTOTAL}</font>)<br>
                 <!-- END BLOCK : MEMBER_CATE -->
                 <!--</div>&nbsp;-->
+            </td>
+        </tr>
+        <tr id="custom_field_checkbox" style="display:none">
+            <th>自訂欄位</th>
+            <td>
+                <input type="radio" name="custom_field_with" value="and" checked /><span style="color:#00f">符合下列所有條件</span>
+                <input type="radio" name="custom_field_with" value="or"/><span style="color:#00f">符合下列任一條件</span><br/>    
+                @說明:<font color="red">若只填[從]，代表要搜尋會員的修改日在[從]之後；若只填[到]，代表要搜尋會員的修改日在[到]之前，若兩者皆填則代表要搜尋修改日在這區間。</font><br/>
+                修改日期: 從<input type="text" name="m_modifydate1" />&nbsp到<input type="text" name="m_modifydate2" /><br/>
+                公司名稱:<input type="text" name="m_company_name" /><br/>
+                國家:<input type="text" name="m_country" /><br/>
+                住址:<input type="text" name="m_address" /><br/>
+                E-mail:<input type="text" name="m_email" /><br/>
+                類別:<input type="text" name="m_cate" /><br/>
             </td>
         </tr>
         <!-- START BLOCK : ATTACH_PRODUCTS_ZONE -->

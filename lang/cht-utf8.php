@@ -327,6 +327,8 @@ $TPLMSG['CONTACTUS_POSITION'] = "部門與職稱";
 $TPLMSG['EPAPER_HEADER'] = "電子報頁首";
 $TPLMSG['EPAPER_FOOTER'] = "電子報頁尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已經從郵件清單裡移除了!";
+$TPLMSG['EPAPER_CUSTOM_FIELD'] = "自訂條件";
+
 $TPLMSG['GALLERY'] = "活動剪影";
 $TPLMSG["PAGE_NO_EXITS"] = "此頁面不存在";
 //Goodlink
