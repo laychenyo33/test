@@ -21,6 +21,7 @@ $cms_cfg["ws_module"]=array(
         "ws_forum"=>0,              //討論區管理
         "ws_gallery"=>0,            //活動剪影
         "ws_gallery_scan_dir"  =>0, //活動剪影，直接從資料夾讀取圖片
+        "ws_gallery_update_db" =>0, //活動剪影，從資料夾將圖片匯人資料庫
         "ws_goodlink"=>0,           //好站連結
         "ws_guestbook"=>0,          //留言版管理
         "ws_stores"=>0,             //門市介紹
