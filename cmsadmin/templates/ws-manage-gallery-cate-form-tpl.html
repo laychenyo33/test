@@ -32,7 +32,7 @@
             <td>
                 <input name="gc_dir" type="text" id="gc_dir" class="validate[required]"  value="{VALUE_GC_DIR}" size="40" />
                 <!-- START BLOCK : UPDATE_DB_BUTTON -->
-                <input id="update_pic" type="button" value="編輯圖片" />
+                <input id="update_pic" type="button" value="編輯圖片" /><span id="gc_dir_note" style="display:none;color:red">請先儲存資料夾設定，否則無法編輯圖片</span>
                 <!-- END BLOCK : UPDATE_DB_BUTTON -->
                 <br/>請指定此分類所屬圖片存放的資料夾，例如，upload_files/gallery
             </td>
@@ -45,6 +45,7 @@
         </tr>
     </table>
     <input type="hidden" name="gc_id" value="{VALUE_GC_ID}">
+    <input type="hidden" name="gc_dir_old" value="{VALUE_GC_DIR}">
     <input type="hidden" name="action_mode" value="{VALUE_ACTION_MODE}">
     <input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
     <input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
@@ -65,10 +66,26 @@
             });
            //設定更新資料庫裡的圖片內容
            $("#update_pic").click(function(evt){
+                if(myform.gc_dir.value!=myform.gc_dir_old.value){
+                    alert("請先儲存資料夾設定");
+                    return false;
+                }else if(myform.gc_dir_old.value==''){
+                    alert("請先指定資料夾");
+                    return false;
+                }
                 var url='gallery.php?func=gp_file&gc_id='+myform.gc_id.value;
                 gpwin.attr('src',url);
                 $("#dialog").dialog("open");
-           });         
+           });        
+           $("#gc_dir").change(function(){
+               if(myform.gc_dir.value!=myform.gc_dir_old.value){
+                   $("#update_pic").attr("disabled","disabled");
+                   $("#gc_dir_note").show();
+               }else{
+                   $("#update_pic").removeAttr("disabled");
+                   $("#gc_dir_note").hide();
+               }
+           });
        });
     });
 </script>

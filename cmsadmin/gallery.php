@@ -834,7 +834,7 @@ class GALLERY{
          $res = array();
          $res['success'] = 1;
          $real_gc_dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$gc_dir;
-         if(!is_dir($real_gc_dir)){
+         if(!$gc_dir || !is_dir($real_gc_dir)){
              $res['success'] = 0;
              $res['err_msg'] = $gc_dir."不存在或非資料夾";
          }
