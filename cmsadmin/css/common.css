@@ -643,3 +643,6 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
     color:#09F;
 }
 span.current{color:#f00}
+.gallery_file_list{width:200px;float:left;position:relative;margin:10px 0;}
+.gallery_file_list .gallery_file{width:100%;height:80px;text-align:center}
+.gallery_file_list .gallery_desc{width:100%;margin:5px 0;text-align:center}

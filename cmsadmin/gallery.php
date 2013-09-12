@@ -13,6 +13,19 @@ class GALLERY{
     function GALLERY(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
+            case "ajax":
+                if(method_exists($this, "ajax_".$_GET['act'])){
+                    $method = "ajax_".$_GET['act'];
+                    $this->$method();
+                }    
+                $this->ws_tpl_type=0;
+                break;            
+            case "gp_file":
+                $this->gp_file();
+                break;
+            case "gp_db_update":
+                $this->gp_db_update();
+                break;
             case "gc_list"://Gallery分類列表
                 $this->current_class="GC";
                 $this->ws_tpl_file = "templates/ws-manage-gallery-cate-list-tpl.html";
@@ -29,6 +42,7 @@ class GALLERY{
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->gallery_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -39,6 +53,7 @@ class GALLERY{
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->gallery_cate_form("mod");
                 $this->ws_tpl_type=1;
                 break;
@@ -216,7 +231,10 @@ class GALLERY{
         }
         if($cms_cfg['ws_module']['ws_gallery_scan_dir']){
             $tpl->newBlock("SETTING_DIR_ZONE");
-    }
+            if($cms_cfg['ws_module']['ws_gallery_update_db']){
+                $tpl->newBlock("UPDATE_DB_BUTTON");
+            }
+        }
     }
     //Gallery分類--資料更新
     function gallery_cate_replace(){
@@ -814,6 +832,97 @@ class GALLERY{
                 break;
         }
     }
+    function gp_db_update(){
+         global $cms_cfg,$db,$main;
+         $res = array();
+         $res['success'] = 1;
+         $real_gc_dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$_POST['gc_dir'];
+         if(!is_dir($real_gc_dir)){
+             $res['success'] = 0;
+             $res['err_msg'] = $_POST['gc_dir']."不存在或非資料夾";
+}
+         if($res['success']){
+            $pattern = $real_gc_dir . "/*.{jpg,jpeg,png}";
+            $imgs = glob($pattern,GLOB_BRACE);
+            foreach($imgs  as $full_path_img){
+                $thumb = $main->file_str_replace($full_path_img);
+                //先找看看該類別是否已寫入該檔名的記錄，有的話先記下id，作為稍後刪除的依據
+                $sql = "select id from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_POST['gc_id']."' and gp_file ='".$thumb."'";
+                if(list($gp_id) =  $db->query_firstRow($sql,false)){
+                    $gp_id_arr[] = $gp_id; 
+                }else{
+                    //沒有記錄就寫入新記錄，一樣記下id，作為稍後刪除的依據
+                    $sql = "insert into ".$cms_cfg['tb_prefix']."_gallery_pics(`gc_id`,`gp_file`)values('".$_POST['gc_id']."','".$thumb."')";
+                    $db->query($sql,true);
+                    $gp_id_arr[] = $db->get_insert_id();
+                }
+            }
+            //如果已存在id，就刪除該類別不在id裡的記錄
+            if($gp_id_arr){
+                $sql = "delete from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_POST['gc_id']."' and id not in(".implode(',',$gp_id_arr).")";
+            }else{ //不存在id，就刪除該類別的所有記錄
+                $sql = "delete from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_POST['gc_id']."'";
+            }
+            $db->query($sql,true);
+         }
+         echo json_encode($res);
+    }
+    function gp_file(){
+        global $tpl,$db,$cms_cfg,$main;
+        if($_POST && $_GET['act']=="save"){
+            //修改檔案
+            if($_POST['gp_desc']){
+                foreach($_POST['gp_desc'] as $gpid => $desc){
+                    $sql = "update ".$cms_cfg['tb_prefix']."_gallery_pics set gp_desc='".$db->quote($_POST['gp_desc'][$gpid])."' where id='".$db->quote($gpid)."'";
+                    $db->query($sql,true);
+                }
+            }
+            $this->ws_tpl_type=0;
+            header("location: gallery.php?func=gp_file&gc_id=".$_POST['gc_id']);
+            die();
+        }else{
+            $template = "templates/ws-manage-gallery-pic-tpl.html";
+            $tpl = new TemplatePower($template);
+            $tpl->prepare();
+            $tpl->newBlock("JS_MAIN");
+            $tpl->newBlock("JS_PREVIEWS_PIC");    
+            $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
+            $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);        
+            $tpl->assign("_ROOT.VALUE_GC_ID",$_GET['gc_id']);
+            $this->ws_tpl_type=1;
+            //顯示原有檔案列表
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_GET['gc_id']."'";
+            $res = $db->query($sql,true);
+            while($row = $db->fetch_array($res,1)){
+                $tpl->newBlock("GALLERY_PICS_LIST");
+                $tpl->assign(array(
+                    "VALUE_GP_FILE" => $cms_cfg['file_root'].$row['gp_file'],
+                    "VALUE_GP_DESC" => $row['gp_desc']?$row['gp_desc']:"新增敘述",
+                    "VALUE_GP_ID"  => $row['id'],
+                ));
+            }     
+        }
+    }    
+    function ajax_get_gp_file(){
+        global $db,$cms_cfg;
+        if($_GET['gp_id']){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where id='".$_GET['gp_id']."'";
+            $file = $db->query_firstRow($sql);
+            if($file){
+                echo "<div class=\"gallery_desc\"><input type=\"text\" name=\"gp_desc[".$file['id']."]\" value=\"".$file['gp_desc']."\"/></div>";
+            }
+        }
+    }
+    function ajax_del_gp_file(){
+        global $db,$cms_cfg;
+        if($_GET['nf_id']){
+            $sql = "delete from ".$cms_cfg['tb_prefix']."_news_files where id='".$_GET['nf_id']."'";
+            $res = $db->query($sql,true);
+            if($db->report()==""){
+                echo 1;
+            }
+        }
+    }    
 }
 //ob_end_flush();
 ?>

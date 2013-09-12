@@ -22,6 +22,15 @@
         <div class="gallery_list_pic">
                <a href="{VALUE_G_LINK}" rel="lightbox"><img class="lazy" src="{TAG_THEME_PATH}ws-no-image.jpg" data-original="{VALUE_G_S_PIC}" alt="" width="{VALUE_G_S_PIC_W}" height="{VALUE_G_S_PIC_H}" class="board-2" /></a> 
         </div>
+        <div class="gallery_list_title">{VALUE_GP_DESC}</div>
     </div>
     <!-- END BLOCK : GALLERY_BATCH_LIST --> 
 <!-- INCLUDE BLOCK : ./templates/ws-fn-pagination-tpl.html -->
+<script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery.samesize.js"></script>
+<script type="text/javascript">
+    jQuery(function($){
+       $(document).ready(function(){
+           $(".gallery_list").samesize("height");
+       });
+    });
+</script>

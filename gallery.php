@@ -172,6 +172,7 @@ class GALLERY{
         }        
     }
     function get_link($row,$item=false){
+        global $cms_cfg;
         if($item){
             if($this->ws_seo){
                 $link = $cms_cfg["base_root"]."gallery/gdetail-".$row["gc_id"]."-".$row["g_id"].".html";
@@ -180,9 +181,9 @@ class GALLERY{
             }
         }else{
             if($this->ws_seo==1 ){
-                $link="gallery/glist-".$row["gc_id"].".htm";
+                $link=$cms_cfg['base_root']."gallery/glist-".$row["gc_id"].".htm";
             }else{
-                $link="gallery.php?func=g_list&gc_id=".$row["gc_id"];
+                $link=$cms_cfg['base_root']."gallery.php?func=g_list&gc_id=".$row["gc_id"];
             }        
         }
         return $link;
@@ -205,45 +206,74 @@ class GALLERY{
     }
     function dirlist($cate){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
-        if(is_dir($dir)){
-            $pattern = $dir . "/*.{jpg,jpeg,png}";
-            $imgs = glob($pattern,GLOB_BRACE);
-            $thumb = $main->file_str_replace($imgs[0]);
-            $tpl->newBlock( "GALLERY_CATE_LIST" );
-            $simg = $cms_cfg['file_root'].$thumb;
-            $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
-            $tpl->assign( array(
-                "VALUE_GC_SUBJECT" => $cate['gc_subject'],
-                "VALUE_GC_LINK" => $this->get_link($cate),
-                "VALUE_GC_S_PIC" => $simg,
-                "VALUE_GC_S_PIC_W" => $dimension['width'],
-                "VALUE_GC_S_PIC_H" => $dimension['height'],
-            ));
+        if($cms_cfg["ws_module"]['ws_gallery_update_db']){
+            $sql = "select gp_file from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$cate['gc_id']."' limit 1";
+            list($gp_file)=$db->query_firstRow($sql,0);   
+            if($gp_file){
+                $thumb = $main->file_str_replace($gp_file);
+            }
+        }else{
+            $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
+            if(is_dir($dir)){
+                $pattern = $dir . "/*.{jpg,jpeg,png}";
+                $imgs = glob($pattern,GLOB_BRACE);
+                $thumb = $main->file_str_replace($imgs[0]);
+            }
         }
+        $simg = $thumb?$cms_cfg['file_root'].$thumb:$cms_cfg['default_preview_pic'];
+        $tpl->newBlock( "GALLERY_CATE_LIST" );
+        $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+        $tpl->assign( array(
+            "VALUE_GC_SUBJECT" => $cate['gc_subject'],
+            "VALUE_GC_LINK" => $this->get_link($cate),
+            "VALUE_GC_S_PIC" => $simg,
+            "VALUE_GC_S_PIC_W" => $dimension['width'],
+            "VALUE_GC_S_PIC_H" => $dimension['height'],
+        ));
         
     }
     function dirshow($cate){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
         if($cate['gc_desc']){
             $tpl->newBlock("GALLERY_CATE_DESC");
             $tpl->assign("VALUE_GC_DESC",$main->content_file_str_replace($cate['gc_desc']));
         }
-        if(is_dir($dir)){
-            $pattern = $dir . "/*.{jpg,jpeg,png}";
-            $imgs = glob($pattern,GLOB_BRACE);
-            foreach($imgs  as $full_path_img){
-                $thumb = $main->file_str_replace($full_path_img);
-                $tpl->newBlock( "GALLERY_BATCH_LIST" );
-                $simg = $cms_cfg['file_root'].$thumb;
-                $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
-                $tpl->assign( array(
-                    "VALUE_G_LINK" => $simg,
-                    "VALUE_G_S_PIC" => $simg,
-                    "VALUE_G_S_PIC_W" => $dimension['width'],
-                    "VALUE_G_S_PIC_H" => $dimension['height'],
-                ));
+        if($cms_cfg["ws_module"]['ws_gallery_update_db']){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$cate['gc_id']."'";
+            $res = $db->query($sql,true);
+            if($db->numRows($res)){
+                while($row = $db->fetch_array($res,1)){
+                    $i++;
+                    $thumb = $main->file_str_replace($row['gp_file']);
+                    $tpl->newBlock( "GALLERY_BATCH_LIST" );
+                    $simg = $cms_cfg['file_root'].$thumb;
+                    $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+                    $tpl->assign( array(
+                        "VALUE_G_LINK" => $simg,
+                        "VALUE_G_S_PIC" => $simg,
+                        "VALUE_G_S_PIC_W" => $dimension['width'],
+                        "VALUE_G_S_PIC_H" => $dimension['height'],
+                        "VALUE_GP_DESC"   => $row['gp_desc'],
+                    ));
+                }            
+            }            
+        }else{
+            $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
+            if(is_dir($dir)){
+                $pattern = $dir . "/*.{jpg,jpeg,png}";
+                $imgs = glob($pattern,GLOB_BRACE);
+                foreach($imgs  as $full_path_img){
+                    $thumb = $main->file_str_replace($full_path_img);
+                    $tpl->newBlock( "GALLERY_BATCH_LIST" );
+                    $simg = $cms_cfg['file_root'].$thumb;
+                    $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+                    $tpl->assign( array(
+                        "VALUE_G_LINK" => $simg,
+                        "VALUE_G_S_PIC" => $simg,
+                        "VALUE_G_S_PIC_W" => $dimension['width'],
+                        "VALUE_G_S_PIC_H" => $dimension['height'],
+                    ));
+                }
             }
         }
     }
