@@ -32,7 +32,7 @@
             <td>
                 <input name="gc_dir" type="text" id="gc_dir" class="validate[required]"  value="{VALUE_GC_DIR}" size="40" />
                 <!-- START BLOCK : UPDATE_DB_BUTTON -->
-                <input type="button" id="update_db" value="更新資料庫"/><input id="update_pic" type="button" value="更新圖片" />
+                <input id="update_pic" type="button" value="編輯圖片" />
                 <!-- END BLOCK : UPDATE_DB_BUTTON -->
                 <br/>請指定此分類所屬圖片存放的資料夾，例如，upload_files/gallery
             </td>
@@ -63,21 +63,6 @@
                 width:660,
                 height:500
             });
-           //設定更新資料庫
-           $("#update_db").click(function(evt){
-               if(myform.gc_dir.value.length==0){
-                   alert("請先指定資料夾路徑");
-                   return false;
-               }
-               $.post("gallery.php?func=gp_db_update",{ gc_id:myform.gc_id.value,gc_dir: myform.gc_dir.value },function(req){
-                   if(req.success){
-                       alert('更新成功!');
-                   }else{
-                       alert(req.err_msg);
-                   }
-               },'json');
-               
-           });
            //設定更新資料庫裡的圖片內容
            $("#update_pic").click(function(evt){
                 var url='gallery.php?func=gp_file&gc_id='+myform.gc_id.value;

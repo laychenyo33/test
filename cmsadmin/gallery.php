@@ -23,9 +23,6 @@ class GALLERY{
             case "gp_file":
                 $this->gp_file();
                 break;
-            case "gp_db_update":
-                $this->gp_db_update();
-                break;
             case "gc_list"://Gallery分類列表
                 $this->current_class="GC";
                 $this->ws_tpl_file = "templates/ws-manage-gallery-cate-list-tpl.html";
@@ -832,40 +829,40 @@ class GALLERY{
                 break;
         }
     }
-    function gp_db_update(){
+    function gp_db_update($gc_id,$gc_dir){
          global $cms_cfg,$db,$main;
          $res = array();
          $res['success'] = 1;
-         $real_gc_dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$_POST['gc_dir'];
+         $real_gc_dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$gc_dir;
          if(!is_dir($real_gc_dir)){
              $res['success'] = 0;
-             $res['err_msg'] = $_POST['gc_dir']."不存在或非資料夾";
-}
+             $res['err_msg'] = $gc_dir."不存在或非資料夾";
+         }
          if($res['success']){
             $pattern = $real_gc_dir . "/*.{jpg,jpeg,png}";
             $imgs = glob($pattern,GLOB_BRACE);
             foreach($imgs  as $full_path_img){
                 $thumb = $main->file_str_replace($full_path_img);
                 //先找看看該類別是否已寫入該檔名的記錄，有的話先記下id，作為稍後刪除的依據
-                $sql = "select id from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_POST['gc_id']."' and gp_file ='".$thumb."'";
+                $sql = "select id from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$gc_id."' and gp_file ='".$thumb."'";
                 if(list($gp_id) =  $db->query_firstRow($sql,false)){
                     $gp_id_arr[] = $gp_id; 
                 }else{
                     //沒有記錄就寫入新記錄，一樣記下id，作為稍後刪除的依據
-                    $sql = "insert into ".$cms_cfg['tb_prefix']."_gallery_pics(`gc_id`,`gp_file`)values('".$_POST['gc_id']."','".$thumb."')";
+                    $sql = "insert into ".$cms_cfg['tb_prefix']."_gallery_pics(`gc_id`,`gp_file`)values('".$gc_id."','".$thumb."')";
                     $db->query($sql,true);
                     $gp_id_arr[] = $db->get_insert_id();
                 }
             }
             //如果已存在id，就刪除該類別不在id裡的記錄
             if($gp_id_arr){
-                $sql = "delete from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_POST['gc_id']."' and id not in(".implode(',',$gp_id_arr).")";
+                $sql = "delete from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$gc_id."' and id not in(".implode(',',$gp_id_arr).")";
             }else{ //不存在id，就刪除該類別的所有記錄
-                $sql = "delete from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_POST['gc_id']."'";
+                $sql = "delete from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$gc_id."'";
             }
             $db->query($sql,true);
          }
-         echo json_encode($res);
+//         echo json_encode($res);
     }
     function gp_file(){
         global $tpl,$db,$cms_cfg,$main;
@@ -890,6 +887,11 @@ class GALLERY{
             $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);        
             $tpl->assign("_ROOT.VALUE_GC_ID",$_GET['gc_id']);
             $this->ws_tpl_type=1;
+            //取得gc_dir
+            $sql = "select gc_dir from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_id='".$_GET['gc_id']."'";
+            list($gc_dir) = $db->query_firstRow($sql,0);
+            //更新gc_dir的圖片到資料庫
+            $this->gp_db_update($_GET['gc_id'],$gc_dir);
             //顯示原有檔案列表
             $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_GET['gc_id']."'";
             $res = $db->query($sql,true);
