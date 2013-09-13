@@ -915,6 +915,7 @@ class MEMBER{
                     $i=0;
                     $wNums = 0; //寫入筆數
                     $cNums = 0; //衝突筆數
+                    $aNums = 0; //略過筆數
                     $sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member","m");
                     while($csv = $main->fgetcsv($res)){
                         if($i>0 && in_array($i,$_POST['row_id'])){
@@ -922,39 +923,49 @@ class MEMBER{
                             $values = array($_POST['mc_id'],'1',$sort++,"'".date("Y-m-d")."'");
                             $conflic = false;
                             $update = false;
+                            $avoid = false;
                             foreach($_POST['mapto'] as $idx => $col){
-                                if($col=="m_email" && $csv[$idx]!=''){
-                                    $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".mysql_real_escape_string($csv[$idx])."'";
-                                    $res_m = $db->query($sql,true);
-                                    $conflic = ($db->numRows($res_m))?true:false;
-                                    if($conflic){ //email已存在就更新mc_id
-                                        $row = $db->fetch_array($res_m,1);
-                                        $mc_id_arr = explode(',',$row['mc_id']);
-                                        array_push($mc_id_arr, $_POST['mc_id']);
-                                        $mc_id_arr = array_unique($mc_id_arr);
-                                        $sql = "update ".$cms_cfg['tb_prefix']."_member set mc_id='".implode(',',$mc_id_arr)."' where m_account='".mysql_real_escape_string($csv[$idx])."' limit 1";
-                                        $res_s = $db->query($sql);
-                                        if($db->report()==""){
-                                            $conflic = false;
-                                            $update = true;
+                                if($col=="m_email" ){
+                                    if($csv[$idx]!=''){
+                                        $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".mysql_real_escape_string($csv[$idx])."'";
+                                        $res_m = $db->query($sql,true);
+                                        $conflic = ($db->numRows($res_m))?true:false;
+                                        if($conflic){ //email已存在就更新mc_id
+                                            $row = $db->fetch_array($res_m,1);
+                                            $mc_id_arr = explode(',',$row['mc_id']);
+                                            array_push($mc_id_arr, $_POST['mc_id']);
+                                            $mc_id_arr = array_unique($mc_id_arr);
+                                            $sql = "update ".$cms_cfg['tb_prefix']."_member set mc_id='".implode(',',$mc_id_arr)."' where m_account='".mysql_real_escape_string($csv[$idx])."' limit 1";
+                                            $res_s = $db->query($sql);
+                                            if($db->report()==""){
+                                                $conflic = false;
+                                                $update = true;
+                                            }
                                         }
+                                        $columns[] = 'm_account';
+                                        $values[] = "'".mysql_real_escape_string(trim($csv[$idx]))."'";
+                                    }else{
+                                        $avoid = true;
                                     }
-                                    $columns[] = 'm_account';
-                                    $values[] = "'".mysql_real_escape_string($csv[$idx])."'";
                                 }
                                 $columns[] = $col;
-                                $values[] = "'".mysql_real_escape_string($csv[$idx])."'";
+                                $values[] = "'".mysql_real_escape_string(trim($csv[$idx]))."'";
                             }
-                            if($conflic){
-                                $tpl->newBlock("CONFLIC_RECORD");
-                                $cNums++;
+                            if($avoid){
+                                $tpl->newBlock("AVOID_RECORD");
+                                $aNums++;
                             }else{
-                                $tpl->newBlock("WRITED_RECORD");
-                                $wNums++;
-                                if(!$update){
-                                    $sql = "insert into ".$cms_cfg['tb_prefix']."_member(".implode(',',$columns).")values(".implode(',',$values).")";
-                                    $db->query($sql,true);
-//                                    $tpl->assign("VALUE_QUERY",$sql);
+                                if($conflic){
+                                    $tpl->newBlock("CONFLIC_RECORD");
+                                    $cNums++;
+                                }else{
+                                    $tpl->newBlock("WRITED_RECORD");
+                                    $wNums++;
+                                    if(!$update){
+                                        $sql = "insert into ".$cms_cfg['tb_prefix']."_member(".implode(',',$columns).")values(".implode(',',$values).")";
+                                        $db->query($sql,true);
+    //                                    $tpl->assign("VALUE_QUERY",$sql);
+                                    }
                                 }
                             }
                             $tpl->assign("VALUE_RECORD",implode(',',$values));
@@ -964,7 +975,7 @@ class MEMBER{
                     $tpl->gotoBlock("SAVING_RESULT");
                     $tpl->assign(array(
                         "VALUE_SUCCESS_NUMS"  => $wNums, 
-                        "VALUE_CONFLICT_NUMS" => $cNums 
+                        "VALUE_CONFLICT_NUMS" => $cNums+$aNums
                     ));
                     @unlink($target_csv);
                     fclose($res);
