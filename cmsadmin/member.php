@@ -511,7 +511,7 @@ class MEMBER{
         global $db,$tpl,$cms_cfg,$TPLMSG;
         //使用國家值
         $country = $_POST['m_new_country']?$_POST['m_new_country']:$_POST['m_country'];
-        $mc_id_str = @implode(',',$_REQUEST["mc_id"]);
+        $mc_id_str = @implode(',',(array)$_REQUEST["mc_id"]);
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
