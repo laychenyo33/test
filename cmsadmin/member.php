@@ -595,7 +595,7 @@ class MEMBER{
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 $goto_url=$cms_cfg["manage_url"]."member.php?func=m_list&mc_id=".$_POST['return_mc_id']."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
-                $this->goto_target_page($goto_url);
+                $this->goto_target_page($goto_url,2);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
