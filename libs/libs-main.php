@@ -1644,7 +1644,24 @@ class MAINFUNC{
         $ik=0; //陣列元素長度
         $tmp_str="";
         while(($c=fgetc($fp))!==FALSE){
-            if($c=="\n" && !$str_mode)break;
+            if($c=="\n"){
+                if(!$str_mode){
+                    if(substr($arr[$k],-1)=="\r"){ //如果是windwos，把非字串模式下的內容拿掉\r
+                        $arr[$k] = substr($arr[$k],0,strlen($arr[$k])-1); //移除字串後的\r
+                    }
+                    break;
+                }else{
+                    if(substr($tmp_str,-1).$c==($enc."\n")){ //如果當前字串結尾取得"\n，當作是字串及行的結束，重設所有相關變數，適用Linux
+                        $arr[$k] = substr($tmp_str,0,strlen($tmp_str)-1); //移除字串後的"，取得當前累積字串
+                        $str_mode=false; //切換回非字串模式
+                        break;
+                    }elseif(substr($tmp_str,-2).$c==($enc."\r\n")){ //如果當前字串結尾取得"\r\n，當作是字串及行的結束，重設所有相關變數，適用Windows
+                        $arr[$k] = substr($tmp_str,0,strlen($tmp_str)-2); //移除字串後的"\r，取得當前累積字串
+                        $str_mode=false; //切換回非字串模式
+                        break;
+                    }                    
+                }
+            }   
             if($c==$enc && !$str_mode && $ik==0){
                 $str_mode = true;
                 continue;
