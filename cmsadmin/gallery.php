@@ -12,6 +12,7 @@ $news = new GALLERY;
 class GALLERY{
     function GALLERY(){
         global $db,$cms_cfg,$tpl;
+        $this->seo=($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
             case "ajax":
                 if(method_exists($this, "ajax_".$_GET['act'])){
@@ -188,6 +189,9 @@ class GALLERY{
     //Gallery分類--表單
     function gallery_cate_form($action_mode){
         global $db,$tpl,$cms_cfg,$TPLMSG;
+        if($this->seo){
+            $tpl->newBlock("SEO_EDIT_ZONE");
+        }
         //欄位名稱
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
                                   "VALUE_GC_SORT"  => 1,
@@ -220,7 +224,17 @@ class GALLERY{
                                           "STR_GC_STATUS_CK1" => ($row["gc_status"])?"checked":"",
                                           "STR_GC_STATUS_CK0" => ($row["gc_status"])?"":"checked",
                                           "MSG_MODE" => $TPLMSG['MODIFY']
-                ));
+                ));	
+                if($this->seo){
+                    $tpl->assignGlobal( array(
+                        "VALUE_GC_SEO_TITLE" => $row["gc_seo_title"],
+                        "VALUE_GC_SEO_KEYWORD" => $row["gc_seo_keyword"],
+                        "VALUE_GC_SEO_DESCRIPTION" => $row["gc_seo_description"],
+                        "VALUE_GC_SEO_FILENAME" => $row["gc_seo_filename"],
+                        "VALUE_GC_SEO_H1" => $row["gc_seo_h1"],
+                        "VALUE_GC_SEO_SHORT_DESC" => $row["gc_seo_short_desc"],
+                    ));
+                }
             }else{
                 header("location : gallery.php?func=gc_list");
                 die();
@@ -236,6 +250,26 @@ class GALLERY{
     //Gallery分類--資料更新
     function gallery_cate_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        if($this->seo){
+            $add_field_str="gc_seo_title,
+                            gc_seo_keyword,
+                            gc_seo_description,
+                            gc_seo_filename,
+                            gc_seo_h1,
+                            gc_seo_short_desc,";
+            $add_value_str="'".htmlspecialchars($_REQUEST["gc_seo_title"])."',
+                            '".htmlspecialchars($_REQUEST["gc_seo_keyword"])."',
+                            '".htmlspecialchars($_REQUEST["gc_seo_description"])."',
+                            '".htmlspecialchars($_REQUEST["gc_seo_filename"])."',
+                            '".htmlspecialchars($_REQUEST["gc_seo_h1"])."',
+                            '".htmlspecialchars($_REQUEST["gc_seo_short_desc"])."',";
+            $update_str="gc_seo_title='".htmlspecialchars($_REQUEST["gc_seo_title"])."',
+                         gc_seo_keyword='".htmlspecialchars($_REQUEST["gc_seo_keyword"])."',
+                         gc_seo_description='".htmlspecialchars($_REQUEST["gc_seo_description"])."',
+                         gc_seo_filename='".htmlspecialchars($_REQUEST["gc_seo_filename"])."',
+                         gc_seo_h1='".htmlspecialchars($_REQUEST["gc_seo_h1"])."',
+                         gc_seo_short_desc='".htmlspecialchars($_REQUEST["gc_seo_short_desc"])."',";
+        }
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
@@ -244,12 +278,14 @@ class GALLERY{
                         gc_sort,
                         gc_subject,
                         gc_desc,
+                        ".$add_field_str."
                         gc_dir
                     ) values (
                         ".$_REQUEST["gc_status"].",
                         '".$_REQUEST["gc_sort"]."',
                         '".htmlspecialchars($_REQUEST["gc_subject"])."',
                         '".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"]))."',
+                        ".$add_value_str."
                         '".$main->file_str_replace($_REQUEST["gc_dir"])."'
                     )";
                 break;
@@ -260,6 +296,7 @@ class GALLERY{
                         gc_sort='".$_REQUEST["gc_sort"]."',
                         gc_subject='".htmlspecialchars($_REQUEST["gc_subject"])."',
                         gc_desc='".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"]))."',
+                        ".$update_str."
                         gc_dir='".$main->file_str_replace($_REQUEST["gc_dir"])."'
                     where gc_id='".$_REQUEST["gc_id"]."'";
                 break;

@@ -156,18 +156,28 @@ class GALLERY{
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
             $tpl->newBlock( "LEFT_CATE_LIST" );
-            $tpl->assign( array( "VALUE_CATE_NAME"   => $row["gc_subject"],
-                                 "VALUE_CATE_LINK"   => $this->get_link($row),
-                                 "TAG_CURRENT_CLASS" => "",
+            $tpl->assign( array( 
+                "VALUE_CATE_NAME"   => $row["gc_subject"],
+                "VALUE_CATE_LINK"   => $this->get_link($row),
+                "TAG_CURRENT_CLASS" => "",
             ));
             if($_REQUEST["gc_id"]==$row["gc_id"]){
                 $tpl->assign("TAG_CURRENT_CLASS" ,"class='current'");
                 if($_GET['g_id']){
-                $main->layer_link($row["gc_subject"],$this->get_link($row));
+                    $main->layer_link($row["gc_subject"],$this->get_link($row));
                 }else{
                     $main->layer_link($row["gc_subject"]);
                 }
-                $main->header_footer("",$row["gc_subject"]);
+                if($this->ws_seo){
+                    $meta_array=array(
+                        "meta_title"       => $row["gc_seo_title"],
+                        "meta_keyword"     => $row["gc_seo_keyword"],
+                        "meta_description" => $row["gc_seo_description"],
+                    );
+                    $main->header_footer($meta_array,$row["gc_subject"]);
+                }else{
+                    $main->header_footer("",$row["gc_subject"]);
+                }                 
             }
         }        
     }
