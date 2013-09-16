@@ -224,7 +224,7 @@ class NEWS{
     //左側選單
     function left_cate_list($cur_nc_id=null){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' order by nc_sort ".$cms_cfg['sort_pos']." ";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' and nc_indep='0' order by nc_sort ".$cms_cfg['sort_pos']." ";
         $selectrs = $db->query($sql);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){

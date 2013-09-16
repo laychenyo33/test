@@ -204,6 +204,8 @@ class NEWS{
                                   "VALUE_NC_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_news_cate","nc","","",0),
                                   "STR_NC_STATUS_CK1" => "checked",
                                   "STR_NC_STATUS_CK0" => "",
+                                  "STR_NC_INDEP_CK0" => "checked",
+                                  "STR_NC_INDEP_CK1" => "",
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
         //相關參數
@@ -229,6 +231,8 @@ class NEWS{
                                           "VALUE_NC_SUBJECT" => $row["nc_subject"],
                                           "STR_NC_STATUS_CK1" => ($row["nc_status"])?"checked":"",
                                           "STR_NC_STATUS_CK0" => ($row["nc_status"])?"":"checked",
+                                          "STR_NC_INDEP_CK1" => ($row["nc_indep"])?"checked":"",
+                                          "STR_NC_INDEP_CK0" => ($row["nc_indep"])?"":"checked",
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
                 if($this->seo){
@@ -273,11 +277,13 @@ class NEWS{
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_news_cate (
                         nc_status,
+                        nc_indep,
                         nc_sort,
                         ".$add_field_str."
                         nc_subject
                     ) values (
                         ".$_REQUEST["nc_status"].",
+                        ".$_REQUEST["nc_indep"].",
                         '".$_REQUEST["nc_sort"]."',
                         ".$add_value_str."
                         '".htmlspecialchars($_REQUEST["nc_subject"])."'
@@ -287,6 +293,7 @@ class NEWS{
                 $sql="
                     update ".$cms_cfg['tb_prefix']."_news_cate set
                         nc_status=".$_REQUEST["nc_status"].",
+                        nc_indep=".$_REQUEST["nc_indep"].",
                         nc_sort='".$_REQUEST["nc_sort"]."',
                         ".$update_str."
                         nc_subject='".htmlspecialchars($_REQUEST["nc_subject"])."'
