@@ -1327,7 +1327,7 @@ class MAINFUNC{
             }
             ////最新消息
             if(in_array('news',$sw)){
-                $sql = "select * from ".$cms_cfg['tb_prefix']."_news_cate order by nc_sort ".$cms_cfg['sort_pos'];
+                $sql = "select * from ".$cms_cfg['tb_prefix']."_news_cate where nc_status='1' and nc_indep='0' order  by nc_sort ".$cms_cfg['sort_pos'];
                 $res = $db->query($sql);
                 if($db->numRows($res)){
                     $menu_arr['news']=array();
