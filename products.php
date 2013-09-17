@@ -894,7 +894,7 @@ class PRODUCTS{
                 default:
                     $tpl->newBlock("CHCAROUSEL_SCRIPT");
             }
-            $tpl->newBlock("RELATED_PRODUCTS_ZONE");
+            $tpl->newBlock("RELATED_PRODUCTS_ZONE_".$effect);
             while($row = $db->fetch_array($selectrs,1)){
                 $tpl->newBlock("RELATED_PRODUCTS");
                 $p_link = $this->get_link($row,true);
