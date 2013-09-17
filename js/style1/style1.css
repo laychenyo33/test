@@ -36,6 +36,7 @@
 	left: 0px;
 	text-align: center;
 }
+#ifocus_piclist ul{padding:0;margin:0}
 #ifocus_piclist li {
 	margin: 0px; 
 	padding: 0px;
@@ -97,3 +98,4 @@
 #ifocus_tx .normal {
 	display: none;
 }
+#ifocus_tx ul{list-style: none}
