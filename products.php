@@ -707,6 +707,7 @@ class PRODUCTS{
     function products_search(){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
         if(trim($_REQUEST["kw"])!=""){
+            $main->layer_link($TPLMSG['PRODUCTS_SEARCH']);
             $tpl->newBlock( "TAG_PRODUCTS_SEARCH" );
             //產品管理列表
             $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id > '0' and p.p_status=1";
