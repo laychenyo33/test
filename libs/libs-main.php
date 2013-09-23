@@ -202,8 +202,18 @@ class MAINFUNC{
             $tpl->assign("TAG_LOGIN_MEMBER_CATE",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_CATE']);
             $tpl->assign("TAG_LOGIN_MEMBER_NAME",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_NAME']);
             $tpl->assign("TAG_LOGIN_MEMBER_DATA",$TPLMSG['MEMBER_ZONE_DATA']);
-            $tpl->assign("TAG_LOGIN_MEMBER_ORDER",$TPLMSG['MEMBER_ZONE_ORDER']);
-            $tpl->assign("TAG_LOGIN_MEMBER_INQUIRY",$TPLMSG['MEMBER_ZONE_INQUIRY']);
+            switch($_SESSION[$cms_cfg['sess_cookie_name']]['sc_cart_type']){
+                case "0":
+                    $tpl->newBlock("CART_TYPE_INQUIRY");
+                    $tpl->assign("TAG_LOGIN_MEMBER_INQUIRY",$TPLMSG['MEMBER_ZONE_INQUIRY']);
+                    $tpl->gotoBlock( "MEMBER_INFO" );
+                    break;
+                case "1":
+                    $tpl->newBlock("CART_TYPE_ORDER");
+                    $tpl->assign("TAG_LOGIN_MEMBER_ORDER",$TPLMSG['MEMBER_ZONE_ORDER']);
+                    $tpl->gotoBlock( "MEMBER_INFO" );
+                    break;
+            }
             $tpl->assign("TAG_LOGIN_MEMBER_CONTACTUS",$TPLMSG['MEMBER_ZONE_CONTACTUS']);
             if($cms_cfg['ws_module']['ws_member_download']){
                 $tpl->newBlock("MEMBER_DOWNLOAD");
