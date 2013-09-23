@@ -475,8 +475,6 @@ class MEMBER{
                     $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                               "VALUE_O_ID"  => $row["o_id"],
                                               "VALUE_O_COMPANY_NAME" => $row["o_company_name"],
-                                              "VALUE_O_CONTACT_S" => $row["o_contact_s"],
-                                              "VALUE_O_NAME" => $row["o_name"],
                                               "VALUE_O_TEL" => $row["o_tel"],
                                               "VALUE_O_FAX" => $row["o_fax"],
                                               "VALUE_O_CELLPHONE" => $row["o_cellphone"],
@@ -490,6 +488,11 @@ class MEMBER{
                                               "VALUE_O_CONTENT" => $row["o_content"],
                                               "VALUE_O_PAYMENT_TYPE" => $ws_array["payment_type"][$row["o_payment_type"]],
                     ));
+                    $tpl->newBlock("ORDER_S_".$this->contact_s_style);
+                    $tpl->assign(array(
+                          "VALUE_O_NAME"      => $row["o_name"],
+                          "VALUE_O_CONTACT_S" => $ws_array['contactus_s'][$row["o_contact_s"]],
+                    ));                    
                     //訂購產品列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
                     $selectrs = $db->query($sql);
