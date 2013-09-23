@@ -214,7 +214,11 @@ class MAINFUNC{
                     $tpl->gotoBlock( "MEMBER_INFO" );
                     break;
             }
-            $tpl->assign("TAG_LOGIN_MEMBER_CONTACTUS",$TPLMSG['MEMBER_ZONE_CONTACTUS']);
+            if($cms_cfg['ws_module']['ws_contactus']){
+                $tpl->newBlock("MEMBER_CONTACTUS");
+                $tpl->assign("TAG_LOGIN_MEMBER_CONTACTUS",$TPLMSG['MEMBER_ZONE_CONTACTUS']);
+                $tpl->gotoBlock( "MEMBER_INFO" );
+            }
             if($cms_cfg['ws_module']['ws_member_download']){
                 $tpl->newBlock("MEMBER_DOWNLOAD");
                 $tpl->assign("TAG_LOGIN_MEMBER_DOWNLOAD",$TPLMSG['DOWNLOAD']);
