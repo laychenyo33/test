@@ -488,7 +488,7 @@ class MEMBER{
                                               "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                               "VALUE_O_STATUS_SUBJECT" => $ws_array["order_status"][$row["o_status"]],
                                               "VALUE_O_CONTENT" => $row["o_content"],
-                                              "VALUE_O_PAYMENT_TYPE" => $row["o_payment_type"],
+                                              "VALUE_O_PAYMENT_TYPE" => $ws_array["payment_type"][$row["o_payment_type"]],
                     ));
                     //訂購產品列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
