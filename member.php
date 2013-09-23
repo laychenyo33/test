@@ -25,6 +25,10 @@ class MEMBER{
                 $this->ws_tpl_type=1;
                 break;
             case "m_add"://會員管理新增
+                if($this->m_id){
+                    header("location:member.php?func=m_mod");
+                    die();
+                }
                 $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_FORMVALID");
