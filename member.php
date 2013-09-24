@@ -312,9 +312,7 @@ class MEMBER{
         }
         if(!empty($sql)){
             $rs = $db->query($sql);
-            $db_msg = $db->report();
-            $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
-            $this->ws_load_tp($this->ws_tpl_file);            
+            $db_msg = $db->report();          
             if ( $db_msg == "" ) {
                 if($_REQUEST["action_mode"]=="add"){
                     //已有購物或詢價時直接登入
