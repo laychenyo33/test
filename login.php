@@ -32,7 +32,7 @@ class LOGIN {
                 $this->Logout();
                 break;
         }
-	}
+    }
 
     //檢查輸入的帳號密碼
     function Check_Login_Data(){
@@ -63,7 +63,11 @@ class LOGIN {
                 $rs = $db->query($sql);
                 $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]="";
                 //echo "1";
-                header("location: ".$_SERVER['HTTP_REFERER']);
+                if(empty($_POST['return_url'])){
+                    header("location: ".$_SERVER['HTTP_REFERER']);
+                }else{
+                    header("location: ".$_POST['return_url']);
+                }
             }else{
                 //echo "2";
                 $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]=$TPLMSG['LOGIN_ERROR'];
