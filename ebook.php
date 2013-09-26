@@ -52,6 +52,7 @@ class EBOOK{
                 break;
         }
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -66,11 +67,13 @@ class EBOOK{
         //$tpl->assignGlobal( "MSG_HOME", $TPLMSG['EBOOK']);
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["EBOOK"]);
         $tpl->assignGlobal( "TAG_LAYER" , $this->top_layer_link);
+        
         $tpl->prepare();
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal( "TAG_MAIN_IMG" , $ws_array["main_img"]["ebook"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["ebook"]);//左方menu title
         $tpl->assignGlobal( "TAG_EBOOK_CURRENT" , "class='current'"); //上方menu current
+        $main->layer_link($TPLMSG["EBOOK"],$cms_cfg['base_root'] . "ebook.php");
         $main->header_footer("");
     }
     //EBOOK--列表================================================================
@@ -116,7 +119,9 @@ class EBOOK{
         $func_str="";
         $ebook_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_ebook_cate","ebc_name","ebc",$this->parent,$func_str);
         if(!empty($ebook_cate_layer)){
-            $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link. $cms_cfg['path_separator'] .implode($cms_cfg['path_separator'],$ebook_cate_layer));
+            foreach($ebook_cate_layer as $cblink) {
+                $main->layer_link($cblink);
+            }
         }
 
         //EBOOK列表
@@ -191,8 +196,10 @@ class EBOOK{
                     $func_str="ebook.php?func=eb_list";
                     $ebook_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_ebook_cate","ebc_name","ebc",$row["ebc_id"],$func_str,1);
                     if(!empty($ebook_cate_layer)){
-                        $tpl->assignGlobal("TAG_LAYER",$this->top_layer_link.$cms_cfg['path_separator'].implode($cms_cfg['path_separator'],$ebook_cate_layer).$cms_cfg['path_separator'].$row["eb_name"]);
-                    }
+                        foreach($ebook_cate_layer as $cblink) {
+                            $main->layer_link($cblink);
+                        }
+                    }                    
                 }
             }
         }
@@ -255,29 +262,29 @@ class EBOOK{
             $page_end=($total%$op_limit)?$Page["total_pages"] : $Page["total_pages"]+1;
         }else{
             //有上跳頁沒有下跳頁
-      if($nowp >= $ppages) {
-        if($jp <= $ppages){ //最後下跳頁
-          $bp=$jp-1;
-          $prev=$page_start-1;
-          $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
-          $Page["nj_page"]="";
-        }
-      }else{
-        //有上跳頁也有下跳頁
-        if($jp < $ppages && $jp!=0){
-          $bp=$jp-1;
-          $np=$jp+1;
-          $prev=$page_start-1;
-          $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
-          $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
-        }
-        //沒有上跳頁有下跳頁
-        if($jp ==0){//第1頁
-          $np=$jp+1;
-          $Page["bj_page"]="";
-          $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
-        }
-      }
+            if($nowp >= $ppages) {
+                if($jp <= $ppages){ //最後下跳頁
+                    $bp=$jp-1;
+                    $prev=$page_start-1;
+                    $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
+                    $Page["nj_page"]="";
+                }
+            }else{
+                //有上跳頁也有下跳頁
+                if($jp < $ppages && $jp!=0){
+                    $bp=$jp-1;
+                    $np=$jp+1;
+                    $prev=$page_start-1;
+                    $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
+                    $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
+                }
+                //沒有上跳頁有下跳頁
+                if($jp ==0){//第1頁
+                    $np=$jp+1;
+                    $Page["bj_page"]="";
+                    $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
+                }
+            }
         }
         //分頁選單PAGE_OPTION
         $nowp_option=array();
@@ -320,7 +327,7 @@ class EBOOK{
             $row = $db->fetch_array($selectrs,1);
             $tpl->assignGlobal(array(
                 "VALUE_EB_BIG_IMG" => (trim($row["eb_big_img"])=="")?$cms_cfg['default_ebook_pic']:$cms_cfg["file_root"].$row["eb_big_img"]
-    		    ));
+            ));
         }
     }    
 }
