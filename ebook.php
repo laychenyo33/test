@@ -302,19 +302,21 @@ class EBOOK{
         $sql = "select eb_id,eb_big_img from ".$cms_cfg['tb_prefix']."_ebook where eb_id=".$_REQUEST["fileID"];
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
-        $piece=explode("/",$row["eb_big_img"]);
-        $num=count($piece)-1;
-        $file_name = $piece[$num];
-        //pumo主機
-        $file_name_path = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row["eb_big_img"];
-        //amgvh主機
-        // $file_name_path = $cms_cfg['file_url'].$row["eb_big_img"];
+        if($row){
+            $piece=explode("/",$row["eb_big_img"]);
+            $num=count($piece)-1;
+            $file_name = $piece[$num];
+            //pumo主機
+            $file_name_path = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row["eb_big_img"];
+            //amgvh主機
+            // $file_name_path = $cms_cfg['file_url'].$row["eb_big_img"];
 
-        header("Content-type:application");
-        header("Content-Disposition: attachment; filename=".$file_name);
-        //file_name是預設下載時的檔名，可使用變數。
-        readfile($file_name_path);
-        //file是實際存放在你硬碟中要被下載的檔案，可使用變數。
+            header("Content-type:application");
+            header("Content-Disposition: attachment; filename=".$file_name);
+            //file_name是預設下載時的檔名，可使用變數。
+            readfile($file_name_path);
+            //file是實際存放在你硬碟中要被下載的檔案，可使用變數。
+        }
         exit(0);        
     }
     //列印 EDM
