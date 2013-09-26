@@ -928,9 +928,25 @@ class MAINFUNC{
         echo "document.location='".$goto_url."'";
         echo "</script>";
     }
-    function replace_html_tags($str){
-        $str=str_replace(" ","",strip_tags($str));
-        $str=str_replace("\r\n","",$str);
+    function replace_html_tags($str,$sw="10"){
+//        $str=str_replace(" ","",strip_tags($str));
+        $pattern = array("10","01","00");
+        foreach($pattern as $p){
+            if(($p & $sw)==$p){
+                switch($p & $sw){
+                    case "10":
+                        $str=strip_tags($str);
+                        break;
+                    case "01":
+                        $str=nl2br($str);
+                        break;
+                    case "00":
+                    default:
+                        $str=str_replace("\r\n","",$str);
+                        break;
+                }
+            }
+        }
         return $str;
     }
     //counter
