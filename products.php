@@ -879,12 +879,15 @@ class PRODUCTS{
     //相關產品
     function related_products($p_id_str,$pc_id,$effect=1){
         global $db,$cms_cfg,$tpl,$TPLMSG,$main;
+        if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
+            $ex_and_str =  " and p.p_type not in ('1','3','5','7') ";
+        }            
         if(trim($p_id_str)!=""){
             $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
-            where p.p_id in (".$p_id_str.") and p.p_status='1' order by rand()";
+            where p.p_id in (".$p_id_str.") and p.p_status='1' ".$ex_and_str." order by rand()";
         }else{
             $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id
-            where p.pc_id='".$pc_id."' and p.p_status='1' order by rand() limit 0,8";
+            where p.pc_id='".$pc_id."' and p.p_status='1' ".$ex_and_str." order by rand() limit 0,8";
         }
         $selectrs = $db->query($sql);
         $rsnum  = $db->numRows($selectrs);
