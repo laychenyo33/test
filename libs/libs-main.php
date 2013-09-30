@@ -59,12 +59,8 @@ class MAINFUNC{
                 $Page["last_page"] = $func_str."&nowp=".$Page["total_pages"]."&jp=".(ceil($Page["total_pages"]/$jp_limit)-1);
             }
         }
-        $this->showPagination($Page,$showNoData);
-        if($_GET["st"]){
-            $sql=$this->sqlstr_add_limit($op_limit,'',$sql);
-        }else{
-            $sql=$this->sqlstr_add_limit($op_limit,$nowp,$sql);
-        }        
+        $this->showPagination($Page,$showNoData);       
+        $sql=$this->sqlstr_add_limit($op_limit,$nowp,$sql);
 //        $sql = $this->sqlstr_add_limit($op_limit,$nowp,$sql);
         return $sql;
     }
@@ -142,12 +138,8 @@ class MAINFUNC{
                 $Page["last_page"] = $func_str."&nowp=".$Page["total_pages"]."&jp=".(ceil($Page["total_pages"]/$jp_limit)-1);
             }
         }        
-        $this->showPagination($Page,$showNoData);
-        if($_GET["st"]){
-            $sql=$this->sqlstr_add_limit($op_limit,'',$sql);
-        }else{
-            $sql=$this->sqlstr_add_limit($op_limit,$nowp,$sql);
-        }        
+        $this->showPagination($Page,$showNoData);      
+        $sql=$this->sqlstr_add_limit($op_limit,$nowp,$sql);
 //        $sql = $this->sqlstr_add_limit($op_limit,$nowp,$sql);
         return $sql;
     }
