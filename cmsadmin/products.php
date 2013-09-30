@@ -782,7 +782,7 @@ class PRODUCTS{
                 $tpl->assignGlobal("TAG_PRODUCTS_CATE_LAYER",$TPLMSG["NO_CATE"]);
             }
             //產品列表
-            $i=$page["start_serial"];
+            $i=(($_GET['nowp']?$_GET['nowp']:1)-1)*$this->op_limit;
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $i++;
                 $tpl->newBlock( "PRODUCTS_LIST" );
