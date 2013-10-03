@@ -8,8 +8,9 @@ class DB {
   var $query_count = 0;
   var $query_time = 0;
   var $query_array = array();
+  var $prefix;
 
-  function DB($db_host, $db_user, $db_password, $db_name, $db_persistent = 0) {
+  function DB($db_host, $db_user, $db_password, $db_name, $tb_prefix,$db_persistent = 0) {
 
     if ($db_persistent) {
       $this->connection = @mysql_pconnect($db_host, $db_user, $db_password)
@@ -29,6 +30,7 @@ class DB {
           $this->connection = $dbselect;
           $this->error("Could not select database ($db_name).");
         }
+        $this->prefix = $tb_prefix;
       }
       return $this->connection;
     }
@@ -254,6 +256,9 @@ class DB {
           $arr[$k] = "'".mysql_real_escape_string($v)."'";
       }
       return $arr;
+  }
+  function prefix($table_name){
+      return sprintf("`%s_%s`",$this->prefix,$table_name);
   }
 } // end of class
 
