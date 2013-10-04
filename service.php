@@ -4,7 +4,7 @@ include_once("libs/libs-sysconfig.php");
 $service = new SERVICE;
 class SERVICE{
     function SERVICE(){
-        global $db,$cms_cfg,$tpl;
+        global $db,$cms_cfg,$tpl,$main;
         //show page
         $this->ws_tpl_file = "templates/ws-service-term-tpl.html";
         if($_REQUEST["s"]==1){
@@ -14,6 +14,7 @@ class SERVICE{
              $this->ws_load_tp("templates/ws-service-term-tpl.html");
         }
         $this->service_list($_REQUEST["st"]);
+        $main->layer_link();
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -38,7 +39,7 @@ class SERVICE{
 
     //服務條款--列表================================================================
     function service_list($term_type){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array,$main;
         switch($term_type){
             case "service":
                 $field="st_service_term";
@@ -74,7 +75,7 @@ class SERVICE{
             $i++;
             if($field==$key){
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $value);
-                $tpl->assignGlobal( "TAG_LAYER" , $value);
+                $main->layer_link($value);
             }
             $tpl->newBlock( "LEFT_CATE_LIST" );
             $key=str_replace("st_","",$key);
