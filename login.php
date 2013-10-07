@@ -12,7 +12,7 @@ $si->setFontColor("222222");
 $si->setFontSize(5);
 $si->setCodeLength(4);
 $si->inputParam = "style='color:blue;'";
-$db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name']);
+$db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name'],$cms_cfg['tb_prefix']);
 $login= new LOGIN();
 class LOGIN {
     //主程式

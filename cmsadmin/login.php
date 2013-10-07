@@ -13,7 +13,7 @@ $si->setFontSize(5);
 $si->setCodeLength(4);
 $si->inputParam = "style='color:blue;'";
 $si->setImageSize("90","25");
-$db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name']);
+$db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name'],$cms_cfg['tb_prefix']);
 $login= new LOGIN();
 class LOGIN {
     //主程式
