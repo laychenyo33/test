@@ -981,7 +981,7 @@ class PRODUCTS{
             $item_name = "p_name";
             $parent_name = "pc_id";
             $row['pc_seo_filename'] = $_GET['d'];
-            $parent_link = $this->get_link($row,true);
+            $parent_link = $this->get_link($row);
         }else{
             $item_name = "pc_name";
             $parent_name = "pc_parent";
