@@ -18,7 +18,7 @@ class METATITLE{
                 $this->ws_tpl_file = "templates/ws-manage-meta-title-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_TABTITLE");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("JS_TINYMCE_SEO");
                 $this->meta_title_form();
                 $this->ws_tpl_type=1;
                 break;
@@ -32,6 +32,7 @@ class METATITLE{
                 $this->ws_tpl_file = "templates/ws-manage-meta-title-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_TABTITLE");
+                $tpl->newBlock("JS_TINYMCE_SEO");
                 $this->meta_title_form();
                 $this->ws_tpl_type=1;
                 break;
@@ -56,105 +57,27 @@ class METATITLE{
 
     ////各項服務說明設定--表單
     function meta_title_form(){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_metatitle ";
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        $sql="select * from ".$db->prefix("metatitle");
         $selectrs = $db->query($sql);
         while($row = $db->fetch_array($selectrs,1)){
-            if($cms_cfg["ws_module"]["ws_aboutus"]==1 && $row["mt_name"]=="aboutus"){
-                $tpl->newBlock("SEO_ZONE_ABOUTUS_T");
-                $tpl->newBlock("SEO_ZONE_ABOUTUS");
-                $tpl->assign(array("VALUE_AU_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_AU_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_AU_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_AU_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_AU_SEO_H1" => $row["mt_seo_h1"]
-                ));
-            }elseif($row["mt_name"]=="video"){
-                $tpl->newBlock("SEO_ZONE_VIDEO_T");
-                $tpl->newBlock("SEO_ZONE_VIDEO");
-                $tpl->assign(array("VALUE_V_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_V_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_V_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_V_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_V_SEO_H1" => $row["mt_seo_h1"]
-                ));
-            }elseif($cms_cfg["ws_module"]["ws_contactus"]==1 && $row["mt_name"]=="contactus"){
-                //聯絡我們seo欄位
-                $tpl->newBlock("SEO_ZONE_CONTACTUS_T");
-                $tpl->newBlock("SEO_ZONE_CONTACTUS");
-                $tpl->assign(array("VALUE_CU_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_CU_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_CU_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_CU_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_CU_SEO_H1" => $row["mt_seo_h1"]
-                ));
-            }elseif($cms_cfg["ws_module"]["ws_download"]==1 && $row["mt_name"]=="download"){
-                //檔案下載seo欄位
-                $tpl->newBlock("SEO_ZONE_DOWNLOAD_T");
-                $tpl->newBlock("SEO_ZONE_DOWNLOAD");
-                $tpl->assign(array("VALUE_D_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_D_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_D_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_D_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_D_SEO_H1" => $row["mt_seo_h1"]
-                ));
-            }elseif($cms_cfg["ws_module"]["ws_faq"]==1 && $row["mt_name"]=="faq"){
-                //FAQ seo欄位
-                $tpl->newBlock("SEO_ZONE_FAQ_T");
-                $tpl->newBlock("SEO_ZONE_FAQ");
-                $tpl->assign(array("VALUE_F_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_F_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_F_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_F_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_F_SEO_H1" => $row["mt_seo_h1"]
-                ));
-            }elseif($cms_cfg["ws_module"]["ws_news"]==1 && $row["mt_name"]=="news"){
-                //最新消息 seo欄位
-                $tpl->newBlock("SEO_ZONE_NEWS_T");
-                $tpl->newBlock("SEO_ZONE_NEWS");
-                $tpl->assign(array("VALUE_N_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_N_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_N_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_N_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_N_SEO_H1" => $row["mt_seo_h1"]
-                ));
-            }elseif($cms_cfg["ws_module"]["ws_products"]==1 && $row["mt_name"]=="products"){
-                //產品主頁 seo欄位
-                $tpl->newBlock("SEO_ZONE_PRODUCTS_T");
-                $tpl->newBlock("SEO_ZONE_PRODUCTS");
-                $tpl->assign(array("VALUE_P_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_P_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_P_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_P_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_P_SEO_H1" => $row["mt_seo_h1"],
-                                   "VALUE_P_SEO_CUSTOM" => $row["mt_seo_custom"],
-                                   "STR_P_SEO_CUSTOM_STATUS_CK0" => (trim($row["mt_seo_custom"]=="")) ? "checked":"",
-                                   "STR_P_SEO_CUSTOM_STATUS_CK1" => (trim($row["mt_seo_custom"]=="")) ? "":"checked",
-                                   "STR_P_SEO_CUSTOM_STATUS_DISPLAY" => (trim($row["mt_seo_custom"]=="")) ? "none":"",
-                ));
-            }elseif($cms_cfg["ws_module"]["ws_products_application"]==1 && $row["mt_name"]=="application"){
-                //應用領域 seo欄位
-                $tpl->newBlock("SEO_ZONE_APPLICATION_T");
-                $tpl->newBlock("SEO_ZONE_APPLICATION");
-                $tpl->assign(array("VALUE_PA_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_PA_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_PA_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_PA_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_PA_SEO_H1" => $row["mt_seo_h1"],
-                                   "VALUE_PA_SEO_CUSTOM" => $row["mt_seo_custom"],
-                                   "STR_PA_SEO_CUSTOM_STATUS_CK0" => (trim($row["mt_seo_custom"]=="")) ? "checked":"",
-                                   "STR_PA_SEO_CUSTOM_STATUS_CK1" => (trim($row["mt_seo_custom"]=="")) ? "":"checked",
-                                   "STR_PA_SEO_CUSTOM_STATUS_DISPLAY" => (trim($row["mt_seo_custom"]=="")) ? "none":"",
-                ));
-            }elseif($row["mt_name"]=="sitemap"){
-                //網站地圖 seo欄位
-                $tpl->newBlock("SEO_ZONE_SITEMAP_T");
-                $tpl->newBlock("SEO_ZONE_SITEMAP");
-                $tpl->assign(array("VALUE_S_SEO_TITLE" => $row["mt_seo_title"],
-                                   "VALUE_S_SEO_KEYWORD" => $row["mt_seo_keyword"],
-                                   "VALUE_S_SEO_DESCRIPTION" => $row["mt_seo_description"],
-                                   "VALUE_S_SEO_SHORT_DESC" => $row["mt_seo_short_desc"],
-                                   "VALUE_S_SEO_H1" => $row["mt_seo_h1"]
+            if(!isset($cms_cfg['ws_module']['ws_'.$row['mt_name']]) || (isset($cms_cfg['ws_module']['ws_'.$row['mt_name']]) && $cms_cfg['ws_module']['ws_'.$row['mt_name']])){
+                $tpl->newBlock("SEO_ZONE_TITLE");
+                $tpl->assign("VALUE_MT_NAME",$row['mt_name']);
+                $tpl->assign("VALUE_MT_NAME_TITLE",$ws_array["main"][$row['mt_name']]);
+                $tpl->newBlock("SEO_ZONE_FIELDS");
+                $tpl->assign(array(
+                    "VALUE_MT_NAME_TITLE"       => $ws_array["main"][$row['mt_name']],
+                    "VALUE_MT_NAME"             => $row['mt_name'],
+                    "VALUE_SEO_TITLE"           => $row["mt_seo_title"],
+                    "VALUE_SEO_KEYWORD"         => $row["mt_seo_keyword"], 
+                    "VALUE_SEO_DESCRIPTION"     => $row["mt_seo_description"], 
+                    "VALUE_SEO_SHORT_DESC"      => $row["mt_seo_short_desc"], 
+                    "VALUE_SEO_CUSTOM"          => $row["mt_seo_custom"], 
+                    "SEO_CUSTOM_STATUS_CK0"     => $row["mt_seo_custom"]?"":"checked", 
+                    "SEO_CUSTOM_STATUS_CK1"     => $row["mt_seo_custom"]?"checked":"", 
+                    "SEO_CUSTOM_STATUS_DISPLAY" => $row["mt_seo_custom"]?"":"none", 
+                    "VALUE_SEO_H1"              => $row["mt_seo_h1"]
                 ));
             }
         }
@@ -164,114 +87,19 @@ class METATITLE{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $main->magic_gpc($_REQUEST);
         //關於我們seo欄位更新
-        if($cms_cfg["ws_module"]["ws_aboutus"]==1){
+        foreach($_POST['meta'] as $mt_name => $metafields){
             $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["au_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["au_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["au_seo_description"])."',
-                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["au_seo_short_desc"]))."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["au_seo_h1"])."'
-                where mt_name='aboutus'";
+                update ".$db->prefix("metatitle")." set
+                    mt_seo_title='".htmlspecialchars($metafields["mt_seo_title"])."',
+                    mt_seo_keyword='".htmlspecialchars($metafields["mt_seo_keyword"])."',
+                    mt_seo_description='".htmlspecialchars($metafields["mt_seo_description"])."',
+                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($metafields["mt_seo_short_desc"]))."',
+                    mt_seo_custom='".$db->quote($main->content_file_str_replace($metafields["mt_seo_custom"]))."',
+                    mt_seo_h1='".htmlspecialchars($metafields["mt_seo_h1"])."'
+                where mt_name='".$mt_name."'";
             $rs = $db->query($sql);
+            $db_msg .= $db->report();
         }
-        //影片seo欄位更新
-        if(true){
-            $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["v_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["v_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["v_seo_description"])."',
-                    mt_seo_short_desc='".htmlspecialchars($_REQUEST["v_seo_short_desc"])."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["v_seo_h1"])."'
-                where mt_name='video'";
-            $rs = $db->query($sql);
-        }        
-        //聯絡我們seo欄位更新
-        if($cms_cfg["ws_module"]["ws_contactus"]==1){
-            $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["cu_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["cu_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["cu_seo_description"])."',
-                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["cu_seo_short_desc"]))."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["cu_seo_h1"])."'
-                where mt_name='contactus'";
-            $rs = $db->query($sql);
-        }
-        //檔案下載seo欄位更新
-        if($cms_cfg["ws_module"]["ws_download"]==1){
-            $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["d_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["d_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["d_seo_description"])."',
-                    mt_seo_short_desc='".htmlspecialchars($_REQUEST["d_seo_short_desc"])."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["d_seo_h1"])."'
-                where mt_name='download'";
-            $rs = $db->query($sql);
-        }
-        //FAQ seo欄位更新
-        if($cms_cfg["ws_module"]["ws_faq"]==1){
-            $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["f_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["f_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["f_seo_description"])."',
-                    mt_seo_short_desc='".htmlspecialchars($_REQUEST["f_seo_short_desc"])."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["f_seo_h1"])."'
-                where mt_name='faq'";
-            $rs = $db->query($sql);
-        }
-        //最新消息 seo欄位更新
-        if($cms_cfg["ws_module"]["ws_news"]==1){
-            $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["n_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["n_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["n_seo_description"])."',
-                    mt_seo_short_desc='".htmlspecialchars($_REQUEST["n_seo_short_desc"])."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["n_seo_h1"])."'
-                where mt_name='news'";
-            $rs = $db->query($sql);
-        }
-        //產品主頁 seo欄位更新
-        if($cms_cfg["ws_module"]["ws_products"]==1){
-            $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["p_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["p_seo_h1"])."',
-                    mt_seo_custom='".$db->quote($main->content_file_str_replace($_REQUEST["p_mt_seo_custom"]))."'
-                where mt_name='products'";
-            $rs = $db->query($sql);
-        }
-        //產品應用領域 seo欄位更新
-        if($cms_cfg["ws_module"]["ws_products_application"]==1){
-            $sql="
-                update ".$cms_cfg['tb_prefix']."_metatitle set
-                    mt_seo_title='".htmlspecialchars($_REQUEST["pa_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($_REQUEST["pa_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($_REQUEST["pa_seo_description"])."',
-                    mt_seo_short_desc='".$_REQUEST["pa_seo_short_desc"]."',
-                    mt_seo_h1='".htmlspecialchars($_REQUEST["pa_seo_h1"])."',
-                    mt_seo_custom='".$_REQUEST["pa_mt_seo_custom"]."'
-                where mt_name='application'";
-            $rs = $db->query($sql);
-        }
-        //網站地圖 seo欄位更新
-        $sql="
-            update ".$cms_cfg['tb_prefix']."_metatitle set
-                mt_seo_title='".htmlspecialchars($_REQUEST["s_seo_title"])."',
-                mt_seo_keyword='".htmlspecialchars($_REQUEST["s_seo_keyword"])."',
-                mt_seo_description='".htmlspecialchars($_REQUEST["s_seo_description"])."',
-                mt_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["s_seo_short_desc"]))."',
-                mt_seo_h1='".htmlspecialchars($_REQUEST["s_seo_h1"])."'
-            where mt_name='sitemap'";
-        $rs = $db->query($sql);
-        $db_msg = $db->report();
         if ( $db_msg == "" ) {
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$cms_cfg["manage_url"]."metatitle.php?func=mt_setup";
