@@ -1340,8 +1340,8 @@ class MAINFUNC{
                             $submenu = "";
                         }
                         $menu_arr['products'][] = array(
-                            'name'    => "#",
-                            'link'    => $row['pc_name'],
+                            'name'    => $row['pc_name'],
+                            'link'    => "#",
                             'submenu' => $submenu,
                         );
                     }
