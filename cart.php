@@ -1272,6 +1272,7 @@ class CART_WITH_SERIAL extends CART{
                                 "MSG_FINISH_INQUIRY"  => $TPLMSG['CART_FINISH_INQUIRY'],
                                 "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL']
             ));
+            $j=0;
             for($i=0;$i<count($inquiry);$i++){                
                 $pid=$inquiry[$i]["p_id"];
                 //如果產品有分型號
@@ -1279,6 +1280,7 @@ class CART_WITH_SERIAL extends CART{
                     $serial_amount = $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$pid];
                     $sArr = explode(',',$inquiry[$i]["p_serial"]);
                     foreach($serial_amount as $p_serial_key => $amount){
+                        $j++;
                         $tpl->newBlock( "INQUIRY_CART_LIST" );
                         if($this->ws_seo){
                             $dirname=(trim($inquiry[$i]["pc_seo_filename"]))?$inquiry[$i]["pc_seo_filename"]:"products";
@@ -1295,8 +1297,8 @@ class CART_WITH_SERIAL extends CART{
                                             "VALUE_P_SMALL_IMG" => (trim($inquiry[$i]["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$inquiry[$i]["p_small_img"],
                                             "VALUE_P_AMOUNT"  => $amount,
                                             "VALUE_P_LINK" => $p_link,
-                                            "VALUE_P_SERIAL"  => $i+1,
-                                            "VALUE_P_SERIAL_LIST"  => $sArr[$p_serial_key],
+                                            "VALUE_P_SERIAL"  => $j,
+                                            "VALUE_P_SERIAL_LIST"  => $p_serial_key,
                                             "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK']
                         ));
                         $tpl->gotoBlock( "INQUIRY_CART_ZONE" );
