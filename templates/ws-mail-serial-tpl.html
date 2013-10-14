@@ -29,20 +29,20 @@ a:visited {
     <table width="92%" border="0" align="center" cellPadding="5" cellSpacing="1" bgColor="#888888">
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_CATE}</td>
+                {MSG_CATE}{MSG_CATE_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CUC_SUBJECT}</td>
         </tr>
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_COMPANY_NAME}</td>
+                {MSG_COMPANY_NAME}{MSG_COMPANY_NAME_MAPPED}</td>
             <td>
                 {VALUE_CU_COMPANY_NAME}</td>
         </tr>
         <!-- START BLOCK : CONTACT_S_STYLE_1 -->
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_CONTACT_PERSON}</td>
+                {MSG_CONTACT_PERSON}{MSG_CONTACT_PERSON_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_CONTACT_S}&nbsp;{VALUE_CU_NAME}</td>
         </tr>
@@ -50,46 +50,54 @@ a:visited {
         <!-- START BLOCK : CONTACT_S_STYLE_2 -->
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_CONTACT_PERSON}</td>
+                {MSG_CONTACT_PERSON}{MSG_CONTACT_PERSON_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_NAME}&nbsp;{VALUE_CU_CONTACT_S}</td>
         </tr>
         <!-- END BLOCK : CONTACT_S_STYLE_2 -->
+        <!-- START BLOCK : POSITION_FIELD -->
+        <tr bgColor="#ffffff" class="body1">
+            <td bgcolor="#D5D5D5">
+                {MSG_POSITION}{MSG_POSITION_MAPPED}</td>
+            <td bgcolor="#ffffff">
+                {VALUE_CU_POSITION}</td>
+        </tr>
+        <!-- END BLOCK : POSITION_FIELD -->
         <!-- START BLOCK : CONTACTUS_COUNTRY_ZONE -->
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_COUNTRY}</td>
+                {MSG_COUNTRY}{MSG_COUNTRY_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_COUNTRY}</td>
         </tr>
         <!-- END BLOCK : CONTACTUS_COUNTRY_ZONE -->
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_TEL}</td>
+                {MSG_TEL}{MSG_TEL_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_TEL}</td>
         </tr>
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_FAX}</td>
+                {MSG_FAX}{MSG_FAX_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_FAX}</td>
         </tr>
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_ADDRESS}</td>
+                {MSG_ADDRESS}{MSG_ADDRESS_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_ADDRESS}</td>
         </tr>
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                e-mail</td>
+                E-mail</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_EMAIL}</td>
         </tr>
         <tr bgColor="#ffffff" class="body1">
             <td bgcolor="#D5D5D5">
-                {MSG_CONTENT}</td>
+                {MSG_CONTENT}{MSG_CONTENT_MAPPED}</td>
             <td bgcolor="#ffffff">
                 {VALUE_CU_CONTENT}</td>
         </tr> 
@@ -101,6 +109,14 @@ a:visited {
                 {VALUE_CU_FILE}</td>
         </tr>          
         <!-- END BLOCK : UPFILE_ROW -->      
+        <!-- START BLOCK : PROD_LIST_ROW -->
+        <tr bgColor="#ffffff" class="body1">
+            <td bgcolor="#D5D5D5">
+                {MSG_PRODUCT_LIST}{MSG_PRODUCT_LIST_MAPPED}</td>
+            <td bgcolor="#ffffff">
+                {VALUE_CU_PRODUCT_LIST}</td>
+        </tr>          
+        <!-- END BLOCK : PROD_LIST_ROW -->      
     </table>
     <!-- END BLOCK : CONTACTUS_MAIL -->
     <!-- START BLOCK : MEMBER_MAIL -->
@@ -115,13 +131,19 @@ a:visited {
                 <td bgcolor="#D5D5D5">
                     {MSG_PASSWORD}</td>
                 <td>
-                    {VALUE_M_PASSWORD}</td>
+                    <span class="not_for_admin">{VALUE_M_PASSWORD}</span></td>
             </tr>
             <tr bgColor="#ffffff" class="body1">
                 <td bgcolor="#D5D5D5">
                     {MSG_CONTACT_PERSON}</td>
                 <td>
-                    {VALUE_M_CONTACT_S}&nbsp;{VALUE_M_NAME}</td>
+                    <!-- START BLOCK : MEMBER_S_STYLE_1 -->
+                    {VALUE_M_CONTACT_S}&nbsp;{VALUE_M_FNAME}&nbsp;{VALUE_M_LNAME}
+                    <!-- END BLOCK : MEMBER_S_STYLE_1 -->
+                    <!-- START BLOCK : MEMBER_S_STYLE_2 -->
+                    {VALUE_M_LNAME}&nbsp;{VALUE_M_FNAME}&nbsp;{VALUE_M_CONTACT_S}
+                    <!-- END BLOCK : MEMBER_S_STYLE_2 -->
+                </td>
             </tr>
             <!-- START BLOCK : COMPANY_ZONE -->
             <tr bgColor="#ffffff" class="body1">
@@ -179,6 +201,7 @@ a:visited {
                     {VALUE_M_EMAIL}
                     </td>
             </tr>
+        </table>
     <!-- END BLOCK : MEMBER_MAIL -->
     <!-- START BLOCK : SHOPPING_CART_ZONE -->
     <div id="tp_product">

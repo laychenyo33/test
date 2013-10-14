@@ -114,12 +114,7 @@
             <tr>
               <th><font color="#ff0000">*</font>{MSG_CONTACT_PERSON}</th>
               <td>
-                 <select name="m_contact_s">
-                  <option value="Mr." {STR_M_CS_CK1}>Mr.</option>
-                  <option value="Miss." {STR_M_CS_CK2}>Miss.</option>
-                  <option value="Mrs." {STR_M_CS_CK3}>Mrs.</option>
-                 </select>
-                &nbsp;{MSG_MEMBER_NAME}:<input name="m_name" id="m_name" class="validate[required]" type="text" value="{VALUE_M_NAME}" size="12" />
+                    <!-- INCLUDE BLOCK : CONTACT_S -->
                 </td>
             </tr>
             <!-- START BLOCK : SELECT_COUNTRY -->
@@ -168,7 +163,7 @@
             <!-- START BLOCK : TIME_SEC_ZONE -->
             <tr>
                 <th>到貨日期</th>
-                <td><input type="text" name="o_deliver_date" value=""  size="20"/><a href="#" onclick="displayCalendar(myform.elements['o_deliver_date'],'yyyy-mm-dd',this);return false;">選擇日期</a></td>
+                <td><input type="text" class="datepicker" name="o_deliver_date" id="o_deliver_date" value=""  size="20"/></td>
             </tr>
             <tr  class="altrow">
                 <th>配送時段</th>
