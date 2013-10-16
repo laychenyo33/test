@@ -19,15 +19,18 @@ abstract class Dbtable_Abstract {
     public function __get($name) {
         return $this->values[$name];
     }
-    
+    protected function _query($sql){
+        $this->query_resource = $this->db->query($sql,true);        
+    }
     public function writeData($post){
         $this->_retrieve_cols($post); 
         if(!empty($this->values[$this->pk])){
+            $this->con[] = sprintf("`%s`='%s'",$this->pk,$this->values[$this->pk]);            
             $sql = $this->_mk_update_sql();
         }else{
             $sql = $this->_mk_insert_sql();
         }
-        $this->query_resource = $this->db->query($sql,true);
+        $this->_query($sql);
     }
     
     public function getData($pk,$cols="*"){
@@ -36,7 +39,7 @@ abstract class Dbtable_Abstract {
         }
         $con = sprintf("`%s`='%s'",$this->pk,$pk);
         $sql = $this->_mk_select_sql($con, $cols);
-        $this->query_resource = $this->db->query($sql,true);
+        $this->_query($sql);
         $row = $this->db->fetch_array($this->query_resource, 1);
         $this->values = $row;
         return $this;
@@ -51,6 +54,7 @@ abstract class Dbtable_Abstract {
     }
     //取得post資料欄位
     protected function _retrieve_cols($post){
+        $this->values = array();
         foreach($post as $k=>$v){
             if(get_magic_quotes_gpc()){
                 $v = stripslashes($v);
@@ -95,14 +99,14 @@ abstract class Dbtable_Abstract {
                 $updates[] = sprintf("`%s`='%s'",$k,$v);
             }
         }
-        $this->con[] = sprintf("`%s`='%s'",$this->pk,$this->values[$this->pk]);
         return sprintf($sql_tpl,implode(',',$updates),implode(' and ',$this->con));
     } 
     
-    protected function _mk_select_sql($con,$col="*",$order=null,$limit=null){
-        $sql = "select ".$col." from ".$this->tablename()." where ".$con;
+    protected function _mk_select_sql($con="",$col="*",$order=null,$limit=null){
+        $sql = "select ".$col." from ".$this->tablename();
+        if($con)$sql.=" where ". $con;
         if($order)$sql.=" order by ".$order;
-        if($limit)$sql.=" ".$limit;
+        if($limit)$sql.=" limit ".$limit;
         return $sql;
     }
     
@@ -110,9 +114,14 @@ abstract class Dbtable_Abstract {
         return $this->prefix."_".$this->table;
     }
     
-    public function getDataList($con,$order=null,$limit=null){
+    public function getDataNums($con){
+        $sql = $this->_mk_select_sql($con);
+        $this->_query($sql);
+        return $this->db->numRows($this->query_resource);
+    }
+    public function getDataList($con="",$col='*',$order=null,$limit=null){
         $sql = $this->_mk_select_sql($con, $col, $order, $limit);
-        $this->query_resource = $db->query($sql);
+        $this->_query($sql);
         $this->values = array();
         if($this->db->numRows($this->query_resource)){
             while($row = $this->db->fetch_array($this->query_resource, 1)){
@@ -122,6 +131,23 @@ abstract class Dbtable_Abstract {
         if(!empty($this->values)){
             return $this->values;
         }
+    }
+    public function update($data,$con){
+        $this->_retrieve_cols($data);
+        if(is_string($con)){
+            $this->con[] = (array)$con;
+        }elseif(is_array($con)){
+            foreach($con as $c=>$v){
+                $this->con[]=sprintf("`%s`='%s'",$c,$v);
+}
+        }
+        $sql = $this->_mk_update_sql();
+        $this->_query($sql);
+    }
+    public function insert($data){
+        $this->_retrieve_cols($data);
+        $sql = $this->_mk_insert_sql();
+        $this->_query($sql);
     }
 }
 
