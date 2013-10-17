@@ -320,8 +320,8 @@ class PRODUCTS{
         $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
         //分類樹狀結構
 //            $this->products_cate_tree($this->parent,"p");
-        require "../class/catetree/".$cms_cfg['tb_prefix']."/productsCate.php";
-        $catetreeClass = "catetree_".$cms_cfg['tb_prefix']."_productsCate";
+        require "../class/catetree/productsCate.php";
+        $catetreeClass = "catetree_productsCate";
         $cateTree = new $catetreeClass(array(
             "db"            => $db,
             "cfg"           => $cms_cfg,
@@ -677,8 +677,8 @@ class PRODUCTS{
             $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
             //分類樹狀結構
 //            $this->products_cate_tree($this->parent,"p");
-            require "../class/catetree/".$cms_cfg['tb_prefix']."/productsCate.php";
-            $catetreeClass = "catetree_".$cms_cfg['tb_prefix']."_productsCate";
+            require "../class/catetree/productsCate.php";
+            $catetreeClass = "catetree_productsCate";
             $cateTree = new $catetreeClass(array(
                 "db"            => $db,
                 "cfg"           => $cms_cfg,
