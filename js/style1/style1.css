@@ -60,18 +60,15 @@
 	width: 75px; 
 	height: 50px;
 	list-style: none;
-	background: url('../../images/index/store-pic-s-bg.gif') no-repeat left top; 
+	background: url('../../images/store-pic-s-bg.gif') no-repeat left top; 
 	cursor: pointer; 
 	filter: alpha(opacity=50); 
 	float: left; 
 	-moz-opacity: 0.5;
 	opacity: 0.5;
 }
-#ifocus_btn img {
-	margin: 0px;
-	width: 75px;
-	height: 50px;
-}
+#ifocus_btn li .wrapper{display:table-cell;width:75px;height:50px;text-align:center;vertical-align: middle;}
+#ifocus_btn img {margin: 0px;}
 #ifocus_btn .current {
 	margin: 0px; 
 	background: url('../../images/store-focus_bg.jpg') no-repeat left top;

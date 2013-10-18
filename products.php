@@ -784,8 +784,11 @@ class PRODUCTS{
                    $tpl->assign("VALUE_P_BIG_IMG_SERIAL",$k);
                    //顯示小圖
                    $tpl->newBlock("SMALL_IMG_LIST");
+                   $dimensions = $main->resizeto($cms_cfg["file_root"].$value,$cms_cfg['thumbs_img_width'],$cms_cfg['thumbs_img_height']);
                    $tpl->assign("TAG_CURRENT", ($k==1)? "current" : "normal");
                    $tpl->assign("VALUE_P_SMALL_IMG",$cms_cfg["file_root"].$value);
+                   $tpl->assign("VALUE_P_SMALL_IMG_W",$dimensions['width']);
+                   $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions['height']);
                    $tpl->assign("VALUE_P_SMALL_IMG_SERIAL",$k);
                 }
             }else{
