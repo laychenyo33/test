@@ -1,0 +1,106 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{
+	margin:0px;
+	padding:0px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+img{ border:0;}
+a {text-decoration:none}
+
+body{
+	background:url(../images/bg2.jpg) repeat-x;
+	background-color:#090909;
+}
+
+
+#wrapper{
+    background:url(../images/bg.jpg) no-repeat;
+	background-position: center top;	
+	margin:0 auto;
+	width:1002px;
+	height:600px;
+	position:relative;
+}
+
+.lang{
+	position:absolute;
+	left:636px;
+	top:154px;
+	color:#CCC;
+	}
+
+.account{
+	position:absolute;
+	left:380px;
+	top:230px;
+	color:#FFF;
+	}
+.pw{
+	position:absolute;
+	left:380px;
+	top:265px;
+	color:#FFF;
+	}
+.verify{
+	position:absolute;
+	left:368px;
+	top:300px;
+	color:#FFF;
+	}
+.code{
+	position:absolute;
+	left:490px;
+	top:299px;
+	color:#FFF;
+	}
+
+
+.login{
+	position:absolute;
+	left:418px;
+	top:338px;
+	color:#FFF;
+	width:64px;
+	height:26px;
+	background:url(../images/btn.png) no-repeat;
+	background-position: center top;
+	}	
+.login span a{
+	display:block;
+	text-align:center;
+	padding:5px 0 0 0;
+	color:#60650a;
+	}	
+.login span a:hover{
+	color:#3c3f05;
+	}	
+
+.clean{
+	position:absolute;
+	left:490px;
+	top:338px;
+	color:#FFF;
+	width:64px;
+	height:26px;
+	background:url(../images/btn.png) no-repeat;
+	background-position: center top;
+	}	
+.clean span a{
+	display:block;
+	text-align:center;
+	padding:5px 0 0 0;
+	color:#60650a;
+	}	
+.clean span a:hover{
+	color:#3c3f05;
+	}	
+
+.cr{
+	position:absolute;
+	left:413px;
+	top:428px;
+	color:#FFF;
+	}	
