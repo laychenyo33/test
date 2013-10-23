@@ -1796,5 +1796,22 @@ class MAINFUNC{
         echo "</pre>";
         die();
     }    
+    function parseQueryStr($qs="",$str=""){
+        if(empty($qs))return;
+        if(is_array($qs)){
+            $arr_str=$qs;
+        }else{
+            parse_str($qs,$arr_str);
+        }
+        if(!empty($str)){
+            parse_str($str,$add_str);
+            $arr_str=array_merge($arr_str,$add_str);
+        }
+        foreach($arr_str as $key=>$v){
+           $return_string[$key]=sprintf("%s=%s",$key,$v);
+        }
+        $return_string=implode("&",$return_string);
+        return $return_string;
+    }    
 }
 ?>
