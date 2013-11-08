@@ -148,7 +148,7 @@ class FAQ{
                 $current_row = $row;
             }
         }     
-        return $row;
+        return $current_row;
     }
 }
 ?>
