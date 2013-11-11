@@ -240,7 +240,7 @@ class MEMBER{
                                   "VALUE_TOTAL_BOX" => $rsnum
         ));
         //分類列表
-        $i=$page["start_serial"];
+        $i=$main->get_pagination_offset($cms_cfg["op_limit"]);
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "MEMBER_CATE_LIST" );
@@ -453,7 +453,7 @@ class MEMBER{
                                       "STR_SELECT_SEARCH_TARGET_CK4" => ($_POST['st']=="m_country")?"selected":"",
             ));
             $tpl->assignGlobal( "VALUE_NOW_MC_ID" , $_REQUEST["mc_id"]);
-            $i=$page["start_serial"];
+            $i=$main->get_pagination_offset($cms_cfg["op_limit"]);
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $i++;
                 $tpl->newBlock( "MEMBER_LIST" );
