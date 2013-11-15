@@ -406,7 +406,7 @@ class MEMBER{
                                 "MSG_TOTAL_MONEY" => $TPLMSG['ORDER_TOTAL_MONEY'],
                                 "MSG_VIEWS" => $TPLMSG['VIEWS'],
             ));
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."'";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' order by o_createdate desc";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
