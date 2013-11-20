@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<!-- 註解:元件結構
+    <items>
+        @開始日期
+        <start>2013/10/1</start> 
+        @結束日期
+        @@結束日期若只填日期，請填入你到期日的後一天，例如最後一天是2013/11/20，請填入2013/11/21，若有指定時間則無此限制
+        <end>2013/10/15</end> 
+        @使用樣版，請從templates/ 開始
+        <template>tempaltes1</template> 
+    </items>-->
+    <items>
+        <start>2013/12/1</start>
+        <end>2013/12/26</end>
+        <template>templates/ws-index-christmas-tpl.html</template>
+    </items>   
+</root>

@@ -25,7 +25,13 @@ class MAINDEFAULT{
     //載入對應的樣板
     function ws_load_tp($ws_tpl_file){
         global $tpl,$cms_cfg,$ws_array,$db,$TPLMSG,$main;
-        $tpl = new TemplatePower( $this->ws_tpl_file );
+        //取得新樣版，依index-template.xml設定
+        $new_template = $this->get_template();
+        if($new_template){
+            $tpl = new TemplatePower( $new_template );
+        }else{
+            $tpl = new TemplatePower( $this->ws_tpl_file );
+        }
         //$tpl->assignInclude( "HEADER", $cms_cfg['base_header_tpl']); //頭檔title,meta,js,css
         //$tpl->assignInclude( "TOP_MENU", $cms_cfg['base_top_menu_tpl']);// 功能列表
         //$tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //左方首頁列
@@ -353,5 +359,21 @@ class MAINDEFAULT{
         global $tpl;
         $tpl->newBlock("NIVO_SLIDER_SCRIPT");
     }
+    //依index-template.xml的設定取得期間內的樣版
+    function get_template(){
+        $xml = new SimpleXMLElement("index-template.xml",0,true);
+        if(count($xml->items)){
+            foreach($xml->items as $item){
+                $ts1 = strtotime($item->start);
+                $ts2 = strtotime($item->end);
+                $cur = time();
+                if($cur>=$ts1 ){
+                    if($cur<=$ts2){
+                        return $item->template;
+                    }
+                }
+            }
+        }
+    }    
 }
 ?>
