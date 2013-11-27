@@ -2,19 +2,24 @@
 class MYDATE {
     static function getFirstWeekAndWeeks($year=""){
         if(!$year) return;
-        $firstDayTS=mktime(0,0,0,1,1,date("Y"));
-        if(strftime("%U",$firstDayTS)==0){
-             $firstDayTS=strtotime("next sunday",$firstDayTS);
+        $firstDayTS=mktime(0,0,0,1,1,$year);
+        if(date("N",$firstDayTS)==7){
+             $firstDayTS=strtotime("next monday",$firstDayTS);
         }else{
-             $firstDayTS=strtotime("last sunday",$firstDayTS);
+             $firstDayTS=strtotime("last monday",$firstDayTS);
         }
-        $lastDayWeek=strftime("%U",mktime(0,0,0,12,31,date("Y")));
+        $lastDayTS = mktime(0,0,0,12,31,$year);
+        if(date("N",$lastDayTS)!=7){
+             $lastDayTS =strtotime("last sunday",$firstDayTS);
+        }
+        $lastDayWeek = date("W",$lastDayTS);
         return array("firstDayTS"=>$firstDayTS,"firstDay"=>date("Y-m-d",$firstDayTS),"weeks"=>$lastDayWeek);
-    }
+}
     
-    static  function getPeriodByWeeks($year="",$weeks){
-        if(!$year||!$weeks)return;
-        $thisyear=getFirstWeekAndWeeks($year);
+    static  function getPeriodByWeeks($year="",$weeks=null){
+        if(!$year)return;
+        $weeks = $weeks?$weeks:date("W");
+        $thisyear=self::getFirstWeekAndWeeks($year);
         $thisTS=strtotime("+".(7*($weeks-1))."days",$thisyear['firstDayTS']);
         $startDate=date("Y-m-d",$thisTS);
         $endDate=date("Y-m-d",strtotime("+6days",$thisTS));
@@ -47,7 +52,54 @@ class MYDATE {
         if($thestamp==$today)return true;
         return false;
     }    
-    
+    static function getWeekOfYear($date){
+        $ts = strtotime($date);
+        if(date("N",$ts)!=7){
+            $res['year'] = date("Y",strtotime("next sunday",$ts));
+        }else{
+            $res['year'] = date("Y",$ts);
+        }
+        $res['week'] = date("W",$ts);
+        return $res;
+    }
+    static function getWeekDiff($date1,$date2,$abs=false){
+        $week1 = self::getWeekOfYear($date1);
+        $week2 = self::getWeekOfYear($date2);
+        if($week1['year']==$week2['year']){ //同一年的比對
+            $weeksDiff = $week1['week']-$week2['week'];
+        }else{
+            if($week1['year']<$week2['year']){ //後面的日期較大
+                $tmp = $week1;
+                $week1 = $week2;
+                $week2 = $tmp; 
+                $toMinus = true;
+            }
+            //計算$date2年度剩餘的週數
+            $weeksInfoOfLater = self::getFirstWeekAndWeeks($week2['year']);
+            $weeksDiff = $weeksInfoOfLater['weeks'] - $week2['week'];
+            //計算新年度的週數
+            $yearsDiff = $week1['year']-$week2['year'];
+            $i=1;
+            while( ($week2['year']+$i) <= $week1['year'] ){
+                if($yearsDiff==$i){ //取$date1年度所屬週數，非整年度週數
+                    $weeksDiff += $week1['week'];
+                }else{ //與$date1比對超過一年時，取整年度週數
+                    $tmpWeesInfo = self::getFirstWeekAndWeeks($week2['year']+$i);
+                    $weeksDiff += $tmpWeesInfo['weeks'];
+                }
+                $i++;
+            }
+            //轉成負數
+            if($toMinus){
+                $weeksDiff *=-1;
+            }
+        }
+        if($abs){
+            return abs($weeksDiff);
+        }else{
+            return $weeksDiff;
+        }
+    }
 }
 
 ?>
