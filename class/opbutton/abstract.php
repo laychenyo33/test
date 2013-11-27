@@ -9,7 +9,6 @@ class opbutton_abstract {
         $tpl = new TemplatePower($this->template);
         $tpl->prepare();
         $this->tpl = $tpl;
-        $this->_run_switch();
     }
     protected function _run_switch(){
         foreach($this->pattern as $pattern){
@@ -22,6 +21,7 @@ class opbutton_abstract {
         }
     }
     public function get_result(){
+        $this->_run_switch();
         return $this->tpl->getOutputContent();
     }
 }
