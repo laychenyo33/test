@@ -94,7 +94,7 @@ $cms_cfg["ws_module"]=array(
         "ws_sysconfig"=>1,          //系統設定
         "ws_index_banner"=>0,       //自訂首頁banner
         "ws_seo"=>1,                //0=>取消rewrite , 1=>啟用rewrite
-        "ws_version"=>"ips",        //系統版本:IPS,IPB,IPC
+        "ws_version"=>"ipc",        //系統版本:IPS,IPB,IPC
         "ws_wysiwyg"=>"tinymce"     //tinymce 編輯器
 )
 ?>
