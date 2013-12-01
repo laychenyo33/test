@@ -594,6 +594,13 @@ class CART{
         }
         if(!empty($shopping)){
             //寫入訂單
+            ////取得訂單號碼
+            $oid=$this->get_oid();
+            //結帳，計算訂單金額
+            $sub_total_price = $this->checkout();
+            $shipping_price = $this->shipping_price($sub_total_price,$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+            $total_price = $sub_total_price+$shipping_price;            
+            $ts = time();
             $sql="
                 insert into ".$cms_cfg['tb_prefix']."_order (
                     m_id,
@@ -667,7 +674,7 @@ class CART{
                     '".$_REQUEST["o_deliver_time_sec"]."'
                 )";
             $rs = $db->query($sql,true);
-            $this->o_id=$db->get_insert_id();
+            //$this->o_id=$db->get_insert_id();
             //產生ATM虛擬帳號
             if($cms_cfg["ws_module"]["ws_vaccount"]==1 & $TPLMSG["PAYMENT_ATM"]==$_REQUEST["o_payment_type"]) {
             $v_account = $this->get_vaccount($_REQUEST["o_subtotal_price"]);
