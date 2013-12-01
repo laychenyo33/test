@@ -714,7 +714,7 @@ class CART{
                         oi_amount
                     ) values (
                         '".$this->m_id."',
-                        '".$this->o_id."',
+                        '".$oid."',
                         '".$pid."',
                         '".$pname."',
                         '".$special_price."',
