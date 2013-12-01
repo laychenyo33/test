@@ -258,10 +258,11 @@
               </td>
             </tr>
         </table>
-        <input type="hidden" name="shipment_type" value="{VALUE_SHIPMENT_TYPE}">
-        <input type="hidden" name="o_plus_price" value="{VALUE_SHIPPING_PRICE}">
-        <input type="hidden" name="o_subtotal_price" id="o_subtotal_price" value="{VALUE_SUBTOTAL}">
-        <input type="hidden" name="o_total_price" value="{VALUE_TOTAL}">
+        <input type="hidden" name="o_charge_fee" id="o_charge_fee" value="0"/>
+        <input type="hidden" name="o_plus_price" id="o_plus_price" origin-value="{VALUE_SHIPPING_PRICE}" value="{VALUE_SHIPPING_PRICE}"/>
+        <input type="hidden" name="o_subtotal_price" id="o_subtotal_price" value="{VALUE_SUBTOTAL}"/>
+        <input type="hidden" name="o_minus_price" id="o_minus_price" value="0"/>
+        <input type="hidden" name="o_total_price" id="o_total_price" value="{VALUE_TOTAL}"/>
         </form>
     <!-- END BLOCK : MEMBER_DATA_FORM -->
     <br/>
@@ -301,24 +302,36 @@
             }
         }        
         jQuery(function($){
+           function calculate(){
+               var charge_fee = parseInt($("#o_charge_fee").val());
+               var ship_price = parseInt($("#o_plus_price").val());
+               var subtotal_price = parseInt($("#o_subtotal_price").val());
+               var minus_price = parseInt($("#o_minus_price").val());
+               var total_price = subtotal_price + ship_price + charge_fee - minus_price;
+               $("#s_charge_fee").text(charge_fee);
+               $("#s_ship_price").text(ship_price);
+               $("#s_minus_price").text(minus_price);
+               $("#s_total_price").text(total_price);
+           }
            $(document).ready(function(){
                //因為最上方還有一個登入表單為formID，所以這裡另外再設定訂購資料區表單的驗證
                $("#formID2").validationEngine();
                var ship_price = $("#ship_price");
+               var can_minus_price = parseInt($("#can_minus_price").text());
                $("#o_payment_type").change(function(){
                    switch($(this).val()){
                        case "1":
                            $("#atm_last5").slideDown();
-                           $("#ship_row").show();
-//                           var subtotal = parseInt($("#o_subtotal_price").val())+parseInt(ship_price.text());
-//                           $("#s_total").text(subtotal);
+                           $("#o_charge_fee").val(0);
+//                           $("#ship_row").show();
+//                           $("#pay_ship_row").hide();
                            break;
                        case "2":
                            $("#atm_last5").slideUp();
                            $("#o_atm_last5").val('');
-                           $("#ship_row").show();
-//                           var subtotal = parseInt($("#o_subtotal_price").val())+parseInt(ship_price.text());
-//                           $("#s_total").text(subtotal);
+                           $("#o_charge_fee").val(30);                    
+//                           $("#ship_row").show();
+//                           $("#pay_ship_row").hide();
                            break;
                        case "3":
                            $("#atm_last5").slideUp();
@@ -329,11 +342,12 @@
                        default:
                            $("#atm_last5").slideUp();
                            $("#o_atm_last5").val('');
-                           $("#ship_row").show();                       
-//                           var subtotal = parseInt($("#o_subtotal_price").val())+parseInt(ship_price.text());
-//                           $("#s_total").text(subtotal);
+                           $("#o_charge_fee").val(0);
+//                           $("#ship_row").show();
+//                           $("#pay_ship_row").hide();
                            break;
                    }
+                   calculate();
                });
                $("#before_send_notification").dialog({
                    autoOpen:false,
