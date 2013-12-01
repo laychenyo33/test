@@ -510,10 +510,9 @@ class CART{
                             "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"],
                             "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
                             "VALUE_M_VAT_NUMBER" => $_REQUEST["m_vat_number"],
-                            "VALUE_M_FAX" => $_REQUEST["m_fax"],
-                            "VALUE_M_CONTACT_S" => $_REQUEST["m_contact_s"],
+                            "VALUE_M_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
                             "VALUE_M_ZIP" => $_REQUEST["m_zip"],
-                            "VALUE_M_ADDRESS" => $_REQUEST["m_address"],
+                            "VALUE_M_ADDRESS" => $_REQUEST["m_city"].$_REQUEST["m_area"].$_REQUEST["m_address"],
                             "VALUE_M_TEL" => $_REQUEST["m_tel"],
                             "VALUE_M_FAX" => $_REQUEST["m_fax"],
                             "VALUE_M_EMAIL" => $_REQUEST["m_email"],
@@ -521,7 +520,7 @@ class CART{
                             "VALUE_M_RECI_CONTACT_S" => $_REQUEST["m_reci_contact_s"],
                             "VALUE_M_RECI_NAME" => $_REQUEST["m_reci_name"],
                             "VALUE_M_RECI_ZIP" => $_REQUEST["m_reci_zip"],
-                            "VALUE_M_RECI_ADDRESS" => $_REQUEST["m_reci_address"],
+                            "VALUE_M_RECI_ADDRESS" => $_REQUEST["m_reci_city"].$_REQUEST["m_reci_area"].$_REQUEST["m_reci_address"],
                             "VALUE_M_RECI_TEL" => $_REQUEST["m_reci_tel"],
                             "VALUE_M_RECI_EMAIL" => $_REQUEST["m_reci_email"],
                             "VALUE_M_RECI_CELLPHONE" => $_REQUEST["m_reci_cellphone"],
@@ -540,6 +539,17 @@ class CART{
             "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
             "VALUE_M_NAME"       => $_REQUEST["m_name"],    
             "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_contact_s"]],                    
+        ));        
+        //收件人
+        if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
+            $tpl->newBlock("RECI_CART_S_STYLE_1");
+        }elseif($cms_cfg['ws_module']['ws_contactus_s_style']==2){//中式稱謂
+            $tpl->newBlock("RECI_CART_S_STYLE_2");
+        }
+        $tpl->assign(array(
+            "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
+            "VALUE_M_NAME"       => $_REQUEST["m_reci_name"],    
+            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_reci_contact_s"]],                    
         ));        
         //付款方式是atm時顯示客戶匯款帳號後五碼
         if($_POST['o_payment_type']=='1'){
@@ -633,6 +643,8 @@ class CART{
                     o_contact_s,
                     o_name,
                     o_zip,
+                    o_city,
+                    o_area,
                     o_address,
                     o_tel,
                     o_fax,
@@ -641,12 +653,16 @@ class CART{
                     o_reci_contact_s,
                     o_reci_name,
                     o_reci_zip,
+                    o_reci_city,
+                    o_reci_area,
                     o_reci_address,
                     o_reci_tel,
                     o_reci_cellphone,
                     o_reci_email,
                     o_plus_price,
+                    o_charge_fee,
                     o_subtotal_price,
+                    o_minus_price,
                     o_total_price,
                     o_content,
                     o_shippment_type,
@@ -668,6 +684,8 @@ class CART{
                     '".$_REQUEST["m_contact_s"]."',
                     '".$_REQUEST["m_name"]."',
                     '".$_REQUEST["m_zip"]."',
+                    '".$_REQUEST["m_city"]."',
+                    '".$_REQUEST["m_area"]."',
                     '".$_REQUEST["m_address"]."',
                     '".$_REQUEST["m_tel"]."',
                     '".$_REQUEST["m_fax"]."',
@@ -676,12 +694,16 @@ class CART{
                     '".$_REQUEST["m_reci_contact_s"]."',
                     '".$_REQUEST["m_reci_name"]."',
                     '".$_REQUEST["m_reci_zip"]."',
+                    '".$_REQUEST["m_reci_city"]."',
+                    '".$_REQUEST["m_reci_area"]."',
                     '".$_REQUEST["m_reci_address"]."',
                     '".$_REQUEST["m_reci_tel"]."',
                     '".$_REQUEST["m_reci_cellphone"]."',
                     '".$_REQUEST["m_reci_email"]."',
                     '".$shipping_price."',
+                    '".$charge_fee."',
                     '".$sub_total_price."',
+                    '0',
                     '".$total_price."',
                     '".$_REQUEST["content"]."',
                     '".$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]."',
