@@ -61,6 +61,9 @@ class CART{
                 $this->ws_tpl_type=1;
                 break;
             case "c_finish"://結帳
+                if($_POST['shipment_type']){
+                    $_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"] = $_POST['shipment_type'];
+                }                
                 if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1){
                     $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
                     $this->ws_load_tp($this->ws_tpl_file);      
