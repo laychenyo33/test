@@ -102,6 +102,7 @@ class SYSTEMCFG{
                                       "VALUE_SC_COMPANY" => $row["sc_company"],
                                       "VALUE_SC_EMAIL" => $row["sc_email"],
                                       "VALUE_SC_SHIPPING_PRICE" => $row["sc_shipping_price"],
+                                      "VALUE_SC_SHIPPING_PRICE2" => $row["sc_shipping_price2"],
                                       "VALUE_SC_NO_SHIPPING_PRICE" => $row["sc_no_shipping_price"],
                                       "VALUE_SC_ONE_PAGE_LIMIT" => $row["sc_one_page_limit"],
                                       //"VALUE_SC_SESSION_DURATION" => $row["sc_session_duration"],
@@ -231,6 +232,7 @@ class SYSTEMCFG{
                 ";
         if($cms_cfg["ws_module"]["ws_version"]=="ips" || $cms_cfg["ws_module"]["ws_version"]=="ipc"){
             $sql .="sc_shipping_price='".$_REQUEST["sc_shipping_price"]."',
+                    sc_shipping_price2='".$_REQUEST["sc_shipping_price2"]."',
                     sc_no_shipping_price='".$_REQUEST["sc_no_shipping_price"]."',";
         }
         if($cms_cfg["ws_module"]["ws_ad"]==1){
