@@ -43,12 +43,14 @@ class CART{
                 $this->ws_tpl_type=1;
                 break;
             case "c_mod"://購物車列表
-                $this->ws_tpl_file = "templates/ws-cart-tpl.html";
-                $this->ws_load_tp($this->ws_tpl_file);
-                $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_POP_IMG");
-                $this->cart_modify();
-                $this->ws_tpl_type=1;
+                if(!$_POST['via_ajax']){
+                    $this->ws_tpl_file = "templates/ws-cart-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $tpl->newBlock("JS_MAIN");
+                    $tpl->newBlock("JS_POP_IMG");
+                    $this->ws_tpl_type=1;
+                }
+                $this->cart_modify($_POST['via_ajax']);
                 break;
             case "c_del"://刪除購物項目
                 $this->ws_tpl_file = "templates/ws-cart-tpl.html";
@@ -365,14 +367,16 @@ class CART{
         }
         $this->cart_list();
     }
-    function cart_modify(){
+    function cart_modify($via_ajax){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         if(!empty($_REQUEST["shop_value"])){
             foreach($_REQUEST["shop_value"] as $key =>$value){
                     $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$key]=$value;
             }
         }
-        $this->cart_list();
+        if(!$via_ajax){
+            $this->cart_list();
+        }
     }
     function cart_finish(){
         global $db,$tpl,$TPLMSG,$ws_array,$shopping,$inquiry,$cms_cfg,$main;
