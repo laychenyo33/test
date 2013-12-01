@@ -409,20 +409,20 @@ class CART{
         $this->cart_list();
         //顯示表單資料
         $tpl->newBlock( "MEMBER_DATA_FORM" );
-        $tpl->assignGlobal( array("MSG_MODE"  => $TPLMSG['SEND'],
-                            "MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
-                            "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
-                            "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
-                            "MSG_ZIP" => $TPLMSG["ZIP"],
-                            "MSG_ADDRESS" => $TPLMSG["ADDRESS"],
-                            "MSG_TEL" => $TPLMSG["TEL"],
-                            "MSG_FAX" => $TPLMSG["FAX"],
-                            "MSG_EMAIL" => $TPLMSG["EMAIL"],
-                            "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"]));
+        $tpl->assignGlobal( array(
+            "MSG_MODE"  => $TPLMSG['SEND'],
+            "MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
+            "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],
+            "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
+            "MSG_ZIP" => $TPLMSG["ZIP"],
+            "MSG_ADDRESS" => $TPLMSG["ADDRESS"],
+            "MSG_TEL" => $TPLMSG["TEL"],
+            "MSG_FAX" => $TPLMSG["FAX"],
+            "MSG_EMAIL" => $TPLMSG["EMAIL"],
+            "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"]
+        ));
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("TIME_SEC_ZONE");
-            //到貨日期
-            $tpl->newBlock("CALENDAR_SCRIPT");
             //配送時段
             foreach($ws_array["deliery_timesec"] as $k=>$timesec){
                 $tpl->newBlock("TIME_SEC_LIST");
