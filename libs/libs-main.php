@@ -677,7 +677,7 @@ class MAINFUNC{
         return $Layer;
     }
     //寄送確認信,電子報
-    function ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null){
+    function ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0){
         global $TPLMSG,$cms_cfg;
         if($mail_type =="epaper"){
             set_time_limit(0);
@@ -733,14 +733,17 @@ class MAINFUNC{
                 @mail($from_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
             }
         }
-        $goto_url=(empty($goto_url))?$cms_cfg["base_url"]:$goto_url;
-        echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
-        echo "<script language=javascript>";
-        echo "Javascript:alert('".$TPLMSG['ACTION_TERM_JS']."')";
-        echo "</script>";
-        echo "<script language=javascript>";
-        echo "document.location='".$goto_url."'";
-        echo "</script>";
+
+        if(empty($none_header)){
+            $goto_url=(empty($goto_url))?$cms_cfg["base_url"]:$goto_url;
+            echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
+            echo "<script language=javascript>";
+            echo "Javascript:alert('".$TPLMSG['ACTION_TERM_JS']."')";
+            echo "</script>";
+            echo "<script language=javascript>";
+            echo "document.location='".$goto_url."'";
+            echo "</script>";
+        }
     }
     function ws_mail_send_simple($from,$to,$mail_content,$mail_subject,$from_name=""){
         global $TPLMSG,$cms_cfg;
