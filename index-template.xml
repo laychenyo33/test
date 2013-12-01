@@ -10,9 +10,4 @@
         @使用樣版，請從templates/ 開始
         <template>tempaltes1</template> 
     </items>-->
-    <items>
-        <start>2013/12/1</start>
-        <end>2013/12/26</end>
-        <template>templates/ws-index-christmas-tpl.html</template>
-    </items>   
 </root>
