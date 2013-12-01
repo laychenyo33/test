@@ -59,6 +59,28 @@ class MEMBER{
                 $this->member_send_password_success_str();
                 $this->ws_tpl_type=1;
                 break;
+            case "mm_list"://會員訊息公告
+                if(empty($this->m_id)){
+                    header("Location: member.php");
+                    die();
+                }
+                $this->ws_tpl_file = "templates/ws-member-message-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->member_message_list();
+                $this->ws_tpl_type=1;
+                break;
+            case "o_del"://取消訂單
+                $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->order_del();
+                $this->ws_tpl_type=1;
+                break;
+            case "o_replace"://編輯匯款帳號
+                $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->order_replace();
+                $this->ws_tpl_type=1;
+                break;            
             case "m_replace"://會員管理更新資料(replace)
                 $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -67,7 +89,8 @@ class MEMBER{
                 break;
             default:    //會員專區
                 if(!empty($this->m_id)){
-                    header("Location: member.php?func=m_zone");
+                    header("Location: member.php?func=mm_list");
+                    die();
                 }
                 $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
