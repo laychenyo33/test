@@ -60,6 +60,18 @@
                 </td>
                 <td colspan="2"> <span id="ship_price">{VALUE_SHIPPING_PRICE_STR}</span></td>
             </tr>
+            <tr id="discount_row" style="display:none">
+                <td colspan="4">
+                    <div align="right">折價:&nbsp;</div>
+                </td>
+                <td colspan="2"> <span id="s_minus_price" style="color:red">0</span></td>
+            </tr>            
+            <tr id="charge_fee_row">
+                <td colspan="4">
+                    <div align="right"> 手續費:&nbsp;</div>
+                </td>
+                <td colspan="2"> <span id="s_charge_fee" >0</span></td>
+            </tr>            
             <tr>
                 <th colspan="4">
                     <div align="right"> {MSG_TOTAL}:&nbsp;</div>
@@ -88,6 +100,7 @@
         </table>
     <!-- END BLOCK : INQUIRY_CART_ZONE -->
     <!-- START BLOCK : MEMBER_DATA_FORM -->
+    <br/>
 <form name="myform" method="post" action="cart.php?func=c_replace" id="formID2" class="formular">
         <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="member_table">
             <tr>
