@@ -163,15 +163,13 @@
                     </select></td>
             </tr>
             <!-- END BLOCK : SELECT_COUNTRY -->
-            <tr>
-                <th>{MSG_ZIP}</th>
-                <td colspan="3">
-                    <input name="m_zip" type="text"   value="{VALUE_M_ZIP}"  ></td>
-            </tr>
-            <tr>
+            <tr id="m_zone_row">
                 <th><font color="#ff0000">*</font>{MSG_ADDRESS}</th>
                 <td colspan="3">
-                    <input name="m_address" class="validate[required]" type="text"   value="{VALUE_M_ADDRESS}" size="60" ></td>
+                    <select name="m_city" id="m_city"></select>
+                    <select name="m_area" id="m_area"></select>  
+                    {MSG_ZIP}<input name="m_zip" id="m_zip" type="text"   value="{VALUE_M_ZIP}" size="5"  >
+                    <input name="m_address" class="validate[required]" type="text"   value="{VALUE_M_ADDRESS}" style="width:98%" ></td>
             </tr>
             <tr>
                 <th><font color="#ff0000">*</font>{MSG_TEL}</th>
@@ -198,7 +196,7 @@
             <tr>
               <th><font color="#ff0000">*</font>{MSG_CONTACT_PERSON}</th>
                 <td>
-                <input name="m_reci_name" id="m_reci_name" class="validate[required]" type="text" value="" size="12" />
+                &nbsp;{MSG_MEMBER_NAME}:<input name="m_reci_name" id="m_reci_name" class="validate[required]" type="text" value="" size="8" />
                  <select name="m_reci_contact_s">
                   <option {STR_M_CS_CK1}>先生</option>
                   <option {STR_M_CS_CK2}>女士</option>
@@ -208,18 +206,16 @@
                 <th>
                     <font color="#ff0000">*</font>E-mail</th>
                 <td>
-                    <input name="m_reci_email" type="text" id="m_reci_email" class="validate[required,custom[email]]"   value="" size="20" >
+                    <input name="m_reci_email" type="text" id="m_reci_email" class="validate[required,custom[email]]"   value="" size="30" >
                     </td>
             </tr>
-            <tr>
-                <th><font color="#ff0000">*</font>{MSG_ZIP}</th>
-                <td colspan="3">
-                    <input name="m_reci_zip" id="m_reci_zip" class="validate[required]" type="text"   value="" size="10" ></td>
-            </tr>
-            <tr>
+            <tr id="m_reci_zone_row">
                 <th><font color="#ff0000">*</font>{MSG_ADDRESS}</th>
                 <td colspan="3">
-                    <input name="m_reci_address" id="m_reci_address" class="validate[required]" type="text"   value="" size="60" ></td>
+                    <select name="m_reci_city" id="m_reci_city"></select>
+                    <select name="m_reci_area" id="m_reci_area"></select>  
+                    {MSG_ZIP}<input name="m_reci_zip" id="m_reci_zip" type="text"   value=""  size="5"  />                    
+                    <input name="m_reci_address" id="m_reci_address" class="validate[required]" type="text"   value="" style="width:98%"></td>
             </tr>
             <tr>
                 <th><font color="#ff0000">*</font>{MSG_TEL}</th>
@@ -275,10 +271,12 @@
     <div id="before_send_notification" style="display:none">
         <h3>提醒您，訂單送出後將無法修改！</h3>
     </div>
+    <script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery-disabler.min.js"></script>
+    <script type="text/javascript" src="{TAG_ROOT_PATH}js/zone_box.js"></script>    
     <script type="text/javascript">
         function move_order_to_reci(checked,form){
-            var _from = ['m_contact_s','m_name','m_email','m_zip','m_address','m_tel','m_cellphone'];
-            var _to = ['m_reci_contact_s','m_reci_name','m_reci_email','m_reci_zip','m_reci_address','m_reci_tel','m_reci_cellphone'];
+            var _from = ['m_contact_s','m_name','m_email','m_city','m_area','m_zip','m_address','m_tel','m_cellphone'];
+            var _to = ['m_reci_contact_s','m_reci_name','m_reci_email','m_reci_city','m_reci_area','m_reci_zip','m_reci_address','m_reci_tel','m_reci_cellphone'];
             if(checked){//核取
                  for(var i=0;i<_from.length;i++){
                      if(form[_to[i]].tagName.toUpperCase()=='SELECT'){
@@ -286,7 +284,11 @@
                      }else{
                          form[_to[i]].value = form[_from[i]].value;
                      }
-                     jQuery(form[_to[i]]).trigger('blur');
+                     if(_to[i]=="m_reci_zip"){
+                         jQuery(form[_to[i]]).trigger('keyup');
+                     }else{
+                         jQuery(form[_to[i]]).trigger('blur');
+                     }
                  }
             }else{//非核取
                  for(var i=0;i<_to.length;i++){
@@ -368,6 +370,23 @@
 //                       $("#formID2").trigger("submit");
 //                   }
                });
+               //設定城市挑選器
+                $("#m_zone_row").zone_box({
+			MAIN_ID : "m_city", // 縣市元素 ID (select 元素)
+			SUB_ID : "m_area", // 區域元素 ID (select 元素)
+			ZIP_ID : "m_zip", // 郵遞區號 ID (input 元素)
+			ZIP_GET : "", // 輸入郵遞區號
+                });
+                $("#m_reci_zone_row").zone_box({
+			MAIN_ID : "m_reci_city", // 縣市元素 ID (select 元素)
+			SUB_ID : "m_reci_area", // 區域元素 ID (select 元素)
+			ZIP_ID : "m_reci_zip", // 郵遞區號 ID (input 元素)
+			ZIP_GET : "", // 輸入郵遞區號
+                });
+                $("#m_zip").trigger('keyup');
+                $(".sw_delivery").disabler({
+                    disable:true
+                });
            });
         });
     </script>
