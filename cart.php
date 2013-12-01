@@ -218,6 +218,7 @@ class CART{
                                   //"CART_IMG_TITLE"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["title_img"],
                                   //"CART_IMG_SUB"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["sub_img"],
         ));
+        $pid_array = array();
         if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
             foreach($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"] as $key => $value){
                 $pid_array[]=$key;
@@ -226,7 +227,7 @@ class CART{
         if(!empty($pid_array)){
             $pid_array_str="(".implode(",",$pid_array).")";
             //$sql="select p_id,p_name,p_special_price,p_type,p_show_price,p_small_img,p_seo_filename from ".$cms_cfg['tb_prefix']."_products where p_id in ".$pid_array_str." ";
-            $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_special_price,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id in ".$pid_array_str." ";
+            $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_special_price,p.p_list_price,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id in ".$pid_array_str." ";
             $selectrs = $db->query($sql);
             $show_price=$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"];
             while ( $row = $db->fetch_array($selectrs,1) ) {
@@ -277,23 +278,25 @@ class CART{
             //H1 TAG
             $tpl->assignGlobal("TAG_MAIN_FUNC" , $TPLMSG['CART_SHOPPING']);
             $tpl->newBlock( "SHOPPING_CART_ZONE" );
-            $tpl->assign( array("MSG_CONTINUE_SHOPPING"  => $TPLMSG['CART_CONTINUE_SHOPPING'],
-                                "MSG_FINISH_SHOPPING"  => $TPLMSG['CART_FINISH_SHOPPING'],
-                                "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'],
-                                "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
+            $tpl->assignGlobal( array(
+                "MSG_CONTINUE_SHOPPING"  => $TPLMSG['CART_CONTINUE_SHOPPING'],
+                "MSG_FINISH_SHOPPING"  => $TPLMSG['CART_FINISH_SHOPPING'],
+                "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'],
+                "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
             ));
             for($i=0;$i<count($shopping);$i++){
                 $tpl->newBlock( "SHOPPING_CART_LIST" );
                 $pid=$shopping[$i]["p_id"];
                 $amount=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$pid];
+                $price = $shopping[$i]["p_special_price"]?$shopping[$i]["p_special_price"]:$shopping[$i]["p_list_price"];
                 if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]) && $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]!=100){
                     $tpl->assignGlobal("MSG_PRODUCT_SPECIAL_PRICE" , $TPLMSG['PRODUCT_DISCOUNT_PRICE']);
                     $tpl->assignGlobal("VALUE_P_DISCOUNT",$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]."%");
-                    $special_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$shopping[$i]["p_special_price"]);
+                    $special_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$price);
                 }else{
                     $tpl->assignGlobal("MSG_PRODUCT_SPECIAL_PRICE" , $TPLMSG['PRODUCT_SPECIAL_PRICE']);
                     $tpl->assignGlobal("VALUE_P_DISCOUNT","");
-                    $special_price=$shopping[$i]["p_special_price"];
+                    $special_price=$price;
                 }
                 if($this->ws_seo){
                     $dirname=(trim($shopping[$i]["pc_seo_filename"]))?$shopping[$i]["pc_seo_filename"]:"products";
