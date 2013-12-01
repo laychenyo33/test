@@ -18,12 +18,14 @@ class CART{
                 $this->ws_tpl_type=1;
                 break;
             case "c_add"://新增購物項目
-                $this->ws_tpl_file = "templates/ws-cart-tpl.html";
-                $this->ws_load_tp($this->ws_tpl_file);
-                $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_POP_IMG");
-                $this->cart_add();
-                $this->ws_tpl_type=1;
+                if(!$_POST['via_ajax']){
+                    $this->ws_tpl_file = "templates/ws-cart-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $tpl->newBlock("JS_MAIN");
+                    $tpl->newBlock("JS_POP_IMG");
+                    $this->ws_tpl_type=1;
+                }
+                $this->cart_add($_POST['via_ajax']);
                 break;
             case "c_list_add"://新增購物項目(產品列表)
                 $this->ws_tpl_file = "templates/ws-cart-tpl.html";
@@ -124,8 +126,8 @@ class CART{
         $main->left_fix_cate_list();
     }
 
-    function cart_add(){
-        global $cms_cfg;
+    function cart_add($is_ajax){
+        global $cms_cfg,$db;
         $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL']=$_SERVER['HTTP_REFERER'];
         $amount_arr = is_array($_REQUEST["amount"])?$_REQUEST["amount"]:(array)$_REQUEST["amount"];
         $p_id_arr = is_array($_REQUEST["p_id"])?$_REQUEST["p_id"]:(array)$_REQUEST["p_id"];
@@ -138,7 +140,9 @@ class CART{
                 $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]+$amount;
             }            
         }
-        $this->cart_list();
+        if(!$via_ajax){
+            $this->cart_list();
+        }
     }
     function cart_list_add(){
         global $cms_cfg;
