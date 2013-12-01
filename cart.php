@@ -198,12 +198,19 @@ class CART{
             $main->js_notice("目前購物車是空的!",$cms_cfg['base_root']."products.htm");
             die();
         }             
-        //取得目前的 cart type
-        $sql="select sc_cart_type from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
+        //取得目前的 cart type，以及運費相關欄位
+        $sql="select sc_cart_type,sc_shipping_price,sc_shipping_price2,sc_shipping_price3,sc_no_shipping_price from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         $_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]=($row["sc_cart_type"]=="")?0:$row["sc_cart_type"];
         $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);
+        //購物車使用的運費info
+        $tpl->assignGlobal(array(
+            "VALUE_SC_SHIPPING_PRICE"    => $row['sc_shipping_price'],
+            "VALUE_SC_SHIPPING_PRICE2"   => $row['sc_shipping_price2'],
+            "VALUE_SC_SHIPPING_PRICE3"   => $row['sc_shipping_price3'],
+            "VALUE_SC_NO_SHIPPING_PRICE" => $row['sc_no_shipping_price'],
+        ));
         //欄位名稱
         $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
                                   "MSG_CONTENT"  => $TPLMSG['CONTENT'],
