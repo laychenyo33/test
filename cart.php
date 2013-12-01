@@ -385,8 +385,13 @@ class CART{
             unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"][$p_id]);
             unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]);
         }
-        $this->cart_list();
-    }
+        if(count($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
+            $this->cart_list();
+        }else{
+            header("location:products.htm");
+            die();
+        }
+    }  
     function cart_modify($via_ajax){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         if(!empty($_REQUEST["shop_value"])){
