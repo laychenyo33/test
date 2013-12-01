@@ -309,4 +309,27 @@ $TPLMSG['EPAPER_HEADER'] = "電子報頁首";
 $TPLMSG['EPAPER_FOOTER'] = "電子報頁尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已經從郵件清單裡移除了!";
 $TPLMSG['GALLERY'] = "活動剪影";
+
+/*新增語彙*/
+/*以下是支付寶相關字彙*/
+$TPLMSG["PAYMENT_ALI"] = "支付寶";
+$TPLMSG["PAYMENT_TEN"] = "財付通";
+$TPLMSG['ALI_FAIL_TITLE'] = "交易失敗";
+$TPLMSG['ALI_OK_TITLE'] = "交易完成";
+$TPLMSG["ALI_TITLE"] = "購物訊息";
+$TPLMSG['ALI_FALE_MESSAGE'] = "產品售完或已下架";
+$TPLMSG["ALI_SHIP_MSG"] = "請於支付寶平台確認運費";
+$TPLMSG["MEMBER_ALI_QUERY"] = "查詢支付寶訂單";
+$TPLMSG['SHIPPMENT_1'] = "臺灣本島";
+$TPLMSG['SHIPPMENT_2'] = "離島地區(澎湖、金門、馬祖)";
+$TPLMSG['SHIPPMENT_3'] = "中國大陸(支付寶)";
+$TPLMSG['THANKS_FOR_ORDER'] = "大黑松小倆口感謝您的訂購!";
+$TPLMSG['INVOICE_TYPE_2'] = "二聯式";
+$TPLMSG['INVOICE_TYPE_3'] = "三聯式";
+$TPLMSG['ORDER_BUYER_INFO'] = "訂購者資訊";
+$TPLMSG['ORDER_RECI_INFO'] = "收件者資訊";
+$TPLMSG['ORDER_INVOICE_INFO'] = "發票資訊";
+$TPLMSG['DELIVER_STR'] = "配送日期及時段";
+$TPLMSG['VAT_NUMBER'] = "統一編號";
+$TPLMSG['PRODUCT_PRICE'] = "價格";
 ?>
