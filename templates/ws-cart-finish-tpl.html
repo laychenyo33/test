@@ -366,10 +366,10 @@
                    }
                });               
                $("#checkout").click(function(evt){
-                   if($("#o_payment_type").val()==1 && $("#o_atm_last5").val()==""){
-                       alert("請輸入匯款帳號後五碼");
-                       return false;
-                   }
+//                   if($("#o_payment_type").val()==1 && $("#o_atm_last5").val()==""){
+//                       alert("請輸入匯款帳號後五碼");
+//                       return false;
+//                   }
                    if($("#o_invoice_type_3")[0].checked){
                        if( $.trim($("#m_vat_number").val()).length==0 || $.trim($("#m_company_name").val()).length==0){
                            alert("三聯式發票需要您的公司抬頭及統一編號資訊");
