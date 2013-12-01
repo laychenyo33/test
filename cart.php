@@ -743,9 +743,15 @@ class CART{
             if($cms_cfg["ws_module"]["ws_cart_login"]==0){
                 $goto_url=$_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
             }else{
-                $goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
+                $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$oid;
             }
-            $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"],"shopping",$goto_url);
+            if(3 == $_REQUEST["o_payment_type"]){
+                    $mail_header = 1;
+            }else{
+                    $mail_header = 0;
+            }
+
+            $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"],"shopping",$goto_url,null,$mail_header);
         }
 
         if(!empty($inquiry)){
@@ -827,6 +833,7 @@ class CART{
         if ( $db_msg == "" ) {
             unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
             unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
+            unset($_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
             //$tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             //$goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
             //$this->goto_target_page($goto_url,2);
