@@ -1833,5 +1833,17 @@ class MAINFUNC{
         $return_string=implode("&",$return_string);
         return $return_string;
     }    
+    function load_privacy_term(){
+        global $tpl,$cms_cfg,$db;
+        $tpl->newBlock("JQUERY_UI_SCRIPT");
+        $sql = " select st_privacy_policy from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
+        list($term) = $db->query_firstrow($sql,false);
+        $tpl->assignGlobal("MSG_PRIVACY_TERM",$term);
+    }
+    //計算分頁的偏移值
+    function get_pagination_offset($op_limit){
+        $p = $_GET['nowp']?abs($_GET['nowp']):1;
+        return ($p-1)*$op_limit;
+    }    
 }
 ?>
