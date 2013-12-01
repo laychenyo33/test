@@ -132,8 +132,8 @@ class CART{
         $main->left_fix_cate_list();
     }
 
-    function cart_add($is_ajax){
-        global $cms_cfg,$db;
+    function cart_add($via_ajax){
+        global $cms_cfg;
         $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL']=$_SERVER['HTTP_REFERER'];
         $amount_arr = is_array($_REQUEST["amount"])?$_REQUEST["amount"]:(array)$_REQUEST["amount"];
         $p_id_arr = is_array($_REQUEST["p_id"])?$_REQUEST["p_id"]:(array)$_REQUEST["p_id"];
@@ -450,13 +450,19 @@ class CART{
         //稱謂下拉選單
         $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART");
         if(!empty($shopping)){
+            //運送區域
+            $tpl->assignGlobal("VALUE_SHIPMENT_TYPE",$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+            $tpl->assignGlobal("VALUE_SHIPMENT_ZONE",$ws_array["shippment_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]]);
+            if($_POST['shipment_type']==3){
+                $tpl->assignGlobal("VALUE_SHIPPING_PRICE_STR",$TPLMSG["ALI_SHIP_MSG"]);
+            }
             //顯示付款方式
             $tpl->newBlock("PAYMENT_TYPE");
             $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
-            for($i=0;$i<count($ws_array["payment_type"]);$i++){
+            foreach($ws_array["payment_type"] as $i => $v){
                 $tpl->newBlock("PAYMENT_TYPE_ITEMS");
                 $tpl->assign("VALUE_PAYMENT_TYPE_ID" , $i);
-                $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$i]);
+                $tpl->assign("VALUE_PAYMENT_TYPE" , $v);
             }
             $tpl->gotoBlock("PAYMENT_TYPE");
             $tpl->gotoBlock("MEMBER_DATA_FORM");
