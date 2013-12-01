@@ -695,11 +695,15 @@ class CART{
                 $pid=$shopping[$i]["p_id"];
                 $pname=$shopping[$i]["p_name"];
                 $amount=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$pid];
+                $price = $shopping[$i]["p_special_price"]?$shopping[$i]["p_special_price"]:$shopping[$i]["p_list_price"];
                 if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]) && $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]!=100){
-                    $special_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$shopping[$i]["p_special_price"]);
+                    $special_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$price);
                 }else{
-                    $special_price=$shopping[$i]["p_special_price"];
+                    $special_price=$price;
                 }
+				
+                $sub_totle[$pid] = $special_price * $amount;
+				
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_order_items (
                         m_id,
