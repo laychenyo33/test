@@ -322,14 +322,12 @@ class CART{
                 ));
                 $tpl->gotoBlock( "SHOPPING_CART_ZONE" );
             }
-            if($total_price > $_SESSION[$cms_cfg['sess_cookie_name']]["sc_no_shipping_price"]){
-                $shipping_price=0;
-            }else{
-                $shipping_price=$_SESSION[$cms_cfg['sess_cookie_name']]["sc_shipping_price"];
-            }
+            $shipping_price = $this->shipping_price($total_price,$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+			
             $subtotal_money=$total_price;
             $total_money=$subtotal_money+$shipping_price;
             $tpl->assignGlobal("VALUE_SHIPPING_PRICE",$shipping_price);
+            $tpl->assignGlobal("VALUE_SHIPPING_PRICE_STR",($_POST['shipment_type']<3 && $shipping_price===0)?"滿額免運費":$shipping_price);
             $tpl->assignGlobal("VALUE_SUBTOTAL",$subtotal_money);
             $tpl->assignGlobal("VALUE_TOTAL",$total_money);
         }
