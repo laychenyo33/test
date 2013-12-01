@@ -330,6 +330,10 @@ class CART{
             $tpl->assignGlobal("VALUE_SHIPPING_PRICE_STR",($_POST['shipment_type']<3 && $shipping_price===0)?"滿額免運費":$shipping_price);
             $tpl->assignGlobal("VALUE_SUBTOTAL",$subtotal_money);
             $tpl->assignGlobal("VALUE_TOTAL",$total_money);
+            //購物說明
+            $sql = "select st_shopping_term from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
+            list($term) = $db->query_firstRow($sql,false);
+            $tpl->assign("SHOPPING_CART_ZONE.MSG_ST_SHOPPING_TERM",$term);
         }
         //顯示詢價清單
         if(!empty($inquiry)){
