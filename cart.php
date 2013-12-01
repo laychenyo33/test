@@ -1030,11 +1030,70 @@ class CART{
         }
         $tpl->printToScreen();
     }
+
+    function shipping_price($price=0,$ship_zone){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $sql = "select sc_shipping_price,sc_shipping_price2,sc_shipping_price3,sc_no_shipping_price from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
+        list($a,$b,$c,$d) = $db->query_firstRow($sql,false);
+        switch($ship_zone){
+            case 1:
+                $ship_price = $a;
+                break;
+            case 2:
+                return  $b;
+                break;
+            case 3:
+                return  $c;
+                break;
+        }
+        if($price < $d){
+            return $ship_price;
+        }else{
+            return 0;
+        }
+    }  
+    //取得最新訂單號碼
+    function get_oid(){
+        global $db,$cms_cfg;
+        $today_str = date("Ymd");
+        $pattern = $today_str."([0-9]{4})";
+        $sql = "SELECT o_id FROM `".$cms_cfg['tb_prefix']."_order` where  o_id  regexp '".$pattern."' order by o_id desc limit 1";
+        $row = $db->query_firstrow($sql);
+        if($row){
+            preg_match(sprintf("/%s/i",$pattern), $row['o_id'], $matches);
+            $serial = intval($matches[1])+1;
+        }else{
+            $serial = 1;
+        }
+        $new_o_id = sprintf("%s%04d",date("Ymd"),$serial);
+        return $new_o_id;
+    }    
     function member_login(){
         global $main,$ws_array,$cms_cfg,$tpl,$TPLMSG;
         $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);  
         $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_LOGIN']);        
     }
+    function checkout(){
+        global $cms_cfg,$db;
+        //取得購物車的產品id
+        $pid_array=array_keys($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);     
+        $pid_array_str = implode(',',$pid_array);
+        $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_list_price,p.p_special_price,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id in (".$pid_array_str.") ";
+        $selectrs = $db->query($sql);   
+        $total_price = 0;//訂單總價
+        while ( $row = $db->fetch_array($selectrs,1) ) {
+            $pid=$row['p_id'];
+            $amount=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$pid];        
+            $base_price = $row["p_special_price"]?$row["p_special_price"]:$row["p_list_price"];
+            if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]) && $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]!=100){
+                $special_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$base_price);
+            }else{
+                $special_price=$base_price;
+            }
+            $total_price += $special_price * $amount;
+        }
+        return $total_price;
+    }        
 }
 
 class CART_WITH_SERIAL extends CART{
