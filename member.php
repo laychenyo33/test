@@ -862,6 +862,31 @@ class MEMBER{
             }
         }
     }    
+    function member_message_list(){
+        global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_member_message order by mm_sort asc,mm_modifydate desc ";
+        //取得總筆數
+        $selectrs = $db->query($sql);
+        $total_records = $db->numRows($selectrs);
+        //取得分頁連結，重新組合包含limit的sql語法
+        $func_str="member.php?func=mm_list";
+        $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        while ( $row = $db->fetch_array($selectrs,1) ) {
+            $i++;
+            $tpl->newBlock( "MESSAGE_LIST" );
+            if($i%2){
+                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+            }    
+            $tpl->assign( array(
+                "VALUE_MM_ID"  => $row["mm_id"],
+                "VALUE_MM_SUBJECT" => $row["mm_subject"],
+                "VALUE_MM_CONTENT" => $row["mm_content"],
+                "VALUE_MM_MODIFYDATE" => $row["mm_modifydate"],
+            ));
+        }
+    }
      //寄送密碼完成訊息
     function member_send_password_success_str(){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
