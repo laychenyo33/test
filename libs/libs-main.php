@@ -1819,6 +1819,13 @@ class MAINFUNC{
         echo "</pre>";
         die();
     }    
+   function equal($c1,$c2,$compare_not_empty=true){
+        if($compare_not_empty){
+            return ($c1 && $c1==$c2);
+        }else{
+            return ($c1==$c2);
+        }
+    }    
     function parseQueryStr($qs="",$str=""){
         if(empty($qs))return;
         if(is_array($qs)){
