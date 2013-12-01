@@ -1341,7 +1341,7 @@ class MAINFUNC{
                         }
                         $menu_arr['products'][] = array(
                             'name'    => $row['pc_name'],
-                            'link'    => "#",
+                            'link'    => $cms_cfg['base_root'].$row['pc_seo_filename'].".htm",
                             'submenu' => $submenu,
                         );
                     }
