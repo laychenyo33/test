@@ -82,7 +82,8 @@ $(document).zone_box({
 		
 		// MAIN
 		$.each(ZONE.MAIN,function(KEY,VALUE){
-			ZONE.MAIN_STR += '<option value="'+ VALUE +'" rel="'+ KEY +'">'+ VALUE +'</option>';
+                        var op_val = (VALUE=="請選擇")?"":VALUE;
+			ZONE.MAIN_STR += '<option value="'+ op_val +'" rel="'+ KEY +'">'+ VALUE +'</option>';
 		})
 		
 		$("#"+ ZONE.MAIN_ID).append(ZONE.MAIN_STR);
