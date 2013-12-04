@@ -462,6 +462,10 @@ class MEMBER{
                                     "VALUE_O_SERIAL" => $i,
                                     "VALUE_O_DETAIL" => $TPLMSG['DETAIL'],
                 ));
+                if($row['o_status']==0){
+                    $tpl->newBlock("BTN_CANCEL_ORDER");
+                    $tpl->assign("VALUE_O_ID",$row['o_id']);
+                }
             }
         }
         if($type=="detail"){
@@ -949,6 +953,65 @@ class MEMBER{
         $accPart = substr(md5($acc),0,10);
         $midPart = substr(md5($mid),0,10);
         return $accPart.$midPart;
+    }     
+    function ajax(){
+        $method = __FUNCTION__."_".$_GET['action'];       
+        if(method_exists($this, $method)){
+            $this->$method();
+        }else{
+            throw new Exception($method."doesn't exists!");
+        }        
+    }
+    function ajax_write_last5(){
+        global $db,$cms_cfg,$main;
+        $res['code']=0;
+        if($_POST['o_id'] && $_POST['o_atm_last5']){
+            $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
+            $db->query($sql);
+            if($err = $db->report()){
+                $res['msg'] = $err;
+            }else{
+                $res['code']=1;
+                //寄發通知信
+                $mail_content = <<<BOX
+訂單 {$_POST['o_id']} 已完成匯款，匯款帳號後五碼為: {$_POST['o_atm_last5']}
+BOX;
+                $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."atm轉帳訂單匯款完成通知","系統通知");                
+            }
+        }
+        echo json_encode($res);
+    }
+    //取消宅配箱訂單
+    function ajax_cancel_order(){
+        global $db,$cms_cfg,$main;
+        $sql = "select * from ".$db->prefix("order")." where o_id='".$_POST['o_id']."'";
+        $order = $db->query_firstrow($sql);
+        if($order){
+            $res['code'] = 1;
+            if($order['o_status']==0){
+                $order['o_status'] = 9;//取消訂單的狀態
+                $sql = "update ".$db->prefix("order")." set o_status='9' where o_id='".$_POST['o_id']."'";
+                $db->query($sql);
+                if($err = $db->report()){
+                    $res['code'] = 0;
+                    $res['msg'] = $err;
+                }else{
+                    //寄發通知信
+                    $time = date("Y-m-d H:i:s");
+                    $mail_content = <<<BOX
+    購物訂單 {$_POST['o_id']} 於{$time}，由客戶線上取消。
+BOX;
+                    $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","系統通知");                
+                }
+            }else{
+                $res['code'] = 0;
+                $res['msg'] = "訂單非新訂單，無法線上取消，請聯絡客服";
+            }
+        }else{
+            $res['code'] = 0;
+            $res['msg'] = "訂單不存在!";
+        }
+        echo json_encode($res);
     }
 }
 
