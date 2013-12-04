@@ -47,8 +47,18 @@ abstract class Dbtable_Abstract {
         return $this;
     }
     
-    public function getDataRow(){
-        return $this->values;    
+    public function getDataRow($cols="*"){
+        if($cols!="*"){
+            $cols = explode(",",$cols);
+            $new_values = array();
+            foreach($cols as $k=>$v){
+                $v = trim($v);
+                $new_values[$v] = $this->values[$v];
+            }
+            return $new_values;
+        }else{
+            return $this->values;    
+        }
     }
     
     public function report(){
