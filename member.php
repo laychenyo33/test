@@ -7,6 +7,7 @@ class MEMBER{
         global $db,$cms_cfg,$tpl,$main;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
+        $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
             case "activate":
                 $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
@@ -40,6 +41,7 @@ class MEMBER{
             case "m_mod"://會員管理修改
                 if(empty($this->m_id)){
                     header("Location: member.php?func=m_add");
+                    die();
                 }
                 $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -485,7 +487,7 @@ class MEMBER{
                                       "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'],
                                       "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'],
                                       "MSG_PRODUCT" => $TPLMSG['PRODUCT'],
-                                      "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_PRICE'],
+                                      "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_SPECIAL_PRICE'],
                                       "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
                                       "MSG_BUYER_INFO"  => $TPLMSG['ORDER_BUYER_INFO'],
                                       "MSG_RECI_INFO"   => $TPLMSG['ORDER_RECI_INFO'],
