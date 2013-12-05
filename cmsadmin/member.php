@@ -819,8 +819,8 @@ class MEMBER{
         }else{
             $mm_id=$_REQUEST["id"];
         }
-        if(!empty($n_id)){
-            $n_id_str = implode(",",$n_id);
+        if(!empty($mm_id)){
+            $mm_id_str = implode(",",$mm_id);
             //刪除勾選的最新消息
             $sql="delete from ".$cms_cfg['tb_prefix']."_member_message where mm_id in (".$mm_id_str.")";
             $rs = $db->query($sql);
