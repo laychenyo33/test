@@ -76,8 +76,7 @@
                 <th colspan="4">
                     <div align="right"> {MSG_TOTAL}:&nbsp;</div>
                 </th>
-                <th colspan="2"> <span id="s_total">{VALUE_TOTAL}</span>
-                </th>
+                <th colspan="2"> <span id="s_total_price" origin-total-price="{VALUE_TOTAL}">{VALUE_TOTAL}</span></th>
             </tr>
         </table>
     <!-- END BLOCK : SHOPPING_CART_ZONE -->
@@ -340,7 +339,8 @@
                            $("#atm_last5").slideUp();
                            $("#o_atm_last5").val('');
                            $("#ship_row").hide();
-//                           $("#s_total").text($("#o_subtotal_price").val());
+//                           $("#pay_ship_row").show();
+                           $("#o_charge_fee").val(0);
                            break;
                        default:
                            $("#atm_last5").slideUp();
