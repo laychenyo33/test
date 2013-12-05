@@ -627,7 +627,14 @@ class CART{
             //結帳，計算訂單金額
             $sub_total_price = $this->checkout();
             $shipping_price = $this->shipping_price($sub_total_price,$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
-            $total_price = $sub_total_price+$shipping_price;            
+            //手續費
+            $charge_fee = 0;
+            if($_REQUEST["o_payment_type"]==2){
+                $charge_fee = 30;      
+                $tpl->newBlock("CHARGE_FEE_ROW");
+                $tpl->assign("VALUE_CHARGE_FEE",$charge_fee);
+            }
+            $total_price = $sub_total_price + $shipping_price + $charge_fee;            
             $ts = time();
             $sql="
                 insert into ".$cms_cfg['tb_prefix']."_order (
