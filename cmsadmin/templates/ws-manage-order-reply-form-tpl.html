@@ -4,6 +4,9 @@
 <form name="myform" method="post" action="order.php?func=o_replace"  class="formular" id="formID">
     <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
         <tr>
+            <th colspan="2" class="table_title_color">訂單資訊</th>
+        </tr>        
+        <tr>
             <th>訂單編號:</th>
             <td>
                 {VALUE_O_ID}
@@ -27,6 +30,54 @@
         <tr>
             <th>匯款後五碼</th>
             <td>{VALUE_O_ATM_LAST5}</td>
+        </tr>
+        <tr>
+            <th>送貨區域</th>
+            <td>{VALUE_O_SHIPPMENT_TYPE}</td>
+        </tr>
+        <!-- START BLOCK : DELIVERY_TIMESEC -->
+        <tr>
+            <th>配送日期及時段</th>
+            <td>{VALUE_O_DELIVERY_STR}</td>
+        </tr>
+        <!-- END BLOCK : DELIVERY_TIMESEC -->        
+        <!-- START BLOCK : ATM_DATA -->
+        <tr>
+            <th>ATM虛擬帳號:</th>
+            <td>
+                {VALUE_O_VIRTUAL_ACCOUNT}</td>
+        </tr>
+        <tr>
+            <th>匯款金額:</th>
+            <td>
+                {VALUE_O_CURAMT}</td>
+        </tr>
+        <!-- END BLOCK : ATM_DATA -->        
+        <tr>
+            <th>內容:</th>
+            <td>
+                &nbsp;{VALUE_O_CONTENT}</td>
+        </tr>         
+        <tr>
+            <th colspan="2" class="table_title_color">發票資訊</th>
+        </tr>
+        <tr>
+            <th>發票類型:</th>
+            <td>
+                {VALUE_O_INVOICE_TYPE}</td>
+        </tr>
+        <tr>
+            <th>公司:</th>
+            <td>
+                {VALUE_O_COMPANY_NAME}</td>
+        </tr>
+        <tr>
+            <th>統一編號:</th>
+            <td>
+                {VALUE_O_VAT_NUMBER}</td>
+        </tr>
+        <tr>
+            <th colspan="2" class="table_title_color">訂購者資訊</th>
         </tr>
         <tr>
             <th>姓名:</th>
@@ -58,35 +109,41 @@
             <td>
                 {VALUE_O_EMAIL}</td>
         </tr>
-        <!-- START BLOCK : DELIVERY_TIMESEC -->
         <tr>
-            <th>配送日期及時段</th>
-            <td>{VALUE_O_DELIVERY_STR}</td>
+            <th colspan="2" class="table_title_color">收件者資訊</th>
         </tr>
-        <!-- END BLOCK : DELIVERY_TIMESEC -->
-        <!-- START BLOCK : ATM_DATA -->
         <tr>
-            <th>ATM虛擬帳號:</th>
+            <th>姓名:</th>
             <td>
-                {VALUE_O_VIRTUAL_ACCOUNT}</td>
+                {VALUE_O_RECI_NAME}</td>
         </tr>
         <tr>
-            <th>匯款金額:</th>
+            <th>電話:</th>
             <td>
-                {VALUE_O_CURAMT}</td>
-        </tr>
-        <!-- END BLOCK : ATM_DATA -->
-        <tr>
-            <th colspan="2"  valign="top" class="table_title_color">
-                <center>
-                    訂單內容
-                </center>
-            </th>
+                {VALUE_O_RECI_TEL}</td>
         </tr>
         <tr>
-            <th>內容:</th>
+            <th>手機:</th>
             <td>
-                &nbsp;{VALUE_O_CONTENT}</td>
+                {VALUE_O_RECI_CELLPHONE}</td>
+        </tr>
+        <tr>
+            <th>郵遞區號:</th>
+            <td>
+                {VALUE_O_RECI_ZIP}</td>
+        </tr>
+        <tr>
+            <th>住址:</th>
+            <td>
+                {VALUE_O_RECI_ADDRESS}</td>
+        </tr>
+        <tr>
+            <th>e-mail:</th>
+            <td>
+                {VALUE_O_RECI_EMAIL}</td>
+        </tr>        
+        <tr>
+            <th colspan="2"  valign="top" class="table_title_color">訂單內容</th>
         </tr>
         <tr>
             <td colspan="2">
@@ -136,6 +193,86 @@
                 </table>
             </td>
         </tr>
+        <!-- START BLOCK : ALI_TABLE -->
+        <tr>
+        	<th colspan="2">支付寶、財富通 訂單訊息</th>
+        </tr>
+        <tr>
+        	<th>訂單編號</th>
+            <td>{VALUE_ALI_PNO}</td>
+        </tr>
+        <tr>
+        	<th>平臺訂單號</th>
+            <td>{VALUE_ALI_ORDER_NO}</td>
+        </tr>
+        <tr>
+        	<th>支付平臺</th>
+            <td>{VALUE_ALI_CHANNEL}</td>
+        </tr>
+        <!--
+        <tr>
+        	<th>平臺交易編號</th>
+            <td>{VALUE_ALI_CHANNEL_NO}</td>
+        </tr>
+        -->
+        <tr>
+        	<th>訂單總價</th>
+            <td>{VALUE_ALI_PRICE}</td>
+        </tr>
+        <tr>
+        	<th>訂單原始價格</th>
+            <td>{VALUE_ALI_O_PRICE}</td>
+        </tr>
+        <tr>
+        	<th>收件人名稱</th>
+            <td>{VALUE_ALI_NAME}</td>
+        </tr>
+        <tr>
+        	<th>收件人電話</th>
+            <td>{VALUE_ALI_TEL}</td>
+        </tr>
+        <tr>
+        	<th>收件人電話 2</th>
+            <td>{VALUE_ALI_TEL_2}</td>
+        </tr>
+        <tr>
+        	<th>收件人E-mail</th>
+            <td>{VALUE_ALI_MAIL}</td>
+        </tr>
+        <tr>
+        	<th>收件地區代碼</th>
+            <td>{VALUE_ALI_ZONE}</td>
+        </tr>
+        <tr>
+        	<th>收件地址</th>
+            <td>{VALUE_ALI_ADDRESS}</td>
+        </tr>
+        <tr>
+        	<th>買方負擔運費</th>
+            <td>{VALUE_ALI_SHIPAY}</td>
+        </tr>
+        <tr>
+        	<th>貨運狀態</th>
+            <td>{VALUE_ALI_SHIP_DESC}</td>
+        </tr>
+        <tr>
+        	<th>訂單狀態</th>
+            <td>{VALUE_ALI_STATUS}</td>
+        </tr>
+        <tr>
+        	<th>狀態說明</th>
+            <td>{VALUE_ALI_DESC}</td>
+        </tr>
+        <!-- END BLOCK : ALI_TABLE -->
+        <!-- START BLOCK : ALI_ERROR -->
+        <tr>
+        	<th colspan="2">支付寶、財富通 訂單查尋失敗</th>
+        </tr>
+        <tr>
+        	<th>查詢失敗</th>
+            <td>無法查詢交易資料，此筆訂單並未交易完成。</td>
+        </tr>
+        <!-- END BLOCK : ALI_ERROR -->
     </table>
     <input type="hidden" name="o_id" value="{VALUE_O_ID}">
     <input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">

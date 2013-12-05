@@ -54,12 +54,12 @@ $cms_cfg["ws_module"]=array(
         "ws_epaper"=>0,                 //電子報管理
         "ws_epaper_attach_products"=>1, //電子報夾帶產品列表
         "ws_epaper_queue"=>1,           //電子報使用佇列發送
-        "ws_order"=>0,                  //訂單管理
+        "ws_order"=>1,                  //訂單管理
         "ws_service"=>0,                //服務條款(IPC專用)
         "ws_vaccount"=>0,               //台銀虛擬帳號
 
 /*      MEMBER SETUP                   */
-        "ws_member"=>0,                 //會員管理
+        "ws_member"=>1,                 //會員管理
         "ws_member_manipulate"=>1,      //會員資料匯出匯入
         "ws_member_country"   =>0,      //會員表單顯示國家下拉式選單
         "ws_member_download"  =>0,      //會員下載
@@ -94,7 +94,7 @@ $cms_cfg["ws_module"]=array(
         "ws_sysconfig"=>1,          //系統設定
         "ws_index_banner"=>0,       //自訂首頁banner
         "ws_seo"=>1,                //0=>取消rewrite , 1=>啟用rewrite
-        "ws_version"=>"ips",        //系統版本:IPS,IPB,IPC
+        "ws_version"=>"ipc",        //系統版本:IPS,IPB,IPC
         "ws_wysiwyg"=>"tinymce"     //tinymce 編輯器
 )
 ?>

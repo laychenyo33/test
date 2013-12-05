@@ -1,0 +1,48 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>會員訊息{MSG_MODE}</h1>
+<form name="myform" method="post" action="member.php?func=mm_replace"  class="formular" id="formID">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="formtable">
+  <tr>
+        <th>啟用狀態:</th>
+        <td>
+          <input type="radio" name="mm_status" value="1" {STR_MM_STATUS_CK1}> 啟用
+          <input type="radio" name="mm_status" value="0" {STR_MM_STATUS_CK0}> 停用
+        </td>
+  </tr>
+  <tr>
+        <th>排序:</th>
+        <td>
+            <input name="mm_sort" type="text" class="validate[custom[onlyNumber]]" value="{VALUE_MM_SORT}" size="4" maxlength="4">
+        </td>
+  </tr>
+    <tr>
+        <th><font color="#cc0000">*</font>標題</th>
+        <td>
+            <input name="mm_subject" type="text" class="validate[required]" value="{VALUE_MM_SUBJECT}" size="50">
+        </td>
+    </tr>
+    <tr>
+        <th>內容</th>
+        <td>
+            <!-- START BLOCK : WYSIWYG_TINYMCE1 -->
+            <textarea id="elm1" name="mm_content" cols="50" rows="15" >{VALUE_MM_CONTENT}</textarea>
+            <!-- END BLOCK : WYSIWYG_TINYMCE1 -->
+        </td>
+    </tr>
+    <tr>
+        <th>&nbsp;</th>
+        <td>
+         <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" />
+        </td>
+    </tr>
+</table>
+<input type="hidden" name="mm_id" value="{VALUE_MM_ID}">
+<input type="hidden" name="action_mode" value="{VALUE_ACTION_MODE}">
+<input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
+<input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
+<input name="nowp" type="hidden" id="nowp" value="{VALUE_NOW_PAGE}">
+<input name="jp" type="hidden" id="jp" value="{VALUE_JUMP_PAGE}"> 
+</form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

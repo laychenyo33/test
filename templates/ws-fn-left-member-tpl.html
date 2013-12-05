@@ -34,10 +34,14 @@
 <!-- END BLOCK : LOGIN_ZONE -->
 <!-- START BLOCK : MEMBER_INFO -->
 <div id="member_login_info">
-<div>{TAG_LOGIN_MEMBER_CATE}: {TAG_LOGIN_MEMBER_NAME}</div>
+<div>
+    <div>會員分類:{TAG_LOGIN_MEMBER_CATE}</div>
+    <div>您好，{TAG_LOGIN_MEMBER_NAME}</div>
+</div>
 <div><a href="login.php?func=logout"><img src="images/ws-logout-{TAG_LANG}.jpg" width="43" height="21" border="0" /></a></div>
 </div>
 <div id="member_login_func">
+<p><a href="{TAG_ROOT_PATH}member.php?func=mm_list">會員訊息</a></p>    
 <p><a href="member.php?func=m_mod">{TAG_LOGIN_MEMBER_DATA}</a></p>
 <!-- START BLOCK : CART_TYPE_ORDER -->
 <p><a href="member.php?func=m_zone&mzt=order">{TAG_LOGIN_MEMBER_ORDER}</a></p>

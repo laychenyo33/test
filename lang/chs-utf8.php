@@ -307,4 +307,27 @@ $TPLMSG['EPAPER_HEADER'] = "电子报页首";
 $TPLMSG['EPAPER_FOOTER'] = "电子报页尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已经从邮件清单里移除了!";
 $TPLMSG['GALLERY'] = "活动剪影";
+
+/*新增语汇*/
+/*以下是支付宝相关字汇*/
+$TPLMSG["PAYMENT_ALI"] = "支付宝";
+$TPLMSG["PAYMENT_TEN"] = "财付通";
+$TPLMSG['ALI_FAIL_TITLE'] = "交易失败";
+$TPLMSG['ALI_OK_TITLE'] = "交易完成";
+$TPLMSG["ALI_TITLE"] = "购物讯息";
+$TPLMSG['ALI_FALE_MESSAGE'] = "产品售完或已下架";
+$TPLMSG["ALI_SHIP_MSG"] = "请于支付宝平台确认运费";
+$TPLMSG["MEMBER_ALI_QUERY"] = "查询支付宝订单";
+$TPLMSG['SHIPPMENT_1'] = "台湾本岛";
+$TPLMSG['SHIPPMENT_2'] = "离岛地区(澎湖、金门、马祖)";
+$TPLMSG['SHIPPMENT_3'] = "中国大陆(支付宝)";
+$TPLMSG['THANKS_FOR_ORDER'] = "大黑松小俩口感谢您的订购!";
+$TPLMSG['INVOICE_TYPE_2'] = "二联式";
+$TPLMSG['INVOICE_TYPE_3'] = "三联式";
+$TPLMSG['ORDER_BUYER_INFO'] = "订购者资讯";
+$TPLMSG['ORDER_RECI_INFO'] = "收件者资讯";
+$TPLMSG['ORDER_INVOICE_INFO'] = "发票资讯";
+$TPLMSG['DELIVER_STR'] = "配送日期及时段";
+$TPLMSG['VAT_NUMBER'] = "统一编号";
+$TPLMSG['PRODUCT_PRICE'] = "价格";
 ?>

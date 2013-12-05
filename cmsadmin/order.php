@@ -131,20 +131,24 @@ class ORDER{
             if($i%2){
                 $tpl->assign("TAG_TR_CLASS","class='altrow'");
             }
-            $tpl->assign( array("VALUE_O_ID"  => $row["o_id"],
-                                "VALUE_O_NAME" => $row["o_name"],
-                                "VALUE_O_CREATEDATE" => $row["o_createdate"],
-                                "VALUE_O_MODIFYDATE" => $row["o_modifydate"],
-                                "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
-                                "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
-                                "VALUE_O_SERIAL" => $i ));
+            $tpl->assign( array(
+                "VALUE_O_ID"  => $row["o_id"],
+                "VALUE_O_NAME" => $row["o_name"],
+                "VALUE_O_CREATEDATE" => $row["o_createdate"],
+                "VALUE_O_MODIFYDATE" => $row["o_modifydate"],
+                "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
+                "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
+                "VALUE_O_SERIAL" => $i 
+            ));
 
             //顯示ATM匯款狀態
             if($cms_cfg["ws_module"]["ws_vaccount"]) {
                 $tpl->newBlock("ATM_TRANSFER_STATE");
-                $tpl->assign( array("VALUE_O_REMIT_STATUS" => ($row["o_payment_type"] == "ATM") ? $row["o_remit_status"] ? "完成匯款":"<font color=\"#ff0000\">未匯款</font>" :"",
-                                    "VALUE_O_CURAMT" => $row["o_curamt"],
-                                    "VALUE_O_TRN_TIME" => $row["o_trn_time"] ));
+                $tpl->assign( array(
+                    "VALUE_O_REMIT_STATUS" => ($row["o_payment_type"] == 1) ? $row["o_remit_status"] ? "完成匯款":"<font color=\"#ff0000\">未匯款</font>" :"",
+                    "VALUE_O_CURAMT" => $row["o_curamt"],
+                    "VALUE_O_TRN_TIME" => $row["o_trn_time"] 
+                ));
             }
         }
     }
@@ -179,7 +183,7 @@ class ORDER{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //欄位名稱
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['MODIFY'],
-                                  "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE']
+                                  "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_PRICE']
         ));
         //相關參數
         if(!empty($_REQUEST['nowp'])){
@@ -207,21 +211,35 @@ class ORDER{
                                           "VALUE_O_TEL" => $row["o_tel"],
                                           "VALUE_O_CELLPHONE" => $row["o_cellphone"],
                                           "VALUE_O_ZIP" => $row["o_zip"],
-                                          "VALUE_O_ADDRESS" => $row["o_address"],
+                                          "VALUE_O_ADDRESS" => $row["o_city"].$row["o_area"].$row["o_address"],
                                           "VALUE_O_EMAIL" => $row["o_email"],
+                                          "VALUE_O_RECI_NAME" => $row["o_reci_name"],
+                                          "VALUE_O_RECI_TEL" => $row["o_reci_tel"],
+                                          "VALUE_O_RECI_CELLPHONE" => $row["o_reci_cellphone"],
+                                          "VALUE_O_RECI_ZIP" => $row["o_reci_zip"],
+                                          "VALUE_O_RECI_ADDRESS" => $row["o_reci_city"].$row["o_reci_area"].$row["o_reci_address"],
+                                          "VALUE_O_RECI_EMAIL" => $row["o_reci_email"],
                                           "VALUE_O_CONTENT" => $row["o_content"],
                                           "VALUE_O_PLUS_PRICE" => $row["o_plus_price"],
+                                          "VALUE_O_CHARGE_FEE" => $row["o_charge_fee"],
+                                          "VALUE_O_MINUS_PRICE" => $row["o_minus_price"],
                                           "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                                           "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                           "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
                                           "VALUE_O_PAYMENT_TYPE"=>$ws_array["payment_type"][$row["o_payment_type"]],
+                                          "VALUE_O_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$row['o_shippment_type']],
+                                          "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
                                           "VALUE_O_ATM_LAST5" => $row["o_atm_last5"],
                                           "VALUE_O_DELIVERY_STR" => sprintf("%s %s",date("Y年m月d日",$dts),$ws_array["deliery_timesec"][$row['o_deliver_time_sec']]),
+                                          "VALUE_O_COMPANY_NAME" => $row["o_company_name"],
+                                          "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
                 ));
                 if($cms_cfg["ws_module"]["ws_vaccount"] & $row["o_virtual_account"]) {
                 $tpl->newBlock("ATM_DATA");
-                $tpl->assignGlobal( array("VALUE_O_VIRTUAL_ACCOUNT" => $row["o_virtual_account"],
-                                          "VALUE_O_CURAMT" => $row["o_curamt"]));
+                    $tpl->assignGlobal( array(
+                        "VALUE_O_VIRTUAL_ACCOUNT" => $row["o_virtual_account"],
+                        "VALUE_O_CURAMT" => $row["o_curamt"]
+                    ));
                 }
                 //訂單狀態
                 foreach($ws_array["order_status"] as $key =>$value){

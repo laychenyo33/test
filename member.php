@@ -7,6 +7,7 @@ class MEMBER{
         global $db,$cms_cfg,$tpl,$main;
         $this->m_id=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
+        $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
             case "activate":
                 $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
@@ -40,6 +41,7 @@ class MEMBER{
             case "m_mod"://會員管理修改
                 if(empty($this->m_id)){
                     header("Location: member.php?func=m_add");
+                    die();
                 }
                 $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -59,6 +61,28 @@ class MEMBER{
                 $this->member_send_password_success_str();
                 $this->ws_tpl_type=1;
                 break;
+            case "mm_list"://會員訊息公告
+                if(empty($this->m_id)){
+                    header("Location: member.php");
+                    die();
+                }
+                $this->ws_tpl_file = "templates/ws-member-message-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->member_message_list();
+                $this->ws_tpl_type=1;
+                break;
+            case "o_del"://取消訂單
+                $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->order_del();
+                $this->ws_tpl_type=1;
+                break;
+            case "o_replace"://編輯匯款帳號
+                $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->order_replace();
+                $this->ws_tpl_type=1;
+                break;            
             case "m_replace"://會員管理更新資料(replace)
                 $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -67,7 +91,8 @@ class MEMBER{
                 break;
             default:    //會員專區
                 if(!empty($this->m_id)){
-                    header("Location: member.php?func=m_zone");
+                    header("Location: member.php?func=mm_list");
+                    die();
                 }
                 $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -256,6 +281,8 @@ class MEMBER{
                         m_birthday,
                         m_sex,
                         m_country,
+                        m_city,
+                        m_area,
                         m_zip,
                         m_address,
                         m_tel,
@@ -277,6 +304,8 @@ class MEMBER{
                         '".$_REQUEST["m_birthday"]."',
                         '".$_REQUEST["m_sex"]."',
                         '".$_REQUEST["m_country"]."',
+                        '".$_REQUEST["m_city"]."',
+                        '".$_REQUEST["m_area"]."',
                         '".$_REQUEST["m_zip"]."',
                         '".$_REQUEST["m_address"]."',
                         '".$_REQUEST["m_tel"]."',
@@ -299,6 +328,8 @@ class MEMBER{
                         m_birthday='".$_REQUEST["m_birthday"]."',
                         m_sex='".$_REQUEST["m_sex"]."',
                         m_country='".$_REQUEST["m_country"]."',
+                        m_city='".$_REQUEST["m_city"]."',
+                        m_area='".$_REQUEST["m_area"]."',
                         m_zip='".$_REQUEST["m_zip"]."',
                         m_address='".$_REQUEST["m_address"]."',
                         m_tel='".$_REQUEST["m_tel"]."',
@@ -451,12 +482,19 @@ class MEMBER{
                                       "MSG_MODE" => $TPLMSG['MODIFY'],
                                       "MSG_CONTENT" => $TPLMSG['CONTENT'],
                                       "MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'],
+                                      "MSG_INVOICE_TYPE" => $TPLMSG['INVOICE_TYPE'],
                                       "MSG_TOTAL" => $TPLMSG['CART_TOTAL'],
                                       "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'],
                                       "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'],
                                       "MSG_PRODUCT" => $TPLMSG['PRODUCT'],
-                                      "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE'],
+                                      "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_SPECIAL_PRICE'],
                                       "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
+                                      "MSG_BUYER_INFO"  => $TPLMSG['ORDER_BUYER_INFO'],
+                                      "MSG_RECI_INFO"   => $TPLMSG['ORDER_RECI_INFO'],
+                                      "MSG_INVOICE_INFO"   => $TPLMSG['ORDER_INVOICE_INFO'],
+                                      "MSG_VAT_NUMBER"   => $TPLMSG['VAT_NUMBER'],
+                                      "MSG_PAYMENT_TYPE"   => $TPLMSG['PAYMENT_TYPE'],
+                                      "MSG_DELIVER_STR"   => $TPLMSG['DELIVER_STR'],
             ));
             //相關參數
             if(!empty($_REQUEST['nowp'])){
@@ -477,24 +515,47 @@ class MEMBER{
                     $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                               "VALUE_O_ID"  => $row["o_id"],
                                               "VALUE_O_COMPANY_NAME" => $row["o_company_name"],
+                                              "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
                                               "VALUE_O_TEL" => $row["o_tel"],
                                               "VALUE_O_FAX" => $row["o_fax"],
                                               "VALUE_O_CELLPHONE" => $row["o_cellphone"],
                                               "VALUE_O_ZIP" => $row["o_zip"],
-                                              "VALUE_O_ADDRESS" => $row["o_address"],
+                                              "VALUE_O_ADDRESS" => $row["o_city"].$row["o_area"].$row["o_address"],
                                               "VALUE_O_EMAIL" => $row["o_email"],
+                                              "VALUE_O_RECI_CONTACT_S" => $row["o_reci_contact_s"],
+                                              "VALUE_O_RECI_NAME" => $row["o_reci_name"],
+                                              "VALUE_O_RECI_TEL" => $row["o_reci_tel"],
+                                              "VALUE_O_RECI_FAX" => $row["o_reci_fax"],
+                                              "VALUE_O_RECI_CELLPHONE" => $row["o_reci_cellphone"],
+                                              "VALUE_O_RECI_ZIP" => $row["o_reci_zip"],
+                                              "VALUE_O_RECI_ADDRESS" => $row["o_reci_city"].$row["o_reci_area"].$row["o_reci_address"],
+                                              "VALUE_O_RECI_TEL" => $row["o_reci_tel"],
+                                              "VALUE_O_RECI_EMAIL" => $row["o_reci_email"],
                                               "VALUE_O_PLUS_PRICE" => $row["o_plus_price"],
+                                              "VALUE_O_CHARGE_FEE" => $row["o_charge_fee"],
+                                              "VALUE_O_MINUS_PRICE" => $row["o_minus_price"],
                                               "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                                               "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                               "VALUE_O_STATUS_SUBJECT" => $ws_array["order_status"][$row["o_status"]],
                                               "VALUE_O_CONTENT" => $row["o_content"],
-                                              "VALUE_O_PAYMENT_TYPE" => $ws_array["payment_type"][$row["o_payment_type"]],
+                                              "VALUE_O_PAYMENT_TYPE" => $ws_array["payment_type"][$row['o_payment_type']],
+                                              "VALUE_O_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$row['o_shippment_type']],
+                                              "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
+                                              "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
+                                              "VALUE_O_DELIVER_DATE" => date("Y年m月d日",strtotime($row["o_deliver_date"])),
+                                              "VALUE_O_DELIVER_TIMESEC" => $ws_array["deliery_timesec"][$row["o_deliver_time_sec"]],                      
+                                              "VALUE_O_ATM_LAST5" => $row['o_atm_last5'],                                           
                     ));
                     $tpl->newBlock("ORDER_S_".$this->contact_s_style);
                     $tpl->assign(array(
                           "VALUE_O_NAME"      => $row["o_name"],
                           "VALUE_O_CONTACT_S" => $ws_array['contactus_s'][$row["o_contact_s"]],
-                    ));                    
+                    ));           
+                    $tpl->newBlock("RECI_ORDER_S_".$this->contact_s_style);
+                    $tpl->assign(array(
+                          "VALUE_O_NAME"      => $row["o_reci_name"],
+                          "VALUE_O_CONTACT_S" => $ws_array['contactus_s'][$row["o_reci_contact_s"]],
+                    ));                          
                     //訂購產品列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
                     $selectrs = $db->query($sql);
@@ -818,6 +879,31 @@ class MEMBER{
             }
         }
     }    
+    function member_message_list(){
+        global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
+        $sql="select * from ".$cms_cfg['tb_prefix']."_member_message order by mm_sort asc,mm_modifydate desc ";
+        //取得總筆數
+        $selectrs = $db->query($sql);
+        $total_records = $db->numRows($selectrs);
+        //取得分頁連結，重新組合包含limit的sql語法
+        $func_str="member.php?func=mm_list";
+        $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        while ( $row = $db->fetch_array($selectrs,1) ) {
+            $i++;
+            $tpl->newBlock( "MESSAGE_LIST" );
+            if($i%2){
+                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+            }    
+            $tpl->assign( array(
+                "VALUE_MM_ID"  => $row["mm_id"],
+                "VALUE_MM_SUBJECT" => $row["mm_subject"],
+                "VALUE_MM_CONTENT" => $row["mm_content"],
+                "VALUE_MM_MODIFYDATE" => $row["mm_modifydate"],
+            ));
+        }
+    }
      //寄送密碼完成訊息
     function member_send_password_success_str(){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;

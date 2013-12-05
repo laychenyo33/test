@@ -58,6 +58,47 @@ class MEMBER{
                 $this->member_data_export();
                 $this->ws_tpl_type=1;                
                 break;
+            case "mm_list"://會員訊息列表
+                $this->ws_tpl_file = "templates/ws-manage-member-message-list-tpl.html";
+                $this->current_class="MM";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_FORMVALID");
+                $this->member_message_list();
+                $this->ws_tpl_type=1;
+                break;
+            case "mm_add"://會員訊息新增
+                $this->ws_tpl_file = "templates/ws-manage-member-message-form-tpl.html";
+                $this->current_class="MM";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_TINYMCE");
+                $this->member_message_form("add");
+                $this->ws_tpl_type=1;
+                break;
+            case "mm_mod"://會員訊息修改
+                $this->ws_tpl_file = "templates/ws-manage-member-message-form-tpl.html";
+                $this->current_class="MM";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_TINYMCE");
+                $this->member_message_form("mod");
+                $this->ws_tpl_type=1;
+                break;
+            case "mm_replace"://會員訊息更新資料(replace)
+                $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->member_message_replace();
+                $this->ws_tpl_type=1;
+                break;
+            case "mm_del"://會員訊息刪除
+                $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->member_message_del();
+                $this->ws_tpl_type=1;
+                break;                
             case "mc_list"://會員分類列表
                 $this->current_class="MC";
                 $this->ws_tpl_file = "templates/ws-manage-member-cate-list-tpl.html";
@@ -624,6 +665,175 @@ class MEMBER{
             }
         }
     }
+    //會員訊息--列表================================================================
+    function member_message_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        //會員訊息列表
+        $sql="select * from ".$cms_cfg['tb_prefix']."_member_message  where mm_id > '0'";
+        //附加條件
+        $and_str="";
+        if($_REQUEST["st"]=="all"){
+            $and_str .= " and (mm_subject like '%".$_REQUEST["sk"]."%' or mm_content like '%".$_REQUEST["sk"]."%')";
+        }
+        if($_REQUEST["st"]=="mm_subject"){
+            $and_str .= " and mm_subject like '%".$_REQUEST["sk"]."%'";
+        }
+        if($_REQUEST["st"]=="mm_content"){
+            $and_str .= " and mm_content like '%".$_REQUEST["sk"]."%'";
+        }
+        $sql .= $and_str." order by mm_sort asc,mm_modifydate desc ";
+        //取得總筆數
+        $selectrs = $db->query($sql);
+        $total_records    = $db->numRows($selectrs);
+        //取得分頁連結
+        $fumc_str="member.php?func=mm_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+        $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$fumc_str,$total_records,$sql);
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
+                                  "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
+                                  "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+
+        ));
+        switch($_REQUEST["st"]){
+                case "all" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK0", "selected");
+                    break;
+                case "mm_subject" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK1", "selected");
+                    break;
+                case "mm_content" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK2", "selected");
+                    break;
+            }
+        $i=($_GET['nowp']?$_GET['nowp']-1:0)*$cms_cfg["op_limit"];
+        while ( $row = $db->fetch_array($selectrs,1) ) {
+            $i++;
+            $tpl->newBlock( "MESSAGE_LIST" );
+            if($i%2){
+                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+            }
+            $tpl->assign( array("VALUE_MM_ID"  => $row["mm_id"],
+                                "VALUE_MM_SORT"  => $row["mm_sort"],
+                                "VALUE_MM_SUBJECT" => $row["mm_subject"],
+                                "VALUE_MM_SERIAL" => $i,
+                                "VALUE_STATUS_IMG" => ($row["mm_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
+                                "VALUE_STATUS_IMG_ALT" => ($row["mm_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
+
+            ));
+        }
+    }
+//會員訊息--表單================================================================
+    function member_message_form($action_mode){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        //欄位名稱
+        $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
+                                  "VALUE_MM_SORT"  => 1,
+                                  "STR_MM_STATUS_CK1" => "checked",
+                                  "STR_MM_STATUS_CK0" => "",
+                                  "VALUE_ACTION_MODE" => $action_mode
+        ));
+        //相關參數
+        if(!empty($_REQUEST['nowp'])){
+            $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
+                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
+                                      "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
+                                      "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
+
+            ));
+        }
+        //如果為修改模式,帶入資料庫資料
+        if($action_mode=="mod" && !empty($_REQUEST["mm_id"])){
+            $sql="select * from ".$cms_cfg['tb_prefix']."_member_message where mm_id='".$_REQUEST["mm_id"]."'";
+            $selectrs = $db->query($sql);
+            $row = $db->fetch_array($selectrs,1);
+            $rsnum    = $db->numRows($selectrs);
+            if ($rsnum > 0) {
+                $tpl->assignGlobal( array("VALUE_MM_ID"  => $row["mm_id"],
+                                          "VALUE_MM_SORT"  => $row["mm_sort"],
+                                          "VALUE_MM_SUBJECT" => $row["mm_subject"],
+                                          "STR_MM_STATUS_CK1" => ($row["mm_status"]==1)?"checked":"",
+                                          "STR_MM_STATUS_CK0" => ($row["mm_status"]==0)?"checked":"",
+                                          "MSG_MODE" => $TPLMSG['MODIFY']
+                ));
+            }else{
+                header("location : member.php?func=mm_list");
+            }
+        }
+        if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
+            $tpl->newBlock("WYSIWYG_TINYMCE1");
+            $tpl->assign( "VALUE_MM_CONTENT" , $row["mm_content"] );
+        }
+    }
+//會員訊息--資料更新================================================================
+    function member_message_replace(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        foreach($_REQUEST as $k=>$v){
+            $_REQUEST[$k] = $db->quote($v);
+        }
+        switch ($_REQUEST["action_mode"]){
+            case "add":
+                $sql="
+                    insert into ".$cms_cfg['tb_prefix']."_member_message (
+                        mm_status,
+                        mm_sort,
+                        mm_subject,
+                        mm_content,
+                        mm_modifydate
+                    ) values (
+                        '".$_REQUEST["mm_status"]."',
+                        '".$_REQUEST["mm_sort"]."',
+                        '".$_REQUEST["mm_subject"]."',
+                        '".$main->content_file_str_replace($_REQUEST["mm_content"])."',
+                        '".date("Y-m-d H:i:s")."'
+                    )";
+                break;
+            case "mod":
+                $sql="
+                    update ".$cms_cfg['tb_prefix']."_member_message set
+                        mm_status='".$_REQUEST["mm_status"]."',
+                        mm_sort='".$_REQUEST["mm_sort"]."',
+                        mm_subject='".$_REQUEST["mm_subject"]."',
+                        mm_content='".$main->content_file_str_replace($_REQUEST["mm_content"])."',
+                        mm_modifydate='".date("Y-m-d H:i:s")."'
+                    where mm_id='".$_REQUEST["mm_id"]."'";
+                break;
+        }
+        if(!empty($sql)){
+            $rs = $db->query($sql,true);
+            $db_msg = $db->report();
+            if ( $db_msg == "" ) {
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                $goto_url=$cms_cfg["manage_url"]."member.php?func=mm_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $this->goto_target_page($goto_url);
+            }else{
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            }
+        }
+    }
+//會員訊息--刪除--資料刪除可多筆處理================================================================
+    function member_message_del(){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        if($_REQUEST["mm_id"]){
+            $mm_id=array(0=>$_REQUEST["mm_id"]);
+        }else{
+            $mm_id=$_REQUEST["id"];
+        }
+        if(!empty($mm_id)){
+            $mm_id_str = implode(",",$mm_id);
+            //刪除勾選的最新消息
+            $sql="delete from ".$cms_cfg['tb_prefix']."_member_message where mm_id in (".$mm_id_str.")";
+            $rs = $db->query($sql);
+            $db_msg = $db->report();
+            if ( $db_msg == "" ) {
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                $goto_url=$cms_cfg["manage_url"]."member.php?func=mm_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $this->goto_target_page($goto_url);
+            }else{
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            }
+        }
+    }    
     //顯示訊息並重新導向
     function goto_target_page($url,$sec=0){
         global $tpl;

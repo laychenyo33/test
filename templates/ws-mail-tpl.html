@@ -229,9 +229,15 @@ a:visited {
                     <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;
                     </div>
                 </td>
-                <td colspan="2"> {VALUE_SHIPPING_PRICE}
+                <td colspan="2"> {VALUE_SHIPPING_PRICE_STR}
                 </td>
             </tr>
+            <!-- START BLOCK : CHARGE_FEE_ROW -->
+            <tr bgcolor="#FFFFFF">
+                <td colspan="4"><div align="right"> 手續費:&nbsp;</div></td>
+                <td colspan="2" align="left"> {VALUE_CHARGE_FEE}</td>
+            </tr>            
+            <!-- END BLOCK : CHARGE_FEE_ROW -->            
             <tr bgcolor="#FFFFFF">
                 <th colspan="4">
                     <div align="right"> {MSG_TOTAL}:&nbsp;
@@ -264,6 +270,15 @@ a:visited {
     <!-- END BLOCK : INQUIRY_CART_ZONE -->
     <!-- START BLOCK : MEMBER_DATA_FORM -->
         <table width="90%" border="0" align="center" cellPadding="5" cellSpacing="1" bgColor="#888888">
+            <tr>
+                <th colspan="2">訂單資訊</th>
+            </tr>            
+            <tr>
+                <td bgcolor="#D5D5D5">
+                    運送區域</td>
+                <td bgcolor="#FFFFFF">
+                    {VALUE_SHIPPMENT_TYPE}</td>
+            </tr>
             <!-- START BLOCK : PAYMENT_TYPE -->
             <tr>
                 <td bgcolor="#D5D5D5">
@@ -272,6 +287,16 @@ a:visited {
                     {VALUE_PAYMENT_TYPE}</td>
             </tr>
             <!-- END BLOCK : PAYMENT_TYPE -->
+            <!-- START BLOCK : DELIVERY_ZONE -->
+            <tr>
+                <td bgcolor="#D5D5D5">到貨日期</td>
+                <td bgcolor="#FFFFFF">{VALUE_M_DELIVER_DATE}</td>
+            </tr>
+            <tr>
+                <td bgcolor="#D5D5D5">配送時段</td>
+                <td bgcolor="#FFFFFF">{VALUE_M_DELIVER_TIMESEC}</td>
+            </tr>
+            <!-- END BLOCK : DELIVERY_ZONE -->
             <!-- START BLOCK : ATM_LAST_FIVE -->
             <tr>
                 <td bgcolor="#D5D5D5">匯款帳號後五碼</td>
@@ -293,11 +318,36 @@ a:visited {
             </tr>
             <!-- END BLOCK : VIRTUAL_ACCOUNT -->
             <tr>
+              <td bgcolor="#D5D5D5">
+                    {MSG_CONTENT}</td>
+              <td bgcolor="#FFFFFF">
+                 {VALUE_CONTENT}
+              </td>
+            </tr>            
+            <tr>
+                <th colspan="2">發票資訊</th>
+            </tr>
+            <tr>
+                <td bgColor="#D5D5D5">
+                    發票類型</td>
+                <td bgColor="#ffffff">
+                    {VALUE_O_INVOICE_TYPE}</td>
+            </tr>
+            <tr>
                 <td bgColor="#D5D5D5">
                     {MSG_COMPANY_NAME}</td>
                 <td bgColor="#ffffff">
                     {VALUE_M_COMPANY_NAME}</td>
             </tr>
+            <tr>
+                <td bgColor="#D5D5D5">
+                    統一編號</td>
+                <td bgColor="#ffffff">
+                    {VALUE_M_VAT_NUMBER}</td>
+            </tr>                
+            <tr>
+                <th colspan="2">訂購者資訊</th>
+            </tr>            
             <!-- START BLOCK : CART_S_STYLE_1 -->
             <tr bgColor="#ffffff" class="body1">
                 <td bgcolor="#D5D5D5">
@@ -343,13 +393,6 @@ a:visited {
             </tr>
             <tr>
                 <td bgcolor="#D5D5D5">
-                    {MSG_FAX}</td>
-                <td bgcolor="#FFFFFF">
-                    {VALUE_M_FAX}
-                    </td>
-            </tr>
-            <tr>
-                <td bgcolor="#D5D5D5">
                     {MSG_CELLPHONE}</td>
                 <td bgcolor="#FFFFFF">
                     {VALUE_M_CELLPHONE}
@@ -362,23 +405,48 @@ a:visited {
                     {VALUE_M_EMAIL}
                     </td>
             </tr>
-            <!-- START BLOCK : DELIVERY_ZONE -->
             <tr>
-                <td bgcolor="#D5D5D5">到貨日期</td>
-                <td bgcolor="#FFFFFF">{VALUE_M_DELIVER_DATE}</td>
+                <th colspan="2">收件者資訊</th>
             </tr>
             <tr>
-                <td bgcolor="#D5D5D5">配送時段</td>
-                <td bgcolor="#FFFFFF">{VALUE_M_DELIVER_TIMESEC}</td>
+                <td bgColor="#D5D5D5">
+                    {MSG_CONTACT_PERSON}</td>
+                <td bgColor="#ffffff">
+                    {VALUE_M_RECI_NAME}&nbsp;{VALUE_M_RECI_CONTACT_S}</td>
             </tr>
-            <!-- END BLOCK : DELIVERY_ZONE -->
             <tr>
               <td bgcolor="#D5D5D5">
-                    {MSG_CONTENT}</td>
+                    {MSG_ZIP}</td>
               <td bgcolor="#FFFFFF">
-                 {VALUE_CONTENT}
+                    {VALUE_M_RECI_ZIP}</td>
+            </tr>
+            <tr>
+                <td bgcolor="#D5D5D5">
+                    {MSG_ADDRESS}</td>
+                <td bgcolor="#FFFFFF">
+                    {VALUE_M_RECI_ADDRESS}</td>
+            </tr>
+            <tr>
+                <td bgcolor="#D5D5D5">
+                    {MSG_TEL}</td>
+                <td bgcolor="#FFFFFF">
+                    {VALUE_M_RECI_TEL}
               </td>
             </tr>
+            <tr>
+                <td bgcolor="#D5D5D5">
+                    {MSG_CELLPHONE}</td>
+                <td bgcolor="#FFFFFF">
+                    {VALUE_M_RECI_CELLPHONE}
+                    </td>
+            </tr>
+            <tr>
+                <td bgcolor="#D5D5D5">
+                    e-mail</td>
+                <td bgcolor="#FFFFFF">
+                    {VALUE_M_RECI_EMAIL}
+                    </td>
+            </tr>               
         </table>
         </div>
     <!-- END BLOCK : MEMBER_DATA_FORM -->
@@ -401,6 +469,10 @@ a:visited {
         </tr>
     </table>
     <!-- END BLOCK : MEMBER_FORGET_PASSWORD -->
+    <!-- START BLOCK : ALYPAY_FAIL -->
+    <div>{VALUE_O_MESSAGE}</div>
+    <div><a href="{VALUE_O_LINK}">{VALUE_O_LINK}</a></div>
+    <!-- END BLOCK : ALYPAY_FAIL -->
 </div>
 </body>
 </html>
