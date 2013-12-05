@@ -515,6 +515,7 @@ class MEMBER{
                     $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                               "VALUE_O_ID"  => $row["o_id"],
                                               "VALUE_O_COMPANY_NAME" => $row["o_company_name"],
+                                              "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
                                               "VALUE_O_TEL" => $row["o_tel"],
                                               "VALUE_O_FAX" => $row["o_fax"],
                                               "VALUE_O_CELLPHONE" => $row["o_cellphone"],
@@ -528,8 +529,11 @@ class MEMBER{
                                               "VALUE_O_RECI_CELLPHONE" => $row["o_reci_cellphone"],
                                               "VALUE_O_RECI_ZIP" => $row["o_reci_zip"],
                                               "VALUE_O_RECI_ADDRESS" => $row["o_reci_address"],
+                                              "VALUE_O_RECI_TEL" => $row["o_reci_tel"],
                                               "VALUE_O_RECI_EMAIL" => $row["o_reci_email"],
                                               "VALUE_O_PLUS_PRICE" => $row["o_plus_price"],
+                                              "VALUE_O_CHARGE_FEE" => $row["o_charge_fee"],
+                                              "VALUE_O_MINUS_PRICE" => $row["o_minus_price"],
                                               "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                                               "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                               "VALUE_O_STATUS_SUBJECT" => $ws_array["order_status"][$row["o_status"]],
@@ -546,7 +550,12 @@ class MEMBER{
                     $tpl->assign(array(
                           "VALUE_O_NAME"      => $row["o_name"],
                           "VALUE_O_CONTACT_S" => $ws_array['contactus_s'][$row["o_contact_s"]],
-                    ));                    
+                    ));           
+                    $tpl->newBlock("RECI_ORDER_S_".$this->contact_s_style);
+                    $tpl->assign(array(
+                          "VALUE_O_NAME"      => $row["o_reci_name"],
+                          "VALUE_O_CONTACT_S" => $ws_array['contactus_s'][$row["o_reci_contact_s"]],
+                    ));                          
                     //訂購產品列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
                     $selectrs = $db->query($sql);

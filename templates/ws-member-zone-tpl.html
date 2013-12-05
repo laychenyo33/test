@@ -29,6 +29,9 @@
             <th colspan="2"> {MSG_ORDER_DETAIL}</th>
         </tr>
         <tr>
+            <th colspan="2">訂單資訊</th>
+        </tr>
+        <tr>
             <td>{MSG_ORDER_ID}</td>
             <td>{VALUE_O_ID}</td>
         </tr>
@@ -72,6 +75,10 @@
             <td>{VALUE_O_VAT_NUMBER}</td>
         </tr>
         <tr>
+            <td>{MSG_FAX}</td>
+            <td>{VALUE_O_FAX}</td>
+        </tr>          
+        <tr>
             <th colspan="2">{MSG_BUYER_INFO}</th>
         </tr>
         <tr>
@@ -109,7 +116,12 @@
         </tr>
         <tr>
             <td>{MSG_CONTACT_PERSON}</td>
-            <td>{VALUE_O_RECI_NAME}&nbsp;{VALUE_O_RECI_CONTACT_S}</td>
+            <!-- START BLOCK : RECI_ORDER_S_1 -->
+            <td>{VALUE_O_CONTACT_S}&nbsp;{VALUE_O_NAME}</td>
+            <!-- END BLOCK : RECI_ORDER_S_1 -->
+            <!-- START BLOCK : RECI_ORDER_S_2 -->
+            <td>{VALUE_O_NAME}&nbsp;{VALUE_O_CONTACT_S}</td>
+            <!-- END BLOCK : RECI_ORDER_S_2 -->            
         </tr>
         <tr>
             <td>{MSG_TEL}</td>
@@ -144,7 +156,7 @@
                         <th width="5%"> No.</th>
                         <th width="40%"> {MSG_PRODUCT}</th>
                         <th width="10%"> {MSG_AMOUNT}</th>
-                        <th width="25%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
+                        <th width="25%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
                         <th width="20%"> {MSG_SUBTOTAL}</th>
                     </tr>
                     <!-- START BLOCK : ORDER_ITEMS_LIST -->
@@ -160,6 +172,10 @@
                         <td colspan="4"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
                         <td>{VALUE_O_PLUS_PRICE}</td>
                     </tr>
+                    <tr>
+                        <td colspan="4"><div align="right"> 手續費:&nbsp;</div></td>
+                        <td> {VALUE_O_CHARGE_FEE}</td>
+                    </tr>                    
                     <tr>
                         <th colspan="4"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
                         <th> {VALUE_O_TOTAL_PRICE}</th>
