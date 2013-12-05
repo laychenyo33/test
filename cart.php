@@ -636,6 +636,8 @@ class CART{
             }
             $total_price = $sub_total_price + $shipping_price + $charge_fee;            
             $ts = time();
+            $tpl->gotoBlock("SHOPPING_CART_ZONE");            
+            $tpl->assign("VALUE_TOTAL",$total_price);            
             $sql="
                 insert into ".$cms_cfg['tb_prefix']."_order (
                     m_id,
