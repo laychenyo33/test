@@ -768,6 +768,9 @@ class MEMBER{
 //會員訊息--資料更新================================================================
     function member_message_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        foreach($_REQUEST as $k=>$v){
+            $_REQUEST[$k] = $db->quote($v);
+        }
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
@@ -797,7 +800,7 @@ class MEMBER{
                 break;
         }
         if(!empty($sql)){
-            $rs = $db->query($sql);
+            $rs = $db->query($sql,true);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
