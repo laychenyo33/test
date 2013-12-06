@@ -27,23 +27,36 @@ class MYDATE {
     }    
     
     static function my_date_diff($newdate,$olddate){
-        if(strtotime($newdate)<strtotime($olddate)){
-            $tmpdate=$newdate;
-            $newdate=$olddate;
-            $olddate=$newdate;
+        $fullYM['newdate'] = $newdate;
+        $fullYM['olddate'] = $olddate;
+        $newTS = strtotime($newdate);
+        $oldTS = strtotime($olddate);
+        if($newTS < $oldTS){
+            $tmpTS = $newTS;
+            $newTS = $oldTS;
+            $oldTS = $tmpTS;
+            $minus = true;
         }
-        $newdate=explode("-",$newdate);
-        $olddate=explode("-",$olddate);
-        if(!checkdate($newdate[1],$newdate[2],$newdate[0])||!checkdate($olddate[1],$olddate[2],$olddate[0]))die();
+        $newdate=explode("-",date("Y-m-d",$newTS));
+        $olddate=explode("-",date("Y-m-d",$oldTS));
         $tmpY=$newdate[0]-$olddate[0];
         $tmpM=$newdate[1]-$olddate[1];
         $tmpD=$newdate[2]-$olddate[2];
-        $tmpY=($tmpM<0)?$tmpY-1:$tmpY;
-        $tmpM=($tmpM<0)?12+$tmpM-(($tmpD<0)?1:0):$tmpM-(($tmpD<0)?1:0);
+        if($tmpD<0){
+            $tmpD = date("t",$oldTS)-$olddate[2]+$newdate[2];
+            $tmpM -=1;
+            $newdate[1] -=1;
+        }
+        if($tmpM<0){
+            $tmpM = 12-$olddate[1]+$newdate[1];
+            $tmpY -= 1;
+        }
         $fullYM['Y']=$tmpY;
         $fullYM['M']=$tmpM;
+        $fullYM['D']=$tmpD;
+        $fullYM['sign']=($minus)?"-":"";
         return $fullYM;
-    }
+}
     
     static function istoday($y="",$m="",$d=""){
         if(!$y||!$m||!$d)return;
