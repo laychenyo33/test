@@ -79,12 +79,11 @@
         }
     </style>
     <script>
-    (function($){
-        $(function() {     // setup ul.tabs to work as tabs for each div directly under div.panes     
-            $("ul.tabs").tabss("div.panes > div");
-        });        
-    })(jQuery);
-
+        jQuery(function($){
+            $(function() {     // setup ul.tabs to work as tabs for each div directly under div.panes     
+                $("ul.tabs").tooltabs("div.panes > div");
+            });        
+        });
     </script>
     <!-- END BLOCK : JS_TABTITLE -->
     <!-- START BLOCK : JS_PIC_ACCORDION -->
@@ -143,12 +142,11 @@
     </table>
     <!-- activate tabs with JavaScript -->
 <script>
-(function($){
-    $(function() { 
-        $("#accordion").tabss("#accordion div.pane", {tabs: 'h2', effect: 'slide', initialIndex: null});
-    });    
-})(jQuery);
-
+    jQuery(function($){
+        $(function() { 
+            $("#accordion").tooltabs("#accordion div.pane", {tabs: 'h2', effect: 'slide', initialIndex: null});
+        });    
+    })
 </script>
 <script>
 
