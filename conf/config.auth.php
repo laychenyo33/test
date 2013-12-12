@@ -54,7 +54,7 @@ $cms_cfg["ws_module"]=array(
         "ws_epaper"=>0,                 //電子報管理
         "ws_epaper_attach_products"=>1, //電子報夾帶產品列表
         "ws_epaper_queue"=>1,           //電子報使用佇列發送
-        "ws_order"=>1,                  //訂單管理
+        "ws_order"=>0,                  //訂單管理
         "ws_service"=>0,                //服務條款(IPC專用)
         "ws_vaccount"=>0,               //台銀虛擬帳號
 
