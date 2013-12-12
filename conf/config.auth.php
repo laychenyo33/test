@@ -59,7 +59,7 @@ $cms_cfg["ws_module"]=array(
         "ws_vaccount"=>0,               //台銀虛擬帳號
 
 /*      MEMBER SETUP                   */
-        "ws_member"=>1,                 //會員管理
+        "ws_member"=>0,                 //會員管理
         "ws_member_manipulate"=>1,      //會員資料匯出匯入
         "ws_member_country"   =>0,      //會員表單顯示國家下拉式選單
         "ws_member_download"  =>0,      //會員下載
