@@ -1434,7 +1434,7 @@ class MAINFUNC{
                 if(is_string($value)){
                     $data_arr[$k] = stripslashes($value);
                 }elseif(is_array($value)){
-                    $this->magic_gpc($value);
+                    $this->magic_gpc($data_arr[$k]);
                 }
             }
         }
