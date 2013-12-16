@@ -484,7 +484,7 @@ class EPAPER{
                 }
             }
                 //總數包含未分類會員
-            $sql = "select count(*) from ".$cms_cfg['tb_prefix']."_member where m_epaper_status='1'";
+            $sql = "select count(*) from ".$cms_cfg['tb_prefix']."_member where m_status='1' and m_epaper_status='1'";
             $rs = $db->query($sql,true);
             list($total)=$db->fetch_array($rs);
             $tpl->assignGlobal("VALUE_E_TOTAL" , $total);
