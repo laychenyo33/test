@@ -965,6 +965,9 @@ h2 {
 .member_zone_table  tr.altrow {
 	background-color: #EAEAEA;
 }
+.member_zone_table  div.unatm_block {
+    border: 1px solid grey;
+}
  /*login & logout*/ 
 .login_table {width:50%;margin:0 auto}
 .login_table img{vertical-align: middle}
