@@ -338,8 +338,9 @@ class ORDER{
         $from_email=explode(",",$from);
         $from_name=(trim($_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]))?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]:$from_email[0];
         //寄給送信者
-        $MAIL_HEADER   = "From: ".$from_name." <".$from_email[0].">\n";
+        $MAIL_HEADER   = "MIME-Version: 1.0\n";
         $MAIL_HEADER  .= "Content-Type: text/html; charset=\"utf-8\"\n";
+        $MAIL_HEADER  .= "From: =?UTF-8?B?".base64_encode($from_name)."?= <".$from_email[0].">\n";
         $MAIL_HEADER  .= "X-Priority: 1\n";
 
         //$MAIL_HEADER   = "From: ".$from_name."<".$from_email[0].">"."\r\n";
@@ -349,7 +350,8 @@ class ORDER{
         //$MAIL_HEADER  .= "X-Priority: 1\r\n";
         $MAIL_HEADER  .= "Message-ID: <".time()."-".$from_email[0].">\r\n";
         $MAIL_HEADER  .= "X-Mailer: PHP v".phpversion()."\r\n";          // These two to help avoid spam-filters
-
+        
+        $mail_subject = "=?UTF-8?B?".base64_encode($mail_subject)."?=";
         $to_email = explode(",",$to);
         for($i=0;$i<count($to_email);$i++){
             mail($to_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
