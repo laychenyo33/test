@@ -1329,7 +1329,7 @@ class PRODUCTS{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
             }
-        }elseif($ws_table=="p"){//產品管理更改狀態
+        }elseif($ws_table=="p" || $ws_table=="p_new"){//產品管理更改狀態
             if($_REQUEST["p_id"]){
                 $p_id=array(0=>$_REQUEST["p_id"]);
             }else{
