@@ -9,6 +9,9 @@ class MEMBER{
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
+            case "ajax":
+                $this->ajax();
+                break;
             case "activate":
                 $this->ws_tpl_file = "templates/ws-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
