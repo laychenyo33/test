@@ -95,7 +95,7 @@ class NEWS{
             $and_str="and nc_id='".$cate_row['nc_id']."'";
             $ext=($this->ws_seo)?".htm":".php";        
             $main->layer_link($TPLMSG["NEWS"],$cms_cfg["base_root"]."news".$ext);
-            $main->layer_link($cate_row['nc_subject'],$this->get_link($cate_row));
+            $main->layer_link($cate_row['nc_subject']);
         }else{
             $main->layer_link($TPLMSG["NEWS"]);
         }
@@ -177,6 +177,7 @@ class NEWS{
                             "VALUE_N_MODIFYDATE" => $row["n_modifydate"],
         ));
         //指定TAG_LAYER
+        $main->layer_link($TPLMSG['NEWS'],$cms_cfg['base_root']."news.htm");
         $main->layer_link($cate_row['nc_subject'],$this->get_link($cate_row))->layer_link($row["n_subject"]);
         //附檔
         if($cms_cfg['ws_module']['ws_news_upfiles']){
