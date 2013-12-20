@@ -495,7 +495,7 @@ class CART{
     //資料更新================================================================
     function cart_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
-        $this->ws_tpl_file = "templates/ws-mail-tpl.html";
+        $this->ws_tpl_file = "templates/mail/cart".$this->cart_type."-finish.html";
         $tpl = new TemplatePower( $this->ws_tpl_file );
         $tpl->prepare();
         $tpl->assignGlobal("TAG_BASE_CSS", $cms_cfg['base_mail_css']);
