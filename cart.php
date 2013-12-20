@@ -6,6 +6,7 @@ class CART{
     function CART(){
         global $db,$cms_cfg,$tpl,$main;
         $this->m_id =$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
+        $this->cart_type =$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
@@ -69,7 +70,7 @@ class CART{
                     $this->ws_load_tp($this->ws_tpl_file);      
                     $this->member_login();
                 }else{
-                    $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
+                    $this->ws_tpl_file = "templates/ws-cart-finish".$this->cart_type."-tpl.html";
                     $this->ws_load_tp($this->ws_tpl_file);
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JQUERY_UI_SCRIPT");
