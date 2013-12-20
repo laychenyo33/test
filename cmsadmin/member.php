@@ -1237,11 +1237,11 @@ class MEMBER{
             //有勾選mc_id才繼續處理
             if($_POST['mc_id'] && $_POST['columns']){
                 //取得勾選的欄位及匯出抬頭
-                header('content-type:text/csv');
-                header("content-disposition: attachment; filename=memberdata.csv");                
+                $file = $_SERVER['DOCUMENT_ROOT'] . $cms_cfg['file_root']."upload_files/tmp_export";
+                $fp = fopen($file,"w");
                 $wanted_column = $_POST['columns'];
                 array_walk($wanted_column,array($this,"_format_csv_title"),$this->columns);
-                $this->_format_csv_line($wanted_column);
+                $this->_format_csv_line($fp,$wanted_column);
                 //取得欲匯出的會員類別
                 $sql = "select m.* from ".$cms_cfg['tb_prefix']."_member as m inner join ".$cms_cfg['tb_prefix']."_member_cate as mc on find_in_set(mc.mc_id,m.mc_id) where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
                 $res = $db->query($sql);
@@ -1252,8 +1252,12 @@ class MEMBER{
                         $wanted_column[] = "".$value."";
                     }
                     //匯出資料
-                    $this->_format_csv_line($wanted_column);
+                    $this->_format_csv_line($fp,$wanted_column);
                 }
+                fclose($fp);
+                header('content-type:text/csv');
+                header("content-disposition: attachment; filename=memberdata.csv");  
+                readfile($file);
             }
             die();   
         }
@@ -1285,8 +1289,17 @@ class MEMBER{
         $value = "".$value."";
     }
     
-    function _format_csv_line($line_data){
-        echo implode(',',$line_data)."\r\n";
+    function _format_csv_line($fp,$line_data){
+        foreach($line_data as $k=>$v){
+            if(preg_match("/[\s,\"]/i", $v)){
+                $v = str_replace("\"","\\\"",$v);
+                $v = sprintf("\"%s\"",$v);
+                $line_data[$k] = $v;
+            }
+        }
+        $line = implode(',',$line_data)."\r\n";
+        $line = mb_convert_encoding($line, "BIG-5", "UTF-8");
+        fwrite($fp,$line);
     }
     
     function _save_csv_file($tmp_name,$new_file_name){
