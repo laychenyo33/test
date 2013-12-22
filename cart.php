@@ -200,7 +200,7 @@ class CART{
             die();
         }             
         //取得目前的 cart type，以及運費相關欄位
-        $sql="select sc_cart_type,sc_shipping_price,sc_shipping_price2,sc_shipping_price3,sc_no_shipping_price from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
+        $sql="select sc_cart_type,sc_shipping_price,sc_shipping_price2,sc_shipping_price3,sc_no_shipping_price,sc_service_fee from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         $_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]=($row["sc_cart_type"]=="")?0:$row["sc_cart_type"];
@@ -211,6 +211,7 @@ class CART{
             "VALUE_SC_SHIPPING_PRICE2"   => $row['sc_shipping_price2'],
             "VALUE_SC_SHIPPING_PRICE3"   => $row['sc_shipping_price3'],
             "VALUE_SC_NO_SHIPPING_PRICE" => $row['sc_no_shipping_price'],
+            "VALUE_SC_SERVICE_FEE"       => $row['sc_service_fee'],
         ));
         //欄位名稱
         $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
@@ -631,7 +632,7 @@ class CART{
             //手續費
             $charge_fee = 0;
             if($_REQUEST["o_payment_type"]==2){
-                $charge_fee = 30;      
+                $charge_fee = $this->service_fee();      
                 $tpl->newBlock("CHARGE_FEE_ROW");
                 $tpl->assign("VALUE_CHARGE_FEE",$charge_fee);
             }
@@ -1198,6 +1199,13 @@ class CART{
             return 0;
         }
     }      
+    function service_fee(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $sql = "select sc_service_fee from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
+        list($sc_service_fee) = $db->query_firstRow($sql,false);  
+        return $sc_service_fee;
+    }
+    
 }
 
 class CART_WITH_SERIAL extends CART{
