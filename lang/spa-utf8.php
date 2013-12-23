@@ -419,4 +419,7 @@ $TPLMSG['COMMENT_FORM_VALID_MSG'] = "please fill data into fields with red borde
 $TPLMSG['COMMENT_UPLOAD_DESCRIPTION'] = "You could upload images, but not required.";
 $TPLMSG['COMMENT_LIST_TITLE'] = "Comment Title";
 $TPLMSG['COMMENT_LIST_PUBLISH_DATE'] = "Date of publication";
+
+$TPLMSG['MOBILE_VERSION'] = "Mobile Version";
+$TPLMSG['COMPUTER_VERSION'] = "Desktop Version";
 ?>

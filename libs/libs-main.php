@@ -236,7 +236,7 @@ class MAINFUNC{
     }
     //頭尾檔設定
     function header_footer($meta_array,$seo_h1=""){
-        global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$detect;
         static $e =0;//本方法的執行次數
         $e++;        
         if($cms_cfg["ws_module"]["ws_seo"] ==0 ){
@@ -288,6 +288,8 @@ class MAINFUNC{
             $tpl->assignGlobal("TAG_MANAGE_IMAGE" , $cms_cfg['manage_images']);
             $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
             $tpl->assignGlobal("TAG_REQ_URI" ,$cms_cfg['req_uri']);
+            $tpl->assignGlobal("TAG_MOBILE_URL" ,$cms_cfg['mobile_url']);
+            $tpl->assignGlobal("TAG_COMPUTER_URL" ,$cms_cfg['computer_url']);
             $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
             $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH",$TPLMSG['PRODUCTS_SEARCH']);
@@ -331,6 +333,21 @@ class MAINFUNC{
              * $cms_cfg['extra_dd_menu']陣列索引是下拉選單div的id名稱，完整的div id名稱是dd_[div名稱]，不包含[]
              */            
             $this->dropdown_menu(null,$cms_cfg['extra_dd_menu']);
+            if($detect && is_a($detect,"Mobile_Detect")){
+                if($cms_cfg['ws_activate_mobile']){ //電腦版、手機版切換連結
+                    if($detect->isMobile()){
+                        $tpl->assignGlobal(array(
+                            "SW_TO_COMPUTER" => "<a href=\"#\" id=\"use_com_ver\">".$TPLMSG['COMPUTER_VERSION']."</a>",
+                            "SW_TO_MOBILE" => "<a href=\"#\" id=\"sw_to_mobile\">".$TPLMSG['MOBILE_VERSION']."</a>"                            
+                        ));
+                    }elseif($cms_cfg['ws_ismobile']){
+                        $tpl->assignGlobal(array(
+                            "SW_TO_COMPUTER" => "<a href=\"#\" id=\"use_com_ver\">".$TPLMSG['COMPUTER_VERSION']."</a>",
+                        ));
+                    }
+                    $tpl->newBlock("JS_MOBILE_SWITCH");
+                }
+            }            
             //$this->float_menu();
             //$this->goodlink_select();
             //尾檔
