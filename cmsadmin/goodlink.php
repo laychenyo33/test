@@ -399,7 +399,7 @@ class GOODLINK{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //欄位名稱
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
-                                  "VALUE_L_SORT"  => 1,
+                                  "VALUE_L_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_goodlink","l"),
                                   "STR_L_STATUS_CK2" => "",
                                   "STR_L_STATUS_CK1" => "checked",
                                   "STR_L_STATUS_CK0" => "",
