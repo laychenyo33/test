@@ -24,6 +24,10 @@ jQuery.fn.extend({
                $(this).empty();
            }        
         };
+        if(typeof $.fn.dialog == "undefined"){
+            console.log("please include jquery ui first!");
+            return false;
+        }
         //合併預設選項
         var options = $.extend(default_options,options);
         //從合併後的options.dialog_options繼續設定dialog
