@@ -10,6 +10,9 @@ jQuery.fn.extend({
             container_title:'youtubedialog title',
             video_width:480,
             video_height:360,
+            thumbType:'ld', //縮圖解析度:ld or hd;
+            thumb_width:0,
+            thumb_height:0,
         };
         //dialog的預設選項
         var default_dialog_options = {
@@ -36,7 +39,17 @@ jQuery.fn.extend({
             if(options.autoImage){
                 //自動加入圖片
                 var img = $("<img/>");
-                img.attr("src","http://i3.ytimg.com/vi/"+videoId+"/default.jpg");
+                if(options.thumbType =='ld'){
+                    img.attr("src","http://i3.ytimg.com/vi/"+videoId+"/default.jpg");
+                }else if(options.thumbType =='hd'){
+                    img.attr("src","http://img.youtube.com/vi/"+ videoId +"/0.jpg ");
+                }
+                if(options.thumb_width>0){
+                    img.attr("width",options.thumb_width);
+                }
+                if(options.thumb_height>0){
+                    img.attr("height",options.thumb_height);
+                }
                 $(obj).append(img);                
             }
             $(obj).click(function(evt){
