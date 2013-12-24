@@ -135,6 +135,8 @@ $cms_cfg['contactus_upfiles_nums'] = 3;
 //    ),
 //);
 $cms_cfg['extra_dd_menu'] = array();
+//管理者通知信主旨
+$cms_cfg['admin_subject'] = " from ".$_SERVER["HTTP_HOST"]."--[For Administrator]";
 
 include_once("config.auth.php");
 
