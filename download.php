@@ -165,7 +165,7 @@ class DOWNLOAD{
                                 "VALUE_D_SUBJECT" => $row["d_subject"],
                                 "VALUE_D_CONTENT" => $row["d_content"],
                                 "VALUE_D_FILEPATH" => $cms_cfg['file_root'].$row["d_filepath"],
-                                "VALUE_D_MODIFYDATE" => $row["d_modifydate"],
+                                "VALUE_D_MODIFYDATE" => date("Y-m-d",strtotime($row["d_modifydate"])),
                                 "VALUE_D_SERIAL" => $i,
                                 "VALUE_DC_SUBJECT"  => $row["dc_subject"],
                                 "TAG_DTYPE"         => $row['dtype']?"<span class='dtype'>*</span>":"",
