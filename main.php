@@ -42,7 +42,6 @@ class MAINDEFAULT{
         $tpl->assignGlobal( "TAG_INDEX_CURRENT" , "class='current'");
         $main->header_footer("");
         $main->google_code(); //google analystics code , google sitemap code
-        $main->login_zone();
 //        $main->left_fix_cate_list();
         $this->nivo_slider();
         /*
