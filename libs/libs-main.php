@@ -676,6 +676,10 @@ class MAINFUNC{
         //$Layer=$this->replace_for_mod_rewrite($Layer);
         return $Layer;
     }
+    //格式化mail header
+    function format_mail_subject($subject){
+        return "=?UTF-8?B?".base64_encode($subject)."?=";
+    }    
     //寄送確認信,電子報
     function ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0){
         global $TPLMSG,$cms_cfg;
@@ -684,11 +688,11 @@ class MAINFUNC{
         }
         $from_email=explode(",",$from);
         $from_name=(trim($_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]))?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]:$from_email[0];
-        $mail_subject = "=?UTF-8?B?".base64_encode($mail_subject)."?=";
+        $subject = $this->format_mail_subject($mail_subject);
         //寄給送信者
         $MAIL_HEADER   = "MIME-Version: 1.0\n";
         $MAIL_HEADER  .= "Content-Type: text/html; charset=\"utf-8\"\n";
-        $MAIL_HEADER  .= "From: =?UTF-8?B?".base64_encode($from_name)."?= <".$from_email[0].">"."\n";
+        $MAIL_HEADER  .= "From: ".$this->format_mail_subject($from_name)." <".$from_email[0].">"."\n";
         $MAIL_HEADER  .= "Reply-To: ".$from_email[0]."\n";
         $MAIL_HEADER  .= "Return-Path: ".$from_email[0]."\n";    // these two to set reply address
         $MAIL_HEADER  .= "X-Priority: 1\n";
@@ -711,7 +715,7 @@ class MAINFUNC{
             if($i!=0 && $i%1000==0){
                 sleep(10000);
             }
-            @mail($to_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
+            @mail($to_email[$i], $subject, $mail_content,$MAIL_HEADER);
         }
         //除了電子報、忘記密碼外寄給管理者
         if($mail_type !="epaper" && $mail_type!="pw"){
@@ -724,13 +728,14 @@ class MAINFUNC{
             $MAIL_HEADER  .= "Message-ID: <".time()."-".$to_email[0].">\n";
             $MAIL_HEADER  .= "X-Mailer: PHP v".phpversion()."\n";          // These two to help avoid spam-filters
             if($admin_subject){
-                $mail_subject = $admin_subject;
+                $subject = $this->format_mail_subject($admin_subject);
             }else{
                 $mail_subject .= $cms_cfg['admin_subject'];
+                $subject = $this->format_mail_subject($mail_subject);
             }
             $mail_content = preg_replace("#<span class=\"not_for_admin\">.+</span>#", "******", $mail_content);
             for($i=0;$i<count($from_email);$i++){
-                @mail($from_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
+                @mail($from_email[$i], $subject, $mail_content,$MAIL_HEADER);
             }
         }
 
@@ -749,11 +754,11 @@ class MAINFUNC{
         global $TPLMSG,$cms_cfg;
         $from_email=explode(",",$from);
         $from_name=(trim($from_name))?$from_name:$from_email[0];
-        $mail_subject = "=?UTF-8?B?".base64_encode($mail_subject)."?=";
+        $mail_subject = $this->format_mail_subject($mail_subject);
         //寄給送信者
         $MAIL_HEADER   = "MIME-Version: 1.0\n";
         $MAIL_HEADER  .= "Content-Type: text/html; charset=\"utf-8\"\n";
-        $MAIL_HEADER  .= "From: =?UTF-8?B?".base64_encode($from_name)."?= <".$from_email[0].">"."\n";
+        $MAIL_HEADER  .= "From: ".$this->format_mail_subject($from_name)." <".$from_email[0].">"."\n";
         $MAIL_HEADER  .= "Reply-To: ".$from_email[0]."\n";
         $MAIL_HEADER  .= "Return-Path: ".$from_email[0]."\n";    // these two to set reply address
         $MAIL_HEADER  .= "X-Priority: 1\n";
@@ -778,7 +783,7 @@ class MAINFUNC{
             }
             @mail($to_email[$i], $mail_subject, $mail_content,$MAIL_HEADER);
         }
-    }    
+    }   
     function CreateLayer($id,$relative,$top,$left,$width,$height,$css,$bgColor,$bgImage,$visible,$zIndex,$html,$events){
         $src = "";
         $src.="<div ";
