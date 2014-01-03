@@ -4,6 +4,7 @@ $TPLMSG['HOME'] = "首页";
 $TPLMSG['LANG_CHT'] = "中文版";
 $TPLMSG['LANG_ENG'] = "英文版";
 $TPLMSG['LANG_JAP'] = "日文版";
+$TPLMSG['LANG_SPA'] = "西班牙文版";
 $TPLMSG['ALL'] = "全部";
 $TPLMSG['FORM'] = "表单";
 $TPLMSG['SUBJECT'] = "标题";
@@ -138,6 +139,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="接受会员条款";
 $TPLMSG['MEMBER_FORGET_TITLE']="会员密码";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="帐号";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="密码";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "请点击以下连结回到网站验证E-mail并启用您的帐号:<br/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "您注册的帐号将会有专人审核，待通过之后会寄发通知信给您，请耐心等候!";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "产品介绍";

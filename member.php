@@ -269,6 +269,7 @@ class MEMBER{
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $max_sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member",'m');
+                $m_status = ($cms_cfg["ws_module"]['ws_member_join_validation'])?0:1;
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_member (
                         mc_id,
@@ -296,7 +297,7 @@ class MEMBER{
                     ) values (
                         '1',
                         '".$max_sort."',
-                        '1',
+                        '".$m_status."',
                         '".date("Y-m-d H:i:s")."',
                         '".$_REQUEST["m_account"]."',
                         '".$_REQUEST["m_password"]."',
@@ -409,10 +410,27 @@ class MEMBER{
                     //稱謂
                     $mtpl->newBlock("MEMBER_S_STYLE_".$this->contact_s_style);
                     $mtpl->assignGlobal( "VALUE_TERM" , $row['st_join_member_mail']);
-//                    //帳號啟用連結
-//                    $m_id = $db->get_insert_id();
-//                    $act_link = $this->get_activate_link($_POST['m_account'],$m_id);      
-//                    $tpl->assignGlobal("ACTIVATE_LINK",$act_link);
+                    //加入會員時驗證的方式
+                    if(!empty($cms_cfg["ws_module"]['ws_member_join_validation'])){
+                        switch($cms_cfg["ws_module"]['ws_member_join_validation']){
+                            case "email"://帳號啟用連結
+                                $m_id = $db->get_insert_id();
+                                $act_link = $this->get_activate_link($_POST['m_account'],$m_id);      
+                                $mtpl->newBlock("MEMBER_JOIN_VALIDATION_EMAIL_NOTIFICATION");
+                                $mtpl->assign(array(
+                                    "MSG_MEMBER_JOIN_VALIDATION_EMAIL" => $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'],
+                                    "ACTIVATE_LINK"                    => $act_link,
+                                ));
+                                break;
+                            case "manual":
+                            default:
+                                $mtpl->newBlock("MEMBER_JOIN_VALIDATION_MANUAL_NOTIFICATION");
+                                $mtpl->assign(array(
+                                    "MSG_MEMBER_JOIN_VALIDATION_MANUAL" => $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'],
+                                ));
+                                break;
+                        }
+                    }
                     $mail_content=$mtpl->getOutputContent();
                     $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_account"],$mail_content,$TPLMSG['MEMBER_CONFIRM_MAIL'],"m",$goto_url);
                 }else{

@@ -139,6 +139,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="私は同意";
 $TPLMSG['MEMBER_FORGET_TITLE']="会員のパスワード";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="アカウント";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="パスワード";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "電子メールを確認するために戻って、サイトには次のリンクをクリックしてアカウントを有効にしてください。<BR/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "ご登録されたアカウントは、通知の手紙があなたに派遣されるの後に採用されるためには、誰かの監査を持っているだろう、もうしばらくお待ちください！";
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "製品情報";
 $TPLMSG['PRODUCT'] = "製品";

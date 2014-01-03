@@ -138,6 +138,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="I agree";
 $TPLMSG['MEMBER_FORGET_TITLE']="Member's Password";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="Account";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="Password";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "Please click on the following link back to the site to verify E-mail and activate your account: <br/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Your registered account will have someone audit, to be adopted after the notification letter will be dispatched to you, please be patient!";
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Products";
 $TPLMSG['PRODUCT'] = "Products";

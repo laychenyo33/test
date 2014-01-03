@@ -140,6 +140,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="接受會員條款";
 $TPLMSG['MEMBER_FORGET_TITLE']="會員密碼";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="帳號";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="密碼";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "請點擊以下連結回到網站驗證E-mail並啟用您的帳號:<br/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "您註冊的帳號將會有專人審核，待通過之後會寄發通知信給您，請耐心等候!";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "產品介紹";

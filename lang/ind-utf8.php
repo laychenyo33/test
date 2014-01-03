@@ -138,6 +138,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="I agree";
 $TPLMSG['MEMBER_FORGET_TITLE']="Member's Password";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="Account";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="Password";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "ई मेल को सत्यापित करने के लिए वापस साइट के लिए नीचे दिए गए लिंक पर क्लिक करें और अपने खाते को सक्रिय करें: <br/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "आपका पंजीकृत खाता सूचना पत्र आप को भेजा जाएगा के बाद अपनाया जाना, किसी ऑडिट होगा, कृपया धैर्य रखें!";
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Products";
 $TPLMSG['PRODUCT'] = "Products";

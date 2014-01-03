@@ -66,6 +66,7 @@ $cms_cfg["ws_module"]=array(
         "ws_member_download_on"   => "", //會員下載依類別cate或會員member，預設是類別(cate)，留空也是類別
         "ws_member_show_discount" => 0, //後台會員類別不顯示折扣欄位
         "ws_member_multi_cate"    => 0, //會員使用多重類別
+        "ws_member_join_validation"  => "", //會員加入驗證，留空不驗證,manual是手動驗證(驗證預設動作),email是指驗證email
         "ws_cart_login"=>0,             //購物車或詢價車是否需要會員登入
         "ws_delivery_timesec"=>0,       //購物車或詢價車是否顯示配送欄位
         "ws_download_login"=>0,         //檔案下載是否需要會員登入

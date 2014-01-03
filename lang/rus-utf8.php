@@ -128,6 +128,11 @@ $TPLMSG['MEMBER_MUTI_FAX_NOTICE']="Разделенные ','";
 $TPLMSG['MEMBER_MUTI_CELLPHONE_NOTICE']="Разделенные ','";
 $TPLMSG['MEMBER_MUTI_EMAIL_NOTICE']="Разделенные ','";
 $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="Я согласен";
+$TPLMSG['MEMBER_FORGET_TITLE']="пароль";
+$TPLMSG['MEMBER_FORGET_ACCOUNT']="номер счета";
+$TPLMSG['MEMBER_FORGET_PASSWORD']="пароль";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "Пожалуйста, нажмите на следующую ссылку обратно на сайт, чтобы убедиться, Электронная почта и активировать свой аккаунт: <br/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Ваше зарегистрированное учетная запись будет иметь кто-то аудит, который должен быть принят после уведомления, письмо будет послан к вам, пожалуйста, будьте терпеливы!";
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Продукты";
 $TPLMSG['PRODUCT'] = "Продукты";

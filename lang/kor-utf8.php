@@ -138,6 +138,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="약관에 동의";
 $TPLMSG['MEMBER_FORGET_TITLE']="암호";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="계정";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="암호";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "E-메일을 확인하기 위해 다시 사이트에 다음 링크를 클릭하여 계정을 활성화하십시오 <BR/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "등록 된 계정 알림 문자가 당신에게 발송됩니다 후 채택 될, 누군가가 감사를해야합니다, 양해 해 주시기 바랍니다!";
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "제품소개";
 $TPLMSG['PRODUCT'] = "제품소개";

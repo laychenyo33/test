@@ -138,6 +138,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="concordo";
 $TPLMSG['MEMBER_FORGET_TITLE']="Senha membro";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="conta";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="senha";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "Por favor, clique no seguinte link para o site para verificar e-mail e ativar a sua conta: <br/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Sua conta registrado terá alguém de auditoria, a ser adotado após a carta de notificação será enviada para você, por favor, seja paciente!";
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "produtos";
 $TPLMSG['PRODUCT'] = "produtos";

@@ -138,6 +138,8 @@ $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="Kabul ediyorum";
 $TPLMSG['MEMBER_FORGET_TITLE']="Üye Şifre";
 $TPLMSG['MEMBER_FORGET_ACCOUNT']="Hesap";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="Parola";
+$TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "E-posta doğrulamak için geri siteye aşağıdaki linke tıklayın ve hesabınızı aktif hale getirin: <br/>";
+$TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Sizin Kayıtlı hesap bildirim mektubu size sevk edilecektir sonra kabul edilmesi, birisi denetim olacak, lütfen sabırlı olun!";
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Ürünler";
 $TPLMSG['PRODUCT'] = "Ürünler";
