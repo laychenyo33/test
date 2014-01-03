@@ -1,7 +1,7 @@
 <?php
 include_once("conf/config.inc.php");
 include_once("libs/libs-mysql.php");
-$db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name']);
+$db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name'],$cms_cfg['tb_prefix']);
 /* RECEIVE VALUE */
 $validateValue=$_POST['validateValue'];
 $validateId=$_POST['validateId'];
