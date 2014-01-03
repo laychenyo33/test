@@ -28,11 +28,13 @@ class MEMBER{
     );
     protected $member_download;
     protected $download_on;
+    protected $member_validation;
     function MEMBER(){
         global $db,$cms_cfg,$tpl;
         $this->showDiscount = $cms_cfg['ws_module']['ws_member_show_discount'];
         $this->member_download = $cms_cfg['ws_module']['ws_member_download'];
         $this->download_on = $cms_cfg['ws_module']['ws_member_download_on'];
+        $this->member_validation = $cms_cfg['ws_module']['ws_member_join_validation'];
         switch($_REQUEST["func"]){
             case "m_import":
                 if($cms_cfg['ws_module']['ws_member_manipulate']!=1){
@@ -508,6 +510,7 @@ class MEMBER{
             if ($rsnum > 0) {
                 $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_M_SORT"  => $row["m_sort"],
+                                          "VALUE_OLD_M_STATUS"  => $row["m_status"],
                                           "VALUE_M_ACCOUNT" => $row["m_account"],
                                           "VALUE_M_PASSWORD" => $row["m_password"],
                                           "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
@@ -632,6 +635,12 @@ class MEMBER{
             //有會員download
             if($this->member_download && $this->download_on=="member"){
                 $db_msg .= $this->_write_download($_POST['d_files'],'m_id',$m_id);
+            }
+            //寄發帳號啟用通知信
+            if($m_id && ($_POST['m_status']==1 && $_POST['old_m_status']=='0')){
+                $sql = "select m_account from ".$db->prefix("member")." where m_id='".$m_id."'";
+                list($m_account) = $db->query_firstrow($sql,false);
+                $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],sprintf($TPLMSG['MEMBER_APPROV_NOTIFICATION_CONTENT'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company'],$m_account),sprintf($TPLMSG['MEMBER_APPROV_NOTIFICATION_SUBJECT'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']));
             }
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);

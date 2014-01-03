@@ -142,6 +142,8 @@ $TPLMSG['MEMBER_FORGET_ACCOUNT']="帳號";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="密碼";
 $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "請點擊以下連結回到網站驗證E-mail並啟用您的帳號:<br/>";
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "您註冊的帳號將會有專人審核，待通過之後會寄發通知信給您，請耐心等候!";
+$TPLMSG['MEMBER_APPROV_NOTIFICATION_SUBJECT'] = "您在 %s 的帳號已啟用";
+$TPLMSG['MEMBER_APPROV_NOTIFICATION_CONTENT'] = "您在 %s 的帳號 %s 已啟用，歡迎回到網站上登入";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "產品介紹";
