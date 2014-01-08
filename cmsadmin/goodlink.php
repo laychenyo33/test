@@ -341,7 +341,7 @@ class GOODLINK{
             if($_REQUEST["st"]=="l_content"){
                 $and_str .= " and l.l_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by lc.lc_sort ".$cms_cfg['sort_pos'].",l.l_sort ".$cms_cfg['sort_pos'].",l.l_modifydate desc ";
+            $sql .= $and_str." order by lc_id,lc.lc_sort ".$cms_cfg['sort_pos'].",l.l_sort ".$cms_cfg['sort_pos'].",l.l_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);
@@ -354,6 +354,7 @@ class GOODLINK{
             $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
                                       "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                                      "TAG_CUR_LCID"     => $_GET['lc_id'],
             ));
             switch($_REQUEST["st"]){
                 case "all" :
@@ -646,7 +647,7 @@ class GOODLINK{
     }
     //複製單筆資料
     function copy_data($ws_table){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //相關連結分類複製
         if($ws_table=="lc"){
             $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink_cate where lc_id='".$_REQUEST["id"][0]."'";
@@ -661,7 +662,7 @@ class GOODLINK{
                         lc_subject
                     ) values (
                         '".$row["lc_status"]."',
-                        '".$row["lc_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_goodlink_cate","lc")."',
                         '".addslashes($row["lc_subject"])."'
                     )";
                 $rs = $db->query($sql);
@@ -698,7 +699,7 @@ class GOODLINK{
                     ) values (
                         '".$row["lc_id"]."',
                         '".$row["l_status"]."',
-                        '".$row["l_sort"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_goodlink","l","lc_id",$row['lc_id'],true)."',
                         '".$row["l_hot"]."',
                         '".$row["l_pop"]."',
                         '".addslashes($row["l_subject"])."',
@@ -712,7 +713,7 @@ class GOODLINK{
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."goodlink.php?func=l_list&lc_id=".$_REQUEST["lc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=$cms_cfg["manage_url"]."goodlink.php?func=l_list&lc_id=".$row["lc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
