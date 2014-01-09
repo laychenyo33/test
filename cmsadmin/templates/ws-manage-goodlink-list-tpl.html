@@ -37,14 +37,7 @@
           <li><img src="images/icon-copy.gif" /><a href="#" Onclick="Javascript:return FormCheckCopy(myform)">複製</a></li>
         </ul>
         <ul>
-          <li>
-            <select name="st" class="seinput">
-                  <option value="all" {STR_SELECT_SEARCH_TARGET_CK0}>全部</option>
-                  <option value="l_name" {STR_SELECT_SEARCH_TARGET_CK1}>標題</option>
-                  <option value="l_content" {STR_SELECT_SEARCH_TARGET_CK2}>內容</option>
-                </select>
-            關鍵字<input type="text" id="sk" name="sk" class="seinput" value="{VALUE_SEARCH_KEYWORD}"/><input type="button" value="搜尋" Onclick="Javascript:return FormCheckQuery(myform)" />
-          </li>
+          <li>{TAG_SEARCH_FIELD}</li>
         </ul>
       </div>
       </td>

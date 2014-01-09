@@ -327,20 +327,13 @@ class GOODLINK{
             }
             //相關連結列表
             $sql="select l.*,lc.lc_subject from ".$cms_cfg['tb_prefix']."_goodlink as l left join ".$cms_cfg['tb_prefix']."_goodlink_cate as lc on l.lc_id=lc.lc_id where l.l_id > '0'";
+            $searchfield = new searchFields_goodlink();
             //附加條件
             $and_str="";
             if(!empty($_REQUEST["lc_id"])){
                 $and_str .= " and l.lc_id = '".$_REQUEST["lc_id"]."'";
             }
-            if($_REQUEST["st"]=="all"){
-                $and_str .= " and (l.l_subject like '%".$_REQUEST["sk"]."%' or l.l_content like '%".$_REQUEST["sk"]."%')";
-            }
-            if($_REQUEST["st"]=="l_subject"){
-                $and_str .= " and l.l_subject like '%".$_REQUEST["sk"]."%'";
-            }
-            if($_REQUEST["st"]=="l_content"){
-                $and_str .= " and l.l_content like '%".$_REQUEST["sk"]."%'";
-            }
+            $and_str = $searchfield->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
             $sql .= $and_str." order by lc_id,lc.lc_sort ".$cms_cfg['sort_pos'].",l.l_sort ".$cms_cfg['sort_pos'].",l.l_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
@@ -355,19 +348,9 @@ class GOODLINK{
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
                                       "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
                                       "TAG_CUR_LCID"     => $_GET['lc_id'],
+                                      "TAG_SEARCH_FIELD" => $searchfield->list_search_fields($_REQUEST['st'], $_REQUEST['sk'])
             ));
-            switch($_REQUEST["st"]){
-                case "all" :
-                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK0", "selected");
-                    break;
-                case "l_subject" :
-                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK1", "selected");
-                    break;
-                case "l_content" :
-                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK2", "selected");
-                    break;
-            }
-            $i=$page["start_serial"];
+            $i=$main->get_pagination_offset($cms_cfg["op_limit"]);
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $i++;
                 $tpl->newBlock( "GOODLINK_LIST" );
