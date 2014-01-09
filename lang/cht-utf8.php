@@ -314,6 +314,9 @@ $TPLMSG['EPAPER_FOOTER'] = "電子報頁尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已經從郵件清單裡移除了!";
 $TPLMSG['GALLERY'] = "活動剪影";
 
+//Goodlink
+$TPLMSG['GOODLINK'] = "好站連結";
+
 /*新增語彙*/
 /*以下是支付寶相關字彙*/
 $TPLMSG["PAYMENT_ALI"] = "支付寶";

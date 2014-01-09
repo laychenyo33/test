@@ -306,6 +306,9 @@ $TPLMSG['EPAPER_FOOTER'] = "電子報頁尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "You've been remove from mail list";
 $TPLMSG['GALLERY'] = "Gallery";
 
+//Goodlink
+$TPLMSG['GOODLINK'] = "Good link";
+
 /*新增語彙*/
 /*以下是支付寶相關字彙*/
 $TPLMSG["PAYMENT_ALI"] = "支付寶";
