@@ -11,7 +11,7 @@ class MAINDEFAULT{
         $this->ws_load_tp($this->ws_tpl_file);
         //請依首頁不同的版型取消註解，顯示以下的項目
 //        $this->products_rand(); //隨機產品
-//        $this->show_category_list(); //分類列表
+        $this->show_category_list(); //分類列表
 //        $this->new_products_list();   //最新產品
 //        $this->hot_products_list();   //熱門產品
 //        $this->promotion_products_list(); //促銷產品
@@ -56,43 +56,16 @@ class MAINDEFAULT{
     function show_category_list(){
         global $db,$tpl,$cms_cfg;
         //$sql="select a.pc_id,a.pc_parent,a.pc_name from ws_products_cate as a,ws_products_cate as b where a.pc_parent='0' or b.pc_parent=a.pc_id ";
-        $sql="select pc_id,pc_parent,pc_name from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1'";
+        $sql="select pc_id,pc_parent,pc_name,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
-        while($row = $db->fetch_array($selectrs,1)){
-            $pc_id_array[]=$row["pc_id"];
-            $main_cate[$row["pc_id"]]=$row["pc_name"];
-        }
         if($rsnum >0){
-            $pc_id_str="('".implode("','",$pc_id_array)."')";
-            $sql="select pc_id,pc_parent,pc_name from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent in ".$pc_id_str." and pc_status='1'";
-            $selectrs = $db->query($sql);
             while($row = $db->fetch_array($selectrs,1)){
-                $sub_id[$row["pc_parent"]][]=$row["pc_id"];
-                $sub_cate[$row["pc_parent"]][]=$row["pc_name"];
-            }
-            $k=0;
-            //分類列表
-            foreach($pc_id_array as $key =>$value){
-                if($k%2){
-                    $tpl->newBlock( "PRODUCT_CATE_LIST1" );
-                }else{
-                    $tpl->newBlock( "PRODUCT_CATE_LIST2" );
-                }
-                $tpl->assign("VALUE_PC_MAIN_ID",$value);
-                $tpl->assign("VALUE_PC_MAIN_NAME",$main_cate[$value]);
-                for($i=0;$i<3;$i++){
-                    if(!empty($sub_id[$value][$i])){
-                        $sub_cate_array[]="<a href='products.php?pc_parent=".$sub_id[$value][$i]."'>".$sub_cate[$value][$i]."</a>";
-                    }
-                }
-                if(!empty($sub_cate_array)){
-                    $sub_cate_str=implode(",",$sub_cate_array);
-                }
-                $tpl->assign("VALUE_PC_SUB_CATE",$sub_cate_str);
-                unset($sub_cate_array);
-                unset($sub_cate_str);
-                $k++;
+                $tpl->newBlock("PRODUCT_CATE_LIST");
+                $tpl->assign(array(
+                    "VALUE_PC_NAME" => $row['pc_name'],
+                    "VALUE_PC_LINK" => $cms_cfg['base_root'].$row['pc_seo_filename'],
+                ));
             }
         }
     }
