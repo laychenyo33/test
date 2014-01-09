@@ -489,6 +489,7 @@ class MAINFUNC{
                             $tpl->newBlock( "LEFT_SUBCATE_LIST" );
                             $tpl->assign( array( "VALUE_SUBCATE_NAME" => $row2["p_name"],
                                                  "VALUE_SUBCATE_LINK"  => $p_link,
+                                                 "TAG_CURRENT_CLASS" => (($_GET['f'] && $_GET['f'] == $row2['p_seo_filename']) || $_GET['p_id']==$row2['p_id'])?"class='current'":"",
                             ));
                             //左方產品次分類為click menu
                             if($cms_cfg['ws_module']['ws_seo']==1){
