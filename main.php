@@ -54,17 +54,22 @@ class MAINDEFAULT{
     }
     //分類列表
     function show_category_list(){
-        global $db,$tpl,$cms_cfg;
+        global $db,$tpl,$cms_cfg,$main;
         //$sql="select a.pc_id,a.pc_parent,a.pc_name from ws_products_cate as a,ws_products_cate as b where a.pc_parent='0' or b.pc_parent=a.pc_id ";
-        $sql="select pc_id,pc_parent,pc_name,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1'";
+        $sql="select pc_id,pc_parent,pc_name,pc_cate_img,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
             while($row = $db->fetch_array($selectrs,1)){
                 $tpl->newBlock("PRODUCT_CATE_LIST");
+                $img = $row['pc_cate_img']?$cms_cfg['file_root'].$row['pc_cate_img']:$cms_cfg['default_preview_pic'];
+                $dimension = $main->resizeto($img,$cms_cfg['idx_prod_cate_img_width'],$cms_cfg['idx_prod_cate_img_height']);
                 $tpl->assign(array(
                     "VALUE_PC_NAME" => $row['pc_name'],
                     "VALUE_PC_LINK" => $cms_cfg['base_root'].$row['pc_seo_filename'],
+                    "VALUE_PC_IMG"  => $img,
+                    "VALUE_PC_IMG_W"  => $dimension['width'],
+                    "VALUE_PC_IMG_H"  => $dimension['height'],
                 ));
             }
         }
