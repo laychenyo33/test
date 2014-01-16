@@ -553,11 +553,6 @@ class CART{
             "VALUE_M_NAME"       => $_REQUEST["m_reci_name"],    
             "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_reci_contact_s"]],                    
         ));        
-        //付款方式是atm時顯示客戶匯款帳號後五碼
-        if($_POST['o_payment_type']=='1'){
-            $tpl->newBlock("ATM_LAST_FIVE");
-            $tpl->assign("VALUE_ATM_LAST5",$_POST['o_atm_last5']);
-        }
         //是否顯示配送欄位
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("DELIVERY_ZONE");
