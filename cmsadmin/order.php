@@ -101,7 +101,7 @@ class ORDER{
             }
         }
         //訂單列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id > '0'";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id > '0' and del='0' ";
         //附加條件
         $and_str="";
         if($_REQUEST["o_status"]!=""){
@@ -200,7 +200,7 @@ class ORDER{
         }
         //帶入要回覆的訂單資料
         if(!empty($_REQUEST["o_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."'";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."' and del='0' ";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -258,7 +258,7 @@ class ORDER{
                     }
                 }
                 //訂購產品列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
+                $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 $selectrs = $db->query($sql);
                 $total_price=0;
                 $i=0;
