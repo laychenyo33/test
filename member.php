@@ -458,7 +458,7 @@ class MEMBER{
                                 "MSG_TOTAL_MONEY" => $TPLMSG['ORDER_TOTAL_MONEY'],
                                 "MSG_VIEWS" => $TPLMSG['VIEWS'],
             ));
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' order by o_createdate desc";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and del='0' order by o_createdate desc";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -538,7 +538,7 @@ class MEMBER{
             }
             //帶入要回覆的訂單資料
             if(!empty($_REQUEST["o_id"])){
-                $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and o_id='".$_REQUEST["o_id"]."'";
+                $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
@@ -588,7 +588,7 @@ class MEMBER{
                           "VALUE_O_CONTACT_S" => $ws_array['contactus_s'][$row["o_reci_contact_s"]],
                     ));                          
                     //訂購產品列表
-                    $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
+                    $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                     $selectrs = $db->query($sql);
                     $total_price=0;
                     $i=0;
