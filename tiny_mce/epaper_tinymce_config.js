@@ -18,5 +18,6 @@ tinyMCE.init({
 	theme_advanced_resizing : true,
 	cleanup : true,
 	media_use_script : true,
-	media_wmp6_compatible : true
+	media_wmp6_compatible : true,
+        convert_urls: false
 });     
