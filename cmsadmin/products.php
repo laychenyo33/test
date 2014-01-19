@@ -972,7 +972,8 @@ class PRODUCTS{
                                           "VALUE_DESC_TITLE" =>$row["p_desc_title"],
                                           "VALUE_CHARACTER_TITLE" =>$row["p_character_title"],
                                           "VALUE_SPEC_TITLE" =>$row["p_spec_title"],
-                                          "VALUE_P_CROSS_CATE" => $row["p_cross_cate"]
+                                          "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
+                                          "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
                 ));
                 //附加檔案
                 if($cms_cfg['ws_module']['ws_products_upfiles']){
@@ -992,7 +993,6 @@ class PRODUCTS{
                                               "VALUE_P_SEO_TITLE" => $row["p_seo_title"],
                                               "VALUE_P_SEO_KEYWORD" => $row["p_seo_keyword"],
                                               "VALUE_P_SEO_DESCRIPTION" => $row["p_seo_description"],
-                                              "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
                                               "STR_P_UP_SORT_CK1" => ($row["p_up_sort"])?"checked":"",
                                               "STR_P_UP_SORT_CK0" => ($row["p_up_sort"])?"":"checked",
                                               "VALUE_P_SEO_H1" => $row["p_seo_h1"]));
@@ -1063,7 +1063,6 @@ class PRODUCTS{
                             p_seo_title,
                             p_seo_keyword,
                             p_seo_description,
-                            p_seo_short_desc,
                             p_seo_h1,
                             p_up_sort,";
             $add_value_str="'".htmlspecialchars($_REQUEST["p_name_alias"])."',
@@ -1071,7 +1070,6 @@ class PRODUCTS{
                             '".htmlspecialchars($_REQUEST["p_seo_title"])."',
                             '".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
                             '".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                            '".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
                             '".htmlspecialchars($_REQUEST["p_seo_h1"])."',
                             '".$_REQUEST["p_up_sort"]."',";
             $update_str="p_name_alias = '".htmlspecialchars($_REQUEST["p_name_alias"])."',
@@ -1079,7 +1077,6 @@ class PRODUCTS{
                          p_seo_title='".htmlspecialchars($_REQUEST["p_seo_title"])."',
                          p_seo_keyword='".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
                          p_seo_description='".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                         p_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
                          p_seo_h1='".htmlspecialchars($_REQUEST["p_seo_h1"])."',
                          p_up_sort='".$_REQUEST["p_up_sort"]."',";
         }
@@ -1135,6 +1132,7 @@ class PRODUCTS{
                         p_desc_title,
                         p_desc,
                         p_desc_strip,
+                        p_seo_short_desc,
                         p_attach_file1,
                         p_attach_file2,
                         p_mv,
@@ -1169,6 +1167,7 @@ class PRODUCTS{
                         '".$db->quote($_REQUEST["p_desc_title"])."',
                         '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"]))."',
                         '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                         '".$db->quote($_REQUEST["p_mv"])."',
@@ -1219,6 +1218,7 @@ class PRODUCTS{
                     p_desc_title = '".$db->quote($_REQUEST["p_desc_title"])."',
                     p_desc = '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"]))."',
                     p_desc_strip = '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
+                    p_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
                     p_attach_file1 = '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                     p_attach_file2 = '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                     p_mv = '".$db->quote($_REQUEST["p_mv"])."',
