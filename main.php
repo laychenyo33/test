@@ -100,7 +100,7 @@ class MAINDEFAULT{
     }
     //最新產品
     function new_products_list(){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,p.p_special_price from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_type in ('1','3','5','7') and p.p_status='1' order by rand() limit 0,4";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
@@ -127,10 +127,14 @@ class MAINDEFAULT{
                 $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
             }
             $tpl->newBlock( "NEW_PRODUCTS_LIST" );
+            $img = (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
+            $dimension = $main->resizeto($img,$cms_cfg['idx_new_prod_img_width'],$cms_cfg['idx_new_prod_img_height']);
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                 "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                 "VALUE_P_LINK"  => $p_link,
-                                "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"],
+                                "VALUE_P_SMALL_IMG" => $img,
+                                "VALUE_P_SMALL_IMG_W" => $dimension['width'],
+                                "VALUE_P_SMALL_IMG_H" => $dimension['height'],
             ));
             //詢價商品或是購物商品
             if($show_price==0){

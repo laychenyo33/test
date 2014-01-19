@@ -85,6 +85,8 @@ $cms_cfg['news_img_width']="166"; //最新消息小圖圖框限制--寬
 $cms_cfg['news_img_height']="89";//最新消息小圖圖框限制--高
 $cms_cfg['idx_prod_cate_img_width']="167"; //首頁產品分類縮圖圖框限制--寬
 $cms_cfg['idx_prod_cate_img_height']="111";//首頁產品分類縮圖圖框限制--高
+$cms_cfg['idx_new_prod_img_width']="78"; //首頁最新產品縮圖圖框限制--寬
+$cms_cfg['idx_new_prod_img_height']="55";//首頁最新產品縮圖圖框限制--高
 
 
 //News page limit
