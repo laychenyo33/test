@@ -11,7 +11,7 @@ class MAINDEFAULT{
         $this->ws_load_tp($this->ws_tpl_file);
         //請依首頁不同的版型取消註解，顯示以下的項目
 //        $this->products_rand(); //隨機產品
-        $this->show_category_list(); //分類列表
+//        $this->show_category_list(); //分類列表
 //        $this->new_products_list();   //最新產品
 //        $this->hot_products_list();   //熱門產品
 //        $this->promotion_products_list(); //促銷產品
