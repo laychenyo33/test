@@ -66,7 +66,7 @@ class MAINDEFAULT{
                 $dimension = $main->resizeto($img,$cms_cfg['idx_prod_cate_img_width'],$cms_cfg['idx_prod_cate_img_height']);
                 $tpl->assign(array(
                     "VALUE_PC_NAME" => $row['pc_name'],
-                    "VALUE_PC_LINK" => $cms_cfg['base_root'].$row['pc_seo_filename'],
+                    "VALUE_PC_LINK" => $cms_cfg['base_root'].$row['pc_seo_filename'].".htm",
                     "VALUE_PC_IMG"  => $img,
                     "VALUE_PC_IMG_W"  => $dimension['width'],
                     "VALUE_PC_IMG_H"  => $dimension['height'],
