@@ -96,12 +96,12 @@ class MAINFUNC{
                 $Page["nj_page"]="";
             }
             //有上跳頁也有下跳頁
-            if($jp < $ppages && $jp!=0){
+            if($jp < $ppages-1 && $jp!=0){
                 $bp=$jp-1;
                 $np=$jp+1;
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."-pages-".$prev."-".$bp.".htm";
-                $Page["nj_page"]=$func_str."-pages-".$page_end."-".$np.".htm";
+                $Page["nj_page"]=$func_str."-pages-".$page_end."-".$np.".htm123";
             }
             //沒有上跳頁有下跳頁
             if($jp ==0){//第1頁
