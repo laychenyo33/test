@@ -133,9 +133,9 @@ class MAINFUNC{
         $Page['current_page_id'] = $nowp;
         $Page["total_pages"]=floor($Page["total_pages"]);
         if($ppages>1){
-            if($jp>0)$Page["first_page"] = $func_str."&nowp=1&jp=0";
+            if($jp>0)$Page["first_page"] = $func_str.".htm";
             if($jp<$ppages-1){
-                $Page["last_page"] = $func_str."&nowp=".$Page["total_pages"]."&jp=".(ceil($Page["total_pages"]/$jp_limit)-1);
+                $Page["last_page"] = $func_str."-pages-".$Page["total_pages"]."-".(ceil($Page["total_pages"]/$jp_limit)-1).".htm";
             }
         }        
         $this->showPagination($Page,$showNoData);      
