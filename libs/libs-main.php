@@ -28,12 +28,14 @@ class MAINFUNC{
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
                 $Page["nj_page"]="";
-            }elseif($jp < $ppages-1 && $jp!=0){//有上跳頁也有下跳頁           
+            }elseif($jp <= $ppages-1 && $jp!=0){//有上跳頁也有下跳頁           
                 $bp=$jp-1;
                 $np=$jp+1;
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."&nowp=".$prev."&jp=".$bp;
-                $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
+                if($jp < $ppages-1){
+                    $Page["nj_page"]=$func_str."&nowp=".$page_end."&jp=".$np;
+                }
             }elseif($jp ==0){////沒有上跳頁有下跳頁，第1頁
                 $np=$jp+1;
                 $Page["bj_page"]="";
@@ -94,17 +96,15 @@ class MAINFUNC{
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."-pages-".$prev."-".$bp.".htm";
                 $Page["nj_page"]="";
-            }
-            //有上跳頁也有下跳頁
-            if($jp < $ppages-1 && $jp!=0){
+            }elseif($jp <= $ppages-1 && $jp!=0){//有上跳頁也有下跳頁
                 $bp=$jp-1;
                 $np=$jp+1;
                 $prev=$page_start-1;
                 $Page["bj_page"]=$func_str."-pages-".$prev."-".$bp.".htm";
-                $Page["nj_page"]=$func_str."-pages-".$page_end."-".$np.".htm123";
-            }
-            //沒有上跳頁有下跳頁
-            if($jp ==0){//第1頁
+                if($jp < $ppages-1){
+                    $Page["nj_page"]=$func_str."-pages-".$page_end."-".$np.".htm";
+                }
+            }elseif($jp ==0){//第1頁//沒有上跳頁有下跳頁
                 $np=$jp+1;
                 $Page["bj_page"]="";
                 $Page["nj_page"]=$func_str."-pages-".$page_end."-".$np.".htm";
