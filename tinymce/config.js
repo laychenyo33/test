@@ -37,6 +37,8 @@
 			    {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
 			]
 			*/
+                        convert_urls: false
+
 		});
 	}
 	
