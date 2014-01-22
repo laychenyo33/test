@@ -3,7 +3,7 @@
 /* 使用方法
 
 $(document).tiny_box({
-	SWITCH : 1, // 1 => 圖片 , 2 => 檔案
+	SWITCH : 0, // 0 => 全部 , 1 => 圖片 , 2 => 檔案
 	ID : ".tiny", // 綁定元素 (同css選取器)，可設定多個元素，使用 , 分隔
 	ROOT : "" // 根目錄位置
 });
@@ -13,6 +13,7 @@ $(document).tiny_box({
 (function($){
 	$.fn.tiny_box = function(OPTION){
 		var TINY = jQuery.extend({
+			SWITCH : 0, // 0 => 全部 , 1 => 圖片 , 2 => 檔案
 			ID : ".tiny", // 綁定元素 (同css選取器)，可設定多個元素，使用 , 分隔
 			ROOT : "" // 根目錄位置
 			//----
@@ -36,21 +37,13 @@ $(document).tiny_box({
 					$(this).prev("input").attr("id","temp_select");
 					INPUT_ID = "temp_select";
 				}
-				
+
 				//判斷有無 ID 如果有直接給值
 				if(INPUT_CH){
 					INPUT_ID = INPUT_CH;
 				}
 				
-				//開啟圖片管理
-				if(TINY.SWITCH == 1){
-					open_popup(TINY.ROOT +'filemanager/dialog.php?type=1&fldr=&popup=1&field_id='+ INPUT_ID +'&lang=zh_TW')
-				}
-				
-				//開啟檔案管理
-				if(TINY.SWITCH == 2){
-					open_popup(TINY.ROOT +'filemanager/dialog.php?type=0&fldr=&popup=1&field_id='+ INPUT_ID +'&lang=zh_TW')
-				}
+				open_popup(TINY.ROOT +'filemanager/dialog.php?type='+ TINY.SWITCH +'&fldr=&popup=1&field_id='+ INPUT_ID +'&lang=zh_TW')
 			});
 		}
 	};
