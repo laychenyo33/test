@@ -32,6 +32,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->products_ca_form("add");
                 $this->ws_tpl_type=1;     
                 break;
@@ -42,6 +43,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->products_ca_form("mod");
                 $this->ws_tpl_type=1;                    
                 break;
@@ -73,7 +75,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->products_application_form("add");
                 $this->ws_tpl_type=1;                
                 break;
@@ -84,7 +86,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->products_application_form("mod");
                 $this->ws_tpl_type=1;             
                 break;
@@ -117,7 +119,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->products_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -132,7 +134,7 @@ class PRODUCTS{
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JS_PREVIEWS_PIC");
                     $tpl->newBlock("JS_MAIN");
-                    $tpl->newBlock("JS_TINYMCE");
+                    $tpl->newBlock("NEW_TINY_LIBS");
                     $this->products_cate_form("mod");
                     $this->ws_tpl_type=1;
                 }
@@ -175,7 +177,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_TINYMCE2");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $tpl->newBlock("JS_TABTITLE");
                 $this->products_form("add");
                 $this->ws_tpl_type=1;
@@ -191,7 +193,7 @@ class PRODUCTS{
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JS_PREVIEWS_PIC");
                     $tpl->newBlock("JS_MAIN");
-                    $tpl->newBlock("JS_TINYMCE2");
+                    $tpl->newBlock("NEW_TINY_LIBS");
                     $tpl->newBlock("JS_TABTITLE");
                     $this->products_form("mod");
                     $this->ws_tpl_type=1;

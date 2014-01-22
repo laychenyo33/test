@@ -65,7 +65,7 @@ class EPAPER{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("JS_TINYMCE_EPAPER");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->epaper_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -75,7 +75,7 @@ class EPAPER{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("JS_TINYMCE_EPAPER");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->epaper_form("mod");
                 $this->ws_tpl_type=1;
                 break;

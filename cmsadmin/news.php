@@ -80,7 +80,7 @@ class NEWS{
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_CALENDAR");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->news_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -92,7 +92,7 @@ class NEWS{
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_CALENDAR");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $tpl->newBlock("JS_JQ_UI");
                 $this->news_form("mod");
                 $this->ws_tpl_type=1;

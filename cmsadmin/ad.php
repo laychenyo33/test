@@ -29,7 +29,7 @@ class AD{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_CALENDAR");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
-                $tpl->newBlock("JS_TINYMCE_IMAGE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->ad_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -40,7 +40,7 @@ class AD{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_CALENDAR");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
-                $tpl->newBlock("JS_TINYMCE_IMAGE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->ad_form("mod");
                 $this->ws_tpl_type=1;
                 break;

@@ -16,7 +16,7 @@ class SERVICE{
             case "st_term":  //各項服務說明設定
                 $this->ws_tpl_file = "templates/ws-manage-service-term-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
-                $tpl->newBlock("JS_TINYMCE_EPAPER");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->service_term_form($_REQUEST["term_type"]);
                 $this->ws_tpl_type=1;
                 break;
@@ -29,7 +29,7 @@ class SERVICE{
             default:    //各項服務說明設定
                 $this->ws_tpl_file = "templates/ws-manage-service-term-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
-                $tpl->newBlock("JS_TINYMCE_EPAPER");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->service_term_form($_REQUEST["term_type"]);
                 $this->ws_tpl_type=1;
                 break;
@@ -83,7 +83,7 @@ class SERVICE{
         $rsnum    = $db->numRows($selectrs);
         if ($rsnum > 0) {
             if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
-                $tpl->newBlock("TINYMCE_JS");
+//                $tpl->newBlock("TINYMCE_JS");
                 $tpl->newBlock("WYSIWYG_TINYMCE1");
                 $tpl->assign( "VALUE_TERM_CONTENT" , $row[$term_type] );
             }

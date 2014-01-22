@@ -34,7 +34,7 @@ class EBOOK{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->ebook_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -49,7 +49,7 @@ class EBOOK{
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JS_PREVIEWS_PIC");
                     $tpl->newBlock("JS_MAIN");
-                    $tpl->newBlock("JS_TINYMCE");
+                    $tpl->newBlock("NEW_TINY_LIBS");
                     $this->ebook_cate_form("mod");
                     $this->ws_tpl_type=1;
                 }
@@ -92,7 +92,7 @@ class EBOOK{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("NEW_TINY_LIBS");
                 $tpl->newBlock("JS_TABTITLE");
                 $this->ebook_form("add");
                 $this->ws_tpl_type=1;
@@ -108,7 +108,7 @@ class EBOOK{
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JS_PREVIEWS_PIC");
                     $tpl->newBlock("JS_MAIN");
-                    $tpl->newBlock("JS_TINYMCE");
+                    $tpl->newBlock("NEW_TINY_LIBS");
                     $tpl->newBlock("JS_TABTITLE");
                     $this->ebook_form("mod");
                     $this->ws_tpl_type=1;
