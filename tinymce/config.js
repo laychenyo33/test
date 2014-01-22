@@ -3,7 +3,7 @@
 	function tiny_load(ROOT_PATH,SELECT){
 		
 		if(typeof(SELECT) == "undefined" || SELECT == ""){
-			SELECT = "#elm1,#elm2,#elm3,#elm4,#elm5,#elm6";
+			SELECT = "#elm1,#elm2,#elm3,#elm4,#elm5,#elm6,.mceEditor";
 		}
 		
 		tinymce.init({
