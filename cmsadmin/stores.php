@@ -15,7 +15,7 @@ class STORES{
         $this->seo=($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
             case "sdc_list"://門市管理分類列表
-                $this->current_class="NC";
+                $this->current_class="SDC";
                 $this->ws_tpl_file = "templates/ws-manage-stores-cate-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
@@ -24,7 +24,7 @@ class STORES{
                 $this->ws_tpl_type=1;
                 break;
             case "sdc_add"://門市管理分類新增
-                $this->current_class="NC";
+                $this->current_class="SDC";
                 $this->ws_tpl_file = "templates/ws-manage-stores-cate-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
@@ -33,7 +33,7 @@ class STORES{
                 $this->ws_tpl_type=1;
                 break;
             case "sdc_mod"://門市管理分類修改
-                $this->current_class="NC";
+                $this->current_class="SDC";
                 $this->ws_tpl_file = "templates/ws-manage-stores-cate-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
@@ -54,7 +54,7 @@ class STORES{
                 $this->ws_tpl_type=1;
                 break;
             case "sd_list"://門市管理列表
-                $this->current_class="N";
+                $this->current_class="SD";
                 $this->ws_tpl_file = "templates/ws-manage-stores-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
@@ -63,7 +63,7 @@ class STORES{
                 $this->ws_tpl_type=1;
                 break;
             case "sd_add"://門市管理新增
-                $this->current_class="N";
+                $this->current_class="SD";
                 $this->ws_tpl_file = "templates/ws-manage-stores-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
@@ -75,7 +75,7 @@ class STORES{
                 $this->ws_tpl_type=1;
                 break;
             case "sd_mod"://門市管理修改
-                $this->current_class="N";
+                $this->current_class="SD";
                 $this->ws_tpl_file = "templates/ws-manage-stores-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
@@ -105,7 +105,7 @@ class STORES{
                 $this->ws_tpl_type=1;
                 break;
             default:    //門市管理列表
-                $this->current_class="N";
+                $this->current_class="SD";
                 $this->ws_tpl_file = "templates/ws-manage-stores-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
