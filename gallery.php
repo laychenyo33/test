@@ -3,6 +3,7 @@
 include_once("libs/libs-sysconfig.php");
 $news = new GALLERY;
 class GALLERY{
+    public $extension = "jpg,jpeg,png,JPG,JPEG,PNG";
     function GALLERY(){
         global $db,$cms_cfg,$tpl,$main;
         $this->op_limit=$cms_cfg['newsop_limit'];
@@ -225,7 +226,7 @@ class GALLERY{
         }else{
             $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
             if(is_dir($dir)){
-                $pattern = $dir . "/*.{jpg,jpeg,png}";
+                $pattern = $dir . "/*.{".$this->extension."}";
                 $imgs = glob($pattern,GLOB_BRACE);
                 $thumb = $main->file_str_replace($imgs[0]);
             }
@@ -270,7 +271,7 @@ class GALLERY{
         }else{
             $dir = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$cate['gc_dir'];
             if(is_dir($dir)){
-                $pattern = $dir . "/*.{jpg,jpeg,png}";
+                $pattern = $dir . "/*.{".$this->extension."}";
                 $imgs = glob($pattern,GLOB_BRACE);
                 foreach($imgs  as $full_path_img){
                     $thumb = $main->file_str_replace($full_path_img);
