@@ -99,7 +99,7 @@ class NEWS{
         }else{
             $main->layer_link($TPLMSG["NEWS"]);
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_news where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_sort ".$cms_cfg['sort_pos'].",n_modifydate desc";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_news where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_showdate desc,n_sort ".$cms_cfg['sort_pos'].",n_modifydate desc";
         $selectrs = $db->query($sql);
         $total_records = $db->numRows($selectrs);
         //取得分頁連結，重新組合包含limit的sql語法
