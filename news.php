@@ -166,7 +166,7 @@ class NEWS{
             );
             $main->header_footer($meta_array);
         }else{
-            $main->header_footer("news",$TPLMSG["NEWS"]);
+            $main->header_footer("news",$row["n_subject"]);
         }
         //顯示內容
         $tpl->newBlock( "NEWS_SHOW" );
