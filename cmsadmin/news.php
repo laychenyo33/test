@@ -399,7 +399,7 @@ class NEWS{
             if($_REQUEST["st"]=="n_content"){
                 $and_str .= " and n.n_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by nc.nc_sort ".$cms_cfg['sort_pos'].",n.n_sort ".$cms_cfg['sort_pos'].",n.n_modifydate desc ";
+            $sql .= $and_str." order by n_showdate desc,nc.nc_sort ".$cms_cfg['sort_pos'].",n.n_sort ".$cms_cfg['sort_pos'].",n.n_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);
