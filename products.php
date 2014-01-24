@@ -286,6 +286,7 @@ class PRODUCTS{
             if($mode=="p_new"){
                 $sql .=  " and p.p_type in ('1','3','5','7') ";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_NEW']);
+                $main->layer_link($TPLMSG['PRODUCT_NEW']);
             //熱門產品
             }elseif($mode=="p_hot"){
                 $sql .=  " and p.p_type in ('2','3','6','7') ";
