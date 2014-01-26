@@ -923,7 +923,7 @@ class MAINFUNC{
     function js_notice($msg,$goto_url){
         echo "<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />";
         echo "<script language=javascript>";
-        echo "Javascript:alert('".$msg."')";
+        echo "Javascript:alert(\"".$msg."\")";
         echo "</script>";
         echo "<script language=javascript>";
         echo "document.location='".$goto_url."'";
