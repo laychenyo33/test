@@ -51,8 +51,12 @@ class ABOUTUS{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //左側選單
         $row = $this->left_cate_list();
-        $main->layer_link($row["au_subject"]);
-        $tpl->assignGlobal( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"]));
+        if($row){
+            $main->layer_link($row["au_subject"]);
+            $tpl->assignGlobal( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"]));
+        }else{
+            $main->js_notice($TPLMSG["PAGE_NO_EXITS"],$cms_cfg['base_root']);
+        }
     }
     function left_cate_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
