@@ -554,7 +554,7 @@ class NEWS{
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("TINYMCE_JS");
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_N_CONTENT" , $row["n_content"] );
+            $tpl->assign( "VALUE_N_CONTENT" , $main->content_file_str_replace($row["n_content"]) );
         }
     }
 //最新消息--資料更新================================================================

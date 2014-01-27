@@ -173,7 +173,7 @@ class NEWS{
         $row["n_content"]=$main->content_file_str_replace($row["n_content"]);
         $tpl->assign( array("VALUE_N_ID"  => $row["n_id"],
                             "VALUE_N_SUBJECT" => $row["n_subject"],
-                            "VALUE_N_CONTENT" => $row["n_content"],
+                            "VALUE_N_CONTENT" => $main->content_file_str_repalce($row["n_content"]),
                             "VALUE_N_MODIFYDATE" => $row["n_modifydate"],
         ));
         //指定TAG_LAYER
