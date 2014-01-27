@@ -30,7 +30,6 @@ class VIDEO{
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->video_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -41,7 +40,6 @@ class VIDEO{
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->video_cate_form("mod");
                 $this->ws_tpl_type=1;
                 break;

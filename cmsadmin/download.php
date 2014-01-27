@@ -69,7 +69,6 @@ class DOWNLOAD{
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->download_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -80,7 +79,6 @@ class DOWNLOAD{
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->download_form("mod");
                 $this->ws_tpl_type=1;
                 break;

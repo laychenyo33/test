@@ -18,7 +18,6 @@ class METATITLE{
                 $this->ws_tpl_file = "templates/ws-manage-meta-title-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_TABTITLE");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->meta_title_form();
                 $this->ws_tpl_type=1;
                 break;
@@ -32,7 +31,6 @@ class METATITLE{
                 $this->ws_tpl_file = "templates/ws-manage-meta-title-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_TABTITLE");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->meta_title_form();
                 $this->ws_tpl_type=1;
                 break;

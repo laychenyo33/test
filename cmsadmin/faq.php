@@ -68,7 +68,6 @@ class FAQ{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->faq_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -78,7 +77,6 @@ class FAQ{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->faq_form("mod");
                 $this->ws_tpl_type=1;
                 break;

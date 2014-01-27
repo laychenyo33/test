@@ -39,7 +39,6 @@ class GALLERY{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $tpl->newBlock("JS_JQ_UI");
                 $this->gallery_cate_form("add");
                 $this->ws_tpl_type=1;
@@ -50,7 +49,6 @@ class GALLERY{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $tpl->newBlock("JS_JQ_UI");
                 $this->gallery_cate_form("mod");
                 $this->ws_tpl_type=1;
@@ -84,7 +82,6 @@ class GALLERY{
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_TABTITLE");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->gallery_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -96,7 +93,6 @@ class GALLERY{
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_TABTITLE");
-                $tpl->newBlock("NEW_TINY_LIBS");
                 $this->gallery_form("mod");
                 $this->ws_tpl_type=1;
                 break;
