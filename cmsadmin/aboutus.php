@@ -213,7 +213,7 @@ class ABOUTUS{
         }        
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_AU_CONTENT" , $row["au_content"] );
+            $tpl->assign( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"]) );
         }
     }
 //關於我們--資料更新================================================================
