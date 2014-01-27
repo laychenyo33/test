@@ -139,13 +139,15 @@ class CART{
         $amount_arr = is_array($_REQUEST["amount"])?$_REQUEST["amount"]:(array)$_REQUEST["amount"];
         $p_id_arr = is_array($_REQUEST["p_id"])?$_REQUEST["p_id"]:(array)$_REQUEST["p_id"];
         foreach($p_id_arr as $k => $p_id){
-            $amount = $amount_arr[$k];
-            $_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"][$p_id]=1;
-            if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id])){
-                $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]=$amount;
-            }else{
-                $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]+$amount;
-            }            
+            if($p_id){
+                $amount = $amount_arr[$k];
+                $_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"][$p_id]=1;
+                if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id])){
+                    $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]=$amount;
+                }else{
+                    $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]+$amount;
+                }
+            }
         }
         if(!$via_ajax){
             $this->cart_list();
@@ -230,7 +232,9 @@ class CART{
         $pid_array = array();
         if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
             foreach($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"] as $key => $value){
-                $pid_array[]=$key;
+                if($key){
+                    $pid_array[]=$key;
+                }
             }
         }
         if(!empty($pid_array)){
