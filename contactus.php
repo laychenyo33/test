@@ -151,6 +151,7 @@ class CONTACTUS{
         if($cms_cfg["ws_module"]["ws_security"]==1 && $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["security_error"]==1){
             $tpl->assignGlobal("MSG_ERROR_MESSAGE",$TPLMSG['SECURITY_ERROR']);
         }
+        unset($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]);
     }
 //聯絡我們--資料更新================================================================
     function contactus_replace(){
