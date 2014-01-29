@@ -876,14 +876,14 @@ class MEMBER{
             require_once("./libs/libs-security-image.php");
             $si = new securityImage();  
             if($si->isValid()){
-                $sql="select m_name,m_account,m_password,m_email from ".$cms_cfg["tb_prefix"]."_member where m_account='".$_REQUEST["m_email"]."'";
+                $sql="select m_fname,m_lname,m_account,m_password,m_email from ".$cms_cfg["tb_prefix"]."_member where m_account='".$_REQUEST["m_email"]."'";
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
                 if ($rsnum > 0) {
                     //重設密碼
                     $row['m_password'] = $main->rand_str(17);
-                    $sql = "update ".$cms_cfg['tb_prefix']."_member set m_password=md5('".$db->quote($row['m_password'])."') where m_account='".$db->quote($row['m_email'])."'";
+                    $sql = "update ".$cms_cfg['tb_prefix']."_member set m_password='".$db->quote($row['m_password'])."' where m_account='".$db->quote($row['m_email'])."'";
                     $db->query($sql,true);
                     //寄出通知信
                     $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
