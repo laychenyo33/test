@@ -1204,10 +1204,12 @@ h2 {
 .gallery_list_pic{width:199px;height:126px;display:table-cell;text-align: center;vertical-align: middle;}
 .gallery_title{text-align:center;padding:2px 0}
 /*related*/
-#related_products{}
-#related_products .direction{display:inline-block;width:30px;height:180px;vertical-align: middle}
+#related_products{position:relative;}
+#related_products .direction{width:30px;height:180px;vertical-align: middle;position:absolute;top:0}
+#related_products .left{left:0}
+#related_products .right{right:0}
 #related_products .direction a{display:block;width:20;height:120px;padding:60px 5px 0 5px;text-decoration: none;}
-#related_products .container{display:inline-block;width:630px;height:180px;vertical-align: middle;overflow:hidden}
+#related_products .container{width:630px;height:180px;margin:0 auto;vertical-align: middle;overflow:hidden}
 #related_products .container .list02
 {	float:left; width:180px; height:180px; margin:0 15px}
 #related_products .container .list02-pto
