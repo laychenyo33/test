@@ -1041,7 +1041,7 @@ class MAINFUNC{
     function content_file_str_replace($content){
         global $cms_cfg;
         $content=preg_replace('%([-\w\.:]*/)*(upload_files/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_root']."$2", $content);
-        $content=preg_replace('%([-\w\.:]*/)*(tiny_mce/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_root']."$2", $content);
+        $content=preg_replace('%([-\w\.:]*/)*(tinymce/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_root']."$2", $content);
         $content=preg_replace('%([-\w\.:]*/)*(images/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['base_root']."$2", $content);
         return $content;
     }    
