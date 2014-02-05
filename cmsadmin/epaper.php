@@ -470,7 +470,7 @@ class EPAPER{
                 ));
             }
             //列出分類表單
-            $sql="SELECT mc.mc_id, mc_subject, sum(if( m_status,1,0) ) AS e_subtotal FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) GROUP BY mc.mc_id order by mc.mc_id";
+            $sql="SELECT mc.mc_id, mc_subject, sum(if( m_status & m_epaper_status,1,0) ) AS e_subtotal FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) GROUP BY mc.mc_id order by mc.mc_id";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             while($row = $db->fetch_array($selectrs,1)){
