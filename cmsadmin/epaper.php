@@ -174,7 +174,7 @@ class EPAPER{
                                   "TAG_SEARCH_FIELDS" => $sf->list_search_fields($_GET['st'], $_GET['sk']),
         ));
         //分類列表
-        $i=$page["start_serial"];
+        $i=$main->get_pagination_offset($cms_cfg["op_limit"]);
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "EPAPER_CATE_LIST" );
@@ -362,7 +362,7 @@ class EPAPER{
                     $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK2", "selected");
                     break;
             }
-            $i=$page["start_serial"];
+            $i=$main->get_pagination_offset($cms_cfg["op_limit"]);
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $i++;
                 $tpl->newBlock( "EPAPER_LIST" );
@@ -468,7 +468,7 @@ class EPAPER{
                 ));
             }
             //列出分類表單
-            $sql="SELECT mc.mc_id, mc_subject, sum(if( m_status,1,0) ) AS e_subtotal FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) GROUP BY mc.mc_id order by mc.mc_id";
+            $sql="SELECT mc.mc_id, mc_subject, sum(if( m_status & m_epaper_status,1,0) ) AS e_subtotal FROM ".$cms_cfg['tb_prefix']."_member AS m LEFT JOIN ".$cms_cfg['tb_prefix']."_member_cate AS mc ON FIND_IN_SET( mc.mc_id, m.mc_id ) GROUP BY mc.mc_id order by mc.mc_id";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             while($row = $db->fetch_array($selectrs,1)){
@@ -795,7 +795,7 @@ class EPAPER{
                                   "VALUE_TOTAL_BOX" => $rsnum,
         ));
         //名單列表
-        $i=$page["start_serial"];
+        $i=$main->get_pagination_offset($cms_cfg["op_limit"]);
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "EPAPER_ORDER_LIST" );
