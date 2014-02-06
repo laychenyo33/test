@@ -25,5 +25,24 @@ tinyMCE.init({
         paste_text_use_dialog : true,                  
         paste_force_cleanup_paste : false,        
         paste_remove_spans : false,               
-        paste_retain_style_properties : "margin, padding, width, height, font-size, font-weight, font-family, color, text-align, ul, ol, li, text-decoration, border, background, float, display"
+        paste_retain_style_properties : "margin, padding, width, height, font-size, font-weight, font-family, color, text-align, ul, ol, li, text-decoration, border, background, float, display",
+        template_replace_values: {
+            username : "Jack Black",
+            staffid : "991234",
+            mybb: function(e){
+                e.innerHTML = 'mybb';
+            }
+        },        
+        template_templates : [
+            {
+                title: "Editor Details",
+                src: "templates/editor_details.htm",
+                description: "Adds Editor Name and Staff ID"
+            },
+            {
+                title: "Timestamp",
+                src: "templates/time.htm",
+                description: "Adds an editing timestamp."
+            }
+        ]
 });     
