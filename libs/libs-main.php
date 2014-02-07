@@ -1810,11 +1810,11 @@ class MAINFUNC{
     }    
     //隨機產生密碼
     function rand_str($len=8){
-        $no_arr = array(34,39,44,46,96);
+        $no_arr = array(34,39,44,46,58,59,60,61,62,63,64,91,92,93,94,95,96);
         $str = "";
         for($i=1;$i<$len;$i++){
             do{
-                $c = rand(33,126);
+                $c = rand(48,122);
             }while(in_array($c,$no_arr));
             $str.=chr($c);
         }
