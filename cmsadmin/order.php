@@ -116,6 +116,9 @@ class ORDER{
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
         $func_str="order.php?func=o_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+        if(isset($_GET['o_status'])){
+            $func_str.="&o_status=".$_GET['o_status'];
+        }
         //分頁且重新組合包含limit的sql語法
         $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
