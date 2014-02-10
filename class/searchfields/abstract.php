@@ -47,6 +47,9 @@ class searchFields_abstract {
     
     function find_search_value_sql($and_str,$st,$sk){
         $sk = trim($sk);
+        if(is_array($and_str)){
+            $and_str = implode(" and ",$and_str);
+        }        
         if($sk){
             if($st=="all"){
                 $tmp = "";
@@ -92,7 +95,7 @@ class searchFields_abstract {
         $field = $fields[0]; //cu_modifydate
         $ts1 = mktime(0,0,0,$dateinfo['mon'],$dateinfo['mday'],$dateinfo['year']);
         $ts2 = mktime(0,0,0,$dateinfo['mon']+1,$dateinfo['mday'],$dateinfo['year']);      
-        $tmp = "(".$field . " between '".date("Y-m",$ts1)."' and '".date("Y-m",$ts2)."') ";
+        $tmp = "(".$field . " between '".date("Y-m-01",$ts1)."' and '".date("Y-m-01",$ts2)."') ";
         return $tmp;
     }
 }
