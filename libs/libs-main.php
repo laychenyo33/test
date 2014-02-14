@@ -1308,11 +1308,13 @@ class MAINFUNC{
                     if(!in_array($row['au_cate'],$had_au_cate)){
                         $menu_arr[$row['au_cate']]=array();
                         array_push($had_au_cate, $row['au_cate']);
+                        $i=1;
                     }
                     $menu_arr[$row['au_cate']][]=array(
                         'name'=>$row['au_subject'],
-                        'link'=> $cms_cfg['base_root'].$row['au_cate'].'/'.$row['au_seo_filename'].".html",
+                        'link'=> ($i==1)?$cms_cfg['base_root'].$row['au_cate'].".htm" : $cms_cfg['base_root'].$row['au_cate'].'/'.$row['au_seo_filename'].".html",
                     );
+                    $i++;
                 }
             }
             ////產品
