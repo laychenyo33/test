@@ -165,12 +165,15 @@ class ORDER{
             $cu_id=$_REQUEST["id"];
         }
         if(!empty($cu_id)){
+            foreach($cu_id as $k=>$v){
+                $cu_id[$k] = sprintf("'%s'",$v);
+            }
             $cu_id_str = implode(",",$cu_id);
             //刪除勾選的訂單
 //            $sql="delete from ".$cms_cfg['tb_prefix']."_order where o_id in (".$cu_id_str.")";
 //            $rs = $db->query($sql);
 //            $sql="delete from ".$cms_cfg['tb_prefix']."_order_items where o_id in (".$cu_id_str.")";
-            $sql = "UPDATE ".$db->prefix("order")." AS o INNER JOIN ".$db->prefix("order_items")." AS oi ON o.o_id = oi.o_id SET o.del = '1' AND oi.del = '1' WHERE o.o_id in(".$cu_id_str.")";
+            $sql = "UPDATE ".$db->prefix("order")." AS o INNER JOIN ".$db->prefix("order_items")." AS oi ON o.o_id = oi.o_id SET o.del = '1' , oi.del = '1' WHERE o.o_id in(".$cu_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
