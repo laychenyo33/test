@@ -81,7 +81,7 @@ if($db->numRows($res)){
                            "VALUE_P_SMALL_IMG_W" => $dimension['width'], 
                            "VALUE_P_SMALL_IMG_H" => $dimension['height'], 
                            "VALUE_P_NAME"      => $p_row['p_name'], 
-                           "VALUE_P_DESC"      => $p_row['p_desc'], 
+                           "VALUE_P_DESC"      => $main->get_short_str($p_row['p_desc'],$cms_cfg['epaper_product_desc_limit'],$p_link), 
                         ));
                     }
                 }
