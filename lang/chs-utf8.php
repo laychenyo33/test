@@ -338,4 +338,5 @@ $TPLMSG['ORDER_INVOICE_INFO'] = "发票资讯";
 $TPLMSG['DELIVER_STR'] = "配送日期及时段";
 $TPLMSG['VAT_NUMBER'] = "统一编号";
 $TPLMSG['PRODUCT_PRICE'] = "价格";
+$TPLMSG['READ_MORE'] = "详全文";
 ?>

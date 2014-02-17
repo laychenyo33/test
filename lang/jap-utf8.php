@@ -335,4 +335,5 @@ $TPLMSG['ORDER_INVOICE_INFO'] = "發票資訊";
 $TPLMSG['DELIVER_STR'] = "配送日期及時段";
 $TPLMSG['VAT_NUMBER'] = "統一編號";
 $TPLMSG['PRODUCT_PRICE'] = "價格";
+$TPLMSG['READ_MORE'] = "More";
 ?>
