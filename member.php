@@ -36,6 +36,9 @@ class MEMBER{
                 $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_FORMVALID");
+                if(!isset($_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER'])){
+                    $_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER'] = time();
+                }                
                 $tpl->newBlock("JQUERY_UI_SCRIPT");
                 $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->member_form("add");
@@ -268,6 +271,9 @@ class MEMBER{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         switch ($_REQUEST["action_mode"]){
             case "add":
+                if(!isset($_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER']) || ($_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER']+20)>time()){
+                    trigger_error("invalid join member",E_USER_ERROR);
+                }                
                 $max_sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member",'m');
                 $m_status = ($cms_cfg["ws_module"]['ws_member_join_validation'])?0:1;
                 $sql="
@@ -350,6 +356,7 @@ class MEMBER{
             $db_msg = $db->report();          
             if ( $db_msg == "" ) {
                 if($_REQUEST["action_mode"]=="add"){
+                    unset($_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER']);
                     //已有購物或詢價時直接登入
                     if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"]=$db->get_insert_id();
