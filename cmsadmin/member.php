@@ -29,12 +29,14 @@ class MEMBER{
     protected $member_download;
     protected $download_on;
     protected $member_validation;
+    protected $contact_s_style;
     function MEMBER(){
         global $db,$cms_cfg,$tpl;
         $this->showDiscount = $cms_cfg['ws_module']['ws_member_show_discount'];
         $this->member_download = $cms_cfg['ws_module']['ws_member_download'];
         $this->download_on = $cms_cfg['ws_module']['ws_member_download_on'];
         $this->member_validation = $cms_cfg['ws_module']['ws_member_join_validation'];
+        $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
             case "m_import":
                 if($cms_cfg['ws_module']['ws_member_manipulate']!=1){
@@ -206,6 +208,7 @@ class MEMBER{
         $tpl->assignInclude( "LEFT", $cms_cfg['manage_left_tpl']);
         $tpl->assignInclude( "TOP_MENU", $cms_cfg['manage_top_menu_tpl']);
         $tpl->assignInclude( "MAIN", $ws_tpl_file);
+        $tpl->assignInclude( "CONTACT_S", "../templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版             
         $tpl->prepare();
         $tpl->assignGlobal("TAG_".$this->current_class."_CURRENT","class=\"current\"");
         $tpl->assignGlobal("CSS_BLOCK_MEMBER","style=\"display:block\"");
@@ -461,7 +464,7 @@ class MEMBER{
                 $tpl->assign( array(
                     "VALUE_M_ID"  => $row["m_id"],
                     "VALUE_M_SORT"  => $row["m_sort"],
-                    "VALUE_M_NAME" => $row["m_fname"]."&nbsp;".$row['m_lname'],
+                    "VALUE_M_NAME" => sprintf($TPLMSG['MEMBER_NAME_SET_'.$this->contact_s_style],$row["m_fname"],$row['m_lname']),
                     "VALUE_M_SERIAL" => $i,
                     "VALUE_MC_SUBJECT"  => $this->get_mc_name($row['mc_id']),
                     "VALUE_STATUS_IMG" => ($row["m_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
@@ -477,6 +480,8 @@ class MEMBER{
         //欄位名稱
         $cate=(trim($_REQUEST["mc_id"])!="")?1:0;
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
+                                  "MSG_MEMBER_FNAME"  => $TPLMSG['MEMBER_FNAME'],
+                                  "MSG_MEMBER_LNAME"  => $TPLMSG['MEMBER_LNAME'],            
                                   "VALUE_M_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_member","m","mc_id",$_REQUEST["mc_id"],$cate),
                                   "STR_M_STATUS_CK2" => "",
                                   "STR_M_STATUS_CK1" => "checked",
@@ -543,6 +548,7 @@ class MEMBER{
         if($cms_cfg["ws_module"]["ws_member_country"]==1) {
             $main->country_select($row["m_country"]);
         }        
+        $main->contact_s_select($row['m_contact_s'],$zone="MEMBER");        
         $this->member_cate_select($row['mc_id']);
         if($this->member_download && $this->download_on=="member"){
             $this->download_of_member($row['m_id']);
@@ -571,6 +577,8 @@ class MEMBER{
                         m_lname,
                         m_birthday,
                         m_sex,
+                        m_city,
+                        m_area,                        
                         m_zip,
                         m_address,
                         m_tel,
@@ -592,6 +600,8 @@ class MEMBER{
                         '".$_REQUEST["m_lname"]."',
                         '".$_REQUEST["m_birthday"]."',
                         '".$_REQUEST["m_sex"]."',
+                        '".$_REQUEST["m_city"]."',
+                        '".$_REQUEST["m_area"]."',                            
                         '".$_REQUEST["m_zip"]."',
                         '".$_REQUEST["m_address"]."',
                         '".$_REQUEST["m_tel"]."',
@@ -616,6 +626,8 @@ class MEMBER{
                         m_lname='".$_REQUEST["m_lname"]."',
                         m_birthday='".$_REQUEST["m_birthday"]."',
                         m_sex='".$_REQUEST["m_sex"]."',
+                        m_city='".$_REQUEST["m_city"]."',
+                        m_area='".$_REQUEST["m_area"]."',                            
                         m_zip='".$_REQUEST["m_zip"]."',
                         m_address='".$_REQUEST["m_address"]."',
                         m_tel='".$_REQUEST["m_tel"]."',

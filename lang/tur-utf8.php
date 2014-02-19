@@ -140,6 +140,9 @@ $TPLMSG['MEMBER_FORGET_ACCOUNT']="Hesap";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="Parola";
 $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "E-posta doğrulamak için geri siteye aşağıdaki linke tıklayın ve hesabınızı aktif hale getirin: <br/>";
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Sizin Kayıtlı hesap bildirim mektubu size sevk edilecektir sonra kabul edilmesi, birisi denetim olacak, lütfen sabırlı olun!";
+$TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
+$TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Ürünler";
 $TPLMSG['PRODUCT'] = "Ürünler";
@@ -331,4 +334,5 @@ $TPLMSG['ORDER_INVOICE_INFO'] = "發票資訊";
 $TPLMSG['DELIVER_STR'] = "配送日期及時段";
 $TPLMSG['VAT_NUMBER'] = "統一編號";
 $TPLMSG['PRODUCT_PRICE'] = "價格";
+$TPLMSG['READ_MORE'] = "More";
 ?>
