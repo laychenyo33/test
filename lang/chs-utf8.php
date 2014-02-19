@@ -141,6 +141,8 @@ $TPLMSG['MEMBER_FORGET_ACCOUNT']="帐号";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="密码";
 $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "请点击以下连结回到网站验证E-mail并启用您的帐号:<br/>";
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "您注册的帐号将会有专人审核，待通过之后会寄发通知信给您，请耐心等候!";
+$TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
+$TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "产品介绍";

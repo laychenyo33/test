@@ -140,6 +140,9 @@ $TPLMSG['MEMBER_FORGET_ACCOUNT']="conta";
 $TPLMSG['MEMBER_FORGET_PASSWORD']="senha";
 $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "Por favor, clique no seguinte link para o site para verificar e-mail e ativar a sua conta: <br/>";
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Sua conta registrado terá alguém de auditoria, a ser adotado após a carta de notificação será enviada para você, por favor, seja paciente!";
+$TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
+$TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "produtos";
 $TPLMSG['PRODUCT'] = "produtos";

@@ -466,7 +466,7 @@ class MEMBER{
                 $tpl->assign( array(
                     "VALUE_M_ID"  => $row["m_id"],
                     "VALUE_M_SORT"  => $row["m_sort"],
-                    "VALUE_M_NAME" => $row["m_fname"]."&nbsp;".$row['m_lname'],
+                    "VALUE_M_NAME" => sprintf($TPLMSG['MEMBER_NAME_SET_'.$this->contact_s_style],$row["m_fname"],$row['m_lname']),
                     "VALUE_M_SERIAL" => $i,
                     "VALUE_MC_SUBJECT"  => $this->get_mc_name($row['mc_id']),
                     "VALUE_STATUS_IMG" => ($row["m_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],

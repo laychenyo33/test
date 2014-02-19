@@ -144,6 +144,8 @@ $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "請點擊以下連結回到網站驗證
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "您註冊的帳號將會有專人審核，待通過之後會寄發通知信給您，請耐心等候!";
 $TPLMSG['MEMBER_APPROV_NOTIFICATION_SUBJECT'] = "您在 %s 的帳號已啟用";
 $TPLMSG['MEMBER_APPROV_NOTIFICATION_CONTENT'] = "您在 %s 的帳號 %s 已啟用，歡迎回到網站上登入";
+$TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
+$TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "產品介紹";
