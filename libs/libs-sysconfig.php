@@ -27,4 +27,6 @@ include_once("conf/default-items.php");
 require "class/autoloader.php";
 $autoloader = new autoloader();
 spl_autoload_register(array($autoloader,"load"));
+//session handler
+$sessHandler = Model_Session::factory($cms_cfg['sess_cookie_name']);
 ?>
