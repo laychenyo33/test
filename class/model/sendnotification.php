@@ -22,7 +22,7 @@ class Model_Sendnotification {
     static public function fill($id){
         $container = self::$_handler->{self::$sess_id};
         $container[$id] = time();
-        self::$_handler->{self::$sess_id} = array_merge(self::$_handler->{self::$sess_id},$container);
+        self::$_handler->{self::$sess_id} = array_merge((array)self::$_handler->{self::$sess_id},$container);
     }
     static public function had($id){
         $container = self::$_handler->{self::$sess_id};
