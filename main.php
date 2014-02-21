@@ -155,8 +155,8 @@ class MAINDEFAULT{
     }
     //熱門產品
     function hot_products_list(){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
-        $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,p.p_special_price from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_type in ('2','3','6','7') and p.p_status='1' order by rand() limit 0,4";
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,p.p_special_price from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_type in ('2','3','6','7') and p.p_status='1' order by p_hot_sort ".$cms_cfg['sort_pos']." limit 0,4";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum > 0){
