@@ -2024,7 +2024,7 @@ class PRODUCTS{
                     break;
             }
             //產品列表
-            $i=$page["start_serial"];
+            $i=$main->get_pagination_offset($this->op_limit);
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $i++;
                 $tpl->newBlock( "PRODUCTS_LIST" );
