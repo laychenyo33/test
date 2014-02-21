@@ -1406,7 +1406,7 @@ class PRODUCTS{
         if(!empty($_REQUEST["sort_value"]) && !empty($ws_table)){
             if($ws_table=="pc"){
                 $table_name=$cms_cfg['tb_prefix']."_products_cate";
-            }elseif($ws_table=="p" || $ws_table=="p_new"){
+            }elseif($ws_table=="p" || $ws_table=="p_new" || $ws_table=="p_hot"){
                 $table_name=$cms_cfg['tb_prefix']."_products";
             }elseif($ws_table=="pa"){
                 $table_name=$cms_cfg['tb_prefix']."_products_application";
@@ -1414,7 +1414,7 @@ class PRODUCTS{
                 $table_name=$cms_cfg['tb_prefix']."_products_ca";
             }
             foreach($_REQUEST["id"] as $key => $value){
-                if($ws_table == "p_new") {
+                if($ws_table == "p_new" || $ws_table == "p_hot") {
                     $sql="update ".$table_name." set ".$ws_table."_sort=".$_REQUEST["sort_value"][$value]." where  p_id='".$value."'";
                 }else{
                     $sql="update ".$table_name." set ".$ws_table."_sort=".$_REQUEST["sort_value"][$value]." where ".$ws_table."_id='".$value."'";
