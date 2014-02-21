@@ -150,15 +150,12 @@ class PRODUCTS{
                 $row = $db->fetch_array($selectrs,1);
                 $this->layer_link($row);
                 $seo_H1=$row["pc_name"];//預設h1
-                //第一頁才顯示設定的meta,第二頁以後抓分類名稱或產品名稱做為meta title
-                if(empty($_REQUEST["nowp"])){
-                    $meta_array=array("meta_title"=>$row["pc_seo_title"],
-                                      "meta_keyword"=>$row["pc_seo_keyword"],
-                                      "meta_description"=>$row["pc_seo_description"],
-                    );
-                    $seo_H1=(trim($row["pc_seo_h1"])!="")?$row["pc_seo_h1"]:$row["pc_name"];
-                    $main->header_footer($meta_array,$seo_H1);
-                }
+                $meta_array=array("meta_title"=>$row["pc_seo_title"],
+                                  "meta_keyword"=>$row["pc_seo_keyword"],
+                                  "meta_description"=>$row["pc_seo_description"],
+                );
+                $seo_H1=(trim($row["pc_seo_h1"])!="")?$row["pc_seo_h1"]:$row["pc_name"];
+                $main->header_footer($meta_array,$seo_H1);
                 if(!empty($row["pc_id"])){
                     $this->parent=$row["pc_id"];
                 }
@@ -350,13 +347,6 @@ class PRODUCTS{
             $k=$page["start_serial"];
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $p_link = $this->get_link($row,true);
-                //收集第二頁以後pc_name 做為 meta title
-                if(!empty($_REQUEST["nowp"]) && $j<3){
-                    $meta_title .=$row["p_name"];
-                }
-                if(!empty($_REQUEST["nowp"]) && $j<6){
-                    $meta_description .=$row["p_name"];
-                }
                 $j++;
                 $k++;
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
@@ -418,15 +408,6 @@ class PRODUCTS{
                         $tpl->assign("TAG_PRODUCTS_TRTD","</tr><tr>");
                     }
                 }
-            }
-            //顯示第二頁以後的meta title
-            if(!empty($_REQUEST["nowp"])){
-                $meta_array=array("meta_title"=>$meta_title,
-                                  "meta_keyword"=>$meta_title,
-                                  "meta_description"=>$meta_description,
-                );
-                //$seo_H1  預設抓分類名稱
-                $main->header_footer($meta_array,$seo_H1);
             }
         }
     }
