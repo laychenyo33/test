@@ -1971,7 +1971,7 @@ class PRODUCTS{
             $this->goto_target_page($goto_url);
         }else{
             //產品管理列表
-            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where  p_type in ('1','3','5','7')";
+            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where  (p_type & 1)=1";
             //附加條件
             $and_str="";
             if(!empty($_REQUEST["pc_parent"])){
