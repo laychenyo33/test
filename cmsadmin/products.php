@@ -212,7 +212,7 @@ class PRODUCTS{
                     $this->ws_tpl_type=1;
                 }
                 break;
-            case "new_p_list"://新產品管理列表
+            case "p_new_list"://新產品管理列表
                 $this->current_class="PN";
                 $this->ws_tpl_file = "templates/ws-manage-newproducts-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -900,41 +900,16 @@ class PRODUCTS{
             if ($rsnum > 0) {
                 if($cms_cfg["ws_module"]["ws_new_product"]){
                     //product type: 1-新產品 2-熱門產品 4-促銷產品
-                    switch($row["p_type"]){
-                        case 1 :
-                            $tpl->assignGlobal("STR_P_TYPE_CK1","checked");
-                            $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","");
-                            break;
-                        case 2 :
-                            $tpl->assignGlobal("STR_P_TYPE_CK2","checked");
-                            $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","none");
-                            break;
-                        case 3 :
-                            $tpl->assignGlobal("STR_P_TYPE_CK1","checked");
-                            $tpl->assignGlobal("STR_P_TYPE_CK2","checked");
-                            $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","");
-                            break;
-                        case 4 :
-                            $tpl->assignGlobal("STR_P_TYPE_CK3","checked");
-                            $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","none");
-                            break;
-                        case 5 :
-                            $tpl->assignGlobal("STR_P_TYPE_CK1","checked");
-                            $tpl->assignGlobal("STR_P_TYPE_CK3","checked");
-                            $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","");
-                            break;
-                        case 6 :
-                            $tpl->assignGlobal("STR_P_TYPE_CK2","checked");
-                            $tpl->assignGlobal("STR_P_TYPE_CK3","checked");
-                            $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","none");
-                            break;
-                        case 7 :
-                            $tpl->assignGlobal("STR_P_TYPE_CK1","checked");
-                            $tpl->assignGlobal("STR_P_TYPE_CK2","checked");
-                            $tpl->assignGlobal("STR_P_TYPE_CK3","checked");
-                            $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","");
-                            break;
-                    }
+                    if(($row["p_type"] & 1)==1){
+                        $tpl->assignGlobal("STR_P_TYPE_CK1","checked");
+                        $tpl->assignGlobal("STR_NEW_SORT_DISPLAY","");
+                    }    
+                    if(($row["p_type"] & 2)==2){
+                        $tpl->assignGlobal("STR_P_TYPE_CK2","checked");
+                    }    
+                    if(($row["p_type"] & 4)==4){
+                        $tpl->assignGlobal("STR_P_TYPE_CK3","checked");
+                    }    
                 }
                 $tpl->assignGlobal( array("NOW_P_ID"  => $row["p_id"],
                                           "NOW_PC_ID"  => $row["pc_id"],
@@ -1965,7 +1940,7 @@ class PRODUCTS{
             $this->goto_target_page($goto_url);
         }else{
             //產品管理列表
-            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where  p_type in ('1','3','5','7')";
+            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where  (p_type & 1)=1";
             //附加條件
             $and_str="";
             if(!empty($_REQUEST["pc_parent"])){
@@ -1991,7 +1966,7 @@ class PRODUCTS{
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
             //取得分頁連結
-            $func_str="products.php?func=new_p_list&pc_parent=".$this->parent."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+            $func_str="products.php?func=p_new_list&pc_parent=".$this->parent."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
             //分頁且重新組合包含limit的sql語法
             $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
@@ -2018,7 +1993,7 @@ class PRODUCTS{
                     break;
             }
             //產品列表
-            $i=$page["start_serial"];
+            $i=$main->get_pagination_offset($this->op_limit);
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $i++;
                 $tpl->newBlock( "PRODUCTS_LIST" );
