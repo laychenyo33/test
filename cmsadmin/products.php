@@ -1900,7 +1900,7 @@ class PRODUCTS{
             case "del":
                 if($_REQUEST["ws_table"]=="pc"){
                     $this->products_cate_del();
-                }elseif($_REQUEST["ws_table"]=="p" || $_REQUEST["ws_table"]=="p_new"){
+                }elseif($_REQUEST["ws_table"]=="p" || $_REQUEST["ws_table"]=="p_new" || $_REQUEST["ws_table"]=="p_hot" ){
                     $this->products_del();
                 }elseif($_REQUEST["ws_table"]=="pa"){
                     $this->products_application_del();
