@@ -2061,7 +2061,7 @@ class PRODUCTS{
             if($_REQUEST["st"]=="p_desc"){
                 $and_str .= " and p.p_desc like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc ";
+            $sql .= $and_str." order by p.p_hot_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -2102,7 +2102,7 @@ class PRODUCTS{
                 }
                 $tpl->assign( array("VALUE_PC_ID"  => $row["p_id"],
                                     "VALUE_P_ID"  => $row["p_id"],
-                                    "VALUE_P_SORT"  => $row["p_sort"],
+                                    "VALUE_P_SORT"  => $row["p_hot_sort"],
                                     "VALUE_P_NAME" => $row["p_name"],
                                     "VALUE_P_SERIAL" => $i,
                                     "VALUE_PC_NAME"  => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
