@@ -875,6 +875,7 @@ class PRODUCTS{
                                   "STR_P_CUSTOM_STATUS_CK0" => "checked",
                                   "STR_P_CUSTOM_STATUS_DISPLAY" => "none",
                                   "STR_NEW_SORT_DISPLAY" => "none",
+                                  "STR_HOT_SORT_DISPLAY" => "none",
                                   "VALUE_ACTION_MODE" => $action_mode
         ));		
         // 無新產品不顯示產品類型欄位
@@ -921,6 +922,7 @@ class PRODUCTS{
                     }    
                     if(($row["p_type"] & 2)==2){
                         $tpl->assignGlobal("STR_P_TYPE_CK2","checked");
+                        $tpl->assignGlobal("STR_HOT_SORT_DISPLAY","");
                     }    
                     if(($row["p_type"] & 4)==4){
                         $tpl->assignGlobal("STR_P_TYPE_CK3","checked");
@@ -930,6 +932,7 @@ class PRODUCTS{
                                           "NOW_PC_ID"  => $row["pc_id"],
                                           "VALUE_P_SORT"  => $row["p_sort"],
                                           "VALUE_NEW_P_SORT" => $row["p_new_sort"],
+                                          "VALUE_HOT_P_SORT" => $row["p_hot_sort"],
                                           "VALUE_P_NAME" => $row["p_name"],
                                           "VALUE_P_NAME_ALIAS" => $row["p_name_alias"],
                                           "VALUE_P_CUSTOM" => $row["p_custom"],
