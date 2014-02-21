@@ -218,7 +218,7 @@ class PRODUCTS{
                     $this->ws_tpl_type=1;
                 }
                 break;
-            case "new_p_list"://新產品管理列表
+            case "p_new_list"://新產品管理列表
                 $this->current_class="PN";
                 $this->ws_tpl_file = "templates/ws-manage-newproducts-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -1997,7 +1997,7 @@ class PRODUCTS{
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
             //取得分頁連結
-            $func_str="products.php?func=new_p_list&pc_parent=".$this->parent."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+            $func_str="products.php?func=p_new_list&pc_parent=".$this->parent."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
             //分頁且重新組合包含limit的sql語法
             $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
