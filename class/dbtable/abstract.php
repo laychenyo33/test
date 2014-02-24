@@ -174,7 +174,7 @@ abstract class Dbtable_Abstract {
     }
     //由主鍵刪除
     public function delete($pk){
-        $this->deleteByCon(sprintf("`%s`='%d'",$this->pk,$pk),1);
+        $this->deleteByCon(sprintf("`%s`='%s'",$this->pk,$pk),1);
 }
     //由指定條件刪除
     public function deleteByCon($con,$limit=null){
