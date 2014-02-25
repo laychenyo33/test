@@ -9,6 +9,7 @@ class CONTACTUS{
         $this->security_mode = 1;//表單安全驗證模式:0=>math_security,1=>security_zone
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         $this->contact_inquiry = $cms_cfg['ws_module']['ws_contactus_inquiry'];
+        $this->form_style = $cms_cfg['ws_module']['ws_contactus_form_style'];
         switch($_REQUEST["func"]){
             case "cu_add"://聯絡我們新增
                 $this->ws_tpl_file = "templates/ws-contactus-form-tpl.html";
@@ -25,7 +26,7 @@ class CONTACTUS{
                 $this->ws_tpl_type=0;
                 break;
             default:    //聯絡我們列表
-                $this->ws_tpl_file = "templates/ws-contactus-form-tpl.html";
+                $this->ws_tpl_file = "templates/ws-contactus-form-style".$this->form_style."-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_FORMVALID");
                 $this->contactus_form();
