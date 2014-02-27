@@ -97,7 +97,11 @@ class ABOUTUS{
     function get_link($row){
         global $cms_cfg;
         if($this->ws_seo==1 ){
-            $cate_link=$cms_cfg["base_root"].$this->au_cate."/".$row["au_seo_filename"].".html";
+            if($row["au_seo_filename"]){
+                $cate_link=$cms_cfg["base_root"].$this->au_cate."/".$row["au_seo_filename"].".html";
+            }else{
+                $cate_link=$cms_cfg["base_root"].$this->au_cate."-".$row["au_id"].".html";
+            }
         }else{
             if($cms_cfg["ws_module"]['ws_aboutus_au_cate']){
                 $cate_link=$cms_cfg["base_root"]."aboutus.php?au_cate=".$row['au_cate']."&au_id=".$row["au_id"];
