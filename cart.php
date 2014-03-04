@@ -61,6 +61,9 @@ class CART{
                 $this->cart_del();
                 $this->ws_tpl_type=1;
                 break;
+            case "c_full_del"://清空購物車
+                $this->cart_full_del($_POST['via_ajax']);
+                break;
             case "c_finish"://結帳
                 if($_POST['shipment_type']){
                     $_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"] = $_POST['shipment_type'];
@@ -394,6 +397,15 @@ class CART{
         if(count($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
             $this->cart_list();
         }else{
+            header("location:products.htm");
+            die();
+        }
+    }  
+    function cart_full_del($via_ajax){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
+        unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
+        if(!$via_ajax){
             header("location:products.htm");
             die();
         }
