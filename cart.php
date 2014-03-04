@@ -61,6 +61,9 @@ class CART{
                 $this->cart_del();
                 $this->ws_tpl_type=1;
                 break;
+            case "c_full_del"://清空購物車
+                $this->cart_full_del($_POST['via_ajax']);
+                break;
             case "c_finish"://結帳
                 if($_POST['shipment_type']){
                     $_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"] = $_POST['shipment_type'];
@@ -140,7 +143,7 @@ class CART{
         $p_id_arr = is_array($_REQUEST["p_id"])?$_REQUEST["p_id"]:(array)$_REQUEST["p_id"];
         foreach($p_id_arr as $k => $p_id){
             if($p_id){
-                $amount = $amount_arr[$k];
+                $amount = $amount_arr[$k]?$amount_arr[$k]:1;
                 $_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"][$p_id]=1;
                 if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id])){
                     $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]=$amount;
@@ -394,6 +397,15 @@ class CART{
         if(count($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
             $this->cart_list();
         }else{
+            header("location:products.htm");
+            die();
+        }
+    }  
+    function cart_full_del($via_ajax){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
+        unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
+        if(!$via_ajax){
             header("location:products.htm");
             die();
         }
