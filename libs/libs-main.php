@@ -1420,7 +1420,15 @@ class MAINFUNC{
     
     function get_short_str($str,$len,$link=""){
         global $TPLMSG;
-        return (mb_strlen($str,"utf-8")<=$len)?$str:mb_substr($str, 0, $len-3, "utf-8")."...".($link?$this->mk_link($TPLMSG['READ_MORE'], $link):"");
+        if(mb_strlen($str,"utf-8")<=$len){
+            return $str;
+        }else{
+            $truncate = $this->truncate($str, $len);
+            if($link){
+                $truncate .=$this->mk_link($TPLMSG['READ_MORE'],$link);
+            }
+            return $truncate;
+        }
     }    
     //等比圖輸出
     function resize_dimensions($goal_width,$goal_height,$width,$height) {
