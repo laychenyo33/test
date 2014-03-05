@@ -603,7 +603,7 @@ class PRODUCTS{
                         if(trim($ck_str)!=""){
                             $tmp = array(
                                 'title' => $row["p_info_field".$j."_title"],
-                                'data'  => $row["p_info_field".$j]
+                                'data'  => $main->content_file_str_replace($row["p_info_field".$j])
                             );
                             array_push($domtabData, $tmp);                       
                         }                    
