@@ -50,7 +50,7 @@ class searchFields_abstract {
         if(is_array($and_str)){
             $and_str = implode(" and ",$and_str);
         }        
-        if($sk){
+        if(isset($sk)){
             if($st=="all"){
                 $tmp = "";
                 foreach($this->search_fields as $key=>$field){
