@@ -419,6 +419,8 @@ class CART{
         }
         if(!$via_ajax){
             $this->cart_list();
+        }else{
+            echo 1;
         }
     }
     function cart_finish(){
