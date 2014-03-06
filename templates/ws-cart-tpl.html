@@ -141,12 +141,24 @@
 <table width="90%" border="0" cellpadding="2" cellspacing="2">
 <tr>
     <td width="55%">&nbsp;</td>
-    <td width="15%"><input type="submit" value="{VALUE_MODIFY_AMOUNT}" /></td>
+    <td width="15%"><input type="button" id="btn_modify_amount" value="{VALUE_MODIFY_AMOUNT}" /></td>
     <td width="15%"><input type="button" name="back" onClick="javascript:cart_continue(this.form,'{LINK_CONTINUE}');" value="{MSG_CONTINUE_INQUIRY}" /></td>
     <td width="15%"><input type="button" name="finish" onclick="javascript:cart_finish(this.form);" value="{MSG_FINISH_INQUIRY}" /></td>
 </tr>
 </table>
 <input type="hidden" name="cart_type" value="inquiry">
+<script type="text/javascript">
+    jQuery(function($){
+           $("#btn_modify_amount").click(function(evt){
+               var serial_data = $("#formID").serialize();
+               serial_data += "&via_ajax=1";
+               $.post("cart.php?func=c_mod",serial_data,function(req){
+                  alert("已更新數量");
+                  location.reload();
+               });
+           });
+    });
+</script>
 <!-- END BLOCK : INQUIRY_CART_ZONE -->
 </form>
 </div>
