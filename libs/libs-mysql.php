@@ -249,11 +249,15 @@ class DB {
   }
   
   function quote($str){
-      return mysql_real_escape_string($str);
+      if(get_magic_quotes_gpc()){
+          return $str;
+      }else{
+          return mysql_real_escape_string($str);
+      }
   }
   function batch_quote(array $arr){
       foreach($arr as $k => $v){
-          $arr[$k] = "'".mysql_real_escape_string($v)."'";
+          $arr[$k] = "'".$this->quote($v)."'";
       }
       return $arr;
   }
