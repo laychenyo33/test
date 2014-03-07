@@ -157,7 +157,6 @@ class CONTACTUS{
 //聯絡我們--資料更新================================================================
     function contactus_replace(){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
-            $main->magic_gpc($_REQUEST);
             if($cms_cfg["ws_module"]["ws_security"]==1){
                 if($this->security_mode){
                     require_once("./libs/libs-security-image.php");

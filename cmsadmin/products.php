@@ -489,7 +489,6 @@ class PRODUCTS{
     //產品管理分類--資料更新
     function products_cate_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_REQUEST);
         if($this->seo){
             $add_field_str="pc_name_alias,
                             pc_seo_filename,
@@ -1037,7 +1036,6 @@ class PRODUCTS{
 //產品管理--資料更新================================================================
     function products_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_REQUEST);
         if($this->seo){
             $add_field_str="p_name_alias,
                             p_seo_filename,
@@ -2237,7 +2235,6 @@ class PRODUCTS{
     //應用領域儲存
     function products_application_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_REQUEST);
         if($this->seo){
             $seo_fields = array(
                 "pa_name_alias"=>array(
@@ -2503,7 +2500,6 @@ class PRODUCTS{
     //認證標章儲存
     function products_ca_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_REQUEST);
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="

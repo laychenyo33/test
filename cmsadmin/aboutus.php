@@ -217,7 +217,6 @@ class ABOUTUS{
 //關於我們--資料更新================================================================
     function aboutus_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_REQUEST);
         if($this->seo){
             $add_field_str="au_seo_title,
                             au_seo_keyword,

@@ -186,7 +186,6 @@ class GUESTBOOK{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
         }else{
-            $main->magic_gpc($_REQUEST);
             foreach($_REQUEST as $key => $value){
                 if(eregi("gb_",$key)){
                     $_SESSION["guestbook"]["$key"]=$value;
