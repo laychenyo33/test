@@ -98,7 +98,6 @@ class SERVICE{
     //資料更新
     function service_term_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_REQUEST);
         if($_REQUEST["action_mode"]=="term"){
             $sql="
                 update ".$cms_cfg['tb_prefix']."_service_term set

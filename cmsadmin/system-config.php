@@ -209,7 +209,6 @@ class SYSTEMCFG{
     //資料更新
     function system_config_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_REQUEST);
         $sql="
             update ".$cms_cfg['tb_prefix']."_system_config set
                 sc_status='".$db->quote($_REQUEST["sc_status"])."',
