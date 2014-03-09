@@ -16,6 +16,11 @@ abstract class Dbtable_Abstract {
     public function __construct(DB $db,$prefix) {
         $this->db = $db;
         $this->prefix = $prefix;
+        if(!$this->table){
+            throw new Exception("no table name assign!");
+        }else{
+            $this->post_cols = $this->db->list_fields($this->tablename());
+        }
     }
     
     public function __get($name) {
