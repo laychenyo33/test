@@ -36,13 +36,13 @@
                 </div>
               </div>
             </div>
-        </div>
-        <div id="ifocus_btn">
-          <ul>
-              <!-- START BLOCK : SMALL_IMG_LIST -->
-              <li class="{TAG_CURRENT}"><div class="wrapper"><img src="{VALUE_P_SMALL_IMG}" width="{VALUE_P_SMALL_IMG_W}" height="{VALUE_P_SMALL_IMG_H}" border="0" /></div></li>
-              <!-- END BLOCK : SMALL_IMG_LIST -->
-          </ul>
+			<div id="ifocus_btn">
+			  <ul>
+				  <!-- START BLOCK : SMALL_IMG_LIST -->
+				  <li class="{TAG_CURRENT}"><div class="wrapper"><img src="{VALUE_P_SMALL_IMG}" width="{VALUE_P_SMALL_IMG_W}" height="{VALUE_P_SMALL_IMG_H}" border="0" /></div></li>
+				  <!-- END BLOCK : SMALL_IMG_LIST -->
+			  </ul>
+			</div>
         </div>
         <!-- END BLOCK : BIG_IMG_MUTI -->
 
@@ -73,8 +73,11 @@
             <!-- START BLOCK : SHOW_DISCOUNT -->
             <div>{MSG_PRODUCT_DISCOUNT_PRICE}:<span class="red">{VALUE_P_DISCOUNT_PRICE}</span></div>
             <!-- END BLOCK : SHOW_DISCOUNT -->
+			<div class="btn01">
+				<div class="btn02"><a href="javascript:document.myform.submit();">Inquiry</a></div>
+				<div class="btn02"><a href="javascript:addBookmarkForBrowser(document.title,document.URL);">Favorite</a></div>
+			</div>
 
-            <input type="image" src="{TAG_THEME_PATH}{TAG_LANG}_inquire.jpg" border="0" />&nbsp;<a href="#" onClick="javascript:addBookmarkForBrowser(document.title,document.URL);"><img src="{TAG_THEME_PATH}{TAG_LANG}_favorite.jpg"  border="0" /></a>
             <!-- START BLOCK : ATTACH_FILE1 -->
             <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
             <!-- END BLOCK : ATTACH_FILE1 -->

@@ -1,71 +1,72 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!-- INCLUDE BLOCK : HEADER -->
 </head>
 <body {TAG_MOUSE_DISABLE}>
-<div id="container">
-	<div id="logo"><img src="{TAG_THEME_PATH}logo.gif"></div>
-    <div id="language_bg">
-    	<ul>
-        	<li><a href="{TAG_ROOT_PATH}aboutus.htm">English</a></li>
-            <li>│</li>
-            <li><a href="/cht/aboutus.htm">中文</a></li>
-        </ul>
-    </div>
-    
-    <div id="menu">
-    	<ul>
-        	<li><a href="{TAG_ROOT_PATH}">Home</a></li>
-        	<li><a href="{TAG_ROOT_PATH}sitemap.htm">site Map</a></li>
-            <li><a href="{TAG_ROOT_PATH}contactus.htm">Contact Us</a></li>
-            <li><a href="{TAG_ROOT_PATH}news.htm">News</a></li>
-            <li><a href="{TAG_ROOT_PATH}products.htm">Products</a></li>
-            <li><a href="{TAG_ROOT_PATH}download.htm">download</a></li>
-            <li><a href="{TAG_ROOT_PATH}member.php">member</a></li>
-            <li><a href="{TAG_ROOT_PATH}faq.htm">faq</a></li>
-            <li><a href="{TAG_ROOT_PATH}aboutus.htm">About Us</a></li>
-        </ul>
-    </div>
-    
-    <div id="banner" style="padding:0 0 0 0">
-    	<div id="category_bg">
-        	<div class="category">{TAG_CATE_TITLE}</div>
-        </div>
-        <div class="banner02"></div>
-	</div>
-    <div style="clear:both">
-    	<table cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" align="left">
-        	<tr>
-            	<td valign="top">
-                	<div id="left">
-                        <!-- INCLUDE BLOCK : LEFT -->
-                        <div><img src="{TAG_THEME_PATH}menupto.gif"></div>
-                    </div>
-                </td>
-                <td valign="top">
-                	<div id="center">
-                        <div id="h1bg">
-                            <h1>{TAG_MAIN_FUNC}&nbsp;&nbsp;{TAG_SUB_FUNC}</h1>
-                            <h2>{TAG_LAYER}</h2>
-                        </div>
-                        <div id="main">
-                        <!-- INCLUDE BLOCK : MAIN -->
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    
-    
-    
-    <div id="footer">
-	<div id="copyright01">No.23, Sec. 2, Sihai Rd., Beidou Township, Changhua County 521, Taiwan (R.O.C.)<br>
-    E-mail:<a href="mailto:info@coaxial-pump.com">info@coaxial-pump.com</a><br>
-Copyright © CHAN HONG METAL IND. CO., LTD.  All Rights Reserved.</div>
-	<div id="copyright02">Designed by <a href="http://www.allmarketing.com.tw/" target="_blank">Allmarketing</a></div>
+<div id="wrapper">
+
+<div id="top">
+<div id="logo"><a href="{TAG_ROOT_PATH}"><img src="{TAG_THEME_PATH}hit.gif" width="290" height="90" /></a></div>
+<div id="lang"><a href="{TAG_ROOT_PATH}sitemap.htm">Sitemap</a> <a href="{TAG_ROOT_PATH}">Home</a> <a href="#">English</a> <a href="#">中文</a></div>
+
+<div id="menu">
+<ul>
+<li><a href="{TAG_ROOT_PATH}aboutus.htm" >About Us</a></li>
+<li><a href="{TAG_ROOT_PATH}products.htm" >Products</a></li>
+<li><a href="{TAG_ROOT_PATH}new-products.htm" >New Products</a></li>
+<li><a href="{TAG_ROOT_PATH}news.htm" >News</a></li>   
+<li><a href="{TAG_ROOT_PATH}ebook/ebook1/" >Catalog</a></li>
+<li><a href="{TAG_ROOT_PATH}contactus.htm" >Contact Us</a></li>
+</ul>
 </div>
-    
+<!--end menu -->
 </div>
+
+<div id="banner" {PRODUCTS_BANNER_SHOW}></div>
+
+<div id="master">
+
+<div id="left">
+<div id="submenu-title"><span>{TAG_CATE_TITLE}</span></div>
+
+<!-- INCLUDE BLOCK : LEFT -->
+        
+</div>
+<!--end left -->
+
+<div id="right">
+<div id="header"><div id="path">{TAG_LAYER}</div><h1>{TAG_MAIN_FUNC}</h1></div>
+
+
+<div id="content">
+
+<!-- INCLUDE BLOCK : MAIN -->
+
+</div>
+<!--end content -->
+
+</div>
+<!--end right -->
+
+
+<div style="clear:both"></div>
+</div>
+<!--end master -->
+
+
+</div>
+<!--end wrapper -->
+
+<div id="footer">
+<div class="ftxt1">
+ADD: No. 82, 32nd Road, Taichung Industrial Park, Taichung, Taiwan  TEL: 886-4-23509600 FAX: 886-4-23509601 E-MAIL: <a href="mailto:sales@cuttway.com">sales@cuttway.com</a>
+<br /><span>Copyright &copy; 2012 CUTTWAY PRODUCTS CO., LTD.  All Rights Reserved.</span>
+</div>
+</div>
+
+
+
+
 </body>
 </html>
