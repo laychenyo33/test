@@ -37,7 +37,12 @@
 			    {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
 			]
 			*/
-                        convert_urls: false
+                        convert_urls: false,
+                        paste_auto_cleanup_on_paste : true,
+                        paste_postprocess : function(pl, o) {
+                            // remove &nbsp
+                            o.node.innerHTML = o.node.innerHTML.replace(/&nbsp;/ig, " ");
+                         }                        
 
 		});
 	}
