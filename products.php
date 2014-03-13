@@ -157,6 +157,7 @@ class PRODUCTS{
                                       "meta_description"=>$row["pc_seo_description"],
                     );
                     $seo_H1=(trim($row["pc_seo_h1"])!="")?$row["pc_seo_h1"]:$row["pc_name"];
+                    $sec_page_meta_title = $row["pc_seo_title"];
                     $main->header_footer($meta_array,$seo_H1);
                 }
                 if(!empty($row["pc_id"])){
@@ -421,7 +422,7 @@ class PRODUCTS{
             }
             //顯示第二頁以後的meta title
             if(!empty($_REQUEST["nowp"])){
-                $meta_array=array("meta_title"=>$meta_title,
+                $meta_array=array("meta_title"=>$sec_page_meta_title,
                                   "meta_keyword"=>$meta_title,
                                   "meta_description"=>$meta_description,
                 );
