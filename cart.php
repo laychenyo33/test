@@ -492,6 +492,7 @@ class CART{
         }
         //稱謂下拉選單
         $tpl->assignGlobal("TAG_CONTACT_WITH_S",$main->contact_s_select_r($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART"));
+        $tpl->assignGlobal("TAG_CONTACTR_WITH_S",$main->contact_s_select_r($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CARTR"));
         if(!empty($shopping)){
             //運送區域
             $tpl->assignGlobal("VALUE_SHIPMENT_TYPE",$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);

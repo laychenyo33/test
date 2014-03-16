@@ -467,7 +467,7 @@ h2 a{color:#4f4f4f;}
 	color:#F00;
 	font-weight:bold;
 }
-.contact1 input,select{
+.contact1 input,.contact1 select{
 	border:1px solid #999;
 	width: 180px;
 }
