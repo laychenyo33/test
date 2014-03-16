@@ -38,22 +38,22 @@
     <div>會員分類:{TAG_LOGIN_MEMBER_CATE}</div>
     <div>您好，{TAG_LOGIN_MEMBER_NAME}</div>
 </div>
-<div><a href="login.php?func=logout"><img src="images/ws-logout-{TAG_LANG}.jpg" width="43" height="21" border="0" /></a></div>
+<div><a href="{TAG_ROOT_PATH}login.php?func=logout"><img src="{TAG_THEME_PATH}ws-logout-{TAG_LANG}.jpg" width="43" height="21" border="0" /></a></div>
 </div>
 <div id="member_login_func">
 <p><a href="{TAG_ROOT_PATH}member.php?func=mm_list">會員訊息</a></p>    
-<p><a href="member.php?func=m_mod">{TAG_LOGIN_MEMBER_DATA}</a></p>
+<p><a href="{TAG_ROOT_PATH}member.php?func=m_mod">{TAG_LOGIN_MEMBER_DATA}</a></p>
 <!-- START BLOCK : CART_TYPE_ORDER -->
-<p><a href="member.php?func=m_zone&mzt=order">{TAG_LOGIN_MEMBER_ORDER}</a></p>
+<p><a href="{MEMBER_ORDER_PATH}">{TAG_LOGIN_MEMBER_ORDER}</a></p>
 <!-- END BLOCK : CART_TYPE_ORDER -->
 <!-- START BLOCK : CART_TYPE_INQUIRY -->
-<p><a href="member.php?func=m_zone&mzt=inquiry">{TAG_LOGIN_MEMBER_INQUIRY}</a></p>
+<p><a href="{TAG_ROOT_PATH}member.php?func=m_zone&mzt=inquiry">{TAG_LOGIN_MEMBER_INQUIRY}</a></p>
 <!-- END BLOCK : CART_TYPE_INQUIRY -->
 <!-- START BLOCK : MEMBER_CONTACTUS -->
-<p><a href="member.php?func=m_zone&mzt=contactus">{TAG_LOGIN_MEMBER_CONTACTUS}</a></p>
+<p><a href="{TAG_ROOT_PATH}member.php?func=m_zone&mzt=contactus">{TAG_LOGIN_MEMBER_CONTACTUS}</a></p>
 <!-- END BLOCK : MEMBER_CONTACTUS -->
 <!-- START BLOCK : MEMBER_DOWNLOAD -->
-<p><a href="{TAG_ROOT_PATH}download.htm">{TAG_LOGIN_MEMBER_DOWNLOAD}</a></p>
+<p><a href="{TAG_ROOT_PATH}{TAG_ROOT_PATH}download.htm">{TAG_LOGIN_MEMBER_DOWNLOAD}</a></p>
 <!-- END BLOCK : MEMBER_DOWNLOAD -->
 </div>
 <!-- END BLOCK : MEMBER_INFO -->
