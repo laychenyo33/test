@@ -313,6 +313,8 @@ $TPLMSG["PAGE_NO_EXITS"] = "This Page doesn't exists!";
 //Goodlink
 $TPLMSG['GOODLINK'] = "Good link";
 $TPLMSG['FIRST_TIME_SHOPPING'] = "First Time Shopping";
+$TPLMSG['FIRST_S_BTN'] = "First Shopping";
+$TPLMSG['FIRST_I_BTN'] = "First Inquiry";
 
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡

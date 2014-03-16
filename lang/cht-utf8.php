@@ -319,6 +319,9 @@ $TPLMSG["PAGE_NO_EXITS"] = "此頁面不存在";
 //Goodlink
 $TPLMSG['GOODLINK'] = "好站連結";
 $TPLMSG['FIRST_TIME_SHOPPING'] = "第一次購物";
+$TPLMSG['FIRST_S_BTN'] = "第一次購物";
+$TPLMSG['FIRST_I_BTN'] = "第一次詢價";
+
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡
 $TPLMSG["WEBATM"] = "Web ATM"; //網路ATM

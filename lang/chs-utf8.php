@@ -316,6 +316,8 @@ $TPLMSG["PAGE_NO_EXITS"] = "此页面不存在";
 //Goodlink
 $TPLMSG['GOODLINK'] = "好站連結";
 $TPLMSG['FIRST_TIME_SHOPPING'] = "第一次购物";
+$TPLMSG['FIRST_S_BTN'] = "第一次购物";
+$TPLMSG['FIRST_I_BTN'] = "第一次询价";
 
 /*新增语汇*/
 /*以下是支付宝相关字汇*/
