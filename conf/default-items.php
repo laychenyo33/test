@@ -35,7 +35,15 @@ $ws_array["contactus_s"]=array( 1 =>$TPLMSG['CONTACT_S_1'],2 =>$TPLMSG['CONTACT_
 
 $ws_array["epaper_order_cate"]=array( 1 =>$TPLMSG['EPAPER_ORDER_NORMAL'],2 =>$TPLMSG['EPAPER_ORDER_MEMBER'],3 =>$TPLMSG['EPAPER_ORDER_FIRST']);
 $ws_array["ad_cate"]=array( 1 =>$TPLMSG['AD_UP_BANNER_580_120'],2 =>$TPLMSG['AD_SIDE_BUTTON_150_150'],3 =>$TPLMSG['AD_SIDE_BUTTON_150_50'],4 =>"首頁跑馬燈",5 =>"內頁跑馬燈");
-$ws_array["payment_type"]=array( 1 =>$TPLMSG["PAYMENT_ATM"],2 =>$TPLMSG["PAYMENT_CASH_ON_DELIVERY"]);
+if($cms_cfg['ws_module']['ws_shopping_cart_module']){
+    if($allpay->allpay_switch && !empty($allpay->all_cfg["allpay_type"])){
+        $ws_array["payment_type"] = array( 1 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] ) + $allpay->all_cfg["allpay_type"];
+    }else{
+        $ws_array["payment_type"] = array( 0 => $TPLMSG["PAYMENT_ATM"] , 1 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] );
+    }    
+}else{
+    $ws_array["payment_type"]=array( 1 =>$TPLMSG["PAYMENT_ATM"],2 =>$TPLMSG["PAYMENT_CASH_ON_DELIVERY"]);
+}
 $ws_array["shippment_type"]=array( 1=>$TPLMSG['SHIPPMENT_1'], 2=>$TPLMSG['SHIPPMENT_2'], 3=>$TPLMSG['SHIPPMENT_3']);
 $ws_array['invoice_type'] = array(2=>$TPLMSG['INVOICE_TYPE_2'],3=>$TPLMSG['INVOICE_TYPE_3']);
 $ws_array["deliery_timesec"]=array( 0 =>"不指定",1 =>"中午前",2=>"12時-17時",3=>"17時-20時");

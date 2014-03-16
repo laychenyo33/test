@@ -294,6 +294,14 @@ class MAINFUNC{
             $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['FAX']);
             $tpl->assignGlobal("TAG_FOOTER_TEL",$TPLMSG['TEL']);
             $tpl->assignGlobal("TAG_FOOTER_EMAIL",$TPLMSG['EMAIL']);
+            //設定購物車模組
+            if($cms_cfg['new_cart_path']){
+                $tpl->assignGlobal("CART_PATH" , $cms_cfg['new_cart_path']);
+                $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['new_cart_path'].'?func=c_order');
+            }else{
+                $tpl->assignGlobal("CART_PATH" , $cms_cfg['base_root']."cart.php");
+                $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['base_root']."member.php?func=m_zone&mzt=order");
+            }
             //有會員即顯示會員登入區
             if($cms_cfg["ws_module"]["ws_member"]==1){
                 $this->login_zone();

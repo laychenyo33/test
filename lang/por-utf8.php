@@ -311,6 +311,24 @@ $TPLMSG['GALLERY'] = "Gallery";
 $TPLMSG["PAGE_NO_EXITS"] = "This Page doesn't exists!";
 //Goodlink
 $TPLMSG['GOODLINK'] = "Good link";
+//歐付寶相關字彙
+$TPLMSG["CREDIT"] = "Credit card"; //信用卡
+$TPLMSG["WEBATM"] = "Web ATM"; //網路ATM
+$TPLMSG["ATM"] = "ATM"; //自動櫃員機
+$TPLMSG["CVS"] = "CVS"; //超商代碼 (需加收 30 元手續費)
+$TPLMSG["BARCODE"] = "Barcode"; //超商條碼 (需加收 30 元手續費)
+$TPLMSG["ALIPAY"] = "Alipay"; //支付寶
+$TPLMSG["TENPAY"] = "Tenpay"; //財付通
+$TPLMSG["TOPUPUSED"] = "Top-up"; //儲值消費
+$TPLMSG['ALLPAY_BANK_CODE'] = "ATM Bank Code"; //ATM 銀行代碼
+$TPLMSG['ALLPAY_VACCOUNT'] = "ATM Premium Account"; //ATM 付費帳號
+$TPLMSG['ALLPAY_CVS_NO'] = "CVS code"; //超商繳費代碼
+$TPLMSG['ALLPAY_CVS_BAR_1'] = "Barcode 1"; //超商繳費條碼 1
+$TPLMSG['ALLPAY_CVS_BAR_2'] = "Barcode 2"; //超商繳費條碼 2
+$TPLMSG['ALLPAY_CVS_BAR_3'] = "Barcode 3"; //超商繳費條碼 3
+$TPLMSG['ALLPAY_EXPIRE'] = "Payment deadline"; //繳費期限
+$TPLMSG['ORDER_PENDING'] = "Pending payment"; //待付款
+$TPLMSG['ORDER_DONE'] = "Paid"; //已付款
 
 /*新增語彙*/
 /*以下是支付寶相關字彙*/
