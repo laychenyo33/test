@@ -318,6 +318,7 @@ $TPLMSG['GALLERY'] = "活動剪影";
 $TPLMSG["PAGE_NO_EXITS"] = "此頁面不存在";
 //Goodlink
 $TPLMSG['GOODLINK'] = "好站連結";
+$TPLMSG['FIRST_TIME_SHOPPING'] = "第一次購物";
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡
 $TPLMSG["WEBATM"] = "Web ATM"; //網路ATM

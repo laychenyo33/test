@@ -125,13 +125,51 @@
                 </td>
             </tr>
             <!-- END BLOCK : TIME_SEC_ZONE -->
+            <!-- START BLOCK : REGISTER_INFO -->
+            <tr>
+                <th colspan="4" class="data-zone">
+                    訂購者資訊(註冊資訊)
+                    <div>填好以下欄位，系統會自動註冊為本站會員</div>
+                </th>
+            </tr>
+          <tr>
+                <th>
+                    <font color="#ff0000">*</font>{MSG_ACCOUNT}<br/>(e-mail)
+                </th>
+                <td colspan="3">
+                    <input name="m_email" type="text" class="validate[required,custom[email],ajax[ajaxUser]]" id="m_account" value="{VALUE_M_ACCOUNT}" size="40" >
+                    <input type="hidden" name="reg_mem" value="1"/>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <font color="#ff0000">*</font>{MSG_PASSWORD}
+                </th>
+                <td>
+                    <input name="m_password" type="password" class="validate[required]" id="m_password" value="{VALUE_M_PASSWORD}" size="20" >
+                </td>
+                <th>
+                    <font color="#ff0000">*</font>{MSG_VALID_PASSWORD}
+                </th>
+                <td>
+                    <input name="v_password" type="password" class="validate[required,confirm[m_password]]" id="v_password" value="{VALUE_M_PASSWORD}" size="20" >
+                </td>
+            </tr>          
+            <tr>
+              <th><font color="#ff0000">*</font>{MSG_CONTACT_PERSON}</th>
+              <td colspan="3">
+                    {TAG_CONTACT_WITH_S}
+                </td>              
+            </tr>            
+            <!-- END BLOCK : REGISTER_INFO-->
+            <!-- START BLOCK : NORMAL_INFO -->            
             <tr>
                 <th colspan="4" class="data-zone">訂購者資訊</th>
             </tr>              
             <tr>
               <th><font color="#ff0000">*</font>{MSG_CONTACT_PERSON}</th>
               <td>
-                    <!-- INCLUDE BLOCK : CONTACT_S -->
+                    {TAG_CONTACT_WITH_S}
                 </td>
                 <th>
                     <font color="#ff0000">*</font>e-mail</th>
@@ -139,6 +177,7 @@
                     <input name="m_email" type="text" id="m_email" class="validate[required,custom[email]]"   value="{VALUE_M_EMAIL}"  >
                     </td>
             </tr>
+            <!-- END BLOCK : NORMAL_INFO -->                        
             <!-- START BLOCK : SELECT_COUNTRY -->
             <tr>
                 <th><font color="#ff0000">*</font>{MSG_COUNTRY}</th>
@@ -168,7 +207,7 @@
             <tr>
                 <th>{MSG_FAX}</th>
                 <td colspan="3">  <input name="m_fax" type="text" value="{VALUE_M_FAX}"  ></td>
-            </tr>                
+            </tr>       
             <tr>
                 <td colspan="4">
                     <input type="checkbox" name="sameto_order" id="sameto_order" onclick="move_order_to_reci(this.checked,this.form)" style="vertical-align: middle;margin-right:3px"/><label for="sameto_order">收件者同訂購者</label>

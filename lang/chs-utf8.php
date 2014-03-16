@@ -315,6 +315,7 @@ $TPLMSG['GALLERY'] = "活动剪影";
 $TPLMSG["PAGE_NO_EXITS"] = "此页面不存在";
 //Goodlink
 $TPLMSG['GOODLINK'] = "好站連結";
+$TPLMSG['FIRST_TIME_SHOPPING'] = "第一次购物";
 
 /*新增语汇*/
 /*以下是支付宝相关字汇*/

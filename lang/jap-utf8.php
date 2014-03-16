@@ -312,6 +312,8 @@ $TPLMSG['GALLERY'] = "Gallery";
 $TPLMSG["PAGE_NO_EXITS"] = "This Page doesn't exists!";
 //Goodlink
 $TPLMSG['GOODLINK'] = "Good link";
+$TPLMSG['FIRST_TIME_SHOPPING'] = "First Time Shopping";
+
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡
 $TPLMSG["WEBATM"] = "Web ATM"; //網路ATM
