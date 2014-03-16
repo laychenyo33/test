@@ -1707,6 +1707,23 @@ class MAINFUNC{
             ));
         }
     }
+    //新建樣版物件，並回傳render內容
+    function contact_s_select_r($sid,$zone="CONTACT"){
+        global $ws_array,$cms_cfg;
+        $sw = $cms_cfg['ws_module']['ws_contactus_s_style'];
+        $tpl = new TemplatePower("templates/ws-fn-contact-s-style{$sw}-tpl.html");
+        $tpl->prepare();
+        $tpl->newBlock($zone."_S_ZONE");
+        foreach($ws_array["contactus_s"] as $id=>$sname){
+            $tpl->newBlock($zone."_S_LIST");
+            $tpl->assign(array(
+                "VALUE_CONTACT_S_ID"   => $id,
+                "VALUE_CONTACT_S_NAME" => $sname,
+                "TAG_SELECTED"         => ($sid==$id)?"selected":"",
+            ));
+        }
+        return $tpl->getOutputContent();
+    }
     //自設的fgetcsv
     function fgetcsv($fp,$limit=',',$enc='"'){
         $str_mode = false;

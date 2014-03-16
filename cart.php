@@ -9,7 +9,7 @@ class CART{
         $this->cart_type =$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
-        switch($_REQUEST["func"]){
+        switch($_REQUEST["func"]){          
             case "c_list"://購物車列表
                 $this->ws_tpl_file = "templates/ws-cart-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -67,10 +67,10 @@ class CART{
             case "c_finish"://結帳
                 if($_POST['shipment_type']){
                     $_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"] = $_POST['shipment_type'];
-                }                
-                if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1){
-                    $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
-                    $this->ws_load_tp($this->ws_tpl_file);      
+                }
+                if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1 && empty($_POST['shop_and_register'])){
+                    $this->ws_tpl_file = "templates/ws-cart-login-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
                     $this->member_login();
                 }else{
                     $this->ws_tpl_file = "templates/ws-cart-finish".$this->cart_type."-tpl.html";
@@ -124,6 +124,7 @@ class CART{
         $tpl->assignInclude( "AD_H", "templates/ws-fn-ad-h-tpl.html"); //橫式廣告模板
         $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板
         $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
+        $tpl->assignInclude( "N_CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["products"]);//左方menu title
@@ -428,7 +429,7 @@ class CART{
         //載入購物車列表
         $this->cart_list();
         //顯示表單資料
-        $tpl->newBlock( "MEMBER_DATA_FORM" );
+        $tpl->newBlock( "MEMBER_DATA_FORM" );        
         $tpl->assignGlobal( array(
             "MSG_MODE"  => $TPLMSG['SEND'],
             "MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
@@ -452,6 +453,23 @@ class CART{
                 ));
             }
         }
+        //會員區資訊
+        if($_POST['shop_and_register']){
+            $tpl->newBlock("REGISTER_INFO");
+            $tpl->assign(array(
+                //第一次註冊
+                "MSG_ACCOUNT"        => $TPLMSG["LOGIN_ACCOUNT"],
+                "MSG_PASSWORD"       => $TPLMSG["LOGIN_PASSWORD"],
+                "MSG_VALID_PASSWORD" => $TPLMSG['MEMBER_CHECK_PASSWORD'],
+                "MSG_MEMBER_NAME"    => $TPLMSG['MEMBER_NAME'],
+                "MSG_CONTACT_PERSON" =>$TPLMSG['CONTACT_PERSON'],       
+                "VALUE_M_NAME"       => $row["m_name"],
+                "VALUE_M_CONTACT_S"  => $row["m_contact_s"],   
+                "VALUE_M_EMAIL"      => $row["m_email"],
+            ));
+        }else{
+            $tpl->newBlock("NORMAL_INFO");
+        }           
         if($this->m_id){
             $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
             $selectrs = $db->query($sql);
@@ -473,7 +491,8 @@ class CART{
             $main->country_select($row["m_country"]);
         }
         //稱謂下拉選單
-        $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART");
+        $tpl->assignGlobal("TAG_CONTACT_WITH_S",$main->contact_s_select_r($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART"));
+        $tpl->assignGlobal("TAG_CONTACTR_WITH_S",$main->contact_s_select_r($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CARTR"));
         if(!empty($shopping)){
             //運送區域
             $tpl->assignGlobal("VALUE_SHIPMENT_TYPE",$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
@@ -587,13 +606,15 @@ class CART{
                                "VALUE_M_COUNTRY" =>$_REQUEST["m_country"]
             ));
         }
-        //如果不需要會員登入,新增一筆會員資料
-        if($cms_cfg["ws_module"]["ws_cart_login"]==0 && $this->m_id<1  && !empty($shopping)){
+        //如果是註冊會員,新增一筆會員資料
+        if($_POST['reg_mem'] && !empty($shopping)){
             $sql="
                 insert into ".$cms_cfg['tb_prefix']."_member (
                     mc_id,
                     m_status,
                     m_sort,
+                    m_account,
+                    m_password,
                     m_modifydate,
                     m_company_name,
                     m_contact_s,
@@ -609,9 +630,11 @@ class CART{
                     m_email,
                     m_epaper_status
                 ) values (
-                    '0',
-                    '0',
+                    '1',
+                    '1',
                     '".$_REQUEST["m_sort"]."',
+                    '".$_REQUEST["m_email"]."',
+                    '".$_REQUEST["m_password"]."',
                     '".date("Y-m-d H:i:s")."',
                     '".$_REQUEST["m_company_name"]."',
                     '".$_REQUEST["m_contact_s"]."',
@@ -1153,6 +1176,7 @@ class CART{
         $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);  
         $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_LOGIN']);        
         $tpl->assignGlobal("TAG_RETURN_URL",$_SERVER['REQUEST_URI']);
+        $tpl->assignGlobal("TAG_FS_SHOPPING",$TPLMSG['FIRST_TIME_SHOPPING']);
     }    
     //取得最新訂單號碼
     function get_oid(){
@@ -1217,8 +1241,7 @@ class CART{
         $sql = "select sc_service_fee from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
         list($sc_service_fee) = $db->query_firstRow($sql,false);  
         return $sc_service_fee;
-    }
-    
+    }   
 }
 
 class CART_WITH_SERIAL extends CART{
