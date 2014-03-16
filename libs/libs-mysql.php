@@ -264,6 +264,18 @@ class DB {
   function prefix($table_name){
       return sprintf("`%s_%s`",$this->prefix,$table_name);
   }
+  //顯示資料表欄位
+  function list_fields($table_name){
+        $this->query_result = $this->query("SHOW COLUMNS FROM ".$table_name);
+        if ($this->numRows($this->query_result) > 0) {
+            $table_fields = array();
+            while ($row = $this->fetch_array($this->query_result,true)) {
+                $table_fields[$row['Field']] = $row;
+            }
+            return $table_fields;
+        }      
+  }
+  
 } // end of class
 
 ?>
