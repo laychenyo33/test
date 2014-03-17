@@ -279,6 +279,7 @@ class MAINFUNC{
             $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
             $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
             $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
+            $tpl->assignGlobal("TAG_REQ_URI" ,$cms_cfg['req_uri']);
             $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
             $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH",$TPLMSG['PRODUCTS_SEARCH']);
