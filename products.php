@@ -185,32 +185,35 @@ class PRODUCTS{
                 }
                 $main->layer_link($TPLMSG['PRODUCTS']);
                 $dirname="products";
-                //顯示產品主頁 SEO H1 標題
-                $sql = "select * from ".$cms_cfg['tb_prefix']."_metatitle where mt_name ='products' ";
-                $selectrs = $db->query($sql);
-                $row = $db->fetch_array($selectrs,1);
-                $meta_array=array("meta_title"=>$row["mt_seo_title"],
-                                  "meta_keyword"=>$row["mt_seo_keyword"],
-                                  "meta_description"=>$row["mt_seo_description"],
-                );
-                $seo_H1=(trim($row["mt_seo_h1"]))?$row["mt_seo_h1"]:$TPLMSG["PRODUCTS"];
-                $main->header_footer($meta_array,$seo_H1);
-                //顯示產品主頁自訂頁
-                if(trim($row["mt_seo_custom"])) {
-//                        $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
-                        $row["mt_seo_custom"]=$main->content_file_str_replace($row["mt_seo_custom"]);
-                        $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
-                        $tpl->assign("VALUE_PC_CUSTOM",$row["mt_seo_custom"]);
-                        $custom=1;
-                }else{
-                    //顯示產品主頁SEO簡述
-                    if(trim($row["mt_seo_short_desc"])){
-                        $row["mt_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_short_desc"]);
-                        $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                        $tpl->assign("VALUE_PC_SHORT_DESC",$row["mt_seo_short_desc"]);
+                if($this->ws_seo){
+                    //顯示產品主頁 SEO H1 標題
+                    $sql = "select * from ".$cms_cfg['tb_prefix']."_metatitle where mt_name ='products' ";
+                    $selectrs = $db->query($sql);
+                    $row = $db->fetch_array($selectrs,1);
+                    $meta_array=array("meta_title"=>$row["mt_seo_title"],
+                                      "meta_keyword"=>$row["mt_seo_keyword"],
+                                      "meta_description"=>$row["mt_seo_description"],
+                    );
+                    $seo_H1=(trim($row["mt_seo_h1"]))?$row["mt_seo_h1"]:$TPLMSG["PRODUCTS"];
+                    $main->header_footer($meta_array,$seo_H1);
+                    //顯示產品主頁自訂頁
+                    if(trim($row["mt_seo_custom"])) {
+    //                        $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
+                            $row["mt_seo_custom"]=$main->content_file_str_replace($row["mt_seo_custom"]);
+                            $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
+                            $tpl->assign("VALUE_PC_CUSTOM",$row["mt_seo_custom"]);
+                            $custom=1;
+                    }else{
+                        //顯示產品主頁SEO簡述
+                        if(trim($row["mt_seo_short_desc"])){
+                            $row["mt_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_short_desc"]);
+                            $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
+                            $tpl->assign("VALUE_PC_SHORT_DESC",$row["mt_seo_short_desc"]);
+                        }
                     }
+                }else{
+                    $main->header_footer('products',$TPLMSG['PRODUCTS']);                    
                 }
-
             }
             $tpl->assignGlobal( array("VALUE_PC_PARENT" => $this->parent ,
                                       "MSG_PRODUCT_CATE" => $TPLMSG["PRODUCT_CATE"] ,
