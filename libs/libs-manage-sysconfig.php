@@ -23,4 +23,7 @@ if($rsnum >0 ){
 require "../class/autoloader.php";
 $autoloader = new autoloader();
 spl_autoload_register(array($autoloader,"load"));
+//helper機制
+App::addHelper('db', $db);
+App::addHelper('main', $main);
 ?>

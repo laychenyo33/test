@@ -11,7 +11,7 @@
  *
  * @author Administrator
  */
-class Model_Session {
+class Model_Session implements arrayaccess {
     //put your code here
     static protected $_handler;
     protected $_session;
@@ -42,4 +42,21 @@ class Model_Session {
     function isValueExists($name){
         return isset($this->_session[$name]);
     }
+    
+    public function offsetSet($offset, $value) {
+        if (is_null($offset)) {
+            $this->_session[] = $value;
+        } else {
+            $this->_session[$offset] = $value;
+        }
+    }
+    public function offsetExists($offset) {
+        return isset($this->_session[$offset]);
+    }
+    public function offsetUnset($offset) {
+        unset($this->_session[$offset]);
+    }
+    public function offsetGet($offset) {
+        return isset($this->_session[$offset]) ? $this->_session[$offset] : null;
+    }    
 }
