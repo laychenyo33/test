@@ -9,6 +9,7 @@ $cms_cfg["manage_page"] = "index.php";
 
 $cms_cfg['base_root']	= "/cms/";
 $cms_cfg['base_url']	= "http://".$cms_cfg['server_name'].$cms_cfg['base_root'];
+$cms_cfg['req_uri']	= "http://".$cms_cfg['server_name'].$_SERVER['REQUEST_URI'];
 $cms_cfg['base_css']	= $cms_cfg['base_root']."css/";
 $cms_cfg['base_images']	= $cms_cfg['base_root']."images/";
 $cms_cfg['base_templates']	= "templates/";
