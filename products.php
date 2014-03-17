@@ -625,7 +625,7 @@ class PRODUCTS{
                         $ck_str=str_replace("&nbsp;","",strip_tags($row["p_info_field".$j],"<img><iframe><script>"));
                         if(trim($ck_str)!=""){
                             $tmp = array(
-                                'title' => $row["p_info_field".$j."_title"],
+                                'title' => ($cms_cfg['ws_module']['ws_products_title'])?$row["p_info_field".$j."_title"]:$ws_array['products_info_fields_title'][$j],
                                 'data'  => $main->content_file_str_replace($row["p_info_field".$j])
                             );
                             array_push($domtabData, $tmp);                       

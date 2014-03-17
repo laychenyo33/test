@@ -89,7 +89,7 @@ $ws_array["left_desc"]=array("aboutus" => $TPLMSG["ABOUT_US_CATE_DESC"],
                         "guestbook" => $TPLMSG['GUESTBOOK_CATE_DESC'],
                         "sitemap" => $TPLMSG["SITEMAP_CATE_DESC"]
                     );
-
+$ws_array['products_info_fields_title'] = array();
 $ws_array["country_array"]=array(
 "Afghanistan",
 "Albania", 
