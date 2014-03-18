@@ -24,7 +24,7 @@ class STORES{
                 $this->ws_tpl_file = "templates/ws-stores-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->stores_list();
-                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("JQUERY_UI_SCRIPT");
                 //page view record --ph_type,ph_type_id,m_id
                 $this->ws_tpl_type=1;
                 break;
@@ -32,12 +32,13 @@ class STORES{
                 $this->ws_tpl_file = "templates/ws-stores-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->stores_list();
-                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("JQUERY_UI_SCRIPT");
                 //page view record --ph_type,ph_type_id,m_id
                 $this->ws_tpl_type=1;
                 break;
         }
         if($this->ws_tpl_type){
+            $main->layer_link();
             $tpl->printToScreen();
         }
     }
@@ -52,7 +53,6 @@ class STORES{
         $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板     
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["STORES"]);
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["STORES"]);
         $tpl->assignGlobal("TAG_PAGE_BACK", $TPLMSG['PAGE_BACK']);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["stores"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["stores"]);//左方menu title
@@ -60,6 +60,11 @@ class STORES{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["stores"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_IMG" , $ws_array["main_img"]["stores"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-stores"); //主要顯示區域的css設定
+        if($_GET){
+            $main->layer_link($TPLMSG["STORES"],$cms_cfg['base_root']."stores.htm");
+        }else{
+            $main->layer_link($TPLMSG["STORES"]);
+        }
         $main->google_code(); //google analystics code , google sitemap code
     }
 
@@ -67,7 +72,6 @@ class STORES{
     function stores_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         $ext=($this->ws_seo)?".htm":".php";
-        $stores_link="<a href=\"".$cms_cfg["base_root"]."stores".$ext."\">".$TPLMSG["STORES"]."</a>";
         //門市管理分類
         $sdc_id = $this->left_cate_list();      
         $tpl->assignGlobal("TAG_LAYER",$stores_link);
@@ -199,7 +203,7 @@ class STORES{
     //左側選單
     function left_cate_list(){
         global $db,$cms_cfg,$tpl,$main,$TPLMSG;
-        $sd_type_arr = array(1=>'各地門市',2=>'網路商城');
+        $sd_type_arr = array(1=>$TPLMSG['STORE_CATE_1'],2=>$TPLMSG['STORE_CATE_2']);
         foreach($sd_type_arr  as $sd_type=>$info){
             $tpl->newBlock( "LEFT_CATE_LIST" );
             if($sd_type==1){
@@ -235,6 +239,7 @@ class STORES{
                             $current_class="class='current'";
                             $sdc_id = $row['sdc_id'];        
                             $meta_row = $row;
+                            $main->layer_link($row['sdc_subject']);
                         }else{
                             $current_class="";
                         }

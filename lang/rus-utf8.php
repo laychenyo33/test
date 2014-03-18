@@ -300,6 +300,8 @@ $TPLMSG['GOODLINK'] = "Good link";
 $TPLMSG['FIRST_TIME_SHOPPING'] = "First Time Shopping";
 $TPLMSG['FIRST_S_BTN'] = "First Shopping";
 $TPLMSG['FIRST_I_BTN'] = "First Inquiry";
+$TPLMSG['STORE_CATE_1'] = "real stores";
+$TPLMSG['STORE_CATE_2'] = "web stores";
 
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡
