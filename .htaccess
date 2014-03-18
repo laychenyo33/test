@@ -54,19 +54,19 @@ RewriteRule ^.*$ - [NC,L]
 RewriteRule ^new-products.htm$  products.php?func=p_new [L]
 RewriteRule ^application-(\d+).htm$  application.php?pa_id=$1 [L]
 #主功能頁
-RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|guestbook|stores|factory|goodlink|gallery|application|video|ebook).htm$  $1.php [L]
+RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|guestbook|stores|factory|goodlink|gallery|application|video|ebook|quick_shopping).htm$  $1.php [L]
 #主功能列表頁-無檔名
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)list-([0-9]+).htm$  $1.php?func=$2_list&$2c_id=$3 [L]
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)list-([0-9]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?func=$2_list&$2c_id=$3&nowp=$4&jp=$5 [L]
 #主功能詳細頁-無檔名
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+)detail-([0-9]+)-([0-9]+).html$  $1.php?func=$2_show&$2c_id=$3&$2_id=$4 [L]
 #主功能詳細頁-有檔名
-RewriteRule ^(news|aboutus|download|faq|goodlink|gallery|application)/([^/]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?type=list&f=$2&nowp=$3&jp=$4 [L]
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery|stores|application)/([^/]+)-pages-([0-9]+)-([0-9]+).htm$  $1.php?type=list&f=$2&nowp=$3&jp=$4 [L]
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)/([^/]+).html$  $1.php?type=show&f=$2 [L]
 #主功能詳細頁-有檔名-功能主頁分頁
 RewriteRule ^(news|aboutus|download|faq|goodlink|gallery)-pages-([0-9]+)-([0-9]+).htm$  $1.php?nowp=$2&jp=$3 [L]
 #主功能列表頁-有檔名
-RewriteRule ^(news|aboutus|download|faq|goodlink|gallery|application|video)/([^/]+).htm$  $1.php?type=list&f=$2 [L]
+RewriteRule ^(news|aboutus|download|faq|goodlink|gallery|application|stores|video)/([^/]+).htm$  $1.php?type=list&f=$2 [L]
 RewriteRule ^(video)/([^/]+)/([^/]+).html$  $1.php?type=show&d=$2&f=$3 [L]
 
 

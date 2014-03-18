@@ -889,3 +889,13 @@ h2 a{color:#4f4f4f;}
 }
 #cart-login-first ul li{ color:#000000; font-size:14px; font-weight:normal; line-height:25px;}
 #cart-login-first ul{ padding-top:15px;}
+
+/*store*/
+.store_list{overflow:hidden;margin-top:20px;padding-bottom:20px;height:auto;}
+.store_list_pic{overflow:hidden;float:left;margin-right:25px;padding-right:30px;border-right:1px solid #d1d1d1;}
+.store_list_pic img{border:1px solid #ffa4ab;}
+.store_info{float:left;width:370px;overflow:hidden;}
+.store_list p{color:#717171; font-size:14px;}
+p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;background: url(../images/icon003.gif) no-repeat left 2px;padding:0 0 0 13px;}
+.store_map{float:left;width:75px;margin-top:55px;}
+.store_online{width:160px;height:240dpx;float:left;margin:13px 6px;border:1px solid #d1d1d1;}

@@ -321,6 +321,8 @@ $TPLMSG['GOODLINK'] = "好站連結";
 $TPLMSG['FIRST_TIME_SHOPPING'] = "第一次購物";
 $TPLMSG['FIRST_S_BTN'] = "第一次購物";
 $TPLMSG['FIRST_I_BTN'] = "第一次詢價";
+$TPLMSG['STORE_CATE_1'] = "各地門市";
+$TPLMSG['STORE_CATE_2'] = "網路商城";
 
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡
