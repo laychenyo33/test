@@ -26,4 +26,6 @@ spl_autoload_register(array($autoloader,"load"));
 //helper機制
 App::addHelper('db', $db);
 App::addHelper('main', $main);
+App::addHelper('request', new Model_Request());
+App::addHelper('dbtable', new Model_Dbtable($db));
 ?>
