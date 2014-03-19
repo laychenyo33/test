@@ -812,7 +812,7 @@ class PRODUCTS{
     }
 //產品管理--表單================================================================
     function products_form($action_mode){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //取得系統設定裡面的產品說明欄位
         $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
         //系統跳回參數
@@ -1018,12 +1018,21 @@ class PRODUCTS{
                 $tpl->newBlock("INFO_FIELD_LIST");
                 $tpl->assign(array(
                    "SERIAL"           => $j,
-                   "TITLE_SERIAL"     => $j+3,
                    "ELM_SERIAL"       => $j+5,
-                   "INFO_FIELD_TITLE" => $row["p_info_field".$j."_title"],
                    "INFO_FIELD_VALUE" => $row["p_info_field".$j],
                    "INFO_FIELD_SHOW"  => (trim($row["p_info_field".$j]))?"":"none",
                 ));
+                if($cms_cfg['ws_module']['ws_products_title']){
+                    $tpl->newBlock("CUSTOM");
+                    $tpl->assign(array(
+                        "SERIAL"           => $j,
+                        "TITLE_SERIAL"     => $j+3,
+                        "INFO_FIELD_TITLE" => $row["p_info_field".$j."_title"]
+                    ));
+                }else{
+                    $tpl->newBlock("STATIC");
+                    $tpl->assign("INFO_FIELD_TITLE",$ws_array['products_info_fields_title'][$j]);
+                }
             }
         }
         if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_products']){

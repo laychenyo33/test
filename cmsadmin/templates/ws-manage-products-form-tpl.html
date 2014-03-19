@@ -208,7 +208,12 @@
         <!-- START BLOCK : INFO_FIELD_LIST -->
         <tr>
             <th>
-            <input type="text" size="25" name="p_info_field{SERIAL}_title" value="{INFO_FIELD_TITLE}">:<br>&nbsp;(產品說明標題{TITLE_SERIAL})
+                <!-- START BLOCK : CUSTOM -->
+                <input type="text" size="25" name="p_info_field{SERIAL}_title" value="{INFO_FIELD_TITLE}">:<br>&nbsp;(產品說明標題{TITLE_SERIAL})
+                <!-- END BLOCK : CUSTOM -->
+                <!-- START BLOCK : STATIC -->
+                {INFO_FIELD_TITLE}
+                <!-- END BLOCK : STATIC -->
             </th>
             <td colspan="3"><a name="info_field{SERIAL}" href="#info_field{SERIAL}" onClick="document.getElementById('div_info_field{SERIAL}').style.display='';">展開</a> <a href="#info_field{SERIAL}" onClick="document.getElementById('div_info_field{SERIAL}').style.display='none';">隱藏</a>
                 <div id="div_info_field{SERIAL}" style="display:{INFO_FIELD_SHOW}">
