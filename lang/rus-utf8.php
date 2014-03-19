@@ -298,10 +298,24 @@ $TPLMSG["PAGE_NO_EXITS"] = "This Page doesn't exists!";
 //Goodlink
 $TPLMSG['GOODLINK'] = "Good link";
 $TPLMSG['FIRST_TIME_SHOPPING'] = "First Time Shopping";
-$TPLMSG['FIRST_S_BTN'] = "First Shopping";
-$TPLMSG['FIRST_I_BTN'] = "First Inquiry";
+$TPLMSG['FIRST_S_BTN'] = "First Shopping?"; //第一次購物
+$TPLMSG['FIRST_I_BTN'] = "First Inquiry?"; //第一次詢價
 $TPLMSG['STORE_CATE_1'] = "real stores";
 $TPLMSG['STORE_CATE_2'] = "web stores";
+$TPLMSG['MEMBER_INFO'] = "Member Information"; //會員資訊
+$TPLMSG['ADDRESSEE'] = "Addressee"; //收件人
+$TPLMSG['SAM'] = "Same as Member"; //同會員資料
+$TPLMSG['INVOICE_INFO'] = "Invoice Information"; //發票資訊
+$TPLMSG['DUP_INVOICE'] = "Duplicate Uniform Invoice"; //二聯式發票
+$TPLMSG['TRI_INVOICE'] = "Triplicate Uniform Invoice"; //三聯式發票
+$TPLMSG['DONATE'] = "Donate"; //捐贈
+$TPLMSG['VAT'] = "VAT number"; //統一編號
+$TPLMSG['ARRIVAL_TIME'] = "Arrival time"; //到貨時間
+$TPLMSG['YEAR'] = "Year"; //年
+$TPLMSG['MONTH'] = "Month"; //月
+$TPLMSG['DAY'] = "Day"; //日
+$TPLMSG['NO_PAYMENT'] = "Please Select Payment Type!"; //請選擇付款方式
+$TPLMSG["PLUS_FEE"] = "Fee"; //手續費
 
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡
