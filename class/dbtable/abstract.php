@@ -84,11 +84,15 @@ abstract class Dbtable_Abstract {
                 if(is_array($v)){
                     $this->values[$k] = implode(',',$v);
                 }else{
-                    $v = trim($v);
-                    if(preg_match("/(seo_title|seo_keyword|seo_description|seo_filename|seo_h1)$/i", $k)){
-                        $v = htmlspecialchars($v);
+                    if(!is_null($v)){
+                        $v = trim($v);
+                        if(preg_match("/(seo_title|seo_keyword|seo_description|seo_filename|seo_h1)$/i", $k)){
+                            $v = htmlspecialchars($v);
+                        }
+                        $this->values[$k] = $this->db->quote($v);
+                    }else{
+                        $this->values[$k] = null;
                     }
-                    $this->values[$k] = $this->db->quote($v);
                 }
             }
         }
@@ -116,7 +120,11 @@ abstract class Dbtable_Abstract {
         $sql_tpl = "update ".$this->tablename()." set %s where %s";
         foreach($this->values as $k=>$v){
             if($k!=$this->pk){
-                $updates[] = sprintf("`%s`='%s'",$k,$v);
+                if(is_null($v)){
+                    $updates[] = sprintf("`%s`=null",$k);
+                }else{
+                    $updates[] = sprintf("`%s`='%s'",$k,$v);
+                }
             }
         }
         return sprintf($sql_tpl,implode(',',$updates),implode(' and ',$this->con));
