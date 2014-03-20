@@ -179,7 +179,8 @@ class PRODUCTS{
                     }
                 }
             }else{
-                if($this->p_homepage!=1){
+                //不是首頁，或ws_left_main_pc=1(存在主分類)，卻沒有找到對應分類者，設為404錯誤
+                if($this->p_homepage!=1 && $cms_cfg['ws_module']['ws_left_main_pc']!=0){
                     include_once("404.htm");
                     exit();
                 }
@@ -318,8 +319,8 @@ class PRODUCTS{
             $showNoData = ($i==0 && $total_records==0 && !$custom);
             //取得分頁連結並重新組合包含limit的sql語法
             if($mode==""){
-                if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
-                    $func_str=$_REQUEST["f"];
+                if($this->ws_seo==1){
+                    $func_str=$_REQUEST["f"]?$_REQUEST["f"]:$dirname;
                     $sql = $main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoData);
                 }else{
                     $func_str="products.php?func=p_list&pc_parent=".$this->parent;
