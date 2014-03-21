@@ -61,8 +61,8 @@ $cms_cfg["ws_module"]=array(
 
 /*      MEMBER SETUP                   */
         "ws_member"=>0,                 //會員管理
-        "ws_member_manipulate"=>1,      //會員資料匯出匯入
         "ws_member_msg" => 0,           //會員公告
+        "ws_member_manipulate"=>1,      //會員資料匯出匯入
         "ws_member_country"   =>0,      //會員表單顯示國家下拉式選單
         "ws_member_download"  =>0,      //會員下載
         "ws_member_download_on"   => "", //會員下載依類別cate或會員member，預設是類別(cate)，留空也是類別
