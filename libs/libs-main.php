@@ -215,6 +215,9 @@ class MAINFUNC{
                 $tpl->newBlock("MEMBER_DOWNLOAD");
                 $tpl->assign("TAG_LOGIN_MEMBER_DOWNLOAD",$TPLMSG['DOWNLOAD']);
             }
+            if($cms_cfg['ws_module']['ws_member_msg']){
+                $tpl->newBlock("MEMBER_MESSAGE");
+            }
         }
     }
     function security_zone($si_w="90", $si_h="25"){
@@ -610,6 +613,7 @@ class MAINFUNC{
         ($cms_cfg["ws_module"]["ws_stores"])?$tpl->newBlock( "AUTHORITY_STORES" ):"";
         ($cms_cfg["ws_module"]["ws_index_banner"])?$tpl->newBlock( "INDEX_BANNER" ):"";//自訂首頁banner管理
         ($cms_cfg["ws_module"]["ws_products_application"])?$tpl->newBlock( "AUTHORITY_PRODUCTS_APPLICATION" ):"";//產品應用領域
+        ($cms_cfg["ws_module"]["ws_member_msg"])?$tpl->newBlock( "AUTHORITY_MEMBER_MESSAGE" ):"";//會員公告
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
     }
