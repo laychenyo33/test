@@ -97,7 +97,7 @@ class MEMBER{
                 break;
             default:    //會員專區
                 if(!empty($this->m_id)){
-                    header("Location: member.php?func=m_zone");
+                    header("Location: member.php?func=m_mod");
                     die();
                 }
                 $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
