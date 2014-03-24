@@ -339,10 +339,9 @@
 			$(".red").css({ "color":"red" });
 			
 			//----
-			$("input[name=fsb_same]").change(function(){
-				var FSB_VAL = $(this).attr("checked");
-				
-				if(FSB_VAL == "checked"){
+			$(":checkbox[name=fsb_same]").click(function(){
+				var FSB_VAL = $(this)[0].checked;
+				if(FSB_VAL){
 					var FSB_NAME = $("input[name=m_name]").val();
 					var FSB_TEL = $("input[name=m_tel]").val();
 					var FSB_ZONE = $("#zone_main option:selected").val();
