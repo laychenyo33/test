@@ -208,7 +208,7 @@
 			            if($_POST["RtnCode"] == 1){
 				            $sql="
 				                update ".$cms_cfg['tb_prefix']."_order
-				                    set o_status='5'
+				                    set o_status='1'
 				                where o_id='".$_POST["MerchantTradeNo"]."'";
 				            $db->query($sql);
 			            }
