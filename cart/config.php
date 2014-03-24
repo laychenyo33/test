@@ -4,7 +4,7 @@
 	$this->c_num = 99; //可購買最大數量
 	$this->arrival_start = date("Y-m-d",mktime(0,0,0,date("m"),date("d") + 1,date("Y"))); //到貨日期起始日
 	$this->arrival_range = 10; //到貨日期範圍 (從起始日起計算天數)
-	$this->taiwan_zone = 0; //台灣地區選單, 0 => 關閉 , 1 => 啟動
+	$this->taiwan_zone = 1; //台灣地區選單, 0 => 關閉 , 1 => 啟動
 	$this->gender_select = 0; //性別欄位位置, 0 => 至前 , 1 => 至後
 	
 	/*
