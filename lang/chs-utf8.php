@@ -320,20 +320,20 @@ $TPLMSG['FIRST_S_BTN'] = "第一次购物";
 $TPLMSG['FIRST_I_BTN'] = "第一次询价";
 $TPLMSG['STORE_CATE_1'] = "各地门市";
 $TPLMSG['STORE_CATE_2'] = "网路商城";
-$TPLMSG['MEMBER_INFO'] = "Member Information"; //會員資訊
-$TPLMSG['ADDRESSEE'] = "Addressee"; //收件人
-$TPLMSG['SAM'] = "Same as Member"; //同會員資料
-$TPLMSG['INVOICE_INFO'] = "Invoice Information"; //發票資訊
-$TPLMSG['DUP_INVOICE'] = "Duplicate Uniform Invoice"; //二聯式發票
-$TPLMSG['TRI_INVOICE'] = "Triplicate Uniform Invoice"; //三聯式發票
-$TPLMSG['DONATE'] = "Donate"; //捐贈
-$TPLMSG['VAT'] = "VAT number"; //統一編號
-$TPLMSG['ARRIVAL_TIME'] = "Arrival time"; //到貨時間
-$TPLMSG['YEAR'] = "Year"; //年
-$TPLMSG['MONTH'] = "Month"; //月
-$TPLMSG['DAY'] = "Day"; //日
-$TPLMSG['NO_PAYMENT'] = "Please Select Payment Type!"; //請選擇付款方式
-$TPLMSG["PLUS_FEE"] = "手续费"; //手續費
+$TPLMSG['MEMBER_INFO'] = "订购人资料"; //会员资讯
+$TPLMSG['ADDRESSEE'] = "收件人资料"; //收件人
+$TPLMSG['SAM'] = "同订购人资料"; //同会员资料
+$TPLMSG['INVOICE_INFO'] = "发票资讯"; //发票资讯
+$TPLMSG['DUP_INVOICE'] = "二联式发票"; //二联式发票
+$TPLMSG['TRI_INVOICE'] = "三联式发票"; //三联式发票
+$TPLMSG['DONATE'] = "捐赠"; //捐赠
+$TPLMSG['VAT'] = "统一编号"; //统一编号
+$TPLMSG['ARRIVAL_TIME'] = "到货时间"; //到货时间
+$TPLMSG['YEAR'] = "年"; //年
+$TPLMSG['MONTH'] = "月"; //月
+$TPLMSG['DAY'] = "日"; //日
+$TPLMSG['NO_PAYMENT'] = "请选择付款方式"; //请选择付款方式
+$TPLMSG["PLUS_FEE"] = "手续费"; //手续费
 
 /*新增语汇*/
 /*以下是支付宝相关字汇*/
