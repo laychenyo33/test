@@ -175,7 +175,7 @@
 			if($this->isValidData($_POST)){
 				switch($switch){
 					default:
-                                            App::getHelper('dbtable')->allpay_order->writeData($_POST);
+                                            App::getHelper('dbtable')->allpay_order->writeData($_POST,'insert');
 //			            $sql="
 //			                insert into ".$cms_cfg['tb_prefix']."_allpay_order (
 //			                    o_id,
@@ -218,7 +218,7 @@
 			            }
 					break;
 					case 1:
-                                            App::getHelper('dbtable')->allpay_payinfo->writeData($_POST);
+                                            App::getHelper('dbtable')->allpay_payinfo->writeData($_POST,'insert');
 //			            $sql="
 //			                insert into ".$cms_cfg['tb_prefix']."_allpay_payinfo (
 //			                    o_id,
@@ -269,7 +269,7 @@
                     'o_status' => 21,
                     'o_id'     => $_POST["MerchantTradeNo"],
                 );
-                App::getHelper('dbtable')->writeData($updataOrder);
+                App::getHelper('dbtable')->order->writeData($updataOrder);
 //	            $sql="
 //	                update ".$cms_cfg['tb_prefix']."_order
 //	                    set o_status='21'
@@ -349,7 +349,7 @@
                 function updateOrder($post){
                     if($this->isValidData($post)){
                         if($post["RtnCode"] == 1){
-                            App::getHelper('dbtable')->allpay_order->writeData($post);
+                            App::getHelper('dbtable')->allpay_order->writeData($post,'insert');
                             $updateOrder['o_id'] = $post["MerchantTradeNo"];
                             $updateOrder['o_status'] = 1;
                             App::getHelper('dbtable')->order->writeData($updateOrder);                        
@@ -364,7 +364,7 @@
                 function updatePayInfo($post){
                     if($this->isValidData($post)){
                         if($post["RtnCode"] == 2 || $_POST["RtnCode"] == "10100073"){
-                            App::getHelper('dbtable')->allpay_payinfo->writeData($post);                        
+                            App::getHelper('dbtable')->allpay_payinfo->writeData($post,'insert');                        
                             $updateOrder['o_id'] = $post["MerchantTradeNo"];
                             $updateOrder['o_status'] = 0;
                             App::getHelper('dbtable')->order->writeData($updateOrder);                        
