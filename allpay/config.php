@@ -7,7 +7,7 @@
 	}
 	
 	$this->all_cfg["MerchantID"] = "2000132"; // 特店編號
-	$this->all_cfg["POST"] = "https://payment.allpay.com.tw"; // 串接主機 (正式)
+//	$this->all_cfg["POST"] = "https://payment.allpay.com.tw"; // 串接主機 (正式)
 	$this->all_cfg["POST"] = "http://payment-stage.allpay.com.tw"; // 串接主機 (測試) 正式環境請註解此行
 	$this->all_cfg["PATH"] =  "/Cashier/AioCheckOut";
 	
