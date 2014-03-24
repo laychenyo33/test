@@ -37,9 +37,9 @@ $ws_array["epaper_order_cate"]=array( 1 =>$TPLMSG['EPAPER_ORDER_NORMAL'],2 =>$TP
 $ws_array["ad_cate"]=array( 1 =>$TPLMSG['AD_INDEX_BANNER'],2 =>$TPLMSG['AD_INSIDE_BANNER'],3 =>$TPLMSG['AD_INSIDE_LEFT'],4 =>$TPLMSG['AD_INSIDE_RIGHT'],5=>$TPLMSG['AD_PRODUCTS']);
 if($cms_cfg['ws_module']['ws_shopping_cart_module']){
     if($allpay->allpay_switch && !empty($allpay->all_cfg["allpay_type"])){
-        $ws_array["payment_type"] = array( 1 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] ) + $allpay->all_cfg["allpay_type"];
+        $ws_array["payment_type"] = array( 2 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] ) + $allpay->all_cfg["allpay_type"];
     }else{
-        $ws_array["payment_type"] = array( 0 => $TPLMSG["PAYMENT_ATM"] , 1 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] );
+        $ws_array["payment_type"] = array( 1 => $TPLMSG["PAYMENT_ATM"] , 2 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] );
     }    
 }else{
     $ws_array["payment_type"]=array( 1 =>$TPLMSG["PAYMENT_ATM"],2 =>$TPLMSG["PAYMENT_CASH_ON_DELIVERY"]);
