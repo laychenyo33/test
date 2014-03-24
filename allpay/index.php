@@ -6,15 +6,15 @@
 			global $db,$cms_cfg,$ws_array,$TPLMSG;
 			include_once(dirname(__FILE__)."/config.php");
 
-			// ReturnURL
-			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && empty($_REQUEST["ap_retrun"])){
-				$this->allpay_respone(0);
-			}
-			
-			// PaymentInfoURL
-			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && !empty($_REQUEST["ap_retrun"])){
-				$this->allpay_respone(1);
-			}
+//			// ReturnURL
+//			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && empty($_REQUEST["ap_retrun"])){
+//				$this->allpay_respone(0);
+//			}
+//			
+//			// PaymentInfoURL
+//			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && !empty($_REQUEST["ap_retrun"])){
+//				$this->allpay_respone(1);
+//			}
 		}
 		
 		#################################################
