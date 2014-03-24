@@ -40,6 +40,7 @@ class Model_Dbtable {
     }
     
     function loadClass($id){
+        $id = str_replace("_", "/", $id);
         if(file_exists($this->_basePath . "/dbtable/".$id.".php")){
             include_once $this->_basePath . "/dbtable/".$id.".php";
             return "Dbtable_".ucfirst($id);
