@@ -175,82 +175,87 @@
 			if($this->isValidData($_POST)){
 				switch($switch){
 					default:
-			            $sql="
-			                insert into ".$cms_cfg['tb_prefix']."_allpay_order (
-			                    o_id,
-			                    MerchantID,
-			                    RtnCode,
-			                    RtnMsg,
-			                    TradeNo,
-			                    TradeAmt,
-			                    PaymentDate,
-			                    PaymentType,
-			                    PaymentTypeChargeFee,
-			                    TradeDate,
-			                    SimulatePaid,
-			                    CheckMacValue
-			                ) values (
-			                    '".$_POST["MerchantTradeNo"]."',
-			                    '".$_POST["MerchantID"]."',
-			                    '".$_POST["RtnCode"]."',
-			                    '".$_POST["RtnMsg"]."',
-			                    '".$_POST["TradeNo"]."',
-			                    '".$_POST["TradeAmt"]."',
-			                    '".$_POST["PaymentDate"]."',
-			                    '".$_POST["PaymentType"]."',
-			                    '".$_POST["PaymentTypeChargeFee"]."',
-			                    '".$_POST["TradeDate"]."',
-			                    '".$_POST["SimulatePaid"]."',
-			                    '".$_POST["CheckMacValue"]."'
-			                )";
-			            $db->query($sql);
+                                            App::getHelper('dbtable')->allpay_order->writeData($_POST);
+//			            $sql="
+//			                insert into ".$cms_cfg['tb_prefix']."_allpay_order (
+//			                    o_id,
+//			                    MerchantID,
+//			                    RtnCode,
+//			                    RtnMsg,
+//			                    TradeNo,
+//			                    TradeAmt,
+//			                    PaymentDate,
+//			                    PaymentType,
+//			                    PaymentTypeChargeFee,
+//			                    TradeDate,
+//			                    SimulatePaid,
+//			                    CheckMacValue
+//			                ) values (
+//			                    '".$_POST["MerchantTradeNo"]."',
+//			                    '".$_POST["MerchantID"]."',
+//			                    '".$_POST["RtnCode"]."',
+//			                    '".$_POST["RtnMsg"]."',
+//			                    '".$_POST["TradeNo"]."',
+//			                    '".$_POST["TradeAmt"]."',
+//			                    '".$_POST["PaymentDate"]."',
+//			                    '".$_POST["PaymentType"]."',
+//			                    '".$_POST["PaymentTypeChargeFee"]."',
+//			                    '".$_POST["TradeDate"]."',
+//			                    '".$_POST["SimulatePaid"]."',
+//			                    '".$_POST["CheckMacValue"]."'
+//			                )";
+//			            $db->query($sql);
 			            
 			            if($_POST["RtnCode"] == 1){
-				            $sql="
-				                update ".$cms_cfg['tb_prefix']."_order
-				                    set o_status='1'
-				                where o_id='".$_POST["MerchantTradeNo"]."'";
-				            $db->query($sql);
+                                        $updateOrder['o_id'] = $_POST["MerchantTradeNo"];
+                                        $updateOrder['o_status'] = 1;
+                                        App::getHelper('dbtable')->order->writeData($updateOrder);
+//				            $sql="
+//				                update ".$cms_cfg['tb_prefix']."_order
+//				                    set o_status='1'
+//				                where o_id='".$_POST["MerchantTradeNo"]."'";
+//				            $db->query($sql);
 			            }
 					break;
 					case 1:
-			            $sql="
-			                insert into ".$cms_cfg['tb_prefix']."_allpay_payinfo (
-			                    o_id,
-			                    MerchantID,
-			                    RtnCode,
-			                    RtnMsg,
-			                    TradeNo,
-			                    TradeAmt,
-			                    PaymentType,
-			                    TradeDate,
-			                    CheckMacValue,
-			                    BankCode,
-			                	vAccount,
-			                	PaymentNo,
-			                	Barcode1,
-			                	Barcode2,
-			                	Barcode3,
-			                	ExpireDate
-			                ) values (
-			                    '".$_POST["MerchantTradeNo"]."',
-			                    '".$_POST["MerchantID"]."',
-			                    '".$_POST["RtnCode"]."',
-			                    '".$_POST["RtnMsg"]."',
-			                    '".$_POST["TradeNo"]."',
-			                    '".$_POST["TradeAmt"]."',
-			                    '".$_POST["PaymentType"]."',
-			                    '".$_POST["TradeDate"]."',
-			                    '".$_POST["CheckMacValue"]."',
-			                    '".$_POST["BankCode"]."',
-			                	'".$_POST["vAccount"]."',
-			                	'".$_POST["PaymentNo"]."',
-			                	'".$_POST["Barcode1"]."',
-			                	'".$_POST["Barcode2"]."',
-			                	'".$_POST["Barcode3"]."',
-			                	'".$_POST["ExpireDate"]."'
-			                )";
-			            $db->query($sql);
+                                            App::getHelper('dbtable')->allpay_payinfo->writeData($_POST);
+//			            $sql="
+//			                insert into ".$cms_cfg['tb_prefix']."_allpay_payinfo (
+//			                    o_id,
+//			                    MerchantID,
+//			                    RtnCode,
+//			                    RtnMsg,
+//			                    TradeNo,
+//			                    TradeAmt,
+//			                    PaymentType,
+//			                    TradeDate,
+//			                    CheckMacValue,
+//			                    BankCode,
+//			                	vAccount,
+//			                	PaymentNo,
+//			                	Barcode1,
+//			                	Barcode2,
+//			                	Barcode3,
+//			                	ExpireDate
+//			                ) values (
+//			                    '".$_POST["MerchantTradeNo"]."',
+//			                    '".$_POST["MerchantID"]."',
+//			                    '".$_POST["RtnCode"]."',
+//			                    '".$_POST["RtnMsg"]."',
+//			                    '".$_POST["TradeNo"]."',
+//			                    '".$_POST["TradeAmt"]."',
+//			                    '".$_POST["PaymentType"]."',
+//			                    '".$_POST["TradeDate"]."',
+//			                    '".$_POST["CheckMacValue"]."',
+//			                    '".$_POST["BankCode"]."',
+//			                	'".$_POST["vAccount"]."',
+//			                	'".$_POST["PaymentNo"]."',
+//			                	'".$_POST["Barcode1"]."',
+//			                	'".$_POST["Barcode2"]."',
+//			                	'".$_POST["Barcode3"]."',
+//			                	'".$_POST["ExpireDate"]."'
+//			                )";
+//			            $db->query($sql);
 					break;
 				}
 	            
@@ -260,11 +265,16 @@
             }
             
             if($_POST["RtnCode"] != 1 && $_POST["RtnCode"] != 2 && $_POST["RtnCode"] != "10100073" || $ckmac_key != $_POST["CheckMacValue"]){
-	            $sql="
-	                update ".$cms_cfg['tb_prefix']."_order
-	                    set o_status='21'
-	                where o_id='".$_POST["MerchantTradeNo"]."'";
-	            $db->query($sql);
+                $updataOrder = array(
+                    'o_status' => 21,
+                    'o_id'     => $_POST["MerchantTradeNo"],
+                );
+                App::getHelper('dbtable')->writeData($updataOrder);
+//	            $sql="
+//	                update ".$cms_cfg['tb_prefix']."_order
+//	                    set o_status='21'
+//	                where o_id='".$_POST["MerchantTradeNo"]."'";
+//	            $db->query($sql);
 	            
 				//? mail 訂單錯誤處理
             }
