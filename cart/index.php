@@ -330,25 +330,25 @@
 			
 			if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
 				// 顯示付款方式
-                $tpl->newBlock("PAYMENT_TYPE");
-                $tpl->assign(array(
-                	"MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"],
-                	"VALUE_PAYMENT_TYPE" => $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"],
-				));
+                            $tpl->newBlock("PAYMENT_TYPE");
+                            $tpl->assign(array(
+                                "MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"],
+                                "VALUE_PAYMENT_TYPE" => $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"],
+                            ));
 
-				// 收件人資訊
-				$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
-				$tpl->assign($this->adv_lang);
-				$tpl->assign(array(
-					"VALUE_ADD_NAME" => $_REQUEST["o_add_name"],
-					"VALUE_ADD_TEL" => $_REQUEST["o_add_tel"],
-					"VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"],
-					"VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"],
-					"VALUE_INVOICE_TYPE" => $invoice_type,
-					"VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"],
-					"VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"],
-					"VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"],
-				));
+                            // 收件人資訊
+                            $tpl->newBlock("TAG_ADDRESSEE_BLOCK");
+                            $tpl->assign($this->adv_lang);
+                            $tpl->assign(array(
+                                    "VALUE_ADD_NAME" => $_REQUEST["o_add_name"],
+                                    "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"],
+                                    "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"],
+                                    "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"],
+                                    "VALUE_INVOICE_TYPE" => $invoice_type,
+                                    "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"],
+                                    "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"],
+                                    "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"],
+                            ));
 			}
 			
 			// 到貨時間
@@ -428,7 +428,7 @@
 					'".$_REQUEST["o_invoice_text"]."',
 					'".$o_arrival_time."'
                 )";
-            $rs = $db->query($sql);
+            $rs = $db->query($sql,true);
 			
             // 寫入購買產品
 			foreach($_SESSION[$cms_cfg['sess_cookie_name']]["id"] as $sess => $ID){
@@ -459,11 +459,19 @@
                         '".$special_price."',
                         '".$row["p_num"]."'
                     )";
-                $rs = $db->query($sql);
+                $rs = $db->query($sql,true);
                 
 				$all_row[$sess] = $row;
             }
-			
+			$this->mail_handle($mail_goto);
+                        App::getHelper('session')->paymentType = $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"];
+                        switch(App::getHelper('session')->paymentType){
+                            case 1: //atm
+                            case '貨到付款': //貨到付款
+                                $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$this->o_id;
+                                header("location:".$goto_url);
+                                break;
+                        }                        
 			// ALLPAY (歐付寶)
 			if($allpay->allpay_switch && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
 				foreach($allpay->all_cfg["allpay_type"] as $type => $str){
@@ -482,17 +490,16 @@
 						0 // 選擇預設付款子項目
 					);
 					
-					$mail_goto = 1;
+//					$mail_goto = 1;
 				}
 			}
 			
-			$this->mail_handle($mail_goto);
 			
 	        $db_msg = $db->report();
 	        if($db_msg == ""){
 	            unset($_SESSION[$cms_cfg['sess_cookie_name']]["id"]);
 	            unset($_SESSION[$cms_cfg['sess_cookie_name']]["num"]);
-				unset($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]);
+                    unset($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]);
 	        }else{
 	            $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
 	        }
@@ -1014,30 +1021,33 @@
 		
 		// 寄送訊息
 		function mail_handle($none_goto=0){
-            global $db,$cms_cfg,$tpl,$main,$TPLMSG;
-			
-            if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
-            	$sql = "select st_order_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
-            	$mail_title = $TPLMSG["ORDER_MAIL_TITLE"];
-				$mail_func = "shopping";
-				$tpl->assignGlobal( "VALUE_TERM" , $row['st_order_mail']);
-			}else{
-				$sql = "select st_inquiry_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
-				$mail_title = $TPLMSG["INQUIRY_MAIL_TITLE"];
-				$mail_func = "inquiry";
-				$tpl->assignGlobal( "VALUE_TERM" , $row['st_inquiry_mail']);
-			}
-            
-            $selectrs = $db->query($sql);
-            $row = $db->fetch_array($selectrs,1);
-            $mail_content=$tpl->getOutputContent();
-			
-            if($cms_cfg["ws_module"]["ws_cart_login"]==0){
-                $goto_url = $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
-            }else{
-                $goto_url = (!empty($this->mail_goto_url))?$this->mail_goto_url:$cms_cfg["base_url"]."cart/?func=c_order_detial&o_id=".$this->o_id;
-            }
-            $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$mail_title,$mail_func,$goto_url,$none_goto);
+                    global $db,$cms_cfg,$tpl,$main,$TPLMSG;
+
+                    if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
+                        $sql = "select st_order_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
+                        $mail_title = $TPLMSG["ORDER_MAIL_TITLE"];
+                        $mail_func = "shopping";
+                        $selectrs = $db->query($sql,true);
+                        $row = $db->fetch_array($selectrs,1);
+                        $tpl->assignGlobal( "VALUE_TERM" , $row['st_order_mail']);
+                    }else{
+                        $sql = "select st_inquiry_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
+                        $mail_title = $TPLMSG["INQUIRY_MAIL_TITLE"];
+                        $mail_func = "inquiry";
+                        $selectrs = $db->query($sql,true);
+                        $row = $db->fetch_array($selectrs,1);
+                        $tpl->assignGlobal( "VALUE_TERM" , $row['st_inquiry_mail']);
+                    }
+
+//                    $mail_content=$tpl->getOutputContent();
+
+                    if($cms_cfg["ws_module"]["ws_cart_login"]==0){
+                        $goto_url = $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
+                    }else{
+                        $goto_url = (!empty($this->mail_goto_url))?$this->mail_goto_url:$cms_cfg["base_url"]."cart/?func=c_order_detial&o_id=".$this->o_id;
+                    }
+//                    $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$mail_title,$mail_func,$goto_url,$none_goto);
+                    App::getHelper('session')->mailContent = $tpl->getOutputContent();
 		}
 		
 		// 讀取各式服務條款
