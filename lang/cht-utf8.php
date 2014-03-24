@@ -336,7 +336,7 @@ $TPLMSG['YEAR'] = "Year"; //年
 $TPLMSG['MONTH'] = "Month"; //月
 $TPLMSG['DAY'] = "Day"; //日
 $TPLMSG['NO_PAYMENT'] = "Please Select Payment Type!"; //請選擇付款方式
-$TPLMSG["PLUS_FEE"] = "Fee"; //手續費
+$TPLMSG["PLUS_FEE"] = "手續費"; //手續費
 
 //歐付寶相關字彙
 $TPLMSG["CREDIT"] = "Credit card"; //信用卡

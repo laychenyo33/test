@@ -333,7 +333,7 @@ $TPLMSG['YEAR'] = "Year"; //年
 $TPLMSG['MONTH'] = "Month"; //月
 $TPLMSG['DAY'] = "Day"; //日
 $TPLMSG['NO_PAYMENT'] = "Please Select Payment Type!"; //請選擇付款方式
-$TPLMSG["PLUS_FEE"] = "Fee"; //手續費
+$TPLMSG["PLUS_FEE"] = "手续费"; //手續費
 
 /*新增语汇*/
 /*以下是支付宝相关字汇*/
