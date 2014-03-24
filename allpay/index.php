@@ -262,7 +262,7 @@
             if($_POST["RtnCode"] != 1 && $_POST["RtnCode"] != 2 && $_POST["RtnCode"] != "10100073" || $ckmac_key != $_POST["CheckMacValue"]){
 	            $sql="
 	                update ".$cms_cfg['tb_prefix']."_order
-	                    set o_status='10'
+	                    set o_status='21'
 	                where o_id='".$_POST["MerchantTradeNo"]."'";
 	            $db->query($sql);
 	            
