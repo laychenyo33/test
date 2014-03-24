@@ -172,16 +172,7 @@
 		function allpay_respone($switch=0){
 			global $db,$cms_cfg,$ws_array,$TPLMSG;
 			
-			ksort($_POST);
-			foreach($_POST as $key => $value){
-				if($key != "CheckMacValue"){
-					$all_post_array[] = $key.'='.$value;
-				}
-			}
-
-			$ckmac_key = strtoupper($this->allpay_checkcode($all_post_array));
-			
-			if($ckmac_key == $_POST["CheckMacValue"]){
+			if($this->isValidData($_POST)){
 				switch($switch){
 					default:
 			            $sql="
@@ -331,5 +322,18 @@
 				}
 			}
 		}
+                //驗證回傳結果
+                function isValidData($post){
+                    ksort($post);
+                    foreach($post as $key => $value){
+                            if($key != "CheckMacValue"){
+                                    $all_post_array[] = $key.'='.$value;
+                            }
+                    }
+
+                    $ckmac_key = strtoupper($this->allpay_checkcode($all_post_array));
+
+                    return ($ckmac_key == $_POST["CheckMacValue"]);
+                }
 	}
 ?>
