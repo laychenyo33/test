@@ -73,6 +73,7 @@
 			}
 			
 	        if($this->ws_tpl_type){
+                    App::getHelper('main')->layer_link();
 	            $tpl->printToScreen();
 	        }
 		}
@@ -94,9 +95,10 @@
 		    $tpl->assignGlobal( "TAG_PRODUCTS_CURRENT" , "class='current'"); //上方menu current
 		    $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["products"]); //此頁面對應的flash及圖檔名稱
 		    $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-products"); //主要顯示區域的css設定
+                    $main->layer_link( ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['CART_SHOPPING']:$TPLMSG['CART_INQUIRY']);
 		    $main->header_footer("");
 		    $main->google_code(); //google analystics code , google sitemap code
-		    $main->left_fix_cate_list();
+                    $main->left_fix_cate_list();
 			
 			$tpl->newBlock("JS_MAIN");
 			$tpl->newBlock("JS_POP_IMG");
@@ -157,7 +159,6 @@
 				"TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK'],
 				
 				"TAG_MAIN_FUNC" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['CART_SHOPPING']:$TPLMSG['CART_INQUIRY'],
-				"TAG_LAYER" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['CART_SHOPPING']:$TPLMSG['CART_INQUIRY'],
 				"TAG_SCROLL_TOP" => $_REQUEST["top"],
 			));
 			
