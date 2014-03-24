@@ -18,7 +18,7 @@
 	$this->all_cfg["ReturnURL"] = $cms_cfg['base_url']."shopping-result2.php"; // 回傳網址
 	$this->all_cfg["ClientBackURL"] = ""; // ALLPAY 會員回傳網址
 	$this->all_cfg["OrderResultURL"] = $cms_cfg['base_url']."shopping-result.php"; // ALLPAY 會員付款結果網址
-	$this->all_cfg["PaymentInfoURL"] = $this->all_cfg["ReturnURL"]."/?ap_retrun=1"; // ATM or CVS(超商) 付費專屬資訊回傳網址
+	$this->all_cfg["PaymentInfoURL"] = $cms_cfg['base_url']."shopping-result.php"; // ATM or CVS(超商) 付費專屬資訊回傳網址
 	$this->all_cfg["ItemURL"] = ""; // 商品銷售網址
 	
 	
