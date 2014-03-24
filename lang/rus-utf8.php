@@ -325,6 +325,8 @@ $TPLMSG['DAY'] = "Day"; //日
 $TPLMSG['NO_PAYMENT'] = "Please Select Payment Type!"; //請選擇付款方式
 $TPLMSG["PLUS_FEE"] = "Fee"; //手續費
 $TPLMSG["SHOPPING_RESULT"] = "Shopping Result"; 
+$TPLMSG['AUTHORIZE_TERMINATE'] = "Authoriz terminated";
+$TPLMSG['AUTHORIZE_FAILED'] = "Authoriz failed";
 $TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG'] = "<div class='auth_err_rc'>%s</div><div class='auth_err_msg'>Please confirm your credit card info！<br/>If you sure that your credit card is correct, contact with you issue bank. Thank you. </div>";
 $TPLMSG['ORDER_SUCCESS'] = "Order Success";
 $TPLMSG['ORDER_FAIL'] = "Order failed";

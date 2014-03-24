@@ -337,6 +337,8 @@ $TPLMSG['DAY'] = "日"; //日
 $TPLMSG['NO_PAYMENT'] = "请选择付款方式"; //请选择付款方式
 $TPLMSG["PLUS_FEE"] = "手续费"; //手续费
 $TPLMSG["SHOPPING_RESULT"] = "订单结果"; 
+$TPLMSG['AUTHORIZE_TERMINATE'] = "授权中断";
+$TPLMSG['AUTHORIZE_FAILED'] = "授权失败";
 $TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG'] = "<div class='auth_err_rc'>%s</div><div class='auth_err_msg'>请确认您的信用卡资讯是否正确！<br/>如果您确定输入是正确的资讯，请与您的发卡银行联络。<br/>若造成您的不便，敬请见谅。 </div>";
 $TPLMSG['ORDER_SUCCESS'] = "订购成功";
 $TPLMSG['ORDER_FAIL'] = "订购失败";

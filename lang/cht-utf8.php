@@ -345,6 +345,8 @@ $TPLMSG['DAY'] = "日"; //日
 $TPLMSG['NO_PAYMENT'] = "請選擇付款方式"; //請選擇付款方式
 $TPLMSG["PLUS_FEE"] = "手續費"; //手續費
 $TPLMSG["SHOPPING_RESULT"] = "訂單結果"; 
+$TPLMSG['AUTHORIZE_TERMINATE'] = "授權中斷";
+$TPLMSG['AUTHORIZE_FAILED'] = "授權失敗";
 $TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG'] = "<div class='auth_err_rc'>%s</div><div class='auth_err_msg'>請確認您的信用卡資訊是否正確！<br/>如果您確定輸入是正確的資訊，請與您的發卡銀行聯絡。<br/>若造成您的不便，敬請見諒。 </div>";
 $TPLMSG['ORDER_SUCCESS'] = "訂購成功";
 $TPLMSG['ORDER_FAIL'] = "訂購失敗";
