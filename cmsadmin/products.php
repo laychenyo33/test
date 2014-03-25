@@ -1081,11 +1081,11 @@ class PRODUCTS{
                         $add_extra_fields .= "p_info_field".$j."_title,";
                         $add_extra_fields .= "p_info_field".$j.",";
                         $add_extra_values .= "'".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
-                        $add_extra_values .= "'".$db->quote($_REQUEST['p_info_field'.$j])."',";
+                        $add_extra_values .= "'".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j]))."',";
                         break;
                     case "mod":
                         $update_extra_fields .= "p_info_field".$j."_title ='".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
-                        $update_extra_fields .= "p_info_field".$j."='".$db->quote($_REQUEST['p_info_field'.$j])."',";
+                        $update_extra_fields .= "p_info_field".$j."='".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j]))."',";
                         break;
                 }
             }
