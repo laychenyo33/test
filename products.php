@@ -427,8 +427,8 @@ class PRODUCTS{
             //顯示第二頁以後的meta title
             if(!empty($_REQUEST["nowp"])){
                 $meta_array=array("meta_title"=>$sec_page_meta_title,
-                                  "meta_keyword"=>$meta_title,
-                                  "meta_description"=>$meta_description,
+                                  "meta_keyword"=> '',
+                                  "meta_description"=> '',
                 );
                 //$seo_H1  預設抓分類名稱
                 $main->header_footer($meta_array,$seo_H1);
@@ -492,6 +492,10 @@ class PRODUCTS{
             $tpl->assignGlobal("VALUE_BACK_LINK",$this->get_link($row));
             //是否為自訂頁面
             if($row["p_custom_status"]){
+                $tpl->assignGlobal( array(
+                    "VALUE_P_CART_TYPE"  => (App::getHelper('session')->sc_cart_type==1)?"shopping":'inquiry',
+                    "VALUE_P_ID"         => $row["p_id"]
+                ));
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
                 $row["p_custom"] = $main->content_file_str_replace($row["p_custom"]);
                 $tpl->assign("VALUE_P_CUSTOM",$row["p_custom"]);
