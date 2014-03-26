@@ -427,8 +427,8 @@ class PRODUCTS{
             //顯示第二頁以後的meta title
             if(!empty($_REQUEST["nowp"])){
                 $meta_array=array("meta_title"=>$sec_page_meta_title,
-                                  "meta_keyword"=>$meta_title,
-                                  "meta_description"=>$meta_description,
+                                  "meta_keyword"=> '',
+                                  "meta_description"=> '',
                 );
                 //$seo_H1  預設抓分類名稱
                 $main->header_footer($meta_array,$seo_H1);
