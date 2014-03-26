@@ -1,17 +1,21 @@
-<!-- START BLOCK : PRODUCTS_DETAIL_CUSTOM -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td>
-    {VALUE_P_CUSTOM}
-	</td>
-  </tr>
-</table>
-<!-- END BLOCK : PRODUCTS_DETAIL_CUSTOM -->
 <form name="myform" method="post" action="{CART_PATH}" style="margin:0px;padding:0px;">
     <input name="amount" value="1" size="2" type="hidden" />
     <input type="hidden" name="func" value="c_add">
     <input type="hidden" name="cart_type" value="{VALUE_P_CART_TYPE}">
     <input type="hidden" name="p_id" value="{VALUE_P_ID}">    
+    <!-- START BLOCK : PRODUCTS_DETAIL_CUSTOM -->
+    <div class="btn01">
+            <div class="btn02"><a href="javascript:document.myform.submit();">Inquiry</a></div>
+            <div class="btn02"><a href="javascript:addBookmarkForBrowser(document.title,document.URL);">Favorite</a></div>
+    </div>    
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+        {VALUE_P_CUSTOM}
+            </td>
+      </tr>
+    </table>
+    <!-- END BLOCK : PRODUCTS_DETAIL_CUSTOM -->
     <!-- START BLOCK : PRODUCTS_DETAIL_DEFAULT -->
 
         <!-- START BLOCK : BIG_IMG_MUTI -->
