@@ -296,6 +296,7 @@ class PRODUCTS{
             }elseif($mode=="p_hot"){
                 $sql .=  " and p.p_type in ('2','3','6','7') ";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_HOT']);
+                $main->layer_link($TPLMSG['PRODUCT_HOT']);
             //促銷產品
             }elseif($mode=="p_pro"){
                 $sql .=  " and p.p_type in ('4','5','6','7') ";

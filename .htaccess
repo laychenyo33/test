@@ -53,6 +53,7 @@ RewriteRule ^.*$ - [NC,L]
 
 RewriteRule ^new-products.htm$  products.php?func=p_new [L]
 RewriteRule ^pro-products.htm$  products.php?func=p_pro [L]
+RewriteRule ^hot-products.htm$  products.php?func=p_hot [L]
 RewriteRule ^application-(\d+).htm$  application.php?pa_id=$1 [L]
 #主功能頁
 RewriteRule ^(news|aboutus|contactus|sitemap|products|download|faq|guestbook|stores|factory|goodlink|gallery|application|video|ebook|quick_shopping).htm$  $1.php [L]
