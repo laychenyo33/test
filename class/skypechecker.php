@@ -79,10 +79,10 @@ class SkypeChecker{
         $this->statusXML = simplexml_load_string($data);
     }
     //取得狀態圖片
-    function get_status_img($nums=1){
+    function get_status_img($nums=1,$lang='en'){
         switch($nums){
             case '2':
-                return "http://mystatus.skype.com/".$this->username;
+                return "http://mystatus.skype.com/".$this->username . "." . $lang;
                 break;
             case "1":
             default:
