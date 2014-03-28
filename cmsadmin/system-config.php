@@ -131,6 +131,7 @@ class SYSTEMCFG{
                                       "VALUE_SC_DESC_TITLE_DEFAULT" => (trim($row["sc_desc_title_default"])=="")?$TPLMSG['PRODUCT_DESCRIPTION']:$row["sc_desc_title_default"],
                                       "VALUE_SC_CHARACTER_TITLE_DEFAULT" => (trim($row["sc_character_title_default"])=="")?$TPLMSG['PRODUCT_CHARACTER']:$row["sc_character_title_default"],
                                       "VALUE_SC_SPEC_TITLE_DEFAULT" => (trim($row["sc_spec_title_default"])=="")?$TPLMSG['PRODUCT_SPEC']:$row["sc_spec_title_default"],
+									  "VALUE_SC_GA_CODE" => $row["sc_ga_code"],
                                       "MSG_MODE" => "修改",
             ));
             if($cms_cfg["ws_module"]["ws_im_msn"]==1) {
@@ -230,6 +231,7 @@ class SYSTEMCFG{
                 sc_desc_title_default='".$db->quote($_REQUEST["sc_desc_title_default"])."',
                 sc_character_title_default='".$db->quote($_REQUEST["sc_character_title_default"])."',
                 sc_spec_title_default='".$db->quote($_REQUEST["sc_spec_title_default"])."',
+				sc_ga_code='".$db->quote($_REQUEST["sc_ga_code"])."',
                 ";
         if($cms_cfg["ws_module"]["ws_version"]=="ips" || $cms_cfg["ws_module"]["ws_version"]=="ipc"){
             $sql .="sc_shipping_price='".$db->quote($_REQUEST["sc_shipping_price"])."',

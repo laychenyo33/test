@@ -7,7 +7,7 @@
 {TAG_META_REFRESH}
 <meta name="keywords" content="{HEADER_META_KEYWORD}" />
 <meta name="description" content="{HEADER_META_DESCRIPTION}" />
-<meta name="robots" content="nofllow" />
+<meta name="robots" content="{HEADER_META_ROBOT}" />
 <link href="{TAG_ROOT_PATH}css/index.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" language="javascript" src="{TAG_ROOT_PATH}js/jquery/jquery-1.8.2.js"></script>
 <link href="{TAG_ROOT_PATH}js/nivo/themes/nivo-slider.css" rel="stylesheet" type="text/css">
@@ -21,6 +21,21 @@ DD_belatedPNG.fix('.theme-default .nivo-controlNav a, .theme-default .nivo-direc
 /* PNG IE6 */
 </script>
 <![endif]-->
+<!-- START BLOCK : GOOGLE_ANALYTICS -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '{VALUE_GA_CODE}']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<!-- END BLOCK : GOOGLE_ANALYTICS -->
 </head>
 
 <body>
