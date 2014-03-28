@@ -1,6 +1,7 @@
 <?
 $cms_cfg['ws_version'] = "cms-ips-v2";
 $cms_cfg['ws_level'] = 20;
+$cms_cfg['ws_online'] = 0; //0:下線;1:上線
 $cms_cfg["ws_module"]=array(
 /*      BASIC(IPB&IPS) SETUP        */
         "ws_aboutus"=>1,            //關於我們(公司簡介)

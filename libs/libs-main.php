@@ -287,6 +287,7 @@ class MAINFUNC{
             $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH",$TPLMSG['PRODUCTS_SEARCH']);
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH_KEYWORD",$TPLMSG['ENTER_KEYWORD']);
+			$tpl->assignGlobal("HEADER_META_ROBOT",($cms_cfg['ws_online']) ? "all" : "nofllow");
             //設定主選單變數
             if(!empty($ws_array["main"])){
                 foreach($ws_array["main"] as $item => $itemName){
@@ -602,10 +603,6 @@ class MAINFUNC{
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?$tpl->newBlock( "AUTHORITY_SEO" ):"";
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_google_sitemap"] && $cms_cfg["ws_module"]["ws_seo"]){
             $tpl->newBlock( "AUTHORITY_GOOGLE_SITEMAP" );
-            $tpl->gotoBlock( "AUTHORITY_SEO" );
-        }
-        if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_google_analytics"] && $cms_cfg["ws_module"]["ws_seo"]){
-            $tpl->newBlock( "AUTHORITY_GOOGLE_ANALYTICS" );
             $tpl->gotoBlock( "AUTHORITY_SEO" );
         }
         ($cms_cfg["ws_module"]["ws_statistic"])?$tpl->newBlock( "AUTHORITY_STATISTIC" ):"";
@@ -1036,7 +1033,7 @@ class MAINFUNC{
         $sql="select sc_ga_code,sc_gs_code,sc_gs_datetime,sc_gs_filename from ".$cms_cfg['tb_prefix']."_system_config";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
-        if(trim($row["sc_ga_code"])!=""){
+        if(trim($row["sc_ga_code"])!="" && $cms_cfg['ws_online']){
             $tpl->newBlock("GOOGLE_ANALYTICS");
             $tpl->assign("VALUE_GA_CODE",$row["sc_ga_code"]);
         }
