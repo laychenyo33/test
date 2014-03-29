@@ -594,6 +594,7 @@ class MAINFUNC{
         }
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_new_product"]){
             $tpl->newBlock("AUTHORITY_NEW_PRODUCTS");
+            $tpl->newBlock("AUTHORITY_HOT_PRODUCTS");
             $tpl->gotoBlock( "AUTHORITY_PRODUCTS" );
         }
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_products_ca"]){
