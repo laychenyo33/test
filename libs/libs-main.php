@@ -266,15 +266,16 @@ class MAINFUNC{
                                      "TAG_MAIN_FUNC" => ($meta_array["seo_h1"])?$meta_array["seo_h1"]:$seo_h1,
             ));
             if($meta_array["seo_short_desc"]){
-            $tpl->newBlock("SEO_SHORT_DESC");
-            $tpl->assign("VALUE_SEO_SHORT_DESC",$meta_array["seo_short_desc"]);
-        }
+                $tpl->newBlock("SEO_SHORT_DESC");
+                $tpl->assign("VALUE_SEO_SHORT_DESC",$meta_array["seo_short_desc"]);
+            }
         }
         if($e==1){  //第一次執行才做
             if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_status"]==1 && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_starttime"] < date("H:i:s") && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_endtime"] > date("H:i:s")){
                 $tpl->newBlock( "IM_ZONE" );
-                $tpl->assign(array("VALUE_SC_IM_SKYPE" =>"skype:<a href=\"callto:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_skype"]."\"><img src=\"".$cms_cfg['base_images']."skype_call_me.png\" alt=\"Skype Me™!\" border='0' width='70' height='23'/></a>",
-                                   "VALUE_SC_IM_MSN" =>"msn:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_msn"],
+                $tpl->assign(array(
+                    "VALUE_SC_IM_SKYPE" =>"skype:<a href=\"callto:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_skype"]."\"><img src=\"".$cms_cfg['base_images']."skype_call_me.png\" alt=\"Skype Me™!\" border='0' width='70' height='23'/></a>",
+                    "VALUE_SC_IM_MSN" =>"msn:".$_SESSION[$cms_cfg['sess_cookie_name']]["sc_im_msn"],
                 ));
             }
             $tpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
@@ -287,7 +288,7 @@ class MAINFUNC{
             $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH",$TPLMSG['PRODUCTS_SEARCH']);
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH_KEYWORD",$TPLMSG['ENTER_KEYWORD']);
-			$tpl->assignGlobal("HEADER_META_ROBOT",($cms_cfg['ws_online']) ? "all" : "nofllow");
+            $tpl->assignGlobal("HEADER_META_ROBOT",($cms_cfg['ws_online']) ? "all" : "nofllow");
             //設定主選單變數
             if(!empty($ws_array["main"])){
                 foreach($ws_array["main"] as $item => $itemName){
@@ -593,6 +594,7 @@ class MAINFUNC{
         }
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_new_product"]){
             $tpl->newBlock("AUTHORITY_NEW_PRODUCTS");
+            $tpl->newBlock("AUTHORITY_HOT_PRODUCTS");
             $tpl->gotoBlock( "AUTHORITY_PRODUCTS" );
         }
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_products_ca"]){
