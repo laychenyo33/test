@@ -75,13 +75,15 @@ if($db->numRows($res)){
                         }
                         $simg = $p_row['p_small_img']?$cms_cfg['file_root'].$p_row['p_small_img']:$cms_cfg['default_preview_pic'];
                         $dimension = $main->resizeto($simg,219,171);
+                        $p_desc=preg_replace('%([-\w\.:]*/)*(upload_files/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $p_row['p_desc']);
+                        $p_desc=preg_replace('%([-\w\.:]*/)*(images/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $p_desc);
                         $mtpl->assign(array(
                            "VALUE_P_LINK"      => $p_link, 
                            "VALUE_P_SMALL_IMG" => $p_row['p_small_img']?$cms_cfg['file_url'].$p_row['p_small_img']:$cms_cfg['server_url'].$cms_cfg['default_preview_pic'], 
                            "VALUE_P_SMALL_IMG_W" => $dimension['width'], 
                            "VALUE_P_SMALL_IMG_H" => $dimension['height'], 
                            "VALUE_P_NAME"      => $p_row['p_name'], 
-                           "VALUE_P_DESC"      => $main->get_short_str($p_row['p_desc'],$cms_cfg['epaper_product_desc_limit'],$p_link), 
+                           "VALUE_P_DESC"      => $main->get_short_str($p_desc,$cms_cfg['epaper_product_desc_limit'],$p_link), 
                         ));
                     }
                 }
