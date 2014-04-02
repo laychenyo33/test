@@ -108,7 +108,7 @@
 			$this->allpay_code = $this->allpay_checkcode($all_code_array);
 			
 			// 組合訂單資訊
-			$allpay_send_ck = $this->allpay_send_form($all_value_array);
+			$this->allpay_send_form($all_value_array);
 			
 //			if($allpay_send_ck){
 //	            $sql="
@@ -161,10 +161,6 @@
 				';
 				
 				echo $form;
-				
-				return true;
-			}else{
-				return false;
 			}
 		}
 		
