@@ -106,6 +106,9 @@
 			
 			// 取得檢查碼
 			$this->allpay_code = $this->allpay_checkcode($all_code_array);
+                        
+                        //更新訂單為授權中斷
+                        App::getHelper('dbtable')->order->writeData(array('o_id'=>$o_id,'o_status'=>20));
 			
 			// 組合訂單資訊
 			$this->allpay_send_form($all_value_array);
