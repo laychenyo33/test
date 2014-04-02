@@ -359,7 +359,14 @@
                                 $updateOrder['o_status'] = 21;
                                 App::getHelper('dbtable')->order->writeData($updateOrder);
                             }
+                            if(($err = App::getHelper('dbtable')->order->report())!=''){
+                                echo "0|db error";
+                            }else{
+                                echo "1|OK";
+                            }
                         }
+                    }else{
+                        echo "0|invalid check value";
                     }
                 }
                 //更新付款資訊
@@ -376,7 +383,14 @@
                                 $updateOrder['o_status'] = 21;
                                 App::getHelper('dbtable')->order->writeData($updateOrder);
                             }
+                            if(($err = App::getHelper('dbtable')->order->report())!=''){
+                                echo "0|db error";
+                            }else{
+                                echo "1|OK";
+                            }                            
                         }
+                    }else{
+                        echo "0|invalid check value";  
                     }
                 }
 	}
