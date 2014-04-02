@@ -110,21 +110,21 @@
 			// 組合訂單資訊
 			$allpay_send_ck = $this->allpay_send_form($all_value_array);
 			
-			if($allpay_send_ck){
-	            $sql="
-	                update ".$cms_cfg['tb_prefix']."_order
-	                    set o_status='4'
-	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
-	            $db->query($sql);
-			}else{
-	            $sql="
-	                update ".$cms_cfg['tb_prefix']."_order
-	                    set o_status='10'
-	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
-	            $db->query($sql);
-				
-				//? mail 訂單錯誤處理
-			}
+//			if($allpay_send_ck){
+//	            $sql="
+//	                update ".$cms_cfg['tb_prefix']."_order
+//	                    set o_status='4'
+//	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
+//	            $db->query($sql);
+//			}else{
+//	            $sql="
+//	                update ".$cms_cfg['tb_prefix']."_order
+//	                    set o_status='10'
+//	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
+//	            $db->query($sql);
+//				
+//				//? mail 訂單錯誤處理
+//			}
 		}
 
 		// 組合訂單資訊
