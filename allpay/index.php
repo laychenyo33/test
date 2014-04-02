@@ -348,30 +348,34 @@
                 //更新訂單資料
                 function updateOrder($post){
                     if($this->isValidData($post)){
-                        if($post["RtnCode"] == 1){
-                            App::getHelper('dbtable')->allpay_order->writeData($post,'insert');
-                            $updateOrder['o_id'] = $post["MerchantTradeNo"];
-                            $updateOrder['o_status'] = 1;
-                            App::getHelper('dbtable')->order->writeData($updateOrder);                        
-                        }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
-                            $updateOrder['o_id'] = $post["MerchantTradeNo"];
-                            $updateOrder['o_status'] = 21;
-                            App::getHelper('dbtable')->order->writeData($updateOrder);
+                        if($post["RtnCode"] != 2 && $_POST["RtnCode"] != "10100073"){
+                            if($post["RtnCode"] == 1){
+                                App::getHelper('dbtable')->allpay_order->writeData($post,'insert');
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 1;
+                                App::getHelper('dbtable')->order->writeData($updateOrder);                        
+                            }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 21;
+                                App::getHelper('dbtable')->order->writeData($updateOrder);
+                            }
                         }
                     }
                 }
                 //更新付款資訊
                 function updatePayInfo($post){
                     if($this->isValidData($post)){
-                        if($post["RtnCode"] == 2 || $_POST["RtnCode"] == "10100073"){
-                            App::getHelper('dbtable')->allpay_payinfo->writeData($post,'insert');                        
-                            $updateOrder['o_id'] = $post["MerchantTradeNo"];
-                            $updateOrder['o_status'] = 0;
-                            App::getHelper('dbtable')->order->writeData($updateOrder);                        
-                        }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
-                            $updateOrder['o_id'] = $post["MerchantTradeNo"];
-                            $updateOrder['o_status'] = 21;
-                            App::getHelper('dbtable')->order->writeData($updateOrder);
+                        if($post["RtnCode"]!=1){
+                            if($post["RtnCode"] == 2 || $_POST["RtnCode"] == "10100073"){
+                                App::getHelper('dbtable')->allpay_payinfo->writeData($post,'insert');                        
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 0;
+                                App::getHelper('dbtable')->order->writeData($updateOrder);                        
+                            }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 21;
+                                App::getHelper('dbtable')->order->writeData($updateOrder);
+                            }
                         }
                     }
                 }
