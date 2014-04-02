@@ -386,7 +386,7 @@
                                 App::getHelper('dbtable')->order->writeData($updateOrder);
                             }
                             $post['o_id'] = $post["MerchantTradeNo"];
-                            App::getHelper('dbtable')->allpay_info->writeData($post,'insert');
+                            App::getHelper('dbtable')->Allpay_Payinfo->writeData($post,'insert');
                             if(($err = App::getHelper('dbtable')->order->report())!=''){
                                 echo "0|db error";
                             }else{
