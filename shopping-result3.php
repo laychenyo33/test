@@ -1,5 +1,5 @@
 <?php
 //error_reporting(15);
 include_once("libs/libs-sysconfig.php");
-$allpay->updatePayInfo();
+$allpay->updatePayInfo($_POST);
 ?>
