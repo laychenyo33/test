@@ -8,74 +8,73 @@
 		function __construct(){
 			global $cms_cfg,$tpl,$TPLMSG;
 			include_once(dirname(__FILE__)."/config.php");
-			
+			$session = App::getHelper('session');
 			$this->m_id = $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
-	        $this->ws_seo = ($cms_cfg["ws_module"]["ws_seo"])?1:0;
+                        $this->ws_seo = ($cms_cfg["ws_module"]["ws_seo"])?1:0;
 			$this->order = ($cms_cfg["ws_module"]["ws_select_order"]==1)?"desc":"asc";
 			 
 			switch($_REQUEST["func"]){
-				case "c_add":
-	                $this->ws_tpl_file = "templates/ws-cart-tpl.html";
-	                $this->ws_load_tp($this->ws_tpl_file);
-	                $this->cart_add();
-	                $this->ws_tpl_type=1;
+                            case "c_add":
+                                $this->ws_tpl_file = "templates/ws-cart-tpl.html";
+                                $this->ws_load_tp($this->ws_tpl_file);
+                                $this->cart_add();
+                                $this->ws_tpl_type=1;
 				break;
-				case "c_finish":
-	                $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
-	                $this->ws_load_tp($this->ws_tpl_file);
-					$tpl->newBlock("JS_FORMVALID");
-	                $this->cart_finish();
-	                $this->ws_tpl_type=1;
+                            case "c_finish":
+                                $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
+                                $this->ws_load_tp($this->ws_tpl_file);
+                                $tpl->newBlock("JS_FORMVALID");
+                                $this->cart_finish();
+                                $this->ws_tpl_type=1;
 				break;
-				case "c_replace":
-					 $this->cart_replace();
+                            case "c_replace":
+                                $this->cart_replace();
 				break;
-				case "c_ajax":
-					$form = $this->ajax_form();
-					
-					switch($form["ajax_act"]){
-						case "c_mod":
-							$this->cart_mod($form);
-						break;
-						case "c_del":
-							$this->cart_del($form);
-						break;
-					}
-					
-					echo $form["ajax_top"];
+                            case "c_ajax":
+                                $form = $this->ajax_form();
+
+                                switch($form["ajax_act"]){
+                                    case "c_mod":
+                                        $this->cart_mod($form);
+                                        break;
+                                    case "c_del":
+                                        $this->cart_del($form);
+                                        break;
+                                }
+                                echo $form["ajax_top"];
 				break;
-				case "c_order":
-	                $this->ws_tpl_file = "templates/ws-cart-order-tpl.html";
-					$this->ws_load_tp($this->ws_tpl_file,1);
-					$this->cart_order();
-					$this->ws_tpl_type=1;
+                            case "c_order":
+                                $this->ws_tpl_file = "templates/ws-cart-order-tpl.html";
+                                $this->ws_load_tp($this->ws_tpl_file,1);
+                                $this->cart_order();
+                                $this->ws_tpl_type=1;
 				break;
-				case "c_order_detial":
-	                $this->ws_tpl_file = "templates/ws-cart-order-tpl.html";
-					$this->ws_load_tp($this->ws_tpl_file,1);
-					$this->cart_order_detail();
-					$this->ws_tpl_type=1;
+                            case "c_order_detial":
+                                $this->ws_tpl_file = "templates/ws-cart-order-tpl.html";
+                                $this->ws_load_tp($this->ws_tpl_file,1);
+                                $this->cart_order_detail();
+                                $this->ws_tpl_type=1;
 				break;
-				case "c_check":
-					$this->cart_check();
+                            case "c_check":
+                                $this->cart_check();
 				break;
 				/*
 				case "c_clear":
 					session_unset();
 				break;
 				*/
-				default:
-	                $this->ws_tpl_file = "templates/ws-cart-tpl.html";
-	                $this->ws_load_tp($this->ws_tpl_file);
-	                $this->cart_list();
-	                $this->ws_tpl_type=1;
+                            default:
+                                $this->ws_tpl_file = "templates/ws-cart-tpl.html";
+                                $this->ws_load_tp($this->ws_tpl_file);
+                                $this->cart_list();
+                                $this->ws_tpl_type=1;
 				break;
 			}
 			
-	        if($this->ws_tpl_type){
-                    App::getHelper('main')->layer_link();
-	            $tpl->printToScreen();
-	        }
+                        if($this->ws_tpl_type){
+                            App::getHelper('main')->layer_link();
+                            $tpl->printToScreen();
+                        }
 		}
 		
 		function ws_load_tp($ws_tpl_file,$member_left=0){
@@ -84,11 +83,11 @@
 		    $tpl->assignInclude( "HEADER", '../'.$cms_cfg['base_header_tpl']); //頭檔title,meta,js,css
 		    if(empty($member_left)){
 		    	$tpl->assignInclude( "LEFT", '../templates/ws-fn-left-products-tpl.html'); //左方首頁表單
-			}else{
-				$tpl->assignInclude( "LEFT", '../'.$cms_cfg['base_left_member_tpl']); //左方首頁表單
-			}
-			$tpl->assignInclude( "TOP", $cms_cfg['base_top_tpl']); // 上方選單
-			$tpl->assignInclude( "FOOTER", $cms_cfg['base_footer_tpl']); // 版權宣告
+                    }else{
+                        $tpl->assignInclude( "LEFT", '../'.$cms_cfg['base_left_member_tpl']); //左方首頁表單
+                    }
+                    $tpl->assignInclude( "TOP", $cms_cfg['base_top_tpl']); // 上方選單
+                    $tpl->assignInclude( "FOOTER", $cms_cfg['base_footer_tpl']); // 版權宣告
 		    $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
 		    $tpl->prepare();
 		    $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
@@ -100,8 +99,8 @@
 		    $main->google_code(); //google analystics code , google sitemap code
                     $main->left_fix_cate_list();
 			
-			$tpl->newBlock("JS_MAIN");
-			$tpl->newBlock("JS_POP_IMG");
+                    $tpl->newBlock("JS_MAIN");
+                    $tpl->newBlock("JS_POP_IMG");
 			
 			// 共通使用程式
 //			$main->share_function();
@@ -163,62 +162,62 @@
 			));
 			
 			if(count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) > 0){
-	            $tpl->newBlock("TAG_CART_ZONE");
-	            $tpl->assign(array(
+                            $tpl->newBlock("TAG_CART_ZONE");
+                            $tpl->assign(array(
 					"MSG_CONTINUE_SHOPPING"  => $TPLMSG['CART_CONTINUE_SHOPPING'],
 					"MSG_FINISH_SHOPPING"  => $TPLMSG['CART_FINISH_SHOPPING'],
 					"LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'],
-	            ));
+                            ));
 
-				foreach($_SESSION[$cms_cfg['sess_cookie_name']]["id"] as $sess => $ID){
-					$row = $this->products_detail($ID);
-					
-					$tpl->newBlock("TAG_CART_LIST");
-					$row["p_num"] = (!is_int($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?round($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]):$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess];
-					$row["p_name"] = $row["p_name"];
-					$p_link = $this->p_link_handle($row);
-					
-	                $tpl->assign(array(
-	                	"VALUE_P_ID"  => $ID,
-						"VALUE_P_NAME"  => $row["p_name"],
-						"VALUE_P_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$row["p_small_img"],
-						"VALUE_P_AMOUNT"  => $row["p_num"],
-						"VALUE_P_LINK" => $p_link,
-						"VALUE_P_SERIAL"  => $i+1,
-						"VALUE_P_SESS" => $sess,
-	                ));
-					
-					for($c_num=$this->c_num_set;$c_num<=$this->c_num;$c_num++){
-						$tpl->newBlock("TAG_CART_NUM");
-						$tpl->assign(array(
-							"VALUE_CART_NUM" => $c_num,
-							"VALUE_CART_CURRENT" => ($c_num == $row["p_num"])?'selected':'',
-						));
-					}
+                            foreach($_SESSION[$cms_cfg['sess_cookie_name']]["id"] as $sess => $ID){
+                                    $row = $this->products_detail($ID);
 
-					if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
-						$this->price_counter($row);
-						$this->service_rule();
-					}
-					
-	                $tpl->gotoBlock("SHOPPING_CART_ZONE");
-				}
+                                    $tpl->newBlock("TAG_CART_LIST");
+                                    $row["p_num"] = (!is_int($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?round($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]):$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess];
+                                    $row["p_name"] = $row["p_name"];
+                                    $p_link = $this->p_link_handle($row);
 
-				if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] && ($_REQUEST["func"] == "c_add" || empty($_REQUEST["func"]))){
+                                    $tpl->assign(array(
+                                            "VALUE_P_ID"  => $ID,
+                                            "VALUE_P_NAME"  => $row["p_name"],
+                                            "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$row["p_small_img"],
+                                            "VALUE_P_AMOUNT"  => $row["p_num"],
+                                            "VALUE_P_LINK" => $p_link,
+                                            "VALUE_P_SERIAL"  => $i+1,
+                                            "VALUE_P_SESS" => $sess,
+                                    ));
+
+                                    for($c_num=$this->c_num_set;$c_num<=$this->c_num;$c_num++){
+                                            $tpl->newBlock("TAG_CART_NUM");
+                                            $tpl->assign(array(
+                                                    "VALUE_CART_NUM" => $c_num,
+                                                    "VALUE_CART_CURRENT" => ($c_num == $row["p_num"])?'selected':'',
+                                            ));
+                                    }
+
+                                    if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
+                                            $this->price_counter($row);
+                                            $this->service_rule();
+                                    }
+
+                                    $tpl->gotoBlock("SHOPPING_CART_ZONE");
+                            }
+
+                            if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] && ($_REQUEST["func"] == "c_add" || empty($_REQUEST["func"]))){
 					// 顯示付款方式
-	                $tpl->newBlock("PAYMENT_TYPE");
-	                $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
-	                foreach($ws_array["payment_type"] as $key => $payment){
-	                    $tpl->newBlock("PAYMENT_TYPE_ITEMS");
-	                    $tpl->assign(array(
-	                    	"VALUE_PAYMENT_TYPE" => $key,
-	                    	"VALUE_PAYMENT_TYPE_STR" => $payment,
-	                    	"VALUE_PAYMENT_CURRENT" => ($key == App::getHelper('session')->o_payment_type)?'checked':'',
-	                    ));
-	                }
-				}
+                                $tpl->newBlock("PAYMENT_TYPE");
+                                $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
+                                foreach($ws_array["payment_type"] as $key => $payment){
+                                    $tpl->newBlock("PAYMENT_TYPE_ITEMS");
+                                    $tpl->assign(array(
+                                        "VALUE_PAYMENT_TYPE" => $key,
+                                        "VALUE_PAYMENT_TYPE_STR" => $payment,
+                                        "VALUE_PAYMENT_CURRENT" => ($key == App::getHelper('session')->o_payment_type)?'checked':'',
+                                    ));
+                                }
+                            }
 			}else{
-				$this->error_handle();
+                            $this->error_handle();
 			}
 		}
 
@@ -226,63 +225,62 @@
 		function cart_finish(){
 			global $tpl,$db,$cms_cfg,$TPLMSG,$main,$ws_array;
 			
-	        if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1 && empty($_REQUEST["first"])){
-	            //驗証碼
-	            $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]=""; //清空錯誤訊息
-	            $tpl->newBlock( "MEMBER_LOGIN_FORM" );
-	            $tpl->assignGlobal(array(
-	            	"MSG_LOGIN_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
-	            	"MSG_LOGIN_PASSWORD" => $TPLMSG["LOGIN_PASSWORD"],
-	            	"MSG_ERROR_MESSAGE" => $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"],
-	            	"MSG_LOGIN_BTN" => $TPLMSG["LOGIN_BUTTON"],
-	            	"MSG_FIRST_BTN" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['FIRST_S_BTN']:$TPLMSG['FIRST_I_BTN'],
-				));
-	            
-	            //載入驗証碼
-	            $main->security_zone();
-	        }else{
-	        	$this->cart_list();
-				
-	            $tpl->newBlock("MEMBER_DATA_FORM");
-	            $tpl->assign($this->basic_lang);
-				
-				$this->member_detail();
-				$this->taiwan_zone_select();
-				
-				if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
-					// 顯示付款方式
-					
-					// 檢查是否選擇付款方式
-					if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"])){
-						$tpl->assignGlobal("MSG_PAYMENT_ALERT",'alert("'.$TPLMSG['NO_PAYMENT'].'"); location.href = "'.$cms_cfg["base_root"].'cart/"');
-					}
-					
-	                $tpl->newBlock("PAYMENT_TYPE");
-	                $tpl->assign(array(
-	                	"MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"],
-	                	"VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][App::getHelper('session')->o_payment_type],
-					));
-					
-					// 購物收件人表單
-					$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
-					$tpl->assign($this->adv_lang);
-					
-					// 到貨日期
-					$tpl->assignGlobal(array(
-						"VALUE_ARRIVAL_START" => $this->arrival_start,
-						"VALUE_ARRIVAL_RANGE" => $this->arrival_range,
-					));
-				}
-				
-				if(empty($this->m_id) && !empty($cms_cfg["ws_module"]["ws_cart_login"])){
-					$tpl->newBlock("TAG_NEW_MEMBER_REGIST");
-					$tpl->assign(array(
-						"MSG_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
-						"MSG_PASSWORD" => $TPLMSG["LOGIN_PASSWORD"],
-						"MSG_VALID_PASSWORD" => $TPLMSG['MEMBER_CHECK_PASSWORD'],
-					));
-				}
-			}
+                        if(empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"]==1 && empty($_REQUEST["first"])){
+                            //驗証碼
+                            $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]=""; //清空錯誤訊息
+                            $tpl->newBlock( "MEMBER_LOGIN_FORM" );
+                            $tpl->assignGlobal(array(
+                                "MSG_LOGIN_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
+                                "MSG_LOGIN_PASSWORD" => $TPLMSG["LOGIN_PASSWORD"],
+                                "MSG_ERROR_MESSAGE" => $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"],
+                                "MSG_LOGIN_BTN" => $TPLMSG["LOGIN_BUTTON"],
+                                "MSG_FIRST_BTN" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['FIRST_S_BTN']:$TPLMSG['FIRST_I_BTN'],
+                            ));
+
+                            //載入驗証碼
+                            $main->security_zone();
+                        }else{
+                            $this->cart_list();
+
+                            $tpl->newBlock("MEMBER_DATA_FORM");
+                            $tpl->assign($this->basic_lang);
+
+                            $this->member_detail();
+                            $this->taiwan_zone_select();
+
+                            if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
+                                // 顯示付款方式
+                                // 檢查是否選擇付款方式
+                                if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"])){
+                                        $tpl->assignGlobal("MSG_PAYMENT_ALERT",'alert("'.$TPLMSG['NO_PAYMENT'].'"); location.href = "'.$cms_cfg["base_root"].'cart/"');
+                                }
+
+                                $tpl->newBlock("PAYMENT_TYPE");
+                                $tpl->assign(array(
+                                        "MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"],
+                                        "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][App::getHelper('session')->o_payment_type],
+                                ));
+
+                                // 購物收件人表單
+                                $tpl->newBlock("TAG_ADDRESSEE_BLOCK");
+                                $tpl->assign($this->adv_lang);
+
+                                // 到貨日期
+                                $tpl->assignGlobal(array(
+                                        "VALUE_ARRIVAL_START" => $this->arrival_start,
+                                        "VALUE_ARRIVAL_RANGE" => $this->arrival_range,
+                                ));
+                            }
+
+                            if(empty($this->m_id) && !empty($cms_cfg["ws_module"]["ws_cart_login"])){
+                                    $tpl->newBlock("TAG_NEW_MEMBER_REGIST");
+                                    $tpl->assign(array(
+                                            "MSG_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
+                                            "MSG_PASSWORD" => $TPLMSG["LOGIN_PASSWORD"],
+                                            "MSG_VALID_PASSWORD" => $TPLMSG['MEMBER_CHECK_PASSWORD'],
+                                    ));
+                            }
+                        }
 		}
 		
 		// 送出訂單
@@ -291,12 +289,12 @@
 			
 			$this->o_id = $this->o_id_generator();
 			
-	        $this->ws_tpl_file = "templates/ws-mail-tpl.html";
-	        $tpl = new TemplatePower( $this->ws_tpl_file );
-	        $tpl->prepare();
-	        $tpl->assignGlobal("TAG_BASE_CSS", $cms_cfg['base_mail_css']);
-			
-	        $this->cart_list();
+                        $this->ws_tpl_file = "templates/ws-mail-tpl.html";
+                        $tpl = new TemplatePower( $this->ws_tpl_file );
+                        $tpl->prepare();
+                        $tpl->assignGlobal("TAG_BASE_CSS", $cms_cfg['base_mail_css']);
+
+                        $this->cart_list();
 			
 			// 台灣區域選擇
 			if(!empty($this->taiwan_zone)){
@@ -309,8 +307,8 @@
 				}
 			}
 			
-	        $tpl->newBlock("MEMBER_DATA_FORM");
-	        $tpl->assign($this->basic_lang);
+                        $tpl->newBlock("MEMBER_DATA_FORM");
+                        $tpl->assign($this->basic_lang);
 			$tpl->assign(array(
 				"VALUE_O_ID" => $this->o_id,
 				"VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
@@ -358,112 +356,112 @@
 				$tpl->assign("VALUE_ARRIVAL_TIME",$o_arrival_time);
 			}
 	        
-	        // 國家欄位
-	        if($cms_cfg["ws_module"]["ws_country"]==1){
-	            $tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
-	            $tpl->assign(array("MSG_COUNTRY" => $TPLMSG['COUNTRY'],
-	                               "VALUE_M_COUNTRY" => $_REQUEST["m_country"]
-	            ));
-	        }
+                        // 國家欄位
+                        if($cms_cfg["ws_module"]["ws_country"]==1){
+                            $tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
+                            $tpl->assign(array("MSG_COUNTRY" => $TPLMSG['COUNTRY'],
+                                               "VALUE_M_COUNTRY" => $_REQUEST["m_country"]
+                            ));
+                        }
 			
-            // 寫入訂單
-			$sql="
-                insert into ".$cms_cfg['tb_prefix']."_order (
-                	o_id,
-                    m_id,
-                    o_status,
-                    o_createdate,
-                    o_modifydate,
-                    o_account,
-                    o_company_name,
-                    o_contact_s,
-                    o_name,
-                    o_zip,
-                    o_address,
-                    o_tel,
-                    o_fax,
-                    o_cellphone,
-                    o_email,
-                    o_plus_price,
-                    o_subtotal_price,
-                    o_total_price,
-                    o_content,
-                    o_payment_type,
-                    o_add_name,
-					o_add_tel,
-					o_add_address,
-					o_add_mail,
-					o_invoice_type,
-					o_invoice_name,
-					o_invoice_vat,
-					o_invoice_text,
-					o_arrival_time
-                ) values (
-                	'".$this->o_id."',
-                    '".$this->m_id."',
-                    '0',
-                    '".date("Y-m-d H:i:s")."',
-                    '".date("Y-m-d H:i:s")."',
-                    '".$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"]."',
-                    '".$_REQUEST["m_company_name"]."',
-                    '".$this->gender_list($_REQUEST["m_contact_s"],1)."',
-                    '".$_REQUEST["m_name"]."',
-                    '".$_REQUEST["m_zip"]."',
-                    '".$_REQUEST["m_address"]."',
-                    '".$_REQUEST["m_tel"]."',
-                    '".$_REQUEST["m_fax"]."',
-                    '".$_REQUEST["m_cellphone"]."',
-                    '".$_REQUEST["m_email"]."',
-                    '".$this->shipping_price."',
-                    '".$this->subtotal_money."',
-                    '".$this->total_money."',
-                    '".$_REQUEST["content"]."',
-                    '".$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]."',
-                    '".$_REQUEST["o_add_name"]."',
-					'".$_REQUEST["o_add_tel"]."',
-					'".$_REQUEST["o_add_address"]."',
-					'".$_REQUEST["o_add_mail"]."',
-					'".$_REQUEST["o_invoice_type"]."',
-					'".$_REQUEST["o_invoice_name"]."',
-					'".$_REQUEST["o_invoice_vat"]."',
-					'".$_REQUEST["o_invoice_text"]."',
-					'".$o_arrival_time."'
-                )";
-            $rs = $db->query($sql,true);
-			
-            // 寫入購買產品
-			foreach($_SESSION[$cms_cfg['sess_cookie_name']]["id"] as $sess => $ID){
-				$row = $this->products_detail($ID);
+                        // 寫入訂單
+                        $sql="
+                            insert into ".$cms_cfg['tb_prefix']."_order (
+                                    o_id,
+                                m_id,
+                                o_status,
+                                o_createdate,
+                                o_modifydate,
+                                o_account,
+                                o_company_name,
+                                o_contact_s,
+                                o_name,
+                                o_zip,
+                                o_address,
+                                o_tel,
+                                o_fax,
+                                o_cellphone,
+                                o_email,
+                                o_plus_price,
+                                o_subtotal_price,
+                                o_total_price,
+                                o_content,
+                                o_payment_type,
+                                o_add_name,
+                                                    o_add_tel,
+                                                    o_add_address,
+                                                    o_add_mail,
+                                                    o_invoice_type,
+                                                    o_invoice_name,
+                                                    o_invoice_vat,
+                                                    o_invoice_text,
+                                                    o_arrival_time
+                            ) values (
+                                    '".$this->o_id."',
+                                '".$this->m_id."',
+                                '0',
+                                '".date("Y-m-d H:i:s")."',
+                                '".date("Y-m-d H:i:s")."',
+                                '".$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"]."',
+                                '".$_REQUEST["m_company_name"]."',
+                                '".$this->gender_list($_REQUEST["m_contact_s"],1)."',
+                                '".$_REQUEST["m_name"]."',
+                                '".$_REQUEST["m_zip"]."',
+                                '".$_REQUEST["m_address"]."',
+                                '".$_REQUEST["m_tel"]."',
+                                '".$_REQUEST["m_fax"]."',
+                                '".$_REQUEST["m_cellphone"]."',
+                                '".$_REQUEST["m_email"]."',
+                                '".$this->shipping_price."',
+                                '".$this->subtotal_money."',
+                                '".$this->total_money."',
+                                '".$_REQUEST["content"]."',
+                                '".$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]."',
+                                '".$_REQUEST["o_add_name"]."',
+                                                    '".$_REQUEST["o_add_tel"]."',
+                                                    '".$_REQUEST["o_add_address"]."',
+                                                    '".$_REQUEST["o_add_mail"]."',
+                                                    '".$_REQUEST["o_invoice_type"]."',
+                                                    '".$_REQUEST["o_invoice_name"]."',
+                                                    '".$_REQUEST["o_invoice_vat"]."',
+                                                    '".$_REQUEST["o_invoice_text"]."',
+                                                    '".$o_arrival_time."'
+                            )";
+                        $rs = $db->query($sql,true);
 
-				$row["p_num"] = (!is_int($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?round($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]):$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess];
-				$row["p_name"] = $row["p_name"];
-				
-				if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
-					$special_price = $this->price_counter($row,1);
-				}
-				
-				$row["p_price"] = $special_price;
-				
-                $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_order_items (
-                        m_id,
-                        o_id,
-                        p_id,
-                        p_name,
-                        p_sell_price,
-                        oi_amount
-                    ) values (
-                        '".$this->m_id."',
-                        '".$this->o_id."',
-                        '".$ID."',
-                        '".$row["p_name"]."',
-                        '".$special_price."',
-                        '".$row["p_num"]."'
-                    )";
-                $rs = $db->query($sql,true);
-                
-				$all_row[$sess] = $row;
-            }
+                        // 寫入購買產品
+                        foreach($_SESSION[$cms_cfg['sess_cookie_name']]["id"] as $sess => $ID){
+                            $row = $this->products_detail($ID);
+
+                            $row["p_num"] = (!is_int($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?round($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]):$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess];
+                            $row["p_name"] = $row["p_name"];
+
+                            if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
+                                    $special_price = $this->price_counter($row,1);
+                            }
+
+                            $row["p_price"] = $special_price;
+
+                            $sql="
+                                insert into ".$cms_cfg['tb_prefix']."_order_items (
+                                    m_id,
+                                    o_id,
+                                    p_id,
+                                    p_name,
+                                    p_sell_price,
+                                    oi_amount
+                                ) values (
+                                    '".$this->m_id."',
+                                    '".$this->o_id."',
+                                    '".$ID."',
+                                    '".$row["p_name"]."',
+                                    '".$special_price."',
+                                    '".$row["p_num"]."'
+                                )";
+                            $rs = $db->query($sql,true);
+
+                            $all_row[$sess] = $row;
+                        }
 			$this->mail_handle($mail_goto);
                         App::getHelper('session')->paymentType = $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"];
                         switch(App::getHelper('session')->paymentType){
@@ -496,14 +494,14 @@
 			}
 			
 			
-	        $db_msg = $db->report();
-	        if($db_msg == ""){
-	            unset($_SESSION[$cms_cfg['sess_cookie_name']]["id"]);
-	            unset($_SESSION[$cms_cfg['sess_cookie_name']]["num"]);
-                    unset($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]);
-	        }else{
-	            $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
-	        }
+                        $db_msg = $db->report();
+                        if($db_msg == ""){
+                            unset($_SESSION[$cms_cfg['sess_cookie_name']]["id"]);
+                            unset($_SESSION[$cms_cfg['sess_cookie_name']]["num"]);
+                            unset($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]);
+                        }else{
+                            $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+                        }
 		}
 		
 		// 修改數量
@@ -545,79 +543,80 @@
 			global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array,$main;
 			
 			$sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' order by o_createdate desc";
-            //取得總筆數
-            $selectrs = $db->query($sql);
-            $total_records    = $db->numRows($selectrs);
-			
-            //取得分頁連結
-            $func_str = $cms_cfg["base_root"]."cart/?func=c_order";
-            $sql = $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
-			
-            $selectrs = $db->query($sql);
-            $rsnum    = $db->numRows($selectrs);
+                        //取得總筆數
+                        $selectrs = $db->query($sql);
+                        $total_records    = $db->numRows($selectrs);
+
+                        //取得分頁連結
+                        $func_str = $cms_cfg["base_root"]."cart/?func=c_order";
+                        $sql = $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+
+                        $selectrs = $db->query($sql);
+                        $rsnum    = $db->numRows($selectrs);
 			
 			if(!empty($rsnum)){
-	            $tpl->newBlock( "ORDER_LIST_ZONE" );
-	            $tpl->assign(array(
-		            "MSG_NAME" => $TPLMSG['MEMBER_NAME'],
-					"MSG_STATUS" => $TPLMSG['STATUS'],
-					"MSG_ORDER_ID" => $TPLMSG['ORDER_ID'],
-					"MSG_CREATEDATE" => $TPLMSG['CREATEDATE'],
-					"MSG_MODIFYDATE" => $TPLMSG['MODIFYDATE'],
-					"MSG_VIEWS" => $TPLMSG['VIEWS'],
-	            ));
+                            $tpl->newBlock( "ORDER_LIST_ZONE" );
+                            $tpl->assign(array(
+                                    "MSG_NAME" => $TPLMSG['MEMBER_NAME'],
+                                    "MSG_STATUS" => $TPLMSG['STATUS'],
+                                    "MSG_ORDER_ID" => $TPLMSG['ORDER_ID'],
+                                    "MSG_CREATEDATE" => $TPLMSG['CREATEDATE'],
+                                    "MSG_MODIFYDATE" => $TPLMSG['MODIFYDATE'],
+                                    "MSG_VIEWS" => $TPLMSG['VIEWS'],
+                            ));
 				
-				if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
-					$tpl->newBlock("TAG_PRICE_TH");
-					$tpl->assign("MSG_TOTAL_MONEY",$TPLMSG['ORDER_TOTAL_MONEY']);
-					$main_func_str = $TPLMSG['MEMBER_ZONE_ORDER'];
-				}else{
-					$main_func_str = $TPLMSG['MEMBER_ZONE_INQUIRY'];
-				}
+                            if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
+                                    $tpl->newBlock("TAG_PRICE_TH");
+                                    $tpl->assign("MSG_TOTAL_MONEY",$TPLMSG['ORDER_TOTAL_MONEY']);
+                                    $main_func_str = $TPLMSG['MEMBER_ZONE_ORDER'];
+                            }else{
+                                    $main_func_str = $TPLMSG['MEMBER_ZONE_INQUIRY'];
+                            }
 				
-	            $tpl->assignGlobal(array(
-	            	"TAG_MAIN_FUNC" => $main_func_str,
-					"TAG_LAYER" => $main_func_str,
-	            ));
+                            $tpl->assignGlobal(array(
+                                "TAG_MAIN_FUNC" => $main_func_str,
+                                "TAG_LAYER" => $main_func_str,
+                            ));
 				
-				while($row = $db->fetch_array($selectrs,1)){
-					$i++;
-					
-					$tpl->newBlock("ORDER_LIST");
-	                $tpl->assign(array(
-		                "VALUE_O_ID"  => $row["o_id"],
-						"VALUE_O_NAME" => $row["o_name"],
-						"VALUE_O_CREATEDATE" => $row["o_createdate"],
-						"VALUE_O_MODIFYDATE" => $row["o_modifydate"],
-						"VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
-						"VALUE_O_SERIAL" => $i,
-						"VALUE_O_DETAIL" => $TPLMSG['DETAIL'],
-	                ));
-					
-					if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
-						$tpl->newBlock("TAG_PRICE_TD");
-						$tpl->assign("VALUE_O_TOTAL_PRICE",$row["o_total_price"]);
-					}
-				}
+                            while($row = $db->fetch_array($selectrs,1)){
+                                    $i++;
+
+                                    $tpl->newBlock("ORDER_LIST");
+                                    $tpl->assign(array(
+                                            "VALUE_O_ID"  => $row["o_id"],
+                                            "VALUE_O_NAME" => $row["o_name"],
+                                            "VALUE_O_CREATEDATE" => $row["o_createdate"],
+                                            "VALUE_O_MODIFYDATE" => $row["o_modifydate"],
+                                            "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
+                                            "VALUE_O_SERIAL" => $i,
+                                            "VALUE_O_DETAIL" => $TPLMSG['DETAIL'],
+                                    ));
+
+                                    if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
+                                            $tpl->newBlock("TAG_PRICE_TD");
+                                            $tpl->assign("VALUE_O_TOTAL_PRICE",$row["o_total_price"]);
+                                    }
+                            }
 				
-	            $tpl->newBlock( "PAGE_DATA_SHOW" );
-	            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-	                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-	                                "VALUE_PAGES_STR"  => $page["pages_str"],
-	                                "VALUE_PAGES_LIMIT"=>$this->op_limit
-	            ));
-	            if($page["bj_page"]){
-	                $tpl->newBlock( "PAGE_BACK_SHOW" );
-	                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-	                $tpl->gotoBlock("PAGE_DATA_SHOW");
-	            }
-	            if($page["nj_page"]){
-	                $tpl->newBlock( "PAGE_NEXT_SHOW" );
-	                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-	                $tpl->gotoBlock("PAGE_DATA_SHOW");
-	            }
+                            $tpl->newBlock( "PAGE_DATA_SHOW" );
+                            $tpl->assign( array(
+                                "VALUE_TOTAL_RECORDS"  => $page["total_records"],
+                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
+                                "VALUE_PAGES_STR"  => $page["pages_str"],
+                                "VALUE_PAGES_LIMIT"=>$this->op_limit
+                            ));
+                            if($page["bj_page"]){
+                                $tpl->newBlock( "PAGE_BACK_SHOW" );
+                                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
+                                $tpl->gotoBlock("PAGE_DATA_SHOW");
+                            }
+                            if($page["nj_page"]){
+                                $tpl->newBlock( "PAGE_NEXT_SHOW" );
+                                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
+                                $tpl->gotoBlock("PAGE_DATA_SHOW");
+                            }
 			}else{
-				$tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
+                            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
 			}
 		}
 		
@@ -631,21 +630,21 @@
 			
 			if(!empty($rsnum)){
 				$tpl->newBlock("ORDER_DETAIL_ZONE");
-	            $tpl->assignGlobal(array(
-		            "MSG_ORDER_DETAIL"  => $TPLMSG['ORDER_DETAIL'],
-					"MSG_ORDER_CONTENT"  => $TPLMSG['ORDER_CONTENT'],
-					"MSG_NAME"  => $TPLMSG['NAME'],
-					"MSG_STATUS" => $TPLMSG['STATUS'],
-					"MSG_ORDER_ID" => $TPLMSG['ORDER_ID'],
-					"MSG_CONTENT" => $TPLMSG['CONTENT'],
-					"MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'],
-					"MSG_TOTAL" => $TPLMSG['CART_TOTAL'],
-					"MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'],
-					"MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'],
-					"MSG_PRODUCT" => $TPLMSG['PRODUCT'],
-					"MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE'],
-					"MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
-	            ) + $this->basic_lang);
+                                $tpl->assignGlobal(array(
+                                        "MSG_ORDER_DETAIL"  => $TPLMSG['ORDER_DETAIL'],
+                                                    "MSG_ORDER_CONTENT"  => $TPLMSG['ORDER_CONTENT'],
+                                                    "MSG_NAME"  => $TPLMSG['NAME'],
+                                                    "MSG_STATUS" => $TPLMSG['STATUS'],
+                                                    "MSG_ORDER_ID" => $TPLMSG['ORDER_ID'],
+                                                    "MSG_CONTENT" => $TPLMSG['CONTENT'],
+                                                    "MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'],
+                                                    "MSG_TOTAL" => $TPLMSG['CART_TOTAL'],
+                                                    "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'],
+                                                    "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'],
+                                                    "MSG_PRODUCT" => $TPLMSG['PRODUCT'],
+                                                    "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE'],
+                                                    "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
+                                ) + $this->basic_lang);
 				
 				$row = $db->fetch_array($selectrs,1);
 				foreach($row as $key => $value){
@@ -688,10 +687,10 @@
 					$main_func_str = $TPLMSG['MEMBER_ZONE_INQUIRY'];
 				}
 					
-	            $tpl->assignGlobal(array(
-	            	"TAG_MAIN_FUNC" => $main_func_str,
-					"TAG_LAYER" => $main_func_str,
-	            ));
+                                $tpl->assignGlobal(array(
+                                    "TAG_MAIN_FUNC" => $main_func_str,
+                                    "TAG_LAYER" => $main_func_str,
+                                ));
 				
 				$this->cart_order_detail_item($row);
 			}
@@ -701,8 +700,8 @@
 		function cart_order_detail_item($detail=0){
 			global $db,$tpl,$cms_cfg,$TPLMSG;
 			
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$detail["o_id"]."'";
-            $selectrs = $db->query($sql);
+                        $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$detail["o_id"]."'";
+                        $selectrs = $db->query($sql);
 			$rsnum = $db->numRows($selectrs);
 			
 			if(!empty($rsnum)){
@@ -736,26 +735,26 @@
 			$p_price = (!empty($row["p_special_price"]))?$row["p_special_price"]:$row["p_list_price"];
 			
 			// 會員折價
-	        if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]) && $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]!=100){
-	            $msg_price = $TPLMSG['PRODUCT_DISCOUNT_PRICE'];
-				$msg_discount = $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]."%";
-	            $special_price = floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"] / 100 * $p_price);
-	        }else{
-	        	$msg_price = $TPLMSG['PRODUCT_SPECIAL_PRICE'];
-				$msg_discount = "";
-	            $special_price = $p_price;
-	        }
+                        if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]) && $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]!=100){
+                                $msg_price = $TPLMSG['PRODUCT_DISCOUNT_PRICE'];
+                                $msg_discount = $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]."%";
+                                $special_price = floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"] / 100 * $p_price);
+                        }else{
+                                $msg_price = $TPLMSG['PRODUCT_SPECIAL_PRICE'];
+                                $msg_discount = "";
+                                $special_price = $p_price;
+                        }
 			
 			// 產品計費
-	        $sub_total_price = $special_price * $row["p_num"];
-	        $total_price = $total_price + $sub_total_price;
-			
-			// 運費
-	        if($total_price > $_SESSION[$cms_cfg['sess_cookie_name']]["sc_no_shipping_price"]){
-	            $this->shipping_price = 0;
-	        }else{
-	            $this->shipping_price = $_SESSION[$cms_cfg['sess_cookie_name']]["sc_shipping_price"];
-	        }
+                        $sub_total_price = $special_price * $row["p_num"];
+                        $total_price = $total_price + $sub_total_price;
+
+                                // 運費
+                        if($total_price > $_SESSION[$cms_cfg['sess_cookie_name']]["sc_no_shipping_price"]){
+                            $this->shipping_price = 0;
+                        }else{
+                            $this->shipping_price = $_SESSION[$cms_cfg['sess_cookie_name']]["sc_shipping_price"];
+                        }
 			
 			// 顯示產品單價
 			if(empty($switch)){
@@ -767,44 +766,44 @@
 			}
 			
 			// 累計價格
-	        $this->subtotal_money = $this->subtotal_money + $total_price;
+                        $this->subtotal_money = $this->subtotal_money + $total_price;
 			
 			$this->price_count++;
 			if(count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) == $this->price_count && empty($switch)){
 				
-				// 手續費
-				if($allpay->allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $allpay->all_cfg["allpay_type"]["CVS"] || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $allpay->all_cfg["allpay_type"]["BARCODE"])){
-					$plus_fee = 30;
-				}
+                            // 手續費
+                            if($allpay->allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $allpay->all_cfg["allpay_type"]["CVS"] || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $allpay->all_cfg["allpay_type"]["BARCODE"])){
+                                    $plus_fee = 30;
+                            }
 
-				// 總價
-				$this->total_money = $this->subtotal_money + $this->shipping_price + $plus_fee;
+                            // 總價
+                            $this->total_money = $this->subtotal_money + $this->shipping_price + $plus_fee;
+
+                            // 顯示價格抬頭
+                            $tpl->newBlock("TAG_PRICE_TH");
+                            $tpl->assign(array(
+                                "MSG_PRODUCT_SPECIAL_PRICE" => $msg_price,
+                                "VALUE_P_DISCOUNT" => $msg_discount,
+                            ));
+
+                            // 顯示手續費
+                            if(!empty($plus_fee)){
+                                $tpl->newBlock("TAG_PLUS_FEE");
+                                $tpl->assign(array(
+                                    "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
+                                    "VALUE_PLUS_FEE" => $plus_fee,
+                                ));
+                            }
 				
-				// 顯示價格抬頭
-				$tpl->newBlock("TAG_PRICE_TH");
-	            $tpl->assign(array(
-	            	"MSG_PRODUCT_SPECIAL_PRICE" => $msg_price,
-	            	"VALUE_P_DISCOUNT" => $msg_discount,
-				));
+                            // 顯示總價
+                            $tpl->newBlock("TAG_PRICE_TOTAL");
+                            $tpl->assign(array(
+                                "VALUE_SHIPPING_PRICE" => $this->shipping_price,
+                                "VALUE_SUBTOTAL" => $this->subtotal_money,
+                                "VALUE_TOTAL" => $this->total_money,
+                            ));
 				
-				// 顯示手續費
-				if(!empty($plus_fee)){
-					$tpl->newBlock("TAG_PLUS_FEE");
-		            $tpl->assign(array(
-		            	"MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
-		            	"VALUE_PLUS_FEE" => $plus_fee,
-					));
-				}
-				
-				// 顯示總價
-				$tpl->newBlock("TAG_PRICE_TOTAL");
-	            $tpl->assign(array(
-	            	"VALUE_SHIPPING_PRICE" => $this->shipping_price,
-	            	"VALUE_SUBTOTAL" => $this->subtotal_money,
-	            	"VALUE_TOTAL" => $this->total_money,
-				));
-				
-				$tpl->gotoBlock("SHOPPING_CART_ZONE");
+                            $tpl->gotoBlock("SHOPPING_CART_ZONE");
 			}
 			
 			return $special_price;
@@ -814,17 +813,17 @@
 		function products_detail($id=0){
 			global $db,$cms_cfg;
 
-            $sql = "select * from ".$cms_cfg['tb_prefix']."_products as p 
-            		left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id 
-            		where p.p_id = '".$id."'";
+                        $sql = "select * from ".$cms_cfg['tb_prefix']."_products as p 
+                                    left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id 
+                                    where p.p_id = '".$id."'";
 					
-            $selectrs = $db->query($sql);
+                        $selectrs = $db->query($sql);
 			$rsnum    = $db->numRows($selectrs);
 			
 			if(!empty($rsnum)){
-            	return $db->fetch_array($selectrs,1);
+                            return $db->fetch_array($selectrs,1);
 			}else{
-				$this->error_handle();
+                            $this->error_handle();
 			}
 		}
 		
@@ -854,10 +853,10 @@
 			// 性別選單
 			$this->gender_list($row["m_contact_s"]);
 			
-            // 國家下拉選單
-            if($cms_cfg["ws_module"]["ws_country"]==1) {
-                $main->country_select($row["m_country"]);
-            }
+                        // 國家下拉選單
+                        if($cms_cfg["ws_module"]["ws_country"]==1) {
+                            $main->country_select($row["m_country"]);
+                        }
 			
 			if(!empty($rsnum)){
 				$this->member = $row;
@@ -869,50 +868,50 @@
 			global $cms_cfg,$db;
 			
 			if(empty($this->m_id) && !empty($cms_cfg["ws_module"]["ws_cart_login"])){
-                $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_member (
-                        mc_id,
-                        m_status,
-                        m_modifydate,
-                        m_account,
-                        m_password,
-                        m_company_name,
-                        m_contact_s,
-                        m_name,
-                        m_birthday,
-                        m_sex,
-                        m_country,
-                        m_zip,
-                        m_address,
-                        m_tel,
-                        m_fax,
-                        m_cellphone,
-                        m_email,
-                        m_epaper_status
-                    ) values (
-                        '0',
-                        '1',
-                        '".date("Y-m-d H:i:s")."',
-                        '".$_REQUEST["m_account"]."',
-                        '".$_REQUEST["m_password"]."',
-                        '".$_REQUEST["m_company_name"]."',
-                        '".$_REQUEST["m_contact_s"]."',
-                        '".$_REQUEST["m_name"]."',
-                        '".$_REQUEST["m_birthday"]."',
-                        '".$_REQUEST["m_sex"]."',
-                        '".$_REQUEST["m_country"]."',
-                        '".$_REQUEST["m_zip"]."',
-                        '".$_REQUEST["m_address"]."',
-                        '".$_REQUEST["m_tel"]."',
-                        '".$_REQUEST["m_fax"]."',
-                        '".$_REQUEST["m_cellphone"]."',
-                        '".$_REQUEST["m_account"]."',
-                        '".$_REQUEST["m_epaper_status"]."'
-                    )";
-	            $rs = $db->query($sql);
-	            $this->m_id = $db->get_insert_id();
+                                $sql="
+                                insert into ".$cms_cfg['tb_prefix']."_member (
+                                    mc_id,
+                                    m_status,
+                                    m_modifydate,
+                                    m_account,
+                                    m_password,
+                                    m_company_name,
+                                    m_contact_s,
+                                    m_name,
+                                    m_birthday,
+                                    m_sex,
+                                    m_country,
+                                    m_zip,
+                                    m_address,
+                                    m_tel,
+                                    m_fax,
+                                    m_cellphone,
+                                    m_email,
+                                    m_epaper_status
+                                ) values (
+                                    '0',
+                                    '1',
+                                    '".date("Y-m-d H:i:s")."',
+                                    '".$_REQUEST["m_account"]."',
+                                    '".$_REQUEST["m_password"]."',
+                                    '".$_REQUEST["m_company_name"]."',
+                                    '".$_REQUEST["m_contact_s"]."',
+                                    '".$_REQUEST["m_name"]."',
+                                    '".$_REQUEST["m_birthday"]."',
+                                    '".$_REQUEST["m_sex"]."',
+                                    '".$_REQUEST["m_country"]."',
+                                    '".$_REQUEST["m_zip"]."',
+                                    '".$_REQUEST["m_address"]."',
+                                    '".$_REQUEST["m_tel"]."',
+                                    '".$_REQUEST["m_fax"]."',
+                                    '".$_REQUEST["m_cellphone"]."',
+                                    '".$_REQUEST["m_account"]."',
+                                    '".$_REQUEST["m_epaper_status"]."'
+                                )";
+                                $rs = $db->query($sql);
+                                $this->m_id = $db->get_insert_id();
 	            
-	            $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"] = $_REQUEST["m_account"];
+                                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"] = $_REQUEST["m_account"];
 				$this->mail_goto_url = $cms_cfg["base_root"];
 			}
 		}
