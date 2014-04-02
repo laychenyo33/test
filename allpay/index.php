@@ -359,6 +359,8 @@
                                 $updateOrder['o_status'] = 21;
                                 App::getHelper('dbtable')->order->writeData($updateOrder);
                             }
+                            $post['o_id'] = $post["MerchantTradeNo"]; 
+                            App::getHelper('dbtable')->allpay_order->writeData($post,'insert');
                             if(($err = App::getHelper('dbtable')->order->report())!=''){
                                 echo "0|db error";
                             }else{
@@ -383,6 +385,8 @@
                                 $updateOrder['o_status'] = 21;
                                 App::getHelper('dbtable')->order->writeData($updateOrder);
                             }
+                            $post['o_id'] = $post["MerchantTradeNo"];
+                            App::getHelper('dbtable')->allpay_info->writeData($post,'insert');
                             if(($err = App::getHelper('dbtable')->order->report())!=''){
                                 echo "0|db error";
                             }else{
