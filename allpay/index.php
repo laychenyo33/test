@@ -343,12 +343,12 @@
 
                     $ckmac_key = strtoupper($this->allpay_checkcode($all_post_array));
 
-                    return ($ckmac_key == $_POST["CheckMacValue"]);
+                    return ($ckmac_key == $post["CheckMacValue"]);
                 }
                 //更新訂單資料
                 function updateOrder($post){
                     if($this->isValidData($post)){
-                        if($post["RtnCode"] != 2 && $_POST["RtnCode"] != "10100073"){
+                        if($post["RtnCode"] != 2 && $post["RtnCode"] != "10100073"){
                             if($post["RtnCode"] == 1){
                                 App::getHelper('dbtable')->allpay_order->writeData($post,'insert');
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
@@ -375,7 +375,7 @@
                 function updatePayInfo($post){
                     if($this->isValidData($post)){
                         if($post["RtnCode"]!=1){
-                            if($post["RtnCode"] == 2 || $_POST["RtnCode"] == "10100073"){
+                            if($post["RtnCode"] == 2 || $post["RtnCode"] == "10100073"){
                                 App::getHelper('dbtable')->allpay_payinfo->writeData($post,'insert');                        
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 0;
