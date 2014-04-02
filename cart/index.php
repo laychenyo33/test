@@ -550,9 +550,7 @@
 			
             //取得分頁連結
             $func_str = $cms_cfg["base_root"]."cart/?func=c_order";
-            $page = $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records);
-            //重新組合包含limit的sql語法
-            $sql = $main->sqlstr_add_limit($cms_cfg["op_limit"],$_REQUEST["nowp"],$sql);
+            $sql = $main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
 			
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
