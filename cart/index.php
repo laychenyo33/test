@@ -211,8 +211,9 @@
 	                foreach($ws_array["payment_type"] as $key => $payment){
 	                    $tpl->newBlock("PAYMENT_TYPE_ITEMS");
 	                    $tpl->assign(array(
-	                    	"VALUE_PAYMENT_TYPE" => $payment,
-	                    	"VALUE_PAYMENT_CURRENT" => ($payment == $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"])?'checked':'',
+	                    	"VALUE_PAYMENT_TYPE" => $key,
+	                    	"VALUE_PAYMENT_TYPE_STR" => $payment,
+	                    	"VALUE_PAYMENT_CURRENT" => ($key == App::getHelper('session')->o_payment_type)?'checked':'',
 	                    ));
 	                }
 				}
@@ -259,7 +260,7 @@
 	                $tpl->newBlock("PAYMENT_TYPE");
 	                $tpl->assign(array(
 	                	"MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"],
-	                	"VALUE_PAYMENT_TYPE" => $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"],
+	                	"VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][App::getHelper('session')->o_payment_type],
 					));
 					
 					// 購物收件人表單
@@ -467,7 +468,7 @@
                         App::getHelper('session')->paymentType = $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"];
                         switch(App::getHelper('session')->paymentType){
                             case 1: //atm
-                            case '貨到付款': //貨到付款
+                            case 2: //貨到付款
                                 $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$this->o_id;
                                 header("location:".$goto_url);
                                 break;
@@ -475,7 +476,7 @@
 			// ALLPAY (歐付寶)
 			if($allpay->allpay_switch && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
 				foreach($allpay->all_cfg["allpay_type"] as $type => $str){
-					if($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $str && !empty($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"])){
+					if($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $type && !empty($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"])){
 						$allpay_payment = $type;
 					}
 				}
@@ -648,7 +649,11 @@
 				
 				$row = $db->fetch_array($selectrs,1);
 				foreach($row as $key => $value){
+                                    if($key=='o_payment_type'){
+					$tpl->assignGlobal("VALUE_".strtoupper($key),$ws_array["payment_type"][$value]);
+                                    }else{
 					$tpl->assignGlobal("VALUE_".strtoupper($key),$value);
+                                    }
 				}
 				$tpl->assignGlobal("VALUE_O_STATUS_SUBJECT",$ws_array["order_status"][$row["o_status"]]);
 				
