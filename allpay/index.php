@@ -375,8 +375,7 @@
                 function updatePayInfo($post){
                     if($this->isValidData($post)){
                         if($post["RtnCode"]!=1){
-                            if($post["RtnCode"] == 2 || $post["RtnCode"] == "10100073"){
-                                App::getHelper('dbtable')->allpay_payinfo->writeData($post,'insert');                        
+                            if($post["RtnCode"] == 2 || $post["RtnCode"] == "10100073"){                      
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 0;
                                 App::getHelper('dbtable')->order->writeData($updateOrder);                        
