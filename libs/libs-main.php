@@ -2001,6 +2001,35 @@ class MAINFUNC{
 
             return $truncate;
 
-    }    
+    }
+    //載入mail樣版
+    function get_mail_tpl($template){
+        global $cms_cfg,$TPLMSG;
+        if(file_exists($_SERVER['DOCUMENT_ROOT'].$cms_cfg['base_root']."templates/mail/".$template.".html")){
+            $tpl = new TemplatePower( $_SERVER['DOCUMENT_ROOT'].$cms_cfg['base_root']."templates/mail/template.html" );
+            $tpl->assignInclude( "MAIN", $_SERVER['DOCUMENT_ROOT'].$cms_cfg['base_root']."templates/mail/".$template.".html"); //主功能顯示區
+            $tpl->prepare();
+            //初始化重要樣版變數
+            $tpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+            $tpl->assignGlobal("MSG_COMPANY",App::getHelper('session')->sc_company);
+            $tpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
+            $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
+            $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
+            $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
+            $tpl->assignGlobal("TAG_BASE_URL_ENCODE" ,  urlencode($cms_cfg["base_url"]));
+            $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
+            $tpl->assignGlobal("MSG_SITEMAP",$TPLMSG["SITEMAP"]);
+            $tpl->assignGlobal("MSG_PRODUCT_SEARCH",$TPLMSG['PRODUCTS_SEARCH']);
+            $tpl->assignGlobal("MSG_PRODUCT_SEARCH_KEYWORD",$TPLMSG['ENTER_KEYWORD']);
+            //設定頁腳變數
+            $tpl->assignGlobal("TAG_FOOTER_ADDRESS",$TPLMSG['COMPANY_ADDRESS']);
+            $tpl->assignGlobal("TAG_FOOTER_FAX",$TPLMSG['FAX']);
+            $tpl->assignGlobal("TAG_FOOTER_TEL",$TPLMSG['FOOTER_TEL']);
+            $tpl->assignGlobal("TAG_FOOTER_EMAIL",$TPLMSG['FOOTER_EMAIL']);
+            return $tpl;
+        }else{
+            throw new Exception($template." doesn't exists!");
+        }
+    }       
 }
 ?>
