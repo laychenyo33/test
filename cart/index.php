@@ -128,7 +128,7 @@
 				$sess = $this->sess_code($_REQUEST["p_id"],$option);
 				
 				$_SESSION[$cms_cfg['sess_cookie_name']]["id"][$sess] = $_REQUEST["p_id"];
-				$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess] = (!empty($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]:$this->c_num_set;
+                                $_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess] += ($_REQUEST['amount'])?$_REQUEST['amount']:$this->c_num_set;
 			}
 			
 			if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"])){
