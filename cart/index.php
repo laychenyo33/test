@@ -412,7 +412,7 @@
                                 '".$_REQUEST["m_fax"]."',
                                 '".$_REQUEST["m_cellphone"]."',
                                 '".$_REQUEST["m_email"]."',
-                                '".$this->shipping_price."',
+                                '".($this->shipping_price+$this->plus_fee)."',
                                 '".$this->subtotal_money."',
                                 '".$this->total_money."',
                                 '".$_REQUEST["content"]."',
@@ -773,11 +773,11 @@
 				
                             // 手續費
                             if($allpay->allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'CVS' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'BARCODE')){
-                                    $plus_fee = 30;
+                                    $this->plus_fee = 30;
                             }
 
                             // 總價
-                            $this->total_money = $this->subtotal_money + $this->shipping_price + $plus_fee;
+                            $this->total_money = $this->subtotal_money + $this->shipping_price + $this->plus_fee;
 
                             // 顯示價格抬頭
                             $tpl->newBlock("TAG_PRICE_TH");
@@ -787,11 +787,11 @@
                             ));
 
                             // 顯示手續費
-                            if(!empty($plus_fee)){
+                            if(!empty($this->plus_fee)){
                                 $tpl->newBlock("TAG_PLUS_FEE");
                                 $tpl->assign(array(
                                     "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
-                                    "VALUE_PLUS_FEE" => $plus_fee,
+                                    "VALUE_PLUS_FEE" => $this->plus_fee,
                                 ));
                             }
 				
