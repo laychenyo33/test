@@ -270,6 +270,14 @@
                                         "VALUE_ARRIVAL_START" => $this->arrival_start,
                                         "VALUE_ARRIVAL_RANGE" => $this->arrival_range,
                                 ));
+                                //發票類型
+                                foreach($ws_array['invoice_type'] as $type_id => $type_label){
+                                    $tpl->newBlock("INVOICE_TYPE_LIST");
+                                    $tpl->assign(array(
+                                        "VALUE_INVOICE_ID"    => $type_id,
+                                        "VALUE_INVOICE_LABEL" => $type_label,
+                                    ));
+                                }                                
                             }
 
                             if(empty($this->m_id) && !empty($cms_cfg["ws_module"]["ws_cart_login"])){
@@ -343,7 +351,7 @@
                                     "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"],
                                     "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"],
                                     "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"],
-                                    "VALUE_INVOICE_TYPE" => $_REQUEST['o_invoice_type'],
+                                    "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
                                     "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"],
                                     "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"],
                                     "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"],
@@ -663,17 +671,7 @@
 					$tpl->newBlock("TAG_ADV_BLOCK");
 					$tpl->assignGlobal($this->adv_lang);
 					
-					switch($row["o_invoice_type"]){
-						case 1:
-							$invoice_type = $TPLMSG['DUP_INVOICE'];
-						break;
-						case 2:
-							$invoice_type = $TPLMSG['TRI_INVOICE'];
-						break;
-						case 3:
-							$invoice_type = $TPLMSG['MSG_DONATE'];
-						break;
-					}
+                                        $invoice_type = $ws_array['invoice_type'][$row["o_invoice_type"]];
 					
 					$tpl->assignGlobal("VALUE_O_INVOICE_TYPE",$invoice_type);
 					

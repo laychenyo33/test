@@ -45,7 +45,11 @@ if($cms_cfg['ws_module']['ws_shopping_cart_module']){
     $ws_array["payment_type"]=array( 1 =>$TPLMSG["PAYMENT_ATM"],2 =>$TPLMSG["PAYMENT_CASH_ON_DELIVERY"]);
 }
 $ws_array["shippment_type"]=array( 1=>$TPLMSG['SHIPPMENT_1'], 2=>$TPLMSG['SHIPPMENT_2'], 3=>$TPLMSG['SHIPPMENT_3']);
-$ws_array['invoice_type'] = array(2=>$TPLMSG['INVOICE_TYPE_2'],3=>$TPLMSG['INVOICE_TYPE_3']);
+if($cms_cfg['ws_module']['ws_shopping_cart_module']){
+    $ws_array['invoice_type'] = array(1=>$TPLMSG['DUP_INVOICE'] ,2=>$TPLMSG['TRI_INVOICE'],3=>$TPLMSG['DONATE']);
+}else{
+    $ws_array['invoice_type'] = array(2=>$TPLMSG['INVOICE_TYPE_2'],3=>$TPLMSG['INVOICE_TYPE_3']);
+}
 $ws_array["deliery_timesec"]=array( 0 =>"不指定",1 =>"中午前",2=>"12時-17時",3=>"17時-20時");
 $ws_array["main"]=array("aboutus" => $TPLMSG["ABOUT_US"],
                         "products" => $TPLMSG["PRODUCTS"],
