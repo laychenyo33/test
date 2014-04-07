@@ -285,7 +285,7 @@
 		
 		// 送出訂單
 		function cart_replace(){
-			global $db,$tpl,$cms_cfg,$TPLMSG,$main,$allpay;
+			global $db,$tpl,$cms_cfg,$TPLMSG,$main,$allpay,$ws_array;
 			
 			$this->o_id = $this->o_id_generator();
 			
