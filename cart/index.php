@@ -772,7 +772,7 @@
 			if(count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) == $this->price_count && empty($switch)){
 				
                             // 手續費
-                            if($allpay->allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $allpay->all_cfg["allpay_type"]["CVS"] || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $allpay->all_cfg["allpay_type"]["BARCODE"])){
+                            if($allpay->allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'CVS' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'BARCODE')){
                                     $plus_fee = 30;
                             }
 
