@@ -199,7 +199,7 @@
                                             $this->price_counter($row);
                                             $this->service_rule();
                                     }
-
+                                    $i++;
                                     $tpl->gotoBlock("SHOPPING_CART_ZONE");
                             }
 
