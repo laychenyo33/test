@@ -447,7 +447,6 @@ class MEMBER{
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
-            $tpl->printToScreen();
         }
     }
     //會員訂單查詢
