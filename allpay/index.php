@@ -371,12 +371,14 @@
                 }
                 //更新付款資訊
                 function updatePayInfo($post){
+                    global $TPLMSG;
                     if($this->isValidData($post)){
                         if($post["RtnCode"]!=1){
                             if($post["RtnCode"] == 2 || $post["RtnCode"] == "10100073"){                      
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 0;
-                                App::getHelper('dbtable')->order->writeData($updateOrder);                        
+                                App::getHelper('dbtable')->order->writeData($updateOrder); 
+                                $mail=true;
                             }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 21;
@@ -387,6 +389,20 @@
                             if(($err = App::getHelper('dbtable')->order->report())!=''){
                                 echo "0|db error";
                             }else{
+                                //寄發通知信
+                                if($mail){
+                                    //$mail_header = ($sessHandler->paymentType == 3)? 1 : 0;
+                                    $sessHandler = App::getHelper('session');
+                                    $order = App::getHelper('dbtable')->order->getdata($post["MerchantTradeNo"])->getdatarow('o_email');
+                                    if($sessHandler['mailContent']){
+                                        $mail_content = $sessHandler->mailContent;
+                                        //ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0)
+                                        App::getHelper('main')->ws_mail_send($sessHandler['sc_email'],$order["o_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"],"order","","",1);
+                    //                    App::getHelper('main')->ws_mail_send_simple($sessHandler['sc_email'],$order["o_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"]);
+                    //                    App::getHelper('main')->ws_mail_send_simple($order["o_email"],$sessHandler['sc_email'],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"]);
+                                    }
+                                    unset($sessHandler['mailContent']);
+                                }
                                 echo "1|OK";
                             }                            
                         }
