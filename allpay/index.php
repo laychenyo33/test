@@ -37,7 +37,7 @@
 			$this->all_cfg["TotalAmount"] = $price;
 			$this->all_cfg["ChoosePayment"] = $c_pay;
 			$this->all_cfg["ChooseSubPayment"] = $c_s_pay;
-			$this->all_cfg["OrderResultURL"] = ($this->allpay_switch)?$cms_cfg["base_url"].'cart/?func=c_order_detial&o_id='.$o_id:$cms_cfg["base_url"].'member.php?func=m_zone&mzt=order&type=detail&o_id='.$o_id;
+			//$this->all_cfg["OrderResultURL"] = ($this->allpay_switch)?$cms_cfg["base_url"].'cart/?func=c_order_detial&o_id='.$o_id:$cms_cfg["base_url"].'member.php?func=m_zone&mzt=order&type=detail&o_id='.$o_id;
 
 			// 交易描述
 			if(!empty($pay_desc)){
