@@ -349,7 +349,6 @@
                     if($this->isValidData($post)){
                         if($post["RtnCode"] != 2 && $post["RtnCode"] != "10100073"){
                             if($post["RtnCode"] == 1){
-                                App::getHelper('dbtable')->allpay_order->writeData($post,'insert');
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 1;
                                 App::getHelper('dbtable')->order->writeData($updateOrder);                        
