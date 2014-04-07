@@ -332,7 +332,7 @@
                             $tpl->newBlock("PAYMENT_TYPE");
                             $tpl->assign(array(
                                 "MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"],
-                                "VALUE_PAYMENT_TYPE" => $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"],
+                                "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]],
                             ));
 
                             // 收件人資訊
