@@ -343,7 +343,7 @@
                                     "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"],
                                     "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"],
                                     "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"],
-                                    "VALUE_INVOICE_TYPE" => $invoice_type,
+                                    "VALUE_INVOICE_TYPE" => $_REQUEST['o_invoice_type'],
                                     "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"],
                                     "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"],
                                     "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"],
