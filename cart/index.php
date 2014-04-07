@@ -327,7 +327,7 @@
 			// 新增會員
 			$this->new_member();
 			
-			if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]){
+			if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]==1){
 				// 顯示付款方式
                             $tpl->newBlock("PAYMENT_TYPE");
                             $tpl->assign(array(
