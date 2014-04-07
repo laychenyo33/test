@@ -352,11 +352,11 @@ $TPLMSG['ORDER_SUCCESS'] = "訂購成功";
 $TPLMSG['ORDER_FAIL'] = "訂購失敗";
 
 //歐付寶相關字彙
-$TPLMSG["CREDIT"] = "Credit card"; //信用卡
-$TPLMSG["WEBATM"] = "Web ATM"; //網路ATM
-$TPLMSG["ATM"] = "ATM"; //自動櫃員機
-$TPLMSG["CVS"] = "CVS"; //超商代碼 (需加收 30 元手續費)
-$TPLMSG["BARCODE"] = "Barcode"; //超商條碼 (需加收 30 元手續費)
+$TPLMSG["CREDIT"] = "信用卡"; //信用卡
+$TPLMSG["WEBATM"] = "網路ATM"; //網路ATM
+$TPLMSG["ATM"] = "ATM轉帳"; //自動櫃員機
+$TPLMSG["CVS"] = "超商代碼"; //超商代碼 (需加收 30 元手續費)
+$TPLMSG["BARCODE"] = "超商條碼"; //超商條碼 (需加收 30 元手續費)
 $TPLMSG["ALIPAY"] = "Alipay"; //支付寶
 $TPLMSG["TENPAY"] = "Tenpay"; //財付通
 $TPLMSG["TOPUPUSED"] = "Top-up"; //儲值消費
