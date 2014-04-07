@@ -143,8 +143,8 @@
 		"ATM" => $TPLMSG["ATM"],
 		"CVS" => $TPLMSG["CVS"],
 		"BARCODE" => $TPLMSG["BARCODE"],
-		"Alipay" => $TPLMSG["ALIPAY"],
-		"Tenpay" => $TPLMSG["TENPAY"],
+//		"Alipay" => $TPLMSG["ALIPAY"],
+//		"Tenpay" => $TPLMSG["TENPAY"],
 		//97 => $TPLMSG["TOPUPUSED"],
 	);
 	
