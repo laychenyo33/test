@@ -230,6 +230,15 @@ class PRODUCTS{
                 $this->hotproducts_list();
                 $this->ws_tpl_type=1;
                 break;
+            case "p_pro_list"://促銷產品管理列表
+                $this->current_class="PP";
+                $this->ws_tpl_file = "templates/ws-manage-proproducts-list-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_FORMVALID");
+                $this->proproducts_list();
+                $this->ws_tpl_type=1;
+                break;
             case "data_processing"://多筆刪除,複製,啟用,停用 處理
                 $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -869,6 +878,7 @@ class PRODUCTS{
                                   "STR_P_CUSTOM_STATUS_DISPLAY" => "none",
                                   "STR_NEW_SORT_DISPLAY" => "none",
                                   "STR_HOT_SORT_DISPLAY" => "none",
+                                  "STR_PRO_SORT_DISPLAY" => "none",
                                   "VALUE_ACTION_MODE" => $action_mode
         ));		
         // 無新產品不顯示產品類型欄位
@@ -919,6 +929,7 @@ class PRODUCTS{
                     }    
                     if(($row["p_type"] & 4)==4){
                         $tpl->assignGlobal("STR_P_TYPE_CK3","checked");
+                        $tpl->assignGlobal("STR_PRO_SORT_DISPLAY","");
                     }    
                 }
                 $tpl->assignGlobal( array("NOW_P_ID"  => $row["p_id"],
@@ -926,6 +937,7 @@ class PRODUCTS{
                                           "VALUE_P_SORT"  => $row["p_sort"],
                                           "VALUE_NEW_P_SORT" => $row["p_new_sort"],
                                           "VALUE_HOT_P_SORT" => $row["p_hot_sort"],
+                                          "VALUE_PRO_P_SORT" => $row["p_pro_sort"],
                                           "VALUE_P_NAME" => $row["p_name"],
                                           "VALUE_P_NAME_ALIAS" => $row["p_name_alias"],
                                           "VALUE_P_CUSTOM" => $row["p_custom"],
@@ -1103,6 +1115,7 @@ class PRODUCTS{
                         p_sort,
                         p_new_sort,
                         p_hot_sort,
+                        p_pro_sort,
                         p_name,
                         p_custom_status,
                         p_custom,
@@ -1139,6 +1152,7 @@ class PRODUCTS{
                         '".$_REQUEST["p_sort"]."',
                         '".$_REQUEST["p_new_sort"]."',
                         '".$_REQUEST["p_hot_sort"]."',
+                        '".$_REQUEST["p_pro_sort"]."',
                         '".htmlspecialchars($_REQUEST["p_name"])."',
                         '".$_REQUEST["p_custom_status"]."',
                         '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"]))."',
@@ -1191,6 +1205,7 @@ class PRODUCTS{
                     p_sort = '".$_REQUEST["p_sort"]."',
                     p_new_sort = '".$_REQUEST["p_new_sort"]."',
                     p_hot_sort = '".$_REQUEST["p_hot_sort"]."',
+                    p_pro_sort = '".$_REQUEST["p_pro_sort"]."',
                     p_name = '".htmlspecialchars($_REQUEST["p_name"])."',
                     p_custom_status = '".$_REQUEST["p_custom_status"]."',
                     p_custom = '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"]))."',
@@ -1320,7 +1335,7 @@ class PRODUCTS{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
             }
-        }elseif($ws_table=="p" || $ws_table=="p_new" || $ws_table=="p_hot"){//產品管理更改狀態
+        }elseif($ws_table=="p" || $ws_table=="p_new" || $ws_table=="p_hot" || $ws_table=="p_pro"){//產品管理更改狀態
             if($_REQUEST["p_id"]){
                 $p_id=array(0=>$_REQUEST["p_id"]);
             }else{
@@ -1413,7 +1428,7 @@ class PRODUCTS{
         if(!empty($_REQUEST["sort_value"]) && !empty($ws_table)){
             if($ws_table=="pc"){
                 $table_name=$cms_cfg['tb_prefix']."_products_cate";
-            }elseif($ws_table=="p" || $ws_table=="p_new" || $ws_table=="p_hot"){
+            }elseif($ws_table=="p" || $ws_table=="p_new" || $ws_table=="p_hot" || $ws_table=="p_pro"){
                 $table_name=$cms_cfg['tb_prefix']."_products";
             }elseif($ws_table=="pa"){
                 $table_name=$cms_cfg['tb_prefix']."_products_application";
@@ -1421,7 +1436,7 @@ class PRODUCTS{
                 $table_name=$cms_cfg['tb_prefix']."_products_ca";
             }
             foreach($_REQUEST["id"] as $key => $value){
-                if($ws_table == "p_new" || $ws_table == "p_hot") {
+                if($ws_table == "p_new" || $ws_table == "p_hot"  || $ws_table == "p_pro") {
                     $sql="update ".$table_name." set ".$ws_table."_sort=".$_REQUEST["sort_value"][$value]." where  p_id='".$value."'";
                 }else{
                     $sql="update ".$table_name." set ".$ws_table."_sort=".$_REQUEST["sort_value"][$value]." where ".$ws_table."_id='".$value."'";
@@ -1907,7 +1922,7 @@ class PRODUCTS{
             case "del":
                 if($_REQUEST["ws_table"]=="pc"){
                     $this->products_cate_del();
-                }elseif($_REQUEST["ws_table"]=="p" || $_REQUEST["ws_table"]=="p_new" || $_REQUEST["ws_table"]=="p_hot" ){
+                }elseif($_REQUEST["ws_table"]=="p" || $_REQUEST["ws_table"]=="p_new" || $_REQUEST["ws_table"]=="p_hot" || $_REQUEST["ws_table"]=="p_pro" ){
                     $this->products_del();
                 }elseif($_REQUEST["ws_table"]=="pa"){
                     $this->products_application_del();
@@ -2110,6 +2125,91 @@ class PRODUCTS{
                 $tpl->assign( array("VALUE_PC_ID"  => $row["p_id"],
                                     "VALUE_P_ID"  => $row["p_id"],
                                     "VALUE_P_SORT"  => $row["p_hot_sort"],
+                                    "VALUE_P_NAME" => $row["p_name"],
+                                    "VALUE_P_SERIAL" => $i,
+                                    "VALUE_PC_NAME"  => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
+                                    "VALUE_STATUS_IMG" => ($row["p_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
+                                    "VALUE_STATUS_IMG_ALT" => ($row["p_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
+                ));
+            }
+        }
+    }
+    //熱門產品管理--列表================================================================
+    function proproducts_list(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        $sql="select count(pc_id) as pc_total from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
+        $selectrs = $db->query($sql);
+        $row = $db->fetch_array($selectrs,1);
+        //沒有分類先建立分類
+        if($row["pc_total"]<1){
+            $tpl->assignGlobal( "MSG_CREATE_CATE_FIRST" , $TPLMSG["CREATE_CATE_FIRST"]);
+            $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_add";
+            $this->goto_target_page($goto_url);
+        }else{
+            //產品管理列表
+            $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where  (p_type & 4)=4 ";
+            //附加條件
+            $and_str="";
+            if(!empty($_REQUEST["pc_parent"])){
+                $and_str .= " and p.pc_id = '".$_REQUEST["pc_parent"]."'";
+            }
+            if($_REQUEST["st"]=="all"){
+                $and_str .= " and (p.p_name like '%".$_REQUEST["sk"]."%' or p.p_spec like '%".$_REQUEST["sk"]."%' or p.p_character like '%".$_REQUEST["sk"]."%' or p.p_desc like '%".$_REQUEST["sk"]."%')";
+            }
+            if($_REQUEST["st"]=="p_name"){
+                $and_str .= " and p.p_name like '%".$_REQUEST["sk"]."%'";
+            }
+            if($_REQUEST["st"]=="p_spec"){
+                $and_str .= " and p.p_spec like '%".$_REQUEST["sk"]."%'";
+            }
+            if($_REQUEST["st"]=="p_character"){
+                $and_str .= " and p.p_character like '%".$_REQUEST["sk"]."%'";
+            }
+            if($_REQUEST["st"]=="p_desc"){
+                $and_str .= " and p.p_desc like '%".$_REQUEST["sk"]."%'";
+            }
+            $sql .= $and_str." order by p.p_pro_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc ";
+            //取得總筆數
+            $selectrs = $db->query($sql);
+            $total_records    = $db->numRows($selectrs);
+            //取得分頁連結
+            $func_str="products.php?func=p_pro_list&pc_parent=".$this->parent."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+            //分頁且重新組合包含limit的sql語法
+            $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+            $selectrs = $db->query($sql);
+            $rsnum    = $db->numRows($selectrs);
+            $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
+                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
+                                      "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+            ));
+            switch($_REQUEST["st"]){
+                case "all" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK0", "selected");
+                    break;
+                case "p_name" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK1", "selected");
+                    break;
+                case "p_spec" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK2", "selected");
+                    break;
+                case "p_character" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK3", "selected");
+                    break;
+                case "p_desc" :
+                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK4", "selected");
+                    break;
+            }
+            //產品列表
+            $i=$main->get_pagination_offset($this->op_limit);
+            while ( $row = $db->fetch_array($selectrs,1) ) {
+                $i++;
+                $tpl->newBlock( "PRODUCTS_LIST" );
+                if($i%2){
+                    $tpl->assign("TAG_TR_CLASS","class='altrow'");
+                }
+                $tpl->assign( array("VALUE_PC_ID"  => $row["p_id"],
+                                    "VALUE_P_ID"  => $row["p_id"],
+                                    "VALUE_P_SORT"  => $row["p_pro_sort"],
                                     "VALUE_P_NAME" => $row["p_name"],
                                     "VALUE_P_SERIAL" => $i,
                                     "VALUE_PC_NAME"  => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],

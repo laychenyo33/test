@@ -316,6 +316,16 @@ function show_hot_sort(form) {
         hot_p_sort.style.display = 'none';
     }
 }
+//顯示促銷產品排序
+function show_pro_sort(form) {
+    var pro_p = form.p_type3;
+    var pro_p_sort = document.getElementById('p_pro_sort');
+    if(pro_p.checked == true){
+        pro_p_sort.style.display = '';
+    }else{
+        pro_p_sort.style.display = 'none';
+    }
+}
 //選擇相關分類、產品、跨分類
 function sel_related_items(ReturnID) {
     related_value = '';
