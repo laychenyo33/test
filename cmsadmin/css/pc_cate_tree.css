@@ -1,6 +1,5 @@
 .simpleTree
-{
-	
+{	
 	margin:0;
 	padding:0;
 	/*
@@ -10,6 +9,12 @@
 	overflow:auto;
 	border: 1px solid #444444;
 	*/
+}
+.simpleTree a{
+	color: #000;
+}
+.simpleTree a:hover{
+	color: #099;
 }
 .simpleTree li
 {

@@ -1,43 +1,22 @@
 body {
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
     margin: 0px;
-	background-color: #F9F9F9;
-    font-family: Verdana, Arial,Vrinda,Tahoma;
-    line-height: 175%;
-    font-size:12px;
-    color:#666;
+    padding:0px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 html {
     background-color: #F9F9F9;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
     margin: 0px;
 }
 a {
-    color: #555;
     text-decoration:none;
-}
-a:hover {
-    color: #0099CC;
 }
 
 img {
-    border-top-width: 0px;
-    border-right-width: 0px;
-    border-bottom-width: 0px;
-    border-left-width: 0px;
-    display:inline;
+	border:0px;
 }
 ul{
     margin:0;
     padding:0;
-    list-style-position: outside;
-    list-style-type: none;
 }
 li{
     margin:0;
@@ -95,13 +74,19 @@ div{
     width: 199px;
 }
 #left_content #user_info {
-    background-image: url(../images/manage_r2_c1.jpg);
+    background-image: url(../images/manage_title.png);
     background-repeat: no-repeat;
     height: 55px;
-    padding: 10px 0 0 55px;
+    padding: 15px 0 0 65px;
+    font-size: 15px;
+    color:#FFF;
+    font-size: 12px;
 }
 #left_content #user_info a{
-    color:#0099CC;
+    color:#FFF;
+}
+#left_content #user_info a:hover{
+    color:#d8e230;
 }
 #left_content #main_nav {
     width: 199px;
@@ -323,7 +308,7 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
     /*background-image: url(images/h1-bg2.jpg);*/
     background-repeat: repeat-x;
     background-position: left bottom;
-    color: #63ABC7;
+    color: #333;
     width: 88%;
     padding-top: 10px;
     padding-right: 20px;
@@ -646,3 +631,20 @@ span.current{color:#f00}
 .gallery_file_list{width:200px;float:left;position:relative;margin:10px 0;}
 .gallery_file_list .gallery_file{width:100%;height:80px;text-align:center}
 .gallery_file_list .gallery_desc{width:100%;margin:5px 0;text-align:center}
+
+
+.toplog a{
+	font-size:12px;
+	color: #000;
+}
+.toplog a:hover{
+	color: #099;
+}
+.toptitle {
+	font-size:12px;
+	color: #000;
+	padding-top: 9px;
+}
+.toptitle span{
+	color: #666;
+}
