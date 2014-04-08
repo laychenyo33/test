@@ -42,7 +42,8 @@ if($db->numRows($res)){
             if(!empty($mx_arr)){
                 //取得電子報內容
                 $mail_subject=$qRow["e_subject"];
-                $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",$qRow["eq_content"]);
+                $mail_content=preg_replace('%([-\w\.:]*/)*(upload_files/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $qRow["eq_content"]);                
+                $mail_content=preg_replace('%([-\w\.:]*/)*(images/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $mail_content);                            
                 //初始化電子報樣版
                 $mtpl = new TemplatePower('./templates/ws-manage-epaper-template-tpl.html');
                 $mtpl->prepare();

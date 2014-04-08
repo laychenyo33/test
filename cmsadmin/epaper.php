@@ -679,7 +679,8 @@ class EPAPER{
                         $goto_url=$cms_cfg["manage_url"]."epaper.php?func=e_list";
                         if($rsnum > 0){
                             $mail_subject=$row["e_subject"];
-                            $mail_content=str_replace("=\"../upload_files/","=\"".$cms_cfg['file_url']."upload_files/",$row["e_content"]);
+                            $mail_content=preg_replace('%([-\w\.:]*/)*(upload_files/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $row["e_content"]);
+                            $mail_content=preg_replace('%([-\w\.:]*/)*(images/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $mail_content);                            
                             //初始化電子報樣版
                             $mtpl = new TemplatePower('./templates/ws-manage-epaper-template-tpl.html');
                             $mtpl->prepare();
@@ -707,6 +708,8 @@ class EPAPER{
                                         $p_link = $cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_row['p_id'];
                                     }
                                     $simg = $p_row['p_small_img']?$cms_cfg['file_root'].$p_row['p_small_img']:$cms_cfg['default_preview_pic'];
+                                    $p_desc=preg_replace('%([-\w\.:]*/)*(upload_files/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $p_row['p_desc']);
+                                    $p_desc=preg_replace('%([-\w\.:]*/)*(images/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $p_desc);                                    
                                     $dimension = $main->resizeto($simg,219,171);                                    
                                     $mtpl->assign(array(
                                        "VALUE_P_LINK"      => $p_link, 
@@ -714,7 +717,7 @@ class EPAPER{
                                        "VALUE_P_SMALL_IMG_W" => $dimension['width'], 
                                        "VALUE_P_SMALL_IMG_H" => $dimension['height'], 
                                        "VALUE_P_NAME"      => $p_row['p_name'], 
-                                       "VALUE_P_DESC"      => $p_row['p_desc'], 
+                                       "VALUE_P_DESC"      => $main->get_short_str(strip_tags($p_desc,"<img>"),$cms_cfg['epaper_product_desc_limit'],$p_link), 
                                     ));
                                 }
                             }
