@@ -130,12 +130,16 @@
 				$_SESSION[$cms_cfg['sess_cookie_name']]["id"][$sess] = $_REQUEST["p_id"];
                                 $_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess] += ($_REQUEST['amount'])?$_REQUEST['amount']:$this->c_num_set;
 			}
-			
-			if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"])){
-				$this->cart_list();
-			}else{
-				$this->error_handle();
-			}
+                        if(!App::getHelper('request')->isAjax()){
+                            if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"])){
+                                    $this->cart_list();
+                            }else{
+                                    $this->error_handle();
+                            }
+                        }else{
+                            echo 1;
+                            die();
+                        }
 		}
 		
 		// 清單顯示
