@@ -2,21 +2,22 @@
 #accordion {
 	width: 195px;
 	background-color: #e5e5e5;
-	border: 3px double #BBDCFD;
+	border: 3px double #ccc;
 }
 
 /* accordion header */
 #accordion h2 {
 	margin:0;
 	padding:3px 20px;
-	font-size:14px;
-	font-weight:bold;
-	border:1px solid #A6D6FA;
+	font-size:13px;
+	height:20px;
+	font-weight:normal;
+	border:1px solid #333;
 	border-bottom:1px solid #ddd;
 	cursor:pointer;
 	background-color: #D4E7F8;
 	background-image: url(../images/h40.gif);
-	color: #369;
+	color: #FFF;
 }
 
 /* currently active header */
@@ -47,17 +48,15 @@
 	background-image: url(../images/arrow.gif);
 	background-repeat: no-repeat;
 	margin: 0px 0px 0px 0px;
-	background-position: 10px 10px;
-	border-bottom-style: inset;
-	border-bottom-width: 1px;
-	border-bottom-color: #09C;
+	background-position: 5px 6px;
+	border-bottom: 1px dashed #666;
 	padding: 5px 0px 5px 30px;
 }
 /* a title inside pane */
 #accordion div.pane h3 a{
 	font-weight:normal;
 	font-size:12px;
-	color:#099;
+	color:#000;
 	margin-top: 0;
 	margin-right: 0;
 	margin-bottom: -5px;
@@ -68,7 +67,7 @@
 	color: #FFF;
 }
 #accordion .pane h3 a.current {
-	color:#933;
+	color:#099;
 }
 #accordion .pane h3 a.current:hover {
 	color:#fff;
