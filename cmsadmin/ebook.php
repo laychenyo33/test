@@ -291,6 +291,13 @@ class EBOOK{
         //載入分類資料,選擇分類
         $this->ebook_cate_select($this->ebook_cate_select_option, $row["ebc_id"],$row["ebc_parent"], $parent=0, $indent="");
         $tpl->assignGlobal("TAG_SELECT_EBOOK_CATE" ,$this->ebook_cate_select_option);
+        //整本型錄欄位
+        filefield::setValues(array(
+            "TAG_FILE_FIELD_NAME"    => "ebc_file",
+            "TAG_FILE_FIELD_ID"      => "ebc_file",
+            "TAG_FILE_FIELD_VALUE"   => $row['ebc_file'],            
+        ));
+        $tpl->assignGlobal("TAG_FILE_FIELD",  filefield::get_html());
     }
     //電子型錄管理分類--資料更新
     function ebook_cate_replace(){
@@ -307,7 +314,8 @@ class EBOOK{
                         ebc_cate_img,
                         ebc_modifydate,
                         ebc_locked,
-                        ebc_modifyaccount
+                        ebc_modifyaccount,
+                        ebc_file
                     ) values (
                         '".$_REQUEST["ebc_parent"]."',
                         '".$_REQUEST["ebc_status"]."',
@@ -317,7 +325,8 @@ class EBOOK{
                         '".$main->file_str_replace($_REQUEST["ebc_cate_img"])."',
                         '".date("Y-m-d m:i:s")."',
                         '".$_REQUEST["ebc_locked"]."',
-                        '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
+                        '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."',
+                        '".$main->file_str_replace($_REQUEST['ebc_file'])."'
                     )";
 
                 $rs = $db->query($sql);
@@ -365,7 +374,8 @@ class EBOOK{
                     ebc_cate_img='".$main->file_str_replace($_REQUEST["ebc_cate_img"])."',
                     ebc_modifydate='".date("Y-m-d m:i:s")."',
                     ebc_locked='".$_REQUEST["ebc_locked"]."',
-                    ebc_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
+                    ebc_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."',
+                    ebc_file='".$main->file_str_replace($_REQUEST['ebc_file'])."'
                 where ebc_id='".$_REQUEST["now_ebc_id"]."'";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();

@@ -222,6 +222,7 @@ $TPLMSG["FORGOT_PASSWORD"]="パスワードを忘れた";
 
 //EBOOK
 $TPLMSG["EBOOK"]="電子カタログ";
+$TPLMSG["EBOOK_DOWNLOAD"]="Download";
 
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "ちょっと待って!!<BR>このページはリダイレクトされます!!";

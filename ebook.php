@@ -15,7 +15,7 @@ class EBOOK{
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         switch($_REQUEST["func"]){
             case "download":
-                $this->download_ebook();
+                $this->download_ebook($_GET['mode']);
                 break;
             case "print":
                 $this->ws_tpl_file = "templates/ws-ebook-print-tpl.html";
@@ -221,7 +221,7 @@ class EBOOK{
     }    
     //顯示EBOOK分類的左方menu
     function left_fix_cate_list(){
-        global $tpl,$db,$main,$cms_cfg;
+        global $tpl,$db,$main,$cms_cfg,$TPLMSG;
         $sql="select * from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_parent='0' and ebc_status='1' order by ebc_sort, ebc_modifyaccount desc";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
@@ -235,6 +235,13 @@ class EBOOK{
                     "VALUE_CATE_NAME"  => $row['ebc_name'],
                     "TAG_CURRENT_CLASS"  => ($_GET['ebc_parent']==$row['ebc_id'])?"class='current'":"",
                 ));
+                if($row['ebc_file']){
+                    $tpl->newBlock("EBOOK_DOWNLOAD");
+                    $tpl->assign(array(
+                        "TAG_EBOOK_DL_LINK" => $_SERVER['PHP_SELF']."?func=download&mode=cate&fileID=".$row['ebc_id'],
+                        "MSG_EBOOK_DOWNLOAD" => $TPLMSG["EBOOK_DOWNLOAD"],
+                    ));
+                }
             }
         }
     }
@@ -297,25 +304,52 @@ class EBOOK{
         $Page["total_pages"]=floor($Page["total_pages"]);
         return $Page;
     }
-    function download_ebook(){
+    function download_ebook($mode=""){
         global $db,$cms_cfg;
-        $sql = "select eb_id,eb_big_img from ".$cms_cfg['tb_prefix']."_ebook where eb_id=".$_REQUEST["fileID"];
-        $selectrs = $db->query($sql);
-        $row = $db->fetch_array($selectrs,1);
-        if($row){
-            $piece=explode("/",$row["eb_big_img"]);
-            $num=count($piece)-1;
-            $file_name = $piece[$num];
-            //pumo主機
-            $file_name_path = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row["eb_big_img"];
-            //amgvh主機
-            // $file_name_path = $cms_cfg['file_url'].$row["eb_big_img"];
-
+        switch($mode){
+            case "cate":
+                $sql = "select ebc_file from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_id=".$_REQUEST["fileID"];
+                $selectrs = $db->query($sql);
+                $row = $db->fetch_array($selectrs,1);
+                if($row){
+                    $file_name = basename($row["ebc_file"]);
+                    //pumo主機
+                    $file_name_path = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row["ebc_file"];
+                    //amgvh主機
+                    // $file_name_path = $cms_cfg['file_url'].$row["eb_big_img"];
+                    $act=true;
+                }
+                break;
+            case "page":
+            default:
+                $sql = "select eb_id,eb_big_img from ".$cms_cfg['tb_prefix']."_ebook where eb_id=".$_REQUEST["fileID"];
+                $selectrs = $db->query($sql);
+                $row = $db->fetch_array($selectrs,1);
+                if($row){
+                    $piece=explode("/",$row["eb_big_img"]);
+                    $num=count($piece)-1;
+                    $file_name = $piece[$num];
+                    //pumo主機
+                    $file_name_path = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row["eb_big_img"];
+                    //amgvh主機
+                    // $file_name_path = $cms_cfg['file_url'].$row["eb_big_img"];
+                    $act=true;
+                }
+                break;
+        }
+        if($act){
             header("Content-type:application");
             header("Content-Disposition: attachment; filename=".$file_name);
             //file_name是預設下載時的檔名，可使用變數。
             readfile($file_name_path);
             //file是實際存放在你硬碟中要被下載的檔案，可使用變數。
+        }else{
+            echo <<<JSN
+         <script type="text/javascript">
+            alert("no files can be download");
+            window.close();
+         </script>   
+JSN;
         }
         exit(0);        
     }

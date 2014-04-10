@@ -221,6 +221,7 @@ $TPLMSG["FORGOT_PASSWORD"]="비밀 번호를 잊으셨습니까";
 
 //EBOOK
 $TPLMSG["EBOOK"]="E-목록";
+$TPLMSG["EBOOK_DOWNLOAD"]="Download";
 
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "잠시! <BR>이 페이지는 경로가 변경됩니다!";

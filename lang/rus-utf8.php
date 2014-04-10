@@ -208,6 +208,13 @@ $TPLMSG["INQUIRY_CONTENT"]="Содержание";
 //DOWNLOAD
 $TPLMSG["DOWNLOAD"]="Загрузить";
 
+//FORGOT PASSWORD
+$TPLMSG["FORGOT_PASSWORD"]="Forgot The Password";
+
+//EBOOK
+$TPLMSG["EBOOK"]="E-catalog";
+$TPLMSG["EBOOK_DOWNLOAD"]="Download";
+
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "Просто момент <BR> Эта страница будет перенаправлен!";
 $TPLMSG['ACTION_TERM_JS'] = "Ваши данные были представлены!";
