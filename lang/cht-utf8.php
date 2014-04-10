@@ -74,6 +74,11 @@ $TPLMSG['ABOUT_US'] = "關於我們";
 $TPLMSG['AD_UP_BANNER_580_120'] = "上方橫幅廣告 寬580 X 高120";
 $TPLMSG['AD_SIDE_BUTTON_150_150'] = "側邊廣告 寬150 X 高150";
 $TPLMSG['AD_SIDE_BUTTON_150_50'] = "側邊廣告 寬150 X 高50";
+$TPLMSG['AD_INDEX_BANNER'] = "首頁Banner";
+$TPLMSG['AD_INSIDE_BANNER'] = "內頁Banner";
+$TPLMSG['AD_INSIDE_LEFT'] = "內頁左側廣告";
+$TPLMSG['AD_INSIDE_RIGHT'] = "內頁右側廣告";
+$TPLMSG['AD_PRODUCTS'] = "產品區廣告";
 //ADMIN
 $TPLMSG['ADMIN_VALID_ACCOUNT'] = "檢測帳號";
 $TPLMSG['ADMIN_ACCOUNT_EXIST'] = "帳號重覆";

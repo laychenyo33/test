@@ -51,7 +51,7 @@ $cms_cfg["ws_module"]=array(
         "ws_products_info_fields" =>0, //額外的產品敘述欄位數量
 
 /*      IPC SETUP                   */
-        "ws_ad"=>0,                     //廣告管理(IPC專用)
+        "ws_ad"=>1,                     //廣告管理(IPC專用)
         "ws_bonus"=>0,                  //紅利點數(IPC專用)
         "ws_epaper"=>0,                 //電子報管理
         "ws_epaper_attach_products"=>1, //電子報夾帶產品列表

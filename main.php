@@ -19,7 +19,7 @@ class MAINDEFAULT{
 //        $this->news_list(); //最新消息
 //        $this->aboutus_list(); //關於我們
 //        $main->counter(); //網站計數器
-        if($cms_cfg["ws_module"]['ws_index_banner'])$this->index_banner(); //自訂首頁banner
+        //if($cms_cfg["ws_module"]['ws_index_banner'])$this->index_banner(); //自訂首頁banner
         $tpl->printToScreen();
     }
     //載入對應的樣板
