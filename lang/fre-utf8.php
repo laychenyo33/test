@@ -221,6 +221,7 @@ $TPLMSG["FORGOT_PASSWORD"]="Mot de passe Le";
 
 //EBOOK
 $TPLMSG["EBOOK"]="E-catalogue";
+$TPLMSG["EBOOK_DOWNLOAD"]="Download";
 
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "Juste un instant <BR> Cette page sera redirigée!!";
