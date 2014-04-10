@@ -25,10 +25,9 @@
 .btn_submenu a{
     display:block;
     color:#fff;
-    padding:10px 5px;
 }
-.btn_submenu a{position:relative;}
-.btn_submenu ul{color:#fff;position:absolute;padding:0;margin:0;width:100%;left:130px;top:0;display:none;z-index:5}
-.btn_submenu li{position:relative;list-style: none;margin:0;padding:5px;z-index:5}
+.btn_submenu #dd_base{position:relative;}
+.btn_submenu #dd_base ul{color:#fff;position:absolute;padding:0;margin:0;width:100%;left:130px;top:0;display:none;z-index:5}
+.btn_submenu #dd_base li{position:relative;list-style: none;margin:0;padding:5px;z-index:5}
 .btn_submenu a:hover,.btn_submenu li:hover{background:#E8E8E8;color:#0086B8;}
-.btn_submenu li span{display:block}
+.btn_submenu #dd_base li span{display:block}

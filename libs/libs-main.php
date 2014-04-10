@@ -1348,7 +1348,8 @@ class MAINFUNC{
                                 $sql = "select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$row2['pc_id']."' and p_status='1' order by p_sort ".$cms_cfg['sort_pos'];
                                 $p_res = $db->query($sql);
                                 $p_n = $db->numRows($p_res);
-                                $submenu.="<li><span>".$row2['pc_name']."</span>\n ";
+                                $pc_link=$cms_cfg['base_root'].$row2['pc_seo_filename'].".htm";
+                                $submenu.="<li><span rel='{$pc_link}'>".$row2['pc_name']."</span>\n ";
                                 if($p_n){
                                     $submenu.="<ul>\n";
                                     while($row3=$db->fetch_array($p_res,1)){
