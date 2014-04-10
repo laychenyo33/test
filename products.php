@@ -77,7 +77,13 @@ class PRODUCTS{
         if($this->ws_tpl_type){
             //有廣告模組才啟動廣告
             if($cms_cfg["ws_module"]["ws_ad"]==1){
-                $main->ad_list($this->parent);
+//                $main->ad_list($this->parent);
+                /*/ 請儘可能在產品區廣告設定產品分類專屬廣告
+                 *  若產品區廣告的樣式不一，可新增專屬廣告分類
+                 *  再於下面新增對應的廣告宣告
+                    例如： $tpl->assignGlobal("TAG_PRODUCTS_AD",App::getHelper('ad')->getAd(newAdCate,'custom-template',$this->parent));
+                 */
+                $tpl->assignGlobal("TAG_PRODUCTS_AD",App::getHelper('ad')->getAd(5,'common',$this->parent));//
             }
             $main->layer_link();
             $tpl->printToScreen();
