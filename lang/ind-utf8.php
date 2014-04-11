@@ -142,6 +142,7 @@ $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "ई मेल को सत्याप
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "आपका पंजीकृत खाता सूचना पत्र आप को भेजा जाएगा के बाद अपनाया जाना, किसी ऑडिट होगा, कृपया धैर्य रखें!";
 $TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
 $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+$TPLMSG["MEMBER_EPAPER"] = "Occasionally, we email newsletters to our members. Would you like to receive this information?";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Products";

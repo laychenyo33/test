@@ -142,6 +142,7 @@ $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "E-메일을 확인하기 위해 다시 
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "등록 된 계정 알림 문자가 당신에게 발송됩니다 후 채택 될, 누군가가 감사를해야합니다, 양해 해 주시기 바랍니다!";
 $TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
 $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+$TPLMSG["MEMBER_EPAPER"] = "Occasionally, we email newsletters to our members. Would you like to receive this information?";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "제품소개";

@@ -143,6 +143,7 @@ $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "電子メールを確認するために
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "ご登録されたアカウントは、通知の手紙があなたに派遣されるの後に採用されるためには、誰かの監査を持っているだろう、もうしばらくお待ちください！";
 $TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
 $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+$TPLMSG["MEMBER_EPAPER"] = "Occasionally, we email newsletters to our members. Would you like to receive this information?";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "製品情報";
