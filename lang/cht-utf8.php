@@ -151,6 +151,7 @@ $TPLMSG['MEMBER_APPROV_NOTIFICATION_SUBJECT'] = "您在 %s 的帳號已啟用";
 $TPLMSG['MEMBER_APPROV_NOTIFICATION_CONTENT'] = "您在 %s 的帳號 %s 已啟用，歡迎回到網站上登入";
 $TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
 $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+$TPLMSG["MEMBER_EPAPER"] = "願意接收電子報訊息?";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "產品介紹";

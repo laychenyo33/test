@@ -142,6 +142,7 @@ $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "Por favor, haz clic en el siguiente enl
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Su cuenta registrada tendrá la auditoría a alguien, que se adoptará después de la carta de notificación será enviada a usted, por favor sea paciente!";
 $TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
 $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+$TPLMSG["MEMBER_EPAPER"] = "Occasionally, we email newsletters to our members. Would you like to receive this information?";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Productos";

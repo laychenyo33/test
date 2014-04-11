@@ -204,6 +204,7 @@ class MEMBER{
                                   "MSG_NO" => $TPLMSG["NO"],
                                   "MSG_SUBSCRIBE" => $TPLMSG["SUBSCRIBE"],
                                   "MSG_ACCEPT_SERVICE_TERM" => $TPLMSG["MEMBER_ACCEPT_SERVICE_TERM"],
+                                  "MSG_ALLOW_EPAPER" => $TPLMSG["MEMBER_EPAPER"],
                                   "STR_M_CS_CK1" =>"selected",
                                   "STR_M_CS_CK2" => "",
                                   "STR_M_CS_CK3" => "",

@@ -142,6 +142,7 @@ $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "E-posta doğrulamak için geri siteye a
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "Sizin Kayıtlı hesap bildirim mektubu size sevk edilecektir sonra kabul edilmesi, birisi denetim olacak, lütfen sabırlı olun!";
 $TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
 $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+$TPLMSG["MEMBER_EPAPER"] = "Occasionally, we email newsletters to our members. Would you like to receive this information?";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Ürünler";
