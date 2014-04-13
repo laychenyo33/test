@@ -42,7 +42,8 @@
                         paste_postprocess : function(pl, o) {
                             // remove &nbsp
                             o.node.innerHTML = o.node.innerHTML.replace(/&nbsp;/ig, " ");
-                         }                        
+                         },
+                         extended_valid_elements : "iframe[src|width|height|name|align],span[style|id|nam|class|lang]"
 
 		});
 	}
