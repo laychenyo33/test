@@ -52,6 +52,7 @@ class Model_Ad {
     }
     //取得廣告輸出
     protected function _render(){
+        global $cms_cfg;
         foreach($this->adItems as $adItem){
             $adBlock = "AD_TYPE_".strtoupper($adItem['ad_file_type']);
             if($adItem['ad_file_type']!='flash' && !empty($adItem['ad_link'])){
@@ -59,6 +60,7 @@ class Model_Ad {
             }
             $this->tpl->newBlock($adBlock);
             $this->tpl->assign(array(
+                "TAG_FILE_ROOT" => $cms_cfg['file_root'],
                 "AD_LINK"    => $adItem['ad_link'],
                 "AD_CONTENT" => $adItem['ad_file'],
                 "AD_SUBJECT" => $adItem['ad_subject'],
