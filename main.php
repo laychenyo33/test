@@ -208,7 +208,7 @@ class MAINDEFAULT{
     function promotion_products_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
         $this->discount=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"];
-        $sql="select select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,p.p_special_price from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_type in ('4','5','6','7') and p_status='1' order by rand() limit 0,4";
+        $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,p.p_special_price from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_type in ('4','5','6','7') and p_status='1' order by rand() limit 0,4";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum > 0){
