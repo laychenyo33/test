@@ -102,6 +102,17 @@
                            this.checked=false; 
                         });                        
                     });
+                    $(".prodToCart").click(function(evt){
+                         var p_id = $(this).attr('rel');
+                         var formData = $(myform).serialize();
+                         formData += "&p_id="+p_id+"&via_ajax=1";
+                         $.post("{CART_PATH}",formData,function(req){
+                             if(req.code=='1'){
+                                 alert("已加入購物車");
+                                 $("#cart-nums").text(req.cart_nums);
+                             }
+                         },'json');
+                     });
                 });
             })(jQuery);
         </script>
