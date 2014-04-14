@@ -9,12 +9,16 @@ class CART{
         $this->cart_type =$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
-        switch($_REQUEST["func"]){          
+        switch($_REQUEST["func"]){
+            case "ajax_show_ship_price":
+                $this->ajax_show_ship_price();
+                break;
             case "c_list"://購物車列表
                 $this->ws_tpl_file = "templates/ws-cart-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_POP_IMG");
+                $tpl->newBlock("JQUERY_UI_SCRIPT");
                 $this->cart_list();
                 $this->ws_tpl_type=1;
                 break;
@@ -102,6 +106,7 @@ class CART{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_POP_IMG");
+                $tpl->newBlock("JQUERY_UI_SCRIPT");
                 $this->cart_list();
                 $this->ws_tpl_type=1;
                 break;
@@ -400,7 +405,8 @@ class CART{
             unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$p_id]);
         }
         if(count($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
-            $this->cart_list();
+            header("location:".$_SERVER['PHP_SELF']);
+            die();
         }else{
             header("location:products.htm");
             die();
@@ -419,13 +425,16 @@ class CART{
         global $db,$tpl,$cms_cfg,$TPLMSG;
         if(!empty($_REQUEST["shop_value"])){
             foreach($_REQUEST["shop_value"] as $key =>$value){
-                    $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$key]=$value;
+                    $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$key]=intval($value);
             }
         }
         if(!$via_ajax){
             $this->cart_list();
         }else{
-            echo 1;
+            $res['code'] = 1;
+            $res['total_price'] = $this->checkout();
+            $res['shipping_price'] = $this->shipping_price($res['total_price'],$_POST['shipment_type']);
+            echo json_encode($res);
         }
     }
     function cart_finish(){
@@ -1246,6 +1255,15 @@ class CART{
         list($sc_service_fee) = $db->query_firstRow($sql,false);  
         return $sc_service_fee;
     }   
+    //動態取得運費
+    function ajax_show_ship_price(){
+        if(App::getHelper('request')->isAjax()){
+            $res['code'] = 1;
+            $res['total_price'] = $this->checkout();
+            $res['shipping_price'] = $this->shipping_price($res['total_price'],$_POST['shipment_type']);
+            echo json_encode($res);
+        }
+    }
 }
 
 class CART_WITH_SERIAL extends CART{
