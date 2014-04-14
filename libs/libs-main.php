@@ -304,6 +304,8 @@ class MAINFUNC{
             if($cms_cfg['new_cart_path']){
                 $tpl->assignGlobal("CART_PATH" , $cms_cfg['new_cart_path']);
                 $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['new_cart_path'].'?func=c_order');
+                //購物車購物數量
+                $tpl->assignGlobal("MSG_CART_NUMS",count(App::getHelper('session')->id));
             }else{
                 $tpl->assignGlobal("CART_PATH" , $cms_cfg['base_root']."cart.php");
                 $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['base_root']."member.php?func=m_zone&mzt=order");
