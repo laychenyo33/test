@@ -899,3 +899,8 @@ h2 a{color:#4f4f4f;}
 p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;background: url(../images/icon003.gif) no-repeat left 2px;padding:0 0 0 13px;}
 .store_map{float:left;width:75px;margin-top:55px;}
 .store_online{width:160px;height:240dpx;float:left;margin:13px 6px;border:1px solid #d1d1d1;}
+#shipment_zone{
+    width:90%;
+    margin:0 auto;
+    padding:10px 3px;
+}
