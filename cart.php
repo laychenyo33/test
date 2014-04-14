@@ -155,6 +155,10 @@ class CART{
         }
         if(!$via_ajax){
             $this->cart_list();
+        }else{
+            $res['code'] = 1;
+            $res['cart_nums'] = count($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
+            echo json_encode($res);
         }
     }
     function cart_list_add(){

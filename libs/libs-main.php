@@ -307,6 +307,8 @@ class MAINFUNC{
             }else{
                 $tpl->assignGlobal("CART_PATH" , $cms_cfg['base_root']."cart.php");
                 $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['base_root']."member.php?func=m_zone&mzt=order");
+                //購物車購物數量
+                $tpl->assignGlobal("MSG_CART_NUMS",count(App::getHelper('session')->CART_PID));
             }
             //有會員即顯示會員登入區
             if($cms_cfg["ws_module"]["ws_member"]==1){
