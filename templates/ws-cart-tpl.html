@@ -17,9 +17,9 @@
     <td  class="no">{VALUE_P_SERIAL}</td>
     <td><center><a href="{VALUE_P_SMALL_IMG}" rel="lightbox[roadtrip]" ><img src="{VALUE_P_SMALL_IMG}" width="60" alt="{VALUE_P_NAME}" border="0"/></a></center></td>
     <td class="title"><a href="{VALUE_P_LINK}" target="_blank">{VALUE_P_NAME}</a></td>
-    <td><input type="text" name="shop_value[{VALUE_P_ID}]" value="{VALUE_P_AMOUNT}" class="form-input"  size="2" maxlength="4"></td>
-    <td>{VALUE_P_SPECIAL_PRICE}</td>
-    <td>{VALUE_P_SUBTOTAL_PRICE}</td>
+    <td><input type="text" name="shop_value[{VALUE_P_ID}]" value="{VALUE_P_AMOUNT}" size="2" class="spinner" readonly/></td>
+    <td><span class="up">{VALUE_P_SPECIAL_PRICE}</span></td>
+    <td><span class="sp">{VALUE_P_SUBTOTAL_PRICE}</span></td>
     <td>
         <a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','cart.php?func=c_del&p_id={VALUE_P_ID}')">
         <img src="{TAG_THEME_PATH}ws-table-delete.gif" border="0" height="20" width="20" /></a>
@@ -28,10 +28,18 @@
 <!-- END BLOCK : SHOPPING_CART_LIST -->
 <tr>
     <td colspan="4">
+        <div align="right"> {MSG_SUBTOTAL}:&nbsp;
+        </div>
+    </td>
+    <td colspan="3"> <span id="sub_total_str">{VALUE_SUBTOTAL}</span>
+    </td>
+</tr> 
+<tr>
+    <td colspan="4">
         <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;
         </div>
     </td>
-    <td colspan="3"> <span id="ship_price"></span>
+    <td colspan="3"> <span id="ship_price">{VALUE_SHIPPING_PRICE}</span>
     </td>
 </tr> 
 <tr>
@@ -39,7 +47,7 @@
         <div align="right"> {MSG_TOTAL}:&nbsp;
         </div>
     </th>
-    <th colspan="3"> <span id="str_total_price">{VALUE_SUBTOTAL}</span>    </th>
+    <th colspan="3"> <span id="total_str">{VALUE_TOTAL}</span>    </th>
 </tr> 
 </table>
 <div id="shipment_zone">
@@ -78,30 +86,19 @@
                    $(this.form).trigger('submit');
                }
            });
-           $(":radio").click(function(evt){
-               var form = $("#formID")[0];
-               if(this.value<3){
-                   if(this.value==1){
-                       if(form['o_subtotal_price'].value < NO_SHIP_PRICE){
-                           form['o_plus_price'].value = parseInt(MSG[this.value]);
-                           $("#ship_price").text(MSG[this.value]);
-                       }else{
-                           $("#ship_price").text("滿額免運費");
-                           form['o_plus_price'].value = 0;
-                       }
-                   }else{
-                       form['o_plus_price'].value = parseInt(MSG[this.value]);
-                       $("#ship_price").text(MSG[this.value]);
-                   }
-               }else{
-                   form['o_plus_price'].value = 0;
-                   $("#ship_price").text("運費請參考支付寶平台");
-               }
-               $("#formID").trigger("calculate");
+           $(":radio[name=shipment_type]").click(function(evt){
+                var dataStr = "func=ajax_show_ship_price&shipment_type="+$(this).val();
+                $.post("{TAG_ROOT_PATH}cart.php",dataStr,function(req){
+                    $("#sub_total_str").text(req.total_price);
+                    $("#ship_price").text(req.shipping_price);
+                    $("#o_subtotal_price").val(req.total_price);
+                    $("#o_plus_price").val(req.shipping_price);
+                    $("#formID").trigger("calculate");
+                },"json");
            });
            $("#formID").bind("calculate",function(evt){
-               this['o_total_price'].value = parseInt(this['o_subtotal_price'].value) + parseInt(this['o_plus_price'].value);
-               $("#str_total_price").text(this['o_total_price'].value);
+                this['o_total_price'].value = parseInt(this['o_subtotal_price'].value) + parseInt(this['o_plus_price'].value);
+                $("#total_str").text(this['o_total_price'].value);            
            });
            $("#btn_modify_amount").click(function(evt){
                var serial_data = $("#formID").serialize();
@@ -113,13 +110,44 @@
                    //location.href = "cart.php";
                });
            });
+            $(".spinner").spinner({
+                min: 1,
+                spin: function( event, ui ) {
+                    var cur = $(this).val();
+                    var elm = $(this);
+                    if($(":radio[name=shipment_type]:checked").size()==0){
+                        alert("請先選擇運送區域!");
+                        elm.val(cur);
+                        return false;
+                    }
+                    var data = "via_ajax=1&"+$(this).attr("name")+"="+ui.value+"&shipment_type="+$(":radio[name=shipment_type]:checked").val();
+                    if(cur != ui.value){
+                        $.post("{TAG_ROOT_PATH}cart.php?func=c_mod",data,function(req){
+                            if(req.code == '1'){
+                                var ans = parseInt(elm.parents('tr').find('.up').text()) * ui.value;
+                                elm.parents('tr').find('.sp').text(ans);
+                                $("#sub_total_str").text(req.total_price);
+                                $("#ship_price").text(req.shipping_price);
+                                $("#o_subtotal_price").val(req.total_price);
+                                $("#o_plus_price").val(req.shipping_price);
+                                $("#formID").trigger("calculate");                                
+                            }else{
+                                alert('error occure!');
+                                elm.val(cur);
+                            }
+                        },'json');
+                    }
+                },
+                change: function( event, ui ) {
+                }            
+            });          
        });
     });
 </script>
 <input type="hidden" name="cart_type" value="shopping">
-<input type="hidden" name="o_plus_price" id="o_plus_price" value="0">
+<input type="hidden" name="o_plus_price" id="o_plus_price" value="{VALUE_SHIPPING_PRICE}">
 <input type="hidden" name="o_subtotal_price" id="o_subtotal_price" value="{VALUE_SUBTOTAL}">
-<input type="hidden" name="o_total_price" id="o_total_price" value="{VALUE_SUBTOTAL}">
+<input type="hidden" name="o_total_price" id="o_total_price" value="{VALUE_TOTAL}">
 <!-- END BLOCK : SHOPPING_CART_ZONE -->
 <!-- START BLOCK : INQUIRY_CART_ZONE -->
 <table width="90%" border="0" cellpadding="0" cellspacing="0" align="center" class="inquiry_table"> 
