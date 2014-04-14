@@ -233,11 +233,14 @@ class MAINDEFAULT{
             }else{
                 $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
             }
+            $dimension = App::getHelper('main')->resizeto($img,$cms_cfg['idx_pro_prod_img_width'],$cms_cfg['idx_pro_prod_img_height']);
             $tpl->newBlock( "PROMOTION_PRODUCTS_LIST" );
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                 "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                 "VALUE_P_LINK"  => $p_link,
                                 "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"],
+                                "VALUE_P_SMALL_IMG_W" => $dimension['width'],
+                                "VALUE_P_SMALL_IMG_H" => $dimension['height'],                
             ));
             //詢價商品或是購物商品
             if($show_price==0){
