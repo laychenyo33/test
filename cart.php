@@ -631,7 +631,7 @@ class CART{
                     m_modifydate,
                     m_company_name,
                     m_contact_s,
-                    m_name,
+                    m_fname,
                     m_birthday,
                     m_sex,
                     m_country,
