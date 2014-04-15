@@ -631,7 +631,7 @@ class CART{
                     m_modifydate,
                     m_company_name,
                     m_contact_s,
-                    m_name,
+                    m_fname,
                     m_birthday,
                     m_sex,
                     m_country,
@@ -823,6 +823,7 @@ class CART{
             $tpl->newBlock("PAYMENT_TYPE");
             $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
             $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$_REQUEST["o_payment_type"]]);
+            App::getHelper("session")->{paymentType} = $_REQUEST["o_payment_type"];
             if($_REQUEST["o_payment_type"]==1){ //ATM轉帳
                 $tpl->newBlock("ATM_LAST_FIVE");
                 $tpl->assign("VALUE_ATM_LAST5",$_REQUEST["o_atm_last5"]);
@@ -836,6 +837,7 @@ class CART{
             $tpl->assignGlobal( "VALUE_TERM" , $row['st_order_mail']);
             $tpl->assignGlobal("VALUE_VIRTUAL_ACCOUNT" , $v_account);
             $mail_content=$tpl->getOutputContent();
+            App::getHelper('session')->{mailContent} = $mail_content;
             if($cms_cfg["ws_module"]["ws_cart_login"]==0){
                 $goto_url=$_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
             }else{
@@ -846,8 +848,20 @@ class CART{
             }else{
                     $mail_header = 0;
             }
-
-            $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"],"shopping",$goto_url,null,$mail_header);
+            $db_msg = $db->report();
+            if ( $db_msg == "" ) {
+                unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
+                unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
+                unset($_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+                //$tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                //$goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
+                //$this->goto_target_page($goto_url,2);
+            }else{
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            }            
+            header("location:".$goto_url);
+            die();
+            //$main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"],"shopping",$goto_url,null,$mail_header);
         }
 
         if(!empty($inquiry)){
@@ -924,17 +938,17 @@ class CART{
                 $goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
             }
             $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$TPLMSG["INQUIRY_MAIL_TITLE"],"inquiry",$goto_url);
-        }
-        $db_msg = $db->report();
-        if ( $db_msg == "" ) {
-            unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
-            unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
-            unset($_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
-            //$tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-            //$goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
-            //$this->goto_target_page($goto_url,2);
-        }else{
-            $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            $db_msg = $db->report();
+            if ( $db_msg == "" ) {
+                unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
+                unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
+                unset($_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+                //$tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                //$goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
+                //$this->goto_target_page($goto_url,2);
+            }else{
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            }
         }
     }
     //顯示訊息並重新導向
