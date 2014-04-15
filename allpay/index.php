@@ -1,20 +1,26 @@
 <?php
-	$allpay = new ALLPAY;
+	$allpay = new ALLPAY($cms_cfg['allpay']);
 
 	Class ALLPAY{
-		function __construct(){
+		function __construct($config){
 			global $db,$cms_cfg,$ws_array,$TPLMSG;
 			include_once(dirname(__FILE__)."/config.php");
-
-			// ReturnURL
-			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && empty($_REQUEST["ap_retrun"])){
-				$this->allpay_respone(0);
-			}
-			
-			// PaymentInfoURL
-			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && !empty($_REQUEST["ap_retrun"])){
-				$this->allpay_respone(1);
-			}
+                        if(!empty($config['MerchantID']) && !empty($config['HashKey']) && !empty($config['HashIV'])){
+                            $this->all_cfg["MerchantID"] = $config['MerchantID']; // 特店編號
+                            $this->all_cfg["HashKey"] = $config['HashKey']; // Hash key
+                            $this->all_cfg["HashIV"] = $config['HashIV']; // Hash IV
+                        }else{
+                            throw new Exception("Missing some ALLPAY initial option");
+                        }
+//			// ReturnURL
+//			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && empty($_REQUEST["ap_retrun"])){
+//				$this->allpay_respone(0);
+//			}
+//			
+//			// PaymentInfoURL
+//			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && !empty($_REQUEST["ap_retrun"])){
+//				$this->allpay_respone(1);
+//			}
 		}
 		
 		#################################################
@@ -37,7 +43,8 @@
 			$this->all_cfg["TotalAmount"] = $price;
 			$this->all_cfg["ChoosePayment"] = $c_pay;
 			$this->all_cfg["ChooseSubPayment"] = $c_s_pay;
-			$this->all_cfg["OrderResultURL"] = ($this->allpay_switch)?$cms_cfg["base_url"].'cart/?func=c_order_detial&o_id='.$o_id:$cms_cfg["base_url"].'member.php?func=m_zone&mzt=order&type=detail&o_id='.$o_id;
+			//$this->all_cfg["OrderResultURL"] = ($this->allpay_switch)?$cms_cfg["base_url"].'cart/?func=c_order_detial&o_id='.$o_id:$cms_cfg["base_url"].'member.php?func=m_zone&mzt=order&type=detail&o_id='.$o_id;
+			$this->all_cfg["PaymentInfoURL"] = $cms_cfg['base_url']."shopping-result3.php?sess=".session_id();
 
 			// 交易描述
 			if(!empty($pay_desc)){
@@ -106,25 +113,28 @@
 			
 			// 取得檢查碼
 			$this->allpay_code = $this->allpay_checkcode($all_code_array);
+                        
+                        //更新訂單為授權中斷
+                        App::getHelper('dbtable')->order->writeData(array('o_id'=>$o_id,'o_status'=>20));
 			
 			// 組合訂單資訊
-			$allpay_send_ck = $this->allpay_send_form($all_value_array);
+			$this->allpay_send_form($all_value_array);
 			
-			if($allpay_send_ck){
-	            $sql="
-	                update ".$cms_cfg['tb_prefix']."_order
-	                    set o_status='4'
-	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
-	            $db->query($sql);
-			}else{
-	            $sql="
-	                update ".$cms_cfg['tb_prefix']."_order
-	                    set o_status='10'
-	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
-	            $db->query($sql);
-				
-				//? mail 訂單錯誤處理
-			}
+//			if($allpay_send_ck){
+//	            $sql="
+//	                update ".$cms_cfg['tb_prefix']."_order
+//	                    set o_status='4'
+//	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
+//	            $db->query($sql);
+//			}else{
+//	            $sql="
+//	                update ".$cms_cfg['tb_prefix']."_order
+//	                    set o_status='10'
+//	                where o_id='".$this->all_cfg["MerchantTradeNo"]."'";
+//	            $db->query($sql);
+//				
+//				//? mail 訂單錯誤處理
+//			}
 		}
 
 		// 組合訂單資訊
@@ -161,10 +171,6 @@
 				';
 				
 				echo $form;
-				
-				return true;
-			}else{
-				return false;
 			}
 		}
 		
@@ -172,94 +178,90 @@
 		function allpay_respone($switch=0){
 			global $db,$cms_cfg,$ws_array,$TPLMSG;
 			
-			ksort($_POST);
-			foreach($_POST as $key => $value){
-				if($key != "CheckMacValue"){
-					$all_post_array[] = $key.'='.$value;
-				}
-			}
-
-			$ckmac_key = strtoupper($this->allpay_checkcode($all_post_array));
-			
-			if($ckmac_key == $_POST["CheckMacValue"]){
+			if($this->isValidData($_POST)){
 				switch($switch){
 					default:
-			            $sql="
-			                insert into ".$cms_cfg['tb_prefix']."_allpay_order (
-			                    o_id,
-			                    MerchantID,
-			                    RtnCode,
-			                    RtnMsg,
-			                    TradeNo,
-			                    TradeAmt,
-			                    PaymentDate,
-			                    PaymentType,
-			                    PaymentTypeChargeFee,
-			                    TradeDate,
-			                    SimulatePaid,
-			                    CheckMacValue
-			                ) values (
-			                    '".$_POST["MerchantTradeNo"]."',
-			                    '".$_POST["MerchantID"]."',
-			                    '".$_POST["RtnCode"]."',
-			                    '".$_POST["RtnMsg"]."',
-			                    '".$_POST["TradeNo"]."',
-			                    '".$_POST["TradeAmt"]."',
-			                    '".$_POST["PaymentDate"]."',
-			                    '".$_POST["PaymentType"]."',
-			                    '".$_POST["PaymentTypeChargeFee"]."',
-			                    '".$_POST["TradeDate"]."',
-			                    '".$_POST["SimulatePaid"]."',
-			                    '".$_POST["CheckMacValue"]."'
-			                )";
-			            $db->query($sql);
+                                            App::getHelper('dbtable')->allpay_order->writeData($_POST,'insert');
+//			            $sql="
+//			                insert into ".$cms_cfg['tb_prefix']."_allpay_order (
+//			                    o_id,
+//			                    MerchantID,
+//			                    RtnCode,
+//			                    RtnMsg,
+//			                    TradeNo,
+//			                    TradeAmt,
+//			                    PaymentDate,
+//			                    PaymentType,
+//			                    PaymentTypeChargeFee,
+//			                    TradeDate,
+//			                    SimulatePaid,
+//			                    CheckMacValue
+//			                ) values (
+//			                    '".$_POST["MerchantTradeNo"]."',
+//			                    '".$_POST["MerchantID"]."',
+//			                    '".$_POST["RtnCode"]."',
+//			                    '".$_POST["RtnMsg"]."',
+//			                    '".$_POST["TradeNo"]."',
+//			                    '".$_POST["TradeAmt"]."',
+//			                    '".$_POST["PaymentDate"]."',
+//			                    '".$_POST["PaymentType"]."',
+//			                    '".$_POST["PaymentTypeChargeFee"]."',
+//			                    '".$_POST["TradeDate"]."',
+//			                    '".$_POST["SimulatePaid"]."',
+//			                    '".$_POST["CheckMacValue"]."'
+//			                )";
+//			            $db->query($sql);
 			            
 			            if($_POST["RtnCode"] == 1){
-				            $sql="
-				                update ".$cms_cfg['tb_prefix']."_order
-				                    set o_status='5'
-				                where o_id='".$_POST["MerchantTradeNo"]."'";
-				            $db->query($sql);
+                                        $updateOrder['o_id'] = $_POST["MerchantTradeNo"];
+                                        $updateOrder['o_status'] = 1;
+                                        App::getHelper('dbtable')->order->writeData($updateOrder);
+//				            $sql="
+//				                update ".$cms_cfg['tb_prefix']."_order
+//				                    set o_status='1'
+//				                where o_id='".$_POST["MerchantTradeNo"]."'";
+//				            $db->query($sql);
 			            }
 					break;
 					case 1:
-			            $sql="
-			                insert into ".$cms_cfg['tb_prefix']."_allpay_payinfo (
-			                    o_id,
-			                    MerchantID,
-			                    RtnCode,
-			                    RtnMsg,
-			                    TradeNo,
-			                    TradeAmt,
-			                    PaymentType,
-			                    TradeDate,
-			                    CheckMacValue,
-			                    BankCode,
-			                	vAccount,
-			                	PaymentNo,
-			                	Barcode1,
-			                	Barcode2,
-			                	Barcode3,
-			                	ExpireDate
-			                ) values (
-			                    '".$_POST["MerchantTradeNo"]."',
-			                    '".$_POST["MerchantID"]."',
-			                    '".$_POST["RtnCode"]."',
-			                    '".$_POST["RtnMsg"]."',
-			                    '".$_POST["TradeNo"]."',
-			                    '".$_POST["TradeAmt"]."',
-			                    '".$_POST["PaymentType"]."',
-			                    '".$_POST["TradeDate"]."',
-			                    '".$_POST["CheckMacValue"]."',
-			                    '".$_POST["BankCode"]."',
-			                	'".$_POST["vAccount"]."',
-			                	'".$_POST["PaymentNo"]."',
-			                	'".$_POST["Barcode1"]."',
-			                	'".$_POST["Barcode2"]."',
-			                	'".$_POST["Barcode3"]."',
-			                	'".$_POST["ExpireDate"]."'
-			                )";
-			            $db->query($sql);
+                                            App::getHelper('dbtable')->allpay_payinfo->writeData($_POST,'insert');
+//			            $sql="
+//			                insert into ".$cms_cfg['tb_prefix']."_allpay_payinfo (
+//			                    o_id,
+//			                    MerchantID,
+//			                    RtnCode,
+//			                    RtnMsg,
+//			                    TradeNo,
+//			                    TradeAmt,
+//			                    PaymentType,
+//			                    TradeDate,
+//			                    CheckMacValue,
+//			                    BankCode,
+//			                	vAccount,
+//			                	PaymentNo,
+//			                	Barcode1,
+//			                	Barcode2,
+//			                	Barcode3,
+//			                	ExpireDate
+//			                ) values (
+//			                    '".$_POST["MerchantTradeNo"]."',
+//			                    '".$_POST["MerchantID"]."',
+//			                    '".$_POST["RtnCode"]."',
+//			                    '".$_POST["RtnMsg"]."',
+//			                    '".$_POST["TradeNo"]."',
+//			                    '".$_POST["TradeAmt"]."',
+//			                    '".$_POST["PaymentType"]."',
+//			                    '".$_POST["TradeDate"]."',
+//			                    '".$_POST["CheckMacValue"]."',
+//			                    '".$_POST["BankCode"]."',
+//			                	'".$_POST["vAccount"]."',
+//			                	'".$_POST["PaymentNo"]."',
+//			                	'".$_POST["Barcode1"]."',
+//			                	'".$_POST["Barcode2"]."',
+//			                	'".$_POST["Barcode3"]."',
+//			                	'".$_POST["ExpireDate"]."'
+//			                )";
+//			            $db->query($sql);
 					break;
 				}
 	            
@@ -269,11 +271,16 @@
             }
             
             if($_POST["RtnCode"] != 1 && $_POST["RtnCode"] != 2 && $_POST["RtnCode"] != "10100073" || $ckmac_key != $_POST["CheckMacValue"]){
-	            $sql="
-	                update ".$cms_cfg['tb_prefix']."_order
-	                    set o_status='10'
-	                where o_id='".$_POST["MerchantTradeNo"]."'";
-	            $db->query($sql);
+                $updataOrder = array(
+                    'o_status' => 21,
+                    'o_id'     => $_POST["MerchantTradeNo"],
+                );
+                App::getHelper('dbtable')->order->writeData($updataOrder);
+//	            $sql="
+//	                update ".$cms_cfg['tb_prefix']."_order
+//	                    set o_status='21'
+//	                where o_id='".$_POST["MerchantTradeNo"]."'";
+//	            $db->query($sql);
 	            
 				//? mail 訂單錯誤處理
             }
@@ -331,5 +338,84 @@
 				}
 			}
 		}
+                //驗證回傳結果
+                function isValidData($post){
+                    ksort($post);
+                    foreach($post as $key => $value){
+                            if($key != "CheckMacValue"){
+                                    $all_post_array[] = $key.'='.$value;
+                            }
+                    }
+
+                    $ckmac_key = strtoupper($this->allpay_checkcode($all_post_array));
+
+                    return ($ckmac_key == $post["CheckMacValue"]);
+                }
+                //更新訂單資料
+                function updateOrder($post){
+                    if($this->isValidData($post)){
+                        if($post["RtnCode"] != 2 && $post["RtnCode"] != "10100073"){
+                            if($post["RtnCode"] == 1){
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 1;
+                                App::getHelper('dbtable')->order->writeData($updateOrder);                        
+                            }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 21;
+                                App::getHelper('dbtable')->order->writeData($updateOrder);
+                            }
+                            $post['o_id'] = $post["MerchantTradeNo"]; 
+                            App::getHelper('dbtable')->allpay_order->writeData($post,'insert');
+                            if(($err = App::getHelper('dbtable')->order->report())!=''){
+                                echo "0|db error";
+                            }else{
+                                echo "1|OK";
+                            }
+                        }
+                    }else{
+                        echo "0|invalid check value";
+                    }
+                }
+                //更新付款資訊
+                function updatePayInfo($post){
+                    global $TPLMSG;
+                    if($this->isValidData($post)){
+                        if($post["RtnCode"]!=1){
+                            if($post["RtnCode"] == 2 || $post["RtnCode"] == "10100073"){                      
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 0;
+                                App::getHelper('dbtable')->order->writeData($updateOrder); 
+                                $mail=true;
+                            }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
+                                $updateOrder['o_id'] = $post["MerchantTradeNo"];
+                                $updateOrder['o_status'] = 21;
+                                App::getHelper('dbtable')->order->writeData($updateOrder);
+                            }
+                            $post['o_id'] = $post["MerchantTradeNo"];
+                            App::getHelper('dbtable')->Allpay_Payinfo->writeData($post,'insert');
+                            if(($err = App::getHelper('dbtable')->order->report())!=''){
+                                echo "0|db error";
+                            }else{
+                                //寄發通知信
+                                if($mail){
+                                    //$mail_header = ($sessHandler->paymentType == 3)? 1 : 0;
+                                    $sessHandler = App::getHelper('session');
+                                    $order = App::getHelper('dbtable')->order->getdata($post["MerchantTradeNo"])->getdatarow('o_email');
+                                    if($sessHandler['mailContent']){
+                                        $mail_content = $sessHandler->mailContent;
+                                        //ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0)
+                                        App::getHelper('main')->ws_mail_send($sessHandler['sc_email'],$order["o_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"],"order","","",1);
+                    //                    App::getHelper('main')->ws_mail_send_simple($sessHandler['sc_email'],$order["o_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"]);
+                    //                    App::getHelper('main')->ws_mail_send_simple($order["o_email"],$sessHandler['sc_email'],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"]);
+                                    }
+                                    unset($sessHandler['mailContent']);
+                                }
+                                echo "1|OK";
+                            }                            
+                        }
+                    }else{
+                        echo "0|invalid check value";  
+                    }
+                }
 	}
 ?>

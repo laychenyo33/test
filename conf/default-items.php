@@ -1,7 +1,7 @@
 <?php
 $ws_array = array();
 $ws_array["lang_version"]=array("cht"=>$TPLMSG["LANG_CHT"],"chs"=>$TPLMSG['LANG_CHS'],"eng"=>$TPLMSG["LANG_ENG"],"jap"=>$TPLMSG["LANG_JAP"],"spa"=>$TPLMSG['LANG_SPA']);
-$ws_array["order_status"]=array(0=>$TPLMSG["ORDER_NEW"],1=>$TPLMSG["ORDER_DEALING"],2=>$TPLMSG["ORDER_PRODUCTS_SEND"],3=>$TPLMSG["ORDER_COMPLETED"],9=>$TPLMSG["ORDER_CANCEL"],10=>$TPLMSG["ORDER_REJECT"]);
+$ws_array["order_status"]=array(0=>$TPLMSG["ORDER_NEW"],1=>$TPLMSG["ORDER_DEALING"],2=>$TPLMSG["ORDER_PRODUCTS_SEND"],3=>$TPLMSG["ORDER_COMPLETED"],9=>$TPLMSG["ORDER_CANCEL"],10=>$TPLMSG["ORDER_REJECT"],20=>$TPLMSG['AUTHORIZE_TERMINATE'],21=>$TPLMSG['AUTHORIZE_FAILED']);
 $ws_array["inquiry_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
 $ws_array["contactus_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
 $ws_array["images_type"]=array(".jpg",".gif",".png",".bmp");
@@ -37,15 +37,19 @@ $ws_array["epaper_order_cate"]=array( 1 =>$TPLMSG['EPAPER_ORDER_NORMAL'],2 =>$TP
 $ws_array["ad_cate"]=array( 1 =>$TPLMSG['AD_INDEX_BANNER'],2 =>$TPLMSG['AD_INSIDE_BANNER'],3 =>$TPLMSG['AD_INSIDE_LEFT'],4 =>$TPLMSG['AD_INSIDE_RIGHT'],5=>$TPLMSG['AD_PRODUCTS']);
 if($cms_cfg['ws_module']['ws_shopping_cart_module']){
     if($allpay->allpay_switch && !empty($allpay->all_cfg["allpay_type"])){
-        $ws_array["payment_type"] = array( 1 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] ) + $allpay->all_cfg["allpay_type"];
+        $ws_array["payment_type"] = array( 2 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] ) + $allpay->all_cfg["allpay_type"];
     }else{
-        $ws_array["payment_type"] = array( 0 => $TPLMSG["PAYMENT_ATM"] , 1 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] );
+        $ws_array["payment_type"] = array( 1 => $TPLMSG["PAYMENT_ATM"] , 2 => $TPLMSG["PAYMENT_CASH_ON_DELIVERY"] );
     }    
 }else{
     $ws_array["payment_type"]=array( 1 =>$TPLMSG["PAYMENT_ATM"],2 =>$TPLMSG["PAYMENT_CASH_ON_DELIVERY"]);
 }
 $ws_array["shippment_type"]=array( 1=>$TPLMSG['SHIPPMENT_1'], 2=>$TPLMSG['SHIPPMENT_2'], 3=>$TPLMSG['SHIPPMENT_3']);
-$ws_array['invoice_type'] = array(2=>$TPLMSG['INVOICE_TYPE_2'],3=>$TPLMSG['INVOICE_TYPE_3']);
+if($cms_cfg['ws_module']['ws_shopping_cart_module']){
+    $ws_array['invoice_type'] = array(1=>$TPLMSG['DUP_INVOICE'] ,2=>$TPLMSG['TRI_INVOICE'],3=>$TPLMSG['DONATE']);
+}else{
+    $ws_array['invoice_type'] = array(2=>$TPLMSG['INVOICE_TYPE_2'],3=>$TPLMSG['INVOICE_TYPE_3']);
+}
 $ws_array["deliery_timesec"]=array( 0 =>"不指定",1 =>"中午前",2=>"12時-17時",3=>"17時-20時");
 $ws_array["main"]=array("aboutus" => $TPLMSG["ABOUT_US"],
                         "products" => $TPLMSG["PRODUCTS"],

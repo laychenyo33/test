@@ -2,6 +2,9 @@
 ob_start("ob_gzhandler");
 //ini_set('session.cache_limiter', 'private');
 session_cache_limiter('private_no_expire, must-revalidate');
+if($_GET['sess']){
+    session_id($_GET['sess']);
+}
 session_start();
 define('APP_ROOT_PATH', realpath(dirname(__FILE__).'/../') . DIRECTORY_SEPARATOR);
 include_once(APP_ROOT_PATH."conf/config.inc.php");

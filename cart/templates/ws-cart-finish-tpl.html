@@ -251,12 +251,9 @@
             </tr>
             <tr>
             	<td colspan="2">
-            		<input type="radio" name="o_invoice_type" value="1" checked>
-            		{MSG_DUP_INVOICE}
-            		<input type="radio" name="o_invoice_type" value="2">
-            		{MSG_TRI_INVOICE}
-            		<input type="radio" name="o_invoice_type" value="3">
-            		{MSG_DONATE}
+                    <!-- START BLOCK : INVOICE_TYPE_LIST -->
+                    <input type="radio" name="o_invoice_type" id="o_invoice_type_{VALUE_INVOICE_ID}" value="{VALUE_INVOICE_ID}" {TAG_CHECKED}/><label for="o_invoice_type_{VALUE_INVOICE_ID}">{VALUE_INVOICE_LABEL}</label>
+                    <!-- END BLOCK : INVOICE_TYPE_LIST -->
             	</td>
             </tr>
             <tr class="tri_block" style="display: none;">
@@ -292,6 +289,7 @@
     <script src="{TAG_ROOT_PATH}js/zone_box.js" type="text/javascript"></script>
     <script src="{TAG_ROOT_PATH}js/get_box.js" type="text/javascript"></script>
 	<script>
+            jQuery(function($){
 		function week_get(){
 			var DATE_GET = new Array();
 			$(".date_picker").each(function(KEY){
@@ -421,4 +419,5 @@
 			//----
 			{MSG_PAYMENT_ALERT}
 		});
+            });
 	</script>

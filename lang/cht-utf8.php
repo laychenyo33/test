@@ -345,16 +345,18 @@ $TPLMSG['DAY'] = "日"; //日
 $TPLMSG['NO_PAYMENT'] = "請選擇付款方式"; //請選擇付款方式
 $TPLMSG["PLUS_FEE"] = "手續費"; //手續費
 $TPLMSG["SHOPPING_RESULT"] = "訂單結果"; 
+$TPLMSG['AUTHORIZE_TERMINATE'] = "授權中斷";
+$TPLMSG['AUTHORIZE_FAILED'] = "授權失敗";
 $TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG'] = "<div class='auth_err_rc'>%s</div><div class='auth_err_msg'>請確認您的信用卡資訊是否正確！<br/>如果您確定輸入是正確的資訊，請與您的發卡銀行聯絡。<br/>若造成您的不便，敬請見諒。 </div>";
 $TPLMSG['ORDER_SUCCESS'] = "訂購成功";
 $TPLMSG['ORDER_FAIL'] = "訂購失敗";
 
 //歐付寶相關字彙
-$TPLMSG["CREDIT"] = "Credit card"; //信用卡
-$TPLMSG["WEBATM"] = "Web ATM"; //網路ATM
-$TPLMSG["ATM"] = "ATM"; //自動櫃員機
-$TPLMSG["CVS"] = "CVS"; //超商代碼 (需加收 30 元手續費)
-$TPLMSG["BARCODE"] = "Barcode"; //超商條碼 (需加收 30 元手續費)
+$TPLMSG["CREDIT"] = "信用卡"; //信用卡
+$TPLMSG["WEBATM"] = "網路ATM"; //網路ATM
+$TPLMSG["ATM"] = "ATM轉帳"; //自動櫃員機
+$TPLMSG["CVS"] = "超商代碼"; //超商代碼 (需加收 30 元手續費)
+$TPLMSG["BARCODE"] = "超商條碼"; //超商條碼 (需加收 30 元手續費)
 $TPLMSG["ALIPAY"] = "Alipay"; //支付寶
 $TPLMSG["TENPAY"] = "Tenpay"; //財付通
 $TPLMSG["TOPUPUSED"] = "Top-up"; //儲值消費

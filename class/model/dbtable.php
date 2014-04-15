@@ -40,8 +40,9 @@ class Model_Dbtable {
     }
     
     function loadClass($id){
-        if(file_exists($this->_basePath . "/dbtable/".$id.".php")){
-            include_once $this->_basePath . "/dbtable/".$id.".php";
+        $filename = str_replace("_", "/", $id);
+        if(file_exists($this->_basePath . "/dbtable/".$filename.".php")){
+            include_once $this->_basePath . "/dbtable/".$filename.".php";
             return "Dbtable_".ucfirst($id);
         }else{
             throw new Exception("file: {$id}.php doesn't exists!");
