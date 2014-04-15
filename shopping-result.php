@@ -39,34 +39,85 @@ class CART{
         $tpl->assignGlobal( "TAG_PRODUCTS_CURRENT" , "class='current'"); //上方menu current
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["products"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-products"); //主要顯示區域的css設定
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['CART_INQUIRY']); //麵包屑
+        $main->layer_link($TPLMSG["SHOPPING_RESULT"]);
         $main->header_footer("");
         $main->google_code(); //google analystics code , google sitemap code
 //        $main->left_fix_cate_list();
     }
     function cart_result(){
-        global $tpl,$ali_note,$cms_cfg,$db;
-        if($_GET['status']){
-            $tpl->newBlock("ORDER_".strtoupper($_GET['status']));
-        }
-        if(empty($_REQUEST['channel_id'])){
-            $sql = "select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$db->quote($_GET['pno'])."'";
-            $res = $db->query($sql,true);
-            if($db->numRows($res)){
-                $order = $db->fetch_array($res,1);
-                $tpl->newBlock("ALI_TABLE");
+        global $tpl,$cms_cfg,$db,$TPLMSG;
+        $sessHandler = App::getHelper('session');
+        if(isset($sessHandler['paymentType'])){
+            $oid = $_GET['pno']?$_GET['pno']:$_POST["MerchantTradeNo"];
+            $order = App::getHelper('dbtable')->order->getData($oid)->getDataRow();
+            if($order){
+                $tpl->newBlock("SHOPPPING_RESULT");
                 $tpl->assign(array( 
-                    "VALUE_ALI_PNO" => $order['o_id'],
-                    "VALUE_ALI_DESC" => $order['o_content'],
-                    "VALUE_ALI_NTD" => $order['o_total_price'],
-                    "VALUE_ALI_LINK" => $cms_cfg['base_root']."member.php?func=m_zone&mzt=order&type=detail&o_id=".$order['o_id']
+                    "ORDER_ID" => $order['o_id'],
+                    "ORDER_PRICE" => $order['o_total_price'],
+                    "ORDER_LINK" => (empty($cms_cfg['ws_module']['ws_shopping_cart_module']))?$cms_cfg['base_root']."member.php?func=m_zone&mzt=order&type=detail&o_id=".$order['o_id']:$cms_cfg['base_root']."cart/?func=c_order_detial&o_id=".$order['o_id'],
                 ));         
             }else{
                 header("location:".$cms_cfg['base_root']);
                 die();
             }
-        }else{
-//            $ali_note->ali_note_switch(); //支付寶note接收
+            switch($sessHandler['paymentType']){
+                case 1:
+                case 2:
+                    if($_GET['status']=='OK'){
+                        $mail=true;
+                        $tpl->assignGlobal("MSG_ORDER_STATUS",$TPLMSG['ORDER_SUCCESS']);
+                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_SUCCESS']);
+                    }else{
+                        $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['ORDER_FAILED'] );
+                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_FAILED']);
+                    }
+                    break;
+                case 3:
+                    if($_POST['final_result']){ //授權成功
+                        $mail=true;
+                    }else{  //授權失敗
+                        $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['ORDER_FAILED'] );
+                        $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG']);
+                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_FAILED']);
+                    }
+                    break;
+                case "Credit": 
+                    if($_POST['RtnCode']==1){
+                        $mail=true;
+                        $tpl->assignGlobal("MSG_ORDER_STATUS",$TPLMSG['ORDER_SUCCESS']);
+                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_SUCCESS']);
+                    }else{
+                        $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['ORDER_FAILED'] );
+                        $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG']);
+                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_FAILED']);
+                    }
+                    break;
+                case "WebATM":
+                    break;
+                case "ATM":   
+                    break;
+                case "CVS":    
+                    break;
+                case "BARCODE":    
+                    break;
+                case "Alipay":   
+                    break;
+                case "Tenpay":    
+                    break;                    
+            }
+            //寄發訂單通知信
+            if($mail){
+                //$mail_header = ($sessHandler->paymentType == 3)? 1 : 0;
+                if($sessHandler['mailContent']){
+                    $mail_content = $sessHandler->mailContent;
+                    //ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0)
+                    App::getHelper('main')->ws_mail_send($sessHandler['sc_email'],$order["o_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"],"order","","",1);
+//                    App::getHelper('main')->ws_mail_send_simple($sessHandler['sc_email'],$order["o_email"],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"]);
+//                    App::getHelper('main')->ws_mail_send_simple($order["o_email"],$sessHandler['sc_email'],$mail_content,$TPLMSG["ORDER_MAIL_TITLE"]);
+                }
+            }
+            unset($sessHandler['mailContent']);
         }
     }
 }
