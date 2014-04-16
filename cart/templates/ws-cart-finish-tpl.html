@@ -1,48 +1,74 @@
 
     <!-- START BLOCK : MEMBER_LOGIN_FORM -->
-            <table width="60%" border="0" align="center" cellpadding="4" cellspacing="1" >
-                <tr>
-                    <td>
-                      {MSG_LOGIN_NOTICE1}</td>
-                    <td>
-                 </tr>
-            </table>
-            <form name="myform" method="post" action="{TAG_ROOT_PATH}login.php?func=check_data" id="formID" class="formular">
-              <table width="90%" border="0" align="center" cellpadding="4" cellspacing="1" class="inquiry_table">
-                    <tr class="altrow1">
-                        <td colspan="2">{MSG_MEMBER_LOGIN}</td>
-                    </tr>
-                    <tr class="altrow2">
-                        <td>{MSG_LOGIN_ACCOUNT}</td>
-                        <td>
-                            <input name="mm_account" class="validate[required]" type="text" class="search_product" id="mm_account" size="20" /></td>
-                    </tr>
-                    <tr class="altrow2">
-                        <td>{MSG_LOGIN_PASSWORD}</td>
-                        <td><input name="mm_password" class="validate[required]" type="password" class="search_product" id="mm_password" size="20" /></td>
-                    </tr>
-                    <tr class="altrow2">
-                        <td>{MSG_LOGIN_SECURITY}</td>
-                        <td>{TAG_INPUT_SECURITY}&nbsp;{TAG_IMAGE_SECURITY_IMAGE}&nbsp;&nbsp;<font color="#ff0000">{MSG_ERROR_MESSAGE}</font></td>
-                    </tr>
-                    <tr class="altrow2">
-                        <td colspan="2">
-                        	<input type="submit" name="login" value="{MSG_LOGIN_BTN}">
-                        	<input type="button" name="first" value="{MSG_FIRST_BTN}">
-						</td>
-                    </tr>
-                </table>
-            <input type="hidden" name="callback" value="1">
-            <input type="hidden" name="rp" value="1">
-            </form>
-            
-			<script>
-				$(function(){
-					$("input[name=first]").click(function(){
-						location.href = '?func=c_finish&first=1';
-					});
-				});
-			</script>
+    <table width="60%" border="0" align="center" cellpadding="4" cellspacing="1" >
+        <tr>
+            <td>
+              {MSG_LOGIN_NOTICE1}</td>
+            <td>
+         </tr>
+    </table>
+    <form name="myform" method="post" action="{TAG_ROOT_PATH}login.php?func=check_data" id="formID" class="formular">
+        <div class="member_login">
+        <table>
+          <tr>
+            <td class="cart_title_icon">{MSG_MEMBER_LOGIN}</td>
+          </tr>
+          <tr>
+            <td><input class="ipt1 iptbox" name="mm_account" id="mm_account" class="validate[required]" type="text" placeholder="{MSG_LOGIN_ACCOUNT}"></td>
+          </tr>
+          <tr>
+            <td><input class="ipt1 iptbox" name="mm_password" id="mm_password" class="validate[required]" type="password" placeholder="{MSG_LOGIN_PASSWORD}"></td>
+          </tr>
+          <tr>
+            <td>
+                <input class="ipt2 iptbox"  name="security" maxlength="4" size="4" type="text" placeholder="{MSG_LOGIN_SECURITY}"> {TAG_IMAGE_SECURITY_IMAGE}<br/><font color="#ff0000">{MSG_ERROR_MESSAGE}</font>             
+            </td>
+          </tr>
+          <tr>
+              <td class="fg_pw"><a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a> <a href="#" onclick="myform.submit();return false;"><img src="{TAG_THEME_PATH}btn_login.png"></a></td>
+          </tr>
+        </table>
+        </div>
+
+
+
+        <div class="login_first">
+        <table>
+          <tr>
+            <td class="cart_title_icon">{TAG_FS_SHOPPING}</td>
+          </tr>
+          <tr>
+            <td><a href="#" id="first"><img style="padding-top: 20px;" src="{TAG_THEME_PATH}/btn_firstbuy.png"></a></td>
+          </tr>
+        </table>
+        </div>
+
+
+
+
+
+<!--      <table width="90%" border="0" align="center" cellpadding="4" cellspacing="1" class="inquiry_table">
+            <tr class="altrow2">
+                <td colspan="2">
+                        <input type="submit" name="login" value="{MSG_LOGIN_BTN}">
+                        <input type="button" name="first" value="{MSG_FIRST_BTN}">
+                </td>
+            </tr>
+        </table>-->
+        <input type="hidden" name="callback" value="1">
+        <input type="hidden" name="rp" value="1">
+    </form>
+
+    <script>
+        jQuery(function($){
+            $(function(){
+                    $("a[id=first]").click(function(evt){
+                        evt.preventDefault();
+                        location.href = '?func=c_finish&first=1';
+                    });
+            });
+        });
+    </script>
     <!-- END BLOCK : MEMBER_LOGIN_FORM -->
     
     

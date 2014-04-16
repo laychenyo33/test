@@ -239,9 +239,10 @@
                             $tpl->assignGlobal(array(
                                 "MSG_LOGIN_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
                                 "MSG_LOGIN_PASSWORD" => $TPLMSG["LOGIN_PASSWORD"],
-                                "MSG_ERROR_MESSAGE" => $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"],
                                 "MSG_LOGIN_BTN" => $TPLMSG["LOGIN_BUTTON"],
                                 "MSG_FIRST_BTN" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['FIRST_S_BTN']:$TPLMSG['FIRST_I_BTN'],
+                                "MSG_MEMBER_LOGIN" => $TPLMSG["MEMBER_LOGIN"],
+                                "TAG_FS_SHOPPING" => $TPLMSG['FIRST_TIME_SHOPPING'],
                             ));
 
                             //載入驗証碼

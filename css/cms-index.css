@@ -884,6 +884,9 @@ h2 a{color:#4f4f4f;}
 .member_login .fg_pw a:hover{
 	color: #333;
 }
+.member_login img{
+    vertical-align: middle;
+}
 .login_first{
 	float: left;
 	padding-left: 60px;
