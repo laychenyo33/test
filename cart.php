@@ -28,6 +28,7 @@ class CART{
                     $this->ws_load_tp($this->ws_tpl_file);
                     $tpl->newBlock("JS_MAIN");
                     $tpl->newBlock("JS_POP_IMG");
+                    $tpl->newBlock("JQUERY_UI_SCRIPT");
                     $this->ws_tpl_type=1;
                 }
                 $this->cart_add($_POST['via_ajax']);

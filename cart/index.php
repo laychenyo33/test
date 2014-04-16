@@ -82,7 +82,7 @@
 		    $tpl = new TemplatePower( '../'.$cms_cfg['base_all_tpl'] );
 		    $tpl->assignInclude( "HEADER", '../'.$cms_cfg['base_header_tpl']); //頭檔title,meta,js,css
 		    if(empty($member_left)){
-		    	$tpl->assignInclude( "LEFT", '../templates/ws-fn-left-products-tpl.html'); //左方首頁表單
+		    	$tpl->assignInclude( "LEFT", '../'.$cms_cfg['base_left_normal_tpl'] ); //左方首頁表單
                     }else{
                         $tpl->assignInclude( "LEFT", '../'.$cms_cfg['base_left_member_tpl']); //左方首頁表單
                     }
