@@ -1002,13 +1002,13 @@
 			global $ws_array,$tpl,$TPLMSG;
 			
 			if(!empty($switch)){
-				return $ws_array["contact_s"][$get_key];
+				return $ws_array["contactus_s"][$get_key];
 			}
 			
-			if(!empty($ws_array["contact_s"]) && is_array($ws_array["contact_s"])){
+			if(!empty($ws_array["contactus_s"]) && is_array($ws_array["contactus_s"])){
 				$tpl->newBlock("TAG_S_BLOCK_".$this->gender_select);
 				$tpl->assign("MSG_MEMBER_NAME",$TPLMSG['MEMBER_NAME']);
-				foreach($ws_array["contact_s"] as $s_key => $s_val){
+				foreach($ws_array["contactus_s"] as $s_key => $s_val){
 					$tpl->newBlock("TAG_S_OPTION_".$this->gender_select);
 					$tpl->assign(array(
 						"VALUE_S_KEY" => $s_key,
