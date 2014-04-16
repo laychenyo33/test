@@ -750,7 +750,161 @@ h2 a{color:#4f4f4f;}
 
 
 
-/* inquiry */
+/*購物車頁面 */
+
+.cart_step{
+	text-align: center;
+	margin-bottom: 20px;
+}
+.cart_title_icon{
+    height:33px;
+    text-indent: 32px;
+    font-size:15px;
+    font-weight:bold;
+    line-height:32px;
+    margin-bottom:10px;
+    background-image: url('../images/ws-clipboard.png');
+    background-repeat: no-repeat;
+}
+.cart_title_icon2{
+    height:34px;
+    text-indent: 32px;
+    font-size:15px;
+    font-weight:bold;
+    line-height:32px;
+    margin-bottom:10px;
+    background-image: url('../images/ws-clipboard2.png');
+    background-repeat: no-repeat;
+}
+.cart_btn{
+	text-align: right;
+	padding-top: 10px;
+}
+
+.cart_pay{
+	border-top:1px dashed #ccc;
+}
+.cart_pay td{
+	border-bottom:1px dashed #ccc;
+	padding: 15px 0;
+}
+.cart_pay_radio{
+	background-color:#ededed;
+	text-align: center;
+}
+
+.cart_table {
+	border: 1px solid #B6B6B6;	
+}
+.cart_table th {
+	color: #333333;
+	background-color: #cccccc;
+	padding:4px 6px;
+}
+.cart_table td {
+	padding: 4px 8px;
+	text-align: center;
+}
+.cart_line td{
+	border-bottom: 1px dashed #ccc;
+}
+.cart_title a {
+	color: #000;
+}
+.cart_title a:hover {
+	color: #FF0000;
+	text-decoration: none;
+}
+.cart_red{
+	color: #c14948;
+}
+
+.cart_order_info_frame{
+	border: 1px solid #B6B6B6;
+	padding: 20px 20px 20px 30px;
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+.cart_order_info th{
+    padding-right: 15px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    color: #666;
+    text-align: right;
+}
+.cart_order_info td{
+    padding-bottom: 10px;
+}
+.cart_order_info .ipt1{
+    width: 200px;
+}
+.cart_order_info .ipt2{
+    width: 500px;
+}
+.cart_order_info .ipt3{
+    width: 60px;
+}
+.cart_aswell{
+    margin: -35px 0 30px 0;
+    text-indent: 130px;   
+}
+.cart_credit{
+    margin: -35px 0 30px 0;
+    text-indent: 130px;
+    color: #c14948;
+}
+
+
+/*購物登入頁面 */
+.v_mid{
+	vertical-align: middle;	
+}
+.member_login{
+	float: left;
+}
+.member_login td{
+	padding-bottom: 10px;	
+}
+.member_login .iptbox{
+	padding: 3px 0 3px 5px;
+}
+.member_login .ipt1{
+	width: 250px;	
+}
+.member_login .ipt2{
+	width: 150px;	
+}
+.member_login .fg_pw{
+	text-align: right;
+}
+.member_login .fg_pw a{
+	color: #666;
+}
+.member_login .fg_pw a:hover{
+	color: #333;
+}
+.login_first{
+	float: left;
+	padding-left: 60px;
+}
+
+
+/*忘記密碼頁面 */
+.forget_pw td{
+	padding-bottom: 10px;	
+}
+.forget_pw .iptbox{
+	padding: 3px 0 3px 5px;
+}
+.forget_pw .ipt1{
+	width: 250px;	
+}
+.forget_pw .ipt2{
+	width: 150px;	
+}
+
+/*詢價頁面*/
 #inquiry{
 	float:left;
 	width:650px;
@@ -760,10 +914,7 @@ h2 a{color:#4f4f4f;}
 	background-color:#FFF;
 }
 .inquiry_table {
-	height: 24px;
-	border-top: 1px solid #B6B6B6;
-	border-left: 1px solid #B6B6B6;	
-	border-right: 1px solid #B6B6B6;	
+	border: 1px solid #B6B6B6;	
 }
 .inquiry_table th {
 	color: #333333;
@@ -771,28 +922,19 @@ h2 a{color:#4f4f4f;}
 	padding:4px 6px;
 }
 .inquiry_table td {
-	color: #000000;
 	padding: 4px 8px;
-	border-bottom: 1px solid #B6B6B6;
-	border-right: 1px solid #B6B6B6;
+	text-align: center;
 }
-.inquiry_table td.no {
-	color: #222222;
+.inquiry_line td{
+	border-bottom: 1px dashed #ccc;
 }
 .inquiry_table td.title a {
-	color: #222222;
+	color: #000;
 }
 .inquiry_table td.title a:hover {
 	color: #FF0000;
 	text-decoration: none;
 }
-.inquiry_table td.date {
-	color: #222222;
-}
-.inquiry_table  tr.altrow {
-	background-color: #999999;
-}
-
 
 
 /* datatable */
