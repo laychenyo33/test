@@ -145,7 +145,10 @@
 		// 清單顯示
 		function cart_list(){
 			global $cms_cfg,$tpl,$TPLMSG,$ws_array;
-			
+                        if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"])){ //空購物車時，回到前一頁
+                            App::getHelper('main')->js_notice("目前購物車是空的!",$cms_cfg['base_root']."products.htm");
+                            die();
+                        }  			
 			$tpl->assignGlobal(array(
 				"MSG_ID" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG["ORDER_ID"]:$TPLMSG["INQUIRY_ID"],
 				"MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
