@@ -99,7 +99,7 @@
 
     <div class="cart_btn">
         <input type="image" src="{TAG_THEME_PATH}btn_prev.png" onclick="cart_continue(myform,'{LINK_CONTINUE}');return false;" />
-        <input type="image" src="{TAG_THEME_PATH}btn_next.png" onclick="myform.submit()" />
+        <a href="#" id="continue"><img src="{TAG_THEME_PATH}btn_next.png" /></a>
     </div>
 
     <br><br>
@@ -118,43 +118,50 @@
 <script src="{TAG_ROOT_PATH}js/form_box.js" type="text/javascript"></script>
 <script>
     jQuery(function($){
-	$(function(){
-		$("input[name=ajax_btn]").form_box({
-			NAME : "myform", // 表單名稱 (name)
-			PHP : "{TAG_ROOT_PATH}cart/", // 傳送目標
-			FUNC : "c_ajax", // func 附值
-			AFTER : function() {  }, // 動作後執行擴充
-		}, function(DATA){
-			//callback
-			location.href = '{TAG_ROOT_PATH}cart/?top='+ DATA;
-		});
+        $("input[name=ajax_btn]").form_box({
+                NAME : "myform", // 表單名稱 (name)
+                PHP : "{TAG_ROOT_PATH}cart/", // 傳送目標
+                FUNC : "c_ajax", // func 附值
+                AFTER : function() {  }, // 動作後執行擴充
+        }, function(DATA){
+                //callback
+                location.href = '{TAG_ROOT_PATH}cart/?top='+ DATA;
+        });
 
-		$("input[name=c_del]").click(function(evt){
-                        evt.preventDefault();
-			if(confirm("{TAG_DELETE_CHECK_STR}")){
-				var DEL_SESS = $(this).attr("rel");
-				$("input[name=ajax_del]").val(DEL_SESS);
-				$("input[name=ajax_act]").val("c_del");
-				
-				$("input[name=ajax_btn]").click();
-			}else{
-				return false;
-			}
-		});
-		
-		//----
-		$(".c_num,input[name=o_payment_type]").change(function(){
-			var NOW_TOP = parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
-			
-			$("input[name=ajax_act]").val("c_mod");
-			$("input[name=ajax_top]").val(NOW_TOP);
-			$("input[name=ajax_btn]").click();
-		});
-		
-		if("{TAG_SCROLL_TOP}" != ""){
-			var $BODY = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
-			$BODY.animate({ scrollTop: "{TAG_SCROLL_TOP}" }, 0);
-		}
-	});
+        $("input[name=c_del]").click(function(evt){
+                evt.preventDefault();
+                if(confirm("{TAG_DELETE_CHECK_STR}")){
+                        var DEL_SESS = $(this).attr("rel");
+                        $("input[name=ajax_del]").val(DEL_SESS);
+                        $("input[name=ajax_act]").val("c_del");
+
+                        $("input[name=ajax_btn]").click();
+                }else{
+                        return false;
+                }
+        });
+
+        //----
+        $(".c_num,input[name=o_payment_type]").change(function(){
+                var NOW_TOP = parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
+
+                $("input[name=ajax_act]").val("c_mod");
+                $("input[name=ajax_top]").val(NOW_TOP);
+                $("input[name=ajax_btn]").click();
+        });
+        //前往結帳表單
+        $("#continue").click(function(evt){
+            evt.preventDefault();
+            if($(":radio[name=o_payment_type]:checked").size()==0){
+                alert("請先選擇付款方式");
+                return false;
+            }
+            $(myform).trigger('submit');
+        });
+        
+        if("{TAG_SCROLL_TOP}" != ""){
+                var $BODY = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
+                $BODY.animate({ scrollTop: "{TAG_SCROLL_TOP}" }, 0);
+        }
     });
 </script>
