@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `eng_order` (
   `o_invoice_text` text NOT NULL,
   `o_shipping_time` date NOT NULL,
   `o_arrival_time` date NOT NULL,
+  `del` tinyint not null default 0,
   PRIMARY KEY  (`o_id`),
   KEY `mc_id` (`m_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
