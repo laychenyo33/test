@@ -26,7 +26,8 @@
                  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="related_table">
                    <tr>
                      <td colspan="4">
-                     <font color="red">{VALUE_PC_MAIN_NAME}(主分類)</font>
+                         <font color="red"><input type="checkbox" name="related_id[]" value="{VALUE_PC_ID}" {TAG_CHECKED}/>{VALUE_PC_MAIN_NAME}(主分類)</font>
+                         <input type='hidden' name="pc{VALUE_PC_ID}" id="pc{VALUE_PC_ID}" value='{VALUE_PC_MAIN_NAME}'>
                      <a href="javascript:change_div_display('div_{VALUE_PC_ID}','open')" >展開</a> <a href="javascript:change_div_display('div_{VALUE_PC_ID}','hide')">隱藏</a>
                      </td>
                    </tr>

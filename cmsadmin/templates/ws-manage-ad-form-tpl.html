@@ -40,11 +40,22 @@
         <tr>
             <th>廣告區域:</th>
             <td>
-                <input type="radio" name="ad_show_type" value="0" {STR_AD_SHOW_TYPE_CK0} > 全站顯示
-                <input type="radio" name="ad_show_type" value="1" {STR_AD_SHOW_TYPE_CK1} > 自訂廣告區域
+                <input type="radio" name="ad_show_type" id="ad_show_type_0" value="0" {STR_AD_SHOW_TYPE_CK0} > <label for="ad_show_type_0">全站顯示</label>
+                <input type="radio" name="ad_show_type" id="ad_show_type_1" value="1" {STR_AD_SHOW_TYPE_CK1} > <label for="ad_show_type_1">自訂廣告區域</label>
+                <script type="text/javascript">
+                    jQuery(function($){
+                        $(":radio[name=ad_show_type]").click(function(evt){
+                            if($(this).val()==1){
+                                $("#ad_show_zone_config").show();
+                            }else{
+                                $("#ad_show_zone_config").hide();
+                            }
+                        });
+                    });
+                </script>
             </td>
         </tr>
-        <tr>
+        <tr id='ad_show_zone_config' style="{TAG_SHOW_ZONE_DISPLAY}">
             <th>自訂廣告區域:</th>
             <td>
             <input name="ad_show_zone" type="text" id="ad_show_zone" value="{VALUE_AD_SHOW_ZONE}" size="50" />
