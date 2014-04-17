@@ -962,7 +962,7 @@
                                     m_password,
                                     m_company_name,
                                     m_contact_s,
-                                    m_name,
+                                    m_lname,
                                     m_birthday,
                                     m_sex,
                                     m_country,
@@ -974,7 +974,7 @@
                                     m_email,
                                     m_epaper_status
                                 ) values (
-                                    '0',
+                                    '1',
                                     '1',
                                     '".date("Y-m-d H:i:s")."',
                                     '".$_REQUEST["m_account"]."',
