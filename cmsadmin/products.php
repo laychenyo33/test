@@ -1895,6 +1895,7 @@ class PRODUCTS{
                 $tpl->newBlock("PRODUCT_CATE_MAIN");
                 $tpl->assign("VALUE_PC_MAIN_NAME",$row["pc_name"]);
                 $tpl->assign("VALUE_PC_ID",$row["pc_id"]);
+                $tpl->assign("TAG_CHECKED",in_array($row["pc_id"],$id_array));
                 $tpl->assign("TAG_DIV_DISPLAY","none");//預設為隱藏
                 $sql1="select p_id,p_serial,p_name from ".$cms_cfg['tb_prefix']."_products where p_status='1' and pc_layer regexp '".$row["pc_layer"]."(-[0-9]+)*$' order by p_sort ".$cms_cfg['sort_pos']." ";
                 $selectrs1 = $db->query($sql1,true);
