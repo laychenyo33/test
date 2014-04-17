@@ -210,11 +210,22 @@
     <br /><br />
 
     <div class="cart_btn">
-        <input type="image" src="{TAG_THEME_PATH}btn_modify.png"> <input type="image" src="{TAG_THEME_PATH}btn_finish.png">
+        <a href="#" id="goback"><img src="{TAG_THEME_PATH}btn_modify.png"></a> <a href="#" id="continue"><img src="{TAG_THEME_PATH}btn_finish.png"></a>
     </div>
     <!-- START BLOCK : TMP_POST_FIELD -->
     <input type="hidden" name="{TAG_POST_KEY}" value="{TAG_POST_VALUE}"/>
     <!-- END BLOCK : TMP_POST_FIELD -->
     <br /><br />
     </form>
-
+<script type="text/javascript">
+    jQuery(function($){
+        $("#goback").click(function(evt){
+            evt.preventDefault();
+            history.go(-1);
+        });
+        $("#continue").click(function(evt){
+            evt.preventDefault();
+            $(myform).trigger('submit');
+        });
+    });
+</script>
