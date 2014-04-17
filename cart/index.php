@@ -846,7 +846,7 @@
 			if(!empty($rsnum)){
 				$row = $db->fetch_array($selectrs,1);
 				$tpl->assignGlobal(array(
-					"VALUE_M_NAME" => $row["m_name"],
+					"VALUE_M_NAME" => $row["m_lname"]." ".$row["m_fname"],
 					//"VALUE_M_CONTACT_S" => $row["m_contact_s"],
 					"VALUE_M_COMPANY_NAME" => $row["m_company_name"],
 					"VALUE_M_ZIP" => $row["m_zip"],
