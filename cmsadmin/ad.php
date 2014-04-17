@@ -229,7 +229,8 @@ class AD{
                                           "STR_AD_FILE_TYPE_IMAGE" => ($row["ad_file_type"]=="image")?"checked":"",
                                           "STR_AD_FILE_TYPE_FLASH" => ($row["ad_file_type"]=="flash")?"checked":"",
                                           "STR_AD_FILE_TYPE_TXT" => ($row["ad_file_type"]=="txt")?"checked":"",
-                                          "MSG_MODE" => $TPLMSG['MODIFY']
+                                          "MSG_MODE" => $TPLMSG['MODIFY'],
+                                          "VALUE_PC_RELATED_CATE" => $row['ad_show_zone'],
                 ));
                 $this->get_items_name($row["ad_show_zone"],"pc"); //廣告顯示分類
             }else{
