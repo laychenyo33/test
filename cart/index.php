@@ -27,6 +27,12 @@
                                 $this->cart_finish();
                                 $this->ws_tpl_type=1;
 				break;
+                            case "c_preview":
+                                $this->ws_tpl_file = "templates/ws-cart-preview-tpl.html";
+                                $this->ws_load_tp($this->ws_tpl_file);
+                                $this->cart_preview();
+                                $this->ws_tpl_type=1;
+				break;
                             case "c_replace":
                                 $this->cart_replace();
 				break;
@@ -145,7 +151,10 @@
 		// 清單顯示
 		function cart_list(){
 			global $cms_cfg,$tpl,$TPLMSG,$ws_array;
-			
+                        if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"])){ //空購物車時，回到前一頁
+                            App::getHelper('main')->js_notice("目前購物車是空的!",$cms_cfg['base_root']."products.htm");
+                            die();
+                        }  			
 			$tpl->assignGlobal(array(
 				"MSG_ID" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG["ORDER_ID"]:$TPLMSG["INQUIRY_ID"],
 				"MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
@@ -236,9 +245,10 @@
                             $tpl->assignGlobal(array(
                                 "MSG_LOGIN_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
                                 "MSG_LOGIN_PASSWORD" => $TPLMSG["LOGIN_PASSWORD"],
-                                "MSG_ERROR_MESSAGE" => $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"],
                                 "MSG_LOGIN_BTN" => $TPLMSG["LOGIN_BUTTON"],
                                 "MSG_FIRST_BTN" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['FIRST_S_BTN']:$TPLMSG['FIRST_I_BTN'],
+                                "MSG_MEMBER_LOGIN" => $TPLMSG["MEMBER_LOGIN"],
+                                "TAG_FS_SHOPPING" => $TPLMSG['FIRST_TIME_SHOPPING'],
                             ));
 
                             //載入驗証碼
@@ -294,7 +304,78 @@
                             }
                         }
 		}
-		
+
+		// 預覽訂單
+		function cart_preview(){
+			global $db,$tpl,$cms_cfg,$TPLMSG,$main,$allpay,$ws_array;
+			
+                        $this->cart_list();
+			
+                        $tpl->newBlock("MEMBER_DATA_FORM");
+                        $tpl->assign($this->basic_lang);
+			$tpl->assign(array(
+				"VALUE_O_ID" => $this->o_id,
+				"VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
+				//"VALUE_M_CONTACT_S" => $this->gender_list($_REQUEST["m_contact_s"],1),
+				//"VALUE_M_NAME" => $_REQUEST["m_name"],
+				"VALUE_M_NAME" => (empty($this->gender_select))?$this->gender_list($_REQUEST["m_contact_s"],1).'&nbsp;'.$_REQUEST["m_name"]:$_REQUEST["m_name"].'&nbsp;'.$this->gender_list($_REQUEST["m_contact_s"],1),
+				"VALUE_M_ZIP" => $_REQUEST["m_zip"],
+				"VALUE_M_ADDRESS" => $_REQUEST["m_address"],
+				"VALUE_M_TEL" => $_REQUEST["m_tel"],
+				"VALUE_M_FAX" => $_REQUEST["m_fax"],
+				"VALUE_M_EMAIL" => $_REQUEST["m_email"],
+				"VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"],
+				"VALUE_CONTENT" => $_REQUEST["content"],
+			));
+			
+			
+			if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]==1){
+				// 顯示付款方式
+                            $tpl->newBlock("PAYMENT_TYPE");
+                            $tpl->assign(array(
+                                "MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"],
+                                "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]],
+                            ));
+
+                            // 收件人資訊
+                            $tpl->newBlock("TAG_ADDRESSEE_BLOCK");
+                            $tpl->assign($this->adv_lang);
+                            $tpl->assign(array(
+                                    "VALUE_ADD_NAME" => $_REQUEST["o_add_name"],
+                                    "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"],
+                                    "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"],
+                                    "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"],
+                                    "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
+                                    "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"],
+                                    "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"],
+                                    "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"],
+                            ));
+			}
+			
+			// 到貨時間
+			if(is_array($_REQUEST["o_arrival_time"])){
+				$o_arrival_time = implode("-",$_REQUEST["o_arrival_time"]);
+				$tpl->assign("VALUE_ARRIVAL_TIME",$o_arrival_time);
+			}
+	        
+                        // 國家欄位
+                        if($cms_cfg["ws_module"]["ws_country"]==1){
+                            $tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
+                            $tpl->assign(array("MSG_COUNTRY" => $TPLMSG['COUNTRY'],
+                                               "VALUE_M_COUNTRY" => $_REQUEST["m_country"]
+                            ));
+                        }
+                        //輸出post暫存
+                        foreach($_POST as $k => $v){
+                            $tpl->newBlock("TMP_POST_FIELD");
+                            $tpl->assign(array(
+                                "TAG_POST_KEY" => $k,
+                                "TAG_POST_VALUE" => $v,
+                            ));
+                        }
+			
+		}
+                
 		// 送出訂單
 		function cart_replace(){
 			global $db,$tpl,$cms_cfg,$TPLMSG,$main,$allpay,$ws_array;
@@ -842,7 +923,7 @@
 			if(!empty($rsnum)){
 				$row = $db->fetch_array($selectrs,1);
 				$tpl->assignGlobal(array(
-					"VALUE_M_NAME" => $row["m_name"],
+					"VALUE_M_NAME" => $row["m_lname"]." ".$row["m_fname"],
 					//"VALUE_M_CONTACT_S" => $row["m_contact_s"],
 					"VALUE_M_COMPANY_NAME" => $row["m_company_name"],
 					"VALUE_M_ZIP" => $row["m_zip"],
@@ -881,7 +962,7 @@
                                     m_password,
                                     m_company_name,
                                     m_contact_s,
-                                    m_name,
+                                    m_lname,
                                     m_birthday,
                                     m_sex,
                                     m_country,
@@ -893,7 +974,7 @@
                                     m_email,
                                     m_epaper_status
                                 ) values (
-                                    '0',
+                                    '1',
                                     '1',
                                     '".date("Y-m-d H:i:s")."',
                                     '".$_REQUEST["m_account"]."',
@@ -998,13 +1079,13 @@
 			global $ws_array,$tpl,$TPLMSG;
 			
 			if(!empty($switch)){
-				return $ws_array["contact_s"][$get_key];
+				return $ws_array["contactus_s"][$get_key];
 			}
 			
-			if(!empty($ws_array["contact_s"]) && is_array($ws_array["contact_s"])){
+			if(!empty($ws_array["contactus_s"]) && is_array($ws_array["contactus_s"])){
 				$tpl->newBlock("TAG_S_BLOCK_".$this->gender_select);
 				$tpl->assign("MSG_MEMBER_NAME",$TPLMSG['MEMBER_NAME']);
-				foreach($ws_array["contact_s"] as $s_key => $s_val){
+				foreach($ws_array["contactus_s"] as $s_key => $s_val){
 					$tpl->newBlock("TAG_S_OPTION_".$this->gender_select);
 					$tpl->assign(array(
 						"VALUE_S_KEY" => $s_key,
