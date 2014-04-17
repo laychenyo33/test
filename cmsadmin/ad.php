@@ -190,7 +190,8 @@ class AD{
                                   "STR_AD_FILE_TYPE_IMAGE" => "checked",
                                   "STR_AD_FILE_TYPE_FLASH" => "",
                                   "STR_AD_FILE_TYPE_TXT" => "",
-                                  "VALUE_ACTION_MODE" => $action_mode
+                                  "VALUE_ACTION_MODE" => $action_mode,
+                                  "TAG_SHOW_ZONE_DISPLAY" => "display:none",
         ));
         $tpl->assignGlobal("TAG_".$this->current_class."_ADD_CURRENT","class=\"current\"");
 
@@ -231,6 +232,7 @@ class AD{
                                           "STR_AD_FILE_TYPE_TXT" => ($row["ad_file_type"]=="txt")?"checked":"",
                                           "MSG_MODE" => $TPLMSG['MODIFY'],
                                           "VALUE_PC_RELATED_CATE" => $row['ad_show_zone'],
+                                          "TAG_SHOW_ZONE_DISPLAY" => ($row['ad_show_type']==0)?"display:none":"",
                 ));
                 $this->get_items_name($row["ad_show_zone"],"pc"); //廣告顯示分類
             }else{
