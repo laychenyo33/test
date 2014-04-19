@@ -181,7 +181,7 @@ class MAINFUNC{
         if(empty($_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID'])){
             $tpl->newBlock( "LOGIN_ZONE" );
             $tpl->assignGlobal( "MSG_ERROR_MESSAGE",$_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]);
-//            $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]=""; //清空錯誤訊息
+            $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]=""; //清空錯誤訊息
             $tpl->assignGlobal( "MSG_LOGIN_ACCOUNT",$TPLMSG["LOGIN_ACCOUNT"]);
             $tpl->assignGlobal( "MSG_LOGIN_PASSWORD",$TPLMSG["LOGIN_PASSWORD"]);
             $tpl->assignGlobal( "MSG_LOGIN_BUTTON",$TPLMSG["LOGIN_BUTTON"]);
