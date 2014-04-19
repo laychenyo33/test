@@ -187,6 +187,7 @@ class MAINFUNC{
             $tpl->assignGlobal( "MSG_LOGIN_BUTTON",$TPLMSG["LOGIN_BUTTON"]);
             $tpl->assignGlobal( "MSG_LOGIN_FORGOT_PASSWORD",$TPLMSG["LOGIN_FORGOT_PASSWORD"]);
             $tpl->assignGlobal( "MSG_LOGIN_REGISTER",$TPLMSG["LOGIN_REGISTER"]);
+            $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG['MEMBER_LOGIN']);
             //載入驗証碼
             $this->security_zone($cms_cfg['security_image_width'],$cms_cfg['security_image_height']);
         }else{
