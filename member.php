@@ -877,7 +877,8 @@ class MEMBER{
             $this->ws_load_tp($this->ws_tpl_file);
             $main->layer_link($TPLMSG["FORGOT_PASSWORD"] );
             $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
-            $tpl->newBlock(strtoupper( $cms_cfg['language'])."_REGISTER_FORGET_PASSWORD" );
+            $tpl->newBlock("REGISTER_FORGET_PASSWORD");
+            $tpl->newBlock("LANG_".strtoupper( $cms_cfg['language']) );
             $main->security_zone();
         }else{
             require_once("./libs/libs-security-image.php");
@@ -946,7 +947,8 @@ class MEMBER{
     function member_send_password_success_str(){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
-        $tpl->newBlock( strtoupper($cms_cfg['language'])."_REGISTER_SEND_PASSWORD_SUCCESSFULLY" );
+        $tpl->newBlock( "REGISTER_SEND_PASSWORD_SUCCESSFULLY" );
+        $tpl->newBlock( "LANG_".strtoupper($cms_cfg['language']) );
     }
     //會員紅利
     function member_bonus(){}

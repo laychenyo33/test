@@ -906,6 +906,9 @@ h2 a{color:#4f4f4f;}
 .forget_pw .ipt2{
 	width: 150px;	
 }
+.forget_pw img{
+    vertical-align: middle;
+}
 
 /*詢價頁面*/
 #inquiry{
