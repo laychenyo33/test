@@ -895,8 +895,9 @@ class MEMBER{
                     $sql = "update ".$cms_cfg['tb_prefix']."_member set m_password='".$db->quote($row['m_password'])."' where m_account='".$db->quote($row['m_email'])."'";
                     $db->query($sql,true);
                     //寄出通知信
-                    $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
-                    $tpl->prepare();
+//                    $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
+//                    $tpl->prepare();
+                    $tpl = App::getHelper('main')->get_mail_tpl("member-forgetpass");
                     $tpl->newBlock( "MEMBER_FORGET_PASSWORD" );
                     $tpl->assignGlobal( array("MSG_TITLE"  => $TPLMSG['MEMBER_FORGET_TITLE'],
                                               "MSG_M_ACCOUNT" => $TPLMSG['MEMBER_FORGET_ACCOUNT'],
