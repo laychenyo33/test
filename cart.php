@@ -840,12 +840,13 @@ class CART{
             $tpl->assignGlobal( "VALUE_TERM" , $row['st_order_mail']);
             $tpl->assignGlobal("VALUE_VIRTUAL_ACCOUNT" , $v_account);
             $mail_content=$tpl->getOutputContent();
-            App::getHelper('session')->{mailContent} = $mail_content;
-            if($cms_cfg["ws_module"]["ws_cart_login"]==0){
-                $goto_url=$_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
-            }else{
-                $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$oid;
-            }
+            App::getHelper('session')->mailContent = $mail_content;
+//            if($cms_cfg["ws_module"]["ws_cart_login"]==0){
+//                $goto_url=$_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
+//            }else{
+//                $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$oid;
+//            }
+            $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$oid;
             if(3 == $_REQUEST["o_payment_type"]){
                     $mail_header = 1;
             }else{
