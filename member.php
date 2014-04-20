@@ -1035,11 +1035,16 @@ BOX;
                     $res['msg'] = $err;
                 }else{
                     //寄發通知信
-                    $time = date("Y-m-d H:i:s");
-                    $mail_content = <<<BOX
-    購物訂單 {$_POST['o_id']} 於{$time}，由客戶線上取消。
-BOX;
-                    $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","系統通知");                
+                    $tpl = App::getHelper('main')->get_mail_tpl("order-cancel");
+                    $tpl->newBlock("SHOPPING_ORDER");
+                    $tpl->assign(array(
+                        "MSG_CANCEL_TIME" => date("Y-m-d H:i:s"),
+                        "MSG_O_ID" => $_POST['o_id'],
+                    ));
+                    $mail_content = $tpl->getOutputContent();
+                    //$main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","系統通知");                
+                    //ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0){
+                    $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$order['o_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","","",null,1);                
                 }
             }else{
                 $res['code'] = 0;
