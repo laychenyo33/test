@@ -1004,17 +1004,25 @@ class MEMBER{
         global $db,$cms_cfg,$main;
         $res['code']=0;
         if($_POST['o_id'] && $_POST['o_atm_last5']){
-            $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
-            $db->query($sql);
-            if($err = $db->report()){
-                $res['msg'] = $err;
-            }else{
-                $res['code']=1;
-                //寄發通知信
-                $mail_content = <<<BOX
-訂單 {$_POST['o_id']} 已完成匯款，匯款帳號後五碼為: {$_POST['o_atm_last5']}
-BOX;
-                $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."atm轉帳訂單匯款完成通知","系統通知");                
+            $sql = "select *  from ".$db->prefix("order")." where o_id='".$db->quote($_POST['o_id'])."'";
+            $qs = $db->query($sql);
+            if($db->numRows($qs)){
+                $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
+                $db->query($sql);
+                if($err = $db->report()){
+                    $res['msg'] = $err;
+                }else{
+                    $res['code']=1;
+                    //寄發通知信
+                    $tpl = App::getHelper('main')->get_mail_tpl("remit-notification");
+                    $tpl->newBlock("REMIT_LAST5");
+                    $tpl->assign(array(
+                        "MSG_O_ID"      => $_POST['o_id'],
+                        "MSG_ATM_LAST5" => $_POST['o_atm_last5'],
+                    ));
+                    $mail_content = $tpl->getOutputContent();
+                    $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."atm轉帳訂單匯款完成通知","系統通知");                
+                }
             }
         }
         echo json_encode($res);
