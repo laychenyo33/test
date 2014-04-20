@@ -367,9 +367,10 @@ class MEMBER{
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=100;
                         $goto_url=$cms_cfg["base_url"]."cart.php?func=c_finish";
                     }
-                    $this->ws_tpl_file = "templates/ws-mail-tpl.html";
-                    $mtpl = new TemplatePower( $this->ws_tpl_file );
-                    $mtpl->prepare();
+//                    $this->ws_tpl_file = "templates/ws-mail-tpl.html";
+//                    $mtpl = new TemplatePower( $this->ws_tpl_file );
+//                    $mtpl->prepare();
+                    $mtpl = App::getHelper('main')->get_mail_tpl("member-join");
                     //寄送訊息
                     $sql="select st_join_member_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
                     $selectrs = $db->query($sql);
@@ -894,8 +895,9 @@ class MEMBER{
                     $sql = "update ".$cms_cfg['tb_prefix']."_member set m_password='".$db->quote($row['m_password'])."' where m_account='".$db->quote($row['m_email'])."'";
                     $db->query($sql,true);
                     //寄出通知信
-                    $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
-                    $tpl->prepare();
+//                    $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
+//                    $tpl->prepare();
+                    $tpl = App::getHelper('main')->get_mail_tpl("member-forgetpass");
                     $tpl->newBlock( "MEMBER_FORGET_PASSWORD" );
                     $tpl->assignGlobal( array("MSG_TITLE"  => $TPLMSG['MEMBER_FORGET_TITLE'],
                                               "MSG_M_ACCOUNT" => $TPLMSG['MEMBER_FORGET_ACCOUNT'],
@@ -1002,24 +1004,32 @@ class MEMBER{
         global $db,$cms_cfg,$main;
         $res['code']=0;
         if($_POST['o_id'] && $_POST['o_atm_last5']){
-            $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
-            $db->query($sql);
-            if($err = $db->report()){
-                $res['msg'] = $err;
-            }else{
-                $res['code']=1;
-                //寄發通知信
-                $mail_content = <<<BOX
-訂單 {$_POST['o_id']} 已完成匯款，匯款帳號後五碼為: {$_POST['o_atm_last5']}
-BOX;
-                $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."atm轉帳訂單匯款完成通知","系統通知");                
+            $sql = "select *  from ".$db->prefix("order")." where o_id='".$db->quote($_POST['o_id'])."'";
+            $qs = $db->query($sql);
+            if($db->numRows($qs)){
+                $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
+                $db->query($sql);
+                if($err = $db->report()){
+                    $res['msg'] = $err;
+                }else{
+                    $res['code']=1;
+                    //寄發通知信
+                    $tpl = App::getHelper('main')->get_mail_tpl("remit-notification");
+                    $tpl->newBlock("REMIT_LAST5");
+                    $tpl->assign(array(
+                        "MSG_O_ID"      => $_POST['o_id'],
+                        "MSG_ATM_LAST5" => $_POST['o_atm_last5'],
+                    ));
+                    $mail_content = $tpl->getOutputContent();
+                    $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."atm轉帳訂單匯款完成通知","系統通知");                
+                }
             }
         }
         echo json_encode($res);
     }
     //取消宅配箱訂單
     function ajax_cancel_order(){
-        global $db,$cms_cfg,$main;
+        global $db,$cms_cfg,$main,$ws_array;
         $sql = "select * from ".$db->prefix("order")." where o_id='".$_POST['o_id']."'";
         $order = $db->query_firstrow($sql);
         if($order){
@@ -1033,11 +1043,17 @@ BOX;
                     $res['msg'] = $err;
                 }else{
                     //寄發通知信
-                    $time = date("Y-m-d H:i:s");
-                    $mail_content = <<<BOX
-    購物訂單 {$_POST['o_id']} 於{$time}，由客戶線上取消。
-BOX;
-                    $main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","系統通知");                
+                    $tpl = App::getHelper('main')->get_mail_tpl("order-cancel");
+                    $tpl->newBlock("SHOPPING_ORDER");
+                    $tpl->assign(array(
+                        "MSG_CANCEL_TIME" => date("Y-m-d H:i:s"),
+                        "MSG_O_ID" => $_POST['o_id'],
+                    ));
+                    $mail_content = $tpl->getOutputContent();
+                    //$main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","系統通知");                
+                    //ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0){
+                    $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$order['o_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","","",null,1);                
+                    $res['msg'] = $ws_array["order_status"][$order['o_status']];                    
                 }
             }else{
                 $res['code'] = 0;

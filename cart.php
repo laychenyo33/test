@@ -547,10 +547,12 @@ class CART{
     //資料更新================================================================
     function cart_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
-        $this->ws_tpl_file = "templates/mail/cart".$this->cart_type."-finish.html";
-        $tpl = new TemplatePower( $this->ws_tpl_file );
-        $tpl->prepare();
-        $tpl->assignGlobal("TAG_BASE_CSS", $cms_cfg['base_mail_css']);
+//        $this->ws_tpl_file = "templates/mail/cart".$this->cart_type."-finish.html";
+//        $tpl = new TemplatePower( $this->ws_tpl_file );
+//        $tpl->prepare();
+//        $tpl->assignGlobal("TAG_BASE_CSS", $cms_cfg['base_mail_css']);
+        $mail_tpl = array("inquiry",'shopping');
+        $tpl = App::getHelper('main')->get_mail_tpl($mail_tpl[$this->cart_type]);
         $this->cart_list();
         $tpl->newBlock( "MEMBER_DATA_FORM" );
         $tpl->assign( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
@@ -838,12 +840,13 @@ class CART{
             $tpl->assignGlobal( "VALUE_TERM" , $row['st_order_mail']);
             $tpl->assignGlobal("VALUE_VIRTUAL_ACCOUNT" , $v_account);
             $mail_content=$tpl->getOutputContent();
-            App::getHelper('session')->{mailContent} = $mail_content;
-            if($cms_cfg["ws_module"]["ws_cart_login"]==0){
-                $goto_url=$_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
-            }else{
-                $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$oid;
-            }
+            App::getHelper('session')->mailContent = $mail_content;
+//            if($cms_cfg["ws_module"]["ws_cart_login"]==0){
+//                $goto_url=$_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'];
+//            }else{
+//                $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$oid;
+//            }
+            $goto_url=$cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$oid;
             if(3 == $_REQUEST["o_payment_type"]){
                     $mail_header = 1;
             }else{

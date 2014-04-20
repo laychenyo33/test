@@ -19,9 +19,9 @@ class CONTACTUS{
                 $this->ws_tpl_type=1;
                 break;
             case "cu_replace"://聯絡我們更新資料(replace)
-                $this->ws_tpl_file = "templates/ws-mail-tpl.html";
-                $tpl = new TemplatePower( $this->ws_tpl_file );
-                $tpl->prepare();
+//                $this->ws_tpl_file = "templates/ws-mail-tpl.html";
+//                $tpl = new TemplatePower( $this->ws_tpl_file );
+//                $tpl->prepare();
                 $this->contactus_replace();
                 $this->ws_tpl_type=0;
                 break;
@@ -156,7 +156,8 @@ class CONTACTUS{
     }
 //聯絡我們--資料更新================================================================
     function contactus_replace(){
-        global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
+        global $db,$cms_cfg,$ws_array,$TPLMSG,$main;
+            $tpl = App::getHelper('main')->get_mail_tpl("contactus");
             if($cms_cfg["ws_module"]["ws_security"]==1){
                 if($this->security_mode){
                     require_once("./libs/libs-security-image.php");
