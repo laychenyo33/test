@@ -367,9 +367,10 @@ class MEMBER{
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=100;
                         $goto_url=$cms_cfg["base_url"]."cart.php?func=c_finish";
                     }
-                    $this->ws_tpl_file = "templates/ws-mail-tpl.html";
-                    $mtpl = new TemplatePower( $this->ws_tpl_file );
-                    $mtpl->prepare();
+//                    $this->ws_tpl_file = "templates/ws-mail-tpl.html";
+//                    $mtpl = new TemplatePower( $this->ws_tpl_file );
+//                    $mtpl->prepare();
+                    $mtpl = App::getHelper('main')->get_mail_tpl("member-join");
                     //寄送訊息
                     $sql="select st_join_member_mail from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
                     $selectrs = $db->query($sql);
