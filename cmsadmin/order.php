@@ -293,7 +293,9 @@ class ORDER{
         $rs = $db->query($sql);
         $db_msg = $db->report();
         if ( $db_msg == "" ) {
-            if($_REQUEST["o_status"] == 2) $this->mail_delivery_notice(); //寄送出貨通知信
+            if($_REQUEST["o_status"] == 2){
+                $this->mail_delivery_notice($_REQUEST["o_id"]); //寄送出貨通知信                
+            } 
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$cms_cfg["manage_url"]."order.php?func=o_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $this->goto_target_page($goto_url);
@@ -319,25 +321,29 @@ class ORDER{
     }
 
     //寄送出貨通知信
-    function mail_delivery_notice() {
+    function mail_delivery_notice($o_id) {
     	global $db,$TPLMSG,$cms_cfg;
-        $this->ws_tpl_file = "templates/ws-manage-mail-tpl.html";
-        $tpl = new TemplatePower( $this->ws_tpl_file );
-        $tpl->prepare();
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."'";
+//        $this->ws_tpl_file = "templates/ws-manage-mail-tpl.html";
+//        $tpl = new TemplatePower( $this->ws_tpl_file );
+//        $tpl->prepare();
+        $tpl = App::getHelper('main')->get_mail_tpl("delivery-notification");
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$o_id."'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
-        $tpl->newBlock( "DELIVERY_NOTICE_MAIL" );
-        $tpl->assign( array("MSG_DELIVERY_ID" => $TPLMSG['DELIVERY_ID'],
-                    "MSG_DELIVERY_TOTAL_PRICE" => $TPLMSG['DELIVERY_TOTAL_PRICE'],
-                    "MSG_DELIVERY_DATE" => $TPLMSG['DELIVERY_DATE'],
-                    "VALUE_DELIVERY_ID" => $row['o_id'],
-                    "VALUE_DELIVERY_TOTAL_PRICE" => $row['o_total_price'],
-                    "VALUE_DELIVERY_DATE" => date("Y-m-d H:i:s") ));
-        $tpl->assignGlobal( "VALUE_TERM" , $TPLMSG['DELIVERY_NOTICE']);
-        $mail_content=$tpl->getOutputContent();
-        $this->mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$row['o_email'],$mail_content,$TPLMSG["DELIVERY_NOTICE"]);
-        return true;
+        if($row){
+            $tpl->newBlock( "DELIVERY_NOTICE" );
+            $tpl->assign( array(
+                "MSG_DELIVERY_ID" => $TPLMSG['DELIVERY_ID'],
+                "MSG_DELIVERY_TOTAL_PRICE" => $TPLMSG['DELIVERY_TOTAL_PRICE'],
+                "MSG_DELIVERY_DATE" => $TPLMSG['DELIVERY_DATE'],
+                "VALUE_DELIVERY_ID" => $row['o_id'],
+                "VALUE_DELIVERY_TOTAL_PRICE" => $row['o_total_price'],
+                "VALUE_DELIVERY_DATE" => date("Y-m-d H:i:s") 
+            ));
+            $tpl->assignGlobal( "VALUE_TERM" , $TPLMSG['DELIVERY_NOTICE']);
+            $mail_content=$tpl->getOutputContent();  
+            App::getHelper('main')->ws_mail_send_simple(App::getHelper('session')->sc_email,$row['o_email'],$mail_content,$TPLMSG["DELIVERY_NOTICE"]);
+        }
     }
 
     function mail_send($from,$to,$mail_content,$mail_subject){
