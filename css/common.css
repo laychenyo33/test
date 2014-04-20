@@ -312,6 +312,65 @@
     vertical-align: middle;
 }
 
+/* contact us */
+.contact_table {
+	font-size: 12px;
+	line-height: 1.2;
+	height: 24px;
+	top: 5px;
+	font-weight: normal;
+	padding-top: 4px;
+	text-align: left;
+	padding-right: 8px;
+	padding-left: 8px;
+	border-top-color: #D6C9A0;
+	border-left-color: #D6C9A0;
+	border-top-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-left-style: solid;
+	background-color: #FFF5E8;
+}
+.contact_table th {
+	color: #000000;
+	background-color: #F4DA9D;
+	font-size: 12px;
+	line-height: 1.2;
+	height: 24px;
+	top: 5px;
+	font-weight: normal;
+	padding-top: 4px;
+	text-align: left;
+	padding-right: 8px;
+	padding-left: 8px;
+	border-right-color: #D6C9A0;
+	border-bottom-color: #D6C9A0;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+ }
+.contact_table td {
+	font-family: "Arial", "Helvetica", "sans-serif";
+	height: 24px;
+	color: #333333;
+	font-size: 12px;
+	text-align: left;
+	padding-left: 8px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CCCCCC;
+ 	border-right-width: 1px;
+ 	border-right-style: solid;
+	border-right-color: #CCCCCC;
+	padding-top: 2px;
+	padding-right: 8px;
+	padding-bottom: 2px;
+ }
+.contact_table  tr.altrow {
+	background-color: #FFFFFF;
+ }
+ 
 /*詢價頁面*/
 #inquiry{
 	float:left;
