@@ -1029,7 +1029,7 @@ class MEMBER{
     }
     //取消宅配箱訂單
     function ajax_cancel_order(){
-        global $db,$cms_cfg,$main;
+        global $db,$cms_cfg,$main,$ws_array;
         $sql = "select * from ".$db->prefix("order")." where o_id='".$_POST['o_id']."'";
         $order = $db->query_firstrow($sql);
         if($order){
@@ -1053,6 +1053,7 @@ class MEMBER{
                     //$main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","系統通知");                
                     //ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0){
                     $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$order['o_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","","",null,1);                
+                    $res['msg'] = $ws_array["order_status"][$order['o_status']];                    
                 }
             }else{
                 $res['code'] = 0;

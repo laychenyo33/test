@@ -667,3 +667,31 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 .video_list .video_list_pic{width:150px;}
 .video_list .video_list_pic .wraper{width:150px;height:150px;text-align: center;vertical-align: middle;display:table-cell}
 .video_list .video_list_title{text-align:center;padding:8px 3px;}
+
+.ajax_place{
+    position:relative;
+    height:100%;
+    width:100%;
+    padding:0;
+    margin:0;
+}
+.ajax_place .layerContent{
+    position:absolute;
+    width:100%;
+    top:25%;
+    left:0;
+    z-index:100;
+    text-align: center;
+}
+.ajax_place .layerBackground{
+    position:absolute;
+    height:100%;
+    width:100%;
+    top:0;
+    left:0;
+    background:#fff;
+    filter: alpha(opacity=50); 
+    -moz-opacity: 0.5;
+    opacity: 0.5;    
+    z-index:99;
+}

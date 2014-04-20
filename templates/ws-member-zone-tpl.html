@@ -19,17 +19,19 @@
             <td>{VALUE_O_TOTAL_PRICE}</td>
             <td><a href="member.php?func=m_zone&mzt=order&type=detail&o_id={VALUE_O_ID}&now_page={VALUE_NOW_PAGE}&jump_page={VALUE_JUMP_PAGE}">{VALUE_O_DETAIL}</a></td>
             <td>
-                <!-- START BLOCK : UNATM_FIELD -->
-                <div class="unatm_block">
-                    匯款帳號
-                    <input type="text" name="o_atm_last5" value="" maxlength="5" size="5"/>                
-                    <input type="button" class="ajax_remit" value="確認匯款" rel="{VALUE_O_ID}"/>                
-                </div>
-                <!-- END BLOCK : UNATM_FIELD -->
-                <!-- START BLOCK : BTN_CANCEL_ORDER -->
-                <input type="button" value="取消訂單" class="cancel_order" rel="{VALUE_O_ID}"/>
-                <!-- END BLOCK : BTN_CANCEL_ORDER -->
-                {VALUE_O_STATUS}<br/>
+                <div class="ajax_place">
+                    <!-- START BLOCK : UNATM_FIELD -->
+                    <div class="unatm_block">
+                        匯款帳號
+                        <input type="text" name="o_atm_last5" value="" maxlength="5" size="5"/>                
+                        <input type="button" class="ajax_remit" value="確認匯款" rel="{VALUE_O_ID}"/>                
+                    </div>
+                    <!-- END BLOCK : UNATM_FIELD -->
+                    <!-- START BLOCK : BTN_CANCEL_ORDER -->
+                    <input type="button" value="取消訂單" class="cancel_order" rel="{VALUE_O_ID}"/>
+                    <!-- END BLOCK : BTN_CANCEL_ORDER -->
+                    {VALUE_O_STATUS}
+                </div>                
             </td>
         </tr>
         <!-- END BLOCK : ORDER_LIST -->
@@ -38,15 +40,19 @@
         jQuery(function($){
            $(document).ready(function(){
                $(".cancel_order").click(function(evt){
+                   var obj = this;
+                   var box = $(obj).parents(".ajax_place");                   
                    var data = {
                        o_id : $(this).attr("rel")
                    };                   
+                   box.append("<div class='layerContent'><img src='{TAG_THEME_PATH}ajax-loader.gif'/></div><div class='layerBackground'></div>");
                    $.post("member.php?func=ajax&action=cancel_order",data,function(req){
                        if(req.code){
-                           location.reload();
+                           box.replaceWith(req.msg);
                        }else{
                            alert(req.msg);
                        }
+                       box.children('.layerContent,.layerBackground').remove();
                    },"json");
                });
               $(".ajax_remit").click(function(){
