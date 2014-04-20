@@ -23,9 +23,12 @@ if($rsnum >0 ){
 require "../class/autoloader.php";
 $autoloader = new autoloader();
 spl_autoload_register(array($autoloader,"load"));
+//session handler
+$sessHandler = Model_Session::factory($cms_cfg['sess_cookie_name']);
 //helper機制
 App::addHelper('db', $db);
 App::addHelper('main', $main);
+App::addHelper('session', $sessHandler);
 App::addHelper('request', new Model_Request());
 App::addHelper('dbtable', new Model_Dbtable($db));
 ?>
