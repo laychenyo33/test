@@ -92,6 +92,12 @@ class CART{
                 }
                 $this->ws_tpl_type=1;
                 break;
+            case "preview": //預覽購物訂單
+                $this->ws_tpl_file = "templates/ws-cart-preview-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->cart_preview();
+                $this->ws_tpl_type=1;
+                break;
             case "c_replace"://存成訂單或詢價單
                 $this->cart_replace();
                 break;
@@ -551,6 +557,126 @@ class CART{
             $tpl->assignGlobal("MSG_SHOPPING_TERM",$row["st_shopping_term"]);
         }        
     }
+    //預覽訂單
+    function cart_preview(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
+        $this->cart_list();
+        $tpl->newBlock( "MEMBER_DATA_FORM" );
+        $tpl->assign( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
+                            "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
+                            "MSG_ZIP" => $TPLMSG["ZIP"],
+                            "MSG_ADDRESS" => $TPLMSG["ADDRESS"],
+                            "MSG_TEL" => $TPLMSG["TEL"],
+                            "MSG_FAX" => $TPLMSG["FAX"],
+                            "MSG_EMAIL" => $TPLMSG["EMAIL"],
+                            "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"],
+                            "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
+                            "VALUE_M_VAT_NUMBER" => $_REQUEST["m_vat_number"],
+                            "VALUE_M_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
+                            "VALUE_M_ZIP" => $_REQUEST["m_zip"],
+                            "VALUE_M_ADDRESS" => $_REQUEST["m_city"].$_REQUEST["m_area"].$_REQUEST["m_address"],
+                            "VALUE_M_TEL" => $_REQUEST["m_tel"],
+                            "VALUE_M_FAX" => $_REQUEST["m_fax"],
+                            "VALUE_M_EMAIL" => $_REQUEST["m_email"],
+                            "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"],
+                            "VALUE_M_RECI_CONTACT_S" => $_REQUEST["m_reci_contact_s"],
+                            "VALUE_M_RECI_NAME" => $_REQUEST["m_reci_name"],
+                            "VALUE_M_RECI_ZIP" => $_REQUEST["m_reci_zip"],
+                            "VALUE_M_RECI_ADDRESS" => $_REQUEST["m_reci_city"].$_REQUEST["m_reci_area"].$_REQUEST["m_reci_address"],
+                            "VALUE_M_RECI_TEL" => $_REQUEST["m_reci_tel"],
+                            "VALUE_M_RECI_EMAIL" => $_REQUEST["m_reci_email"],
+                            "VALUE_M_RECI_CELLPHONE" => $_REQUEST["m_reci_cellphone"],
+                            "VALUE_CONTENT" => nl2br($_REQUEST["content"]),
+                            "VALUE_O_ID" => $this->o_id,
+                            "VALUE_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]],
+                            "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
+        ));
+        //訂購人
+        if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
+            $tpl->newBlock("CART_S_STYLE_1");
+        }elseif($cms_cfg['ws_module']['ws_contactus_s_style']==2){//中式稱謂
+            $tpl->newBlock("CART_S_STYLE_2");
+        }
+        $tpl->assign(array(
+            "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
+            "VALUE_M_NAME"       => $_REQUEST["m_name"],    
+            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_contact_s"]],                    
+        ));        
+        //收件人
+        if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
+            $tpl->newBlock("RECI_CART_S_STYLE_1");
+        }elseif($cms_cfg['ws_module']['ws_contactus_s_style']==2){//中式稱謂
+            $tpl->newBlock("RECI_CART_S_STYLE_2");
+        }
+        $tpl->assign(array(
+            "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
+            "VALUE_M_NAME"       => $_REQUEST["m_reci_name"],    
+            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_reci_contact_s"]],                    
+        ));        
+        //是否顯示配送欄位
+        if($cms_cfg['ws_module']['ws_delivery_timesec']){
+            $tpl->newBlock("DELIVERY_ZONE");
+            $dt_key = $_POST['o_deliver_time_sec'];
+            $tpl->assign(array(
+               "VALUE_M_DELIVER_DATE"    => $_POST['o_deliver_date'], 
+               "VALUE_M_DELIVER_TIMESEC" => $ws_array["deliery_timesec"][$dt_key], 
+            ));
+        }
+        //國家欄位
+        if($cms_cfg["ws_module"]["ws_country"]==1) {
+            $tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
+            $tpl->assign(array("MSG_COUNTRY" =>$TPLMSG['COUNTRY'],
+                               "VALUE_M_COUNTRY" =>$_REQUEST["m_country"]
+            ));
+        }
+        if(!empty($shopping)){
+            //寫入訂單
+            ////取得訂單號碼
+            $oid=$this->get_oid();
+            //結帳，計算訂單金額
+            $sub_total_price = $this->checkout();
+            $shipping_price = $this->shipping_price($sub_total_price,$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+            //手續費
+            $charge_fee = 0;
+            if($_REQUEST["o_payment_type"]==2){
+                $charge_fee = $this->service_fee($sub_total_price);      
+                $tpl->newBlock("CHARGE_FEE_ROW");
+                $tpl->assign("VALUE_CHARGE_FEE",$charge_fee);
+            }
+            $total_price = $sub_total_price + $shipping_price + $charge_fee;            
+            $ts = time();
+            $tpl->gotoBlock("SHOPPING_CART_ZONE");            
+            $tpl->assign("VALUE_TOTAL",$total_price);
+            //$this->o_id=$db->get_insert_id();
+            //產生ATM虛擬帳號
+            if($cms_cfg["ws_module"]["ws_vaccount"]==1 & $TPLMSG["PAYMENT_ATM"]==$_REQUEST["o_payment_type"]) {
+            $v_account = $this->get_vaccount($_REQUEST["o_subtotal_price"]);
+            //在確認信中加入虛擬帳號
+            $tpl->newBlock("VIRTUAL_ACCOUNT");
+            $tpl->assignGlobal( array("MSG_TRANSFER_BANK" => $TPLMSG['TRANSFER_BANK'],
+                                      "VALUE_TRANSFER_BANK_CODE" => $TPLMSG['TRANSFER_BANK_CODE'],
+                                      "MSG_TRANSFER_ACCOUNT" => $TPLMSG['TRANSFER_ACCOUNT'],
+                                      "VALUE_VIRTUAL_ACCOUNT" => $v_account ));
+            }
+            //顯示付款方式
+            $tpl->newBlock("PAYMENT_TYPE");
+            $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
+            $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$_REQUEST["o_payment_type"]]);
+            if($_REQUEST["o_payment_type"]==1){ //ATM轉帳
+                $tpl->newBlock("ATM_LAST_FIVE");
+                $tpl->assign("VALUE_ATM_LAST5",$_REQUEST["o_atm_last5"]);
+            }            
+            $tpl->gotoBlock( "MEMBER_DATA_FORM" );
+            $tpl->assignGlobal("VALUE_VIRTUAL_ACCOUNT" , $v_account);
+            
+            //輸出post暫存
+            foreach ($_POST as $k => $v) {
+                    $tpl -> newBlock("TMP_POST_FIELD");
+                    $tpl -> assign(array("TAG_POST_KEY" => $k, "TAG_POST_VALUE" => $v, ));
+            }            
+
+        }
+    }    
     //資料更新================================================================
     function cart_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
