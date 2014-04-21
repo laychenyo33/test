@@ -59,6 +59,9 @@ class XLSExportor{
                         'fill' => array(
                                 'type' => PHPExcel_Style_Fill::FILL_SOLID,
                                 'color' => array('rgb' => 'cccccc')
+                        ),
+                        'alignment' => array(
+                            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                         )
                     ) 
                 );
