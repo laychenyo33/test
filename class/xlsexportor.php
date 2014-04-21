@@ -59,46 +59,78 @@ class XLSExportor{
                         'fill' => array(
                                 'type' => PHPExcel_Style_Fill::FILL_SOLID,
                                 'color' => array('rgb' => 'cccccc')
+                        ),
+                        'alignment' => array(
+                            'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                         )
                     ) 
                 );
                 $this->column++; 
             }
+            //自動重設欄寬
+//            for($i='A';$i<$this->column;$i++){
+//                $objPHPExcel->getActiveSheet()->getColumnDimension($i)->setAutoSize(true);
+//            }            
             $row_no++;
         }
         if(is_array($this->dataFields) && count($this->dataFields)){
             foreach ( $this->dataFields as $k => $row ) {
                 $this->column = "A";
                 for($i = 0; $i< count($row); $i++){
-                        $objPHPExcel->getActiveSheet()->setCellValue($this->column.$row_no,$row[$i]);
-                        $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->getFont()->setSize($this->font_size);
-                        if($this->column == "A"){
-                            $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->applyFromArray(
-                                array(
-                                    'borders' => array( 
-                                        'left'     => array( 
-                                             'style' => PHPExcel_Style_Border::BORDER_THIN
-                                         )
-                                    )
-                                ) 
-                            );
+                    if(is_array($row[$i])){
+                        switch($row[$i]['type']){
+                            case "image":
+                                if(file_exists($row[$i]['data'])){
+                                    $objDrawing = new PHPExcel_Worksheet_Drawing();
+                                    $objDrawing->setName('avatar');
+                                    $objDrawing->setDescription('avatar');
+                                    $objDrawing->setPath($row[$i]['data']);
+                                    $objDrawing->setWidth(70);
+                                    $objDrawing->setCoordinates($this->column.$row_no)->setOffsetX(10)->setOffsetY(10);
+                                    $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                                    $objPHPExcel->getActiveSheet()->getColumnDimension($this->column)->setWidth(13);
+                                    $objPHPExcel->getActiveSheet()->getRowDimension($row_no)->setRowHeight($objDrawing->getHeight()-10);                                    
+                                }
+                                break;
+                            default:
+                                //$objPHPExcel->getActiveSheet()->setCellValue($this->column.$row_no,$row[$i]);
+                                $objPHPExcel->getActiveSheet()->getCell($this->column.$row_no)->setValueExplicit($row[$i]['data'], $row[$i]['type']);
+                                break;
                         }
+                    }else{
+                        $objPHPExcel->getActiveSheet()->setCellValue($this->column.$row_no,$row[$i]);
+                    }
+                    $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->getFont()->setSize($this->font_size);
+                    if($this->column == "A"){
                         $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->applyFromArray(
                             array(
                                 'borders' => array( 
-                                    'right'     => array( 
+                                    'left'     => array( 
                                          'style' => PHPExcel_Style_Border::BORDER_THIN
-                                     ),
-                                    'bottom'     => array( 
-                                         'style' => PHPExcel_Style_Border::BORDER_THIN
-                                     ),
+                                     )
                                 )
                             ) 
                         );
-                        $this->column++; 
+                    }
+                    $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->applyFromArray(
+                        array(
+                            'borders' => array( 
+                                'right'     => array( 
+                                     'style' => PHPExcel_Style_Border::BORDER_THIN
+                                 ),
+                                'bottom'     => array( 
+                                     'style' => PHPExcel_Style_Border::BORDER_THIN
+                                 ),
+                            ),
+                            'alignment' => array(
+                                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                'vertical'   => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                            ),                            
+                        ) 
+                    );
+                    $this->column++; 
                 }
                 $row_no++;
-
             }
 
             // Rename sheet 
@@ -128,6 +160,12 @@ class XLSExportor{
             exit;
         }
     }
+    //切換excel日期數據為可讀
+    function getdatefromjd($val,$format="Y-m-d"){
+        $jd = GregorianToJD(1, 1, 1970); 
+        $gregorian = JDToGregorian($jd+intval($val)-25569);               
+        return date($format,strtotime($gregorian));
+    }    
 }
 //ob_end_flush();
 ?>
