@@ -1053,10 +1053,10 @@ class MAINFUNC{
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         if(trim($row["sc_ga_code"])!="" && $cms_cfg['ws_online']){
-			$ga_domain=str_replace("www.","",$cms_cfg['server_name']);
+            $ga_domain=str_replace("www.","",$cms_cfg['server_name']);
             $tpl->newBlock("GOOGLE_ANALYTICS");
             $tpl->assign("VALUE_GA_CODE",$row["sc_ga_code"]);
-			$tpl->assign("VALUE_GA_DOMAIN",$ga_domain);
+            $tpl->assign("VALUE_GA_DOMAIN",$ga_domain);
         }
         if(trim($row["sc_gs_code"])!=""){
             $tpl->newBlock("GOOGLE_SITEMAP_METATAG");
