@@ -578,7 +578,7 @@ class PRODUCTS{
                             $tpl->newBlock("BTN_YOUTUBE_MV_SHOW");
                             $tpl->assignGlobal("VALUE_MV_ID",$mvId);
                         }
-                    }elseif($cms_cfg['ws_module']['ws_products_link']){
+                    }elseif($cms_cfg['ws_module']['ws_products_mv_link']){
                         $tpl->newBlock("BTN_LINK_MV_SHOW");
                         $tpl->assign("VALUE_P_MV_URL",$row["p_mv"]);
                     }
