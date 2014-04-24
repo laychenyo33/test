@@ -2084,5 +2084,22 @@ class MAINFUNC{
 		global $cms_cfg;
 		
 	}
+	
+	// jQuery 載入模組
+	function jQuery_init(){
+		global $tpl,$cms_cfg;
+		
+		$file_title = func_get_args();
+
+		if(is_array($file_title)){
+			foreach($file_title as $key => $value){
+				$js_insert .= '<script src="'.$cms_cfg["base_root"].'js/box_serial/'.$value.'_box.js" type="text/javascript"></script>';
+			}
+		}else{
+			$js_insert = '<script src="'.$cms_cfg["base_root"].'js/box_serial/'.$file_title.'_box.js" type="text/javascript"></script>';
+		}
+		
+		$tpl->assignGlobal("TAG_JS_BOX",$js_insert);
+	}
 }
 ?>
