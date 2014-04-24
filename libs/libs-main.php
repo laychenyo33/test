@@ -2050,6 +2050,39 @@ class MAINFUNC{
         }else{
             throw new Exception($template." doesn't exists!");
         }
-    }       
+    }
+    
+	// AJAX 表單輸入 -- 配合 form_box.js
+	function ajax_form_input(){
+		if(is_array($_REQUEST["val"])){
+			foreach($_REQUEST["val"] as $key => $array){
+				if(!empty($array["value"])){
+					if(empty($form[$array["name"]])){
+						$form[$array["name"]] = $array["value"];
+					}else{
+						if(!is_array($form[$array["name"]])){
+							$sub_array = $form[$array["name"]];
+							unset($form[$array["name"]]);
+							
+							$form[$array["name"]][] = $sub_array;
+							$form[$array["name"]][] = $array["value"];
+						}else{
+							$form[$array["name"]][] = $array["value"];
+						}
+					}
+				}
+			}
+			
+			return $form;
+		}else{
+			return false;
+		}
+	}
+	
+	// 共通方法
+	function share_function(){
+		global $cms_cfg;
+		
+	}
 }
 ?>
