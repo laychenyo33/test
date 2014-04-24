@@ -24,6 +24,7 @@
                                 $this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
                                 $this->ws_load_tp($this->ws_tpl_file);
                                 $tpl->newBlock("JS_FORMVALID");
+                                App::getHelper('main')->jQuery_init("date","zone","get");
                                 $this->cart_finish();
                                 $this->ws_tpl_type=1;
 				break;
