@@ -84,6 +84,7 @@ class CART{
                     $tpl->newBlock("JQUERY_UI_SCRIPT");
                     $tpl->newBlock("DATEPICKER_SCRIPT_IN_CART");
                     $main->load_privacy_term();
+                    $main->jQuery_init("zone");
                     $this->cart_finish();
                 }
                 $this->ws_tpl_type=1;
