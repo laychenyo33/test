@@ -343,6 +343,41 @@ $TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG'] = "<div class='auth_err_rc'>%s</div><div 
 $TPLMSG['ORDER_SUCCESS'] = "订购成功";
 $TPLMSG['ORDER_FAIL'] = "订购失败";
 
+//欧付宝相关字汇
+$TPLMSG["CREDIT"] = "信用卡"; //信用卡
+$TPLMSG["WEBATM"] = "网路ATM"; //网路ATM
+$TPLMSG["ATM"] = "ATM转帐"; //自动柜员机
+$TPLMSG["CVS"] = "超商代码"; //超商代码 (需加收 30 元手续费)
+$TPLMSG["BARCODE"] = "超商条码"; //超商条码 (需加收 30 元手续费)
+$TPLMSG["ALIPAY"] = "Alipay"; //支付宝
+$TPLMSG["TENPAY"] = "Tenpay"; //财付通
+$TPLMSG["TOPUPUSED"] = "Top-up"; //储值消费
+$TPLMSG['ALLPAY_BANK_CODE'] = "ATM Bank Code"; //ATM 银行代码
+$TPLMSG['ALLPAY_VACCOUNT'] = "ATM Premium Account"; //ATM 付费帐号
+$TPLMSG['ALLPAY_CVS_NO'] = "CVS code"; //超商缴费代码
+$TPLMSG['ALLPAY_CVS_BAR_1'] = "Barcode 1"; //超商缴费条码 1
+$TPLMSG['ALLPAY_CVS_BAR_2'] = "Barcode 2"; //超商缴费条码 2
+$TPLMSG['ALLPAY_CVS_BAR_3'] = "Barcode 3"; //超商缴费条码 3
+$TPLMSG['ALLPAY_EXPIRE'] = "Payment deadline"; //缴费期限
+$TPLMSG['ORDER_PENDING'] = "Pending payment"; //待付款
+$TPLMSG['ORDER_DONE'] = "Paid"; //已付款
+
+/*周日名称*/
+$TPLMSG['W_SUNDAY'] = "星期日";
+$TPLMSG['W_MONDAY'] = "星期一";
+$TPLMSG['W_TUESDAY'] = "星期二";
+$TPLMSG['W_WEDNESDAY'] = "星期三";
+$TPLMSG['W_THRUSDAY'] = "星期四";
+$TPLMSG['W_FRIDAY'] = "星期五";
+$TPLMSG['W_SATURDAY'] = "星期六";
+$TPLMSG['W_SUN'] = "日";
+$TPLMSG['W_MON'] = "一";
+$TPLMSG['W_TUE'] = "二";
+$TPLMSG['W_WED'] = "三";
+$TPLMSG['W_THR'] = "四";
+$TPLMSG['W_FRI'] = "五";
+$TPLMSG['W_SAT'] = "六";
+
 /*新增语汇*/
 /*以下是支付宝相关字汇*/
 $TPLMSG["PAYMENT_ALI"] = "支付宝";
