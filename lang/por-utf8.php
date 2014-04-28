@@ -358,6 +358,22 @@ $TPLMSG['ALLPAY_EXPIRE'] = "Payment deadline"; //繳費期限
 $TPLMSG['ORDER_PENDING'] = "Pending payment"; //待付款
 $TPLMSG['ORDER_DONE'] = "Paid"; //已付款
 
+/*周日名称*/
+$TPLMSG['W_SUNDAY'] = "Sunday";
+$TPLMSG['W_MONDAY'] = "Monday";
+$TPLMSG['W_TUESDAY'] = "Tuesday";
+$TPLMSG['W_WEDNESDAY'] = "Wednesday";
+$TPLMSG['W_THRUSDAY'] = "Thursday";
+$TPLMSG['W_FRIDAY'] = "Friday";
+$TPLMSG['W_SATURDAY'] = "Saturday";
+$TPLMSG['W_SUN'] = "Sun";
+$TPLMSG['W_MON'] = "Mon";
+$TPLMSG['W_TUE'] = "Tue";
+$TPLMSG['W_WED'] = "Wed";
+$TPLMSG['W_THR'] = "Thu";
+$TPLMSG['W_FRI'] = "Fri";
+$TPLMSG['W_SAT'] = "Sat";
+
 /*新增語彙*/
 /*以下是支付寶相關字彙*/
 $TPLMSG["PAYMENT_ALI"] = "支付寶";
