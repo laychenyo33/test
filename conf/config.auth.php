@@ -70,6 +70,7 @@ $cms_cfg["ws_module"]=array(
         "ws_epaper_queue"=>1,           //電子報使用佇列發送
         "ws_order"=>0,                  //訂單管理
         "ws_order_cancel" => 0,         //新訂單可由消費者自行取消
+        "ws_order_export" => 1,         //匯出訂單為excel，需另外加入phpexcel類別在class資料夾
         "ws_multi_shipprice"=>0,        //依訂單金額區段計算運費
         "ws_multi_chargefee"=>0,        //依訂單金額區段計算手續費
         "ws_service"=>0,                //服務條款(IPC專用)
