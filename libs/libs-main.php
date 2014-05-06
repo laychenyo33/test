@@ -2107,13 +2107,15 @@ class MAINFUNC{
 		}else{
 			$file_title = func_get_args();
 		}
-		
-        foreach($file_title as $key => $value){
-        	$css_insert .= '<link href="'.$cms_cfg["base_root"].'css/'.$value.'.css" rel="stylesheet" type="text/css" />'."\n";
-        }
-		
-		$this->css_args = $file_title;
-        $tpl->assignGlobal("TAG_CSS_INCLUDE",$css_insert);
+
+		if(count($file_title)){
+			foreach($file_title as $key => $value){
+				$css_insert .= '<link href="'.$cms_cfg["base_root"].'css/'.$value.'.css" rel="stylesheet" type="text/css" />'."\n";
+			}
+
+			$this->css_args = $file_title;
+			$tpl->assignGlobal("TAG_CSS_INCLUDE",$css_insert);
+		}
 	}
 }
 ?>
