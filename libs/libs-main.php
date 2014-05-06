@@ -2090,13 +2090,30 @@ class MAINFUNC{
 		global $tpl,$cms_cfg;
 		
 		$file_title = func_get_args();
-                if(count($file_title)){
-                    foreach($file_title as $key => $value){
-                            $js_insert .= "<script src=\"".$cms_cfg["base_root"]."js/box_serial/".$value."_box.js\" type=\"text/javascript\"></script>\n";
-                    }
-                    $tpl->assignGlobal("TAG_JS_BOX",$js_insert);
-                    
-                }		
+		if(count($file_title)){
+		    foreach($file_title as $key => $value){
+		    	$js_insert .= '<script src="'.$cms_cfg["base_root"].'"js/box_serial'.$value.'_box.js" type="text/javascript"></script>'."\n";
+		    }
+		    $tpl->assignGlobal("TAG_JS_BOX",$js_insert);
+		}		
+	}
+	
+	// css 載入模組
+	function css_init(){
+		global $tpl,$cms_cfg;
+		
+		if(!empty($this->css_args)){
+			$file_title = $this->css_args;
+		}else{
+			$file_title = func_get_args();
+		}
+		
+        foreach($file_title as $key => $value){
+        	$css_insert .= '<link href="'.$cms_cfg["base_root"].'css/'.$value.'.css" rel="stylesheet" type="text/css" />'."\n";
+        }
+		
+		$this->css_args = $file_title;
+        $tpl->assignGlobal("TAG_CSS_INCLUDE",$css_insert);
 	}
 }
 ?>
