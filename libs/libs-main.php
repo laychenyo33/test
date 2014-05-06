@@ -915,7 +915,7 @@ class MAINFUNC{
         $ip=$_SERVER["REMOTE_ADDR"];
         //$ip="59.126.50.204"; //taiwan
         //$ip="137.153.10.110";
-        if($ip!="127.0.0.1"){
+        if($ip!="127.0.0.1" && $cms_cfg['ws_module']['ws_pageview_history']){
             $ph_ip_number = sprintf("%u", ip2long($ip));
             //get ip country
             $sql="SELECT country_name FROM ".$cms_cfg['tb_prefix']."_ip_country WHERE ip_from <= inet_aton('".$ip."') AND ip_to >= inet_aton('".$ip."') ";
