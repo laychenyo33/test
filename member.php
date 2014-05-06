@@ -581,7 +581,7 @@ class MEMBER{
                                               "VALUE_O_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$row['o_shippment_type']],
                                               "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
                                               "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
-                                              "VALUE_O_DELIVER_DATE" => date("Y年m月d日",strtotime($row["o_deliver_date"])),
+                                              "VALUE_O_DELIVER_DATE" => (strtotime($row["o_deliver_date"]))?date("Y年m月d日",strtotime($row["o_deliver_date"])):"",
                                               "VALUE_O_DELIVER_TIMESEC" => $ws_array["deliery_timesec"][$row["o_deliver_time_sec"]],                      
                                               "VALUE_O_ATM_LAST5" => $row['o_atm_last5'],                                           
                     ));
