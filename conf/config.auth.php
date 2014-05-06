@@ -49,6 +49,7 @@ $cms_cfg["ws_module"]=array(
         "ws_products_upfiles"     =>0, //產品附檔,
         "ws_products_ca"=>0,           //產品認證標章管理
         "ws_products_info_fields" =>0, //額外的產品敘述欄位數量
+        "ws_pageview_history"     =>0, //記錄瀏覽歷程
 
 /*      IPC SETUP                   */
         "ws_ad"=>1,                     //廣告管理(IPC專用)
