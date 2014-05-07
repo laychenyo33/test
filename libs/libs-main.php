@@ -631,6 +631,7 @@ class MAINFUNC{
         ($cms_cfg["ws_module"]["ws_products_application"])?$tpl->newBlock( "AUTHORITY_PRODUCTS_APPLICATION" ):"";//產品應用領域
         ($cms_cfg["ws_module"]["ws_member_msg"])?$tpl->newBlock( "AUTHORITY_MEMBER_MESSAGE" ):"";//會員公告
         ($cms_cfg['ws_module']['ws_multi_shipprice'])?$tpl->newBlock( "AUTHORITY_MULTI_SHIPPRICE" ):"";//訂單金額區段運費管理
+        ($cms_cfg['ws_module']['ws_multi_chargefee'])?$tpl->newBlock( "AUTHORITY_MULTI_CHARGEFEE" ):"";//訂單金額區段手續費管理
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
     }

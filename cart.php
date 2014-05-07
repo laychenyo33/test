@@ -10,6 +10,9 @@ class CART{
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
+            case "ajax_get_charge_fee":
+                $this->ajax_get_charge_fee();
+                break;
             case "ajax_show_ship_price":
                 $this->ajax_show_ship_price();
                 break;
@@ -685,7 +688,7 @@ class CART{
             //手續費
             $charge_fee = 0;
             if($_REQUEST["o_payment_type"]==2){
-                $charge_fee = $this->service_fee();      
+                $charge_fee = $this->service_fee($sub_total_price);      
                 $tpl->newBlock("CHARGE_FEE_ROW");
                 $tpl->assign("VALUE_CHARGE_FEE",$charge_fee);
             }
@@ -1250,11 +1253,8 @@ class CART{
     function shipping_price($price, $ship_zone) {
         return Model_Shipprice::calculate($price, $ship_zone);
     }  
-    function service_fee(){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $sql = "select sc_service_fee from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
-        list($sc_service_fee) = $db->query_firstRow($sql,false);  
-        return $sc_service_fee;
+    function service_fee($price=null){
+        return Model_Chargefee::calculate($price);
     }   
     //動態取得運費
     function ajax_show_ship_price(){
@@ -1262,6 +1262,15 @@ class CART{
             $res['code'] = 1;
             $res['total_price'] = $this->checkout();
             $res['shipping_price'] = $this->shipping_price($res['total_price'],$_POST['shipment_type']);
+            echo json_encode($res);
+        }
+    }
+    //動態取得手續費
+    function ajax_get_charge_fee(){
+        if(App::getHelper('request')->isAjax()){
+            $res['code'] = 1;
+            $res['total_price'] = $this->checkout();
+            $res['charge_fee'] = $this->service_fee($res['total_price']);
             echo json_encode($res);
         }
     }
