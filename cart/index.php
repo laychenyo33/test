@@ -713,8 +713,12 @@
                                 $this->shipping_price = Model_Shipprice::calculate($this -> subtotal_money);
 	
 				// 手續費
-				if ($allpay -> allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'CVS' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'BARCODE')) {
+				if ($allpay -> allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == '2' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'CVS' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'BARCODE')) {
+                                    if($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]==2){
+					$this -> plus_fee = Model_Chargefee::calculate($this -> subtotal_money);
+                                    }else{
 					$this -> plus_fee = 30;
+                                    }
 				}
 	
 				// 總價
