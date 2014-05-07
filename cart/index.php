@@ -706,6 +706,7 @@
 			$this -> subtotal_money = $this -> subtotal_money + $total_price;
 	
 			$this -> price_count++;
+                        //跑完購物車項目才進行輸出
 			if (count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) == $this -> price_count && empty($switch)){
 					
 				// 運費
