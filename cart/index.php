@@ -704,7 +704,7 @@
 			if (count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) == $this -> price_count && empty($switch)){
 					
 				// 運費
-				if ($total_price > $_SESSION[$cms_cfg['sess_cookie_name']]["sc_no_shipping_price"]) {
+				if ($this -> subtotal_money > $_SESSION[$cms_cfg['sess_cookie_name']]["sc_no_shipping_price"]) {
 					$this -> shipping_price = 0;
 				} else {
 					$this -> shipping_price = $_SESSION[$cms_cfg['sess_cookie_name']]["sc_shipping_price"];
