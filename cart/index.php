@@ -710,11 +710,7 @@
 			if (count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) == $this -> price_count && empty($switch)){
 					
 				// 運費
-				if ($this -> subtotal_money > $_SESSION[$cms_cfg['sess_cookie_name']]["sc_no_shipping_price"]) {
-					$this -> shipping_price = 0;
-				} else {
-					$this -> shipping_price = $_SESSION[$cms_cfg['sess_cookie_name']]["sc_shipping_price"];
-				}
+                                $this->shipping_price = Model_Shipprice::calculate($this -> subtotal_money);
 	
 				// 手續費
 				if ($allpay -> allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'CVS' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'BARCODE')) {
