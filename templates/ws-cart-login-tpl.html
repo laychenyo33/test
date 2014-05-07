@@ -1,52 +1,45 @@
-<div class="cart-login_f">
-    <div id="cart-login-member">
-        <form name="loginform" method="post" action="login.php?func=check_data" style="margin:0px;padding:0px;">
-            {MSG_LOGIN_NOTICE1}
-            <table cellpadding="2" cellspacing="0" border="0" class="login_table" >
-                <tr>
-                    <th>{MSG_LOGIN_ACCOUNT}:</th>
-                    <td><input type="text" name="mm_account" id="mm_account" size="28" value="範例：fancy@jelly.com" rel="範例：fancy@jelly.com"></td>
-                </tr>
-                <tr>
-                    <th>{MSG_LOGIN_PASSWORD}:</th>
-                    <td><input type="password" name="mm_password" size="28"> </td>
-                </tr>
-                <tr>
-                    <th>{MSG_LOGIN_SECURITY}</th>
-                    <td>{TAG_INPUT_SECURITY}&nbsp;{TAG_IMAGE_SECURITY_IMAGE}&nbsp;&nbsp;<font color="red" style="font-size:13px;">{MSG_ERROR_MESSAGE}</font></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td class="cart-login-m_btn02">
-                        <input type="submit" value="{MSG_LOGIN_BUTTON}"/>                    
+        {MSG_LOGIN_NOTICE1}
+        <div class="member_login">
+            <form name="myform" method="post" action="{TAG_ROOT_PATH}login.php?func=check_data" id="formID" class="formular">
+                <table>
+                  <tr>
+                    <td class="cart_title_icon">{MSG_MEMBER_LOGIN}</td>
+                  </tr>
+                  <tr>
+                    <td><input class="ipt1 iptbox" name="mm_account" id="mm_account" class="validate[required]" type="text" placeholder="{MSG_LOGIN_ACCOUNT}"></td>
+                  </tr>
+                  <tr>
+                    <td><input class="ipt1 iptbox" name="mm_password" id="mm_password" class="validate[required]" type="password" placeholder="{MSG_LOGIN_PASSWORD}"></td>
+                  </tr>
+                  <tr>
+                    <td>
+                        <input class="ipt2 iptbox"  name="security" maxlength="4" size="4" type="text" placeholder="{MSG_LOGIN_SECURITY}"> {TAG_IMAGE_SECURITY_IMAGE}<br/><font color="#ff0000">{MSG_ERROR_MESSAGE}</font>             
                     </td>
-                </tr>
-                <tr>
+                  </tr>
+                  <tr>
+                      <td class="fg_pw"><a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a> <a href="#" onclick="myform.submit();return false;"><img src="{TAG_THEME_PATH}btn_login.png"></a></td>
+                  </tr>
+                </table>
+                <input type="hidden" name="callback" value="1">
+                <input type="hidden" name="return_url" value="{TAG_ROOT_PATH}cart.php?func=c_finish"/>
+            </form>            
+        </div>
 
-                    <td colspan="2">
-                    <table width="100%" border="0" class="cart-login-m_btn">
-                      <tr>
-                           <td width="50%" align="center"><a href="member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a> </td>
-                           <td width="50%" align="center"><a href="member.php?func=m_add">{MSG_LOGIN_REGISTER}</a> </td>
-                      </tr>
-              </table>    
-                  </td>
-                </tr>
-            </table>
-            <input type="hidden" name="callback" value="1">
-            <input type="hidden" name="return_url" value="{TAG_ROOT_PATH}cart.php?func=c_finish"/>
-        </form>
-    </div>
-    <div id="cart-login-first">
-        <form name="fsfrm" action="{TAG_ROOT_PATH}cart.php?func=c_finish" method="post">
-            <input type="hidden" name="shop_and_register" value="1"/>
-            <div>歡迎光臨 <br/> Feng Hsi 豐喜 &amp; Touched 塔吉特 !!!<br/> 
-                  <ul><li>為了簡化您的購物流程，請直接將商品加入購物車，即可進入結帳流程！完成訂購後，系統自動為您加入會員喔！</li>
-                      <li>已在網站消費的會員可以登入會員後查詢『我的購物車』，了解自己消費情況。</li>
-                  </ul>
-            </div>
-            <div class="cart-login_f_btn"><input type="button" value="{TAG_FS_SHOPPING}" onclick="fsfrm.submit();"/></div>
-        </form>
-    </div>
-    <div style="clear:both;margin-bottom:20px;"></div>
-</div>
+
+
+        <div class="login_first">
+            <form name="fsfrm" action="{TAG_ROOT_PATH}cart.php?func=c_finish" method="post">
+                <table>
+                  <tr>
+                    <td class="cart_title_icon">{TAG_FS_SHOPPING}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                  </tr>
+                </table>
+                <input type="hidden" name="shop_and_register" value="1"/>
+                <div class="cart-login_f_btn">
+                    <a href="#" id="first" onclick="fsfrm.submit();"><img style="padding-top: 20px;" src="{TAG_THEME_PATH}/btn_firstbuy.png"></a>
+                </div>
+            </form>            
+        </div>
