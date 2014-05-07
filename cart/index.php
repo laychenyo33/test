@@ -155,7 +155,9 @@
 					$this -> error_handle();
 				}
 			} else {
-				echo 1;
+                                $res['code'] = 1;
+                                $res['cart_nums'] = count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]);
+                                echo json_encode($res);
 				die();
 			}
 		}
