@@ -192,11 +192,14 @@
 	
 					if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
 						$this -> price_counter($row);
-						$this -> service_rule();
 					}
 					$i++;
 					$tpl -> gotoBlock("SHOPPING_CART_ZONE");
 				}
+                                //購物車時輸出服務條款
+                                if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
+                                        $this -> service_rule();
+                                }
 	
 				if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] && ($_REQUEST["func"] == "c_add" || empty($_REQUEST["func"]))) {
 					// 顯示付款方式
