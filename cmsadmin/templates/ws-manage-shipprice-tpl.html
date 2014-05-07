@@ -1,0 +1,28 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+    <h1>運費管理</h1>
+    <form name="myform" method="post" action="?save=1" class="formular" id="formID">
+        <table id="appendGridTable"></table>
+        <input type="submit" value="提交"/>
+        <script type="text/javascript">
+            jQuery(function($){
+                $('#appendGridTable').appendGrid({
+                    initRows: 1,
+                    columns: [
+                            { name: 'pricefloor', display: '訂單最低金額', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '160px'} },
+                            { name: 'priceceil', display: '訂單最高金額', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '100px'} },
+                            { name: 'shipprice', display: '運費', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '50px', 'text-align': 'right' }, value: 0 },
+                            { name: 'id', type: 'hidden', value: 0 }
+                        ],
+                    initData: {TAG_DATA_JSON},
+                    rowDragging:true,
+                    hideButtons: {
+                        moveUp: true,
+                        moveDown: true
+                    }                    
+                });                
+            });
+        </script>
+    </form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

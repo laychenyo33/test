@@ -94,6 +94,12 @@
     <h2>購物管理</h2>
     <div class="pane" {CSS_BLOCK_ORDER}>
         <h3><a href="order.php?func=o_list" {TAG_O_CURRENT}>訂單管理</a></h3>
+        <!-- START BLOCK : AUTHORITY_MULTI_SHIPPRICE -->
+        <h3><a href="shipprice.php" {TAG_SPL_CURRENT}>運費管理</a></h3>
+        <!-- END BLOCK : AUTHORITY_MULTI_SHIPPRICE -->        
+        <!-- START BLOCK : AUTHORITY_MULTI_CHARGEFEE -->
+        <h3><a href="chargefee.php" {TAG_CFL_CURRENT}>手續費管理</a></h3>        
+        <!-- END BLOCK : AUTHORITY_MULTI_CHARGEFEE -->
         <h3><a href="service.php?func=st_term&term_type=st_order_mail" {TAG_ST_ORDER_CURRENT}>購物確認信編輯</a></h3>
         <h3><a href="service.php?func=st_term&term_type=st_shopping_term" {TAG_ST_SHOPPING_TERM_CURRENT}>購物說明</a></h3>
         <h3><a href="service.php?func=st_term&term_type=st_service_term" {TAG_ST_SERVICE_TERM_CURRENT}>服務條款</a></h3>

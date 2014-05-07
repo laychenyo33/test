@@ -1247,27 +1247,9 @@ class CART{
         }
         return $total_price;
     }        
-    function shipping_price($price=0,$ship_zone){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $sql = "select sc_shipping_price,sc_shipping_price2,sc_shipping_price3,sc_no_shipping_price from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
-        list($a,$b,$c,$d) = $db->query_firstRow($sql,false);
-        switch($ship_zone){
-            case 1:
-                $ship_price = $a;
-                break;
-            case 2:
-                return  $b;
-                break;
-            case 3:
-                return  $c;
-                break;
-        }
-        if($price < $d){
-            return $ship_price;
-        }else{
-            return 0;
-        }
-    }      
+    function shipping_price($price, $ship_zone) {
+        return Model_Shipprice::calculate($price, $ship_zone);
+    }  
     function service_fee(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $sql = "select sc_service_fee from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
