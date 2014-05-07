@@ -1,0 +1,29 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+    <h1>手續費管理</h1>
+    <div>手續費若設為大於1的值，為直接加入的手續費金額；<br/>若設為小於1的值，代表費率，需與訂單金額計算才能得出手續費金額。<br/>不在列表裡的金額不需手續費</div>
+    <form name="myform" method="post" action="?save=1" class="formular" id="formID">
+        <table id="appendGridTable"></table>
+        <input type="submit" value="提交"/>
+        <script type="text/javascript">
+            jQuery(function($){
+                $('#appendGridTable').appendGrid({
+                    initRows: 1,
+                    columns: [
+                            { name: 'pricefloor', display: '訂單最低金額', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '160px'} },
+                            { name: 'priceceil', display: '訂單最高金額', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '100px'} },
+                            { name: 'fee', display: '手續費', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '50px', 'text-align': 'right' }, value: 0 },
+                            { name: 'id', type: 'hidden', value: 0 }
+                        ],
+                    initData: {TAG_DATA_JSON},
+                    rowDragging:true,
+                    hideButtons: {
+                        moveUp: true,
+                        moveDown: true
+                    }                    
+                });                
+            });
+        </script>
+    </form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

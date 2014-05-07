@@ -155,7 +155,9 @@
 					$this -> error_handle();
 				}
 			} else {
-				echo 1;
+                                $res['code'] = 1;
+                                $res['cart_nums'] = count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]);
+                                echo json_encode($res);
 				die();
 			}
 		}
@@ -190,11 +192,14 @@
 	
 					if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
 						$this -> price_counter($row);
-						$this -> service_rule();
 					}
 					$i++;
 					$tpl -> gotoBlock("SHOPPING_CART_ZONE");
 				}
+                                //購物車時輸出服務條款
+                                if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
+                                        $this -> service_rule();
+                                }
 	
 				if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] && ($_REQUEST["func"] == "c_add" || empty($_REQUEST["func"]))) {
 					// 顯示付款方式
@@ -701,18 +706,19 @@
 			$this -> subtotal_money = $this -> subtotal_money + $total_price;
 	
 			$this -> price_count++;
+                        //跑完購物車項目才進行輸出
 			if (count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) == $this -> price_count && empty($switch)){
 					
 				// 運費
-				if ($this -> subtotal_money > $_SESSION[$cms_cfg['sess_cookie_name']]["sc_no_shipping_price"]) {
-					$this -> shipping_price = 0;
-				} else {
-					$this -> shipping_price = $_SESSION[$cms_cfg['sess_cookie_name']]["sc_shipping_price"];
-				}
+                                $this->shipping_price = Model_Shipprice::calculate($this -> subtotal_money);
 	
 				// 手續費
-				if ($allpay -> allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'CVS' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'BARCODE')) {
+				if ($allpay -> allpay_switch && ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == '2' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'CVS' || $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == 'BARCODE')) {
+                                    if($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]==2){
+					$this -> plus_fee = Model_Chargefee::calculate($this -> subtotal_money);
+                                    }else{
 					$this -> plus_fee = 30;
+                                    }
 				}
 	
 				// 總價

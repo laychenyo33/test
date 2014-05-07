@@ -172,6 +172,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_TABTITLE");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->products_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -187,6 +188,7 @@ class PRODUCTS{
                     $tpl->newBlock("JS_PREVIEWS_PIC");
                     $tpl->newBlock("JS_MAIN");
                     $tpl->newBlock("JS_TABTITLE");
+                    $tpl->newBlock("JS_JQ_UI");
                     $this->products_form("mod");
                     $this->ws_tpl_type=1;
                 }

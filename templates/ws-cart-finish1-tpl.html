@@ -335,6 +335,7 @@
                $("#formID2").validationEngine();
                var ship_price = $("#ship_price");
                var can_minus_price = parseInt($("#can_minus_price").text());
+               var charge_fee;
                $("#o_payment_type").change(function(){
                    switch($(this).val()){
                        case "1":
@@ -346,7 +347,17 @@
                        case "2":
                            $("#atm_last5").slideUp();
                            $("#o_atm_last5").val('');
-                           $("#o_charge_fee").val({VALUE_SC_SERVICE_FEE});                    
+                           if(typeof charge_fee == 'undefined'){
+                               $.post("cart.php?func=ajax_get_charge_fee",function(req){
+                                   if(req.code){
+                                       charge_fee = req.charge_fee;
+                                       $("#o_charge_fee").val(charge_fee);
+                                       calculate();
+                                   }
+                               },'json');
+                           }else{
+                               $("#o_charge_fee").val(charge_fee);
+                           }
 //                           $("#ship_row").show();
 //                           $("#pay_ship_row").hide();
                            break;
