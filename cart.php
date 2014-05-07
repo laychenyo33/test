@@ -362,9 +362,7 @@ class CART{
             $tpl->assignGlobal("VALUE_SUBTOTAL",$subtotal_money);
             $tpl->assignGlobal("VALUE_TOTAL",$total_money);
             //購物說明
-            $sql = "select st_shopping_term from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
-            list($term) = $db->query_firstRow($sql,false);
-            $tpl->assign("SHOPPING_CART_ZONE.MSG_ST_SHOPPING_TERM",$term);
+            $this->load_term($tpl);
         }
         //顯示詢價清單
         if(!empty($inquiry)){
@@ -537,16 +535,21 @@ class CART{
                 ));
             }
             //付款說明
-            $sql="select st_payment_term,st_shopping_term from ".$cms_cfg['tb_prefix']."_service_term  where st_id='1'";
-            $selectrs = $db->query($sql);
-            $rsnum    = $db->numRows($selectrs);
-            $row = $db->fetch_array($selectrs,1);
-            $payment_term=trim($row["st_payment_term"]);
-            if(!empty($payment_term)){
-                $tpl->assignGlobal("MSG_PAYMENT_TERM",$row["st_payment_term"]);
-                $tpl->assignGlobal("MSG_SHOPPING_TERM",$row["st_shopping_term"]);
-            }
+            $this->load_term($tpl);
         }
+    }
+    //載入付款說明
+    function load_term($tpl){
+        $db = App::getHelper('db');
+        $sql="select st_payment_term,st_shopping_term from ".$db->prefix("service_term")."  where st_id='1'";
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        $row = $db->fetch_array($selectrs,1);
+        $payment_term=trim($row["st_payment_term"]);
+        if(!empty($payment_term)){
+            $tpl->assignGlobal("MSG_PAYMENT_TERM",$row["st_payment_term"]);
+            $tpl->assignGlobal("MSG_SHOPPING_TERM",$row["st_shopping_term"]);
+        }        
     }
     //資料更新================================================================
     function cart_replace(){
