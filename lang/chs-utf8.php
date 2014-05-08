@@ -401,4 +401,7 @@ $TPLMSG['DELIVER_STR'] = "配送日期及时段";
 $TPLMSG['VAT_NUMBER'] = "统一编号";
 $TPLMSG['PRODUCT_PRICE'] = "价格";
 $TPLMSG['READ_MORE'] = "详全文";
+
+//关闭网站
+$TPLMSG['WEB_CLOSE_MSG'] = "很抱歉，我们的网站目前暂时关闭.";
 ?>

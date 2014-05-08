@@ -53,4 +53,13 @@ App::addHelper('session', $sessHandler);
 App::addHelper('request', new Model_Request());
 App::addHelper('dbtable', new Model_Dbtable($db));
 App::addHelper('ad', new Model_Ad($db,$_SERVER['DOCUMENT_ROOT'].$cms_cfg['base_root'],$cms_cfg['sort_pos']));
+//網站關閉時
+if(App::getHelper('session')->sc_status==0){
+    $tpl = new TemplatePower("templates\ws-web-close.html");
+    $tpl->prepare();
+    App::getHelper('main')->header_footer("");
+    $tpl->assignGlobal("MAIN_MESSAGE",$TPLMSG['WEB_CLOSE_MSG']);
+    $tpl->printToScreen();
+    die();
+}
 ?>
