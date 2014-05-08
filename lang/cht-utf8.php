@@ -409,4 +409,7 @@ $TPLMSG['DELIVER_STR'] = "配送日期及時段";
 $TPLMSG['VAT_NUMBER'] = "統一編號";
 $TPLMSG['PRODUCT_PRICE'] = "價格";
 $TPLMSG['READ_MORE'] = "詳全文";
+
+//關閉網站
+$TPLMSG['WEB_CLOSE_MSG'] = "很抱歉，我們的網站目前暫時關閉.";
 ?>
