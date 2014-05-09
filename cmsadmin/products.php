@@ -1017,13 +1017,13 @@ class PRODUCTS{
         $this->products_cate_select2($this->products_cate_select_option,$pc_id, $parent=0, $indent="");
         $tpl->assignGlobal("TAG_SELECT_PRODUCTS_CATE" ,$this->products_cate_select_option);
         $tpl->assignGlobal( array ("VALUE_P_CUSTOM" => $row["p_custom"],
-                                   "VALUE_P_SPEC" => $row["p_spec"],
+                                   "VALUE_P_SPEC" => $main->content_file_str_replace($row["p_spec"]),
                                    "TAG_SPEC_SHOW" => (trim($row["p_spec"]))?"":"none" ,
-                                   "VALUE_P_CHARACTER" => $row["p_character"],
+                                   "VALUE_P_CHARACTER" => $main->content_file_str_replace($row["p_character"]),
                                    "TAG_CHARACTER_SHOW" => (trim($row["p_character"]))?"":"none" ,
-                                   "VALUE_P_DESC" => $row["p_desc"],
+                                   "VALUE_P_DESC" => $main->content_file_str_replace($row["p_desc"]),
                                    "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none",
-                                   "VALUE_P_CERT" => $row["p_certificate"],
+                                   "VALUE_P_CERT" => $main->content_file_str_replace($row["p_certificate"]),
                                    "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
                                    "TAG_SHORT_DESC_SHOW" => (trim($row["p_seo_short_desc"]))?"":"none",
         ));
