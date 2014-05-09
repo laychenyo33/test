@@ -304,8 +304,15 @@
 			}
 			//輸出post暫存
 			foreach ($_POST as $k => $v) {
-				$tpl -> newBlock("TMP_POST_FIELD");
-				$tpl -> assign(array("TAG_POST_KEY" => $k, "TAG_POST_VALUE" => $v, ));
+				if(!is_array($v)){
+					$tpl -> newBlock("TMP_POST_FIELD");
+					$tpl -> assign(array("TAG_POST_KEY" => $k, "TAG_POST_VALUE" => $v, ));
+				}else{
+					foreach($v as $split_v){
+						$tpl -> newBlock("TMP_POST_FIELD");
+						$tpl->assign(array("TAG_POST_KEY" => $k.'[]', "TAG_POST_VALUE" => $split_v, ));
+					}
+				}
 			}
 	
 		}
@@ -547,7 +554,7 @@
 		function cart_order() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $ws_array, $main;
 	
-			$sql = "select * from " . $cms_cfg['tb_prefix'] . "_order where m_id='" . $this -> m_id . "' order by o_createdate desc";
+			$sql = "select * from " . $cms_cfg['tb_prefix'] . "_order where m_id='" . $this -> m_id . "' and del!='1' order by o_createdate desc";
 			//取得總筆數
 			$selectrs = $db -> query($sql);
 			$total_records = $db -> numRows($selectrs);
