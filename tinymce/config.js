@@ -24,7 +24,7 @@
 			     "save table contextmenu directionality emoticons template paste textcolor"
 			   ],
 			
-			toolbar1: "insertfile undo redo | styleselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink anchor | image responsivefilemanager media |  preview emoticons print code ",
+			toolbar1: "insertfile undo redo | styleselect fontselect fontsizeselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink anchor | image responsivefilemanager media |  preview emoticons print code ",
 				
 			/*
 			style_formats: [
