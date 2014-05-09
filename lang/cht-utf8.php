@@ -270,6 +270,7 @@ $TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
 $TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
 $TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
 $TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
+$TPLMSG['EPAPER_SENT'] = "電子報發送完成";
 
 $TPLMSG['SLIDE_BOX_IMAGE'] = "圖片";
 $TPLMSG['SLIDE_BOX_OF'] = "之";
