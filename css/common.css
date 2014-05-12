@@ -228,6 +228,13 @@
     -moz-border-radius: 10px;
     border-radius: 10px;
 }
+.cart_order_info{
+    border-collapse: collapse;
+    width:90%;
+    margin:0 auto;
+    font-size:14px;
+    line-height:30px;
+}
 .cart_order_info th{
     padding-right: 15px;
     padding-bottom: 10px;
@@ -237,6 +244,10 @@
 }
 .cart_order_info td{
     padding-bottom: 10px;
+}
+.cart_order_info input{
+    border:1px solid grey;
+    padding:3px;
 }
 .cart_order_info .ipt1{
     width: 200px;
