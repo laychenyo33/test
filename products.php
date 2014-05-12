@@ -373,24 +373,19 @@ class PRODUCTS{
                 $j++;
                 $k++;
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
+                $dimension = App::getHelper('main')->resizeto($p_img,$cms_cfg['small_prod_img_width'],$cms_cfg['small_prod_img_height']);
                 $tpl->newBlock( $blockname );
                 $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                     "VALUE_P_ID" =>$row["p_id"],
                                     "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                     "VALUE_P_LINK"  => $p_link,
                                     "VALUE_P_SMALL_IMG" => $p_img,
+                                    "VALUE_P_SMALL_IMG_W" => $dimension['width'],
+                                    "VALUE_P_SMALL_IMG_H" => $dimension['height'],
                                     "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"],
                                     "VALUE_P_SERIAL" => $row["p_serial"],
                                     "VALUE_P_NO" => $k,
                 ));
-                $dimensions["width"]=$cms_cfg['small_img_width'];
-                $dimensions["height"]=$cms_cfg['small_img_height'];
-                if(is_file($_SERVER['DOCUMENT_ROOT'].$p_img)){
-                    list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$p_img);
-                    $dimensions = $main->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
-                }
-                $tpl->assign("VALUE_P_SMALL_IMG_W",$dimensions["width"]);
-                $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions["height"]);
                 /*
                 //點選跳大圖
                 if($cms_cfg["ws_module"]["ws_pop_bigimg"]==1){
