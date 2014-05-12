@@ -144,7 +144,7 @@ class PRODUCTS{
             //$this->show_style=1; //顯示模式固定為 圖文
             $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
             //顯示SEO 項目
-            $sql="select pc_id,pc_name,pc_parent,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
+            $sql="select pc_id,pc_name,pc_desc,pc_parent,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
             if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
                 $sql .= " and pc_seo_filename='".$_REQUEST["f"]."' and pc_status='1' ";
             }else{
@@ -183,6 +183,13 @@ class PRODUCTS{
                         $tpl->newBlock("PRODUCTS_CATE_DOWN_SHORT_DESC");
                         $tpl->assign("VALUE_PC_SHORT_DESC",  $row["pc_seo_down_short_desc"]);
                     }
+                }
+                //pc_cate_desc
+                if($row['pc_desc']){
+                    $tpl->newBlock('PRODUCTS_CATE_DESC');
+                    $tpl->assign(array(
+                        "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc']),
+                    ));
                 }
             }else{
                 //不是首頁，或ws_left_main_pc=1(存在主分類)，卻沒有找到對應分類者，設為404錯誤
@@ -259,6 +266,7 @@ class PRODUCTS{
                                          "VALUE_PC_SHOW_STYLE" => $row["pc_show_style"],
                                          "VALUE_PC_CATE_IMG" => $pc_img,
                                          "VALUE_PC_SERIAL" => $i,
+                                         "VALUE_PC_DESC" => strip_tags($row['pc_desc']),
                     ));
                     $dimensions["width"]=$cms_cfg['small_img_width'];
                     $dimensions["height"]=$cms_cfg['small_img_height'];

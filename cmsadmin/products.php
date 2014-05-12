@@ -469,7 +469,8 @@ class PRODUCTS{
                                           "STR_PC_CUSTOM_STATUS_CK1" => ($row["pc_custom_status"]==1)?"checked":"",
                                           "STR_PC_CUSTOM_STATUS_CK0" => ($row["pc_custom_status"]==0)?"checked":"",
                                           "STR_PC_CUSTOM_STATUS_DISPLAY" => ($row["pc_custom_status"]==1)?" ":"none",
-                                          "MSG_MODE" => $TPLMSG['MODIFY']
+                                          "MSG_MODE" => $TPLMSG['MODIFY'],
+                                          "VALUE_PC_DESC" => $row['pc_desc'],
                 ));
                 if($this->seo){
                     $tpl->assignGlobal( array("VALUE_PC_RELATED_CATE" => $row["pc_related_cate"],
@@ -547,6 +548,7 @@ class PRODUCTS{
                     pc_custom,
                     pc_show_style,
                     pc_cate_img,
+                    pc_desc,
                     pc_related_cate,
                     pc_modifydate,
                     ".$add_field_str."
@@ -562,6 +564,7 @@ class PRODUCTS{
                     '".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"]))."',
                     '".$_REQUEST["pc_show_style"]."',
                     '".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
+                    '".$main->content_file_str_replace($_REQUEST["pc_desc"])."',
                     '".$_REQUEST["pc_related_cate"]."',
                     '".date("Y-m-d H:i:s")."',
                     ".$add_value_str."
@@ -614,6 +617,7 @@ class PRODUCTS{
                     pc_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"]))."',
                     pc_show_style='".$_REQUEST["pc_show_style"]."',
                     pc_cate_img='".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
+                    pc_desc='".$main->content_file_str_replace($_REQUEST["pc_desc"])."',
                     pc_related_cate='".$_REQUEST["pc_related_cate"]."',
                     pc_modifydate='".date("Y-m-d H:i:s")."',
                     ".$update_str."
