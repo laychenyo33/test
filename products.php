@@ -862,14 +862,14 @@ class PRODUCTS{
         $rsnum  = $db->numRows($selectrs);
         if ($rsnum > 0) {
             $p_link = $this->get_link($row,true);
-            $tpl->assignGlobal("TAG_PREVIOUS_PRODUCT","<a href='".$p_link."'><img src=\"".$cms_cfg['base_images'].$cms_cfg['language']."_prev.jpg\" border=\"0\" /></a>");
+            $tpl->assignGlobal("TAG_PREVIOUS_PRODUCT","<a href='".$p_link."'>".$TPLMSG['PREV']."</a>");
         }
         $selectrs = $db->query($next_sql);
         $row = $db->fetch_array($selectrs,1);
         $rsnum  = $db->numRows($selectrs);
         if ($rsnum > 0) {
             $p_link = $this->get_link($row,true);
-            $tpl->assignGlobal("TAG_NEXT_PRODUCT","<a href='".$p_link."'><img src=\"".$cms_cfg['base_images'].$cms_cfg['language']."_next.jpg\" border=\"0\" /></a>");
+            $tpl->assignGlobal("TAG_NEXT_PRODUCT","<a href='".$p_link."'>".$TPLMSG['NEXT']."</a>");
         }
     }
     //上下筆分類區域
