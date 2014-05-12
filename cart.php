@@ -374,6 +374,7 @@ class CART{
         if(!empty($inquiry)){
             //H1 TAG
             $tpl->assignGlobal("TAG_MAIN_FUNC" , $TPLMSG['CART_INQUIRY']);
+            $tpl->assignGlobal("TAG_DISPLAY" , "style='display:none'");
             $tpl->newBlock( "INQUIRY_CART_ZONE" );
             $tpl->assign( array("MSG_CONTINUE_INQUIRY"  => $TPLMSG['CART_CONTINUE_INQUIRY'],
                                 "MSG_FINISH_INQUIRY"  => $TPLMSG['CART_FINISH_INQUIRY'],
