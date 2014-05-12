@@ -144,7 +144,7 @@ class PRODUCTS{
             //$this->show_style=1; //顯示模式固定為 圖文
             $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
             //顯示SEO 項目
-            $sql="select pc_id,pc_name,pc_parent,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
+            $sql="select pc_id,pc_name,pc_desc,pc_parent,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
             if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
                 $sql .= " and pc_seo_filename='".$_REQUEST["f"]."' and pc_status='1' ";
             }else{
@@ -183,6 +183,13 @@ class PRODUCTS{
                         $tpl->newBlock("PRODUCTS_CATE_DOWN_SHORT_DESC");
                         $tpl->assign("VALUE_PC_SHORT_DESC",  $row["pc_seo_down_short_desc"]);
                     }
+                }
+                //pc_cate_desc
+                if($row['pc_desc']){
+                    $tpl->newBlock('PRODUCTS_CATE_DESC');
+                    $tpl->assign(array(
+                        "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc']),
+                    ));
                 }
             }else{
                 //不是首頁，或ws_left_main_pc=1(存在主分類)，卻沒有找到對應分類者，設為404錯誤
@@ -259,6 +266,7 @@ class PRODUCTS{
                                          "VALUE_PC_SHOW_STYLE" => $row["pc_show_style"],
                                          "VALUE_PC_CATE_IMG" => $pc_img,
                                          "VALUE_PC_SERIAL" => $i,
+                                         "VALUE_PC_DESC" => strip_tags($row['pc_desc']),
                     ));
                     $dimensions["width"]=$cms_cfg['small_img_width'];
                     $dimensions["height"]=$cms_cfg['small_img_height'];
@@ -373,24 +381,19 @@ class PRODUCTS{
                 $j++;
                 $k++;
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
+                $dimension = App::getHelper('main')->resizeto($p_img,$cms_cfg['small_prod_img_width'],$cms_cfg['small_prod_img_height']);
                 $tpl->newBlock( $blockname );
                 $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                     "VALUE_P_ID" =>$row["p_id"],
                                     "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                     "VALUE_P_LINK"  => $p_link,
                                     "VALUE_P_SMALL_IMG" => $p_img,
+                                    "VALUE_P_SMALL_IMG_W" => $dimension['width'],
+                                    "VALUE_P_SMALL_IMG_H" => $dimension['height'],
                                     "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"],
                                     "VALUE_P_SERIAL" => $row["p_serial"],
                                     "VALUE_P_NO" => $k,
                 ));
-                $dimensions["width"]=$cms_cfg['small_img_width'];
-                $dimensions["height"]=$cms_cfg['small_img_height'];
-                if(is_file($_SERVER['DOCUMENT_ROOT'].$p_img)){
-                    list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$p_img);
-                    $dimensions = $main->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
-                }
-                $tpl->assign("VALUE_P_SMALL_IMG_W",$dimensions["width"]);
-                $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions["height"]);
                 /*
                 //點選跳大圖
                 if($cms_cfg["ws_module"]["ws_pop_bigimg"]==1){
@@ -862,14 +865,14 @@ class PRODUCTS{
         $rsnum  = $db->numRows($selectrs);
         if ($rsnum > 0) {
             $p_link = $this->get_link($row,true);
-            $tpl->assignGlobal("TAG_PREVIOUS_PRODUCT","<a href='".$p_link."'><img src=\"".$cms_cfg['base_images'].$cms_cfg['language']."_prev.jpg\" border=\"0\" /></a>");
+            $tpl->assignGlobal("TAG_PREVIOUS_PRODUCT","<a href='".$p_link."'>".$TPLMSG['PREV']."</a>");
         }
         $selectrs = $db->query($next_sql);
         $row = $db->fetch_array($selectrs,1);
         $rsnum  = $db->numRows($selectrs);
         if ($rsnum > 0) {
             $p_link = $this->get_link($row,true);
-            $tpl->assignGlobal("TAG_NEXT_PRODUCT","<a href='".$p_link."'><img src=\"".$cms_cfg['base_images'].$cms_cfg['language']."_next.jpg\" border=\"0\" /></a>");
+            $tpl->assignGlobal("TAG_NEXT_PRODUCT","<a href='".$p_link."'>".$TPLMSG['NEXT']."</a>");
         }
     }
     //上下筆分類區域
