@@ -742,6 +742,7 @@ class MEMBER{
     //會員聯絡我們
     function member_contactus($type="list",$cu_id=""){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
+        $main->layer_link($TPLMSG['MEMBER_ZONE_CONTACTUS']);
         if($type=="list"){
             $tpl->newBlock( "CONTACTUS_LIST_ZONE" );
             //聯絡我們分類
