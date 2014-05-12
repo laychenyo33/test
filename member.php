@@ -454,8 +454,8 @@ class MEMBER{
     //會員訂單查詢
     function member_order($type="list",$o_id=""){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
+        $main->layer_link($TPLMSG['MEMBER_ZONE_ORDER']);
         if($type=="list"){
-            $main->layer_link($TPLMSG['MEMBER_ZONE_ORDER']);
             $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_ZONE_ORDER']  ));
             $tpl->newBlock( "ORDER_LIST_ZONE" );
             $tpl->assign( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
