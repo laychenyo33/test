@@ -891,7 +891,8 @@ class PRODUCTS{
                                   "STR_NEW_SORT_DISPLAY" => "none",
                                   "STR_HOT_SORT_DISPLAY" => "none",
                                   "STR_PRO_SORT_DISPLAY" => "none",
-                                  "VALUE_ACTION_MODE" => $action_mode
+                                  "VALUE_ACTION_MODE" => $action_mode,
+                                  "MSG_PRODUCT_ON_CLICKS_THIS" => $TPLMSG['CHANGE_PRICE_STATUS_CLICK_ME'],
         ));		
         // 無新產品不顯示產品類型欄位
         ($cms_cfg["ws_module"]["ws_new_product"])?$tpl->newBlock( "PRODUCTS_TYPE_FIELD" ):"";
