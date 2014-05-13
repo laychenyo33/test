@@ -14,16 +14,14 @@
 #
 #################################
 
-
 class securityImage {
 
-var $inputParam = "style='color:blue;width:70px' class='search_product'";			// Public; $x->inputParam = "style='color:blue'"
+var $inputParam = "style='color:blue;' class='search_product'";			// Public; $x->inputParam = "style='color:blue'"
 var $name 	= "security";		// Public; $x->name = "mySecurityInputField"
 
 var $codeLength = 4;			// Private; use setCodeLength()
 var $fontSize	= 4;			// Private; use setFontSize()
 var $fontColor  = "333333";		// Private; use setFontColor()
-var $imageFile  = "../images/ws-security-image.jpg";	// Private; use setImageFile()  MUST BE JPEG FILE!
 
 var $securityCode = "";			// Private
 
@@ -55,9 +53,7 @@ function securityImage() {
 		$this->fontColor = $_SESSION['fontColor'];
 	}
 
-	if (isset($_SESSION['imageFile'])) {
-		$this->imageFile = $_SESSION['imageFile'];
-	}
+	$this->imageFile = "../images/security/bgs/ws-security-image".rand(1,10).".jpg";
 }
 
 function simpleRandString($length=10, $list="1234567890") {
@@ -126,6 +122,9 @@ function generateImage() {
     $white = imagecolorallocate($this->img, 255, 255, 255);
     $grey = imagecolorallocate($this->img, 128, 128, 128);
     $black = imagecolorallocate($this->img, 0, 0, 0);
+	$rand_color = imagecolorallocate($this->img, rand(0,255), rand(0,255), rand(0,255));
+	$graphic_color1 = imagecolorallocate($this->img, rand(0,255), rand(0,255), rand(0,255));
+	$graphic_color2 = imagecolorallocate($this->img, rand(0,255), rand(0,255), rand(0,255));
     //imagefilledrectangle($this->img, 0, 0, 399, 29, $white);
 
     // The text to draw
@@ -133,7 +132,7 @@ function generateImage() {
     // Replace path by your own font path
     //$font = 'images/magik.TTF';
     //$font="images/BastardusSans.ttf";
-    $font="images/CAPTCHA.ttf";
+    $font="images/security/fonts/font".rand(1,23).".ttf";
 
     // Add some shadow to the text
     imagettftext($this->img, 16, 0, 11, 21, $grey, $font, $newstr);
@@ -147,6 +146,29 @@ function generateImage() {
 		imagechar( $this->img, $this->fontSize, $x + ($fw*$i), $hz, $newstr[$i], $color);
 	}
 	*/
+	
+	
+   //繪入文字雜訊-線條
+    for ($i = 0; $i < 5; $i++) {    //5條
+        imageline(
+            $this->img, 
+            0, 
+            rand() % $img_size[1], 
+            $img_size[0], 
+            rand() % $img_size[1], 
+            $graphic_color1
+        );
+    }
+    //繪入文字雜訊-點
+    for ($i = 0; $i < 50; $i++) {   //50點
+        imagesetpixel(
+            $this->img, 
+            rand() % $img_size[0], 
+            rand() % $img_size[1], 
+            $graphic_color2
+        );
+    }
+	
 }
 
 /*
@@ -158,11 +180,12 @@ function showFormInput() {
 
 function showFormImage() {
 	global $cms_cfg;
-	return "<img src=\"".$cms_cfg['base_root']."security_image.php\" width='".$this->imageWidth."' height='".$this->imageHight."'>";
+	$id=md5(time());
+	return "<img id=\"security_image".$id."\" src=\"".$cms_cfg['base_root']."security_image.php?c=".$id."\" width='".$this->imageWidth."' height='".$this->imageHight."' style='margin-left:5px;'> <img id=\"security_image".$id."\" src=\"../images/security/reload.png\" onclick=\"document.getElementById('security_image".$id."').src='security_image.php';\" style=\"cursor:pointer;\" />";
 }
 
 function isValid() {
-	return (!empty($this->userSecurityCode) && $_POST["$this->name"] == $this->userSecurityCode);
+	return !empty($_POST["$this->name"]) && ($_POST["$this->name"] == $this->userSecurityCode);
 }
 
 function setCodeLength($p) {
