@@ -181,7 +181,7 @@ function showFormInput() {
 function showFormImage() {
 	global $cms_cfg;
 	$id=md5(time());
-	return "<img id=\"security_image".$id."\" src=\"".$cms_cfg['base_root']."security_image.php?c=".$id."\" width='".$this->imageWidth."' height='".$this->imageHight."' style='margin-left:5px;'> <img id=\"security_image".$id."\" src=\"../images/security/reload.png\" onclick=\"document.getElementById('security_image".$id."').src='security_image.php';\" style=\"cursor:pointer;\" />";
+	return "<img id=\"security_image".$id."\" src=\"".$cms_cfg['base_root']."security_image.php?c=".$id."\" width='".$this->imageWidth."' height='".$this->imageHight."' style='margin-left:5px;'> <img id=\"security_image".$id."\" src=\"../images/security/reload.png\" onclick=\"document.getElementById('security_image".$id."').src='".$cms_cfg['base_root']."security_image.php';\" style=\"cursor:pointer;\" />";
 }
 
 function isValid() {
