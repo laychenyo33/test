@@ -162,12 +162,18 @@
                     </tr>
                     <!-- END BLOCK : ORDER_ITEMS_LIST -->
                     <!-- START BLOCK : TAG_ADV_PRICE -->
+                    <!-- START BLOCK : TAG_PLUS_FEE -->
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
-                        <td>{VALUE_O_PLUS_PRICE}</td>
+                        <td colspan="5"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
+                        <td> {VALUE_O_FEE_PRICE}</td>
+                    </tr>
+                    <!-- END BLOCK : TAG_PLUS_FEE -->
+                    <tr>
+                        <td colspan="5"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
+                        <td>{VALUE_O_SHIP_PRICE}</td>
                     </tr>
                     <tr>
-                        <th colspan="4"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
+                        <th colspan="5"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
                         <th> {VALUE_O_TOTAL_PRICE}</th>
                     </tr>
                     <!-- END BLOCK : TAG_ADV_PRICE -->
@@ -177,9 +183,6 @@
     </table>
     <!-- END BLOCK : ORDER_DETAIL_ZONE -->
     
-    <div align="center">
-        <font size='3' color="#ff0000"> {MSG_NO_DATA}</font>
-    </div>
     </div>
     
     <!-- INCLUDE BLOCK : ../templates/ws-fn-pagination-tpl.html -->

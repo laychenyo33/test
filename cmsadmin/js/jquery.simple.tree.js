@@ -224,10 +224,10 @@
                             trigger.click(function(event){
                                     TREE.nodeToggle(node);
                             });
-                            if(!$.browser.msie)
-                            {
-                                    trigger.css('float','left');
-                            }
+//                            if(!$.browser.msie)
+//                            {
+//                                    trigger.css('float','left');
+//                            }
                     };
                     TREE.dragStart = function(event){
                             var LI = $(event.data.LI);
