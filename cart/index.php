@@ -169,7 +169,23 @@
 				App::getHelper('main') -> js_notice("目前購物車是空的!", $cms_cfg['base_root'] . "products.htm");
 				die();
 			}
-			$tpl -> assignGlobal(array("MSG_ID" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) ? $TPLMSG["ORDER_ID"] : $TPLMSG["INQUIRY_ID"], "MSG_NAME" => $TPLMSG['MEMBER_NAME'], "MSG_CONTENT" => $TPLMSG['CONTENT'], "MSG_MODIFY" => $TPLMSG['MODIFY'], "MSG_DEL" => $TPLMSG['DEL'], "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], "MSG_PRODUCT" => $TPLMSG['PRODUCT'], "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'], "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'], "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK'], "TAG_MAIN_FUNC" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) ? $TPLMSG['CART_SHOPPING'] : $TPLMSG['CART_INQUIRY'], "TAG_SCROLL_TOP" => $_REQUEST["top"], ));
+			$tpl -> assignGlobal(array(
+                            "MSG_ID" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) ? $TPLMSG["ORDER_ID"] : $TPLMSG["INQUIRY_ID"], 
+                            "MSG_NAME" => $TPLMSG['MEMBER_NAME'], 
+                            "MSG_CONTENT" => $TPLMSG['CONTENT'], 
+                            "MSG_MODIFY" => $TPLMSG['MODIFY'], 
+                            "MSG_DEL" => $TPLMSG['DEL'], 
+                            "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], 
+                            "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], 
+                            "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], 
+                            "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], 
+                            "MSG_PRODUCT" => $TPLMSG['PRODUCT'], 
+                            "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'], 
+                            "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'], 
+                            "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK'], 
+                            "TAG_MAIN_FUNC" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) ? $TPLMSG['CART_SHOPPING'] : $TPLMSG['CART_INQUIRY'], 
+                            "TAG_SCROLL_TOP" => $_REQUEST["top"], 
+                        ));
 	
 			if (count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) > 0) {
 				$tpl -> newBlock("TAG_CART_ZONE");
@@ -183,11 +199,22 @@
 					$row["p_name"] = $row["p_name"];
 					$p_link = $this -> p_link_handle($row);
 	
-					$tpl -> assign(array("VALUE_P_ID" => $ID, "VALUE_P_NAME" => $row["p_name"], "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"]) == "") ? $cms_cfg['default_preview_pic'] : $cms_cfg["file_url"] . $row["p_small_img"], "VALUE_P_AMOUNT" => $row["p_num"], "VALUE_P_LINK" => $p_link, "VALUE_P_SERIAL" => $i + 1, "VALUE_P_SESS" => $sess, ));
+					$tpl -> assign(array(
+                                            "VALUE_P_ID" => $ID, 
+                                            "VALUE_P_NAME" => $row["p_name"], 
+                                            "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"]) == "") ? $cms_cfg['default_preview_pic'] : $cms_cfg["file_url"] . $row["p_small_img"], 
+                                            "VALUE_P_AMOUNT" => $row["p_num"], 
+                                            "VALUE_P_LINK" => $p_link, 
+                                            "VALUE_P_SERIAL" => $i + 1, 
+                                            "VALUE_P_SESS" => $sess, 
+                                        ));
 	
 					for ($c_num = $this -> c_num_set; $c_num <= $this -> c_num; $c_num++) {
 						$tpl -> newBlock("TAG_CART_NUM");
-						$tpl -> assign(array("VALUE_CART_NUM" => $c_num, "VALUE_CART_CURRENT" => ($c_num == $row["p_num"]) ? 'selected' : '', ));
+						$tpl -> assign(array(
+                                                    "VALUE_CART_NUM" => $c_num, 
+                                                    "VALUE_CART_CURRENT" => ($c_num == $row["p_num"]) ? 'selected' : '', 
+                                                ));
 					}
 	
 					if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
@@ -669,7 +696,10 @@
 					$main_func_str = $TPLMSG['MEMBER_ZONE_INQUIRY'];
 				}
 	
-				$tpl -> assignGlobal(array("TAG_MAIN_FUNC" => $main_func_str, "TAG_LAYER" => $main_func_str, ));
+				$tpl -> assignGlobal(array(
+                                    "TAG_MAIN_FUNC" => $main_func_str, 
+                                    "TAG_LAYER" => $main_func_str, 
+                                ));
 	
 				$this -> cart_order_detail_item($row);
 			}
@@ -687,11 +717,19 @@
 				while ($row = $db -> fetch_array($selectrs, 1)) {
 					$i++;
 					$tpl -> newBlock("ORDER_ITEMS_LIST");
-					$tpl -> assign(array("VALUE_P_ID" => $row["p_id"], "VALUE_P_NAME" => $row["p_name"], "VALUE_P_AMOUNT" => $row["oi_amount"], "VALUE_P_SERIAL" => $i, ));
+					$tpl -> assign(array(
+                                            "VALUE_P_ID" => $row["p_id"], 
+                                            "VALUE_P_NAME" => $row["p_name"], 
+                                            "VALUE_P_AMOUNT" => $row["oi_amount"], 
+                                            "VALUE_P_SERIAL" => $i, 
+                                        ));
 	
 					if (!empty($detail["o_payment_type"])) {
 						$tpl -> newBlock("TAG_ADV_TD");
-						$tpl -> assign(array("VALUE_P_SELL_PRICE" => $row["p_sell_price"], "VALUE_P_SUBTOTAL_PRICE" => $row["p_sell_price"] * $row["oi_amount"], ));
+						$tpl -> assign(array(
+                                                    "VALUE_P_SELL_PRICE" => $row["p_sell_price"], 
+                                                    "VALUE_P_SUBTOTAL_PRICE" => $row["p_sell_price"] * $row["oi_amount"], 
+                                                ));
 					}
 				}
 			}
@@ -723,7 +761,10 @@
 			// 顯示產品單價
 			if (empty($switch)) {
 				$tpl -> newBlock("TAG_PRICE_TD");
-				$tpl -> assign(array("VALUE_P_SPECIAL_PRICE" => $p_price, "VALUE_P_SUBTOTAL_PRICE" => $sub_total_price, ));
+				$tpl -> assign(array(
+                                    "VALUE_P_SPECIAL_PRICE" => $p_price, 
+                                    "VALUE_P_SUBTOTAL_PRICE" => $sub_total_price, 
+                                ));
 			}
 	
 			// 累計價格
@@ -750,17 +791,27 @@
 	
 				// 顯示價格抬頭
 				$tpl -> newBlock("TAG_PRICE_TH");
-				$tpl -> assign(array("MSG_PRODUCT_SPECIAL_PRICE" => $msg_price, "VALUE_P_DISCOUNT" => $msg_discount, ));
+				$tpl -> assign(array(
+                                    "MSG_PRODUCT_SPECIAL_PRICE" => $msg_price, 
+                                    "VALUE_P_DISCOUNT" => $msg_discount, 
+                                ));
 	
 				// 顯示手續費
 				if (!empty($this -> plus_fee)) {
 					$tpl -> newBlock("TAG_PLUS_FEE");
-					$tpl -> assign(array("MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"], "VALUE_PLUS_FEE" => $this -> plus_fee, ));
+					$tpl -> assign(array(
+                                            "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"], 
+                                            "VALUE_PLUS_FEE" => $this -> plus_fee, 
+                                        ));
 				}
 	
 				// 顯示總價
 				$tpl -> newBlock("TAG_PRICE_TOTAL");
-				$tpl -> assign(array("VALUE_SHIPPING_PRICE" => $this -> shipping_price, "VALUE_SUBTOTAL" => $this -> subtotal_money, "VALUE_TOTAL" => $this -> total_money, ));
+				$tpl -> assign(array(
+                                    "VALUE_SHIPPING_PRICE" => $this -> shipping_price, 
+                                    "VALUE_SUBTOTAL" => $this -> subtotal_money, 
+                                    "VALUE_TOTAL" => $this -> total_money, 
+                                ));
 	
 				$tpl -> gotoBlock("SHOPPING_CART_ZONE");
 			}
