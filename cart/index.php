@@ -619,7 +619,23 @@
 	
 			if (!empty($rsnum)) {
 				$tpl -> newBlock("ORDER_DETAIL_ZONE");
-				$tpl -> assignGlobal( array("MSG_ORDER_DETAIL" => $TPLMSG['ORDER_DETAIL'], "MSG_ORDER_CONTENT" => $TPLMSG['ORDER_CONTENT'], "MSG_NAME" => $TPLMSG['NAME'], "MSG_STATUS" => $TPLMSG['STATUS'], "MSG_ORDER_ID" => $TPLMSG['ORDER_ID'], "MSG_CONTENT" => $TPLMSG['CONTENT'], "MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'], "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], "MSG_PRODUCT" => $TPLMSG['PRODUCT'], "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE'], "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], ) + $this -> basic_lang);
+				$tpl -> assignGlobal( array(
+                                    "MSG_ORDER_DETAIL" => $TPLMSG['ORDER_DETAIL'], 
+                                    "MSG_ORDER_CONTENT" => $TPLMSG['ORDER_CONTENT'], 
+                                    "MSG_NAME" => $TPLMSG['NAME'], 
+                                    "MSG_STATUS" => $TPLMSG['STATUS'], 
+                                    "MSG_ORDER_ID" => $TPLMSG['ORDER_ID'], 
+                                    "MSG_CONTENT" => $TPLMSG['CONTENT'], 
+                                    "MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'], 
+                                    "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], 
+                                    "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], 
+                                    "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], 
+                                    "MSG_PRODUCT" => $TPLMSG['PRODUCT'], 
+                                    "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE'], 
+                                    "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], 
+                                    "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
+                                    ) + $this -> basic_lang
+                                );
 	
 				$row = $db -> fetch_array($selectrs, 1);
 				foreach ($row as $key => $value) {
@@ -646,7 +662,8 @@
 	
 					$tpl -> newBlock("TAG_ADV_TH");
 					$tpl -> newBlock("TAG_ADV_PRICE");
-	
+                                        // 顯示手續費
+                                        if ($row['o_fee_price']) $tpl -> newBlock("TAG_PLUS_FEE");
 					$main_func_str = $TPLMSG['MEMBER_ZONE_ORDER'];
 				} else {
 					$main_func_str = $TPLMSG['MEMBER_ZONE_INQUIRY'];
