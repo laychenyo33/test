@@ -1,0 +1,11 @@
+<form name="exportForm" id="exportForm" action="" method="post" target="_blank">
+    <input type="hidden" name="export" value="1"/>
+</form>
+<script type="text/javascript">
+    jQuery(function($){
+        var exBtn = $("<input type='button' value='匯出本頁excel'/>").click(function(evt){ 
+               $("#exportForm").trigger('submit');
+        });            
+        $("#exportButton").replaceWith(exBtn);
+    });
+</script>
