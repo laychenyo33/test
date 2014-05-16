@@ -631,9 +631,6 @@ class CART{
             ));
         }
         if(!empty($shopping)){
-            //寫入訂單
-            ////取得訂單號碼
-            $oid=$this->get_oid();
             //結帳，計算訂單金額
             $sub_total_price = $this->checkout();
             $shipping_price = $this->shipping_price($sub_total_price,$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
