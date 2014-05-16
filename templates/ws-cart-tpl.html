@@ -132,11 +132,11 @@
                             if(req.code == '1'){
                                 var ans = parseInt(elm.parents('tr').find('.up').text()) * ui.value;
                                 elm.parents('tr').find('.sp').text(ans);
-                                $("#sub_total_str").text(req.total_price);
+                                $("#sub_total_str").text(req.sub_total_price);
                                 $("#ship_price").text(req.shipping_price);
-                                $("#o_subtotal_price").val(req.total_price);
-                                $("#o_plus_price").val(req.shipping_price);
-                                $("#formID").trigger("calculate");                                
+                                $("#o_subtotal_price").val(req.sub_total_price);
+                                $("#o_plus_price").val(req.shipping_price>=0?req.shipping_price:0);
+                                $("#formID").trigger("calculate");
                             }else{
                                 alert('error occure!');
                                 elm.val(cur);
