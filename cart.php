@@ -442,8 +442,7 @@ class CART{
             $this->cart_list();
         }else{
             $res['code'] = 1;
-            $res['total_price'] = $this->checkout();
-            $res['shipping_price'] = $this->shipping_price($res['total_price'],$_POST['shipment_type']);
+            $res = array_merge($res,$this->checkout($_POST['shipment_type'],0));
             echo json_encode($res);
         }
     }
@@ -631,23 +630,16 @@ class CART{
             ));
         }
         if(!empty($shopping)){
-            //寫入訂單
-            ////取得訂單號碼
-            $oid=$this->get_oid();
             //結帳，計算訂單金額
-            $sub_total_price = $this->checkout();
-            $shipping_price = $this->shipping_price($sub_total_price,$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+            $billList = $this->checkout($_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"],$_REQUEST["o_payment_type"]);
             //手續費
-            $charge_fee = 0;
-            if($_REQUEST["o_payment_type"]==2){
-                $charge_fee = $this->service_fee($sub_total_price);      
+            if($billList['charge_fee']){   
                 $tpl->newBlock("CHARGE_FEE_ROW");
-                $tpl->assign("VALUE_CHARGE_FEE",$charge_fee);
-            }
-            $total_price = $sub_total_price + $shipping_price + $charge_fee;            
+                $tpl->assign("VALUE_CHARGE_FEE",$billList['charge_fee']);
+            }           
             $ts = time();
             $tpl->gotoBlock("SHOPPING_CART_ZONE");            
-            $tpl->assign("VALUE_TOTAL",$total_price);
+            $tpl->assign("VALUE_TOTAL",$billList['total_price']);
             //$this->o_id=$db->get_insert_id();
             //產生ATM虛擬帳號
             if($cms_cfg["ws_module"]["ws_vaccount"]==1 & $TPLMSG["PAYMENT_ATM"]==$_REQUEST["o_payment_type"]) {
@@ -813,19 +805,15 @@ class CART{
             ////取得訂單號碼
             $oid=$this->get_oid();
             //結帳，計算訂單金額
-            $sub_total_price = $this->checkout();
-            $shipping_price = $this->shipping_price($sub_total_price,$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+            $billList = $this->checkout(App::getHelper('session')->shipment_type,$_POST['o_payment_type']);
             //手續費
-            $charge_fee = 0;
-            if($_REQUEST["o_payment_type"]==2){
-                $charge_fee = $this->service_fee($sub_total_price);      
+            if($billList['charge_fee']){    
                 $tpl->newBlock("CHARGE_FEE_ROW");
-                $tpl->assign("VALUE_CHARGE_FEE",$charge_fee);
-            }
-            $total_price = $sub_total_price + $shipping_price + $charge_fee;            
+                $tpl->assign("VALUE_CHARGE_FEE",$billList['charge_fee']);
+            }          
             $ts = time();
             $tpl->gotoBlock("SHOPPING_CART_ZONE");            
-            $tpl->assign("VALUE_TOTAL",$total_price);            
+            $tpl->assign("VALUE_TOTAL",$billList['total_price']);            
             $sql="
                 insert into ".$cms_cfg['tb_prefix']."_order (
                     m_id,
@@ -897,11 +885,11 @@ class CART{
                     '".$_REQUEST["m_reci_tel"]."',
                     '".$_REQUEST["m_reci_cellphone"]."',
                     '".$_REQUEST["m_reci_email"]."',
-                    '".$shipping_price."',
-                    '".$charge_fee."',
-                    '".$sub_total_price."',
+                    '".$billList['shipping_price']."',
+                    '".$billList['charge_fee']."',
+                    '".$billList['sub_total_price']."',
                     '0',
-                    '".$total_price."',
+                    '".$billList['total_price']."',
                     '".$_REQUEST["content"]."',
                     '".$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]."',
                     '".$_REQUEST["o_payment_type"]."',
@@ -1359,14 +1347,16 @@ class CART{
         $new_o_id = sprintf("%s%04d",date("Ymd"),$serial);
         return $new_o_id;
     }    
-    function checkout(){
+    function checkout($shipmentType,$paymentType){
         global $cms_cfg,$db;
         //取得購物車的產品id
         $pid_array=array_keys($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);     
         $pid_array_str = implode(',',$pid_array);
         $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_list_price,p.p_special_price,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id in (".$pid_array_str.") ";
         $selectrs = $db->query($sql);   
-        $total_price = 0;//訂單總價
+        $return['sub_total_price'] = 0;//訂單小計
+        $return['total_price'] = 0;//訂單總價
+        $return['charge_fee'] = 0;//手續費
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $pid=$row['p_id'];
             $amount=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$pid];        
@@ -1376,9 +1366,21 @@ class CART{
             }else{
                 $special_price=$base_price;
             }
-            $total_price += $special_price * $amount;
+            $return['sub_total_price'] += $special_price * $amount;
         }
-        return $total_price;
+        //計算運費
+        if(App::getHelper ('session')->advance_ship_price){
+            $return['shipping_price'] = -1;
+        }else{
+            $return['shipping_price'] = $this->shipping_price($return['sub_total_price'],$shipmentType);
+        }
+        //計算手續費
+        if($paymentType==2){
+            $return['charge_fee'] = $this->service_fee($return['sub_total_price']);   
+        }
+        //計算訂單總價
+        $return['total_price'] = $return['sub_total_price'] + ($return['shipping_price']<0?0:$return['shipping_price']) + $return['charge_fee'];
+        return $return;
     }        
     function shipping_price($price, $ship_zone) {
         return Model_Shipprice::calculate($price, $ship_zone);
@@ -1390,8 +1392,7 @@ class CART{
     function ajax_show_ship_price(){
         if(App::getHelper('request')->isAjax()){
             $res['code'] = 1;
-            $res['total_price'] = $this->checkout();
-            $res['shipping_price'] = $this->shipping_price($res['total_price'],$_POST['shipment_type']);
+            $res = array_merge($res , $this->checkout($_POST['shipment_type'],0) );
             echo json_encode($res);
         }
     }
@@ -1399,8 +1400,7 @@ class CART{
     function ajax_get_charge_fee(){
         if(App::getHelper('request')->isAjax()){
             $res['code'] = 1;
-            $res['total_price'] = $this->checkout();
-            $res['charge_fee'] = $this->service_fee($res['total_price']);
+            $res = array_merge($res, $this->checkout(App::getHelper('session')->shipment_type,$_POST['payment_type']));
             echo json_encode($res);
         }
     }

@@ -368,7 +368,7 @@
                            $("#atm_last5").slideUp();
                            $("#o_atm_last5").val('');
                            if(typeof charge_fee == 'undefined'){
-                               $.post("cart.php?func=ajax_get_charge_fee",function(req){
+                               $.post("cart.php?func=ajax_get_charge_fee",{ payment_type:2 },function(req){
                                    if(req.code){
                                        charge_fee = req.charge_fee;
                                        $("#o_charge_fee").val(charge_fee);
