@@ -607,47 +607,37 @@ class PRODUCTS{
                     }
                 }
                 //批次處理domtab資料
-                $domtabData = array();
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_desc"],"<img><iframe>"));
-                //產品敘述
-                if(trim($ck_str)!=""){
-                    $tmp = array(
-                        'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row["p_desc_title"]:$TPLMSG['PRODUCT_DESCRIPTION'],
-                        'data'=>$main->content_file_str_replace($row["p_desc"])
-                    );
-                    array_push($domtabData, $tmp);
-                }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_character"],"<img><iframe>"));
-                //產品特性
-                if(trim($ck_str)!=""){
-                    $tmp = array(
-                        'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row["p_character_title"]:$TPLMSG['PRODUCT_CHARACTER'],
-                        'data'=>$main->content_file_str_replace($row["p_character"])
-                    );
-                    array_push($domtabData, $tmp);                    
-                }
-                $ck_str=str_replace("&nbsp;","",strip_tags($row["p_spec"],"<img><iframe>"));
-                //產品規格
-                if(trim($ck_str)!=""){
-                    $tmp = array(
-                        'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row["p_spec_title"]:$TPLMSG['PRODUCT_SPEC'],
-                        'data'=>$main->content_file_str_replace($row["p_spec"])
-                    );
-                    array_push($domtabData, $tmp);                       
-                }
+                $propertyMap = array(
+                    //產品敘述
+                    array('field'=>'p_desc','defaultTitle'=>$TPLMSG['PRODUCT_DESCRIPTION'],'sort'=>1),
+                    //產品特性
+                    array('field'=>'p_character','defaultTitle'=>$TPLMSG['PRODUCT_CHARACTER'],'sort'=>2),
+                    //產品規格
+                    array('field'=>'p_spec','defaultTitle'=>$TPLMSG['PRODUCT_SPEC'],'sort'=>3),
+                );
                 //新增的產品訊息欄位
                 if($cms_cfg['ws_module']['ws_products_info_fields']){
-                    for($j=1;$j<=$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
-                        $ck_str=str_replace("&nbsp;","",strip_tags($row["p_info_field".$j],"<img><iframe><script>"));
-                        if(trim($ck_str)!=""){
-                            $tmp = array(
-                                'title' => ($cms_cfg['ws_module']['ws_products_title'])?$row["p_info_field".$j."_title"]:$ws_array['products_info_fields_title'][$j],
-                                'data'  => $main->content_file_str_replace($row["p_info_field".$j])
-                            );
-                            array_push($domtabData, $tmp);                       
-                        }                    
+                    for($j=0;$j<$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
+                        $tmp = array(
+                            'field' => "p_info_field".($j+1),
+                            'defaultTitle' => $ws_array['products_info_fields_title'][$j],
+                            'sort' => $ws_array['products_info_fields_sort'][$j],
+                        );
+                        $propertyMap[] = $tmp;
                     }
                 }
+                $domtabData = array();
+                foreach($propertyMap as $property){
+                    $ck_str=str_replace("&nbsp;","",strip_tags($row[$property['field']],"<img><iframe>"));
+                    if(trim($ck_str)!=""){
+                        $tmp = array(
+                            'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row[$property['field']."_title"]:$property['defaultTitle'],
+                            'data'=>$main->content_file_str_replace($row[$property['field']])
+                        );
+                        $domtabData[$property['sort']] = $tmp;
+                    }
+                }
+                ksort($domtabData);
                 if($cms_cfg['ws_module']['ws_products_desc_style']==1){
                     //載入dombtab libs
                     $tpl->newBlock("DOMTAB_SCRIPT");
