@@ -221,7 +221,7 @@ class MAINFUNC{
             }
         }
     }
-    function security_zone($si_w="90", $si_h="25"){
+    function security_zone($si_w="200", $si_h="40"){
         global $tpl,$cms_cfg,$TPLMSG;
         if($cms_cfg["ws_module"]["ws_security"]==1){
             //驗証碼

@@ -20,7 +20,7 @@ var $inputParam = "style='color:blue;' class='search_product'";			// Public; $x-
 var $name 	= "security";		// Public; $x->name = "mySecurityInputField"
 
 var $codeLength = 4;			// Private; use setCodeLength()
-var $fontSize	= 4;			// Private; use setFontSize()
+var $fontSize	= 5;			// Private; use setFontSize()
 var $fontColor  = "333333";		// Private; use setFontColor()
 
 var $securityCode = "";			// Private
@@ -94,16 +94,19 @@ function generateImage() {
 
 	$img_path = dirname(__FILE__)."/$this->imageFile";
 
-	$this->img = ImageCreateFromJpeg($img_path);
+//	$this->img = ImageCreateFromJpeg($img_path);
+//
+//	$img_size = getimagesize($img_path);
+	$img_size = array(200,35);
+	$this->img = imagecreatetruecolor($img_size[0],$img_size[1]);
 
-	$img_size = getimagesize($img_path);
-
+	$white = imagecolorallocate($this->img,255,255,255);
 	$color = imagecolorallocate($this->img,
 			hexdec(substr($this->fontColor, 1, 2)),
 			hexdec(substr($this->fontColor, 3, 2)),
 			hexdec(substr($this->fontColor, 5, 2))
 			);
-
+        imagefill($this->img, 0, 0, $white);
 	$fw = imagefontwidth($this->fontSize);
 	$fh = imagefontheight($this->fontSize);
 
@@ -132,13 +135,20 @@ function generateImage() {
     // Replace path by your own font path
     //$font = 'images/magik.TTF';
     //$font="images/BastardusSans.ttf";
-    $font="images/security/fonts/font".rand(1,23).".ttf";
+//    $font="images/security/fonts/font".rand(1,23).".ttf";
+    $font="images/security/fonts/font6.ttf";
 
     // Add some shadow to the text
-    imagettftext($this->img, 16, 0, 11, 21, $grey, $font, $newstr);
+    $r = rand(-5,5);
+    $baseY = 35;
+    $targetY = $baseY+$r*1.3;
+    $fontSize=35;
+    for($s=0;$s<strlen($newstr);$s++){
+        imagettftext($this->img, $fontSize, rand(-30,30), 16+(rand(18,25)*$s), $targetY, $grey, $font, $newstr[$s]);
+    }
 
     // Add the text
-    imagettftext($this->img, 16, 0, 10, 20, $black, $font, $newstr);
+//    imagettftext($this->img, 16, 0, 10, 20, $black, $font, $newstr);
     /*
 	// output each character at a random height and standard horizontal spacing
 	for ($i = 0; $i < strlen($newstr); $i++) {
