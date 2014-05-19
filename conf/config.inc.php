@@ -114,8 +114,8 @@ $cms_cfg['ad_left_button_limit']=2;
 $cms_cfg['ad_marquee_limit']=16;
 
 // front security image
-$cms_cfg['security_image_width'] = "90";
-$cms_cfg['security_image_height'] = "25";
+$cms_cfg['security_image_width'] = "200";
+$cms_cfg['security_image_height'] = "40";
 
 // related categories & products limit
 $cms_cfg['related_limit']=15;
