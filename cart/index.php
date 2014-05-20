@@ -454,7 +454,7 @@
 					'" . date("Y-m-d H:i:s") . "',
 					'" . $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"] . "',
 					'" . $_REQUEST["m_company_name"] . "',
-					'" . $this -> gender_list($_REQUEST["m_contact_s"], 1) . "',
+					'" . $_REQUEST["m_contact_s"] . "',
 					'" . $_REQUEST["m_name"] . "',
 					'" . $_REQUEST["m_zip"] . "',
 					'" . $_REQUEST["m_address"] . "',

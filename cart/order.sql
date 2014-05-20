@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `eng_order` (
   `o_modifydate` datetime NOT NULL,
   `o_account` varchar(100) NOT NULL,
   `o_company_name` varchar(100) NOT NULL,
-  `o_contact_s` varchar(10) NOT NULL,
+  `o_contact_s`  TINYINT NOT NULL,
   `o_name` varchar(100) NOT NULL,
   `o_zip` int(5) NOT NULL default '0',
   `o_country` varchar(50) NOT NULL,
