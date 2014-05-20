@@ -51,15 +51,27 @@
 					echo $form["ajax_top"];
 					break;
 				case "c_order" :
-					$this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
-					$this -> ws_load_tp($this -> ws_tpl_file, 1);
-					$this -> cart_order();
+                                        if(!$this->m_id){
+                                            $this -> ws_tpl_file = "../templates/ws-login-form-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file);
+                                            $this -> member_login();
+                                        }else{
+                                            $this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file, 1);
+                                            $this -> cart_order();
+                                        }
 					$this -> ws_tpl_type = 1;
 					break;
 				case "c_order_detial" :
-					$this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
-					$this -> ws_load_tp($this -> ws_tpl_file, 1);
-					$this -> cart_order_detail();
+                                        if(!$this->m_id){
+                                            $this -> ws_tpl_file = "../templates/ws-login-form-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file);
+                                            $this -> member_login();                                            
+                                        }else{
+                                            $this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file, 1);
+                                            $this -> cart_order_detail();
+                                        }
 					$this -> ws_tpl_type = 1;
 					break;
 				case "c_check" :
@@ -1087,6 +1099,12 @@
 				break;
 			}
 		}
+                function member_login(){
+                    global $main,$ws_array,$cms_cfg,$tpl,$TPLMSG;
+                    $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);  
+                    $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_LOGIN']);        
+                    $tpl->assignGlobal("TAG_RETURN_URL",$_SERVER['REQUEST_URI']);
+                }                  
 	
 	}
 ?>
