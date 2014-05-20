@@ -317,7 +317,7 @@
 			$tpl -> assign(array("VALUE_O_ID" => $this -> o_id, "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
 			//"VALUE_M_CONTACT_S" => $this->gender_list($_REQUEST["m_contact_s"],1),
 			//"VALUE_M_NAME" => $_REQUEST["m_name"],
-			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $_REQUEST["m_address"], "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
+			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $_REQUEST["m_city"].$_REQUEST["m_area"].$_REQUEST["m_address"], "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
 	
 			if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] == 1) {
 				// 顯示付款方式
@@ -371,11 +371,11 @@
 	
 			// 台灣區域選擇
 			if (!empty($this -> taiwan_zone)) {
-				if ($_REQUEST["m_zone"] != "請選擇") {
-					if ($_REQUEST["m_city"] != "無分區") {
-						$_REQUEST["m_address"] = $_REQUEST["m_zone"] . $_REQUEST["m_city"] . $_REQUEST["m_address"];
+				if ($_REQUEST["m_city"] != "請選擇") {
+					if ($_REQUEST["m_area"] != "無分區") {
+						$o_address = $_REQUEST["m_city"] . $_REQUEST["m_area"] . $_REQUEST["m_address"];
 					} else {
-						$_REQUEST["m_address"] = $_REQUEST["m_zone"] . $_REQUEST["m_address"];
+						$o_address = $_REQUEST["m_city"] . $_REQUEST["m_address"];
 					}
 				}
 			}
@@ -385,7 +385,7 @@
 			$tpl -> assign(array("VALUE_O_ID" => $this -> o_id, "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
 			//"VALUE_M_CONTACT_S" => $this->gender_list($_REQUEST["m_contact_s"],1),
 			//"VALUE_M_NAME" => $_REQUEST["m_name"],
-			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $_REQUEST["m_address"], "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
+			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $o_address, "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
 	
 			// 新增會員
 			$this -> new_member();
@@ -457,7 +457,7 @@
 					'" . $_REQUEST["m_contact_s"] . "',
 					'" . $_REQUEST["m_name"] . "',
 					'" . $_REQUEST["m_zip"] . "',
-					'" . $_REQUEST["m_address"] . "',
+					'" . $o_address . "',
 					'" . $_REQUEST["m_tel"] . "',
 					'" . $_REQUEST["m_fax"] . "',
 					'" . $_REQUEST["m_cellphone"] . "',
