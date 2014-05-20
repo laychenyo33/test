@@ -32,7 +32,7 @@ http://www.your-site.com/manage/
 $cms_cfg['manage_root']	= $cms_cfg['base_root']."cmsadmin/";
 $cms_cfg['manage_url']	= "http://".$_SERVER["SERVER_NAME"].$cms_cfg['manage_root'];
 $cms_cfg['manage_css']	= $cms_cfg['manage_root']."css/";
-$cms_cfg['manage_images']	= $cms_cfg['manage_root']."images/main/";
+$cms_cfg['manage_images']	= $cms_cfg['manage_root']."images/";
 $cms_cfg['manage_templates']	= "templates/";
 /*
 default manage header,footer templates/

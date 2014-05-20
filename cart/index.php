@@ -51,15 +51,27 @@
 					echo $form["ajax_top"];
 					break;
 				case "c_order" :
-					$this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
-					$this -> ws_load_tp($this -> ws_tpl_file, 1);
-					$this -> cart_order();
+                                        if(!$this->m_id){
+                                            $this -> ws_tpl_file = "../templates/ws-login-form-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file);
+                                            $this -> member_login();
+                                        }else{
+                                            $this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file, 1);
+                                            $this -> cart_order();
+                                        }
 					$this -> ws_tpl_type = 1;
 					break;
 				case "c_order_detial" :
-					$this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
-					$this -> ws_load_tp($this -> ws_tpl_file, 1);
-					$this -> cart_order_detail();
+                                        if(!$this->m_id){
+                                            $this -> ws_tpl_file = "../templates/ws-login-form-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file);
+                                            $this -> member_login();                                            
+                                        }else{
+                                            $this -> ws_tpl_file = "templates/ws-cart-order-tpl.html";
+                                            $this -> ws_load_tp($this -> ws_tpl_file, 1);
+                                            $this -> cart_order_detail();
+                                        }
 					$this -> ws_tpl_type = 1;
 					break;
 				case "c_check" :
@@ -305,7 +317,7 @@
 			$tpl -> assign(array("VALUE_O_ID" => $this -> o_id, "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
 			//"VALUE_M_CONTACT_S" => $this->gender_list($_REQUEST["m_contact_s"],1),
 			//"VALUE_M_NAME" => $_REQUEST["m_name"],
-			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $_REQUEST["m_address"], "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
+			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $_REQUEST["m_city"].$_REQUEST["m_area"].$_REQUEST["m_address"], "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
 	
 			if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] == 1) {
 				// 顯示付款方式
@@ -359,11 +371,11 @@
 	
 			// 台灣區域選擇
 			if (!empty($this -> taiwan_zone)) {
-				if ($_REQUEST["m_zone"] != "請選擇") {
-					if ($_REQUEST["m_city"] != "無分區") {
-						$_REQUEST["m_address"] = $_REQUEST["m_zone"] . $_REQUEST["m_city"] . $_REQUEST["m_address"];
+				if ($_REQUEST["m_city"] != "請選擇") {
+					if ($_REQUEST["m_area"] != "無分區") {
+						$o_address = $_REQUEST["m_city"] . $_REQUEST["m_area"] . $_REQUEST["m_address"];
 					} else {
-						$_REQUEST["m_address"] = $_REQUEST["m_zone"] . $_REQUEST["m_address"];
+						$o_address = $_REQUEST["m_city"] . $_REQUEST["m_address"];
 					}
 				}
 			}
@@ -373,7 +385,7 @@
 			$tpl -> assign(array("VALUE_O_ID" => $this -> o_id, "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
 			//"VALUE_M_CONTACT_S" => $this->gender_list($_REQUEST["m_contact_s"],1),
 			//"VALUE_M_NAME" => $_REQUEST["m_name"],
-			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $_REQUEST["m_address"], "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
+			"VALUE_M_NAME" => (empty($this -> gender_select)) ? $this -> gender_list($_REQUEST["m_contact_s"], 1) . '&nbsp;' . $_REQUEST["m_name"] : $_REQUEST["m_name"] . '&nbsp;' . $this -> gender_list($_REQUEST["m_contact_s"], 1), "VALUE_M_ZIP" => $_REQUEST["m_zip"], "VALUE_M_ADDRESS" => $o_address, "VALUE_M_TEL" => $_REQUEST["m_tel"], "VALUE_M_FAX" => $_REQUEST["m_fax"], "VALUE_M_EMAIL" => $_REQUEST["m_email"], "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], "VALUE_CONTENT" => $_REQUEST["content"], ));
 	
 			// 新增會員
 			$this -> new_member();
@@ -442,10 +454,10 @@
 					'" . date("Y-m-d H:i:s") . "',
 					'" . $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"] . "',
 					'" . $_REQUEST["m_company_name"] . "',
-					'" . $this -> gender_list($_REQUEST["m_contact_s"], 1) . "',
+					'" . $_REQUEST["m_contact_s"] . "',
 					'" . $_REQUEST["m_name"] . "',
 					'" . $_REQUEST["m_zip"] . "',
-					'" . $_REQUEST["m_address"] . "',
+					'" . $o_address . "',
 					'" . $_REQUEST["m_tel"] . "',
 					'" . $_REQUEST["m_fax"] . "',
 					'" . $_REQUEST["m_cellphone"] . "',
@@ -667,10 +679,11 @@
 				$row = $db -> fetch_array($selectrs, 1);
 				foreach ($row as $key => $value) {
 					if ($key == 'o_payment_type') {
-						$tpl -> assignGlobal("VALUE_" . strtoupper($key), $ws_array["payment_type"][$value]);
-					} else {
-						$tpl -> assignGlobal("VALUE_" . strtoupper($key), $value);
-					}
+						$value = $ws_array["payment_type"][$value];
+                                        }else if($key == 'o_name'){
+						$value = (empty($this -> gender_select)) ? $this -> gender_list($row["o_contact_s"], 1) . '&nbsp;' . $value : $value . '&nbsp;' . $this -> gender_list($row["o_contact_s"], 1);
+                                        }
+                                        $tpl -> assignGlobal("VALUE_" . strtoupper($key), $value);
 				}
 				$tpl -> assignGlobal("VALUE_O_STATUS_SUBJECT", $ws_array["order_status"][$row["o_status"]]);
 	
@@ -884,6 +897,8 @@
 						m_sex,
 						m_country,
 						m_zip,
+						m_city,
+						m_area,
 						m_address,
 						m_tel,
 						m_fax,
@@ -903,6 +918,8 @@
 						'" . $_REQUEST["m_sex"] . "',
 						'" . $_REQUEST["m_country"] . "',
 						'" . $_REQUEST["m_zip"] . "',
+						'" . $_REQUEST["m_city"] . "',
+						'" . $_REQUEST["m_area"] . "',
 						'" . $_REQUEST["m_address"] . "',
 						'" . $_REQUEST["m_tel"] . "',
 						'" . $_REQUEST["m_fax"] . "',
@@ -1087,6 +1104,12 @@
 				break;
 			}
 		}
+                function member_login(){
+                    global $main,$ws_array,$cms_cfg,$tpl,$TPLMSG;
+                    $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);  
+                    $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_LOGIN']);        
+                    $tpl->assignGlobal("TAG_RETURN_URL",$_SERVER['REQUEST_URI']);
+                }                  
 	
 	}
 ?>

@@ -283,6 +283,8 @@ class MAINFUNC{
             $tpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
             $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
             $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
+            $tpl->assignGlobal("TAG_MANAGE_ROOT" , $cms_cfg['manage_root']);
+            $tpl->assignGlobal("TAG_MANAGE_IMAGE" , $cms_cfg['manage_images']);
             $tpl->assignGlobal("TAG_BASE_URL" ,$cms_cfg["base_url"]);
             $tpl->assignGlobal("TAG_REQ_URI" ,$cms_cfg['req_uri']);
             $tpl->assignGlobal("TAG_LANG",$cms_cfg['language']);
@@ -305,11 +307,13 @@ class MAINFUNC{
             if($cms_cfg['new_cart_path']){
                 $tpl->assignGlobal("CART_PATH" , $cms_cfg['new_cart_path']);
                 $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['new_cart_path'].'?func=c_order');
+                $tpl->assignGlobal("ADMIN_ORDER_PATH" , $cms_cfg['new_cart_path'].'admin.php');
                 //購物車購物數量
                 $tpl->assignGlobal("MSG_CART_NUMS",count(App::getHelper('session')->id));
             }else{
                 $tpl->assignGlobal("CART_PATH" , $cms_cfg['base_root']."cart.php");
                 $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['base_root']."member.php?func=m_zone&mzt=order");
+                $tpl->assignGlobal("ADMIN_ORDER_PATH" , $cms_cfg['manage_root'].'order.php');
                 //購物車購物數量
                 $tpl->assignGlobal("MSG_CART_NUMS",count(App::getHelper('session')->CART_PID));
             }
@@ -578,6 +582,7 @@ class MAINFUNC{
     //後台管理權限
     function mamage_authority(){
         global $tpl,$ws_array,$cms_cfg;
+        $this->header_footer("cmsadmin");
         $tpl->assignGlobal(array("TAG_LANG_VERSION" => $ws_array["lang_version"][$cms_cfg['language']],
                                  "TAG_USER_NAME"   => $_SESSION[$cms_cfg['sess_cookie_name']]["USER_NAME"],
                                  "TAG_USER_ACCOUNT"   => $_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]
