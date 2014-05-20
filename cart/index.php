@@ -679,10 +679,11 @@
 				$row = $db -> fetch_array($selectrs, 1);
 				foreach ($row as $key => $value) {
 					if ($key == 'o_payment_type') {
-						$tpl -> assignGlobal("VALUE_" . strtoupper($key), $ws_array["payment_type"][$value]);
-					} else {
-						$tpl -> assignGlobal("VALUE_" . strtoupper($key), $value);
-					}
+						$value = $ws_array["payment_type"][$value];
+                                        }else if($key == 'o_name'){
+						$value = (empty($this -> gender_select)) ? $this -> gender_list($row["o_contact_s"], 1) . '&nbsp;' . $value : $value . '&nbsp;' . $this -> gender_list($row["o_contact_s"], 1);
+                                        }
+                                        $tpl -> assignGlobal("VALUE_" . strtoupper($key), $value);
 				}
 				$tpl -> assignGlobal("VALUE_O_STATUS_SUBJECT", $ws_array["order_status"][$row["o_status"]]);
 	
