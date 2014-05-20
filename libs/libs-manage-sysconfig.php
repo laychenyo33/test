@@ -4,7 +4,7 @@ include_once("../libs/libs-mysql.php");
 include_once("../libs/libs-main.php");
 include_once("../TP/class.TemplatePower.inc.php");
 include_once("../lang/cht-utf8.php");
-include_once("../conf/default-items.php");
+define('APP_ROOT_PATH', realpath(dirname(__FILE__).'/../') . DIRECTORY_SEPARATOR);
 $db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name'],$cms_cfg['tb_prefix']);
 $mainfunc_class = class_exists("MAINFUNC_NEW")?"MAINFUNC_NEW":"MAINFUNC";
 $main = new $mainfunc_class;
@@ -19,8 +19,22 @@ if($rsnum >0 ){
 		$_SESSION[$cms_cfg['sess_cookie_name']][$key]=$value;
 	}
 }
+//處理串接購物車模組
+if($cms_cfg['ws_module']['ws_shopping_cart_module']){
+    $tmp = explode('+',$cms_cfg['ws_module']['ws_shopping_cart_module']);
+    if(is_dir($_SERVER['DOCUMENT_ROOT'] . $cms_cfg['base_root'] .  $tmp[0])){
+        $cms_cfg['new_cart_path'] = $cms_cfg['base_root']. $tmp[0] . '/';
+    }
+    $tmp[1] = str_replace('.', '/', $tmp[1]);
+    $new_cart_class = $_SERVER['DOCUMENT_ROOT'] . $cms_cfg['base_root'] . $tmp[1].".php";
+    if(file_exists($new_cart_class)){
+        //引用歐付寶類別
+        require_once( $new_cart_class);
+    }
+}
+include_once(APP_ROOT_PATH."conf/default-items.php");
 //autoload class
-require "../class/autoloader.php";
+require APP_ROOT_PATH."class/autoloader.php";
 $autoloader = new autoloader();
 spl_autoload_register(array($autoloader,"load"));
 //session handler
@@ -31,4 +45,5 @@ App::addHelper('main', $main);
 App::addHelper('session', $sessHandler);
 App::addHelper('request', new Model_Request());
 App::addHelper('dbtable', new Model_Dbtable($db));
+App::addHelper('ad', new Model_Ad($db,$_SERVER['DOCUMENT_ROOT'].$cms_cfg['base_root'],$cms_cfg['sort_pos']));
 ?>
