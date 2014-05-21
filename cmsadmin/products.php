@@ -869,6 +869,7 @@ class PRODUCTS{
                                   "VALUE_P_LIST_PRICE" => 0,
                                   "VALUE_P_SPECIAL_PRICE" => 0,
                                   "NOW_P_ID" => 0,
+                                  "TAG_PC_ID" => $_GET['pc_parent'],
                                   "VALUE_P_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_products","p","pc_id",$_REQUEST["pc_parent"],$cate),
                                   "VALUE_SMALL_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
                                   "VALUE_BIG_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
@@ -956,7 +957,8 @@ class PRODUCTS{
                     }    
                 }
                 $tpl->assignGlobal( array("NOW_P_ID"  => $row["p_id"],
-                                          "NOW_PC_ID"  => $row["pc_id"],
+                                          "NOW_PC_ID"  => $row["pc_id"],                    
+                                          "TAG_PC_ID" => $row["pc_id"],
                                           "VALUE_NEW_P_SORT" => $row["p_new_sort"],
                                           "VALUE_HOT_P_SORT" => $row["p_hot_sort"],
                                           "VALUE_PRO_P_SORT" => $row["p_pro_sort"],
