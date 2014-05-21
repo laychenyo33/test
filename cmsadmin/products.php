@@ -863,6 +863,7 @@ class PRODUCTS{
                                   "VALUE_P_LIST_PRICE" => 0,
                                   "VALUE_P_SPECIAL_PRICE" => 0,
                                   "NOW_P_ID" => 0,
+                                  "TAG_PC_ID" => $_GET['pc_parent'],
                                   "VALUE_P_SORT"  => $main->get_max_sort_value($cms_cfg['tb_prefix']."_products","p","pc_id",$_REQUEST["pc_parent"],$cate),
                                   "VALUE_SMALL_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
                                   "VALUE_BIG_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
@@ -918,10 +919,20 @@ class PRODUCTS{
         }
         $pc_id=$_REQUEST["pc_parent"];//預設帶入的分類id
         //如果為修改模式,帶入資料庫資料
-        if($action_mode=="mod" && !empty($_REQUEST["p_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_products where p_id='".$_REQUEST["p_id"]."'";
+        if(($action_mode=="mod" && !empty($_REQUEST["p_id"])) || ($action_mode=="add" && !empty($_REQUEST["copy"]))){
+            if(isset($_REQUEST["p_id"])){
+                $sql="select * from ".$cms_cfg['tb_prefix']."_products where p_id='".$_REQUEST["p_id"]."'";
+            }elseif(isset($_REQUEST["copy"])){
+                $sql="select * from ".$cms_cfg['tb_prefix']."_products where p_id='".$_REQUEST["copy"]."'";
+            }
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
+            //複製產品時不使用的欄位
+            if(isset($_REQUEST["copy"])){
+                unset($row['p_id']);
+                unset($row['p_sort']);
+                unset($row['p_seo_filename']);
+            }
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
                 if($cms_cfg["ws_module"]["ws_new_product"]){
@@ -940,8 +951,8 @@ class PRODUCTS{
                     }    
                 }
                 $tpl->assignGlobal( array("NOW_P_ID"  => $row["p_id"],
-                                          "NOW_PC_ID"  => $row["pc_id"],
-                                          "VALUE_P_SORT"  => $row["p_sort"],
+                                          "NOW_PC_ID"  => $row["pc_id"],                    
+                                          "TAG_PC_ID" => $row["pc_id"],
                                           "VALUE_NEW_P_SORT" => $row["p_new_sort"],
                                           "VALUE_HOT_P_SORT" => $row["p_hot_sort"],
                                           "VALUE_PRO_P_SORT" => $row["p_pro_sort"],
@@ -974,6 +985,10 @@ class PRODUCTS{
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
                                           "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
                 ));
+                //有排序欄位才重新指定排序值，複製產品不使用原先產品的排序值
+                if($row['p_sort']){
+                    $tpl->assignGlobal("VALUE_P_SORT" , $row["p_sort"]);
+                }
                 //附加檔案
                 if($cms_cfg['ws_module']['ws_products_upfiles']){
                     $tpl->newBlock("PRODUCTS_ATTACH_FILES");
@@ -1268,8 +1283,14 @@ class PRODUCTS{
                 }
             }
             if ( $db_msg == "" ) {
-                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);                 
+                if(isset($_POST['submit2'])){
+                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_add&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                }elseif(isset($_POST['submit3'])){
+                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_add&pc_parent=".$_REQUEST["pc_id"]."&copy=".$this->p_id."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                }else{
+                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                }
                 $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
