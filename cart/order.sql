@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `eng_order` (
   `o_payment_type` varchar(100) NOT NULL,
   `o_add_name` varchar(255) NOT NULL,
   `o_add_tel` varchar(50) NOT NULL,
+  `o_add_cellphone` varchar(50) NOT NULL,
   `o_add_address` text NOT NULL,
   `o_add_mail` text NOT NULL,
   `o_invoice_type` tinyint(1) NOT NULL,

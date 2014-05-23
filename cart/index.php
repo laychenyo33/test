@@ -327,7 +327,7 @@
 				// 收件人資訊
 				$tpl -> newBlock("TAG_ADDRESSEE_BLOCK");
 				$tpl -> assign($this -> adv_lang);
-				$tpl -> assign(array("VALUE_ADD_NAME" => $_REQUEST["o_add_name"], "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"], "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"], "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"], "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']], "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"], "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"], "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"], ));
+				$tpl -> assign(array("VALUE_ADD_NAME" => $_REQUEST["o_add_name"], "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"],"VALUE_ADD_CELLPHONE" => $_REQUEST["o_add_cellphone"], "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"], "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"], "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']], "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"], "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"], "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"], ));
 			}
 	
 			// 到貨時間
@@ -398,7 +398,7 @@
 				// 收件人資訊
 				$tpl -> newBlock("TAG_ADDRESSEE_BLOCK");
 				$tpl -> assign($this -> adv_lang);
-				$tpl -> assign(array("VALUE_ADD_NAME" => $_REQUEST["o_add_name"], "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"], "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"], "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"], "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']], "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"], "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"], "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"], ));
+				$tpl -> assign(array("VALUE_ADD_NAME" => $_REQUEST["o_add_name"], "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"],"VALUE_ADD_CELLPHONE" => $_REQUEST["o_add_cellphone"], "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"], "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"], "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']], "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"], "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"], "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"], ));
 			}
 	
 			// 到貨時間
@@ -439,6 +439,7 @@
 	                o_payment_type,
 	                o_add_name,
 					o_add_tel,
+					o_add_cellphone,
 					o_add_address,
 					o_add_mail,
 					o_invoice_type,
@@ -470,6 +471,7 @@
 					'" . $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] . "',
 					'" . $_REQUEST["o_add_name"] . "',
 					'" . $_REQUEST["o_add_tel"] . "',
+					'" . $_REQUEST["o_add_cellphone"] . "',
 					'" . $_REQUEST["o_add_address"] . "',
 					'" . $_REQUEST["o_add_mail"] . "',
 					'" . $_REQUEST["o_invoice_type"] . "',
