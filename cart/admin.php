@@ -223,6 +223,7 @@ class ORDER{
                                           "VALUE_O_EMAIL" => $row["o_email"],
                                           "VALUE_O_ADD_NAME" => $row["o_add_name"],
                                           "VALUE_O_ADD_TEL" => $row["o_add_tel"],
+                                          "VALUE_O_ADD_CELLPHONE" => $row["o_add_cellphone"],
                                           "VALUE_O_ADD_ADDRESS" => $row["o_add_address"],
                                           "VALUE_O_ADD_MAIL" => $row["o_add_mail"],
                                           "VALUE_O_CONTENT" => $row["o_content"],

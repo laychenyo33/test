@@ -285,6 +285,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <th><span class="red">*</span>{MSG_CELLPHONE}</th>
+                    <td>
+                            <input type="text" name="o_add_cellphone" id="o_add_cellphone" class="validate[required] ipt1" value="">
+                    </td>
+                </tr>
+                <tr>
                     <th><span class="red">*</span>{MSG_ADDRESS}</th>
                     <td>
                             <input type="text" name="o_add_address" id="o_add_address" class="validate[required] ipt1" value="">
@@ -399,6 +405,7 @@
 				if(FSB_VAL){
 					var FSB_NAME = $("input[name=m_name]").val();
 					var FSB_TEL = $("input[name=m_tel]").val();
+					var FSB_CELLPHONE = $("input[name=m_cellphone]").val();
 					var FSB_ZONE = $("#zone_main option:selected").val();
 					var FSB_CITY = $("#zone_sub option:selected").val();
 					
@@ -416,11 +423,13 @@
 					
 					$("input[name=o_add_name]").val(FSB_NAME);
 					$("input[name=o_add_tel]").val(FSB_TEL);
+					$("input[name=o_add_cellphone]").val(FSB_CELLPHONE);
 					$("input[name=o_add_address]").val(FSB_ADDRESS);
 					$("input[name=o_add_mail]").val(FSB_MAIL);
 				}else{
 					$("input[name=o_add_name]").val("");
 					$("input[name=o_add_tel]").val("");
+					$("input[name=o_add_cellphone]").val("");
 					$("input[name=o_add_address]").val("");
 					$("input[name=o_add_mail]").val("");
 				}
