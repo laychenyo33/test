@@ -86,7 +86,6 @@ class CART{
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JQUERY_UI_SCRIPT");
                     $tpl->newBlock("DATEPICKER_SCRIPT_IN_CART");
-                    $main->load_privacy_term();
                     $main->jQuery_init("zone");
                     $this->cart_finish();
                 }
@@ -96,6 +95,7 @@ class CART{
                 $this->ws_tpl_file = "templates/ws-cart-preview-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->cart_preview();
+                $main->load_privacy_term();
                 $this->ws_tpl_type=1;
                 break;
             case "c_replace"://存成訂單或詢價單
