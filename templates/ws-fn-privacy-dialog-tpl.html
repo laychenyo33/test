@@ -21,7 +21,7 @@
                    }        
                }
             });
-            $(":submit").click(function(evt){
+            $(":submit,#continue").click(function(evt){
                 evt.preventDefault();
                 //本頁還沒顯示過隱私權內容就顯示隱私權dialog
                 if(!$("#privacy_dialog").data('displayed')){
