@@ -328,6 +328,7 @@
         <tr>
             <th>&nbsp;</th>
             <td colspan="3">
+                <input type="submit" name="submit" id="save" value="儲存(alt+0)" />&nbsp;&nbsp;&nbsp;
                 <input type="submit" name="submit1" id="submit1" value="儲存後回到列表(alt+1)" />&nbsp;&nbsp;&nbsp;
                 <input type="submit" name="submit2" id="submit2" value="儲存後編輯新產品(alt+2)" />&nbsp;&nbsp;&nbsp;
                 <input type="submit" name="submit3" id="submit3" value="儲存後依目前產品編輯新產品(alt+3)" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回列表頁" onclick="location.href='?func=p_list&pc_parent={TAG_PC_ID}'" />
@@ -352,6 +353,9 @@
         $(document).keydown(function(evt){
             if(evt.altKey){
                 switch(evt.keyCode){
+                    case 48:
+                        var btnId='#save';
+                        break;
                     case 49:
                         var btnId='#submit1';
                         break;
@@ -368,3 +372,27 @@
     });
 </script>
 <!-- INCLUDE BLOCK : FOOTER -->
+
+<script>
+	$(function(){
+                $("#save").click(function(evt){
+                    evt.preventDefault();
+//                    if(myform['now_p_id'].value==0){
+//                        alert("新增檔案時無法預覽!\n請先儲存後再執行此功能!");
+//                        return false;
+//                    }
+                    var formAction = myform.action;
+                    var formData = $(myform).serialize()+'&via_ajax=1';
+                    $.post(formAction,formData,function(req){
+                        if(req.code){
+//                            if(confirm("儲存成功!\n導至"+req.previewURL)){
+//                                window.open(req.previewURL,'preview');
+//                            }
+                            location.href='?func=p_mod&p_id='+req.data.p_id+'&st='+req.data.st+'&sk='+req.data.sk+'&nowp='+req.data.nowp+'&jp='+req.data.jp;
+                        }else{
+                            alert('儲存失敗!');
+                        }
+                    },"json");
+                });
+	});
+</script>

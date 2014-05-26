@@ -1303,12 +1303,27 @@ class PRODUCTS{
                 }else{
                     $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
                 }
-                $this->goto_target_page($goto_url);
+                if($_POST['via_ajax']){
+                    $returnJson['code']=1;
+                    $returnJson['data']=array(
+                        'p_id' => $this->p_id,
+                        'st' => $_REQUEST["st"],
+                        'sk' => $_REQUEST["sk"],
+                        'nowp'=> $_REQUEST["nowp"],
+                        "jp" => $_REQUEST["jp"],
+                    );
+                    $returnJson['previewURL']=$cms_cfg['base_root']."products.php?func=p_detail&p_id=".$this->p_id."&pc_parent=".$_POST['pc_id']."&preview=1";
+                }else{
+                    $this->goto_target_page($goto_url);
+                }
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
         }else{
             $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+        }
+        if($_POST['via_ajax']){
+            echo json_encode($returnJson);
         }
     }
 //產品管理--刪除--資料刪除可多筆處理================================================================
