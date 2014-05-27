@@ -992,7 +992,6 @@ class PRODUCTS{
                                           "VALUE_SPEC_TITLE" =>$row["p_spec_title"],
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
                                           "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
-                                          "TAG_PREVIEW_URL" => $cms_cfg['base_root']."products.php?func=p_detail&p_id=".$row['p_id']."&pc_parent=".$row['pc_id']."&preview=1",
                 ));
                 //有排序欄位才重新指定排序值，複製產品不使用原先產品的排序值
                 if($row['p_sort']){
@@ -1027,8 +1026,6 @@ class PRODUCTS{
                 $row2 = $db->fetch_array($selectrs,1);				
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
                 $pc_id=$row["pc_id"];
-                //預覽連結
-                $tpl->newBlock("PREVIEW_LINK");
             }else{
                 header("location : products.php?func=p_list");
                 die();
@@ -1045,6 +1042,16 @@ class PRODUCTS{
                 "BIG_IMG_NO" =>$j,
             ));
         }
+        //預覽連結
+        if($cms_cfg['ws_module']['ws_products_preview']){
+            $tpl->newBlock("PREVIEW_ROW");
+            if($row['p_id']){
+                $tpl->newBlock("PREVIEW_LINK");
+                $tpl->assign(array(
+                  "TAG_PREVIEW_URL" => $cms_cfg['base_root']."products.php?func=p_detail&p_id=".$row['p_id']."&pc_parent=".$row['pc_id']."&preview=1",                        
+                ));
+            }
+        }        
         $this->products_cate_select2($this->products_cate_select_option,$pc_id, $parent=0, $indent="");
         $tpl->assignGlobal("TAG_SELECT_PRODUCTS_CATE" ,$this->products_cate_select_option);
         $tpl->assignGlobal( array ("VALUE_P_CUSTOM" => $row["p_custom"],
