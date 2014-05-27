@@ -470,11 +470,12 @@ class PRODUCTS{
                                       "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
             ));
         }
+        $and_str=($_GET['preview'] && !empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]))?'':" and p_status='1' ";
         //如果是rewrite過的網址,先取得pc_parent
         if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
-            $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_seo_filename='".$_REQUEST["f"]."' and p_status='1' ";
+            $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_seo_filename='".$_REQUEST["f"]."'". $and_str;
         }else{
-            $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_id='".$_REQUEST["p_id"]."' and p_status='1' ";
+            $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p_id='".$_REQUEST["p_id"]."'". $and_str;
         }
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);

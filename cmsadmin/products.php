@@ -197,7 +197,9 @@ class PRODUCTS{
                 $this->ws_tpl_file = "templates/ws-manage-msg-action-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->products_replace();
-                $this->ws_tpl_type=1;
+                if(!$_POST['via_ajax']){
+                    $this->ws_tpl_type=1;
+                }
                 break;
             case "p_del"://產品管理刪除
                 if($_REQUEST["p_id"]!=""){
@@ -984,6 +986,7 @@ class PRODUCTS{
                                           "VALUE_SPEC_TITLE" =>$row["p_spec_title"],
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
                                           "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
+                                          "TAG_PREVIEW_URL" => $cms_cfg['base_root']."products.php?func=p_detail&p_id=".$row['p_id']."&pc_parent=".$row['pc_id']."&preview=1",
                 ));
                 //有排序欄位才重新指定排序值，複製產品不使用原先產品的排序值
                 if($row['p_sort']){
@@ -1018,6 +1021,8 @@ class PRODUCTS{
                 $row2 = $db->fetch_array($selectrs,1);				
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
                 $pc_id=$row["pc_id"];
+                //預覽連結
+                $tpl->newBlock("PREVIEW_LINK");
             }else{
                 header("location : products.php?func=p_list");
                 die();
@@ -1263,6 +1268,7 @@ class PRODUCTS{
                 $this->p_id=$_REQUEST["now_p_id"];
                 break;
         }
+        $returnJson['code']=0;
         if ( $db_msg == "" ) {
             $p_big_img_replace_str="";
             for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){
@@ -1291,12 +1297,27 @@ class PRODUCTS{
                 }else{
                     $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
                 }
-                $this->goto_target_page($goto_url);
+                if($_POST['via_ajax']){
+                    $returnJson['code']=1;
+                    $returnJson['data']=array(
+                        'p_id' => $this->p_id,
+                        'st' => $_REQUEST["st"],
+                        'sk' => $_REQUEST["sk"],
+                        'nowp'=> $_REQUEST["nowp"],
+                        "jp" => $_REQUEST["jp"],
+                    );
+                    $returnJson['previewURL']=$cms_cfg['base_root']."products.php?func=p_detail&p_id=".$this->p_id."&pc_parent=".$_POST['pc_id']."&preview=1";
+                }else{
+                    $this->goto_target_page($goto_url);
+                }
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
         }else{
             $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+        }
+        if($_POST['via_ajax']){
+            echo json_encode($returnJson);
         }
     }
 //產品管理--刪除--資料刪除可多筆處理================================================================
