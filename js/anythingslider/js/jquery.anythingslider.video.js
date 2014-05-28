@@ -71,7 +71,7 @@
 					$vid.each(function(){
 						// Older IE doesn't have an object - just make sure we are wrapping the correct element
 						$tar = ($(this).parent()[0].tagName === 'OBJECT') ? $(this).parent() : $(this);
-						vidsrc = ($tar[0].tagName === 'EMBED') ? $tar.attr('src') : $tar.find('embed').attr('src') || $tar.children().filter('[name=movie]').attr('value');
+						vidsrc = ($tar[0].tagName === 'EMBED') ? $tar.attr('src') : $tar.find('embed').attr('src') || $tar.children().filter('[name=movie]').val();
 						opts = $.extend(true, {}, {
 							flashvars : null,
 							params    : { allowScriptAccess: 'always', wmode : base.options.addWmodeToObject, allowfullscreen : true },
