@@ -382,7 +382,7 @@
 //                        alert("新增檔案時無法預覽!\n請先儲存後再執行此功能!");
 //                        return false;
 //                    }
-                    tinyMCE.triggerSave();
+                    tinymce.triggerSave();
                     var formAction = myform.action;
                     var formData = $(myform).serialize()+'&via_ajax=1';
                     $.post(formAction,formData,function(req){
