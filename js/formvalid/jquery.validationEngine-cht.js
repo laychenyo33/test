@@ -443,7 +443,7 @@ $.validationEngine = {
             customRule = rules[position+1];
             pattern = eval($.validationEngine.settings.allrules[customRule].regex);
             
-            if(!pattern.test($(caller).attr('value'))){
+            if(!pattern.test($(caller).val())){
                 $.validationEngine.isError = true;
                 promptText += $.validationEngine.settings.allrules[customRule].alertText+"<br />";
             }
@@ -525,7 +525,7 @@ $.validationEngine = {
         function _confirm(caller,rules,position){        // VALIDATE FIELD MATCH
             confirmField = rules[position+1];
             
-            if($(caller).attr('value') != $("#"+confirmField).attr('value')){
+            if($(caller).val() != $("#"+confirmField).val()){
                 $.validationEngine.isError = true;
                 promptText += $.validationEngine.settings.allrules["confirm"].alertText+"<br />";
             }
@@ -533,7 +533,7 @@ $.validationEngine = {
         function _length(caller,rules,position){          // VALIDATE LENGTH
             startLength = eval(rules[position+1]);
             endLength = eval(rules[position+2]);
-            feildLength = $(caller).attr('value').length;
+            feildLength = $(caller).val().length;
 
             if(feildLength<startLength || feildLength>endLength){
                 $.validationEngine.isError = true;
