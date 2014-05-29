@@ -128,6 +128,15 @@ class XLSExportor{
                             ),                            
                         ) 
                     );
+                    if($row[$i]['wrap']){
+                        $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->applyFromArray(
+                            array(
+                                'alignment' => array(
+                                    'wrap'   => true,
+                                ),
+                            )
+                        );
+                    }
                     $this->column++; 
                 }
                 $row_no++;
