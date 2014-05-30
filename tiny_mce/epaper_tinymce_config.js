@@ -19,5 +19,12 @@ tinyMCE.init({
 	cleanup : true,
 	media_use_script : true,
 	media_wmp6_compatible : true,
-        convert_urls: false
+        convert_urls: false,
+        paste_remove_styles : false,
+        paste_strip_class_attributes : "none",  
+        paste_auto_cleanup_on_paste : false,  
+        paste_text_use_dialog : true,                  
+        paste_force_cleanup_paste : false,        
+        paste_remove_spans : false,               
+        paste_retain_style_properties : "margin, padding, width, height, font-size, font-weight, font-family, color, text-align, ul, ol, li, text-decoration, border, background, float, display"
 });     
