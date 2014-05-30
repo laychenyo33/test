@@ -4,6 +4,8 @@ class XLSExportor{
     protected $dataFields;
     protected $file_name = "export";
     protected $sheet_title = "maindata";
+    protected $autoSize = true;
+    protected $font_size = 12;
     function __construct(){
         if(!class_exists("PHPExcel")){
             throw new Exception("Required Class PHPExcel doesn't exists!");
@@ -29,9 +31,19 @@ class XLSExportor{
         //處理標題列
         if(is_array($this->titles) && count($this->titles)){
             for($i = 0; $i< count($this->titles); $i++){
-                $objPHPExcel->getActiveSheet()->setCellValue($this->column.'1',$this->titles[$i]);
+                //設標題值及欄位寬度
+                if(is_string($this->titles[$i])){
+                    $objPHPExcel->getActiveSheet()->setCellValue($this->column.'1',$this->titles[$i]);
+                    if($this->autoSize){
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->column)->setAutoSize(true);                    
+                    }
+                }elseif(is_array($this->titles[$i])){
+                    $objPHPExcel->getActiveSheet()->setCellValue($this->column.'1',$this->titles[$i]['data']);
+                    if($this->titles[$i]['width']){
+                        $objPHPExcel->getActiveSheet()->getColumnDimension($this->column)->setWidth($this->titles[$i]['width']); 
+                    }
+                }
                 $objPHPExcel->getActiveSheet()->getStyle($this->column.'1')->getFont()->setSize($this->font_size);
-                $objPHPExcel->getActiveSheet()->getColumnDimension($this->column)->setWidth($this->set_width); 
                 if($this->column == "A"){
                         $objPHPExcel->getActiveSheet()->getStyle($this->column.'1')->applyFromArray(
                             array(
@@ -46,7 +58,7 @@ class XLSExportor{
                 $objPHPExcel->getActiveSheet()->getStyle($this->column.'1')->applyFromArray(
                     array(
                         'borders' => array( 
-                                'right'     => array( 
+                                'right'     => array(
                                          'style' => PHPExcel_Style_Border::BORDER_THIN
                                  ),
                                 'bottom'     => array( 
@@ -67,10 +79,6 @@ class XLSExportor{
                 );
                 $this->column++; 
             }
-            //自動重設欄寬
-//            for($i='A';$i<$this->column;$i++){
-//                $objPHPExcel->getActiveSheet()->getColumnDimension($i)->setAutoSize(true);
-//            }            
             $row_no++;
         }
         if(is_array($this->dataFields) && count($this->dataFields)){
@@ -175,6 +183,12 @@ class XLSExportor{
         $gregorian = JDToGregorian($jd+intval($val)-25569);               
         return date($format,strtotime($gregorian));
     }    
+    function setAutoSize($v=true){
+        $this->autoSize = $v;
+    }
+    function setFontSize($s=10){
+        $this->font_size = $s;
+    }
 }
 //ob_end_flush();
 ?>
