@@ -105,6 +105,15 @@ class XLSExportor{
                                 $objPHPExcel->getActiveSheet()->getCell($this->column.$row_no)->setValueExplicit($row[$i]['data'], $row[$i]['type']);
                                 break;
                         }
+                        if($row[$i]['wrap']){
+                            $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->applyFromArray(
+                                array(
+                                    'alignment' => array(
+                                        'wrap'   => true,
+                                    ),
+                                )
+                            );
+                        }
                     }else{
                         $objPHPExcel->getActiveSheet()->setCellValue($this->column.$row_no,$row[$i]);
                     }
@@ -136,15 +145,6 @@ class XLSExportor{
                             ),                            
                         ) 
                     );
-                    if($row[$i]['wrap']){
-                        $objPHPExcel->getActiveSheet()->getStyle($this->column.$row_no)->applyFromArray(
-                            array(
-                                'alignment' => array(
-                                    'wrap'   => true,
-                                ),
-                            )
-                        );
-                    }
                     $this->column++; 
                 }
                 $row_no++;
