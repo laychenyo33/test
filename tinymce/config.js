@@ -24,7 +24,7 @@
 			     "save table contextmenu directionality emoticons template paste textcolor"
 			   ],
 			
-			toolbar1: "insertfile undo redo | styleselect fontselect fontsizeselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink anchor | image responsivefilemanager media |  preview emoticons print code ",
+			toolbar1: "insertfile undo redo | styleselect fontselect fontsizeselect | cut copy paste pastetext | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink anchor | image responsivefilemanager media |  preview emoticons print code ",
 				
 			/*
 			style_formats: [
@@ -43,7 +43,10 @@
                             // remove &nbsp
                             o.node.innerHTML = o.node.innerHTML.replace(/&nbsp;/ig, " ");
                          },
-                         extended_valid_elements : "iframe[src|width|height|name|align],span[style|id|nam|class|lang]"
+                         extended_valid_elements : "iframe[src|width|height|name|align],span[style|id|nam|class|lang]",
+                        paste_retain_style_properties : "margin padding width height font-size font-weight font-family color text-align ul ol li text-decoration border background float display background-color",
+                        paste_word_valid_elements: "b,strong,i,em,h1,h2,table,tr,th,td,ul,ol,li,style,img",
+                        paste_data_images: true
 
 		});
 	}
