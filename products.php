@@ -511,6 +511,9 @@ class PRODUCTS{
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
                 $row["p_custom"] = $main->content_file_str_replace($row["p_custom"]);
                 $tpl->assign("VALUE_P_CUSTOM",$row["p_custom"]);
+                if($cms_cfg['ws_module']['ws_products_custom_inquiry']){
+                    $tpl->newBlock("INQUIRY_IN_CUSTOM");
+                }
             }else{
                 $this->show_style=($row["p_show_style"])?$row["p_show_style"]:1;
                 $show_style_str_p="SHOW_STYLE_P".$this->show_style;
