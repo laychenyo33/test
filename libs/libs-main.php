@@ -1615,7 +1615,7 @@ class MAINFUNC{
         static $_layers = array();
         static $call = 0;
         if($call==0){
-            $_layers[$call] = $this->mk_link($TPLMSG['HOME'] , $cms_cfg['base_root']);
+            $_layers[$call] = $this->mk_link($cms_cfg['path_home_text'] , $cms_cfg['base_root']);
         }                
         switch(func_num_args()){
             case 0: //輸出layer

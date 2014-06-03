@@ -105,7 +105,11 @@ class NEWS{
         //取得分頁連結，重新組合包含limit的sql語法
         if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
             //$func_str=$cms_cfg['base_root']."news/".$_REQUEST["f"];
-            $func_str=$this->func_str;
+            if($cate_row){
+                $func_str=$cms_cfg['base_root']."news/".$cate_row['nc_seo_filename'];
+            }else{
+                $func_str=$cms_cfg['base_root']."news";
+            }
             $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }else{
             $func_str=$cms_cfg["base_root"]."news.php?func=n_list&nc_id=".$cate_row['nc_id'];
@@ -127,7 +131,7 @@ class NEWS{
             $tpl->assign( array("VALUE_NC_ID"  => $row["nc_id"],
                                 "VALUE_N_ID"  => $row["n_id"],
                                 "VALUE_N_SUBJECT" => $row["n_subject"],
-                                "VALUE_N_SHORT" => $row["n_short"],
+                                "VALUE_N_SHORT" => $main->get_short_str($row["n_short"],150),
                                 "VALUE_N_LINK" => $n_link,
                                 "VALUE_N_MODIFYDATE" => substr($row["n_modifydate"],0,10),
                                 "VALUE_N_SHOWDATE" => $row["n_showdate"],
