@@ -132,6 +132,7 @@ $cms_cfg['sql_dir'] = "/sql_dump/";    //SQL備份檔存放路徑
 $cms_cfg['sort_pos'] = "asc";    //sort欄位的排序方法
 $cms_cfg['path_separator'] = " > ";    //麵包屑(網站路徑的分隔符號)
 $cms_cfg['path_wraper'] = "<li>%s</li>";    //麵包屑的容器，麵包屑的分隔符號留空時使用
+$cms_cfg['path_home_text'] = "Home";    //麵包屑的首頁連結文字
 
 //custom index banner numbers
 $cms_cfg['index_banner_nums'] = 4;
