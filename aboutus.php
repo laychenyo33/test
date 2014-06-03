@@ -33,7 +33,6 @@ class ABOUTUS{
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-aboutus"); //主要顯示區域的css設定
         //$main->header_footer("aboutus");
         $main->google_code(); //google analystics code , google sitemap code
-        $main->login_zone();
 //        if($this->au_cate!="aboutus"){
 //            $main->layer_link($ws_array["main"][$this->au_cate],$cms_cfg['base_root'].$this->au_cate.".htm");
 //        }
