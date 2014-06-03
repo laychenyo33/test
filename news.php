@@ -131,7 +131,7 @@ class NEWS{
             $tpl->assign( array("VALUE_NC_ID"  => $row["nc_id"],
                                 "VALUE_N_ID"  => $row["n_id"],
                                 "VALUE_N_SUBJECT" => $row["n_subject"],
-                                "VALUE_N_SHORT" => $row["n_short"],
+                                "VALUE_N_SHORT" => $main->get_short_str($row["n_short"],150),
                                 "VALUE_N_LINK" => $n_link,
                                 "VALUE_N_MODIFYDATE" => substr($row["n_modifydate"],0,10),
                                 "VALUE_N_SHOWDATE" => $row["n_showdate"],
