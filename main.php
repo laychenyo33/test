@@ -287,14 +287,20 @@ class MAINDEFAULT{
                 $n_link = $row["n_url"];
             }
             $tpl->newBlock( "NEWS_LIST" );
+            $n_img=(trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["n_s_pic"];
+            $dimensions = App::getHelper('main')->resizeto($n_img,$cms_cfg['idx_news_img_width'],$cms_cfg['idx_news_img_height']);
             $tpl->assign( array( "VALUE_NC_ID" => $row["nc_id"],
                                  "VALUE_NC_SUBJECT"  => $row["nc_subject"],
                                  "VALUE_N_ID"  => $row["n_id"],
                                  "VALUE_N_SUBJECT"  => $row["n_subject"],
+                                 "VALUE_N_SHORT" => App::getHelper('main')->get_short_str($row["n_short"],90),
                                  "VALUE_N_LINK" => $n_link,
                                  "VALUE_N_MODIFYDATE" => substr($row["n_modifydate"],0,10),
                                  "VALUE_N_SHOWDATE" => $row["n_showdate"],
                                  "VALUE_N_TARGET" => ($row["n_pop"])?"_blank":"_parent",
+                                 "VALUE_N_S_PIC" => $n_img,
+                                 "VALUE_N_S_PIC_W" => $dimensions['width'],
+                                 "VALUE_N_S_PIC_H" => $dimensions['height'],
             ));
         }
 
