@@ -19,6 +19,7 @@ class MAINDEFAULT{
 //        $this->news_list(); //最新消息
 //        $this->aboutus_list(); //關於我們
 //        $main->counter(); //網站計數器
+        //$this->gallery_list();
         //if($cms_cfg["ws_module"]['ws_index_banner'])$this->index_banner(); //自訂首頁banner
         $tpl->printToScreen();
     }
@@ -286,14 +287,20 @@ class MAINDEFAULT{
                 $n_link = $row["n_url"];
             }
             $tpl->newBlock( "NEWS_LIST" );
+            $n_img=(trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["n_s_pic"];
+            $dimensions = App::getHelper('main')->resizeto($n_img,$cms_cfg['idx_news_img_width'],$cms_cfg['idx_news_img_height']);
             $tpl->assign( array( "VALUE_NC_ID" => $row["nc_id"],
                                  "VALUE_NC_SUBJECT"  => $row["nc_subject"],
                                  "VALUE_N_ID"  => $row["n_id"],
                                  "VALUE_N_SUBJECT"  => $row["n_subject"],
+                                 "VALUE_N_SHORT" => App::getHelper('main')->get_short_str($row["n_short"],90),
                                  "VALUE_N_LINK" => $n_link,
                                  "VALUE_N_MODIFYDATE" => substr($row["n_modifydate"],0,10),
                                  "VALUE_N_SHOWDATE" => $row["n_showdate"],
                                  "VALUE_N_TARGET" => ($row["n_pop"])?"_blank":"_parent",
+                                 "VALUE_N_S_PIC" => $n_img,
+                                 "VALUE_N_S_PIC_W" => $dimensions['width'],
+                                 "VALUE_N_S_PIC_H" => $dimensions['height'],
             ));
         }
 
@@ -362,5 +369,30 @@ class MAINDEFAULT{
             }
         }
     }    
+    //活動剪影
+    function gallery_list(){
+        global $cms_cfg,$ws_array,$tpl;
+        $db = App::getHelper('db');
+        $sql = "select * from ".$db->prefix("gallery")." where g_status='1' order by g_modifydate desc limit 1";
+        $res = $db->query($sql);
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("GALLERY_LIST");
+            if($this->ws_seo){
+                $link = $cms_cfg["base_root"]."gallery/gdetail-".$row["gc_id"]."-".$row["g_id"].".html";
+            }else{
+                $link = $cms_cfg['base_root']."gallery.php?func=g_show&gc_id=".$row["gc_id"]."&g_id=".$row["g_id"];
+            }
+            $gpic = $row['g_b_pic1']?$cms_cfg['file_root'].$row['g_b_pic1']:$cms_cfg['default_preview_pic'];
+            $dimension = App::getHelper('main')->resizeto($gpic,286,166);
+            $tpl->assign(array(
+                "VALUE_G_SUBJECT" => $row['g_subject'],
+                "VALUE_G_CONTENT" => App::getHelper('main')->get_short_str($row['g_content'],90),
+                "VALUE_G_LINK" => $link,
+                "VALUE_G_PIC" => $gpic,
+                "VALUE_G_PIC_W" => $dimension['width'],
+                "VALUE_G_PIC_H" => $dimension['height'],
+            ));
+        }
+    }
 }
 ?>

@@ -96,6 +96,8 @@ $cms_cfg['idx_pro_prod_img_width']="160"; //首頁促銷產品縮圖圖框限制
 $cms_cfg['idx_pro_prod_img_height']="160";//首頁促銷產品縮圖圖框限制--高
 $cms_cfg['idx_hot_prod_img_width']="160"; //首頁熱門產品縮圖圖框限制--寬
 $cms_cfg['idx_hot_prod_img_height']="160";//首頁熱門產品縮圖圖框限制--高
+$cms_cfg['idx_news_img_width']="160"; //首頁最新消息小圖圖框限制--寬
+$cms_cfg['idx_news_img_height']="160";//首頁最新消息小圖圖框限制--高
 
 
 //News page limit
