@@ -93,7 +93,7 @@ class GALLERY{
             $i++;
             $tpl->newBlock( "GALLERY_LIST" );
             $simg = $row["g_s_pic"]?$cms_cfg['file_root'].$row["g_s_pic"]:$cms_cfg['default_preview_pic'];
-            $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+            $dimension = $main->resizeto($simg,$cms_cfg['gallery_cate_img_width'],$cms_cfg['gallery_cate_img_height']);
             $tpl->assign( array("VALUE_GC_ID"  => $row["gc_id"],
                                 "VALUE_G_ID"  => $row["g_id"],
                                 "VALUE_G_SUBJECT" => $row["g_subject"],
