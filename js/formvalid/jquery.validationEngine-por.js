@@ -63,7 +63,7 @@
                         "alertText":"* apenas letras"}
                     }   
     }
-    settings = $.extend({
+    $.validationSettings = $.extend({
         allrules:allRules,                  
         inlineValidation: true, 
         ajaxSubmit: false,
@@ -79,14 +79,14 @@
     $(this).bind("submit", function(caller){   // ON FORM SUBMIT, CONTROL AJAX FUNCTION IF SPECIFIED ON DOCUMENT READY
         $.validationEngine.onSubmitValid = true;
         
-        if($.validationEngine.submitValidation(this,settings) == false){
-            if($.validationEngine.submitForm(this,settings) == true) {return false;}
+        if($.validationEngine.submitValidation(this,$.validationSettings) == false){
+            if($.validationEngine.submitForm(this,$.validationSettings) == true) {return false;}
         }else{
-            settings.failure && settings.failure(); 
+            $.validationSettings.failure && $.validationSettings.failure(); 
             return false;
         }       
     })
-    if(settings.inlineValidation == true){      // Validating Inline ?
+    if($.validationSettings.inlineValidation == true){      // Validating Inline ?
         
         $(this).find("[class^=validate]").not("[type=checkbox]").bind("blur", function(caller){ _inlinEvent(this)   })
         $(this).find("[class^=validate][type=checkbox]").bind("click", function(caller){        _inlinEvent(this)   })
@@ -94,7 +94,7 @@
             function _inlinEvent(caller){
                 if($.validationEngine.intercept == false || !$.validationEngine.intercept){     // STOP INLINE VALIDATION THIS TIME ONLY
                     $.validationEngine.onSubmitValid=false;
-                    $.validationEngine.loadValidation(caller,settings); 
+                    $.validationEngine.loadValidation(caller,$.validationSettings); 
                 }else{
                     $.validationEngine.intercept = false;
                 }
