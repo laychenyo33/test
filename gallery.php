@@ -80,10 +80,10 @@ class GALLERY{
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結，且重新組合包含limit的sql語法
         if($this->ws_seo==1 ){
-            $func_str="gallery/glist-".$gc_id;
+            $func_str=$cms_cfg['base_root']."gallery/glist-".$gc_id;
             $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }else{
-            $func_str="gallery.php?func=g_list&gc_id=".$gc_id;
+            $func_str=$cms_cfg['base_root']."gallery.php?func=g_list&gc_id=".$gc_id;
             $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }
         $selectrs = $db->query($sql);
