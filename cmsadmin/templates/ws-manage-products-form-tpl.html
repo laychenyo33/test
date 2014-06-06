@@ -382,19 +382,21 @@
 //                        alert("新增檔案時無法預覽!\n請先儲存後再執行此功能!");
 //                        return false;
 //                    }
-                    tinymce.triggerSave();
-                    var formAction = myform.action;
-                    var formData = $(myform).serialize()+'&via_ajax=1';
-                    $.post(formAction,formData,function(req){
-                        if(req.code){
-//                            if(confirm("儲存成功!\n導至"+req.previewURL)){
-//                                window.open(req.previewURL,'preview');
-//                            }
-                            location.href='?func=p_mod&p_id='+req.data.p_id+'&st='+req.data.st+'&sk='+req.data.sk+'&nowp='+req.data.nowp+'&jp='+req.data.jp;
-                        }else{
-                            alert('儲存失敗!');
-                        }
-                    },"json");
+                    if($.validationEngine.submitValidation(myform,$.validationSettings)===false){
+                        tinymce.triggerSave();
+                        var formAction = myform.action;
+                        var formData = $(myform).serialize()+'&via_ajax=1';
+                        $.post(formAction,formData,function(req){
+                            if(req.code){
+//                                if(confirm("儲存成功!\n導至"+req.previewURL)){
+//                                    window.open(req.previewURL,'preview');
+//                                }
+                                location.href='?func=p_mod&p_id='+req.data.p_id+'&st='+req.data.st+'&sk='+req.data.sk+'&nowp='+req.data.nowp+'&jp='+req.data.jp;
+                            }else{
+                                alert('儲存失敗!');
+                            }
+                        },"json");
+                    }
                 });
 	});
 </script>
