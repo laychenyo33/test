@@ -117,7 +117,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
-                $tpl->newBlock("JS_TINYMCE");
+                $tpl->newBlock("JS_TINYMCE2");
                 $this->products_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -132,7 +132,7 @@ class PRODUCTS{
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JS_PREVIEWS_PIC");
                     $tpl->newBlock("JS_MAIN");
-                    $tpl->newBlock("JS_TINYMCE");
+                    $tpl->newBlock("JS_TINYMCE2");
                     $this->products_cate_form("mod");
                     $this->ws_tpl_type=1;
                 }
