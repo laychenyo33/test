@@ -467,6 +467,7 @@ class PRODUCTS{
                                           "STR_PC_CUSTOM_STATUS_DISPLAY" => ($row["pc_custom_status"]==1)?" ":"none",
                                           "MSG_MODE" => $TPLMSG['MODIFY'],
                                           "VALUE_PC_DESC" => $row['pc_desc'],
+                                          "VALUE_PC_REDIRECT_URL" => $row['pc_redirect_url'],
                 ));
                 if($this->seo){
                     $tpl->assignGlobal( array("VALUE_PC_RELATED_CATE" => $row["pc_related_cate"],
@@ -545,6 +546,7 @@ class PRODUCTS{
                     pc_show_style,
                     pc_cate_img,
                     pc_desc,
+                    pc_redirect_url,
                     pc_related_cate,
                     pc_modifydate,
                     ".$add_field_str."
@@ -561,6 +563,7 @@ class PRODUCTS{
                     '".$_REQUEST["pc_show_style"]."',
                     '".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
                     '".$main->content_file_str_replace($_REQUEST["pc_desc"])."',
+                    '".$_REQUEST["pc_redirect_url"]."',
                     '".$_REQUEST["pc_related_cate"]."',
                     '".date("Y-m-d H:i:s")."',
                     ".$add_value_str."
@@ -614,6 +617,7 @@ class PRODUCTS{
                     pc_show_style='".$_REQUEST["pc_show_style"]."',
                     pc_cate_img='".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
                     pc_desc='".$main->content_file_str_replace($_REQUEST["pc_desc"])."',
+                    pc_redirect_url='".$_REQUEST["pc_redirect_url"]."',
                     pc_related_cate='".$_REQUEST["pc_related_cate"]."',
                     pc_modifydate='".date("Y-m-d H:i:s")."',
                     ".$update_str."

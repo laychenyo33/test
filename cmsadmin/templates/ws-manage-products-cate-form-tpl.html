@@ -5,9 +5,26 @@
 <form name="myform" method="post" action="products.php?func=pc_replace"  class="formular" id="formID">
     <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
       <tr>
-        <th><font color="red">*</font>分類名稱:</th>
-        <td colspan="3">
+        <th width="15%"><font color="red">*</font>分類名稱:</th>
+        <td width="35%">
             <input name="pc_name" id="pc_name" type="text" class="validate[required]"  value="{VALUE_PC_NAME}" size="40" maxlength="255">
+        </td>
+        <th width="15%">轉址設定:</th>
+        <td width="35%">
+            <input name="pc_redirect_url" id="pc_redirect_url" type="text" value="{VALUE_PC_REDIRECT_URL}" size="50" maxlength="255">
+            <div class="desc">
+                說明:<br/>
+                <ul>
+                    <li>使用<span class="red">http(s)://</span>開頭的字串會直接導向。</li>
+                    <li>其餘字串在轉址時會自動補上目前的基本路徑</li>
+                    <li><span class="red">欲作為轉址的分類需設為停用，以免前台列表或選單顯示</span></li>
+                    例如，輸入<span class="green">abc.htm</span>，而現在是在<span class="blue">/cht</span>下，
+                    轉址時就會變成<span class="blue">/cht/</span><span class="green">abc.htm</span>。
+                    換句話說就是只能在同一個語言裡轉址。若需要跨語言轉址，請使用<span class="red">http(s)://</span>開頭的完整url。
+                    但因為是直接導向，因此請在確認路徑不會再變動後再行設定，不然變動之後還需要手動更新。
+                    
+                </ul>
+            </div>
         </td>
       </tr>
       <tr>

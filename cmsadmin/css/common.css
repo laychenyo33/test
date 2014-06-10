@@ -649,3 +649,10 @@ span.current{color:#f00}
 	color: #666;
 }
 #previewlink{color:#aa0;font-size:18px;line-height:30px;}
+/*敘述區塊使用*/
+.desc{padding:5px 8px 0 8px}
+.desc ul{ margin:0;;list-style-position: inside}
+.desc ul li{margin-left:10px;}
+.desc span.red{color:#f00}
+.desc span.green{color:#2a2}
+.desc span.blue{color:#00f}
