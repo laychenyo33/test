@@ -6,8 +6,15 @@
     <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
       <tr>
         <th><font color="red">*</font>應用領域名稱:</th>
-        <td colspan="3">
+        <td>
             <input name="pa_name" id="pa_name" type="text" class="validate[required]"  value="{VALUE_PA_NAME}" size="40" maxlength="255">
+        </td>
+        <th>父類別:</th>
+        <td>
+            <select name="pa_parent" id="pa_parent">
+                <option value="0" > 未分類 </option> 
+                {TAG_APP_PARENT_OPTION}
+            </select>
         </td>
       </tr>
       <tr>

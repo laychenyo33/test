@@ -656,3 +656,6 @@ span.current{color:#f00}
 .desc span.red{color:#f00}
 .desc span.green{color:#2a2}
 .desc span.blue{color:#00f}
+.app_chk_box{float:left;margin:5px;border:1px solid grey;padding:4px;line-height:20px;}
+.app_chk_box input{margin:0}
+.app_chk_box .child{margin:0 0 0 20px;float:none;border:none;padding:0}

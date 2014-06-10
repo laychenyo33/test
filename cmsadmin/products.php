@@ -63,6 +63,7 @@ class PRODUCTS{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_PC_TREE");                
                 $this->products_application_list();
                 $this->ws_tpl_type=1;
                 break;
@@ -1802,6 +1803,19 @@ class PRODUCTS{
             }
         }
     }
+    //組合分類下拉選單--產品選擇分類專用
+    function application_parent_select(&$output,$pa_id,$now_pa_parent, $pa_parent=0, $indent="") {
+        global $db,$cms_cfg;
+        $sql = "SELECT pa_id,pa_name FROM ".$cms_cfg['tb_prefix']."_products_application WHERE pa_parent='".$pa_parent."' and pa_id<>'".$pa_id."' order by pa_sort ".$cms_cfg['sort_pos'].",pa_modifydate desc";
+        $selectrs = $db->query($sql);
+        while ($row =  $db->fetch_array($selectrs,1)) {
+            $selected = ($row["pa_id"]==$now_pa_parent) ? "selected" : "";
+            $output .= "<option value=\"".$row["pa_id"]."\" ".$selected.">".$indent."├".$row["pa_name"]."</option>";
+            if($row["pa_id"]!=$pa_parent){
+                $this->application_parent_select($output,$pa_id,$now_pa_parent, $row["pa_id"],$indent."****");
+            }
+        }
+    }
     function products_cate_tree($pc_id,$type){
         global $tpl,$db,$cms_cfg;
         $sql="select pc_id,pc_layer from ".$cms_cfg['tb_prefix']."_products_cate where pc_id='".$pc_id."'";
@@ -2298,14 +2312,29 @@ class PRODUCTS{
 
             ));
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_id > '0'";
+        $cateTree = new catetree_application(array(
+            "db"            => $db,
+            "cfg"           => $cms_cfg,
+            "cate_link_str" => "products.php?func=pa_list",
+        ));
+        $tpl->assign("_ROOT.APPLICATION_CATE_TREE",$cateTree->get_tree()); 
+        //階層
+        $tpl->assignGlobal("MSG_NOW_CATE" , $TPLMSG["NOW_CATE"]);
+        $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_application","pa_name","pa",$_GET['pa_parent'],'products.php?func=pa_list');
+        if(!empty($products_cate_layer)){
+            $tpl->assignGlobal("TAG_PRODUCTS_CATE_LAYER",implode(" > ",$products_cate_layer));
+        }else{
+            $tpl->assignGlobal("TAG_PRODUCTS_CATE_LAYER",$TPLMSG["NO_CATE"]);
+        }        
+        $sql="select a.*,b.pa_name as parent_name from ".$cms_cfg['tb_prefix']."_products_application as a left join ".$db->prefix("products_application")." as b on a.pa_parent=b.pa_id where a.pa_parent='".$_GET['pa_parent']."'";
         $and_str = "";
         if(!empty($_REQUEST["sk"])){
-            $and_str .= " and pa_name like '%".$_REQUEST["sk"]."%'";
+            $and_str .= " and a.pa_name like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by pa_sort ".$cms_cfg['sort_pos'].",pa_modifydate desc ";
+        $sql .= $and_str." order by a.pa_sort ".$cms_cfg['sort_pos'].",a.pa_modifydate desc ";
         //取得總筆數
-        $total_records=$main->count_total_records($sql);
+        $res0 = $db->query($sql);
+        $total_records=$db->numRows($res0);
         //取得分頁連結
         $func_str="products.php?func=pa_list&&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
         //分頁且重新組合包含limit的sql語法
@@ -2329,6 +2358,7 @@ class PRODUCTS{
                                 "VALUE_PA_STATUS"  => $row["pa_status"],
                                 "VALUE_PA_SORT"  => $row["pa_sort"],
                                 "VALUE_PA_NAME" => $row["pa_name"],
+                                "VALUE_PARENT_NAME" => $row["parent_name"]?$row["parent_name"]:"NA",
                                 "VALUE_PA_SMALL_IMG" => (trim($row["pa_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pa_small_img"],
                                 "VALUE_PA_SERIAL" => $i,
                                 "VALUE_STATUS_IMG" => ($row["pa_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
@@ -2403,6 +2433,8 @@ class PRODUCTS{
                 header("location : products.php?func=pa_list");
             }
         }
+        $this->application_parent_select($app_select_option,$row['pa_id'],$row['pa_parent']);
+        $tpl->assignGlobal("TAG_APP_PARENT_OPTION",$app_select_option);
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_PA_CUSTOM" , $row["pa_custom"] );
@@ -2456,6 +2488,7 @@ class PRODUCTS{
             case "add":
                 $sql="
                 insert into ".$cms_cfg['tb_prefix']."_products_application(
+                    pa_parent,
                     pa_status,
                     pa_sort,
                     pa_name,
@@ -2466,6 +2499,7 @@ class PRODUCTS{
                     ".$add_field_str."
                     pa_modifyaccount
                 ) values (
+                    '".$_REQUEST["pa_parent"]."',
                     '".$_REQUEST["pa_status"]."',
                     '".$_REQUEST["pa_sort"]."',
                     '".htmlspecialchars($_REQUEST["pa_name"])."',
@@ -2485,6 +2519,7 @@ class PRODUCTS{
             case "mod":
                 $sql="
                 update ".$cms_cfg['tb_prefix']."_products_application set
+                    pa_parent='".$_REQUEST["pa_parent"]."',
                     pa_status='".$_REQUEST["pa_status"]."',
                     pa_sort='".$_REQUEST["pa_sort"]."',
                     pa_name='".htmlspecialchars($_REQUEST["pa_name"])."',
@@ -2543,19 +2578,12 @@ class PRODUCTS{
         $s=1;
         $pa_id_arr = array();
         while($row=$db->fetch_array($res,1)){
-            $pa_id_arr[] = $row['pa_id'];
-            $tpl->newBlock("APPLICATION_ITEM");
-            $tpl->assign(array(
-                "SERIAL" => $s,
-                "VALUE_PA_ID" => $row['pa_id'],
-                "VALUE_PA_NAME" => $row['pa_name'],
-                "TAG_PA_ID_CHK" => $row['checked']?"checked":"",
-            ));
-            $s++;
+            $pa_id_arr[$row['pa_id']] = $row;
         }
+        $tpl->assignGlobal("TAG_CHECKBOX_MAP",$this->application_checkbox_maker($pa_id_arr));
         if(count($pa_id_arr)){
             $tpl->gotoBlock("PRODUCTS_APPLICATION_ZONE");
-            $tpl->assign("VALUE_PA_ID_STR",implode(',',$pa_id_arr));
+            $tpl->assign("VALUE_PA_ID_STR",implode(',',array_keys($pa_id_arr)));
         }
     }
     function write_application($id,$paids,$is_cate=false){
@@ -2754,6 +2782,24 @@ class PRODUCTS{
                 "TAG_CHECKED"    => (in_array($row['ca_id'],$ca_arr))?"checked":"", 
             ));
         }
+    }
+    //製作多層次application checkbox
+    function application_checkbox_maker($dataMap,$parent=0){
+        global $cms_cfg,$ws_array;
+        $db = App::getHelper('db');
+        $outout='';
+        $sql = "select * from ".$db->prefix("products_application")." where pa_parent='".$parent."' order by pa_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        while($row = $db->fetch_array($res,1)){
+            $childClass = ($parent>0)?"child":'';
+            $chk = $dataMap[$row['pa_id']]['checked']?"checked":'';
+            $outout.="<div class='app_chk_box {$childClass}'>";
+            $outout.="<input type='checkbox' name='pa_id[".$row['pa_id']."]' id='pa_id_".$row['pa_id']."' value='".$row['pa_id']."' {$chk}/><label for='pa_id_".$row['pa_id']."'>".$row['pa_name']."</label>";
+            $outout.=$this->application_checkbox_maker($dataMap, $row['pa_id']);
+            $outout.="</div>";
+            
+        }
+        return $outout;
     }
 }
 //ob_end_flush();
