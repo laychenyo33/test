@@ -144,16 +144,26 @@ class PRODUCTS{
             //$this->show_style=1; //顯示模式固定為 圖文
             $this->parent=($_REQUEST["pc_parent"])?$_REQUEST["pc_parent"]:0;
             //顯示SEO 項目
-            $sql="select pc_id,pc_name,pc_desc,pc_parent,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
+            $sql="select pc_id,pc_name,pc_desc,pc_redirect_url,pc_parent,pc_custom_status,pc_custom,pc_seo_title,pc_seo_keyword,pc_seo_description,pc_seo_short_desc,pc_seo_down_short_desc,pc_seo_h1,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_id > '0'";
             if($this->ws_seo==1 && trim($_REQUEST["f"])!=""){
-                $sql .= " and pc_seo_filename='".$_REQUEST["f"]."' and pc_status='1' ";
+                $sql .= " and pc_seo_filename='".$_REQUEST["f"]."' and (pc_status='1' || pc_redirect_url<>'') ";
             }else{
-                $sql .= " and pc_id='".$this->parent."' and pc_status='1' ";
+                $sql .= " and pc_id='".$this->parent."' and (pc_status='1' || pc_redirect_url<>'' ) ";
             }
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             if($rsnum > 0){
                 $row = $db->fetch_array($selectrs,1);
+                //產品分類轉址處理
+                if($row['pc_redirect_url']){
+                    if(preg_match("#^http(s)*://#", $row['pc_redirect_url'])){
+                        $redirect_url = $row['pc_redirect_url'];
+                    }else{
+                        $redirect_url = $cms_cfg['base_root'].$row['pc_redirect_url'];
+                    }
+                    header("location:".$redirect_url);
+                    die();
+                }
                 $this->layer_link($row);
                 $seo_H1=$row["pc_name"];//預設h1
                 //第一頁才顯示設定的meta,第二頁以後抓分類名稱或產品名稱做為meta title
