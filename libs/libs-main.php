@@ -1072,7 +1072,7 @@ class MAINFUNC{
         }
     }
     //圖檔檔案路徑替換避免破圖
-    function file_str_replace($input_path,$pattern="#(.*/)(upload_files/.+)$#i",$replacement="$2"){
+    function file_str_replace($input_path,$pattern='#(.*/)(upload_files/.+)$#i',$replacement='$2'){
         global $cms_cfg;
         $input_path=preg_replace( $pattern, $replacement, $input_path);
         return $input_path;
