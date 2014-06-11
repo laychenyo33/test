@@ -5,7 +5,7 @@
 <form action="aboutus.php" method="get" name="myform" class="formular" id="formID">
     <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
     <tr>
-      <td colspan="7">
+      <td colspan="{TAG_COLUMN_NUMS}">
         <div class="title">
         <ul>
           <li><img src="images/icon-add.gif" /><a href="aboutus.php?func=au_add" >新增</a></li>
@@ -33,7 +33,10 @@
       <th width="5%">No.</th>
       <th width="7%">排序</th>
       <!-- START BLOCK : AU_CATE_TITLE -->
-      <th width="25%">分類</th>
+      <th width="13%">分類</th>
+      <!-- START BLOCK : AU_SUBCATE_TITLE -->
+      <th width="12%">次分類</th>
+      <!-- END BLOCK : AU_SUBCATE_TITLE -->
       <!-- END BLOCK : AU_CATE_TITLE -->
       <th width="">標題</th>
       <th width="5%">修改</th>
@@ -47,6 +50,9 @@
       <td><input type="text" name="sort_value[{VALUE_AU_ID}]" value="{VALUE_AU_SORT}" class="validate[custom[onlyNumber]]" size="2" maxlength="4"></td>
       <!-- START BLOCK : AU_CATE_FIELD -->
       <td>{VALUE_AU_CATE}</td>
+      <!-- START BLOCK : AU_SUBCATE_FIELD -->
+      <td>{VALUE_AU_SUBCATE}</td>
+      <!-- END BLOCK : AU_SUBCATE_FIELD -->
       <!-- END BLOCK : AU_CATE_FIELD -->
       <td>{VALUE_AU_SUBJECT}</td>
       <td><a href="aboutus.php?func=au_mod&au_id={VALUE_AU_ID}&st={VALUE_SEARCH_TARGET}&sk={SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}"><img src="images/icon-edit2.gif" width="11" border="0" alt="{MSG_MODIFY}" /></a></td>

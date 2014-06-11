@@ -116,7 +116,7 @@ class ABOUTUS{
         $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
                                   "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
                                   "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
-
+                                  "TAG_COLUMN_NUMS" => 7,
         ));
         switch($_REQUEST["st"]){
             case "all" :
@@ -131,6 +131,11 @@ class ABOUTUS{
         }
         if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
             $tpl->newBlock("AU_CATE_TITLE");
+            $tpl->assignGlobal("TAG_COLUMN_NUMS",8);
+            if($cms_cfg['ws_module']['ws_aboutus_au_subcate']){
+                $tpl->newBlock("AU_SUBCATE_TITLE");
+                $tpl->assignGlobal("TAG_COLUMN_NUMS",9);
+            }
         }
         $i=$page["start_serial"];
         while ( $row = $db->fetch_array($selectrs,1) ) {
@@ -150,6 +155,10 @@ class ABOUTUS{
             if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
                 $tpl->newBlock("AU_CATE_FIELD");
                 $tpl->assign("VALUE_AU_CATE",$ws_array["main"][$row['au_cate']]);
+                if($cms_cfg['ws_module']['ws_aboutus_au_subcate']){
+                    $tpl->newBlock("AU_SUBCATE_FIELD");
+                    $tpl->assign("VALUE_AU_SUBCATE",$row['au_subcate']);
+                }
             }
         }
     }
@@ -206,10 +215,15 @@ class ABOUTUS{
         //有獨立類別
         if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
             $tpl->newBlock("UNIQUE_CATE");
-        $this->get_au_cate_option($row);
+            $this->get_au_cate_option($row);
             if($cms_cfg['ws_module']['ws_aboutus_au_cate_input']){
                 $tpl->newblock("AU_CATE_INPUT");
             }
+            if($cms_cfg['ws_module']['ws_aboutus_au_subcate']){
+                $tpl->newBlock("AU_SUBCATE");
+                $this->get_au_subcate_option($row);
+            }
+
         }        
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
@@ -238,6 +252,7 @@ class ABOUTUS{
         }
         //設定類別
         $addtion_au_cate = $_REQUEST['au_cate_input']?$_REQUEST['au_cate_input']:$_REQUEST['au_cate_select'];
+        $addtion_au_subcate = $_REQUEST['au_subcate_input']?$_REQUEST['au_subcate_input']:$_REQUEST['au_subcate_select'];
         $au_cate = $addtion_au_cate?strtolower($addtion_au_cate):'aboutus';
         switch ($_REQUEST["action_mode"]){
             case "add":
@@ -246,6 +261,7 @@ class ABOUTUS{
                         au_status,
                         au_sort,
                         au_cate,
+                        au_subcate,
                         au_subject,
                         au_content,
                         ".$add_field_str."
@@ -254,6 +270,7 @@ class ABOUTUS{
                         '".$_REQUEST["au_status"]."',
                         '".$_REQUEST["au_sort"]."',
                         '".$au_cate."',
+                        '".$addtion_au_subcate."',
                         '".$_REQUEST["au_subject"]."',
                         '".$db->quote($main->content_file_str_replace($_REQUEST["au_content"]))."',
                         ".$add_value_str."
@@ -266,6 +283,7 @@ class ABOUTUS{
                         au_status='".$_REQUEST["au_status"]."',
                         au_sort='".$_REQUEST["au_sort"]."',
                         au_cate='".$au_cate."',
+                        au_subcate='".$addtion_au_subcate."',
                         au_subject='".$_REQUEST["au_subject"]."',
                         au_content='".$db->quote($main->content_file_str_replace($_REQUEST["au_content"]))."',
                         ".$update_str."
@@ -433,6 +451,17 @@ class ABOUTUS{
             $tpl->newBlock("AU_CATE_OPTION");
             $tpl->assign("VALUE_AU_CATE",$row['au_cate']);
             $tpl->assign("VALUE_AU_OPTION_SELECTED",($row['au_cate']==$rdata['au_cate'])?"selected":"");
+        }
+    }
+    //取得au_cate
+    function get_au_subcate_option($rdata){
+        global $db,$tpl,$cms_cfg;
+        $sql = "select distinct au_subcate from ".$cms_cfg['tb_prefix']."_aboutus where au_subcate<>'' ";
+        $res = $db->query($sql,true);
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("AU_SUBCATE_OPTION");
+            $tpl->assign("VALUE_AU_SUBCATE",$row['au_subcate']);
+            $tpl->assign("VALUE_AU_OPTION_SELECTED",($row['au_subcate']==$rdata['au_subcate'])?"selected":"");
         }
     }
 }

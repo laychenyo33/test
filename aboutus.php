@@ -65,18 +65,17 @@ class ABOUTUS{
         if(empty($_REQUEST["au_id"]) && empty($_REQUEST["f"])){
            $sel_top_record=true;
         }
+        if($cms_cfg['ws_module']['ws_aboutus_au_subcate'] && $cms_cfg['ws_module']['ws_aboutus_au_subcate_effect']){        
+            $tpl->newBlock("JS_LEFT_AU_SUBCATE");
+        }
         $current_row = null;
         $i=0;
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
-            if($cms_cfg["ws_module"]["ws_left_main_au"]==1){
-                $tpl->newBlock( "LEFT_CATE_LIST" );
-                $tpl->assign( array( "VALUE_CATE_NAME" => $row["au_subject"],
-                                     "VALUE_CATE_LINK"  => ($i==1)?$cms_cfg["base_root"].$this->au_cate.".htm":$this->get_link($row),
-                ));
-            }
-            if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["au_seo_filename"]))){
-                $tpl->assign("TAG_CURRENT_CLASS", "class=\"current\"");
+            $menuItem['name'] = $row['au_subject'];
+            $menuItem['link'] = ($i==1)?$cms_cfg["base_root"].$this->au_cate.".htm":$this->get_link($row);
+            if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || ($this->ws_seo && ($_REQUEST["f"] && $_REQUEST["f"]==$row["au_seo_filename"]))){
+                //$menuItem['tag_cur'] = "class='current'";
                 $current_row = $row;
                 if($this->ws_seo){
                     $meta_array=array("meta_title"=>$row["au_seo_title"],
@@ -88,8 +87,24 @@ class ABOUTUS{
                 }else{
                     $main->header_footer("aboutus",$row["au_subject"]);
                 }
+            }            
+            if($cms_cfg["ws_module"]["ws_left_main_au"]==1){
+                if($cms_cfg['ws_module']['ws_aboutus_au_subcate']){
+                    if(!empty($row['au_subcate'])){
+                        if(!isset($left_menu[$row['au_subcate']])){
+                            $left_menu[$row['au_subcate']]['name'] = $row['au_subcate'];
+                            $left_menu[$row['au_subcate']]['link'] = '#';
+                        }
+                        $left_menu[$row['au_subcate']]['sub'][]=$menuItem;
+                    }else{
+                        $left_menu[]=$menuItem;
+                    }
+                }else{
+                    $left_menu[]=$menuItem;
+                }
             }
-        }     
+        }
+        App::getHelper('main')->new_left_menu($left_menu);
         return $current_row;
     }
     //取得aboutus連結
