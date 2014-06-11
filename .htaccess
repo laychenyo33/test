@@ -48,8 +48,9 @@ RewriteRule ^.*$ - [NC,L]
 
 #獨立aboutus類別
 #showroom
-#RewriteRule ^showroom.htm$  aboutus.php?au_cate=showroom [L]
-#RewriteRule ^showroom/([^/]+).html$  aboutus.php?au_cate=showroom&f=$1 [L]
+#RewriteRule ^(showroom).htm$  aboutus.php?au_cate=$1 [L]
+#RewriteRule ^(showroom)/([^/]+).html$  aboutus.php?au_cate=$1&f=$2 [L]
+#RewriteRule ^(showroom)-(\d+).html$  aboutus.php?au_cate=$1&au_id=$2 [L]
 
 RewriteRule ^new-products.htm$  products.php?func=p_new [L]
 RewriteRule ^pro-products.htm$  products.php?func=p_pro [L]
