@@ -190,10 +190,10 @@ class APPLICATON{
                 //取得分頁連結且重新組合包含limit的sql語法
                 if($this->ws_seo==1 && trim($_GET["f"])!=""){
                     $func_str=$_GET["f"];
-                    $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,!$custom);
+                    $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,false);
                 }else{
                     $func_str="application.php?pa_id=".$app_row['pa_id'];
-                    $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,!$custom);
+                    $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,false);
                 }
                 $selectrs = $db->query($sql);
                 $rsnum    = $db->numRows($selectrs);
