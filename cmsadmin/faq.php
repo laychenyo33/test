@@ -463,12 +463,13 @@ class FAQ{
         }
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_F_CONTENT" , $row["f_content"] );
+            $tpl->assign( "VALUE_F_CONTENT" , $main->content_file_str_replace($row["f_content"],'out') );
         }
     }
 //問與答--資料更新================================================================
     function faq_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
+        $main = App::getHelper('main');
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
@@ -484,7 +485,7 @@ class FAQ{
                         '".$_REQUEST["f_status"]."',
                         '".$_REQUEST["f_sort"]."',
                         '".$_REQUEST["f_subject"]."',
-                        '".$_REQUEST["f_content"]."',
+                        '".$main->content_file_str_replace($_REQUEST["f_content"],'in')."',
                         '".date("Y-m-d H:i:s")."'
                     )";
                 break;
@@ -495,7 +496,7 @@ class FAQ{
                         f_status='".$_REQUEST["f_status"]."',
                         f_sort='".$_REQUEST["f_sort"]."',
                         f_subject='".$_REQUEST["f_subject"]."',
-                        f_content='".$_REQUEST["f_content"]."',
+                        f_content='".$main->content_file_str_replace($_REQUEST["f_content"],'in')."',
                         f_modifydate='".date("Y-m-d H:i:s")."'
                     where f_id='".$_REQUEST["f_id"]."'";
                 break;
@@ -674,7 +675,7 @@ class FAQ{
                         '".$row["f_status"]."',
                         '".$row["f_sort"]."',
                         '".$row["f_subject"]."',
-                        '".$row["f_content"]."',
+                        '".$main->content_file_str_replace($row["f_content"],'in')."',
                         '".$row["f_modifydate"]."'
                     )";
                 $rs = $db->query($sql);

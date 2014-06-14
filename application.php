@@ -67,14 +67,14 @@ class APPLICATON{
             if(trim($row["mt_seo_custom"])) {
                     $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
                     $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
-                    $tpl->assign("VALUE_PC_CUSTOM",$row["mt_seo_custom"]);
+                    $tpl->assign("VALUE_PC_CUSTOM",$main->content_file_str_replace($row["mt_seo_custom"],'out'));
                     $custom=1;
             }else{
                 //顯示產品主頁SEO簡述
                 if(trim($row["mt_seo_short_desc"])){
                     $row["mt_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_short_desc"]);
                     $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                    $tpl->assign("VALUE_PC_SHORT_DESC",$row["mt_seo_short_desc"]);
+                    $tpl->assign("VALUE_PC_SHORT_DESC",$main->content_file_str_replace($row["mt_seo_short_desc"],'out'));
                 }
             }           
             //應用領域列表
@@ -136,7 +136,7 @@ class APPLICATON{
                 if(trim($app_row["pa_seo_short_desc"])){
                     $app_row["pa_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$app_row["pa_seo_short_desc"]);
                     $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                    $tpl->assign("VALUE_PC_SHORT_DESC",$app_row["pa_seo_short_desc"]);
+                    $tpl->assign("VALUE_PC_SHORT_DESC",$main->content_file_str_replace($app_row["pa_seo_short_desc"],'out'));
                 }
                 //應用領域列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_status='1' and pa_parent='".$app_row['pa_id']."' order by pa_sort ".$cms_cfg['sort_pos']." ";

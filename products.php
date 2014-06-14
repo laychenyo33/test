@@ -198,7 +198,7 @@ class PRODUCTS{
                 if($row['pc_desc']){
                     $tpl->newBlock('PRODUCTS_CATE_DESC');
                     $tpl->assign(array(
-                        "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc']),
+                        "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out'),
                     ));
                 }
             }else{
@@ -223,7 +223,7 @@ class PRODUCTS{
                     //顯示產品主頁自訂頁
                     if(trim($row["mt_seo_custom"])) {
     //                        $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
-                            $row["mt_seo_custom"]=$main->content_file_str_replace($row["mt_seo_custom"]);
+                            $row["mt_seo_custom"]=$main->content_file_str_replace($row["mt_seo_custom"],'out');
                             $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
                             $tpl->assign("VALUE_PC_CUSTOM",$row["mt_seo_custom"]);
                             $custom=1;
@@ -303,7 +303,7 @@ class PRODUCTS{
         //階層
         $func_str="";
         if($row["pc_custom_status"]==1){//自訂頁面
-                $row["pc_custom"] = $main->content_file_str_replace($row["pc_custom"]);
+                $row["pc_custom"] = $main->content_file_str_replace($row["pc_custom"],'out');
                 $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
                 $tpl->assign("VALUE_PC_CUSTOM",$row["pc_custom"]);
         }else{
@@ -519,7 +519,7 @@ class PRODUCTS{
                     "VALUE_P_ID"         => $row["p_id"]
                 ));
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
-                $row["p_custom"] = $main->content_file_str_replace($row["p_custom"]);
+                $row["p_custom"] = $main->content_file_str_replace($row["p_custom"],'out');
                 $tpl->assign("VALUE_P_CUSTOM",$row["p_custom"]);
                 if($cms_cfg['ws_module']['ws_products_custom_inquiry']){
                     $tpl->newBlock("INQUIRY_IN_CUSTOM");
@@ -646,7 +646,7 @@ class PRODUCTS{
                     if(trim($ck_str)!=""){
                         $tmp = array(
                             'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row[$property['field']."_title"]:$property['defaultTitle'],
-                            'data'=>$main->content_file_str_replace($row[$property['field']])
+                            'data'=>$main->content_file_str_replace($row[$property['field']],'out')
                         );
                         $domtabData[$property['sort']] = $tmp;
                     }

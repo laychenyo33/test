@@ -61,7 +61,7 @@ class Model_Ad {
             $this->tpl->newBlock($adBlock);
             $this->tpl->assign(array(
                 "TAG_FILE_ROOT" => $cms_cfg['file_root'],
-                "AD_LINK"    => $adItem['ad_link'],
+                "AD_LINK"    => App::getHelper('main')->content_file_str_replace($adItem['ad_link'],'out'),
                 "AD_CONTENT" => $adItem['ad_file'],
                 "AD_SUBJECT" => $adItem['ad_subject'],
             ));

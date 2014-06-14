@@ -72,8 +72,8 @@ class METATITLE{
                     "VALUE_SEO_TITLE"           => $row["mt_seo_title"],
                     "VALUE_SEO_KEYWORD"         => $row["mt_seo_keyword"], 
                     "VALUE_SEO_DESCRIPTION"     => $row["mt_seo_description"], 
-                    "VALUE_SEO_SHORT_DESC"      => $row["mt_seo_short_desc"], 
-                    "VALUE_SEO_CUSTOM"          => $row["mt_seo_custom"], 
+                    "VALUE_SEO_SHORT_DESC"      => $main->content_file_str_replace($row["mt_seo_short_desc"],'out'), 
+                    "VALUE_SEO_CUSTOM"          => $main->content_file_str_replace($row["mt_seo_custom"],'out'), 
                     "SEO_CUSTOM_STATUS_CK0"     => $row["mt_seo_custom"]?"":"checked", 
                     "SEO_CUSTOM_STATUS_CK1"     => $row["mt_seo_custom"]?"checked":"", 
                     "SEO_CUSTOM_STATUS_DISPLAY" => $row["mt_seo_custom"]?"":"none", 
@@ -93,8 +93,8 @@ class METATITLE{
                     mt_seo_title='".htmlspecialchars($metafields["mt_seo_title"])."',
                     mt_seo_keyword='".htmlspecialchars($metafields["mt_seo_keyword"])."',
                     mt_seo_description='".htmlspecialchars($metafields["mt_seo_description"])."',
-                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($metafields["mt_seo_short_desc"]))."',
-                    mt_seo_custom='".$db->quote($main->content_file_str_replace($metafields["mt_seo_custom"]))."',
+                    mt_seo_short_desc='".$db->quote($main->content_file_str_replace($metafields["mt_seo_short_desc"],'in'))."',
+                    mt_seo_custom='".$db->quote($main->content_file_str_replace($metafields["mt_seo_custom"],'in'))."',
                     mt_seo_h1='".htmlspecialchars($metafields["mt_seo_h1"])."'
                 where mt_name='".$mt_name."'";
             $rs = $db->query($sql);

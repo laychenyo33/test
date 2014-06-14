@@ -188,7 +188,7 @@ class GALLERY{
     }
     //Gallery分類--表單
     function gallery_cate_form($action_mode){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         if($this->seo){
             $tpl->newBlock("SEO_EDIT_ZONE");
         }
@@ -219,7 +219,7 @@ class GALLERY{
                                           "VALUE_GC_STATUS"  => $row["gc_status"],
                                           "VALUE_GC_SORT"  => $row["gc_sort"],
                                           "VALUE_GC_SUBJECT" => $row["gc_subject"],
-                                          "VALUE_GC_DESC" => $row["gc_desc"],
+                                          "VALUE_GC_DESC" => $main->content_file_str_replace($row["gc_desc"],'out'),
                                           "VALUE_GC_DIR" => $row["gc_dir"],
                                           "STR_GC_STATUS_CK1" => ($row["gc_status"])?"checked":"",
                                           "STR_GC_STATUS_CK0" => ($row["gc_status"])?"":"checked",
@@ -284,7 +284,7 @@ class GALLERY{
                         ".$_REQUEST["gc_status"].",
                         '".$_REQUEST["gc_sort"]."',
                         '".htmlspecialchars($_REQUEST["gc_subject"])."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"]))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"],'in'))."',
                         ".$add_value_str."
                         '".$main->file_str_replace($_REQUEST["gc_dir"])."'
                     )";
@@ -295,7 +295,7 @@ class GALLERY{
                         gc_status=".$_REQUEST["gc_status"].",
                         gc_sort='".$_REQUEST["gc_sort"]."',
                         gc_subject='".htmlspecialchars($_REQUEST["gc_subject"])."',
-                        gc_desc='".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"]))."',
+                        gc_desc='".$db->quote($main->content_file_str_replace($_REQUEST["gc_desc"],'in'))."',
                         ".$update_str."
                         gc_dir='".$main->file_str_replace($_REQUEST["gc_dir"])."'
                     where gc_id='".$_REQUEST["gc_id"]."'";
@@ -531,7 +531,7 @@ class GALLERY{
         }
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_G_CONTENT" , $row["g_content"] );
+            $tpl->assign( "VALUE_G_CONTENT" , $main->content_file_str_replace($row["g_content"],'out') );
         }
     }
 //Gallery--資料更新================================================================
@@ -572,7 +572,7 @@ class GALLERY{
                         '".$_REQUEST["g_pop"]."',
                         '".htmlspecialchars($_REQUEST["g_subject"])."',
                         '".$_REQUEST["g_content_type"]."',
-                        '".$_REQUEST["g_content"]."',
+                        '".$main->content_file_str_replace($_REQUEST["g_content"],'in')."',
                         '".$_REQUEST["g_url"]."',
                         '".$main->file_str_replace($_REQUEST["g_s_pic"])."',
                         '".$main->file_str_replace($_REQUEST["g_b_pic1"])."',
@@ -600,7 +600,7 @@ class GALLERY{
                         g_pop='".$_REQUEST["g_pop"]."',
                         g_subject='".htmlspecialchars($_REQUEST["g_subject"])."',
                         g_content_type='".$_REQUEST["g_content_type"]."',
-                        g_content='".$_REQUEST["g_content"]."',
+                        g_content='".$main->content_file_str_replace($_REQUEST["g_content"],'in')."',
                         g_url='".$_REQUEST["g_url"]."',
                         g_s_pic='".$main->file_str_replace($_REQUEST["g_s_pic"])."',
                         g_b_pic1='".$main->file_str_replace($_REQUEST["g_b_pic1"])."',
@@ -811,9 +811,9 @@ class GALLERY{
                         '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_gallery","g")."',
                         '".$row["g_hot"]."',
                         '".$row["g_pop"]."',
-                        '".addslashes($row["g_subject"])."',
+                        '".$row["g_subject"]."',
                         '".$row["g_content_type"]."',
-                        '".addslashes($row["g_content"])."',
+                        '".$row["g_content"]."',
                         '".$row["g_url"]."',
                         '".$row["g_s_pic"]."',
                         '".$row["g_b_pic1"]."',

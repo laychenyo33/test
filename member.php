@@ -941,7 +941,7 @@ class MEMBER{
             $tpl->assign( array(
                 "VALUE_MM_ID"  => $row["mm_id"],
                 "VALUE_MM_SUBJECT" => $row["mm_subject"],
-                "VALUE_MM_CONTENT" => $row["mm_content"],
+                "VALUE_MM_CONTENT" => $main->content_file_str_replace($row["mm_content"],'out'),
                 "VALUE_MM_MODIFYDATE" => $row["mm_modifydate"],
             ));
         }

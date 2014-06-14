@@ -104,7 +104,7 @@ class GALLERY{
                                 "VALUE_G_S_PIC" => $simg,
                                 "VALUE_G_S_PIC_W" => $dimension['width'],
                                 "VALUE_G_S_PIC_H" => $dimension['height'],
-                                "VALUE_G_STRIP_CONTENT" => str_replace("\r\n","",strip_tags($row["g_content"])),
+                                "VALUE_G_STRIP_CONTENT" => str_replace("\r\n","",strip_tags($main->content_file_str_replace($row["g_content"],'out'))),
             ));
         }
     }
@@ -120,7 +120,7 @@ class GALLERY{
         $tpl->newBlock( "GALLERY_SHOW" );
         $tpl->assign( array("VALUE_G_ID"  => $row["g_id"],
                             "VALUE_G_SUBJECT" => $row["g_subject"],
-                            "VALUE_G_CONTENT" => $row["g_content"],
+                            "VALUE_G_CONTENT" => $main->content_file_str_replace($row["g_content"],'out'),
                             "VALUE_G_MODIFYDATE" => $row["g_modifydate"],
         ));
         for($i=1;$i<=$cms_cfg['gallery_img_limit'];$i++){
@@ -247,7 +247,7 @@ class GALLERY{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         if($cate['gc_desc']){
             $tpl->newBlock("GALLERY_CATE_DESC");
-            $tpl->assign("VALUE_GC_DESC",$main->content_file_str_replace($cate['gc_desc']));
+            $tpl->assign("VALUE_GC_DESC",$main->content_file_str_replace($cate['gc_desc'],'out'));
         }
         if($cms_cfg["ws_module"]['ws_gallery_update_db']){
             $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$cate['gc_id']."'";

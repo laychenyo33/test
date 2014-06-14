@@ -101,7 +101,7 @@ class SERVICE{
         if($_REQUEST["action_mode"]=="term"){
             $sql="
                 update ".$cms_cfg['tb_prefix']."_service_term set
-                    ".$_REQUEST["term_type"]."='".$db->quote($main->content_file_str_replace($_REQUEST["term_content"]))."'
+                    ".$_REQUEST["term_type"]."='".$db->quote($main->content_file_str_replace($_REQUEST["term_content"],'in'))."'
                 where st_id='1'";
             $rs = $db->query($sql);
             $db_msg = $db->report();
