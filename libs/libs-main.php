@@ -1084,25 +1084,28 @@ class MAINFUNC{
                 'pattern' => array(
                     '%(https://)('.$cms_cfg['server_name'].')*('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/|tinymce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
                     '%(https://)('.$cms_cfg['server_name'].')*('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
-                    '%(http://)('.$cms_cfg['server_name'].')*('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
+                    '%(https://)('.$cms_cfg['server_name'].')*('.$cms_cfg['file_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
+                    '%(http://)('.$cms_cfg['server_name'].')*('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/|tinymce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
                     '%(http://)('.$cms_cfg['server_name'].')*('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
-                    '%('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
+                    '%(http://)('.$cms_cfg['server_name'].')*('.$cms_cfg['file_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
+                    '%('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/|tinymce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
                     '%('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
                     '%('.$cms_cfg['file_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
                 ),
                 'replace' => array(
-                    '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_FILE_PATH}$4',
+                    '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_FILE_ROOT}$4',
                     '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_ROOT_PATH}$4',
-                    '{TAG_SCHEME}{TAG_SERVER}{TAG_FILE_PATH}$4',
+                    '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_FILE_ROOT}$4',
+                    '{TAG_SCHEME}{TAG_SERVER}{TAG_FILE_ROOT}$4',
                     '{TAG_SCHEME}{TAG_SERVER}{TAG_ROOT_PATH}$4',
-                    '{TAG_FILE_PATH}$2',
+                    '{TAG_SCHEME}{TAG_SERVER}{TAG_FILE_ROOT}$4',
+                    '{TAG_FILE_ROOT}$2',
                     '{TAG_ROOT_PATH}$2',
                     '{TAG_FILE_ROOT}$2',
                 )
             ),
             'out' => array(
                 'pattern' => array(
-                    '%{TAG_FILE_PATH}%',
                     '%{TAG_ROOT_PATH}%',
                     '%{TAG_FILE_ROOT}%',
                     '%{TAG_SERVER}%',
@@ -1110,7 +1113,6 @@ class MAINFUNC{
                     '%{TAG_SECURE_SCHEME}%',
                 ),
                 'replace' => array(
-                    $cms_cfg['file_root'],
                     $cms_cfg['base_root'],
                     $cms_cfg['file_root'],
                     $cms_cfg['server_name'],
