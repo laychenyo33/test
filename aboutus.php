@@ -52,7 +52,7 @@ class ABOUTUS{
         $row = $this->left_cate_list();
         if($row){
             $main->layer_link($row["au_subject"]);
-            $tpl->assignGlobal( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"]));
+            $tpl->assignGlobal( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"],'out'));
         }else{
             $main->js_notice($TPLMSG["PAGE_NO_EXITS"],$cms_cfg['base_root']);
         }

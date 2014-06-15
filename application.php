@@ -67,52 +67,54 @@ class APPLICATON{
             if(trim($row["mt_seo_custom"])) {
                     $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
                     $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
-                    $tpl->assign("VALUE_PC_CUSTOM",$row["mt_seo_custom"]);
+                    $tpl->assign("VALUE_PC_CUSTOM",$main->content_file_str_replace($row["mt_seo_custom"],'out'));
                     $custom=1;
             }else{
                 //顯示產品主頁SEO簡述
                 if(trim($row["mt_seo_short_desc"])){
                     $row["mt_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_short_desc"]);
                     $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                    $tpl->assign("VALUE_PC_SHORT_DESC",$row["mt_seo_short_desc"]);
+                    $tpl->assign("VALUE_PC_SHORT_DESC",$main->content_file_str_replace($row["mt_seo_short_desc"],'out'));
                 }
-            }           
-            //應用領域列表
-            $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_status='1' and pa_parent='0' order by pa_sort ".$cms_cfg['sort_pos']." ";
-            $selectrs = $db->query($sql);
-            $rsnum    = $db->numRows($selectrs);
-            $i=0;
-            while($row = $db->fetch_array($selectrs,1)){
-                $pa_link = $this->get_link($row);
-                //收集第二頁以後pc_name 做為 meta title
-                if(!empty($_REQUEST["nowp"]) && $i<3){
-                    $meta_title .=$row["pa_name"];
-                }
-                if(!empty($_REQUEST["nowp"]) && $i<6){
-                    $meta_description .=$row["pa_name"];
-                }
-                $pa_img=(trim($row["pa_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pa_small_img"];
-                $dimensions = $main->resizeto($pa_img,$cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
-                $i++;
-                $tpl->newBlock( $show_style_str_pc."_APP" );
-                $tpl->assign( array( "VALUE_PC_NAME"  => $row["pa_name"],
-                                     "VALUE_PC_NAME_ALIAS" =>$row["pa_name_alias"],
-                                     "VALUE_PC_LINK"  => $pa_link,
-                                     "VALUE_PC_ID" => $row["pa_id"],
-                                     "VALUE_PC_CATE_IMG" => $pa_img,
-                                     "VALUE_PC_SMALL_IMG_W" => $dimensions["width"],
-                                     "VALUE_PC_SMALL_IMG_H" => $dimensions["height"],
-                                     "VALUE_PC_SERIAL" => $i,
-                ));
-                if($row_num){
-                    if($i%$row_num==0){
-                        $tpl->assign("TAG_PRODUCTS_CATE_TRTD","</tr><tr>");
+            }
+            if(!$custom){
+                //應用領域列表
+                $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_status='1' and pa_parent='0' order by pa_sort ".$cms_cfg['sort_pos']." ";
+                $selectrs = $db->query($sql);
+                $rsnum    = $db->numRows($selectrs);
+                $i=0;
+                while($row = $db->fetch_array($selectrs,1)){
+                    $pa_link = $this->get_link($row);
+                    //收集第二頁以後pc_name 做為 meta title
+                    if(!empty($_REQUEST["nowp"]) && $i<3){
+                        $meta_title .=$row["pa_name"];
+                    }
+                    if(!empty($_REQUEST["nowp"]) && $i<6){
+                        $meta_description .=$row["pa_name"];
+                    }
+                    $pa_img=(trim($row["pa_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pa_small_img"];
+                    $dimensions = $main->resizeto($pa_img,$cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
+                    $i++;
+                    $tpl->newBlock( $show_style_str_pc."_APP" );
+                    $tpl->assign( array( "VALUE_PC_NAME"  => $row["pa_name"],
+                                         "VALUE_PC_NAME_ALIAS" =>$row["pa_name_alias"],
+                                         "VALUE_PC_LINK"  => $pa_link,
+                                         "VALUE_PC_ID" => $row["pa_id"],
+                                         "VALUE_PC_CATE_IMG" => $pa_img,
+                                         "VALUE_PC_SMALL_IMG_W" => $dimensions["width"],
+                                         "VALUE_PC_SMALL_IMG_H" => $dimensions["height"],
+                                         "VALUE_PC_SERIAL" => $i,
+                    ));
+                    if($row_num){
+                        if($i%$row_num==0){
+                            $tpl->assign("TAG_PRODUCTS_CATE_TRTD","</tr><tr>");
+                        }
+                    }
+                    if($row["pa_id"]==$_GET["pa_id"]){
+                        $tpl->assignGlobal("TAG_NOW_CATE",$row["pa_name"]);
                     }
                 }
-                if($row["pa_id"]==$_GET["pa_id"]){
-                    $tpl->assignGlobal("TAG_NOW_CATE",$row["pa_name"]);
-                }
-            }            
+            }
         }else{
            //應用領域內頁
            //先取得應用領域的info
@@ -136,7 +138,7 @@ class APPLICATON{
                 if(trim($app_row["pa_seo_short_desc"])){
                     $app_row["pa_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$app_row["pa_seo_short_desc"]);
                     $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                    $tpl->assign("VALUE_PC_SHORT_DESC",$app_row["pa_seo_short_desc"]);
+                    $tpl->assign("VALUE_PC_SHORT_DESC",$main->content_file_str_replace($app_row["pa_seo_short_desc"],'out'));
                 }
                 //應用領域列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_products_application where pa_status='1' and pa_parent='".$app_row['pa_id']."' order by pa_sort ".$cms_cfg['sort_pos']." ";

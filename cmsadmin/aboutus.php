@@ -225,7 +225,7 @@ class ABOUTUS{
         }        
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"]) );
+            $tpl->assign( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"],'out') );
         }
     }
 //關於我們--資料更新================================================================
@@ -270,7 +270,7 @@ class ABOUTUS{
                         '".$au_cate."',
                         '".$addtion_au_subcate."',
                         '".$_REQUEST["au_subject"]."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["au_content"]))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["au_content"],'in'))."',
                         ".$add_value_str."
                         '".date("Y-m-d H:i:s")."'
                     )";
@@ -283,7 +283,7 @@ class ABOUTUS{
                         au_cate='".$au_cate."',
                         au_subcate='".$addtion_au_subcate."',
                         au_subject='".$_REQUEST["au_subject"]."',
-                        au_content='".$db->quote($main->content_file_str_replace($_REQUEST["au_content"]))."',
+                        au_content='".$db->quote($main->content_file_str_replace($_REQUEST["au_content"],'in'))."',
                         ".$update_str."
                         au_modifydate='".date("Y-m-d H:i:s")."'
                     where au_id='".$_REQUEST["au_id"]."'";

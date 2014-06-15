@@ -92,7 +92,7 @@ class FAQ{
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "FAQ_LIST" );
-            $row["f_content"]=$main->content_file_str_replace($row["f_content"]);
+            $row["f_content"]=$main->content_file_str_replace($row["f_content"],'out');
             $tpl->assign( array("VALUE_FC_ID"        => $row["fc_id"],
                                 "VALUE_F_ID"         => $row["f_id"],
                                 "VALUE_F_SUBJECT"    => $row["f_subject"],
@@ -139,7 +139,7 @@ class FAQ{
                     );
                     if(trim($row["fc_seo_short_desc"])!=""){
                         $tpl->newBlock("FAQ_CATE_SHORT_DESC");
-                        $tpl->assign("VALUE_FC_SEO_SHORT_DESC",$main->content_file_str_replace($row["fc_seo_short_desc"]));
+                        $tpl->assign("VALUE_FC_SEO_SHORT_DESC",$main->content_file_str_replace($row["fc_seo_short_desc"],'out'));
                     }
                     $main->header_footer($meta_array);
                 }else{

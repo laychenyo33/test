@@ -415,7 +415,7 @@ class GOODLINK{
                                           "VALUE_L_STATUS"  => $row["l_status"],
                                           "VALUE_L_SORT"  => $row["l_sort"],
                                           "VALUE_L_SUBJECT" => $row["l_subject"],
-                                          "VALUE_L_URL" => $row["l_url"],
+                                          "VALUE_L_URL" => $main->content_file_str_replace($row["l_url"],'out'),
                                           "VALUE_L_STARTDATE" => $row["l_startdate"],
                                           "VALUE_L_ENDDATE" => $row["l_enddate"],
                                           "STR_L_STATUS_CK2" => ($row["l_status"]==2)?"checked":"",
@@ -451,7 +451,7 @@ class GOODLINK{
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("TINYMCE_JS");
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_L_CONTENT" , $row["l_content"] );
+            $tpl->assign( "VALUE_L_CONTENT" , $main->content_file_str_replace($row["l_content"],'out') );
         }
     }
 //相關連結--資料更新================================================================
@@ -480,8 +480,8 @@ class GOODLINK{
                         '".$_REQUEST["l_pop"]."',
                         '".htmlspecialchars($_REQUEST["l_subject"])."',
                         '".$_REQUEST["l_content_type"]."',
-                        '".$_REQUEST["l_content"]."',
-                        '".$_REQUEST["l_url"]."',
+                        '".$main->content_file_str_replace($_REQUEST["l_content"],'in')."',
+                        '".$main->content_file_str_replace($_REQUEST["l_url"],'in')."',
                         '".$main->file_str_replace($_REQUEST["l_s_pic"])."',
                         '".date("Y-m-d H:i:s")."'
                     )";
@@ -496,15 +496,15 @@ class GOODLINK{
                         l_pop='".$_REQUEST["l_pop"]."',
                         l_subject='".htmlspecialchars($_REQUEST["l_subject"])."',
                         l_content_type='".$_REQUEST["l_content_type"]."',
-                        l_content='".$_REQUEST["l_content"]."',
-                        l_url='".$_REQUEST["l_url"]."',
+                        l_content='".$main->content_file_str_replace($_REQUEST["l_content"],'in')."',
+                        l_url='".$main->content_file_str_replace($_REQUEST["l_url"],'in')."',
                         l_s_pic='".$main->file_str_replace($_REQUEST["l_s_pic"])."',
                         l_modifydate='".date("Y-m-d H:i:s")."'
                     where l_id='".$_REQUEST["l_id"]."'";
                 break;
         }
         if(!empty($sql)){
-            $rs = $db->query($sql);
+            $rs = $db->query($sql,true);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
@@ -685,7 +685,7 @@ class GOODLINK{
                         '".$row["l_pop"]."',
                         '".addslashes($row["l_subject"])."',
                         '".$row["l_content_type"]."',
-                        '".addslashes($row["l_content"])."',
+                        '".$row["l_content"]."',
                         '".$row["l_url"]."',
                         '".$main->file_str_replace($_REQUEST["l_s_pic"])."',
                         '".$row["l_modifydate"]."'

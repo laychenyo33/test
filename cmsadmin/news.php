@@ -552,7 +552,7 @@ class NEWS{
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("TINYMCE_JS");
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_N_CONTENT" , $main->content_file_str_replace($row["n_content"]) );
+            $tpl->assign( "VALUE_N_CONTENT" , $main->content_file_str_replace($row["n_content"],'out') );
         }
     }
 //最新消息--資料更新================================================================
@@ -604,7 +604,7 @@ class NEWS{
                         '".htmlspecialchars($_REQUEST["n_subject"])."',
                         '".$_REQUEST["n_short"]."',
                         '".$_REQUEST["n_content_type"]."',
-                        '".$main->content_file_str_replace($_REQUEST["n_content"])."',
+                        '".$main->content_file_str_replace($_REQUEST["n_content"],'in')."',
                         '".$_REQUEST["n_url"]."',
                         '".$main->file_str_replace($_REQUEST["n_s_pic"])."',
                         '".date("Y-m-d H:i:s")."',
@@ -625,7 +625,7 @@ class NEWS{
                         n_subject='".htmlspecialchars($_REQUEST["n_subject"])."',
                         n_short='".$_REQUEST["n_short"]."',
                         n_content_type='".$_REQUEST["n_content_type"]."',
-                        n_content='".$main->content_file_str_replace($_REQUEST["n_content"])."',
+                        n_content='".$main->content_file_str_replace($_REQUEST["n_content"],'in')."',
                         n_url='".$_REQUEST["n_url"]."',
                         n_s_pic='".$main->file_str_replace($_REQUEST["n_s_pic"])."',
                         n_modifydate='".date("Y-m-d H:i:s")."',

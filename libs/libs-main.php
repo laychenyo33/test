@@ -359,7 +359,7 @@ class MAINFUNC{
             $meta_array["meta_title"]=$row["mt_seo_title"];
             $meta_array["meta_keyword"]=$row["mt_seo_keyword"];
             $meta_array["meta_description"]=$row["mt_seo_description"];
-            $meta_array["seo_short_desc"]=$row["mt_seo_short_desc"];
+            $meta_array["seo_short_desc"]=$this->content_file_str_replace($row["mt_seo_short_desc"],'out');
             $meta_array["seo_h1"]=$row["mt_seo_h1"];
         }
         return $meta_array;
@@ -1077,12 +1077,49 @@ class MAINFUNC{
         $input_path=preg_replace( $pattern, $replacement, $input_path);
         return $input_path;
     }
-    function content_file_str_replace($content){
+    function content_file_str_replace($content,$direction){
         global $cms_cfg;
-        $content=preg_replace('%([-\w\.:]*/)*(upload_files/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_root']."$2", $content);
-        $content=preg_replace('%([-\w\.:]*/)*(tinymce/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_root']."$2", $content);
-        $content=preg_replace('%([-\w\.:]*/)*(images/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['base_root']."$2", $content);
-        return $content;
+        $replace_option = array(
+            'in' => array(
+                'pattern' => array(
+                    '%(https://)('.$cms_cfg['server_name'].')*('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/|tinymce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
+                    '%(https://)('.$cms_cfg['server_name'].')*('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
+                    '%(http://)('.$cms_cfg['server_name'].')*('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
+                    '%(http://)('.$cms_cfg['server_name'].')*('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
+                    '%('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
+                    '%('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
+                    '%('.$cms_cfg['file_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
+                ),
+                'replace' => array(
+                    '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_FILE_PATH}$4',
+                    '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_ROOT_PATH}$4',
+                    '{TAG_SCHEME}{TAG_SERVER}{TAG_FILE_PATH}$4',
+                    '{TAG_SCHEME}{TAG_SERVER}{TAG_ROOT_PATH}$4',
+                    '{TAG_FILE_PATH}$2',
+                    '{TAG_ROOT_PATH}$2',
+                    '{TAG_FILE_ROOT}$2',
+                )
+            ),
+            'out' => array(
+                'pattern' => array(
+                    '%{TAG_FILE_PATH}%',
+                    '%{TAG_ROOT_PATH}%',
+                    '%{TAG_FILE_ROOT}%',
+                    '%{TAG_SERVER}%',
+                    '%{TAG_SCHEME}%',
+                    '%{TAG_SECURE_SCHEME}%',
+                ),
+                'replace' => array(
+                    $cms_cfg['file_root'],
+                    $cms_cfg['base_root'],
+                    $cms_cfg['file_root'],
+                    $cms_cfg['server_name'],
+                    "http://",
+                    "https://",
+                )
+            )
+        );
+        return preg_replace( $replace_option[$direction]['pattern'] , $replace_option[$direction]['replace'] , $content);
     }    
     //鎖滑鼠右鍵功能
     function mouse_disable() {

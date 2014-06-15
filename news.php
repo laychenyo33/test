@@ -174,10 +174,9 @@ class NEWS{
         }
         //顯示內容
         $tpl->newBlock( "NEWS_SHOW" );
-        $row["n_content"]=$main->content_file_str_replace($row["n_content"]);
         $tpl->assign( array("VALUE_N_ID"  => $row["n_id"],
                             "VALUE_N_SUBJECT" => $row["n_subject"],
-                            "VALUE_N_CONTENT" => $main->content_file_str_replace($row["n_content"]),
+                            "VALUE_N_CONTENT" => $main->content_file_str_replace($row["n_content"],'out'),
                             "VALUE_N_MODIFYDATE" => $row["n_modifydate"],
         ));
         //指定TAG_LAYER

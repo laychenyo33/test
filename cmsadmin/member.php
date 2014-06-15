@@ -803,7 +803,7 @@ class MEMBER{
                         '".$_REQUEST["mm_status"]."',
                         '".$_REQUEST["mm_sort"]."',
                         '".$_REQUEST["mm_subject"]."',
-                        '".$main->content_file_str_replace($_REQUEST["mm_content"])."',
+                        '".$main->content_file_str_replace($_REQUEST["mm_content"],'in')."',
                         '".date("Y-m-d H:i:s")."'
                     )";
                 break;
@@ -813,7 +813,7 @@ class MEMBER{
                         mm_status='".$_REQUEST["mm_status"]."',
                         mm_sort='".$_REQUEST["mm_sort"]."',
                         mm_subject='".$_REQUEST["mm_subject"]."',
-                        mm_content='".$main->content_file_str_replace($_REQUEST["mm_content"])."',
+                        mm_content='".$main->content_file_str_replace($_REQUEST["mm_content"],'in')."',
                         mm_modifydate='".date("Y-m-d H:i:s")."'
                     where mm_id='".$_REQUEST["mm_id"]."'";
                 break;

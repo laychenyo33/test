@@ -486,7 +486,7 @@ class STORES{
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("TINYMCE_JS");
             $tpl->newBlock("WYSIWYG_TINYMCE1");
-            $tpl->assign( "VALUE_SD_DESC" , $row["sd_desc"] );
+            $tpl->assign( "VALUE_SD_DESC" , $main->content_file_str_replace($row["sd_desc"],'out') );
         }
     }
 //門市管理--資料更新================================================================
@@ -512,7 +512,7 @@ class STORES{
                         '".$_REQUEST["sd_sort"]."',
                         '".htmlspecialchars($_REQUEST["sd_name"])."',
                         '".$_REQUEST["sd_type"]."',
-                        '".$_REQUEST["sd_desc"]."',
+                        '".$main->content_file_str_replace($_REQUEST["sd_desc"],'in')."',
                         '".$_REQUEST["sd_url"]."',
                         '".$_REQUEST["sd_gmurl"]."',
                         '".$main->file_str_replace($_REQUEST["sd_img"])."',
@@ -527,7 +527,7 @@ class STORES{
                         sd_sort='".$_REQUEST["sd_sort"]."',
                         sd_name='".htmlspecialchars($_REQUEST["sd_name"])."',
                         sd_type='".$_REQUEST["sd_type"]."',
-                        sd_desc='".$_REQUEST["sd_desc"]."',
+                        sd_desc='".$main->content_file_str_replace($_REQUEST["sd_desc"],'in')."',
                         sd_url='".$_REQUEST["sd_url"]."',
                         sd_gmurl='".$_REQUEST["sd_gmurl"]."',
                         sd_img='".$main->file_str_replace($_REQUEST["sd_img"])."',

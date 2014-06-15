@@ -520,7 +520,7 @@ class PRODUCTS{
                             '".htmlspecialchars($_REQUEST["pc_seo_title"])."',
                             '".htmlspecialchars($_REQUEST["pc_seo_keyword"])."',
                             '".htmlspecialchars($_REQUEST["pc_seo_description"])."',
-                            '".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"]))."',
+                            '".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"],'in'))."',
                             '".$_REQUEST["pc_seo_down_short_desc"]."',
                             '".htmlspecialchars($_REQUEST["pc_seo_h1"])."',
                             '".$_REQUEST["pc_up_sort"]."',";
@@ -529,7 +529,7 @@ class PRODUCTS{
                          pc_seo_title='".htmlspecialchars($_REQUEST["pc_seo_title"])."',
                          pc_seo_keyword='".htmlspecialchars($_REQUEST["pc_seo_keyword"])."',
                          pc_seo_description='".htmlspecialchars($_REQUEST["pc_seo_description"])."',
-                         pc_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"]))."',
+                         pc_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"],'in'))."',
                          pc_seo_down_short_desc='".$_REQUEST["pc_seo_down_short_desc"]."',
                          pc_seo_h1='".htmlspecialchars($_REQUEST["pc_seo_h1"])."',
                          pc_up_sort='".$_REQUEST["pc_up_sort"]."',";
@@ -560,10 +560,10 @@ class PRODUCTS{
                     '".$_REQUEST["pc_sort"]."',
                     '".htmlspecialchars($_REQUEST["pc_name"])."',
                     '".$_REQUEST["pc_custom_status"]."',
-                    '".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"]))."',
+                    '".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"],'in'))."',
                     '".$_REQUEST["pc_show_style"]."',
                     '".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
-                    '".$main->content_file_str_replace($_REQUEST["pc_desc"])."',
+                    '".$main->content_file_str_replace($_REQUEST["pc_desc"],'in')."',
                     '".$_REQUEST["pc_redirect_url"]."',
                     '".$_REQUEST["pc_related_cate"]."',
                     '".date("Y-m-d H:i:s")."',
@@ -614,10 +614,10 @@ class PRODUCTS{
                     pc_name='".htmlspecialchars($_REQUEST["pc_name"])."',
                     pc_level='".$pc_level."',
                     pc_custom_status='".$_REQUEST["pc_custom_status"]."',
-                    pc_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"]))."',
+                    pc_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"],'in'))."',
                     pc_show_style='".$_REQUEST["pc_show_style"]."',
                     pc_cate_img='".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
-                    pc_desc='".$main->content_file_str_replace($_REQUEST["pc_desc"])."',
+                    pc_desc='".$main->content_file_str_replace($_REQUEST["pc_desc"],'in')."',
                     pc_redirect_url='".$_REQUEST["pc_redirect_url"]."',
                     pc_related_cate='".$_REQUEST["pc_related_cate"]."',
                     pc_modifydate='".date("Y-m-d H:i:s")."',
@@ -1054,13 +1054,13 @@ class PRODUCTS{
         $this->products_cate_select2($this->products_cate_select_option,$pc_id, $parent=0, $indent="");
         $tpl->assignGlobal("TAG_SELECT_PRODUCTS_CATE" ,$this->products_cate_select_option);
         $tpl->assignGlobal( array ("VALUE_P_CUSTOM" => $row["p_custom"],
-                                   "VALUE_P_SPEC" => $main->content_file_str_replace($row["p_spec"]),
+                                   "VALUE_P_SPEC" => $main->content_file_str_replace($row["p_spec"],'out'),
                                    "TAG_SPEC_SHOW" => (trim($row["p_spec"]))?"":"none" ,
-                                   "VALUE_P_CHARACTER" => $main->content_file_str_replace($row["p_character"]),
+                                   "VALUE_P_CHARACTER" => $main->content_file_str_replace($row["p_character"],'out'),
                                    "TAG_CHARACTER_SHOW" => (trim($row["p_character"]))?"":"none" ,
-                                   "VALUE_P_DESC" => $main->content_file_str_replace($row["p_desc"]),
+                                   "VALUE_P_DESC" => $main->content_file_str_replace($row["p_desc"],'in'),
                                    "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none",
-                                   "VALUE_P_CERT" => $main->content_file_str_replace($row["p_certificate"]),
+                                   "VALUE_P_CERT" => $main->content_file_str_replace($row["p_certificate"],'out'),
                                    "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
                                    "TAG_SHORT_DESC_SHOW" => (trim($row["p_seo_short_desc"]))?"":"none",
         ));
@@ -1070,7 +1070,7 @@ class PRODUCTS{
                 $tpl->assign(array(
                    "SERIAL"           => $j,
                    "ELM_SERIAL"       => $j+5,
-                   "INFO_FIELD_VALUE" => $row["p_info_field".$j],
+                   "INFO_FIELD_VALUE" => $main->content_file_str_replace($row["p_info_field".$j],'out'),
                    "INFO_FIELD_SHOW"  => (trim($row["p_info_field".$j]))?"":"none",
                 ));
                 if($cms_cfg['ws_module']['ws_products_title']){
@@ -1126,11 +1126,11 @@ class PRODUCTS{
                         $add_extra_fields .= "p_info_field".$j."_title,";
                         $add_extra_fields .= "p_info_field".$j.",";
                         $add_extra_values .= "'".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
-                        $add_extra_values .= "'".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j]))."',";
+                        $add_extra_values .= "'".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j],'in'))."',";
                         break;
                     case "mod":
                         $update_extra_fields .= "p_info_field".$j."_title ='".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
-                        $update_extra_fields .= "p_info_field".$j."='".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j]))."',";
+                        $update_extra_fields .= "p_info_field".$j."='".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j],'in'))."',";
                         break;
                 }
             }
@@ -1194,7 +1194,7 @@ class PRODUCTS{
                         '".$_REQUEST["p_pro_sort"]."',
                         '".htmlspecialchars($_REQUEST["p_name"])."',
                         '".$_REQUEST["p_custom_status"]."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"]))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"],'in'))."',
                         '".$_REQUEST["p_show_style"]."',
                         '".$this->p_type."',
                         '".$_REQUEST["p_show_price"]."',
@@ -1204,13 +1204,13 @@ class PRODUCTS{
                         '".$main->file_str_replace($_REQUEST["p_small_img"])."',
                         '".$_REQUEST["p_related_products"]."',
                         '".$db->quote($_REQUEST["p_spec_title"])."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"]))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"],'in'))."',
                         '".$db->quote($_REQUEST["p_character_title"])."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"]))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"],'in'))."',
                         '".$db->quote($_REQUEST["p_desc_title"])."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"]))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"],'in'))."',
                         '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
+                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"],'in'))."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                         '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                         '".$db->quote($_REQUEST["p_mv"])."',
@@ -1247,7 +1247,7 @@ class PRODUCTS{
                     p_pro_sort = '".$_REQUEST["p_pro_sort"]."',
                     p_name = '".htmlspecialchars($_REQUEST["p_name"])."',
                     p_custom_status = '".$_REQUEST["p_custom_status"]."',
-                    p_custom = '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"]))."',
+                    p_custom = '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"],'in'))."',
                     p_show_style = '".$_REQUEST["p_show_style"]."',
                     p_type = '".$this->p_type."',
                     p_show_price = '".$_REQUEST["p_show_price"]."',
@@ -1257,13 +1257,13 @@ class PRODUCTS{
                     p_small_img = '".$main->file_str_replace($_REQUEST["p_small_img"])."',
                     p_related_products = '".$_REQUEST["p_related_products"]."',
                     p_spec_title = '".$db->quote($_REQUEST["p_spec_title"])."',
-                    p_spec = '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"]))."',
+                    p_spec = '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"],'in'))."',
                     p_character_title = '".$db->quote($_REQUEST["p_character_title"])."',
-                    p_character = '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"]))."',
+                    p_character = '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"],'in'))."',
                     p_desc_title = '".$db->quote($_REQUEST["p_desc_title"])."',
-                    p_desc = '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"]))."',
+                    p_desc = '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"],'in'))."',
                     p_desc_strip = '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
-                    p_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"]))."',
+                    p_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"],'in'))."',
                     p_attach_file1 = '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
                     p_attach_file2 = '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
                     p_mv = '".$db->quote($_REQUEST["p_mv"])."',
@@ -2418,8 +2418,8 @@ class PRODUCTS{
                         "VALUE_PA_SEO_KEYWORD" => $row["pa_seo_keyword"],
                         "VALUE_PA_SEO_DESCRIPTION" => $row["pa_seo_description"],
                         "VALUE_PA_SEO_H1" => $row["pa_seo_h1"],
-                        "VALUE_PA_SEO_SHORT_DESC" => $row["pa_seo_short_desc"],
-                        "VALUE_PA_SEO_DOWN_SHORT_DESC" => $row["pa_seo_down_short_desc"],
+                        "VALUE_PA_SEO_SHORT_DESC" => $main->content_file_str_replace($row["pa_seo_short_desc"],'out'),
+                        "VALUE_PA_SEO_DOWN_SHORT_DESC" => $main->content_file_str_replace($row["pa_seo_down_short_desc"],'out'),
                     ));
                 }
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
@@ -2455,10 +2455,10 @@ class PRODUCTS{
                     'filter'=>array('htmlspecialchars')  
                 ),
                 "pa_seo_short_desc"=>array(
-                    //'filter'=>array('htmlspecialchars')   
+                    'filter'=>array(array('callback'=>array($main,'content_file_str_replace'),'params'=>array('in'))),
                 ),
                 "pa_seo_down_short_desc"=>array(
-                    //'filter'=>array('htmlspecialchars')   
+                    'filter'=>array(array('callback'=>array($main,'content_file_str_replace'),'params'=>array('in'))),
                 ),
                 "pa_seo_h1"=>array(
                     'filter'=>array('htmlspecialchars')   
@@ -2469,8 +2469,19 @@ class PRODUCTS{
             foreach($seo_fields as $field => $info){
                 $val = trim($_REQUEST[$field]);
                 if(is_array($info['filter'])){
-                    foreach($info['filter'] as $func){
-                        $val = $func($val);   
+                    foreach($info['filter'] as $callback){
+                        if(is_string($callback)){
+                            $val = call_user_func($callback,$val);
+                        }elseif(is_array($callback)){
+                            if(!isset($callback['callback'])){
+                                $callback = array('callback'=>$callback);
+                            }
+                            $params = array($val);
+                            if(isset($callback['params'])){
+                                $params = array_merge($params,$callback['params']);
+                            }
+                            $val = call_user_func_array($callback['callback'],$params);
+                        }
                     }
                 }
                 $add_field_str .= "".$field.",";
@@ -2498,7 +2509,7 @@ class PRODUCTS{
                     '".$_REQUEST["pa_sort"]."',
                     '".htmlspecialchars($_REQUEST["pa_name"])."',
                     '".$_REQUEST["pa_custom_status"]."',
-                    '".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"]))."',
+                    '".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"],'in'))."',
                     '".$main->file_str_replace($_REQUEST["pa_small_img"])."',
                     '".date("Y-m-d H:i:s")."',
                     ".$add_value_str."
@@ -2518,7 +2529,7 @@ class PRODUCTS{
                     pa_sort='".$_REQUEST["pa_sort"]."',
                     pa_name='".htmlspecialchars($_REQUEST["pa_name"])."',
                     pa_custom_status='".$_REQUEST["pa_custom_status"]."',
-                    pa_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"]))."',
+                    pa_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"],'in'))."',
                     pa_small_img='".$main->file_str_replace($_REQUEST["pa_small_img"])."',
                     pa_modifydate='".date("Y-m-d H:i:s")."',
                     ".$update_str."
