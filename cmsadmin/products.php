@@ -1064,7 +1064,7 @@ class PRODUCTS{
                                    "TAG_SPEC_SHOW" => (trim($row["p_spec"]))?"":"none" ,
                                    "VALUE_P_CHARACTER" => $main->content_file_str_replace($row["p_character"],'out'),
                                    "TAG_CHARACTER_SHOW" => (trim($row["p_character"]))?"":"none" ,
-                                   "VALUE_P_DESC" => $main->content_file_str_replace($row["p_desc"],'in'),
+                                   "VALUE_P_DESC" => $main->content_file_str_replace($row["p_desc"],'out'),
                                    "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none",
                                    "VALUE_P_CERT" => $main->content_file_str_replace($row["p_certificate"],'out'),
                                    "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
