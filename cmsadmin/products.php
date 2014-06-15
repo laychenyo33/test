@@ -1058,27 +1058,28 @@ class PRODUCTS{
                                    "TAG_SPEC_SHOW" => (trim($row["p_spec"]))?"":"none" ,
                                    "VALUE_P_CHARACTER" => $main->content_file_str_replace($row["p_character"],'out'),
                                    "TAG_CHARACTER_SHOW" => (trim($row["p_character"]))?"":"none" ,
-                                   "VALUE_P_DESC" => $main->content_file_str_replace($row["p_desc"],'in'),
+                                   "VALUE_P_DESC" => $main->content_file_str_replace($row["p_desc"],'out'),
                                    "TAG_DESC_SHOW" => (trim($row["p_desc"]))?"":"none",
                                    "VALUE_P_CERT" => $main->content_file_str_replace($row["p_certificate"],'out'),
                                    "TAG_CERT_SHOW" => (trim($row["p_certificate"]))?"":"none",
                                    "TAG_SHORT_DESC_SHOW" => (trim($row["p_seo_short_desc"]))?"":"none",
         ));
         if($cms_cfg['ws_module']['ws_products_info_fields']){
-            for($j=1;$j<=$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
+            for($j=0;$j<$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
+                $fieldIdx = $j+1;
                 $tpl->newBlock("INFO_FIELD_LIST");
                 $tpl->assign(array(
-                   "SERIAL"           => $j,
-                   "ELM_SERIAL"       => $j+5,
-                   "INFO_FIELD_VALUE" => $main->content_file_str_replace($row["p_info_field".$j],'out'),
-                   "INFO_FIELD_SHOW"  => (trim($row["p_info_field".$j]))?"":"none",
+                   "SERIAL"           => $fieldIdx,
+                   "ELM_SERIAL"       => $fieldIdx+5,
+                   "INFO_FIELD_VALUE" => $main->content_file_str_replace($row["p_info_field".$fieldIdx],'out'),
+                   "INFO_FIELD_SHOW"  => (trim($row["p_info_field".$fieldIdx]))?"":"none",
                 ));
                 if($cms_cfg['ws_module']['ws_products_title']){
                     $tpl->newBlock("CUSTOM");
                     $tpl->assign(array(
-                        "SERIAL"           => $j,
-                        "TITLE_SERIAL"     => $j+3,
-                        "INFO_FIELD_TITLE" => $row["p_info_field".$j."_title"]
+                        "SERIAL"           => $fieldIdx,
+                        "TITLE_SERIAL"     => $fieldIdx+3,
+                        "INFO_FIELD_TITLE" => $row["p_info_field".$fieldIdx."_title"]
                     ));
                 }else{
                     $tpl->newBlock("STATIC");
