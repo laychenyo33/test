@@ -5,13 +5,17 @@
 		function __construct($config){
 			global $db,$cms_cfg,$ws_array,$TPLMSG;
 			include_once(dirname(__FILE__)."/config.php");
-                        if(!empty($config['MerchantID']) && !empty($config['HashKey']) && !empty($config['HashIV'])){
-                            $this->all_cfg["MerchantID"] = $config['MerchantID']; // 特店編號
-                            $this->all_cfg["HashKey"] = $config['HashKey']; // Hash key
-                            $this->all_cfg["HashIV"] = $config['HashIV']; // Hash IV
-                        }else{
-                            throw new Exception("Missing some ALLPAY initial option");
-                        }
+			
+			/* 這樣真的很多餘 = ="
+            if(!empty($config['MerchantID']) && !empty($config['HashKey']) && !empty($config['HashIV'])){
+                $this->all_cfg["MerchantID"] = $config['MerchantID']; // 特店編號
+                $this->all_cfg["HashKey"] = $config['HashKey']; // Hash key
+                $this->all_cfg["HashIV"] = $config['HashIV']; // Hash IV
+            }else{
+                throw new Exception("Missing some ALLPAY initial option");
+            }
+			*/
+			
 //			// ReturnURL
 //			if(!empty($_POST["MerchantTradeNo"]) && empty($_REQUEST["o_id"]) && empty($_REQUEST["ap_retrun"])){
 //				$this->allpay_respone(0);
