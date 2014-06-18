@@ -21,11 +21,14 @@ class Model_Session implements arrayaccess {
         }
         $this->_session =&$_SESSION[$sess_cookie_name];
     }
-    function __get($name){
+    function &__get($name){
         return $this->_session[$name];
     }
     function __set($name,$value){
         $this->_session[$name] = $value;
+    }
+    function __isset($name) {
+        return isset($this->_session[$name]);
     }
     static function factory($sess_cookie_name){
         if(self::$_handler === null){
