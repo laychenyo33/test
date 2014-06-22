@@ -74,21 +74,22 @@ class CONTACTUS{
 //聯絡我們--表單================================================================
     function contactus_form(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array,$main;
-        $tpl->assignGlobal(array("VALUE_CU_NAME" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_name"],
-                                 "VALUE_CU_COMPANY_NAME" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_company_name"],
-                                 "VALUE_CU_ADDRESS" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_address"],
-                                 "VALUE_CU_TEL" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_tel"],
-                                 "VALUE_CU_FAX" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_fax"],
-                                 "VALUE_CU_CONTENT" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_content"],
-                                 "STR_M_CS_CK1" => ($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"]=="Mr.")?"selected":"",
-                                 "STR_M_CS_CK2" => ($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"]=="Miss.")?"selected":"",
-                                 "STR_M_CS_CK3" => ($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"]=="Mrs.")?"selected":"",
-                                 "VALUE_CU_EMAIL" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_email"]));
+        $sess_contactus = App::getHelper('session')->contactus;
+        if(is_array($sess_contactus)){
+            foreach($sess_contactus as $k => $v){
+                if(preg_match('/^cu_/',$k)){
+                    $tpl->assignGlobal("VALUE_".strtoupper($k),$v );
+                }
+            }
+        }
         foreach($ws_array["contactus_cate"] as $key =>$value){
             $i++;
             $tpl->newBlock( "TAG_SELECT_CONTACTUS_CATE" );
-            $tpl->assign( array("TAG_SELECT_CONTACTUS_CATE_NAME"  => $value,
-                                "TAG_SELECT_CONTACTUS_CATE_VALUE" => $key));
+            $tpl->assign( array(
+                "TAG_SELECT_CONTACTUS_CATE_NAME"  => $value,
+                "TAG_SELECT_CONTACTUS_CATE_VALUE" => $key,
+                "STR_CU_SEL"                      => ($key == $sess_contactus['cu_cate'])?"selected":"",
+            ));
         }
         //欄位名稱
         $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['MEMBER_NAME'],
@@ -104,13 +105,13 @@ class CONTACTUS{
                                   "MSG_CONTENT" => $TPLMSG['CONTENT']));
         //國家下拉選單
         if($cms_cfg["ws_module"]["ws_country"]==1) {
-            $main->country_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_country"]);
+            $main->country_select($sess_contactus["cu_country"]);
         }
         //稱謂下拉選單
-        $main->contact_s_select($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"]);
+        $main->contact_s_select($sess_contactus["cu_contact_s"]);
         //產品清單checkbox
         if($this->contact_inquiry){
-            $main->contactus_product_list_checkbox($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_pid"]);
+            $main->contactus_product_list_checkbox($sess_contactus["cu_pid"]);
         }
         //可附檔上傳
         if($cms_cfg["ws_module"]["ws_contactus_upfiles"]==1) {
@@ -135,7 +136,7 @@ class CONTACTUS{
             $tpl->newBlock("POSITION_FIELD");
             $tpl->assign(array(
                 "MSG_POSITION"      => $TPLMSG['CONTACTUS_POSITION'],
-                "VALUE_CU_POSITION" => $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_position"],
+                "VALUE_CU_POSITION" => $sess_contactus["cu_position"],
             ));
         }        
         //聯絡我們資料
@@ -149,10 +150,15 @@ class CONTACTUS{
             $tpl->assignGlobal("MSG_CONTACTUS_TERM",$row["st_contactus_term"]);
         }
         //啟用驗証碼顯示錯誤訊息
-        if($cms_cfg["ws_module"]["ws_security"]==1 && $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["security_error"]==1){
+        if($cms_cfg["ws_module"]["ws_security"]==1 && $sess_contactus["security_error"]==1){
             $tpl->assignGlobal("MSG_ERROR_MESSAGE",$TPLMSG['SECURITY_ERROR']);
         }
-        unset($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]);
+        if($cms_cfg['ws_module']['ws_address_type']=='tw'){
+            $tpl->newBlock("TW_ADDRESS");
+        }else{
+            $tpl->newBlock("SINGLE_ADDRESS");
+        }        
+        unset(App::getHelper('session')->contactus);
     }
 //聯絡我們--資料更新================================================================
     function contactus_replace(){
@@ -179,50 +185,23 @@ class CONTACTUS{
                 if(is_array($_POST['cu_pid'])){
                     $pid_str = implode(",",$_POST['cu_pid']);
                 }
-                $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_contactus (
-                        m_id,
-                        cu_cate,
-                        cu_status,
-                        cu_company_name,
-                        cu_contact_s,
-                        cu_name,
-                        cu_position,
-                        cu_tel,
-                        cu_fax,
-                        cu_country,
-                        cu_address,
-                        cu_email,
-                        cu_content,
-                        cu_file,
-                        cu_ip,
-                        cu_ip_country,                        
-                        cu_pid_str,                        
-                        cu_modifydate
-                    ) values (
-                        '".$this->m_id."',
-                        '".mysql_real_escape_string($_REQUEST["cu_cate"])."',
-                        '0',
-                        '".mysql_real_escape_string($_REQUEST["cu_company_name"])."',
-                        '".$ws_array["contactus_s"][$_REQUEST["cu_contact_s"]]."',
-                        '".mysql_real_escape_string($_REQUEST["cu_name"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_position"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_tel"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_fax"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_country"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_address"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_email"])."',
-                        '".mysql_real_escape_string($_REQUEST["cu_content"])."',
-                        '".$file."',
-                        '".$ip_country['address']."',
-                        '".$ip_country['country']."',                            
-                        '".$pid_str."',                            
-                        '".date("Y-m-d H:i:s")."'
-                    )";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
+                $contactusData = array(
+                    'cu_pid_str'    => $pid_str,
+                    'cu_status'     => 0,                    
+                    'cu_contact_s'  => $ws_array["contactus_s"][$_REQUEST["cu_contact_s"]],
+                );
+                if($file){
+                    $contactusData['cu_file'] = $file;
+                }
+                if($ip_country){
+                    $contactusData['cu_ip'] = $ip_country['address'];
+                    $contactusData['cu_ip_country'] = $ip_country['country'];
+                    
+                }           
+                App::getHelper('dbtable')->contactus->writeData($contactusData);
+                $db_msg = App::getHelper('dbtable')->contactus->report();
                 if ( $db_msg == "" ) {
-                    unset($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]);
+                    unset(App::getHelper('session')->contactus);
                     //新增完成寄送確認信
                     //全域內容
                     $tpl->assignGlobal(array(
@@ -242,7 +221,7 @@ class CONTACTUS{
                             "VALUE_CU_COMPANY_NAME" => $_REQUEST["cu_company_name"],
                             "VALUE_CU_FAX" => $_REQUEST["cu_fax"],
                             "VALUE_CU_TEL" => $_REQUEST["cu_tel"],
-                            "VALUE_CU_ADDRESS" => $_REQUEST["cu_address"],
+                            "VALUE_CU_ADDRESS" => $_REQUEST["cu_zip"].$_REQUEST["cu_city"].$_REQUEST["cu_area"].$_REQUEST["cu_address"],
                             "VALUE_CU_EMAIL" => $_REQUEST["cu_email"],
                             "VALUE_CU_CONTENT" => (get_magic_quotes_gpc())?stripcslashes($_REQUEST["cu_content"]):$_REQUEST["cu_content"],
                     ));
@@ -297,17 +276,17 @@ class CONTACTUS{
                         //載入對照語言語系檔
                         include "lang/eng-utf8.php";
                         $tpl->assignGlobal(array(
-                                "MSG_COMPANY_NAME"   => sprintf("<br/>(%s)",$TPLMSG['COMPANY_NAME']),
-                                "MSG_CATE"           => sprintf("<br/>(%s)",$TPLMSG['CATE']),
-                                "MSG_ADDRESS"        => sprintf("<br/>(%s)",$TPLMSG['ADDRESS']),
-                                "MSG_TEL"            => sprintf("<br/>(%s)",$TPLMSG['TEL']),
-                                "MSG_FAX"            => sprintf("<br/>(%s)",$TPLMSG['FAX']),
-                                "MSG_CONTENT"        => sprintf("<br/>(%s)",$TPLMSG['CONTENT']),
-                                "MSG_ATTACH_FILES"   => sprintf("<br/>(%s)",$TPLMSG['CONTACT_US_ATTACH_FILES']),
-                                "MSG_CONTACT_PERSON" => sprintf("<br/>(%s)",$TPLMSG['CONTACT_PERSON']),     
-                                "MSG_COUNTRY"        => sprintf("<br/>(%s)",$TPLMSG['COUNTRY']),        
-                                "MSG_PRODUCT_LIST"   => sprintf("<br/>(%s)",$TPLMSG['CONTACTUS_PRODUCT_LIST']),
-                                "MSG_POSITION"       => sprintf("<br/>(%s)",$TPLMSG['CONTACTUS_POSITION']),                        
+                                "MSG_COMPANY_NAME_MAPPED"   => sprintf("<br/>(%s)",$TPLMSG['COMPANY_NAME']),
+                                "MSG_CATE_MAPPED"           => sprintf("<br/>(%s)",$TPLMSG['CATE']),
+                                "MSG_ADDRESS_MAPPED"        => sprintf("<br/>(%s)",$TPLMSG['ADDRESS']),
+                                "MSG_TEL_MAPPED"            => sprintf("<br/>(%s)",$TPLMSG['TEL']),
+                                "MSG_FAX_MAPPED"            => sprintf("<br/>(%s)",$TPLMSG['FAX']),
+                                "MSG_CONTENT_MAPPED"        => sprintf("<br/>(%s)",$TPLMSG['CONTENT']),
+                                "MSG_ATTACH_FILES_MAPPED"   => sprintf("<br/>(%s)",$TPLMSG['CONTACT_US_ATTACH_FILES']),
+                                "MSG_CONTACT_PERSON_MAPPED" => sprintf("<br/>(%s)",$TPLMSG['CONTACT_PERSON']),     
+                                "MSG_COUNTRY_MAPPED"        => sprintf("<br/>(%s)",$TPLMSG['COUNTRY']),        
+                                "MSG_PRODUCT_LIST_MAPPED"   => sprintf("<br/>(%s)",$TPLMSG['CONTACTUS_PRODUCT_LIST']),
+                                "MSG_POSITION_MAPPED"       => sprintf("<br/>(%s)",$TPLMSG['CONTACTUS_POSITION']),                        
                         ));
                     }
                     $mail_content=$tpl->getOutputContent();
@@ -316,13 +295,14 @@ class CONTACTUS{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
             }else{
-                $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]=array();
+                $sess_contactus = array();
                 foreach($_REQUEST as $key => $value){
-                    if(eregi("cu_",$key)){
-                        $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["$key"]=$value;
+                    if(preg_match("/^cu_/",$key)){
+                        $sess_contactus[$key]=$value;
                     }
                 }
-                $_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["security_error"]=1;
+                $sess_contactus["security_error"]=1;
+                App::getHelper('session')->contactus = $sess_contactus;
                 header("location:contactus.php");
                 die();
             }
