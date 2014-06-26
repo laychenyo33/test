@@ -31,7 +31,7 @@ $thumbs_base_path = '../thumbs/'; // relative path from filemanager folder to th
 // YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS
 //--------------------------------------------------------------------------------------------------------
 
-$MaxSizeUpload=100; //Mb
+$MaxSizeUpload=20; //Mb
 
 $default_language="zh_TW"; //default language file name
 $icon_theme="ico"; //ico or ico_dark you can cusatomize just putting a folder inside filemanager/img
@@ -54,9 +54,9 @@ $image_max_height=800;
 // If you set $image_resizing to true the script converts all uploaded images exactly to image_resizing_width x image_resizing_height dimension
 // If you set width or height to 0 the script automatically calculates the other dimension
 // Is possible that if you upload very big images the script not work to overcome this increase the php configuration of memory and time limit
-$image_resizing=false;
-$image_resizing_width=0;
-$image_resizing_height=0;
+$image_resizing=true;
+$image_resizing_width=800;
+$image_resizing_height=800;
 
 //******************
 // Default layout setting
