@@ -72,7 +72,7 @@
 	$mcImageManagerConfig['thumbnail.allow_override'] = "*";
 
 	// Upload options
-	$mcImageManagerConfig['upload.maxsize'] = "20MB";
+	$mcImageManagerConfig['upload.maxsize'] = "2MB";
 	$mcImageManagerConfig['upload.overwrite'] = false;
 	$mcImageManagerConfig['upload.include_file_pattern'] = '';
 	$mcImageManagerConfig['upload.exclude_file_pattern'] = '';
