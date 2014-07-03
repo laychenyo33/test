@@ -258,6 +258,8 @@ class ORDER{
                         $tpl->assign("TAG_STATUS_CHECKED","checked");
                     }
                 }
+                //發票尉類型
+                App::getHelper('main')->multiple_radio("invoice_type",$ws_array['invoice_type'],$row['o_invoice_type']);
                 require_once "AllpayInfo.php";
                 //信用卡付款資訊
                 $cardInfo = App::getHelper('dbtable')->allpay_order->getData($row['o_id'])->getDataRow();
@@ -306,17 +308,18 @@ class ORDER{
     }
 //訂單回覆--資料更新================================================================
     function order_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
-        $sql="update ".$cms_cfg['tb_prefix']."_order set o_status='".$_REQUEST["o_status"]."' , o_modifydate='".date("Y-m-d H:i:s")."' where o_id='".$_REQUEST["o_id"]."'";
-        $rs = $db->query($sql);
-        $db_msg = $db->report();
+        global $tpl,$TPLMSG;
+//        $sql="update ".$cms_cfg['tb_prefix']."_order set o_status='".$_REQUEST["o_status"]."' , o_modifydate='".date("Y-m-d H:i:s")."' where o_id='".$_REQUEST["o_id"]."'";
+//        $rs = $db->query($sql);
+        App::getHelper('dbtable')->order->writeData($_POST);
+        $db_msg = App::getHelper('dbtable')->order->report();
         if ( $db_msg == "" ) {
             if($_REQUEST["o_status"] == 2){
                 $this->mail_delivery_notice($_REQUEST["o_id"]); //寄送出貨通知信                
             } 
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$_SERVER['PHP_SELF']."?func=o_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
-            $this->goto_target_page($goto_url);
+            $this->goto_target_page($goto_url,2);
         }else{
             $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
         }
