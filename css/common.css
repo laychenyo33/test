@@ -745,3 +745,7 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 .attach_list{clear:both;padding:10px 0;height:84px;}
 .attach_list .attach{float:left;width:80px;height:80px;border:1px solid grey;padding:1px;}
 .attach_list .attach .wrapper{display:table-cell;width:80px;height:80px;text-align:center;vertical-align: middle}
+
+.classification_title{margin-bottom:10px;padding:5px 0;}
+.classification_title a{display:block;float:left;margin:5px 10px;font-size:13px;border:1px solid grey;padding:2px 3px;}
+.classification_title a.current{border:1px solid red;background:#df0;color:#2a2}

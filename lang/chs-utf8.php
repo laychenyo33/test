@@ -427,4 +427,10 @@ $TPLMSG['COMMENT_LIST_PUBLISH_DATE'] = "发布时间";
 
 $TPLMSG['MOBILE_VERSION'] = "手机版";
 $TPLMSG['COMPUTER_VERSION'] = "电脑版";
+    
+$TPLMSG['COPY_URL_DONE'] = "已复制网址!";
+
+$TPLMSG['STATUS_OFF'] = "停用";
+$TPLMSG['STATUS_ON'] = "启用";
+$TPLMSG['CLASSIFY_OTHER'] = "其他";
 ?>

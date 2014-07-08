@@ -46,16 +46,36 @@
             </td>
         </tr>    
         <tr>
-        <th>資料權限:</th>
-        <td>
-            <input type="radio" name="p_locked" value="1" {STR_P_LOCK_CK1}> <img src="images/icon-lock.gif">上鎖
-            <input type="radio" name="p_locked" value="0" {STR_P_LOCK_CK0}> <img src="images/icon-key.gif">解鎖
-        </td>
+            <th>特別分類:</th>
+            <td>
+                <select name="classify_id">
+                    <option value="0" > 未分類 </option> 
+                    <!-- START BLOCK : CLASSIFY_SELECT -->
+                    <option value="{VALUE_CLASSIFY_KEY}" {SELECTED}>{VALUE_CLASSIFY_NAME}</option>  
+                    <!-- END BLOCK : CLASSIFY_SELECT -->
+                </select>
+                <div class="desc">
+                    說明:
+                    <ul>
+                        <li><span class="red">特別分類</span>是產品分類下的額外分類方式，是一種資料篩選的機制。</li>
+                        <li><span class="red">特別分類</span>會出現在產品列表上方。</li>
+                        <li>產品分類所屬產品有設<span class="red">特別分類</span>時才會出現。</li>
+                        <li>設定<span class="red">特別分類</span>請到<a href="{TAG_MANAGE_ROOT}products.php?func=classify">產品分類方法</a></li>
+                    </ul>
+                </div>
+            </td>            
             <th>產品排序:</th>
             <td>
                 <input name="p_sort" type="text" id="p_sort" class="validate[custom[onlyNumber]]"  value="{VALUE_P_SORT}" size="4" maxlength="4">
                 <br><font color="red">請輸入數字如：0,1,2,3...數字『愈大』<br>前台的產品排列會愈前面</font>
             </td>
+        </tr>
+        <tr>
+            <th>資料權限:</th>
+            <td colspan="3">
+                <input type="radio" name="p_locked" value="1" {STR_P_LOCK_CK1}> <img src="images/icon-lock.gif">上鎖
+                <input type="radio" name="p_locked" value="0" {STR_P_LOCK_CK0}> <img src="images/icon-key.gif">解鎖
+            </td>            
         </tr>
         <!-- START BLOCK : PRODUCTS_APPLICATION_ZONE -->
         <tr>

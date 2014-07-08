@@ -310,8 +310,8 @@ class PRODUCTS{
         }else{
             //產品列表
             //$sql="select * from ".$cms_cfg['tb_prefix']."_products where p_id > '0'";
-            $sql="select p.pc_id,p.p_id,p.p_name,p.p_name_alias,p.p_serial,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' ";
-
+            $sql="select p.pc_id,p.p_id,p.p_status,p.p_up_sort,p.p_sort,p.p_name,p.p_name_alias,p.p_type,p.p_desc,p.p_character,p.p_modifydate,p.p_serial,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,classify_id from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' ";
+            $sql= "select p.*,pi.p_big_img1 as big_img from (".$sql.") as p inner join ".$db->prefix("products_img")." as pi on p.p_id=pi.p_id ";
             //最新產品
             if($mode=="p_new"){
                 $sql .=  " and p.p_type & 1 = '1' ";
@@ -332,6 +332,9 @@ class PRODUCTS{
                 $main->layer_link($TPLMSG['PRODUCT_PROMOTION']);
             }else{
                 $sql .=  " and p.pc_id = '".$this->parent."' ";
+                if(isset($_GET['classify_id'])){
+                    $sql .=  " and p.classify_id = '".$_GET['classify_id']."' ";
+                }
                 if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
                     $sql .=  " and p.p_type & 1 = '0' ";
                 }
@@ -343,11 +346,11 @@ class PRODUCTS{
             $showNoData = ($i==0 && $total_records==0 && !$custom);
             //取得分頁連結並重新組合包含limit的sql語法
             if($mode==""){
-                if($this->ws_seo==1){
+                if($this->ws_seo==1 && !isset($_GET['classify_id'])){
                     $func_str=$_REQUEST["f"]?$_REQUEST["f"]:$dirname;
                     $sql = $main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoData);
                 }else{
-                    $func_str="products.php?func=p_list&pc_parent=".$this->parent;
+                    $func_str="products.php?func=p_list&pc_parent=".$this->parent."&classify_id=".$_GET['classify_id'];
                     $sql = $main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoData);
                 }
             }else{
@@ -373,6 +376,29 @@ class PRODUCTS{
                     $blockname = $show_style_str_p2;
                 }else{
                     $blockname = $show_style_str_p;
+                }
+                //取得分類標題
+                $sql = "select distinct classify_id from ".$db->prefix("products")." where p_status='1' and pc_id='".$this->parent."' and classify_id>'0' ";
+                $sql = "select * from ".$db->prefix("classify")." where status='1' and id in (".$sql.")";
+                $gg_res = $db->query($sql,true);
+                if($db->numRows($gg_res)){
+                    $tpl->newBlock("CLASSIFY_ZONE");
+                    while( $classify = $db->fetch_array($gg_res,1)){
+                        $tpl->newBlock("CLASSIFY_TITLE");
+                        $tpl->assign(array(
+                            'CLASSIFY_ID'    => $classify['id'],
+                            'CLASSIFY_TITLE' => $classify['title'],
+                            "PC_ID"          => $this->parent,
+                            "TAG_CLASS"      => $classify['id']==$_GET['classify_id']?"current":"",
+                        ));
+                    }
+                    $tpl->newBlock("CLASSIFY_TITLE");
+                    $tpl->assign(array(
+                        'CLASSIFY_ID'    => 0,
+                        'CLASSIFY_TITLE' => $TPLMSG['CLASSIFY_OTHER'],
+                        "PC_ID"          => $this->parent,
+                        "TAG_CLASS"      => (isset($_GET['classify_id']) && $_GET['classify_id']==0)?"current":"",
+                    ));
                 }
             }
             $j=0;

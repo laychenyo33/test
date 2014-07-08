@@ -17,6 +17,19 @@ class PRODUCTS{
         $this->op_limit=10;
         $this->jp_limit=10;
         switch($_REQUEST["func"]){
+            case "classify"://產品分類方法
+                $this->current_class="CLF";
+                $method = "classify";
+                if($_GET['act']){
+                    $method .= "_".strtolower($_GET['act']);
+                }
+                $view = $_GET['act']?$_GET['act']:"index";
+                $this->ws_tpl_file = "templates/classify/".$view.".html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $this->ws_tpl_type=1;
+                $this->{$method}();
+                break;
             case "unlockall":
                 $this->unlockall();
                 break;
@@ -1104,6 +1117,7 @@ class PRODUCTS{
         if($cms_cfg['ws_module']['ws_products_ca']){
             $this->ca_checkbox($row['p_ca']);        
         }
+        $this->products_classify($row['classify_id']);
     }
 //產品管理--資料更新================================================================
     function products_replace(){
@@ -1195,6 +1209,7 @@ class PRODUCTS{
                         ".$add_field_str."
                         p_cross_cate,
                         p_locked,
+                        classify_id,
                         p_modifyaccount
                     ) VALUES (
                         '".$_REQUEST["pc_id"]."',
@@ -1232,6 +1247,7 @@ class PRODUCTS{
                         ".$add_value_str."
                         '".$_REQUEST["p_cross_cate"]."',
                         '".$_REQUEST["p_locked"]."',
+                        '".$_REQUEST["classify_id"]."',
                         '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
                     )";
                 $rs = $db->query($sql);
@@ -1285,6 +1301,7 @@ class PRODUCTS{
                     ".$update_str."
                     p_cross_cate = '".$_REQUEST["p_cross_cate"]."',
                     p_locked = '".$_REQUEST["p_locked"]."',
+                    classify_id = '".$_REQUEST["classify_id"]."',
                     p_modifyaccount = '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
                 WHERE p_id ='".$_REQUEST["now_p_id"]."' ";
                 $rs = $db->query($sql);
@@ -2835,6 +2852,61 @@ class PRODUCTS{
         $tpl->prepare();
         App::getHelper('main')->mamage_authority();
         $tpl->printToScreen();
+    }
+    function classify(){
+        global $tpl,$ws_array;
+        $opbutton = new opbutton_products_classify();
+        $tpl->assignGlobal(array(
+            "TAG_OPBUTTON" => $opbutton->get_result(),
+        ));
+        $classifyList = App::getHelper('dbtable')->classify->getDataList();
+        if($classifyList){
+            $i=0;
+            foreach($classifyList as $row){
+                $i++;
+                $tpl->newBlock("CLASSIFY_LIST");
+                foreach($row as $k => $v){
+                    if($k=='status'){
+                        $v = $ws_array['default_status'][$v];
+                    }
+                    $tpl->assign(strtoupper($k),$v);
+                }
+                $tpl->assign(array(
+                    "TAG_SERIAL" => $i,
+                ));
+            }
+        }
+    }
+    function classify_form(){
+        global $tpl,$TPLMSG,$ws_array;
+        if($_GET['id']){
+            $row = App::getHelper('dbtable')->classify->getdata($_GET['id'])->getDataRow();
+            if(empty($row)){
+                header("location:".$_SERVER['PHP_SELF']."?func=classify");
+                die();
+            }
+            foreach($row as $k => $v){
+                $tpl->assignGlobal(strtoupper($k),$v);
+            }
+        }
+        $row['status'] = isset($row['status'])?$row['status']:1;
+        App::getHelper('main')->multiple_radio("status",$ws_array['default_status'],$row['status'],$tpl);
+    }
+    function classify_save(){
+        $this->ws_tpl_type=0;
+        App::getHelper('dbtable')->classify->writeData($_POST);
+        header("location:".$_SERVER['PHP_SELF']."?func=classify");
+    }
+    function products_classify($classify_id){
+        global $tpl;
+        $values = array();
+        $classifyList = App::getHelper('dbtable')->classify->getDataList();
+        if($classifyList){
+            foreach($classifyList as $row){
+                $values[$row['id']] = $row['title'];
+            }
+        }
+        App::getHelper('main')->multiple_select("classify",$values,$classify_id,$tpl);
     }
 }
 //ob_end_flush();
