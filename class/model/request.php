@@ -11,7 +11,7 @@
  *
  * @author Administrator
  */
-class Model_Request {
+class Model_Request extends Model_Modules{
     //put your code here
     protected $_get;
     protected $_post;
@@ -29,5 +29,9 @@ class Model_Request {
     }
     function isAjax(){
         return $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+    }
+    
+    function get_link($type,$data){
+        return $this->getModule('link')->getModule($type)->get_link($data);
     }
 }

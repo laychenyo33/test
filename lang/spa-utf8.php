@@ -48,7 +48,7 @@ $TPLMSG['VIEWS'] = "Ver";
 $TPLMSG['FILE'] = "Archivo";
 $TPLMSG['PUBLISH_ON'] = "Restante del Cargo";
 $TPLMSG['PUBLISH_OFF'] = "Caducado";
-$TPLMSG['PAGE_BACK'] = "vuelta";
+$TPLMSG['PAGE_BACK'] = "anterior";
 $TPLMSG['EMAIL'] = "E-mail";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
@@ -109,7 +109,7 @@ $TPLMSG['SEX']="";
 $TPLMSG['MALE']="masculina";
 $TPLMSG['FEMALE']="mujeres";
 $TPLMSG['ADDRESS']="Dirección";
-$TPLMSG['TEL']="Tel";
+$TPLMSG['TEL']="Teléfono";
 $TPLMSG['FAX']="Fax";
 $TPLMSG['CONTACT_PERSON']="Persona de contacto";
 $TPLMSG['COMPANY_NAME']="Nombre de la empresa";
@@ -301,9 +301,9 @@ $TPLMSG["FACTORY"] = "Factory";
 $TPLMSG['EBOOK_CATE_DESC'] = "E-catalog";
 $TPLMSG['THUMB'] = "Thumb";
 $TPLMSG['CART_QUICK_SHOPPING'] = "Quick Shopping";
-$TPLMSG['CONTACT_S_1']="Mr.";
-$TPLMSG['CONTACT_S_2']="Mrs.";
-$TPLMSG['CONTACT_S_3']="Miss";
+$TPLMSG['CONTACT_S_1']="Sr.";
+$TPLMSG['CONTACT_S_2']="Sra.";
+$TPLMSG['CONTACT_S_3']="Srta.";
 $TPLMSG['ACCOUNT_ACTIVATED'] = "Your account have been activated!!! Please login again.";
 $TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "Account activating failed!";
 $TPLMSG['REGISTER_NOTIFICATION'] = "Please click on the link in the mail send by system after you submit the info , which is process of activating your account.";
@@ -403,4 +403,20 @@ $TPLMSG['READ_MORE'] = "More";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website closed temporarily";
+
+$TPLMSG['ATTACH'] = "Attach file";
+$TPLMSG['MAX_UPLOAD_SIZE'] = "Max upload file size: %s";
+$TPLMSG['COMMENT_NOTIFY_SUBJECT'] = "You got comment";
+$TPLMSG['COMMENT_NOTIFICATION'] = 'You got comment in <a href="%1$s">%1$s</a>';
+$TPLMSG['COMMENT_VALID_TAGS'] = "valid html tags: &lt;b&gt;, &lt;p&gt;, &lt;br&gt;, &lt;a&gt;";
+$TPLMSG['COMMENT_GUEST'] = "Guest";
+$TPLMSG['COMMENT_ADMIN'] = "Admin";
+$TPLMSG['COMMENT_ROLE_WRAPPER1'] = "<span class='role'>%s</span>";
+$TPLMSG['COMMENT_ROLE_WRAPPER2'] = "<span class='role-user'>%s</span>";
+$TPLMSG['COMMENT_ROLE_WRAPPER3'] = "<span class='role-admin'>%s</span>";
+$TPLMSG['COMMENT_ROLE'] = "Role: ".$TPLMSG['COMMENT_ROLE_WRAPPER1'];
+$TPLMSG['COMMENT_FORM_VALID_MSG'] = "please fill data into fields with red border";
+$TPLMSG['COMMENT_UPLOAD_DESCRIPTION'] = "You could upload images, but not required.";
+$TPLMSG['COMMENT_LIST_TITLE'] = "Comment Title";
+$TPLMSG['COMMENT_LIST_PUBLISH_DATE'] = "Date of publication";
 ?>

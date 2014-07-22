@@ -116,6 +116,8 @@ class MEMBER{
         $tpl->assignInclude( "HEADER", $cms_cfg['base_header_tpl']); //頭檔title,meta,js,css
         if(!empty($this->m_id)){
             $tpl->assignInclude( "LEFT", $cms_cfg['base_left_member_tpl']); //左方會員專區表單
+        }else{
+            $tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //左方一般選單
         }
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
         $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
@@ -144,6 +146,11 @@ class MEMBER{
             $tpl->newBlock("INDEX_LOGIN_ZONE");
         }else{
             $tpl->newBlock("INDEX_LOGOUT_ZONE");
+        }
+        //未登入會員左選單
+        if(empty($this->m_id)){
+            $leftMenu = new Leftmenu_Nonemember($tpl);
+            $leftMenu->make();
         }
     }
 
@@ -213,7 +220,7 @@ class MEMBER{
                                   "VALUE_ACTION_MODE" => $action_mode
         ));
         //如果有詢問信管理，顯示公司及傳真欄位
-        if($cms_cfg["ws_module"]["ws_inquiry"]){
+        if($cms_cfg["ws_module"]["ws_inquiry"] || App::configs()->ws_module->ws_member_company){
             $tpl->newBlock( "COMPANY_ZONE" );
         }
         //如果為修改模式,帶入資料庫資料
@@ -381,9 +388,6 @@ class MEMBER{
                     $selectrs = $db->query($sql);
                     $row = $db->fetch_array($selectrs,1);
                     //如果有詢問信管理，顯示公司及傳真欄位
-                    if($cms_cfg["ws_module"]["ws_inquiry"]){
-                        $mtpl->newBlock( "COMPANY_ZONE" );
-                    }
                     $mtpl->newBlock( "MEMBER_MAIL" );
                     $mtpl->assignGlobal( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
                                               "MSG_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
@@ -414,6 +418,9 @@ class MEMBER{
                                               "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"],
                                               "VALUE_M_EPAPER" => ($_REQUEST["m_epaper"]==1)?$TPLMSG["YES"]:$TPLMSG["NO"],
                     ));
+                    if($cms_cfg["ws_module"]["ws_inquiry"] || App::configs()->ws_module->ws_member_company){
+                        $mtpl->newBlock( "COMPANY_ZONE" );
+                    }                    
                     //國家欄位
                     if($cms_cfg["ws_module"]["ws_country"]==1) {
                         $mtpl->newBlock("MEMBER_COUNTRY_ZONE");
@@ -502,7 +509,7 @@ class MEMBER{
                         "VALUE_O_ID" => $row['o_id']
                     ));
                 }
-                if($row['o_status']==0){
+                if($row['o_status']==0 && $cms_cfg['ws_module']['ws_order_cancel']){
                     $tpl->newBlock("BTN_CANCEL_ORDER");
                     $tpl->assign("VALUE_O_ID",$row['o_id']);
                 }
