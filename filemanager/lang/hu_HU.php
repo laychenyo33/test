@@ -29,30 +29,69 @@ define('lang_View_list','Lista');
 define('lang_View_columns_list','Oszlopok');
 define('lang_View_boxes','Miniatűrök');
 define('lang_Toolbar','Eszközök');
-define('lang_Actions','Actions');
+define('lang_Actions','Műveletek');
 define('lang_Rename_existing_file','A fájl már létezik');
 define('lang_Rename_existing_folder','A mappa már létezik');
 define('lang_Empty_name','A név nincs megadva');
 define('lang_Text_filter','szűrés');
-define('lang_Swipe_help','Swipe the name of file/folder to show options');
+define('lang_Swipe_help','Húzd az egered a fájl/mappa nevére, hogy lásd az opciókat.');
 define('lang_Upload_base','Alapértelmezett feltöltő');
 define('lang_Upload_java','JAVA feltöltő (nagyméretű fájlokhoz)');
 define('lang_Upload_java_help',"Ha a Java Applet nem töltődik be: 1. ellenőrizze, hogy a JAVA telepítve van-e, ha nincs: <a href='http://java.com/en/download/'>[letöltés]</a> 2. ellenőrizze, hogy a tűzfal nem blokkolja-e");
-define('lang_Upload_base_help',"Drag & Drop file/s inside above area or click in it (for modern browsers) otherwise select the file and click on button. When the upload end, click on upper return button.");
+define('lang_Upload_base_help',"Fogd meg és húzd az ablakba a fájlt vagy kattints bele és válaszd ki majd nyomd meg a megnyitás gombot (modern böngészők). Amikor a feltöltés befejeződött kattints a fenti gombra a visszatéréshez.");
 define('lang_Type_dir','Mappa');
 define('lang_Type','Típus');
 define('lang_Dimension','Felbontás');
 define('lang_Size','Méret');
 define('lang_Date','Dátum');
-define('lang_Name','Név');
-define('lang_Operations','Operations');
+define('lang_Filename','Név');
+define('lang_Operations','Műveletek');
 define('lang_Date_type','y-m-d');
 define('lang_OK','OK');
 define('lang_Cancel','Mégse');
-define('lang_Sorting','sorting');
-define('lang_Show_url','show URL');
-define('lang_Extract','extract here');
-define('lang_File_info','file info');
-define('lang_Edit_image','edit image');
-define('lang_Duplicate','Duplicate');
+define('lang_Sorting','rendezés');
+define('lang_Show_url','URL mutatása');
+define('lang_Extract','kibontás ide');
+define('lang_File_info','fájl info');
+define('lang_Edit_image','kép szerkesztése');
+define('lang_Duplicate','Klónozás');
+define('lang_Folders', 'Mappák');
+define('lang_Copy','Másolás');
+define('lang_Cut','Kivágás');
+define('lang_Paste','Beillesztés');
+define('lang_CB', 'VL'); // clipboard
+define('lang_Paste_Here','Beillesztés ebbe a mappába.');
+define('lang_Paste_Confirm','Biztos vagy benne, hogy ebbe a mappába szeretnéd beilleszteni a fájlokat? A létező fájlok/mappák felül lesznek írva.');
+define('lang_Paste_Failed','A beillesztés sikertelen!');
+define('lang_Clear_Clipboard','Vágólap törlése');
+define('lang_Clear_Clipboard_Confirm','Biztos törlöd a vágólap tartalmát?');
+define('lang_Files_ON_Clipboard','Fájlok találhatóak a vágólapon.');
+define('lang_Copy_Cut_Size_Limit','A kiválasztott fájlok/mappák túl nagyok a %shoz. Limit: %d MB/művelet'); // %s = cut or copy
+define('lang_Copy_Cut_Count_Limit','Túl sok fájlt választottál ki a %shoz. Limit: %d fájl/művelet'); // %s = cut or copy
+define('lang_Copy_Cut_Not_Allowed','A %s nem engedélyezett.'); // %s(1) = cut or copy, %s(2) = files or folders
+define('lang_Aviary_No_Save', 'A kép mentése sikertelen.');
+define('lang_Zip_No_Extract', 'Kicsomagolás sikertelen. Lehet, hogy korrupt a fájl.');
+define('lang_Zip_Invalid', 'Ez a kiterjesztés nem támogatott. Támogatott: zip, gz, tar.');
+define('lang_Dir_No_Write', 'A kiválasztott mappa nem írható.');
+define('lang_Function_Disabled', 'A %s funkciót letiltotta a szerver.'); // %s = cut or copy
+define('lang_File_Permission', 'Engedélyek');
+define('lang_File_Permission_Not_Allowed', 'A %s jogainak a megváltoztatása nem engedélyezett.'); // %s = files or folders
+define('lang_File_Permission_Recursive', 'Rekurzív beállítás az almappákra?');
+define('lang_File_Permission_Wrong_Mode', "A beírt engedély nem megfelelő.");
+define('lang_User', 'Felhasználó');
+define('lang_Group', 'Csoport');
+define('lang_Yes', 'Igen');
+define('lang_No', 'Nem');
+define('lang_Lang_Not_Found', 'A nyelv nem található.');
+define('lang_Lang_Change', 'Nyelv megváltoztatása');
+define('lang_File_Not_Found', 'A fájl nem található.');
+define('lang_File_Open_Edit_Not_Allowed', 'Nincs jogod %s a fájlt.'); // %s = open or edit
+define('lang_Edit', 'Szerkesztés');
+define('lang_Edit_File', "Fájl szerkesztése");
+define('lang_File_Save_OK', "Fájl sikeresen mentve.");
+define('lang_File_Save_Error', "Hiba történt a fájl mentése közben.");
+define('lang_New_File','Új fájl');
+define('lang_No_Extension','Meg kell adnod a fájl kiterjesztését.'); 
+define('lang_Valid_Extensions','Elfogadott kiterjesztések: %s'); // %s = txt,log etc.
+
 ?>

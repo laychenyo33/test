@@ -24,35 +24,74 @@ define('lang_Insert_Folder_Name','Insira o nome da pasta:');
 define('lang_Root','root');
 define('lang_Rename','Mudar o nome');
 define('lang_Back','de volta');
-define('lang_View','View');
-define('lang_View_list','List view');
-define('lang_View_columns_list','Columns list view');
-define('lang_View_boxes','Box view');
+define('lang_View','Modo de Visualização');
+define('lang_View_list','Lista');
+define('lang_View_columns_list','Lista de Colunas');
+define('lang_View_boxes','Box');
 define('lang_Toolbar','Toolbar');
-define('lang_Actions','Actions');
-define('lang_Rename_existing_file','The file is already existing');
-define('lang_Rename_existing_folder','The folder is already existing');
-define('lang_Empty_name','The name is empty');
-define('lang_Text_filter','text filter');
-define('lang_Swipe_help','Swipe the name of file/folder to show options');
+define('lang_Actions','Ações');
+define('lang_Rename_existing_file','O arquivo já existe!');
+define('lang_Rename_existing_folder','A pasta já existe!');
+define('lang_Empty_name','O nome está vazio!');
+define('lang_Text_filter','Filtrar');
+define('lang_Swipe_help','Passe o nome do arquivo/pasta para ver as opções');
 define('lang_Upload_base','Base upload');
-define('lang_Upload_java','JAVA upload (big size files)');
-define('lang_Upload_java_help',"If the Java Applet don't load 1. make sure you have Java installed otherwise <a href='http://java.com/en/download/'>[download link]</a> 2. make sure nothing is blocked from firewall");
-define('lang_Upload_base_help',"Drag & Drop file/s inside above area or click in it (for modern browsers) otherwise select the file and click on button. When the upload end, click on upper return button.");
+define('lang_Upload_java','JAVA upload (Arquivos grandes)');
+define('lang_Upload_java_help',"Se o Java Applet não carregar: 1. Certifique-se de ter o Java instalado de outra forma <a href='http://java.com/en/download/'>[download link]</a> 2. Certifique-se que nada é impedido pelo firewall");
+define('lang_Upload_base_help',"Arraste e Solta os arquivos dentro área acima ou clique nele (para navegadores modernos), caso contrário, selecione o arquivo e clique no botão. Quando terminar o upload, clique no botão de retorno superior.");
 define('lang_Type_dir','dir');
-define('lang_Type','Type');
-define('lang_Dimension','Dimension');
-define('lang_Size','Size');
-define('lang_Date','Date');
-define('lang_Filename','Name');
-define('lang_Operations','Operations');
-define('lang_Date_type','y-m-d');
+define('lang_Type','Tipo');
+define('lang_Dimension','Dimensão');
+define('lang_Size','Tamanho');
+define('lang_Date','Data');
+define('lang_Filename','Nome');
+define('lang_Operations','Operações');
+define('lang_Date_type','d/m/Y');
 define('lang_OK','OK');
-define('lang_Cancel','Cancel');
-define('lang_Sorting','sıralama');
-define('lang_Show_url','show URL');
-define('lang_Extract','extract here');
-define('lang_File_info','file info');
-define('lang_Edit_image','edit image');
-define('lang_Duplicate','Duplicate');
+define('lang_Cancel','Cancelar');
+define('lang_Sorting','Ordenar');
+define('lang_Show_url','mostrar URL');
+define('lang_Extract','extrair aqui');
+define('lang_File_info','Informação do Arquivo');
+define('lang_Edit_image','Editar a imagem');
+define('lang_Duplicate','Duplicar');
+define('lang_Folders', 'Folders');
+define('lang_Copy','Copy');
+define('lang_Cut','Cut');
+define('lang_Paste','Paste');
+define('lang_CB', 'CB'); // clipboard
+define('lang_Paste_Here','Paste to this directory');
+define('lang_Paste_Confirm','Are you sure you want to paste to this directory? This will overwrite existing files/folders if encountered any.');
+define('lang_Paste_Failed','Failed to paste file(s)');
+define('lang_Clear_Clipboard','Clear clipboard');
+define('lang_Clear_Clipboard_Confirm','Are you sure you want to clear the clipboard?');
+define('lang_Files_ON_Clipboard','There are files on the clipboard.');
+define('lang_Copy_Cut_Size_Limit','The selected files/folders are too big to %s. Limit: %d MB/operation'); // %s = cut or copy
+define('lang_Copy_Cut_Count_Limit','You selected too many files/folders to %s. Limit: %d files/operation'); // %s = cut or copy
+define('lang_Copy_Cut_Not_Allowed','You are not allowed to %s files.'); // %s(1) = cut or copy, %s(2) = files or folders
+define('lang_Aviary_No_Save', 'Could not save image');
+define('lang_Zip_No_Extract', 'Could not extract. File might be corrupt.');
+define('lang_Zip_Invalid', 'This extension is not supported. Valid: zip, gz, tar.');
+define('lang_Dir_No_Write', 'The directory you selected is not writable.');
+define('lang_Function_Disabled', 'The %s function has been disabled by the server.'); // %s = cut or copy
+define('lang_File_Permission', 'File permission');
+define('lang_File_Permission_Not_Allowed', 'Changing %s permissions are not allowed.'); // %s = files or folders
+define('lang_File_Permission_Recursive', 'Apply recursively?');
+define('lang_File_Permission_Wrong_Mode', "The supplied permission mode is incorrect.");
+define('lang_User', 'User');
+define('lang_Group', 'Group');
+define('lang_Yes', 'Yes');
+define('lang_No', 'No');
+define('lang_Lang_Not_Found', 'Could not find language.');
+define('lang_Lang_Change', 'Change the language');
+define('lang_File_Not_Found', 'Could not find the file.');
+define('lang_File_Open_Edit_Not_Allowed', 'You are not allowed to %s this file.'); // %s = open or edit
+define('lang_Edit', 'Edit');
+define('lang_Edit_File', "Edit file's content");
+define('lang_File_Save_OK', "File successfully saved.");
+define('lang_File_Save_Error', "There was an error while saving the file.");
+define('lang_New_File','New File');
+define('lang_No_Extension','You have to add a file extension.'); 
+define('lang_Valid_Extensions','Valid extensions: %s'); // %s = txt,log etc.
+
 ?>
