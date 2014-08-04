@@ -69,7 +69,7 @@
             </tr>            
             <tr id="charge_fee_row">
                 <td colspan="4">
-                    <div align="right"> 手續費:&nbsp;</div>
+                    <div align="right"> {MSG_PLUS_FEE}:&nbsp;</div>
                 </td>
                 <td colspan="2"> <span id="s_charge_fee" >0</span></td>
             </tr>            
@@ -122,11 +122,9 @@
                 <tr>
                     <th>配送時段</th>
                     <td>
-                        <select name="o_deliver_time_sec">
-                            <!-- START BLOCK : TIME_SEC_LIST -->
-                            <option value="{TS_ID}">{TS_SEC}</option>
-                            <!-- END BLOCK : TIME_SEC_LIST -->
-                        </select>
+                        <!-- START BLOCK : DELIVER_TIMESEC_RADIO -->
+                        <label><input type="radio" name="o_deliver_time_sec" value="{VALUE_DELIVER_TIMESEC_KEY}" {CHECKED}/>{VALUE_DELIVER_TIMESEC_NAME}</label>
+                        <!-- END BLOCK : DELIVER_TIMESEC_RADIO -->
                     </td>
                 </tr>
                 <!-- END BLOCK : TIME_SEC_ZONE -->
@@ -315,9 +313,9 @@
                 <tr>
                     <th>發票類型</th>
                     <td>
-                        <!-- START BLOCK : INVOICE_TYPE_LIST -->
-                        <input type="radio" name="o_invoice_type" id="o_invoice_type_{VALUE_INVOICE_ID}" value="{VALUE_INVOICE_ID}" {TAG_CHECKED}/><label for="o_invoice_type_{VALUE_INVOICE_ID}">{VALUE_INVOICE_LABEL}</label>
-                        <!-- END BLOCK : INVOICE_TYPE_LIST -->
+                        <!-- START BLOCK : INVOICE_RADIO -->
+                        <input type="radio" name="o_invoice_type" id="o_invoice_type_{VALUE_INVOICE_KEY}" value="{VALUE_INVOICE_KEY}" {CHECKED}/><label for="o_invoice_type_{VALUE_INVOICE_KEY}">{VALUE_INVOICE_NAME}</label>
+                        <!-- END BLOCK : INVOICE_RADIO -->
                   </td>
                 </tr>
                 <tr>
@@ -331,7 +329,7 @@
                 <tr>
                       <th>消費者備註</th>
                       <td>
-                         <textarea name="content" cols="50" rows="12" style="width:98%;"></textarea>
+                         <textarea name="content" cols="50" rows="12" style="width:98%;">{VALUE_CONTENT}</textarea>
                       </td>
                 </tr>            
             </table>       

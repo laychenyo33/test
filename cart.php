@@ -245,6 +245,7 @@ class CART{
                                   "MSG_MODIFY" => $TPLMSG['MODIFY'],
                                   "MSG_DEL" => $TPLMSG['DEL'],
                                   "MSG_TOTAL" => $TPLMSG['CART_TOTAL'],
+                                  "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
                                   "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'],
                                   "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'],
                                   "MSG_PRODUCT" => $TPLMSG['PRODUCT'],
@@ -321,6 +322,8 @@ class CART{
                 "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'],
                 "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
             ));
+            //送貨區域
+            App::getHelper('main')->multiple_radio("shipment_type",$ws_array["shippment_type"],"");                 
             for($i=0;$i<count($shopping);$i++){
                 $tpl->newBlock( "SHOPPING_CART_LIST" );
                 $pid=$shopping[$i]["p_id"];
@@ -450,6 +453,7 @@ class CART{
     }
     function cart_finish(){
         global $db,$tpl,$TPLMSG,$ws_array,$shopping,$inquiry,$cms_cfg,$main;
+        $tmpForm = App::getHelper('session')->tmpForm;
         //載入購物車列表
         $this->cart_list();
         //顯示表單資料
@@ -469,13 +473,7 @@ class CART{
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("TIME_SEC_ZONE");
             //配送時段
-            foreach($ws_array["deliery_timesec"] as $k=>$timesec){
-                $tpl->newBlock("TIME_SEC_LIST");
-                $tpl->assign(array(
-                   "TS_ID"  => $k,
-                   "TS_SEC" => $timesec,
-                ));
-            }
+            App::getHelper('main')->multiple_radio("deliver_timesec",$ws_array["deliery_timesec"],'');
         }
         //會員區資訊
         if($_POST['shop_and_register']){
@@ -508,6 +506,13 @@ class CART{
                  "VALUE_M_FAX" => $row["m_fax"],
                  "VALUE_M_EMAIL" => $row["m_email"],
                  "VALUE_M_CELLPHONE" => $row["m_cellphone"]
+            ));
+        }
+        if($tmpForm){
+            $tpl->assignGlobal(array(
+                 "VALUE_M_COMPANY_NAME" => $tmpForm["m_company_name"],                
+                 "VALUE_M_VAT_NUMBER" => $tmpForm["m_vat_number"],
+                 "VALUE_CONTENT" => $tmpForm["content"],
             ));
         }
         //國家下拉選單
@@ -547,13 +552,7 @@ class CART{
             $tpl->gotoBlock("PAYMENT_TYPE");
             $tpl->gotoBlock("MEMBER_DATA_FORM");
             //發票類型
-            foreach($ws_array['invoice_type'] as $type_id => $type_label){
-                $tpl->newBlock("INVOICE_TYPE_LIST");
-                $tpl->assign(array(
-                    "VALUE_INVOICE_ID"    => $type_id,
-                    "VALUE_INVOICE_LABEL" => $type_label,
-                ));
-            }
+            $main->multiple_radio("invoice",$ws_array['invoice_type'],$tmpForm['o_invoice_type']?$tmpForm['o_invoice_type']:2);
             //付款說明
             $this->load_term($tpl);
         }    
@@ -574,6 +573,7 @@ class CART{
     //預覽訂單
     function cart_preview(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
+        App::getHelper('session')->tmpForm = $_POST;
         $this->cart_list();
         $tpl->newBlock( "MEMBER_DATA_FORM" );
         $tpl->assign( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
@@ -668,7 +668,7 @@ class CART{
             //顯示付款方式
             $tpl->newBlock("PAYMENT_TYPE");
             $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
-            $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$_REQUEST["o_payment_type"]]);
+            $tpl->assign("VALUE_PAYMENT_TYPE" , $main->multi_map_value($ws_array["payment_type"],$_REQUEST["o_payment_type"]));
             if($_REQUEST["o_payment_type"]==1){ //ATM轉帳
                 $tpl->newBlock("ATM_LAST_FIVE");
                 $tpl->assign("VALUE_ATM_LAST5",$_REQUEST["o_atm_last5"]);
@@ -964,7 +964,7 @@ class CART{
             //顯示付款方式
             $tpl->newBlock("PAYMENT_TYPE");
             $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
-            $tpl->assign("VALUE_PAYMENT_TYPE" , $ws_array["payment_type"][$_REQUEST["o_payment_type"]]);
+            $tpl->assign("VALUE_PAYMENT_TYPE" , $main->multi_map_value($ws_array["payment_type"],$_REQUEST["o_payment_type"]));
             App::getHelper("session")->{paymentType} = $_REQUEST["o_payment_type"];
             if($_REQUEST["o_payment_type"]==1){ //ATM轉帳
                 $tpl->newBlock("ATM_LAST_FIVE");
@@ -1086,6 +1086,7 @@ class CART{
                 unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
                 unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
                 unset($_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+                unset(App::getHelper('session')->tmpForm);//結帳表單暫存
                 //$tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 //$goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
                 //$this->goto_target_page($goto_url,2);
