@@ -716,7 +716,7 @@ class EPAPER{
                                     $simg = $p_row['p_small_img']?$cms_cfg['file_root'].$p_row['p_small_img']:$cms_cfg['default_preview_pic'];
                                     $p_desc=preg_replace('%([-\w\.:]*/)*(upload_files/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $p_row['p_desc']);
                                     $p_desc=preg_replace('%([-\w\.:]*/)*(images/([-\w\.]+/)*[-\w\.]+)%i', $cms_cfg['file_url']."$2", $p_desc);                                    
-                                    $dimension = $main->resizeto($simg,219,171);                                    
+                                    $dimension = $main->resizeto($simg,$cms_cfg['epaper_prod_img_width'],$cms_cfg['epaper_prod_img_height']);                                    
                                     $mtpl->assign(array(
                                        "VALUE_P_LINK"      => $p_link, 
                                        "VALUE_P_SMALL_IMG" => $p_row['p_small_img']?$cms_cfg['file_url'].$p_row['p_small_img']:$cms_cfg['server_url'].$cms_cfg['default_preview_pic'], 
@@ -1067,6 +1067,7 @@ class EPAPER{
                         $tpl->newBlock("PRODUCTS_LIST");
                         $tpl->assign(array(
                             "VALUE_P_SMALL_IMG" => $row['p_small_img']?$cms_cfg['file_root'].$row['p_small_img']:$cms_cfg['default_preview_pic'], 
+                            "VALUE_P_NAME"      => $row['p_name'],
                             "VALUE_P_ID"        => $row['p_id'], 
                         ));
                     }
