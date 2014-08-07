@@ -83,9 +83,6 @@
 })(jQuery);
 </script>   
 <!-- END BLOCK : JS_FORMVALID -->
-<!-- START BLOCK : JS_MAIN -->
-<script language="JavaScript" src="{TAG_ROOT_PATH}js/ws_main.js"></script>
-<!-- END BLOCK : JS_MAIN -->
 <!-- START BLOCK : JS_SHOW_STYLE_P1 -->
 <script language="JavaScript" src="{TAG_ROOT_PATH}js/style1/showimages.js"></script>
 <link type="text/css" rel="stylesheet" href="{TAG_ROOT_PATH}js/style1/style1.css"/>
@@ -809,3 +806,19 @@ function nav_formatter(idx,pan){
 <link rel="stylesheet" type="text/css" href="{TAG_ROOT_PATH}js/itoggle/style.css">
 <script type="text/javascript" src="{TAG_ROOT_PATH}js/itoggle/itoggle.jquery.js"></script>    
 <!-- END BLOCK : JS_ITOGGLE -->
+<!-- START BLOCK : JS_MOBILE_SWITCH -->
+<script type="text/javascript">
+    jQuery(function($){
+        $("#use_com_ver").click(function(evt){
+            evt.preventDefault();
+            setCookie("USE_COM_VER",1);
+            location.href="{TAG_COMPUTER_URL}";
+        });
+        $("#sw_to_mobile").click(function(evt){
+            evt.preventDefault();
+            setCookie('USE_COM_VER',1,-1);
+            location.href = "{TAG_MOBILE_URL}";
+        });     
+    });
+</script>
+<!-- END BLOCK : JS_MOBILE_SWITCH -->

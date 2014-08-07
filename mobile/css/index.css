@@ -1,0 +1,75 @@
+@charset "utf-8";
+/* CSS Document */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, input, img, p{
+	padding:0;
+	margin:0;
+}
+img {border:0;}
+a{ text-decoration:none;}
+
+body{
+	background:url(../images/bg.jpg) no-repeat center top #1f1f1f;
+        color:#fff;
+}
+
+#logo{
+	width:100%;
+}
+#banner{
+	width:100%;
+	display:block;
+	clear:both;
+}
+#menu{
+	width:60%;
+	margin:5% 20% 8% 20%;
+}
+.menu_btn{
+	width:100%;
+	margin:15px 0 0 0;
+}
+#footer{
+	width:100%;
+	font-family:Verdana, "微軟正黑體";
+	font-size:11px;
+	color:#868686;
+	line-height:2em;
+	text-align:center;
+	margin:0 0 5% 0;
+}
+#back_pc{
+	text-align: center;
+	width:87%;
+	margin:0 7%;
+	padding:10px 0;	
+
+}
+#back_pc a{
+	font-family:Verdana, "微軟正黑體";
+	font-size:16px;
+	color:#fff;
+}
+#use_com_ver{
+	background:url(../images/pc-icon.png) no-repeat left 2px;
+	padding:10px 0 10px 38px;
+}
+#language{
+    width:80%;
+    margin:5px auto;
+    text-align:center;
+    color:#fff;
+    font-size:13px;
+}
+#language a{
+    color:#fff;
+    font-size:13px;
+    display:inline-block;
+    margin:0 3px;
+    padding:2px;
+}
+#language a.current{
+    background:#fff;
+    color:#000;
+}
+#device-tw a{font-size:80px;color:#fff}
