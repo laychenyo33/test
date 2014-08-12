@@ -46,7 +46,46 @@
                          extended_valid_elements : "iframe[src|width|height|name|align],span[style|id|nam|class|lang]",
                         paste_retain_style_properties : "margin padding width height font-size font-weight font-family color text-align ul ol li text-decoration border background float display background-color",
                         paste_word_valid_elements: "b,strong,i,em,h1,h2,table,tr,th,td,ul,ol,li,style,img",
-                        paste_data_images: true
+                        paste_data_images: true,
+                        template_replace_values: {
+                            username : "Jack Black",
+                            staffid : "991234",
+                            mybb: function(e){
+                                e.innerHTML = 'mybb';
+                            }
+                        },           
+                        templates : [
+                            {
+                                title: "edm01單欄",
+                                url: "templates/epaper/edm01-single-column.html",
+                                description: "edm01的單欄表格"
+                            },
+                            {
+                                title: "edm01雙欄",
+                                url: "templates/epaper/edm01-double-column.html",
+                                description: "edm01的雙欄表格"
+                            },
+                            {
+                                title: "edm02示範內容",
+                                url: "templates/epaper/edm02-template.html",
+                                description: "edm02的示範內容"
+                            },
+                            {
+                                title: "edm02空白區域",
+                                url: "templates/epaper/edm02-empty-block.html",
+                                description: "edm02的空白區域"
+                            },
+                            {
+                                title: "Editor Details",
+                                url: "templates/epaper/editor_details.htm",
+                                description: "Adds Editor Name and Staff ID"
+                            },
+                            {
+                                title: "Timestamp",
+                                url: "templates/epaper/time.htm",
+                                description: "Adds an editing timestamp."
+                            }
+                        ]                                
 
 		});
 	}
