@@ -55,7 +55,7 @@ if($db->numRows($res)){
                             $p_link = $cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_row['p_id'];
                         }
                         $simg = $p_row['p_small_img']?$cms_cfg['file_root'].$p_row['p_small_img']:$cms_cfg['default_preview_pic'];
-                        $dimension = $main->resizeto($simg,219,171);
+                        $dimension = $main->resizeto($simg,$cms_cfg['epaper_prod_img_width'],$cms_cfg['epaper_prod_img_height']);                                    
                         $mtpl->assign(array(
                            "VALUE_P_LINK"      => $p_link, 
                            "VALUE_P_SMALL_IMG" => $p_row['p_small_img']?$cms_cfg['file_url'].$p_row['p_small_img']:$cms_cfg['server_url'].$cms_cfg['default_preview_pic'], 
@@ -113,6 +113,6 @@ if($db->numRows($res)){
     $db->query($sql,true);
     $sql = "OPTIMIZE TABLE  `".$cms_cfg['tb_prefix']."_epaper_queue`";
     $db->query($sql);
-    echo "done!";
+    echo $mail_content;
 }
 ?>
