@@ -41,6 +41,16 @@
             </td>
         </tr>
         <tr>
+            <th>套用樣版</th>
+            <td>
+                <select name="template" id="template">
+                    <!-- START BLOCK : TEMPLATE_SELECT -->
+                    <option value="{VALUE_TEMPLATE_KEY}" {SELECTED}>{VALUE_TEMPLATE_NAME}</option>
+                    <!-- END BLOCK : TEMPLATE_SELECT -->
+                </select>
+            </td>
+        </tr>        
+        <tr>
             <th>&nbsp;</th>
             <td>
                 <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" /></td>
