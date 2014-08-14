@@ -142,12 +142,18 @@ class ABOUTUS{
             if($i%2){
                 $tpl->assign("TAG_TR_CLASS","class='altrow'");
             }
+            if($cms_cfg['ws_activate_mobile']){
+                $com_only = ($row['mobilehide'])?"<span style='color:#a29'>(電)</span>":"";
+                $mob_only = ($row['mobileonly'])?"<span style='color:#0a0'>(手)</span>":"";
+            }
             $tpl->assign( array("VALUE_AU_ID"  => $row["au_id"],
                                 "VALUE_AU_SORT"  => $row["au_sort"],
                                 "VALUE_AU_SUBJECT" => $row["au_subject"],
                                 "VALUE_AU_SERIAL" => $i,
                                 "VALUE_STATUS_IMG" => ($row["au_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
                                 "VALUE_STATUS_IMG_ALT" => ($row["au_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
+                                "TAG_VERSION_COM" => $com_only,
+                                "TAG_VERSION_MOB" => $mob_only,
 
             ));
             if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
@@ -162,7 +168,7 @@ class ABOUTUS{
     }
 //關於我們--表單================================================================
     function aboutus_form($action_mode){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         if($this->seo){
             $tpl->newBlock("SEO_EDIT_ZONE");
         }
@@ -227,6 +233,13 @@ class ABOUTUS{
             $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"],'out') );
         }
+        if($cms_cfg['ws_activate_mobile']){
+            $tpl->newBlock("MOBILE_OPTIONS");
+            //手機版隱藏選項
+            $main->multiple_radio("mobilehide",$ws_array["yesno_status"],$row['mobilehide']);
+            //手機版專用選項
+            $main->multiple_radio("mobileonly",$ws_array["yesno_status"],$row['mobileonly']);
+        }
     }
 //關於我們--資料更新================================================================
     function aboutus_replace(){
@@ -263,7 +276,9 @@ class ABOUTUS{
                         au_subject,
                         au_content,
                         ".$add_field_str."
-                        au_modifydate
+                        au_modifydate,
+                        mobilehide,
+                        mobileonly
                     ) values (
                         '".$_REQUEST["au_status"]."',
                         '".$_REQUEST["au_sort"]."',
@@ -272,7 +287,9 @@ class ABOUTUS{
                         '".$_REQUEST["au_subject"]."',
                         '".$db->quote($main->content_file_str_replace($_REQUEST["au_content"],'in'))."',
                         ".$add_value_str."
-                        '".date("Y-m-d H:i:s")."'
+                        '".date("Y-m-d H:i:s")."',
+                        '".$_REQUEST["mobilehide"]."',
+                        '".$_REQUEST["mobileonly"]."'
                     )";
                 break;
             case "mod":
@@ -285,7 +302,9 @@ class ABOUTUS{
                         au_subject='".$_REQUEST["au_subject"]."',
                         au_content='".$db->quote($main->content_file_str_replace($_REQUEST["au_content"],'in'))."',
                         ".$update_str."
-                        au_modifydate='".date("Y-m-d H:i:s")."'
+                        au_modifydate='".date("Y-m-d H:i:s")."',
+                        mobilehide='".$_REQUEST["mobilehide"]."',
+                        mobileonly='".$_REQUEST["mobileonly"]."'
                     where au_id='".$_REQUEST["au_id"]."'";
                 break;
         }

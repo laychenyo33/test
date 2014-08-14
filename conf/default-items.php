@@ -4,6 +4,7 @@ $ws_array["lang_version"]=array("cht"=>$TPLMSG["LANG_CHT"],"chs"=>$TPLMSG['LANG_
 $ws_array["order_status"]=array(0=>$TPLMSG["ORDER_NEW"],1=>$TPLMSG["ORDER_DEALING"],2=>$TPLMSG["ORDER_PRODUCTS_SEND"],3=>$TPLMSG["ORDER_COMPLETED"],9=>$TPLMSG["ORDER_CANCEL"],10=>$TPLMSG["ORDER_REJECT"],20=>$TPLMSG['AUTHORIZE_TERMINATE'],21=>$TPLMSG['AUTHORIZE_FAILED']);
 $ws_array["inquiry_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
 $ws_array["contactus_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
+$ws_array["yesno_status"]=array(0=>$TPLMSG["NO"],1=>$TPLMSG["YES"]);
 $ws_array["images_type"]=array(".jpg",".gif",".png",".bmp");
 $ws_array["cart_type"]=array(0=>$TPLMSG['CART_INQUIRY'],1=>$TPLMSG['CART_SHOPPING']);
 $ws_array["service_term"]=array("st_contactus_term"=>$TPLMSG["CONTACTUS_TERM"],

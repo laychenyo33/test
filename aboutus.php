@@ -60,7 +60,10 @@ class ABOUTUS{
     function left_cate_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //前台關於我們列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' and au_cate = '".$this->au_cate."' order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
+        if($cms_cfg['ws_activate_mobile']){
+            $and_str = ($cms_cfg['ws_ismobile'])?"and mobilehide='0'":"and mobileonly='0'";
+        }
+        $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_status='1' and au_cate = '".$this->au_cate."' {$and_str} order by au_sort ".$cms_cfg['sort_pos'].",au_modifydate desc";
         $selectrs = $db->query($sql);
         if(empty($_REQUEST["au_id"]) && empty($_REQUEST["f"])){
            $sel_top_record=true;
