@@ -10,6 +10,24 @@
           <input type="radio" name="au_status" value="0" {STR_AU_STATUS_CK0}> 停用
         </td>
   </tr>
+  <!-- START BLOCK : MOBILE_OPTIONS -->
+  <tr>
+        <th>手機版隱藏:</th>
+        <td>
+            <!-- START BLOCK : MOBILEHIDE_RADIO -->
+            <label><input type="radio" name="mobilehide" value="{VALUE_MOBILEHIDE_KEY}" {CHECKED}/>{VALUE_MOBILEHIDE_NAME}</label>
+            <!-- END BLOCK : MOBILEHIDE_RADIO -->
+        </td>
+  </tr>
+  <tr>
+        <th>手機版專用:</th>
+        <td>
+            <!-- START BLOCK : MOBILEONLY_RADIO -->
+            <label><input type="radio" name="mobileonly" value="{VALUE_MOBILEONLY_KEY}" {CHECKED}/>{VALUE_MOBILEONLY_NAME}</label>
+            <!-- END BLOCK : MOBILEONLY_RADIO -->
+        </td>
+  </tr>
+  <!-- END BLOCK : MOBILE_OPTIONS -->
   <tr>
         <th>排序:</th>
         <td>
