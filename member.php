@@ -896,7 +896,7 @@ class MEMBER{
             $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
             $tpl->newBlock("REGISTER_FORGET_PASSWORD");
             $tpl->newBlock("LANG_".strtoupper( $cms_cfg['language']) );
-            $main->security_zone();
+            $main->security_zone($cms_cfg['security_image_width'],$cms_cfg['security_image_height']);
             $this->ws_tpl_type=1;            
         }else{
             require_once("./libs/libs-security-image.php");
