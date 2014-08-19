@@ -139,12 +139,12 @@ function generateImage() {
     $font="images/security/fonts/font6.ttf";
 
     // Add some shadow to the text
-    $r = rand(-5,5);
+    $r = 0;
     $baseY = 35;
     $targetY = $baseY+$r*1.3;
     $fontSize=35;
     for($s=0;$s<strlen($newstr);$s++){
-        imagettftext($this->img, $fontSize, rand(-30,30), 16+(rand(18,25)*$s), $targetY, $grey, $font, $newstr[$s]);
+        imagettftext($this->img, $fontSize, 0, 16+(25*$s), $targetY, $grey, $font, $newstr[$s]);
     }
 
     // Add the text
