@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>2秒後關閉</title>
+        <title>全部產品設為開放，2秒後關閉</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery/jquery-1.8.3.min.js"></script>
+        <style>
+            body{
+                background:#000;
+            }
+            #messsage{
+                font-size:30px;
+                width:600px;
+                height:100px;
+                margin:200px auto;
+                color:#fff;
+                text-align:center;
+                line-height:100px;
+            }
+        </style>
     </head>
     <body>
-        <div>全部產品設為開發，2秒後關閉</div>
+        <div id="messsage">全部產品設為開放，2秒後關閉</div>
         <script type="text/javascript">
             jQuery(function($){
                 window.opener.location.reload();

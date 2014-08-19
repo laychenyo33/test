@@ -2816,8 +2816,12 @@ class PRODUCTS{
     }
     function unlockall(){
         global $tpl;
+        $operator = App::getHelper('session')->USER_ACCOUNT;
         $db = App::getHelper('db');
-        $sql = "update ".$db->prefix("products")." set p_locked='0' ";
+        if($operator!='root'){
+            $condition = " where p_modifyaccount='{$operator}' ";
+        }
+        $sql = "update ".$db->prefix("products")." set p_locked='0'".$condition;
         $db->query($sql,true);
         $tpl = new TemplatePower("templates/unlock-all.html");
         $tpl->prepare();
