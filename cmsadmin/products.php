@@ -17,6 +17,9 @@ class PRODUCTS{
         $this->op_limit=10;
         $this->jp_limit=10;
         switch($_REQUEST["func"]){
+            case "unlockall":
+                $this->unlockall();
+                break;
             case "ca_list"://認證標章列表
                 $this->current_class="CA";
                 $this->ws_tpl_file = "templates/ws-manage-products-ca-list-tpl.html";
@@ -2810,6 +2813,16 @@ class PRODUCTS{
     function preview_link($row){
         global $cms_cfg;
         return $cms_cfg['base_root']."products.php?func=p_detail&p_id=".$row['p_id']."&pc_parent=".$row['pc_id']."&preview=1";
+    }
+    function unlockall(){
+        global $tpl;
+        $db = App::getHelper('db');
+        $sql = "update ".$db->prefix("products")." set p_locked='0' ";
+        $db->query($sql,true);
+        $tpl = new TemplatePower("templates/unlock-all.html");
+        $tpl->prepare();
+        App::getHelper('main')->mamage_authority();
+        $tpl->printToScreen();
     }
 }
 //ob_end_flush();
