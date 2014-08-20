@@ -158,18 +158,19 @@ class DOWNLOAD{
             }else{
                 $cate_link=$cms_cfg["base_root"]."download.php?func=d_list&dc_id=".$row["dc_id"];
             }
+            $filepath = $cms_cfg['file_root'].$row["d_filepath"];
+            $dllink = $cms_cfg['base_root']."download.php?func=dl&d_id=".$row['d_id'];
             $tpl->assign( array("VALUE_DC_ID"  => $row["dc_id"],
                                 "VALUE_DC_LINK"  => $cate_link,
                                 "VALUE_DC_SUBJECT"  => $row["dc_subject"],
                                 "VALUE_D_ID"  => $row["d_id"],
                                 "VALUE_D_SUBJECT" => $row["d_subject"],
                                 "VALUE_D_CONTENT" => $row["d_content"],
-                                "VALUE_D_FILEPATH" => $cms_cfg['file_root'].$row["d_filepath"],
                                 "VALUE_D_MODIFYDATE" => date("Y-m-d",strtotime($row["d_modifydate"])),
                                 "VALUE_D_SERIAL" => $i,
                                 "VALUE_DC_SUBJECT"  => $row["dc_subject"],
                                 "TAG_DTYPE"         => $row['dtype']?"<span class='dtype'>*</span>":"",
-                                "VALUE_D_LINK"  => $cms_cfg['base_root']."download.php?func=dl&d_id=".$row['d_id'],
+                                "VALUE_D_LINK"  => $row['d_type']?$filepath:$dllink,
             ));
             //如果下載顯示縮圖，開啟縮圖欄位
             if($cms_cfg['ws_module']['ws_download_thumb']){

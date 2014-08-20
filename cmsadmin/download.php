@@ -473,6 +473,8 @@ class DOWNLOAD{
                 "VALUE_D_THUMB_PREVIEW1" => trim($row["d_thumb"])?$cms_cfg['file_root'].$row["d_thumb"]:$cms_cfg['default_preview_pic'],                
             ));
         }
+        //下載方式
+        App::getHelper('main')->multiple_radio("dltype",App::defaults()->download_type,$row['d_type']);
     }
 //檔案下載--資料更新================================================================
     function download_replace(){
@@ -491,7 +493,8 @@ class DOWNLOAD{
                         d_subject,
                         d_content,
                         d_filepath,
-                        d_modifydate
+                        d_modifydate,
+                        d_type
                     ) values (
                         '".$_REQUEST["dc_id"]."',
                         '".$_REQUEST["d_status"]."',
@@ -501,7 +504,8 @@ class DOWNLOAD{
                         '".$_REQUEST["d_subject"]."',
                         '".$_REQUEST["d_content"]."',
                         '".$main->file_str_replace($_REQUEST["d_filepath"])."',
-                        '".date("Y-m-d H:i:s")."'
+                        '".date("Y-m-d H:i:s")."',
+                        '".$_REQUEST["d_type"]."'
                     )";
                 break;
             case "mod":
@@ -515,7 +519,8 @@ class DOWNLOAD{
                         d_subject='".$_REQUEST["d_subject"]."',
                         d_content='".$_REQUEST["d_content"]."',
                         d_filepath='".$main->file_str_replace($_REQUEST["d_filepath"])."',
-                        d_modifydate='".date("Y-m-d H:i:s")."'
+                        d_modifydate='".date("Y-m-d H:i:s")."',
+                        d_type='".$_REQUEST["d_type"]."'
                     where d_id='".$_REQUEST["d_id"]."'";
                 break;
         }
