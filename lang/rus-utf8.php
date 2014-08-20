@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "Запрос корзину автоответчик�
 $TPLMSG["ORDER_MAIL"] = "Корзина автоответчика электронной почты";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "список запросов";
 $TPLMSG["ORDER_MAIL_TITLE"] = "Список покупок";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="Код заказа";

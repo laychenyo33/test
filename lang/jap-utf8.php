@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "お問い合わせカートの自動返信メール";
 $TPLMSG["ORDER_MAIL"] = "ショッピングカートの自動返信メール";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "お問い合わせ一覧";
 $TPLMSG["ORDER_MAIL_TITLE"] = "ショッピングリスト";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="注文ID";

@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "Inquiry Cart auto-reply email";
 $TPLMSG["ORDER_MAIL"] = "Shopping Cart auto-reply email";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "Inquiry List";
 $TPLMSG["ORDER_MAIL_TITLE"] = "Shopping List";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="Order ID";

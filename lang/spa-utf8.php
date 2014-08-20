@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "pregunta a la cesta respuesta automática de correo e
 $TPLMSG["ORDER_MAIL"] = "carro de la compra respuesta automática de correo electrónico";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "pregunta a la lista";
 $TPLMSG["ORDER_MAIL_TITLE"] = "lista de compras";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="ID del pedido";
