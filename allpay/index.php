@@ -357,12 +357,19 @@
                 }
                 //更新訂單資料
                 function updateOrder($post){
+                    global $TPLMSG;
                     if($this->isValidData($post)){
                         if($post["RtnCode"] != 2 && $post["RtnCode"] != "10100073"){
                             if($post["RtnCode"] == 1){
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 1;
-                                App::getHelper('dbtable')->order->writeData($updateOrder);                        
+                                App::getHelper('dbtable')->order->writeData($updateOrder);     
+                                $mtpl = App::getHelper('main')->get_mail_tpl("receipt-notification");
+                                $mtpl->newBlock("SHOPPING_ORDER");
+                                $mtpl->assignGlobal("MSG_O_ID",$post["MerchantTradeNo"]);
+                                $mcontent = $mtpl->getOutputContent();
+                                $order = App::getHelper('dbtable')->order->getData($post["MerchantTradeNo"])->getDataRow("o_email");
+                                App::getHelper('main')->ws_mail_send(App::getHelper('session')->sc_email,$order["o_email"],$mcontent,$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"],"order","","",1);                                
                             }elseif($post["RtnCode"] !='10100054'){ //非訂單重複的錯誤，更新訂單
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 21;

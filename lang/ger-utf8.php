@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "Anfragekorb Auto-Antwort-E-Mail";
 $TPLMSG["ORDER_MAIL"] = "Einkaufswagen Auto-Antwort-E-Mail";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "Anfrage Liste";
 $TPLMSG["ORDER_MAIL_TITLE"] = "Einkaufen Liste";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="Bestell-ID";

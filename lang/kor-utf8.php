@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "문의 장바구니  자동 응답 이메일";
 $TPLMSG["ORDER_MAIL"] = "장바구니  자동 응답 이메일";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "문의리스트";
 $TPLMSG["ORDER_MAIL_TITLE"] = "쇼핑 목록";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="주문 번호";

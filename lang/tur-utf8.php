@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "Sorgulama Cart otomatik e-posta yanıtı";
 $TPLMSG["ORDER_MAIL"] = "Alışveriş Sepeti oto-cevap e-posta";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "Talep Listesi";
 $TPLMSG["ORDER_MAIL_TITLE"] = "Alışveriş Listesi";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="Sipariş No";

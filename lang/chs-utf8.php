@@ -197,6 +197,7 @@ $TPLMSG["INQUIRY_MAIL"] = "询问车自动回覆通知设定";
 $TPLMSG["ORDER_MAIL"] = "购物车自动回覆通知设定";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "询问确认信";
 $TPLMSG["ORDER_MAIL_TITLE"] = "订单确认信";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "缴款通知信";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="订单编号";

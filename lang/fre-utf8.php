@@ -193,6 +193,7 @@ $TPLMSG["INQUIRY_MAIL"] = "Panier enquête de réponse automatique par courriel"
 $TPLMSG["ORDER_MAIL"] = "Panier de réponse automatique par courriel";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "Liste enquête";
 $TPLMSG["ORDER_MAIL_TITLE"] = "liste d'achats";
+$TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="identification d'ordre";
