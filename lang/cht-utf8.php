@@ -233,7 +233,9 @@ $TPLMSG["INQUIRY_QUANTITY_UPDATED"]="已更新數量!";
 
 //DOWNLOAD
 $TPLMSG["DOWNLOAD"]="檔案分享";
-
+$TPLMSG['DOWNLOAD_AFTER_READ'] = "讀取下載(不顯示真實路徑)";
+$TPLMSG['DOWNLOAD_DIRECTLY'] = "直接下載(顯示真實路徑)";
+        
 //FORGOT PASSWORD
 $TPLMSG["FORGOT_PASSWORD"]="忘記密碼";
 
