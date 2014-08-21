@@ -15,3 +15,16 @@
 {TAG_JS_BOX}
 {TAG_JS_INCLUDE}
 <!-- INCLUDE BLOCK : ./templates/ws-fn-common-js-tpl.html -->
+<!-- START BLOCK : INDEX_AD_INIT -->
+<link rel="stylesheet" href="{TAG_ROOT_PATH}js/prettyPhoto/css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
+<script src="{TAG_ROOT_PATH}js/prettyPhoto/js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    jQuery(function($){
+        $(document).ready(function(){
+            //弹出式广告
+            $("a[rel^='prettyPhoto']").prettyPhoto();
+            $.prettyPhoto.open('pop_ad.php?iframe=true&width=780&height=95%');
+        });
+    });
+</script>
+<!-- END BLOCK : INDEX_AD_INIT -->    

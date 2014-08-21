@@ -21,6 +21,7 @@ class MAINDEFAULT{
 //        $main->counter(); //網站計數器
         //$this->gallery_list();
         //if($cms_cfg["ws_module"]['ws_index_banner'])$this->index_banner(); //自訂首頁banner
+        $this->index_ad();
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -392,6 +393,15 @@ class MAINDEFAULT{
                 "VALUE_G_PIC_W" => $dimension['width'],
                 "VALUE_G_PIC_H" => $dimension['height'],
             ));
+        }
+    }
+    function index_ad(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $sql="select * from ".$db->prefix("ad")." where ad_cate='{$cms_cfg['index_pop_ad_cate']}' and (ad_status='1' or (ad_status='2' and ad_startdate <= '".date("Y-m-d")."' and ad_enddate >= '".date("Y-m-d")."') ) order by ad_sort desc limit 0,1";
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        if($rsnum){
+            $tpl->newBlock("INDEX_AD_INIT");
         }
     }
 }
