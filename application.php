@@ -169,7 +169,7 @@ class APPLICATON{
                     ));
                 }
                 //layer link
-                $main->layer_link($TPLMSG['APPLICATION'],$cms_cfg['base_root']."application.htm")->layer_link($app_row['pa_name']);
+                $this->layer_link($app_row);
                 if($cms_cfg['ws_module']['ws_application_cates']){  //應用領域產品分類
                     //分類列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_products_cate where pc_id in (select pc_id from ".$cms_cfg['tb_prefix']."_products_cate_application_map where pa_id='".$app_row['pa_id']."' and checked='1')";
@@ -314,5 +314,36 @@ class APPLICATON{
         }
         return $link;                  
     }    	
+    function layer_link($row){
+        global $main,$cms_cfg,$db,$TPLMSG;
+        $item_name = "pa_name";
+        $parent_name = "pa_parent";
+        if(!isset($row[$parent_name])){
+             trigger_error("pa_parent field missing!"); 
+        }
+        $parent_id = $row[$parent_name];
+        $layer[]['name'] = $row[$item_name];
+        //取得上層分類
+        while($parent_id>0){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_products_application where pa_id='".$parent_id."'";
+            $row = $db->query_firstrow($sql);
+            $parent_id = $row['pa_parent'];
+            $tmp = array(
+                'name' => $row['pa_name'],
+                'link' => $this->get_link($row),
+            );
+            $layer[] = $tmp;
+        }
+        //寫入階層
+        $main->layer_link($TPLMSG['APPLICATION'],$cms_cfg['base_root']."application.htm");
+        while($layer){
+            $item = array_pop($layer);
+            if($item['link']){
+                $main->layer_link($item['name'],$item['link']);
+            }else{
+                $main->layer_link($item['name']);  
+            }
+        }        
+    }
 }
 ?>
