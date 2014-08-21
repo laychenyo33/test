@@ -60,7 +60,7 @@ class CONTACTUS{
         $main->google_code(); //google analystics code , google sitemap code
         if($this->security_mode){
             $tpl->newBlock("IMAGE_SECURITY_ZONE");
-            $main->security_zone();
+            $main->security_zone($cms_cfg['security_image_width'],$cms_cfg['security_image_height']);
             
         }else{
             $tpl->newBlock("MATH_SECURITY_ZONE");
