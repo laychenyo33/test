@@ -55,6 +55,9 @@ class LOGIN {
                         '".$row["m_id"]."','1','".date("Y-m-d H:i:s")."'
                     )";
                 $rs = $db->query($sql);
+                $sql = "SELECT COUNT( * ) FROM  ".$db->prefix("login_history")." WHERE m_id = '{$row['m_id']}' AND lh_success = '1'";
+                list($login_times) = $db->query_firstRow($sql,0);
+                App::getHelper('dbtable')->member->update(array('login_times'=>$login_times),"m_id='{$row['m_id']}'");
                 $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]="";
                 //echo "1";
                 if(empty($_POST['return_url'])){
