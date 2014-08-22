@@ -1,18 +1,12 @@
 <?php
-session_start();
-include_once("conf/config.inc.php");
-include_once("lang/".$cms_cfg['language']."-utf8.php");
-include_once("conf/default-items.php");
-include_once("libs/libs-mysql.php");
-include_once("TP/class.TemplatePower.inc.php");
-//驗証碼
+//error_reporting(15);
+include_once("libs/libs-sysconfig.php");
 include_once("libs/libs-security-image.php");
 $si = new securityImage();
 $si->setFontColor("222222");
 $si->setFontSize(5);
 $si->setCodeLength(4);
 $si->inputParam = "style='color:blue;'";
-$db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name'],$cms_cfg['tb_prefix']);
 $login= new LOGIN();
 class LOGIN {
     //主程式
