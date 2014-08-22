@@ -128,6 +128,7 @@ class GUESTBOOK{
             }
             $tpl->gotoBlock( "GUESTBOOK_LIST" );
         }
+        $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
     }
 
 //留言版--資料更新================================================================

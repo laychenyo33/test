@@ -21,16 +21,12 @@ class FAQ{
                 $this->ws_tpl_file = "templates/ws-faq-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->faq_list();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("fc",$_REQUEST["fc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
             default:    //問與答列表
                 $this->ws_tpl_file = "templates/ws-faq-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->faq_list();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("fc",$_REQUEST["fc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
         }
@@ -73,6 +69,7 @@ class FAQ{
         if($cate){
             $and_str="and fc_id='".$cate['fc_id']."'";
         }
+        $main->pageview_history($main->get_main_fun(),$cate['fc_id'],App::getHelper('session')->MEMBER_ID);
         $sql="select * from ".$cms_cfg['tb_prefix']."_faq where f_status='1' ".$and_str." order by f_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $selectrs = $db->query($sql);

@@ -159,6 +159,8 @@ $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
 $TPLMSG["MEMBER_EPAPER"] = "願意接收電子報訊息?";
 $TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"] = '%2$s%1$s';
 $TPLMSG["MEMBER_ACCOUNT_EXISTS"] = "會員帳號已存在!";
+$TPLMSG['MEMBER_FOOTPRINT'] = "我的足跡";
+$TPLMSG['MEMBER_COLLECT'] = "我的收藏";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "產品介紹";

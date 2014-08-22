@@ -80,6 +80,8 @@ class CONTACTUS{
                     $tpl->assignGlobal("VALUE_".strtoupper($k),$v );
                 }
             }
+        }else{
+            $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
         }
         foreach($ws_array["contactus_cate"] as $key =>$value){
             $i++;

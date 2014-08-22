@@ -9,6 +9,7 @@ class SITEMAP{
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->ws_load_tp("templates/ws-sitemap-tpl.html");
         $this->sitemap_list();
+        $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
         $main->layer_link();
         $tpl->printToScreen();
     }

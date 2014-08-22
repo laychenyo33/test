@@ -220,6 +220,14 @@ class MAINFUNC{
             if($cms_cfg['ws_module']['ws_member_msg']){
                 $tpl->newBlock("MEMBER_MESSAGE");
             }
+            if(App::configs()->ws_module->ws_pageview_history){
+                $tpl->newBlock("MEMBER_FOOTPRINT");
+                $tpl->assign('TAG_LOGIN_MEMBER_FOOTPRINT'  , $TPLMSG['MEMBER_FOOTPRINT']);
+            }
+            if(App::configs()->ws_module->ws_products_collect){
+                $tpl->newBlock("MEMBER_PROD_COLLECT");
+                $tpl->assign('TAG_LOGIN_MEMBER_COLLECT' , $TPLMSG['MEMBER_COLLECT'] );
+            }
         }
     }
     function security_zone($si_w="200", $si_h="40"){
@@ -947,7 +955,7 @@ class MAINFUNC{
         $ip=$_SERVER["REMOTE_ADDR"];
         //$ip="59.126.50.204"; //taiwan
         //$ip="137.153.10.110";
-        if($ip!="127.0.0.1" && $cms_cfg['ws_module']['ws_pageview_history']){
+        if($ip!="127.0.0.1" && $cms_cfg['ws_module']['ws_pageview_history'] && $m_id){
             $ph_ip_number = sprintf("%u", ip2long($ip));
             //get ip country
             $sql="SELECT country_name FROM ".$cms_cfg['tb_prefix']."_ip_country WHERE ip_from <= inet_aton('".$ip."') AND ip_to >= inet_aton('".$ip."') ";
@@ -963,6 +971,7 @@ class MAINFUNC{
                     ph_country,
                     ph_type,
                     ph_type_id,
+                    ph_request_uri,
                     ph_modifydate,
                     ph_dateY,
                     ph_dateM,
@@ -973,12 +982,21 @@ class MAINFUNC{
                     '".$row["country_name"]."',
                     '".$ph_type."',
                     '".$ph_type_id."',
+                    '".$this->content_file_str_replace($_SERVER['REQUEST_URI'],'in')."',
                     '".date("Y-m-d H:i:s")."',
                     '".date("Y")."',
                     '".date("m")."',
                     '".date("d")."'
                 )";
             $db->query($sql);
+            //超過20筆刪除
+            $sql = "select nums,min(ph_modifydate) as modifydate from  (SELECT count(*) as nums FROM ".$db->prefix("pageview_history")." WHERE m_id='{$m_id}') as a,(SELECT ph_modifydate FROM ".$db->prefix("pageview_history")." WHERE m_id='{$m_id}' order by ph_modifydate desc limit 20) as b group by nums";
+            $rec_info = $db->query_firstRow($sql);
+            if($rec_info['nums']>20){
+                $sql = "delete from ".$db->prefix("pageview_history")." where m_id='{$m_id}' and ph_modifydate<'{$rec_info['modifydate']}'";
+                $db->query($sql,true);
+                $db->query("OPTIMIZE TABLE  ".$db->prefix("pageview_history"));
+            }
         }
     }
     function js_notice($msg,$goto_url){
@@ -2345,6 +2363,14 @@ class MAINFUNC{
             $shipping_price_str = "運費另計";
         }
         return $shipping_price_str;
+    }    
+    //登入會員收藏的產品數量
+    function collect_nums($p_id){
+        $db = App::getHelper('db');
+        $sql = "select count(*) from ".$db->prefix("member_collect")." where p_id='".$p_id."'";
+        $res = $db->query($sql);
+        list($collectNums) = $db->fetch_array($res,0);
+        return is_null($collectNums)?0:$collectNums;
     }    
 }
 ?>

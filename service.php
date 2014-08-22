@@ -14,6 +14,7 @@ class SERVICE{
              $this->ws_load_tp("templates/ws-service-term-tpl.html");
         }
         $this->service_list($_REQUEST["st"]);
+        $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);        
         $main->layer_link();
         $tpl->printToScreen();
     }

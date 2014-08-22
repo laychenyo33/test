@@ -158,6 +158,12 @@ class MEMBER{
         global $db,$tpl;
         $_REQUEST["type"]=(empty($_REQUEST["type"]))?"list":$_REQUEST["type"];
         switch($_REQUEST["mzt"]){
+            case "collect":
+                $this->member_collect();
+                break;
+            case "pageview":
+                $this->member_pageview();
+                break;
             case "data"://基本資料修改
                 $this->member_form("mod");
                 break;
@@ -1079,6 +1085,114 @@ class MEMBER{
             $res['msg'] = "訂單不存在!";
         }
         echo json_encode($res);
+    }
+    
+    function ajax_collect(){
+        $result['code']=1;
+        if($this->m_id){
+            $olddata = App::getHelper('dbtable')->member_collect->getDataList("m_id='{$this->m_id}' and p_id='{$_POST['p_id']}'","*","createdate desc");
+            if(empty($olddata)){
+                $newdata = App::getHelper('dbtable')->products->getData($_POST['p_id'])->getDataRow('p_id,p_name,p_small_img');
+                $newdata['m_id'] = $this->m_id;
+                $newdata['createdate'] = date("Y-m-d H:i:s");
+                App::getHelper('dbtable')->member_collect->writeData($newdata);
+                if(App::getHelper('dbtable')->member_collect->report()==""){
+                    $result['msg']="成功收藏!";
+                    $result['nums'] = App::getHelper('main')->collect_nums($_POST['p_id']);
+                }else{
+                    $result['code']=0;
+                    $result['msg']="收藏失敗!";
+                }
+            }else{
+                $result['msg']="已收藏過此產品!";
+            }
+        }else{
+            $result['code']=0;
+            $result['msg']="請先登入會員!";
+        }
+        echo json_encode($result);
+    }
+    
+    function member_pageview(){
+        global $tpl,$TPLMSG;
+        App::gethelper("main")->layer_link($TPLMSG['MEMBER_FOOTPRINT']);
+        $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_FOOTPRINT']);
+        $tpl->newBlock("MEMBER_PAGEVIEW");
+        $sql = "select * from ".App::getHelper('db')->prefix("pageview_history")." where m_id='".$this->m_id."'  order by ph_modifydate desc limit 20";
+        $res = App::getHelper('db')->query($sql);
+//        $total_records = App::gethelper('db')->numRows($res);
+//        $func_str="member.php?func=m_zone&mzt=pageview";
+//        $sql = App::getHelper('main')->pagination(App::configs()->op_limit,App::configs()->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,true);
+//        $res2 = App::getHelper('db')->query($sql,true);
+//        $offset = App::getHelper('main')->get_pagination_offset(App::configs()->op_limit)+1;
+        $offset = 1;
+        while($history = App::getHelper('db')->fetch_array($res,1)){
+            $tpl->newBlock("HISTORY_LIST");
+            $tpl->assign(array(
+                "TAG_SERIAL" => $offset++,
+                "MSG_PAGE_TYPE" => App::defaults()->main[$history['ph_type']],
+                "MSG_REQUEST_URI" => App::getHelper('main')->content_file_str_replace($history['ph_request_uri'],'out'),
+                "MSG_MODIFYDATE" => $history['ph_modifydate'],
+            ));
+        }
+    }
+    function member_collect(){
+        global $tpl,$TPLMSG;
+        if(App::getHelper('request')->isPost()){ 
+            if(isset($_GET['act'])){
+                switch($_GET['act']){
+                    case "delete":
+                        if(is_array($_POST['delete'])){
+                            foreach($_POST['delete'] as $collect_id){
+                                App::getHelper('dbtable')->member_collect->delete($collect_id);
+                            }
+                        }
+                        break;
+                }
+            }
+            header("location:".$_SERVER['PHP_SELF']."?func=m_zone&mzt=collect");
+            die();
+        }
+        App::gethelper("main")->layer_link($TPLMSG['MEMBER_COLLECT']);
+        $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_COLLECT']);
+        $tpl->newBlock("MEMBER_COLLECT");
+        $sql = "select * from ".App::getHelper('db')->prefix("member_collect")." where m_id='".$this->m_id."'  order by createdate desc limit 20";
+        $res = App::getHelper('db')->query($sql);
+//        $total_records = App::gethelper('db')->numRows($res);
+//        $func_str="member.php?func=m_zone&mzt=pageview";
+//        $sql = App::getHelper('main')->pagination(App::configs()->op_limit,App::configs()->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,true);
+//        $res2 = App::getHelper('db')->query($sql,true);
+//        $offset = App::getHelper('main')->get_pagination_offset(App::configs()->op_limit)+1;
+        if(App::getHelper('session')->sc_cart_type==1){
+            $tpl->newBlock("SHOP_TITLE");
+        }
+        $offset = 1;
+        while($collect = App::getHelper('db')->fetch_array($res,1)){
+            $prod = App::getHelper('dbtable')->products->getData($collect['p_id'])->getDataRow();
+            if($prod){
+                $tpl->newBlock("COLLECT_LIST");
+                $p_img = $collect['p_small_img']?app::configs()->base_root.$collect['p_small_img']:App::configs()->default_preview_pic;
+                $dimension = App::getHelper('main')->resizeto($p_img,80,80);
+                $price = $prod['p_special_price']?$prod['p_special_price']:$prod['p_list_price'];
+                $tpl->assign(array(
+                    "TAG_SERIAL" => $offset++,
+                    "COLLECT_ID" => $collect['id'],
+                    "VALUE_P_NAME" => $collect['p_name'],
+                    "VALUE_P_LINK" => App::getHelper('request')->get_link('products',$prod),
+                    "VALUE_P_SMALL_IMG" => $p_img,
+                    "VALUE_P_SMALL_IMG_W" => $dimension['width'],
+                    "VALUE_P_SMALL_IMG_H" => $dimension['height'],
+                    "MSG_CREATEDATE" => $collect['createdate'],
+                ));
+                if(App::getHelper('session')->sc_cart_type==1){
+                    $tpl->newBlock("SHOP_FIELD");
+                    $tpl->assign(array(
+                        "VALUE_P_PRICE" => $prod['spec_sets']?'':$price,
+                        "TAG_CART_LINK" => $prod['spec_sets']?App::gethelper('main')->mk_link("購買",App::getHelper('request')->get_link('products',$prod)):"<a href='#' class='prodToCart' rel='{$prod['p_id']}'>購買</a>",
+                    ));
+                }
+            }
+        }        
     }
 }
 

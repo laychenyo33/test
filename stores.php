@@ -82,6 +82,7 @@ class STORES{
             }
             $blocklist="REAL_STORES_LIST";
         }
+        $main->pageview_history($main->get_main_fun(),$this->currentRow['sdc_id'],App::getHelper('session')->MEMBER_ID);        
         if($this->currentRow){
             $this->layer_link($this->currentRow);
         }else{

@@ -24,8 +24,6 @@ class VIDEO{
                 break;
         }
         if($this->ws_tpl_type){
-            //page view record --ph_type,ph_type_id,m_id
-            $main->pageview_history("v",$_REQUEST["v_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
             $main->layer_link();
             $tpl->printToScreen();
         }        
@@ -69,6 +67,7 @@ class VIDEO{
             }     
             $vc_id = $crow['vc_id'];
         }
+        $main->pageview_history($main->get_main_fun(),$vc_id,App::getHelper('session')->MEMBER_ID);
         if($vc_id){
             $sql = "select * from ".$cms_cfg['tb_prefix']."_video where v_status='1' and vc_id='".$vc_id."' order by v_sort ".$cms_cfg['sort_pos'];
             $res = $db->query($sql,1);
@@ -116,6 +115,7 @@ class VIDEO{
         }
         if($sql){
             $row = $db->query_firstrow($sql);
+            $main->pageview_history($main->get_main_fun(),$row['v_id'],App::getHelper('session')->MEMBER_ID);
             if($this->ws_seo){
                 $meta_array=array("meta_title"       =>$row["v_seo_title"],
                                   "meta_keyword"     =>$row["v_seo_keyword"],

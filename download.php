@@ -46,8 +46,6 @@ class DOWNLOAD{
             }
         }        
         if($this->ws_tpl_type){
-            //page view record --ph_type,ph_type_id,m_id
-            $main->pageview_history("dc",$_REQUEST["dc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
             $main->layer_link();
             $tpl->printToScreen();
         }
@@ -94,6 +92,7 @@ class DOWNLOAD{
             $main->header_footer("download",$TPLMSG["DOWNLOAD"]);
         }
         $dc_id=$crow["dc_id"];        
+        $main->pageview_history($main->get_main_fun(),$dc_id,App::getHelper('session')->MEMBER_ID);
         
         if($dc_id!=0){
             $and_str=" and d.dc_id='".$dc_id."'";
