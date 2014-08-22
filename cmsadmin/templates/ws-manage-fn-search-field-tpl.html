@@ -15,7 +15,9 @@
                         for(var i=0;i<tmp.length;i++){
                             var tmp2 = tmp[i].split('=');
                             if(tmp2.length>1){
-                                query[tmp2[0]]=tmp2[1];
+                                if(tmp2[0]!='st' && tmp2[0]!='sk'){
+                                    query[tmp2[0]]=tmp2[1];
+                                }
                             }
                         }
                         return query;

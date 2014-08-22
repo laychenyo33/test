@@ -420,19 +420,11 @@ class MEMBER{
             //附加條件
             $and_str="";
             if(!empty($_REQUEST["mc_id"])){
-                $and_str .= " and find_in_set('".$_REQUEST["mc_id"]."',m.mc_id) >0 ";
+                $and_str .= " find_in_set('".$_REQUEST["mc_id"]."',m.mc_id) >0 ";
             }
-            $_REQUEST["sk"] = trim($db->quote($_REQUEST["sk"]));
-            if($_REQUEST["st"]=="m_name"){
-                $and_str .= " and (m.m_lname like '%".$_REQUEST["sk"]."%' or m.m_fname like '%".$_REQUEST["sk"]."%' or concat(m.m_fname,' ',m.m_lname) like '%".$_REQUEST["sk"]."%')";
-            }elseif($_REQUEST["st"]=="m_email"){
-                $and_str .= " and (m_email like '%".$_REQUEST["sk"]."%')";
-            }elseif($_REQUEST["st"]=="m_company"){
-                $and_str .= " and (m_company_name like '%".$_REQUEST["sk"]."%')";
-            }elseif($_REQUEST["st"]=="m_country"){
-                $and_str .= " and (m_country like '%".$_REQUEST["sk"]."%')";
-            }
-            $sql .= $and_str." order by m.m_sort ".$cms_cfg['sort_pos'].",m.m_modifydate desc ";
+            $search = new searchFields_member();
+            $and_str = $search->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
+            $sql .= ($and_str?(" and ".$and_str):"")." order by m.m_sort ".$cms_cfg['sort_pos'].",m.m_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -442,16 +434,13 @@ class MEMBER{
             $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
-            $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
-                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
-                                      "TAG_SELECT_SEARCH_TARGET_NAME" => $TPLMSG['NAME'],
-                                      "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
-                                      "VALUE_STR_NOWP"       => $_GET['nowp'],
-                                      "VALUE_STR_JP"         => $_GET['jp'],
-                                      "STR_SELECT_SEARCH_TARGET_CK1" => ($_POST['st']=="m_name")?"selected":"",
-                                      "STR_SELECT_SEARCH_TARGET_CK2" => ($_POST['st']=="m_email")?"selected":"",
-                                      "STR_SELECT_SEARCH_TARGET_CK3" => ($_POST['st']=="m_company")?"selected":"",
-                                      "STR_SELECT_SEARCH_TARGET_CK4" => ($_POST['st']=="m_country")?"selected":"",
+            $tpl->assignGlobal( array(
+                "VALUE_TOTAL_BOX" => $rsnum,
+                "TAG_SELECT_SEARCH_TARGET_NAME" => $TPLMSG['NAME'],
+                "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                "VALUE_STR_NOWP"       => $_GET['nowp'],
+                "VALUE_STR_JP"         => $_GET['jp'],
+                "TAG_SEARCH_FIELD"     => $search->list_search_fields($_GET['st'], $_GET['sk']),
             ));
             $tpl->assignGlobal( "VALUE_NOW_MC_ID" , $_REQUEST["mc_id"]);
             $i=$main->get_pagination_offset($cms_cfg["op_limit"]);

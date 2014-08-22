@@ -1735,6 +1735,14 @@ class MAINFUNC{
                     $tpl->assign("TAG_OPTION_".  strtoupper($m),sprintf("%s='%s'",$m,$n));
                 }
             }
+            if(isset($v['exlabel']) && is_array($v['exlabel'])){
+                $trans = array();
+                $sourceKey = explode(',',$v['exlabel']['source']);
+                foreach($sourceKey as $key){
+                    $trans["{".$key."}"] = $v[$key];
+                }
+                $tpl->assign("EX_LABEL",  strtr($v['exlabel']['t'], $trans));
+            }
         }
     }
     //multiple radio
@@ -1760,6 +1768,14 @@ class MAINFUNC{
                     $tpl->assign("TAG_OPTION_".  strtoupper($m),sprintf("%s='%s'",$m,$n));
                 }
             }
+            if(isset($v['exlabel']) && is_array($v['exlabel'])){
+                $trans = array();
+                $sourceKey = explode(',',$v['exlabel']['source']);
+                foreach($sourceKey as $key){
+                    $trans["{".$key."}"] = $v[$key];
+                }
+                $tpl->assign("EX_LABEL",  strtr($v['exlabel']['t'], $trans));
+            }
         }
     }        
     //multiple select
@@ -1784,6 +1800,14 @@ class MAINFUNC{
                 foreach($v['htmlOptions'] as $m => $n){
                     $tpl->assign("TAG_OPTION_".  strtoupper($m),sprintf("%s='%s'",$m,$n));
                 }
+            }
+            if(isset($v['exlabel']) && is_array($v['exlabel'])){
+                $trans = array();
+                $sourceKey = explode(',',$v['exlabel']['source']);
+                foreach($sourceKey as $key){
+                    $trans["{".$key."}"] = $v[$key];
+                }
+                $tpl->assign("EX_LABEL",  strtr($v['exlabel']['t'], $trans));
             }
         }
     }      

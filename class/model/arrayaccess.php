@@ -10,7 +10,7 @@ class Model_Arrayaccess implements IteratorAggregate , ArrayAccess , Serializabl
     }
     function &__get($name){
         if(!isset($this->_storage[$name])){
-            $this->_storage[$name] = new self();
+            return;
         }
         return $this->_storage[$name];
     }
@@ -49,7 +49,7 @@ class Model_Arrayaccess implements IteratorAggregate , ArrayAccess , Serializabl
     }
     public function offsetGet($offset) {
         if(!isset($this->_storage[$offset])){
-            $this->_storage[$offset] = new self();
+            return;
         }        
         return $this->_storage[$offset];
     }    
