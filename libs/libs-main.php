@@ -1111,7 +1111,7 @@ class MAINFUNC{
                     '%('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
                     '%('.$cms_cfg['file_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
                     '%(["\'])(\.\./)*(upload_files/[^"\']+)%i',
-                    '%(["\'])(images/[^"\']+)%i',
+                    '%(["\'])(\.\./)*(images/[^"\']+)%i',
                 ),
                 'replace' => array(
                     '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_FILE_ROOT}$4',
