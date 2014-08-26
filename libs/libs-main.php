@@ -1658,6 +1658,7 @@ class MAINFUNC{
             if($itme['sub']){
                 $tpl->assign("TAG_".$deep."_UL1",$subul1[$blockname]);
                 $tpl->assign("TAG_".$deep."_UL2",$subul2[$blockname]);
+                $tpl->newBlock("LEFT_".$sub_cate_name.'ZONE');
                 $this->new_left_menu($itme['sub'],$sub_cate_name,true,$deep);
             }
         }
