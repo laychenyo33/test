@@ -113,7 +113,9 @@ class PRODUCTS{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["products"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-products"); //主要顯示區域的css設定
         $main->google_code(); //google analystics code , google sitemap code
-        $main->left_fix_cate_list();
+        //$main->left_fix_cate_list();
+        $leftmenu = new Leftmenu_Products($tpl,2,false);
+        $leftmenu->make();
     }
     function load_product_detail_template(){
         global $db,$cms_cfg;

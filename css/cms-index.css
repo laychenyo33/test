@@ -120,6 +120,7 @@ body{
 	border:1px solid #CCC;
 	height:auto;
 }
+.submenu li a.current{color:#f00}
 
 .menu_head {
 	width:190px;
@@ -136,7 +137,7 @@ body{
 	color: #666;
 }
 .menu_body {
-	display:none;
+	/*display:none;*/
 }
 .menu_body ul{}
 .menu_body li{
