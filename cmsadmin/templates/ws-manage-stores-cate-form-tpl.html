@@ -9,6 +9,17 @@
                 <input name="sdc_subject" type="text" class="validate[required]"  value="{VALUE_SDC_SUBJECT}" size="60" maxlength="255"></td>
         </tr> 
         <tr>
+            <th>父分類名稱:</th>
+            <td>
+                <select name="sdc_parent" id="sdc_parent">
+                    <option value="0">無</option>
+                    <!-- START BLOCK : PARENTCATE_SELECT -->
+                    <option value="{VALUE_PARENTCATE_KEY}" {SELECTED}>{VALUE_PARENTCATE_NAME}</option>
+                    <!-- END BLOCK : PARENTCATE_SELECT -->
+                </select>
+            </td>
+        </tr> 
+        <tr>
             <th>狀態:</th>
             <td>
                 <input type="radio" name="sdc_status" value="1" {STR_SDC_STATUS_CK1}> 啟用

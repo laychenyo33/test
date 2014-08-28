@@ -60,11 +60,6 @@ class STORES{
         $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["stores"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_IMG" , $ws_array["main_img"]["stores"]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-stores"); //主要顯示區域的css設定
-        if($_GET){
-            $main->layer_link($TPLMSG["STORES"],$cms_cfg['base_root']."stores.htm");
-        }else{
-            $main->layer_link($TPLMSG["STORES"]);
-        }
         $main->google_code(); //google analystics code , google sitemap code
     }
 
@@ -73,8 +68,7 @@ class STORES{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         $ext=($this->ws_seo)?".htm":".php";
         //門市管理分類
-        $sdc_id = $this->left_cate_list();      
-        $tpl->assignGlobal("TAG_LAYER",$stores_link);
+        $this->left_cate_list();      
         //門市管理列表
         ////網路門市
         if($_GET['f']=='webstores' || $_GET['sd_type']=='2'){
@@ -83,12 +77,16 @@ class STORES{
         }else{
             ////實體門市
             $and_str = " and sd_type='1'";
-            if($sdc_id){
-                $and_str .= " and sdc_id='".$sdc_id."'";
+            if($this->currentRow){
+                $and_str .= " and sdc_id in(".$this->fetch_sdc_id($this->currentRow['sdc_id']).")";
             }
             $blocklist="REAL_STORES_LIST";
         }
-        
+        if($this->currentRow){
+            $this->layer_link($this->currentRow);
+        }else{
+            $main->layer_link($TPLMSG['STORES']);
+        }
         $sql="select * from ".$cms_cfg['tb_prefix']."_stores where sd_status='1' ".$and_str." order by sd_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
@@ -173,84 +171,46 @@ class STORES{
     
     /*由$row取得該筆記錄的url
      */
-    function get_link(&$row,$is_stores=false){
+    function get_link($row){
         global $cms_cfg;
-        $link = "";
-        if($is_stores){
-            if($this->ws_seo==1 ){
-                if(trim($row["sd_seo_filename"])==""){
-                    $link = $cms_cfg["base_root"]."stores/ndetail-".$row["sdc_id"]."-".$row["sd_id"].".html";
-                }else{
-                    $link = $cms_cfg["base_root"]."stores/".$row["sd_seo_filename"].".html";
-                }
-            }else{
-                $link = "stores.php?func=sd_show&sdc_id=".$row["sdc_id"]."&sd_id=".$row["sd_id"];
-            }   
+        if($this->ws_seo){
+            $sub_cate_link = $cms_cfg['base_root']."stores/".$row['sdc_seo_filename'].".htm";  
+
         }else{
-            if($this->ws_seo==1 ){
-                if(trim($row["sdc_seo_filename"])==""){
-                    $link = $cms_cfg["base_root"]."stores/nlist-".$row["sdc_id"].".htm";
-                }else{
-                    $link = $cms_cfg["base_root"]."stores/".$row["sdc_seo_filename"].".htm";
-                }
-            }else{
-                $link = $cms_cfg["base_root"]."stores.php?func=sd_list&sdc_id=".$row["sdc_id"];
-            }
+            $sub_cate_link = $cms_cfg['base_root']."stores.php?func=sd_list&sdc_id=".$row['sdc_id'];
         }
-        return $link;                  
+        return $sub_cate_link;
     }     
     
     //左側選單
     function left_cate_list(){
         global $db,$cms_cfg,$tpl,$main,$TPLMSG;
         $sd_type_arr = array(1=>$TPLMSG['STORE_CATE_1'],2=>$TPLMSG['STORE_CATE_2']);
+        $menuItems = array();
         foreach($sd_type_arr  as $sd_type=>$info){
-            $tpl->newBlock( "LEFT_CATE_LIST" );
             if($sd_type==1){
                 $cate_link = "#";
-            }elseif($sd_type=2){
+            }elseif($sd_type==2){
                 if($this->ws_seo){
                     $cate_link = $cms_cfg['base_root']."stores/webstores.htm";
                 }else{
                     $cate_link = $cms_cfg['base_root']."stores.php?func=sd_list&sd_type=2";
                 }
             }
-            $tpl->assign( array( "VALUE_CATE_NAME" => $info,
-                                 "VALUE_CATE_LINK"  => $cate_link,
-                                 "TAG_CURRENT_CLASS"  => ($_GET['f']=='webstores' || $_GET['sd_type']==2)?"class='current'":"",
-            ));            
+            $item = array(
+                'name' => $info,
+                'link' => $cate_link,
+                'tag_cur' => ($_GET['f']=='webstores' || $_GET['sd_type']==2)?"class='current'":"",
+            );
             if($sd_type==1){
-                $sql = "select * from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_status='1' order by sdc_sort ".$cms_cfg['sort_pos'];
-                $res = $db->query($sql,true);
-                if($db->numRows($res)){
-                    $tpl->assign(array(
-                       "TAG_SUB_UL1"=>"<div class=\"menu_body\"><ul>", 
-                       "TAG_SUB_UL2"=>"</ul></div>", 
-                    ));
-                    while($row = $db->fetch_array($res,1)){
-                        $tpl->newBlock("LEFT_SUBCATE_LIST");
-                        if($this->ws_seo){
-                            $sub_cate_link = $cms_cfg['base_root']."stores/".$row['sdc_seo_filename'].".htm";  
-                            
-                        }else{
-                            $sub_cate_link = $cms_cfg['base_root']."stores.php?func=sd_list&sdc_id=".$row['sdc_id'];
-                        }
-                        if($_GET['f']==$row['sdc_seo_filename'] || $_GET['sdc_id']==$row['sdc_id']){
-                            $current_class="class='current'";
-                            $sdc_id = $row['sdc_id'];        
-                            $meta_row = $row;
-                            $main->layer_link($row['sdc_subject']);
-                        }else{
-                            $current_class="";
-                        }
-                        $tpl->assign(array(
-                           "VALUE_SUBCATE_LINK"=>$sub_cate_link, 
-                           "TAG_CURRENT_CLASS"=>$current_class,
-                           "VALUE_SUBCATE_NAME"=>$row['sdc_subject'],
-                        ));     
-                    }
+                $storeCate = array();
+                $this->_get_cate_link($storeCate);
+                if($storeCate){
+                    $item['sub'] = $storeCate;
+                    if($this->currentRow) $meta_row = $this->currentRow;
                 }
             }
+            $menuItems[] = $item;
         }
         if($meta_row){
             if($this->ws_seo){
@@ -266,8 +226,8 @@ class STORES{
             }                              
         }else{
             $main->header_footer("stores",$TPLMSG["STORES"]);
-        }        
-        return $sdc_id;
+        }
+        $main->new_left_menu($menuItems);
     }
     //取得google map
     function get_map(){
@@ -281,5 +241,73 @@ class STORES{
             }
         }        
     }
+    function _get_cate_link(&$catelink,$parent=0){
+        global $db,$cms_cfg;
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_parent='{$parent}' order by sdc_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        while($row = $db->fetch_array($res,1)){
+            $tmp = array(
+                'link' => $this->get_link($row),
+                'name' => $row['sdc_subject'],
+            );
+            if($_GET['sdc_id']==$row['sdc_id'] || ($_GET[f]==$row['sdc_seo_filename'])){
+                $tmp['tag_cur'] = "class='current'";
+                $this->currentRow = $row;
+            }
+            $sub = array();
+            $this->_get_cate_link($sub, $row['sdc_id']);
+            if($sub)$tmp['sub'] = $sub;
+            $catelink[] = $tmp;
+        }
+    }    
+    function fetch_sdc_id($sdc_id,&$box=array(),$deep=1){
+        global $db,$cms_cfg;
+        $box[] = $sdc_id;
+        $sql = "select sdc_id from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_parent='{$sdc_id}' order by sdc_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql,1);
+        while(list($sub_sdc_id) = $db->fetch_array($res,0)){
+            $this->fetch_sdc_id($sub_sdc_id, $box,$deep+1);
+        }
+        if($deep==1){
+            return implode(',',$box);
+        }
+    }
+    //產品自訂layer_link
+    function layer_link($row){
+        global $main,$cms_cfg,$db,$TPLMSG;
+        $item_name = "sdc_subject";
+        $parent_name = "sdc_parent";
+        if(!isset($row[$parent_name])){
+             trigger_error($parent_name." field missing!"); 
+        }
+        $parent_id = $row[$parent_name];
+        $layer[]['name'] = $row[$item_name];
+        //取得上層分類
+        while($parent_id>0){
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_id='".$parent_id."'";
+            $row = $db->query_firstrow($sql);
+            $parent_id = $row[$parent_name];
+            $tmp = array(
+                'name' => $row[$item_name],
+                'link' => $this->get_link($row),
+            );
+            $layer[] = $tmp;
+        }
+        //寫入階層
+        $main->layer_link($TPLMSG['STORES'],$cms_cfg['base_root']."stores.htm");
+        if(($_GET['f']=='webstores' || $_GET['sd_type']==2)){
+            $main->layer_link($TPLMSG['STORE_CATE_2']);
+        }else{
+            $main->layer_link($TPLMSG['STORE_CATE_1']);
+        }
+        while($layer){
+            $item = array_pop($layer);
+            if($item['link']){
+                $main->layer_link($item['name'],$item['link']);
+            }else{
+                $main->layer_link($item['name']);  
+            }
+        }
+    }        
 }
 ?>

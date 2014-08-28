@@ -137,15 +137,28 @@ class STORES{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //相關參數
         if(!empty($_REQUEST['nowp'])){
-            $tpl->assignGlobal( array("VALUE_SEARCH_TARGET" => $_REQUEST['st'],
-                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
-                                      "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
-                                      "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
-
+            $tpl->assignGlobal( array(
+                "VALUE_SEARCH_TARGET" => $_REQUEST['st'],
+                "VALUE_SEARCH_KEYWORD" => $_REQUEST['sk'],
+                "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
+                "VALUE_JUMP_PAGE" => $_REQUEST['jp'],
             ));
         }
+        $this->parent = $_GET['sdc_parent']?$_GET['sdc_parent']:0;
+        $func_str = $_SERVER['PHP_SELF']."?func=sdc_list";
+        $stores_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_stores_cate","sdc_subject","sdc",$this->parent,$func_str);
+        if(!empty($stores_cate_layer)){
+            $tpl->assignGlobal("TAG_STORES_CATE_LAYER",implode(" > ",$stores_cate_layer));
+        }else{
+            $tpl->assignGlobal("TAG_STORES_CATE_LAYER",$TPLMSG["NO_CATE"]);
+        }        
         $sql="select * from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_id > '0'";
         $and_str = "";
+        if(!empty($_REQUEST["sdc_parent"])){
+            $and_str = " and sdc_parent=".$_REQUEST["sdc_parent"];
+        }else{
+            $and_str = " and sdc_parent=0";
+        }
         if(!empty($_REQUEST["sk"])){
             $and_str = " and sdc_subject like '%".$_REQUEST["sk"]."%'";
         }
@@ -233,6 +246,9 @@ class STORES{
                 header("location : stores.php?func=sdc_list");
             }
         }
+        $cateLayer = array();
+        $this->get_cate_layer($cateLayer,$row['sdc_id']);
+        $main->multiple_select('parentcate',$cateLayer,$row['sdc_parent']);
     }
     //門市管理分類--資料更新
     function stores_cate_replace(){
@@ -261,11 +277,13 @@ class STORES{
             case "add":
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_stores_cate (
+                        sdc_parent,
                         sdc_status,
                         sdc_sort,
                         ".$add_field_str."
                         sdc_subject
                     ) values (
+                        ".$_REQUEST["sdc_parent"].",
                         ".$_REQUEST["sdc_status"].",
                         '".$_REQUEST["sdc_sort"]."',
                         ".$add_value_str."
@@ -275,6 +293,7 @@ class STORES{
             case "mod":
                 $sql="
                     update ".$cms_cfg['tb_prefix']."_stores_cate set
+                        sdc_parent=".$_REQUEST["sdc_parent"].",
                         sdc_status=".$_REQUEST["sdc_status"].",
                         sdc_sort='".$_REQUEST["sdc_sort"]."',
                         ".$update_str."
@@ -337,6 +356,14 @@ class STORES{
 
             ));
         }
+        $this->parent = $_GET['sdc_id']?$_GET['sdc_id']:0;
+        $func_str = $_SERVER['PHP_SELF']."?func=sd_list&sd_type=1";
+        $stores_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_stores_cate","sdc_subject","sdc",$this->parent,$func_str);
+        if(!empty($stores_cate_layer)){
+            $tpl->assignGlobal("TAG_STORES_CATE_LAYER",implode(" > ",$stores_cate_layer));
+        }else{
+            $tpl->assignGlobal("TAG_STORES_CATE_LAYER",$TPLMSG["NO_CATE"]);
+        }           
         //門市管理類別
         $sd_type_arr = array(1=>"實體門市",2=>"網路門市");
         $i=0;
@@ -360,6 +387,9 @@ class STORES{
         $and_str="";
         if(!empty($_REQUEST["sd_type"])){
             $and_str .= " and sd.sd_type = '".$_REQUEST["sd_type"]."'";
+        }
+        if(!empty($_REQUEST["sdc_id"])){
+            $and_str .= " and sd.sdc_id = '".$_REQUEST["sdc_id"]."'";
         }
         if($_REQUEST["st"]=="all"){
             $and_str .= " and (sd.sd_subject like '%".$_REQUEST["sk"]."%' or sd.sd_content like '%".$_REQUEST["sk"]."%')";
@@ -407,6 +437,7 @@ class STORES{
                                 "VALUE_SD_ID"  => $row["sd_id"],
                                 "VALUE_SD_SORT"  => $row["sd_sort"],
                                 "VALUE_SD_NAME" => $row["sd_name"],
+                                "VALUE_SDC_SUBJECT" => $row["sdc_subject"],
                                 "VALUE_SD_SERIAL" => $i,
                                 "VALUE_SD_TYPE"  => ($row["sd_type"]==1)?"實體門市":"網路門市",
                                 "VALUE_STATUS_IMG" => ($row["sd_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
@@ -475,16 +506,9 @@ class STORES{
             }
         }
         //門市管理分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_id > '0'";
-        $selectrs = $db->query($sql);
-        $rsnum    = $db->numRows($selectrs);
-        while($row1 = $db->fetch_array($selectrs,1)){
-            $tpl->newBlock( "SELECT_OPTION_STORES_CATE" );
-            $tpl->assign( array( "OPTION_STORES_CATE_NAME"  => $row1["sdc_subject"],
-                                 "OPTION_STORES_CATE_VALUE" => $row1["sdc_id"],
-                                 "STR_SDC_SEL"       => ($row1["sdc_id"]==$row["sdc_id"] || $row1["sdc_id"]==$_REQUEST["sdc_id"])?"selected":""
-            ));
-        }
+        $cateLayer = array();
+        $this->get_cate_layer($cateLayer,0);
+        $main->multiple_select('sdcid',$cateLayer,$row['sdc_id']);
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("TINYMCE_JS");
             $tpl->newBlock("WYSIWYG_TINYMCE1");
@@ -766,6 +790,15 @@ class STORES{
             case "sort":
                 $this->change_sort($_REQUEST["ws_table"]);
                 break;
+        }
+    }
+    function get_cate_layer(&$layer,$current,$parent=0,$deep=1){
+        global $db,$cms_cfg;
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_stores_cate where sdc_parent='{$parent}' and sdc_id<>'{$current}' order by sdc_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        while($row = $db->fetch_array($res,1)){
+            $layer[$row['sdc_id']] = str_repeat("-", ($deep-1)*2).$row['sdc_subject'];
+            $this->get_cate_layer($layer,$current, $row['sdc_id'], $deep+1);
         }
     }
 }
