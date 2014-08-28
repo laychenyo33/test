@@ -872,7 +872,7 @@ class GALLERY{
              $res['err_msg'] = $gc_dir."不存在或非資料夾";
          }
          if($res['success']){
-            $pattern = $real_gc_dir . "/*.{jpg,jpeg,png}";
+            $pattern = $real_gc_dir . "/*.{jpg,jpeg,png,JPG,JPEG,PNG}";
             $imgs = glob($pattern,GLOB_BRACE);
             foreach($imgs  as $full_path_img){
                 $thumb = $main->file_str_replace($full_path_img);
