@@ -519,8 +519,22 @@ class CART{
             $main->country_select($row["m_country"]);
         }
         //稱謂下拉選單
-        $tpl->assignGlobal("TAG_CONTACT_WITH_S",$main->contact_s_select_r($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CART"));
-        $tpl->assignGlobal("TAG_CONTACTR_WITH_S",$main->contact_s_select_r($_SESSION[$cms_cfg['sess_cookie_name']]["contactus"]["cu_contact_s"],"CARTR"));
+        $ordererField = new ContactfieldWithCourtesyTitle(array(
+            'view'      => 'orderer',
+            'blockName' => 'Orderer',
+            'fieldData' => array(
+                'contact' => array(
+                    'name' => sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$memRow['m_fname'],$memRow['m_lname']),
+                ),
+                'courtesyTitle' => $memRow['m_contact_s'],
+            ),
+        ));
+        $tpl->assignGlobal("TAG_CONTACT_WITH_S",$ordererField->get_html());
+        $receiveField = new ContactfieldWithCourtesyTitle(array(
+            'view'      => 'orderreceiver',
+            'blockName' => 'Receiver',
+        ));
+        $tpl->assignGlobal("TAG_CONTACTR_WITH_S",$receiveField->get_html());
         //地址欄位格式
         if($cms_cfg['ws_module']['ws_address_type']=='tw'){
             $tpl->newBlock("TW_ADDRESS");
