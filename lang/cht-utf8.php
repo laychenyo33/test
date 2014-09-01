@@ -155,6 +155,7 @@ $TPLMSG['MEMBER_APPROV_NOTIFICATION_CONTENT'] = "您在 %s 的帳號 %s 已啟�
 $TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
 $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
 $TPLMSG["MEMBER_EPAPER"] = "願意接收電子報訊息?";
+$TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"] = '%2$s%1$s';
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "產品介紹";
