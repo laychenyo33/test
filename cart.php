@@ -323,7 +323,7 @@ class CART{
                 "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
             ));
             //送貨區域
-            App::getHelper('main')->multiple_radio("shipment_type",$ws_array["shippment_type"],"");                 
+            App::getHelper('main')->multiple_radio("shipment_type",$ws_array["shippment_type"],"",$tpl);                 
             for($i=0;$i<count($shopping);$i++){
                 $tpl->newBlock( "SHOPPING_CART_LIST" );
                 $pid=$shopping[$i]["p_id"];
@@ -473,7 +473,7 @@ class CART{
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("TIME_SEC_ZONE");
             //配送時段
-            App::getHelper('main')->multiple_radio("deliver_timesec",$ws_array["deliery_timesec"],'');
+            App::getHelper('main')->multiple_radio("deliver_timesec",$ws_array["deliery_timesec"],'',$tpl);
         }
         //會員區資訊
         if($_POST['shop_and_register']){
@@ -552,7 +552,7 @@ class CART{
             $tpl->gotoBlock("PAYMENT_TYPE");
             $tpl->gotoBlock("MEMBER_DATA_FORM");
             //發票類型
-            $main->multiple_radio("invoice",$ws_array['invoice_type'],$tmpForm['o_invoice_type']?$tmpForm['o_invoice_type']:2);
+            $main->multiple_radio("invoice",$ws_array['invoice_type'],$tmpForm['o_invoice_type']?$tmpForm['o_invoice_type']:2,$tpl);
             //付款說明
             $this->load_term($tpl);
         }    

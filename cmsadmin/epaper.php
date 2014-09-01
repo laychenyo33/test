@@ -1158,7 +1158,7 @@ class EPAPER{
                 $templates[$label] = $label;
             }
         }
-        $main->multiple_select("template",$templates,$template);
+        $main->multiple_select("template",$templates,$template,$tpl);
     }
 }
 //ob_end_flush();

@@ -238,9 +238,9 @@ class ABOUTUS{
         if($cms_cfg['ws_activate_mobile']){
             $tpl->newBlock("MOBILE_OPTIONS");
             //手機版隱藏選項
-            $main->multiple_radio("mobilehide",$ws_array["yesno_status"],$row['mobilehide']);
+            $main->multiple_radio("mobilehide",$ws_array["yesno_status"],$row['mobilehide'],$tpl);
             //手機版專用選項
-            $main->multiple_radio("mobileonly",$ws_array["yesno_status"],$row['mobileonly']);
+            $main->multiple_radio("mobileonly",$ws_array["yesno_status"],$row['mobileonly'],$tpl);
         }
     }
 //關於我們--資料更新================================================================

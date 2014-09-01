@@ -1718,8 +1718,7 @@ class MAINFUNC{
      * $datas，所有內容的集合陣列
      * $values，指定內容的陣列，值是$datas的索引值
      */
-    function multiple_checkbox($blockname,$datas,$values){
-        global $tpl;
+    function multiple_checkbox($blockname,$datas,$values,  TemplatePower $tpl){     
         if(is_string($values)){
             $values = explode(',',$values);
         }
@@ -1751,8 +1750,7 @@ class MAINFUNC{
      * $datas，所有內容的集合陣列
      * $values，指定內容的值，值是$datas的索引值，若是陣列，則取第一個值
      */
-    function multiple_radio($blockname,$datas,$values){
-        global $tpl;
+    function multiple_radio($blockname,$datas,$values,  TemplatePower $tpl){
         if(is_array($values)){
             $values = $values[0];
         }
@@ -1784,8 +1782,7 @@ class MAINFUNC{
      * $datas，所有內容的集合陣列
      * $values，指定內容的值，值是$datas的索引值，若是陣列，則取第一個值
      */
-    function multiple_select($blockname,$datas,$values){
-        global $tpl;
+    function multiple_select($blockname,$datas,$values, TemplatePower $tpl){ 
         if(is_array($values)){
             $values = $values[0];
         }
