@@ -295,6 +295,7 @@ class MAINFUNC{
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH",$TPLMSG['PRODUCTS_SEARCH']);
             $tpl->assignGlobal("MSG_PRODUCT_SEARCH_KEYWORD",$TPLMSG['ENTER_KEYWORD']);
             $tpl->assignGlobal("HEADER_META_ROBOT",($cms_cfg['ws_online']) ? "all" : "nofllow");
+            $tpl->assignGlobal("MSG_COPY_URL_DONE",$TPLMSG['COPY_URL_DONE']);
             //設定主選單變數
             if(!empty($ws_array["main"])){
                 foreach($ws_array["main"] as $item => $itemName){
