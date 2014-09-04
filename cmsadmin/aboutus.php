@@ -90,10 +90,36 @@ class ABOUTUS{
     //關於我們--列表================================================================
     function aboutus_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        //最新消息分類
+        if($cms_cfg['ws_module']['ws_aboutus_au_cate']){
+            $tpl->newBlock("AU_CATE_ZONE");
+            $tpl->newBlock("AU_CATE_NOTIFIER");
+            $i=0;
+            $tpl->assignGlobal("TAG_NOW_CATE" ,$TPLMSG["NO_CATE"]);
+            $sql = "select distinct au_cate as au_cate from ".$cms_cfg['tb_prefix']."_aboutus ";
+            $selectrs = $db->query($sql,true);        
+            while($row = $db->fetch_array($selectrs,1)){
+                $i++;
+                $tpl->newBlock( "AU_CATE_LIST" );
+                $tpl->assign( array( 
+                    "VALUE_AU_CATE"  => $ws_array["main"][$row["au_cate"]],
+                    "TAG_AU_CATE" => $row["au_cate"],
+                ));
+                if($i%4==0){
+                    $tpl->assign("TAG_AU_CATE_TRTD","</tr><tr>");
+                }
+                if($row["au_cate"]==$_REQUEST["au_cate"]){
+                    $tpl->assignGlobal("TAG_NOW_CATE",$ws_array["main"][$row["au_cate"]]);
+                }
+            }
+        }
         //關於我們列表
         $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus  where au_id > '0'";
         //附加條件
         $and_str="";
+        if($_GET['au_cate']){
+            $and_str .= " and au_cate='".$_GET['au_cate']."' ";
+        }
         if($_REQUEST["st"]=="all"){
             $and_str .= " and (au_subject like '%".$_REQUEST["sk"]."%' or au_content like '%".$_REQUEST["sk"]."%')";
         }
@@ -108,7 +134,7 @@ class ABOUTUS{
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
-        $fumc_str="aboutus.php?func=au_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+        $fumc_str="aboutus.php?func=au_list".(isset($_GET['au_cate'])?"&au_cate='".$_GET['au_cate']."'":"")."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
         //分頁並重新組合包含limit的sql語法
         $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$fumc_str,$total_records,$sql);
         $selectrs = $db->query($sql);

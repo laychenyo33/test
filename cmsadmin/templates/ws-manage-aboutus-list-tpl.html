@@ -3,7 +3,32 @@
 <h1>關於我們</h1>
 <br>
 <form action="aboutus.php" method="get" name="myform" class="formular" id="formID">
+    <!-- START BLOCK : AU_CATE_ZONE -->
+    <table width="95%" border="0" cellpadding="0" cellspacing="0" class="catetable">
+        <tr>
+          <!-- START BLOCK : AU_CATE_LIST -->
+          <td width="25%" valign="top">
+           <table>
+             <tr>
+               <td valign="top">
+               <a href="aboutus.php?func=au_list&au_cate={TAG_AU_CATE}"><div class="on">{VALUE_AU_CATE}</div></a>
+               </td>
+             </tr>
+          </table>
+          </td>
+          {TAG_AU_CATE_TRTD}
+          <!-- END BLOCK : AU_CATE_LIST -->
+        </tr>
+    </table>    
+    <!-- END BLOCK : AU_CATE_ZONE -->
     <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
+    <!-- START BLOCK : AU_CATE_NOTIFIER -->
+    <tr>
+      <td colspan="{TAG_COLUMN_NUMS}">
+          目前分類 : <a href="aboutus.php?func=au_list">TOP</a> > {TAG_NOW_CATE}
+      </td>
+    </tr>        
+    <!-- END BLOCK : AU_CATE_NOTIFIER -->
     <tr>
       <td colspan="{TAG_COLUMN_NUMS}">
         <div class="title">
