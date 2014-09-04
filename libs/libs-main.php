@@ -1417,7 +1417,7 @@ class MAINFUNC{
                     }
                     $menu_arr[$row['au_cate']][]=array(
                         'name'=>$row['au_subject'],
-                        'link'=> ($i==1)?$cms_cfg['base_root'].$row['au_cate'].".htm" : ($cms_cfg["ws_module"]['ws_seo'])?$cms_cfg['base_root'].$row['au_cate'].'-'.$row['au_id'].".html":$cms_cfg['base_root']."aboutus.php?au_cate=".$row['au_cate']."&au_id=".$row['au_id'],
+                        'link'=> ($i==1)?$cms_cfg['base_root'].$row['au_cate'].".htm" : (($cms_cfg["ws_module"]['ws_seo'])?$cms_cfg['base_root'].$row['au_cate'].'-'.$row['au_id'].".html":$cms_cfg['base_root']."aboutus.php?au_cate=".$row['au_cate']."&au_id=".$row['au_id']),
                     );
                     $i++;
                 }
