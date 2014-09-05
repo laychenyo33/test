@@ -474,7 +474,7 @@ class DOWNLOAD{
             ));
         }
         //下載方式
-        App::getHelper('main')->multiple_radio("dltype",App::defaults()->download_type,$row['d_type']);
+        App::getHelper('main')->multiple_radio("dltype",App::defaults()->download_type,$row['d_type'],$tpl);
     }
 //檔案下載--資料更新================================================================
     function download_replace(){

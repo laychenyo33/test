@@ -89,9 +89,10 @@
                        sz_other.push( $(this).next().text());
                    }
                });
-               if(confirm("目前選擇的送貨區域是:"+sz+"\n若送貨地區為"+sz_other[0]+" \n請重新選擇送貨區域。\n確定結帳請按 送出，重新選擇請按 取消。")){
-                   $(this.form).trigger('submit');
-               }
+               $(this.form).trigger('submit');
+//               if(confirm("目前選擇的送貨區域是:"+sz+"\n若送貨地區為"+sz_other[0]+" \n請重新選擇送貨區域。\n確定結帳請按 送出，重新選擇請按 取消。")){
+//                   $(this.form).trigger('submit');
+//               }
            });
            $(":radio[name=shipment_type]").click(function(evt){
                 var dataStr = "func=ajax_show_ship_price&shipment_type="+$(this).val();

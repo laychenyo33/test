@@ -745,6 +745,7 @@ class MAINFUNC{
         }
         $from_email=explode(",",$from);
         $from_name=(trim($_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]))?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]:$from_email[0];
+        $mail_subject = "【".App::getHelper('session')->sc_company."】".$mail_subject;
         $subject = $this->format_mail_subject($mail_subject);
         //寄給送信者
         $MAIL_HEADER   = "MIME-Version: 1.0\n";
@@ -811,6 +812,7 @@ class MAINFUNC{
         global $TPLMSG,$cms_cfg;
         $from_email=explode(",",$from);
         $from_name=(trim($from_name))?$from_name:$from_email[0];
+        $mail_subject = "【".App::getHelper('session')->sc_company."】".$mail_subject;     
         $mail_subject = $this->format_mail_subject($mail_subject);
         //寄給送信者
         $MAIL_HEADER   = "MIME-Version: 1.0\n";
@@ -1417,7 +1419,7 @@ class MAINFUNC{
                     }
                     $menu_arr[$row['au_cate']][]=array(
                         'name'=>$row['au_subject'],
-                        'link'=> ($i==1)?$cms_cfg['base_root'].$row['au_cate'].".htm" : ($cms_cfg["ws_module"]['ws_seo'])?$cms_cfg['base_root'].$row['au_cate'].'-'.$row['au_id'].".html":$cms_cfg['base_root']."aboutus.php?au_cate=".$row['au_cate']."&au_id=".$row['au_id'],
+                        'link'=> ($i==1)?$cms_cfg['base_root'].$row['au_cate'].".htm" : (($cms_cfg["ws_module"]['ws_seo'])?$cms_cfg['base_root'].$row['au_cate'].'-'.$row['au_id'].".html":$cms_cfg['base_root']."aboutus.php?au_cate=".$row['au_cate']."&au_id=".$row['au_id']),
                     );
                     $i++;
                 }
@@ -1718,8 +1720,7 @@ class MAINFUNC{
      * $datas，所有內容的集合陣列
      * $values，指定內容的陣列，值是$datas的索引值
      */
-    function multiple_checkbox($blockname,$datas,$values){
-        global $tpl;
+    function multiple_checkbox($blockname,$datas,$values,  TemplatePower $tpl){     
         if(is_string($values)){
             $values = explode(',',$values);
         }
@@ -1751,8 +1752,7 @@ class MAINFUNC{
      * $datas，所有內容的集合陣列
      * $values，指定內容的值，值是$datas的索引值，若是陣列，則取第一個值
      */
-    function multiple_radio($blockname,$datas,$values){
-        global $tpl;
+    function multiple_radio($blockname,$datas,$values,  TemplatePower $tpl){
         if(is_array($values)){
             $values = $values[0];
         }
@@ -1784,8 +1784,7 @@ class MAINFUNC{
      * $datas，所有內容的集合陣列
      * $values，指定內容的值，值是$datas的索引值，若是陣列，則取第一個值
      */
-    function multiple_select($blockname,$datas,$values){
-        global $tpl;
+    function multiple_select($blockname,$datas,$values, TemplatePower $tpl){ 
         if(is_array($values)){
             $values = $values[0];
         }

@@ -994,6 +994,8 @@ class PRODUCTS{
                                           "VALUE_SPEC_TITLE" =>$row["p_spec_title"],
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
                                           "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
+                                          "MSG_SMALL_IMG_TEMPLATE" => sprintf("%dx%d",$cms_cfg['small_prod_img_width'],$cms_cfg['small_prod_img_height']),
+                                          "MSG_BIG_IMG_TEMPLATE" => sprintf("%dx%d",$cms_cfg['big_img_width'][1],$cms_cfg['big_img_height'][1]),
                 ));
                 //有排序欄位才重新指定排序值，複製產品不使用原先產品的排序值
                 if($row['p_sort']){

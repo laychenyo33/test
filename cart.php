@@ -323,7 +323,7 @@ class CART{
                 "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
             ));
             //送貨區域
-            App::getHelper('main')->multiple_radio("shipment_type",$ws_array["shippment_type"],"");                 
+            App::getHelper('main')->multiple_radio("shipment_type",$ws_array["shippment_type"],"",$tpl);                 
             for($i=0;$i<count($shopping);$i++){
                 $tpl->newBlock( "SHOPPING_CART_LIST" );
                 $pid=$shopping[$i]["p_id"];
@@ -473,7 +473,7 @@ class CART{
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("TIME_SEC_ZONE");
             //配送時段
-            App::getHelper('main')->multiple_radio("deliver_timesec",$ws_array["deliery_timesec"],'');
+            App::getHelper('main')->multiple_radio("deliver_timesec",$ws_array["deliery_timesec"],'',$tpl);
         }
         //會員區資訊
         if($_POST['shop_and_register']){
@@ -495,17 +495,16 @@ class CART{
         if($this->m_id){
             $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
             $selectrs = $db->query($sql);
-            $row = $db->fetch_array($selectrs,1);
+            $memRow = $db->fetch_array($selectrs,1);
             $tpl->assignGlobal( array( 
-                 "VALUE_M_NAME" => ($this->contact_s_style==1)?$row["m_fname"]." ".$row["m_lname"]:$row["m_lname"].$row["m_fname"],
-                 "VALUE_M_CONTACT_S" => $row["m_contact_s"],
-                 "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
-                 "VALUE_M_ZIP" => $row["m_zip"],
-                 "VALUE_M_ADDRESS" => $row["m_address"],
-                 "VALUE_M_TEL" => $row["m_tel"],
-                 "VALUE_M_FAX" => $row["m_fax"],
-                 "VALUE_M_EMAIL" => $row["m_email"],
-                 "VALUE_M_CELLPHONE" => $row["m_cellphone"]
+                 "VALUE_M_NAME" => sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$memRow["m_fname"],$memRow["m_lname"]),
+                 "VALUE_M_COMPANY_NAME" => $memRow["m_company_name"],
+                 "VALUE_M_ZIP" => $memRow["m_zip"],
+                 "VALUE_M_ADDRESS" => $memRow["m_address"],
+                 "VALUE_M_TEL" => $memRow["m_tel"],
+                 "VALUE_M_FAX" => $memRow["m_fax"],
+                 "VALUE_M_EMAIL" => $memRow["m_email"],
+                 "VALUE_M_CELLPHONE" => $memRow["m_cellphone"]
             ));
         }
         if($tmpForm){
@@ -552,7 +551,7 @@ class CART{
             $tpl->gotoBlock("PAYMENT_TYPE");
             $tpl->gotoBlock("MEMBER_DATA_FORM");
             //發票類型
-            $main->multiple_radio("invoice",$ws_array['invoice_type'],$tmpForm['o_invoice_type']?$tmpForm['o_invoice_type']:2);
+            $main->multiple_radio("invoice",$ws_array['invoice_type'],$tmpForm['o_invoice_type']?$tmpForm['o_invoice_type']:2,$tpl);
             //付款說明
             $this->load_term($tpl);
         }    

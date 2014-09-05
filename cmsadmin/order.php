@@ -244,7 +244,7 @@ class ORDER{
                                           "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
                 ));
                 //發票類型
-                $main->multiple_radio("invoice_type",$ws_array['invoice_type'],$row['o_invoice_type']);
+                $main->multiple_radio("invoice_type",$ws_array['invoice_type'],$row['o_invoice_type'],$tpl);
                 if($cms_cfg["ws_module"]["ws_vaccount"] & $row["o_virtual_account"]) {
                 $tpl->newBlock("ATM_DATA");
                     $tpl->assignGlobal( array(

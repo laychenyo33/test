@@ -771,7 +771,7 @@ class MEMBER{
                 ));
             }
             //聯絡我們列表
-            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."'";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."' order by cu_modifydate desc";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -810,16 +810,6 @@ class MEMBER{
                                     "VALUE_CU_SERIAL" => $i,
                                     "VALUE_CUC_SUBJECT"  => $ws_array["contactus_cate"][$row["cu_cate"]],
                                     "VALUE_CU_DETAIL" => $TPLMSG['DETAIL'],
-                ));
-            }
-            if($i==0){
-                $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-            }else{
-                $tpl->newBlock( "PAGE_DATA_SHOW" );
-                $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                    "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                    "VALUE_PAGES_STR"  => $page["pages_str"],
-                                    "VALUE_PAGES_LIMIT"=>$cms_cfg["op_limit"]
                 ));
             }
         }
