@@ -350,18 +350,17 @@ class CONTACTUS{
     //回覆完成寄送回覆信
     function mail_cur($re_time="") {
         global $TPLMSG,$cms_cfg;
-        $this->ws_tpl_file = "templates/ws-manage-mail-tpl.html";
-        $tpl = new TemplatePower( $this->ws_tpl_file );
-        $tpl->prepare();
+        $tpl = App::getHelper('main')->get_mail_tpl('contactus-reply');
         $tpl->newBlock( "CONTACTUS_MAIL" );
-        $tpl->assign( array("MSG_CONTENT" => $TPLMSG['CONTENT'],
-                            "MSG_MODIFYDATE" => $TPLMSG['CONTACT_US_REPLY_TIME'],
-                            "VALUE_CUR_CONTENT" => $_REQUEST["cur_content"],
-                            "VALUE_CUR_MODIFYDATE" => $re_time
+        $tpl->assign( array(
+            "MSG_CONTENT" => $TPLMSG['CONTENT'],
+            "MSG_MODIFYDATE" => $TPLMSG['CONTACT_US_REPLY_TIME'],
+            "VALUE_CUR_CONTENT" => nl2br($_REQUEST["cur_content"]),
+            "VALUE_CUR_MODIFYDATE" => $re_time
         ));
-        $tpl->assignGlobal( "VALUE_TERM" , $TPLMSG['CONTACT_US_REPLY']);
+        $reply_title=$TPLMSG['CONTACT_US_REPLY'];
         $mail_content=$tpl->getOutputContent();
-        $this->mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["cu_email"],$mail_content,$TPLMSG["CONTACT_US_REPLY"]);
+        App::getHelper('main')->ws_mail_send_simple(App::getHelper('session')->sc_email,$_REQUEST["cu_email"],$mail_content,$reply_title,App::getHelper('session')->sc_company);
         return true;
     }
 
