@@ -745,6 +745,7 @@ class MAINFUNC{
         }
         $from_email=explode(",",$from);
         $from_name=(trim($_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]))?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_company"]:$from_email[0];
+        $mail_subject = "【".App::getHelper('session')->sc_company."】".$mail_subject;
         $subject = $this->format_mail_subject($mail_subject);
         //寄給送信者
         $MAIL_HEADER   = "MIME-Version: 1.0\n";
@@ -811,6 +812,7 @@ class MAINFUNC{
         global $TPLMSG,$cms_cfg;
         $from_email=explode(",",$from);
         $from_name=(trim($from_name))?$from_name:$from_email[0];
+        $mail_subject = "【".App::getHelper('session')->sc_company."】".$mail_subject;     
         $mail_subject = $this->format_mail_subject($mail_subject);
         //寄給送信者
         $MAIL_HEADER   = "MIME-Version: 1.0\n";
