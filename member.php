@@ -119,8 +119,7 @@ class MEMBER{
         }else{
             $tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //左方一般選單
         }
-        $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
-        $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
+        $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區     
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["member"]);//左方menu title
         $tpl->assignGlobal( "TAG_CATE_DESC", $ws_array["left_desc"]["member"]);//左方menu title
@@ -186,8 +185,6 @@ class MEMBER{
         $main->load_js_msg();
         //欄位名稱
         $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_JOIN'],
-                                  "MSG_MEMBER_FNAME"  => $TPLMSG['MEMBER_FNAME'],
-                                  "MSG_MEMBER_LNAME"  => $TPLMSG['MEMBER_LNAME'],
                                   "MSG_CHECK_ACCOUNT" => $TPLMSG['MEMBER_CHECK_ACCOUNT'],
                                   "MSG_MODE" => $TPLMSG['SEND'],
                                   "MSG_ACCOUNT" => $TPLMSG["LOGIN_ACCOUNT"],
@@ -239,8 +236,6 @@ class MEMBER{
                                           "VALUE_M_ACCOUNT" => $row["m_account"],
                                           "VALUE_M_PASSWORD" => $row["m_password"],
                                           "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
-                                          "VALUE_M_FNAME" => $row["m_fname"],
-                                          "VALUE_M_LNAME" => $row["m_lname"],
                                           "VALUE_M_BIRTHDAY" => $row["m_birthday"],
                                           "VALUE_M_ZIP" => $row["m_zip"],
                                           "VALUE_M_ADDRESS" => $row["m_address"],
@@ -248,9 +243,6 @@ class MEMBER{
                                           "VALUE_M_FAX" => $row["m_fax"],
                                           "VALUE_M_EMAIL" => $row["m_email"],
                                           "VALUE_M_CELLPHONE" => $row["m_cellphone"],
-                                          "STR_M_CS_CK1" => ($row["m_contact_s"]=="Mr.")?"selected":"",
-                                          "STR_M_CS_CK2" => ($row["m_contact_s"]=="Miss.")?"selected":"",
-                                          "STR_M_CS_CK3" => ($row["m_contact_s"]=="Mrs.")?"selected":"",
                                           "STR_M_EPAPER_STATUS_CK1" => ($row["m_epaper_status"]==1)?"checked":"",
                                           "STR_M_EPAPER_STATUS_CK0" => ($row["m_epaper_status"]==0)?"checked":"",
                                           "MSG_MODE" => $TPLMSG['MODIFY'],
@@ -271,7 +263,21 @@ class MEMBER{
         if($cms_cfg["ws_module"]["ws_country"]==1) {
             $main->country_select($row["m_country"]);
         }
-        $main->contact_s_select($row['m_contact_s'],$zone="MEMBER");
+        //稱謂下拉選單
+        $memberField = new ContactfieldWithCourtesyTitle(array(
+            'view'      => 'member',
+            'blockName' => 'Member',
+            'fieldData' => array(
+                'contact' => array(
+                    'fname' => $row["m_fname"],
+                    'lname' => $row["m_lname"],
+                    "MSG_FNAME"  => $TPLMSG['MEMBER_FNAME'],
+                    "MSG_LNAME"  => $TPLMSG['MEMBER_LNAME'],                    
+                ),
+                'courtesyTitle' => $row["m_contact_s"],
+            ),
+        ));
+        $tpl->assignGlobal("TAG_CONTACT_WITH_S",$memberField->get_html());
         //地址欄位格式
         if($cms_cfg['ws_module']['ws_address_type']=='tw'){
             $tpl->newBlock("TW_ADDRESS");
