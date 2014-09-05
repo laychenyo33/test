@@ -812,16 +812,6 @@ class MEMBER{
                                     "VALUE_CU_DETAIL" => $TPLMSG['DETAIL'],
                 ));
             }
-            if($i==0){
-                $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-            }else{
-                $tpl->newBlock( "PAGE_DATA_SHOW" );
-                $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                    "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                    "VALUE_PAGES_STR"  => $page["pages_str"],
-                                    "VALUE_PAGES_LIMIT"=>$cms_cfg["op_limit"]
-                ));
-            }
         }
         if($type=="detail"){
             $tpl->newBlock( "CONTACTUS_DETAIL_ZONE" );
