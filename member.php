@@ -771,7 +771,7 @@ class MEMBER{
                 ));
             }
             //聯絡我們列表
-            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."'";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."' order by cu_modifydate desc";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
