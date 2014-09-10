@@ -443,4 +443,6 @@ $TPLMSG['COMMENT_LIST_PUBLISH_DATE'] = "發布時間";
 
 $TPLMSG['MOBILE_VERSION'] = "手機版";
 $TPLMSG['COMPUTER_VERSION'] = "電腦版";
+    
+$TPLMSG['COPY_URL_DONE'] = "已複製網址!";
 ?>

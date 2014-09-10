@@ -46,8 +46,7 @@ class CONTACTUS{
         $tpl->assignInclude( "LEFT", $cms_cfg['base_left_normal_tpl']); //左方一般表單
         $tpl->assignInclude( "MAIN", $ws_tpl_file); //主功能顯示區
         $tpl->assignInclude( "AD_H", "templates/ws-fn-ad-h-tpl.html"); //橫式廣告模板
-        $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板      
-        $tpl->assignInclude( "CONTACT_S", "templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版      
+        $tpl->assignInclude( "AD_V", "templates/ws-fn-ad-v-tpl.html"); //直式廣告模板         
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["CONTACT_US"]);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);//左方menu title
@@ -108,7 +107,17 @@ class CONTACTUS{
             $main->country_select($sess_contactus["cu_country"]);
         }
         //稱謂下拉選單
-        $main->contact_s_select($sess_contactus["cu_contact_s"]);
+        $contactField = new ContactfieldWithCourtesyTitle(array(
+            'view'      => 'contactus',
+            'blockName' => 'Contactus',
+            'fieldData' => array(
+                'contact' => array(
+                    'name' => $sess_contactus['cu_name'],
+                ),
+                'courtesyTitle' => $sess_contactus['cu_contact_s'],
+            ),
+        ));
+        $tpl->assignGlobal("TAG_CONTACT_WITH_S",$contactField->get_html());
         //產品清單checkbox
         if($this->contact_inquiry){
             $main->contactus_product_list_checkbox($sess_contactus["cu_pid"]);

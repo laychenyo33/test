@@ -207,8 +207,7 @@ class MEMBER{
         $tpl = new TemplatePower( $cms_cfg['manage_all_tpl'] );
         $tpl->assignInclude( "LEFT", $cms_cfg['manage_left_tpl']);
         $tpl->assignInclude( "TOP_MENU", $cms_cfg['manage_top_menu_tpl']);
-        $tpl->assignInclude( "MAIN", $ws_tpl_file);
-        $tpl->assignInclude( "CONTACT_S", "../templates/ws-fn-contact-s-style".$this->contact_s_style."-tpl.html"); //稱呼樣版             
+        $tpl->assignInclude( "MAIN", $ws_tpl_file);    
         $tpl->prepare();
         $tpl->assignGlobal("TAG_".$this->current_class."_CURRENT","class=\"current\"");
         $tpl->assignGlobal("CSS_BLOCK_MEMBER","style=\"display:block\"");
@@ -543,7 +542,21 @@ class MEMBER{
         }else{
             $tpl->newBlock("SINGLE_ADDRESS");
         }            
-        $main->contact_s_select($row['m_contact_s'],$zone="MEMBER");        
+        //稱謂下拉選單
+        $memberField = new ContactfieldWithCourtesyTitle(array(
+            'view'      => 'member',
+            'blockName' => 'Member',
+            'fieldData' => array(
+                'contact' => array(
+                    'fname' => $row["m_fname"],
+                    'lname' => $row["m_lname"],
+                    "MSG_FNAME"  => $TPLMSG['MEMBER_FNAME'],
+                    "MSG_LNAME"  => $TPLMSG['MEMBER_LNAME'],                    
+                ),
+                'courtesyTitle' => $row["m_contact_s"],
+            ),
+        ));
+        $tpl->assignGlobal("TAG_CONTACT_WITH_S",$memberField->get_html());    
         $this->member_cate_select($row['mc_id']);
         if($this->member_download && $this->download_on=="member"){
             $this->download_of_member($row['m_id']);
