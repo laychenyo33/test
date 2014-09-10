@@ -1,0 +1,23 @@
+$(function(){
+	$(".date").live("mouseover",function(){
+		$(".date").Zebra_DatePicker({
+			offset: [-140,50]
+		});
+	});
+});
+
+
+/*-----------------------------OR---------------------------------*/
+
+$(function(){
+	$("input[rel=date]").live("mouseover",function(){
+		$(this).Zebra_DatePicker({
+			offset: [-140,50]
+		});
+	});
+});
+
+
+
+
+//Detil -> http://stefangabos.ro/jquery/zebra-datepicker/
