@@ -1785,15 +1785,15 @@ class MAINFUNC{
      * $values，指定內容的值，值是$datas的索引值，若是陣列，則取第一個值
      */
     function multiple_select($blockname,$datas,$values, TemplatePower $tpl){ 
-        if(is_array($values)){
-            $values = $values[0];
+        if(!is_array($values)){
+            $values = explode(',',$values);
         }
         foreach($datas as $k => $v){
             $tpl->newBlock(strtoupper($blockname)."_SELECT");
             $tpl->assign(array(
                 "VALUE_".strtoupper($blockname)."_KEY"  => $k, 
                 "VALUE_".strtoupper($blockname)."_NAME" => is_array($v)?$v['label']:$v,
-                "SELECTED"                   => ($k==$values)?"selected":"",
+                "SELECTED"                   => (in_array($k,$values))?"selected":"",
             ));
             if(isset($v['htmlOptions']) && is_array($v['htmlOptions'])){
                 foreach($v['htmlOptions'] as $m => $n){
