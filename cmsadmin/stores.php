@@ -248,7 +248,7 @@ class STORES{
         }
         $cateLayer = array();
         $this->get_cate_layer($cateLayer,$row['sdc_id']);
-        $main->multiple_select('parentcate',$cateLayer,$row['sdc_parent']);
+        $main->multiple_select('parentcate',$cateLayer,$row['sdc_parent'],$tpl);
     }
     //門市管理分類--資料更新
     function stores_cate_replace(){
@@ -508,7 +508,7 @@ class STORES{
         //門市管理分類
         $cateLayer = array();
         $this->get_cate_layer($cateLayer,0);
-        $main->multiple_select('sdcid',$cateLayer,$row['sdc_id']);
+        $main->multiple_select('sdcid',$cateLayer,$row['sdc_id'],$tpl);
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){
             $tpl->newBlock("TINYMCE_JS");
             $tpl->newBlock("WYSIWYG_TINYMCE1");
