@@ -1007,19 +1007,6 @@ class PRODUCTS{
                 if($row['p_sort']){
                     $tpl->assignGlobal("VALUE_P_SORT" , $row["p_sort"]);
                 }
-                //附加檔案
-                if($cms_cfg['ws_module']['ws_products_upfiles']){
-                    $tpl->newBlock("PRODUCTS_ATTACH_FILES");
-                    $tpl->assign(array(
-                        "VALUE_P_ATTACH_FILE1" => $row["p_attach_file1"],
-                        "VALUE_P_ATTACH_FILE2" => $row["p_attach_file2"],                        
-                    ));
-                }
-                //影片
-                if($cms_cfg['ws_module']['ws_products_mv']){
-                    $tpl->newBlock("MV_COLUMN");
-                    $tpl->assign("VALUE_P_MV",$row['p_mv']);
-                }
                 if($this->seo){
                     $tpl->assignGlobal( array("VALUE_P_SEO_FILENAME" => $row["p_seo_filename"],
                                               "VALUE_P_SEO_TITLE" => $row["p_seo_title"],
@@ -1041,6 +1028,19 @@ class PRODUCTS{
                 die();
             }
         }
+        //附加檔案
+        if($cms_cfg['ws_module']['ws_products_upfiles']){
+            $tpl->newBlock("PRODUCTS_ATTACH_FILES");
+            $tpl->assign(array(
+                "VALUE_P_ATTACH_FILE1" => $row["p_attach_file1"],
+                "VALUE_P_ATTACH_FILE2" => $row["p_attach_file2"],                        
+            ));
+        }
+        //影片
+        if($cms_cfg['ws_module']['ws_products_mv']){
+            $tpl->newBlock("MV_COLUMN");
+            $tpl->assign("VALUE_P_MV",$row['p_mv']);
+        }        
         for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){	//新增時載入大圖區域及預設值
             //大圖區域TAB
             $tpl->newBlock("PRODUCTS_BIG_IMG_TAB");
