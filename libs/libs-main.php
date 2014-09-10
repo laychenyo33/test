@@ -2238,38 +2238,58 @@ class MAINFUNC{
 		
 	}
 	
-	// jQuery 載入模組
-	function jQuery_init(){
-		global $tpl,$cms_cfg;
+	// 資源載入模組
+	function res_init(){
+		global $cms_cfg,$tpl;
 		
-		$file_title = func_get_args();
-		if(count($file_title)){
-			foreach($file_title as $key => $value){
-				$js_insert .= '<script src="'.$cms_cfg["base_root"].'js/box_serial/'.$value.'_box.js" type="text/javascript"></script>'."\n";
-			}
-			$tpl->assignGlobal("TAG_JS_BOX",$js_insert);
+		static $box_title;
+		static $css_title;
+		static $js_title;
+		
+		$new_title = func_get_args();
+		$res_type = array_pop($new_title); // 最後一個值為資源類型
+		
+		switch($res_type){
+			case "box":
+				$res_tag = "TAG_JS_BOX";
+				$res_title = 'box_title';
+			break;
+			case "css":
+				$res_tag = "TAG_CSS_INCLUDE";
+				$res_title = 'css_title';
+			break;
+			case "js":
+				$res_tag = "TAG_JS_INCLUDE";
+				$res_title = 'js_title';
+			break;
 		}
-	}
-	
-	// css 載入模組
-	function css_init(){
-		global $tpl,$cms_cfg;
 		
-		if(!empty($this->css_args)){
-			$file_title = $this->css_args;
+		if(is_array($$res_title)){
+			$$res_title = array_merge($$res_title,$new_title);
 		}else{
-			$file_title = func_get_args();
+			$$res_title = $new_title;
 		}
-
-		if(count($file_title)){
-			foreach($file_title as $key => $value){
-				$css_insert .= '<link href="'.$cms_cfg["base_root"].'css/'.$value.'.css" rel="stylesheet" type="text/css" />'."\n";
+		
+		if(count($$res_title)){
+			foreach($$res_title as $key => $value){
+				
+				switch($res_type){
+					case "box":
+						$res_insert .= '<script src="'.$cms_cfg["base_root"].'js/box_serial/'.$value.'_box.js" type="text/javascript"></script>'."\n";
+					break;
+					case "css":
+						$res_insert .= '<link href="'.$cms_cfg["base_root"].'css/'.$value.'.css" rel="stylesheet" type="text/css" />'."\n";
+					break;
+					case "js":
+						$res_insert .= '<script src="'.$cms_cfg["base_root"].'js/'.$value.'.js" type="text/javascript"></script>'."\n";
+					break;
+				}
 			}
-
-			$this->css_args = $file_title;
-			$tpl->assignGlobal("TAG_CSS_INCLUDE",$css_insert);
+			
+			$tpl->assignGlobal($res_tag,$res_insert);
 		}
 	}
+
     //判斷pc_id是否等於parent_id，或是其子類別 
     function is_current_or_child_cate($pc_id,$parent_id,$seo=false){
         $identityCol = ($seo)?"pc_seo_filename":"pc_id";
