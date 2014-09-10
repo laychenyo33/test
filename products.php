@@ -277,7 +277,7 @@ class PRODUCTS{
                                          "VALUE_PC_SHOW_STYLE" => $row["pc_show_style"],
                                          "VALUE_PC_CATE_IMG" => $pc_img,
                                          "VALUE_PC_SERIAL" => $i,
-                                         "VALUE_PC_DESC" => strip_tags($row['pc_desc']),
+                                         "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out'),
                     ));
                     $dimensions["width"]=$cms_cfg['small_img_width'];
                     $dimensions["height"]=$cms_cfg['small_img_height'];
