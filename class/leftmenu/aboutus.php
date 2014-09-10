@@ -38,7 +38,7 @@ class Leftmenu_Aboutus extends Leftmenu_Abstract {
                 if(App::configs()->ws_module->ws_aboutus_au_subcate){
                     if(!empty($row['au_subcate'])){
                         if(!isset($left_menu[$row['au_subcate']])){
-                            $left_menu[$row['au_subcate']]['name'] = $row['au_subcate'];
+                            $left_menu[$row['au_subcate']]['name'] = App::defaults()->au_subcate[$row['au_subcate']];
                             $left_menu[$row['au_subcate']]['link'] = '#';
                         }
                         if(isset($menuItem['tag_cur'])){

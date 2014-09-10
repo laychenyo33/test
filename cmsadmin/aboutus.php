@@ -189,7 +189,7 @@ class ABOUTUS{
                 $tpl->assign("VALUE_AU_CATE",$ws_array["main"][$row['au_cate']]);
                 if($cms_cfg['ws_module']['ws_aboutus_au_subcate']){
                     $tpl->newBlock("AU_SUBCATE_FIELD");
-                    $tpl->assign("VALUE_AU_SUBCATE",$row['au_subcate']);
+                    $tpl->assign("VALUE_AU_SUBCATE",App::defaults()->au_subcate[$row['au_subcate']]);
                 }
             }
         }
