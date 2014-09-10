@@ -200,7 +200,7 @@ class STORES{
             $item = array(
                 'name' => $info,
                 'link' => $cate_link,
-                'tag_cur' => ($_GET['f']=='webstores' || $_GET['sd_type']==2)?"class='current'":"",
+                'tag_cur' => ($sd_type==2 && ($_GET['f']=='webstores' || $_GET['sd_type']==2))?"class='current'":"",
             );
             if($sd_type==1){
                 $storeCate = array();
@@ -250,7 +250,7 @@ class STORES{
                 'link' => $this->get_link($row),
                 'name' => $row['sdc_subject'],
             );
-            if($_GET['sdc_id']==$row['sdc_id'] || ($_GET[f]==$row['sdc_seo_filename'])){
+            if($_GET['sdc_id']==$row['sdc_id'] || ($_GET[f] && $_GET[f]==$row['sdc_seo_filename'])){
                 $tmp['tag_cur'] = "class='current'";
                 $this->currentRow = $row;
             }
