@@ -22,9 +22,9 @@
     <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
     <tr>
       <td colspan="11">
-          目前分類 : <a href="stores.php?func=sd_list">TOP</a> > {TAG_NOW_CATE}
+      目前分類 : <a href="stores.php?func=sd_list">主分類</a> > {TAG_STORES_CATE_LAYER} 
       </td>
-    </tr>
+    </tr> 
     <tr>
       <td colspan="11">
         <div class="title">
@@ -53,8 +53,9 @@
       <th width="3%"><a href="javascript:click_all(myform);"><img src="images/ico-markers.gif" width="12" height="12" border="0" /></a></th>
       <th width="5%">No.</th>
       <th width="7%">排序</th>
-      <th width="12%">門市分類</th>
-      <th width="25%">標題</th>
+      <th width="12%">門市類型</th>
+      <th width="12%">分類</th>
+      <th width="">標題</th>
       <th width="5%">修改</th>
       <th width="5%">刪除</th>
       <th width="5%">狀態</th>
@@ -65,6 +66,7 @@
       <td>{VALUE_SD_SERIAL}</td>
       <td><input type="text" name="sort_value[{VALUE_SD_ID}]" value="{VALUE_SD_SORT}" class="validate[custom[onlyNumber]]" size="2" maxlength="4"></td>
       <td>{VALUE_SD_TYPE}</td>
+      <td><a href="stores.php?func=sd_list&sd_type=1&sdc_id={VALUE_SDC_ID}">{VALUE_SDC_SUBJECT}</a></td>
       <td>{VALUE_SD_NAME}</td>
       <td><a href="stores.php?func=sd_mod&sd_id={VALUE_SD_ID}&st={VALUE_SEARCH_TARGET}&sk={SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}"><img src="images/icon-edit2.gif" width="11" border="0" alt="{MSG_MODIFY}" /></a></td>
       <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','stores.php?func=sd_del&sd_id={VALUE_SD_ID}&st={VALUE_SEARCH_TARGET}&sk={VALUE_SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}');"><img src="images/icon-del2.gif" width="10" height="9" border="0" /></a></td>
