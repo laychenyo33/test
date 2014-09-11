@@ -5,6 +5,7 @@ $ws_array["order_status"]=array(0=>$TPLMSG["ORDER_NEW"],1=>$TPLMSG["ORDER_DEALIN
 $ws_array["inquiry_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
 $ws_array["contactus_status"]=array(0=>$TPLMSG["REPLY_NO"],1=>$TPLMSG["REPLY_YES"]);
 $ws_array["yesno_status"]=array(0=>$TPLMSG["NO"],1=>$TPLMSG["YES"]);
+$ws_array['default_status'] = array($TPLMSG['STATUS_OFF'],$TPLMSG['STATUS_ON']);
 $ws_array["images_type"]=array(".jpg",".gif",".png",".bmp");
 $ws_array["cart_type"]=array(0=>$TPLMSG['CART_INQUIRY'],1=>$TPLMSG['CART_SHOPPING']);
 $ws_array["download_type"]=array(0=>$TPLMSG['DOWNLOAD_AFTER_READ'],1=>$TPLMSG['DOWNLOAD_DIRECTLY']);

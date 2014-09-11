@@ -423,4 +423,10 @@ $TPLMSG['COMMENT_LIST_PUBLISH_DATE'] = "Date of publication";
 
 $TPLMSG['MOBILE_VERSION'] = "Mobile Version";
 $TPLMSG['COMPUTER_VERSION'] = "Desktop Version";
+    
+$TPLMSG['COPY_URL_DONE'] = "Replicated URL!";
+
+$TPLMSG['STATUS_OFF'] = "off";
+$TPLMSG['STATUS_ON'] = "on";
+$TPLMSG['CLASSIFY_OTHER'] = "Other";
 ?>

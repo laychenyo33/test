@@ -445,4 +445,8 @@ $TPLMSG['MOBILE_VERSION'] = "手機版";
 $TPLMSG['COMPUTER_VERSION'] = "電腦版";
     
 $TPLMSG['COPY_URL_DONE'] = "已複製網址!";
+
+$TPLMSG['STATUS_OFF'] = "停用";
+$TPLMSG['STATUS_ON'] = "啟用";
+$TPLMSG['CLASSIFY_OTHER'] = "其他";
 ?>
