@@ -775,6 +775,7 @@ class CART{
         }
         //如果是註冊會員,新增一筆會員資料
         if($_POST['reg_mem'] && !empty($shopping)){
+            $main->check_duplicate_member_account($_REQUEST["m_email"]);            
             $sql="
                 insert into ".$cms_cfg['tb_prefix']."_member (
                     mc_id,
