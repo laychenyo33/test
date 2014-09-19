@@ -681,22 +681,16 @@ class PRODUCTS{
         }
         if(!empty($pc_id)){
             $pc_id_str = implode(",",$pc_id);
-            //清空分類底下的產品管理
-            $sql="delete from ".$cms_cfg['tb_prefix']."_products where pc_id in (".$pc_id_str.")";
+            //刪除分類
+            $sql="delete from ".$cms_cfg['tb_prefix']."_products_cate where pc_id in (".$pc_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
-                //刪除分類
-                $sql="delete from ".$cms_cfg['tb_prefix']."_products_cate where pc_id in (".$pc_id_str.")";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                if ( $db_msg == "" ) {
-                    $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_id=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
-                    $this->goto_target_page($goto_url);
-                }else{
-                    $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
-                }
+                //刪除pc_parent(分類)及pc_id(產品)皆不存在的分類及產品
+                $this->products_cate_del_sub();
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_id=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
@@ -2930,6 +2924,19 @@ class PRODUCTS{
             }
         }
         App::getHelper('main')->multiple_select("classify",$values,$classify_id,$tpl);
+    }
+    function products_cate_del_sub(){
+        $db = App::getHelper('db');
+        $sql = "delete from ".$db->prefix("products_cate")." where pc_parent<>'0' and pc_parent not in (select pc_id from (select pc_id from ".$db->prefix("products_cate").") as x)";
+        $db->query($sql,true);
+        if($db->affected_rows()){
+            $this->products_cate_del_sub();
+        }else{
+            $sql = "delete from ".$db->prefix("products")." where pc_id<>'0' and pc_id not in(select pc_id from ".$db->prefix("products_cate").")";
+            $db->query($sql,true);
+            $sql = "delete from ".$db->prefix("products_img")." where p_id not in(select p_id from ".$db->prefix("products").")";
+            $db->query($sql,true);
+        }
     }
 }
 //ob_end_flush();
