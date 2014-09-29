@@ -264,7 +264,7 @@ class CONTACTUS{
                                           "VALUE_CU_POSITION" => $row["cu_position"],
                                           "VALUE_CU_TEL" => $row["cu_tel"],
                                           "VALUE_CU_FAX" => $row["cu_fax"],
-                                          "VALUE_CU_ADDRESS" => $row["cu_address"],
+                                          "VALUE_CU_ADDRESS" => $row["cu_zip"].$row["cu_city"].$row["cu_area"].$row["cu_address"],
                                           "VALUE_CU_EMAIL" => $row["cu_email"],
                                           "VALUE_CU_CONTENT" => $row["cu_content"],
                                           "VALUE_CU_COUNTRY" => $row["cu_country"],
