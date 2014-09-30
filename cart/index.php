@@ -20,11 +20,14 @@
 					$this -> cart_add();
 					$this -> ws_tpl_type = 1;
 					break;
+                                case "c_quick_add"://快速購物項目
+                                        $this->cart_quick_add();
+                                        break;                                    
 				case "c_finish" :
 					$this -> ws_tpl_file = "templates/ws-cart-finish-tpl.html";
 					$this -> ws_load_tp($this -> ws_tpl_file);
 					$tpl -> newBlock("JS_FORMVALID");
-					App::getHelper('main') -> jQuery_init("date", "zone", "get");
+					App::getHelper('main') -> res_init("date", "zone", "get","box");
 					$this -> cart_finish();
 					$this -> ws_tpl_type = 1;
 					break;
@@ -173,6 +176,22 @@
 				die();
 			}
 		}
+                
+                //快速購物
+                function cart_quick_add(){
+                    global $cms_cfg;
+                    $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL']=$_SERVER['HTTP_REFERER'];
+                    $option = "";
+                    foreach($_REQUEST["amount"] as $key => $value){
+                        if($value !=""){
+                            $sess = $this -> sess_code($key, $option);
+                            $_SESSION[$cms_cfg['sess_cookie_name']]["id"][$sess] = $key;
+                            $_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess] = $value;                            
+                        }
+                    }
+                    header("location:index.php");
+                    die();
+                }                
 	
 		// 清單顯示
 		function cart_list() {
