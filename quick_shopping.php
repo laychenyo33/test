@@ -26,6 +26,7 @@ class PRODUCTS{
         //$tpl->assignInclude( "FOOTER", $cms_cfg['base_footer_tpl']); //尾檔功能列表
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['CART_QUICK_SHOPPING']);
+        $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['CART_QUICK_SHOPPING']);
         $main->header_footer("products",$TPLMSG['CART_QUICK_SHOPPING']);
         $main->login_zone();
