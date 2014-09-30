@@ -262,7 +262,7 @@ class ORDER{
                     }
                 }
                 //發票尉類型
-                App::getHelper('main')->multiple_radio("invoice_type",$ws_array['invoice_type'],$row['o_invoice_type']);
+                App::getHelper('main')->multiple_radio("invoice_type",$ws_array['invoice_type'],$row['o_invoice_type'],$tpl);
                 require_once "AllpayInfo.php";
                 //信用卡付款資訊
                 $cardInfo = App::getHelper('dbtable')->allpay_order->getData($row['o_id'])->getDataRow();
