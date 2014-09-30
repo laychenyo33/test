@@ -118,7 +118,11 @@
 			$tpl -> assignInclude("MAIN", $ws_tpl_file);
 			//主功能顯示區
 			$tpl -> prepare();
-			$tpl -> assignGlobal("TAG_CATE_TITLE", $ws_array["left"]["products"]);
+                        if (empty($member_left)) {
+                            $tpl -> assignGlobal("TAG_CATE_TITLE", $ws_array["left"]["products"]);
+                        }else{
+                            $tpl -> assignGlobal("TAG_CATE_TITLE", $ws_array["left"]["member"]);
+                        }                        
 			//左方menu title
 			$tpl -> assignGlobal("TAG_PRODUCTS_CURRENT", "class='current'");
 			//上方menu current
