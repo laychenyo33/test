@@ -11,7 +11,7 @@ class Leftmenu_Products extends Leftmenu_Catewithitems {
             'parentField' => 'pc_parent',
             'select' => '*',
             'condition' => "pc_status='1'",
-            'order' => 'pc_sort',
+            'order' => 'pc_up_sort desc,pc_sort',
         ),
     );
     //項目資訊
