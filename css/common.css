@@ -749,3 +749,13 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 .classification_title{margin-bottom:10px;padding:5px 0;}
 .classification_title a{display:block;float:left;margin:5px 10px;font-size:13px;border:1px solid grey;padding:2px 3px;}
 .classification_title a.current{border:1px solid red;background:#df0;color:#2a2}
+
+.operator{padding:5px 8px;}
+.operator input{padding:3px 5px;}
+
+#missing-files{border:1px solid grey;padding:10px;}
+#missing-files h1{font-size:30px;line-height:35px;}
+#missing-files p{font-size:13px;line-height:25px;}
+#missing-files-sitemap{padding:10px;margin-top:20px;border:1px solid grey;background:  #d3d0ce}
+#missing-files-sitemap h3{font-size:20px; }
+#missing-files-sitemap #desc{ margin-top:10px;}
