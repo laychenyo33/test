@@ -205,8 +205,7 @@ class PRODUCTS{
             }else{
                 //不是首頁，或ws_left_main_pc=1(存在主分類)，卻沒有找到對應分類者，設為404錯誤
                 if($this->p_homepage!=1 && $cms_cfg['ws_module']['ws_left_main_pc']!=0){
-                    include_once("404.htm");
-                    exit();
+                    $this->redirect_detect();
                 }
                 $main->layer_link($TPLMSG['PRODUCTS']);
                 $dirname="products";
@@ -715,8 +714,7 @@ class PRODUCTS{
                 }
             }
         }else{
-            include_once("404.htm");
-            exit();
+            $this->redirect_detect();
         }
     }
     function get_pop_big_img($p_id){
@@ -1078,5 +1076,9 @@ class PRODUCTS{
             }
         }
     }    
+    function redirect_detect(){
+        new Redirectdetect;
+        die();
+    }
 }
 ?>
