@@ -282,7 +282,8 @@ class EBOOK{
                                           "STR_EBC_STATUS_CK0" => ($row["ebc_status"])?"":"checked",
                                           "STR_EBC_LOCK_CK1" => ($row["ebc_locked"])?"checked":"",
                                           "STR_EBC_LOCK_CK0" => ($row["ebc_locked"])?"":"checked",
-                                          "MSG_MODE" => $TPLMSG['MODIFY']
+                                          "MSG_MODE" => $TPLMSG['MODIFY'],
+                                          "VALUE_EBC_PATH" => $row["ebc_path"]
                 ));
             }else{
                 header("location : ebook.php?func=ebc_list");
@@ -315,7 +316,8 @@ class EBOOK{
                         ebc_modifydate,
                         ebc_locked,
                         ebc_modifyaccount,
-                        ebc_file
+                        ebc_file,
+                        ebc_path
                     ) values (
                         '".$_REQUEST["ebc_parent"]."',
                         '".$_REQUEST["ebc_status"]."',
@@ -326,7 +328,8 @@ class EBOOK{
                         '".date("Y-m-d m:i:s")."',
                         '".$_REQUEST["ebc_locked"]."',
                         '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."',
-                        '".$main->file_str_replace($_REQUEST['ebc_file'])."'
+                        '".$main->file_str_replace($_REQUEST['ebc_file'])."',
+                        '".$_REQUEST["ebc_path"]."'
                     )";
 
                 $rs = $db->query($sql);
@@ -375,7 +378,8 @@ class EBOOK{
                     ebc_modifydate='".date("Y-m-d m:i:s")."',
                     ebc_locked='".$_REQUEST["ebc_locked"]."',
                     ebc_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."',
-                    ebc_file='".$main->file_str_replace($_REQUEST['ebc_file'])."'
+                    ebc_file='".$main->file_str_replace($_REQUEST['ebc_file'])."',
+                    ebc_path='".$_REQUEST["ebc_path"]."'
                 where ebc_id='".$_REQUEST["now_ebc_id"]."'";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
