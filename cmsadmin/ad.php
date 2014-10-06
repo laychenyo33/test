@@ -29,6 +29,7 @@ class AD{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_CALENDAR");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
+                $tpl->newBlock("JS_TINYMCE2");
                 $this->ad_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -39,6 +40,7 @@ class AD{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_CALENDAR");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
+                $tpl->newBlock("JS_TINYMCE2");
                 $this->ad_form("mod");
                 $this->ws_tpl_type=1;
                 break;
@@ -258,7 +260,7 @@ class AD{
                     $tpl->assignGlobal(array("FILE_TYPE_DISPLAY_IMAGE"  => "none",
                                              "FILE_TYPE_DISPLAY_FLASH"  => "none",
                                              "FILE_TYPE_DISPLAY_TXT"  => "",
-                                             "VALUE_AD_FILE3"  => $row["ad_file"],
+                                             "VALUE_AD_FILE3"  => $main->content_file_str_replace($row["ad_file"],'out'),
                                              "VALUE_PIC_PREVIEW1" => $cms_cfg['default_preview_pic'],
                     ));
                     break;
@@ -284,18 +286,19 @@ class AD{
 //廣告--資料更新================================================================
     function ad_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        $main->magic_gpc($_REQUEST);
         switch($_REQUEST["ad_file_type"]){
             case "image":
-                $ad_file=$_REQUEST["ad_file1"];
+                $ad_file=$main->file_str_replace($_REQUEST["ad_file1"]);
                 break;
             case "flash":
-                $ad_file=$_REQUEST["ad_file2"];
+                $ad_file=$main->file_str_replace($_REQUEST["ad_file2"]);
                 break;
             case "txt":
-                $ad_file=$_REQUEST["ad_file3"];
+                $ad_file=$main->content_file_str_replace($_REQUEST["ad_file3"],'in');
                 break;
             default:
-                $ad_file=$_REQUEST["ad_file1"];
+                $ad_file=$main->file_str_replace($_REQUEST["ad_file1"]);
                 break;
         }
         switch ($_REQUEST["action_mode"]){
@@ -320,7 +323,7 @@ class AD{
                         '".$_REQUEST["ad_sort"]."',
                         '".$_REQUEST["ad_subject"]."',
                         '".$_REQUEST["ad_file_type"]."',
-                        '".$main->file_str_replace($ad_file)."',
+                        '".$ad_file."',
                         '".$main->content_file_str_replace($_REQUEST["ad_link"],'in')."',
                         '".date("Y-m-d H:i:s")."',
                         '".$_REQUEST["ad_startdate"]."',
@@ -337,7 +340,7 @@ class AD{
                         ad_sort='".$_REQUEST["ad_sort"]."',
                         ad_subject='".$_REQUEST["ad_subject"]."',
                         ad_file_type='".$_REQUEST["ad_file_type"]."',
-                        ad_file='".$main->file_str_replace($ad_file)."',
+                        ad_file='".$ad_file."',
                         ad_link='".$main->content_file_str_replace($_REQUEST["ad_link"],'in')."',
                         ad_modifydate='".date("Y-m-d H:i:s")."',
                         ad_startdate='".$_REQUEST["ad_startdate"]."',

@@ -82,6 +82,7 @@ $TPLMSG['AD_INSIDE_BANNER'] = "內頁Banner";
 $TPLMSG['AD_INSIDE_LEFT'] = "內頁左側廣告";
 $TPLMSG['AD_INSIDE_RIGHT'] = "內頁右側廣告";
 $TPLMSG['AD_PRODUCTS'] = "產品區廣告";
+$TPLMSG['AD_INDEX_POPUP'] = "首頁彈出式廣告";
 //ADMIN
 $TPLMSG['ADMIN_VALID_ACCOUNT'] = "檢測帳號";
 $TPLMSG['ADMIN_ACCOUNT_EXIST'] = "帳號重覆";
