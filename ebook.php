@@ -96,7 +96,7 @@ class EBOOK{
         //一列顯示筆數
         $row_num=$cms_cfg["ws_ebook_row"];
         if($mode==""){
-            $sql="select ebc_id,ebc_name,ebc_cate_img from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_id > '0'";
+            $sql="select ebc_path,ebc_id,ebc_name,ebc_cate_img from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_id > '0'";
             $sql .= " and ebc_id='".$this->parent."' and ebc_status='1' order by ebc_sort, ebc_modifyaccount desc ";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
@@ -123,6 +123,12 @@ class EBOOK{
                 $main->layer_link($cblink);
             }
         }
+		
+		// 讀取 Flash 翻頁式內頁圖檔組成列表
+		if(!empty($ebc_row["ebc_path"])){
+			$this->flash_ebook_load($ebc_row["ebc_path"]);
+			return false;
+		}
 
         //EBOOK列表
         $sql="select * from ".$cms_cfg['tb_prefix']."_ebook where eb_status='1' and ebc_id ='".$this->parent."' order by eb_sort ".$cms_cfg['sort_pos'].", eb_modifyaccount desc";
@@ -365,6 +371,33 @@ JSN;
                 "VALUE_EB_BIG_IMG" => (trim($row["eb_big_img"])=="")?$cms_cfg['default_ebook_pic']:$cms_cfg["file_root"].$row["eb_big_img"]
             ));
         }
-    }    
+    }
+	
+	function flash_ebook_load($relative_path=''){
+		global $db,$cms_cfg,$tpl;
+		
+		$relative_path = str_replace('http://'.$cms_cfg['server_name'].'/', '', $relative_path);
+		
+		$ebook_path = $relative_path."/pages/*.jpg";
+		$ebook_path = str_replace('//', '/', $ebook_path);
+		
+		$file_array = glob($ebook_path,GLOB_NOESCAPE);
+		
+		if(count($file_array) > 0 && is_array($file_array)){
+			foreach($file_array as $key => $file_name){
+				$link_page = (($i + 1) % 2 != 0 && $i != 0)?$i:$i + 1;
+				
+				$tpl->newBlock("SHOW_STYLE_EB1");
+				$tpl->assign(array(
+					"VALUE_EB_SMALL_IMG" => $file_name,
+					"VALUE_EB_NAME" => (empty($i))?'COVER':'P.'.$i,
+					"VALUE_EB_LINK" => 'http://'.$cms_cfg['server_name'].'/'.$relative_path.'?pages='.$link_page,
+					"VALUE_EB_TARGET" => 'target="_blank"'
+				));
+				
+				$i++;
+			}
+		}
+	}
 }
 ?>
