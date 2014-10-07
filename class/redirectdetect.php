@@ -1,16 +1,6 @@
 <?php
 class Redirectdetect{
     function __construct(){
-        $redirectMap = include("conf/redirect-map.php");
-        $filename = substr(strstr($_SERVER['REQUEST_URI'],App::configs()->base_root),strlen(App::configs()->base_root));
-        if(is_array($redirectMap) && count($redirectMap)){
-            foreach($redirectMap as $pattern => $newpath){
-                if(preg_match("#".$pattern."#",$filename)){
-                    header("location:".App::configs()->file_root . $newpath);
-                    die();
-                }
-            }
-        }
         header("HTTP/1.0 404 Not Found");
         $this->ws_load_tp('templates/404/'.App::configs()->language.'.html');
         $tpl = $GLOBALS['tpl'];
