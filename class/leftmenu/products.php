@@ -28,7 +28,10 @@ class Leftmenu_Products extends Leftmenu_Catewithitems {
         ),
     );
     
-    function __construct(TemplatePower $tpl, $maxDigs = 2) {
+    protected $cateLayer = 2;
+    
+    function __construct(TemplatePower $tpl) {
+        $maxDigs = App::configs()->ws_module->ws_left_sub_pc? $this->cateLayer : 1;
         parent::__construct($tpl, $maxDigs, App::configs()->ws_module->ws_left_products);
     }
     

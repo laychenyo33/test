@@ -115,7 +115,7 @@ class PRODUCTS{
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-products"); //主要顯示區域的css設定
         $main->google_code(); //google analystics code , google sitemap code
         //$main->left_fix_cate_list();
-        $leftmenu = new Leftmenu_Products($tpl,2);
+        $leftmenu = new Leftmenu_Products($tpl);
         $leftmenu->make();
     }
     function load_product_detail_template(){
