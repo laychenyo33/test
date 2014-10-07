@@ -98,7 +98,7 @@ class Leftmenu_Catewithitems extends Leftmenu_Abstract {
         }
         //處理item項目
         if($this->menuWithItems){
-            $sql = "select ".$this->items['query']['select']." from ".$this->getItemTable()." ".$this->getItemTableAlias()." inner join ".$this->getCateTable()." ".$this->getCateTableAlias().
+            $sql = "select ".$this->items['query']['select']." from ".$this->getItemTable()." ".$this->getItemTableAlias()." left join ".$this->getCateTable()." ".$this->getCateTableAlias().
                     "on ".$this->getItemTable(true).".".$this->items['query']['cateField']."=".$this->getCateTable(true).".".$this->cate['query']['pkField'].
                     " where ".$this->_initQueryCondition('items', $cateId) . $this->_initQueryOrder('items');
             $res2 = App::getHelper('db')->query($sql,true);
