@@ -27,4 +27,9 @@ class Leftmenu_Products extends Leftmenu_Catewithitems {
             'order' => 'p_sort',
         ),
     );
+    
+    function __construct(TemplatePower $tpl, $maxDigs = 2) {
+        parent::__construct($tpl, $maxDigs, App::configs()->ws_module->ws_left_products);
+    }
+    
 }
