@@ -62,20 +62,24 @@
                   var last5 = $(this).prev().val();
                   var o_id = $(this).attr('rel');
                   if(last5!=""){
-                      var data = {
-                          o_id:o_id,
-                          o_atm_last5:last5
+                      if(last5.length==5){
+                          var data = {
+                              o_id:o_id,
+                              o_atm_last5:last5
+                          };
+                          box.append("<div class='layerContent'><img src='{TAG_THEME_PATH}ajax-loader.gif'/></div><div class='layerBackground'></div>");
+                          $.post("member.php?func=ajax&action=write_last5",data,function(req){
+                                if(req.code){
+                                    container.remove();
+                                    alert("訂單:"+o_id+"完成匯款，匯款後五碼為:"+last5);
+                                }else{
+                                    alert(req.msg);
+                                }
+                                box.children('.layerContent,.layerBackground').remove();                           
+                          },'json');
+                      }else{
+                          alert("不足五碼，請確認!");
                       }
-                      box.append("<div class='layerContent'><img src='{TAG_THEME_PATH}ajax-loader.gif'/></div><div class='layerBackground'></div>");
-                      $.post("member.php?func=ajax&action=write_last5",data,function(req){
-                            if(req.code){
-                                container.remove();
-                                alert("訂單:"+o_id+"完成匯款，匯款後五碼為:"+last5);
-                            }else{
-                                alert(req.msg);
-                            }
-                            box.children('.layerContent,.layerBackground').remove();                           
-                      },'json');
                   }else{
                       alert("請輸入匯款後五碼!");
                   }

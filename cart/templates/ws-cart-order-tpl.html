@@ -22,10 +22,75 @@
             <td>{VALUE_O_TOTAL_PRICE}</td>
             <!-- END BLOCK : TAG_PRICE_TD -->
             <td><a href="{TAG_ROOT_PATH}cart/?func=c_order_detial&o_id={VALUE_O_ID}&now_page={VALUE_NOW_PAGE}&jump_page={VALUE_JUMP_PAGE}">{VALUE_O_DETAIL}</a></td>
-            <td>{VALUE_O_STATUS}</td>
+            <td>
+                <div class="ajax_place">
+                    <!-- START BLOCK : UNATM_FIELD -->
+                    <div class="unatm_block">
+                        匯款帳號
+                        <input type="text" name="o_atm_last5" value="" maxlength="5" size="5"/>                
+                        <input type="button" class="ajax_remit" value="確認匯款" rel="{VALUE_O_ID}"/>                
+                    </div>
+                    <!-- END BLOCK : UNATM_FIELD -->
+                    <!-- START BLOCK : BTN_CANCEL_ORDER -->
+                    <input type="button" value="取消訂單" class="cancel_order" rel="{VALUE_O_ID}"/>
+                    <!-- END BLOCK : BTN_CANCEL_ORDER -->
+                    {VALUE_O_STATUS}
+                </div>   
+            </td>
         </tr>
         <!-- END BLOCK : ORDER_LIST -->
     </table>
+    <script type="text/javascript">
+        jQuery(function($){
+           $(document).ready(function(){
+               $(".cancel_order").click(function(evt){
+                   var obj = this;
+                   var box = $(obj).parents(".ajax_place");                   
+                   var data = {
+                       o_id : $(this).attr("rel")
+                   };                   
+                   box.append("<div class='layerContent'><img src='{TAG_THEME_PATH}ajax-loader.gif'/></div><div class='layerBackground'></div>");
+                   $.post("index.php?func=ajax&action=cancel_order",data,function(req){
+                       if(req.code){
+                           box.replaceWith(req.msg);
+                       }else{
+                           alert(req.msg);
+                       }
+                       box.children('.layerContent,.layerBackground').remove();
+                   },"json");
+               });
+              $(".ajax_remit").click(function(){
+                  var obj = this;
+                  var box = $(obj).parents(".ajax_place");                      
+                  var container = $(this).parents('div.unatm_block');
+                  var last5 = $(this).prev().val();
+                  var o_id = $(this).attr('rel');
+                  if(last5!=""){
+                      if(last5.length==5){
+                          var data = {
+                              o_id:o_id,
+                              o_atm_last5:last5
+                          }
+                          box.append("<div class='layerContent'><img src='{TAG_THEME_PATH}ajax-loader.gif'/></div><div class='layerBackground'></div>");
+                          $.post("index.php?func=ajax&action=write_last5",data,function(req){
+                                if(req.code){
+                                    container.remove();
+                                    alert("訂單:"+o_id+"完成匯款，匯款後五碼為:"+last5);
+                                }else{
+                                    alert(req.msg);
+                                }
+                                box.children('.layerContent,.layerBackground').remove();                           
+                          },'json');
+                      }else{
+                          alert("不足五碼，請確認!");
+                      }
+                  }else{
+                      alert("請輸入匯款後五碼!");
+                  }
+              });               
+           });
+        });
+    </script>        
     <!-- END BLOCK : ORDER_LIST_ZONE -->
     <!-- START BLOCK : ORDER_DETAIL_ZONE -->
     <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
@@ -41,7 +106,13 @@
             <td>{MSG_PAYMENT_TYPE}</td>
             <td>{VALUE_O_PAYMENT_TYPE}</td>
         </tr>
-        <!-- END BLOCK : TAG_PAYMENT_BLOCK -->
+        <!-- END BLOCK : TAG_PAYMENT_BLOCK -->  
+        <!-- START BLOCK : ATM_LAST5 -->
+        <tr>
+            <td>匯款後五碼</td>
+            <td>{VALUE_O_ATM_LAST5}</td>
+        </tr>
+        <!-- END BLOCK : ATM_LAST5 -->
         <tr>
             <td>{MSG_STATUS}</td>
             <td>{VALUE_O_STATUS_SUBJECT}</td>

@@ -236,7 +236,6 @@ class ORDER{
                                           "VALUE_O_PAYMENT_TYPE"=>$ws_array["payment_type"][$row["o_payment_type"]],
                                           "VALUE_O_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$row['o_shippment_type']],
                                           "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
-                                          "VALUE_O_ATM_LAST5" => $row["o_atm_last5"],
                                           "VALUE_O_ARRIVAL_TIME" => date("Y年m月d日",$dts),
                                           "VALUE_O_COMPANY_NAME" => $row["o_company_name"],
                                           "VALUE_O_INVOICE_NAME" => $row["o_invoice_name"],
@@ -244,6 +243,13 @@ class ORDER{
                                           "VALUE_O_INVOICE_TEXT" => $row["o_invoice_text"],
                                           "ORIGIN_STATUS" => $row["o_status"],
                 ));
+                //一般atm匯款記錄
+                if($row['o_payment_type']==1){
+                    $tpl->newBlock("ATM_LAST5");
+                    $tpl->assign(array(
+                        "VALUE_O_ATM_LAST5" => $row["o_atm_last5"],
+                    ));
+                }
                 //訂單狀態
                 foreach($ws_array["order_status"] as $key =>$value){
                     $i++;

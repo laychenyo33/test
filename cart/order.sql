@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `eng_order` (
   `o_shipping_time` date NOT NULL,
   `o_arrival_time` date NOT NULL,
   `del` tinyint not null default 0,
+  `o_atm_last5` CHAR( 5 ) NOT NULL,
   PRIMARY KEY  (`o_id`),
   KEY `mc_id` (`m_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
