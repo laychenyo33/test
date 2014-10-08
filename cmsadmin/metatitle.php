@@ -89,7 +89,7 @@ class METATITLE{
     //資料更新
     function meta_title_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $main->magic_gpc($_POST);
+        //$main->magic_gpc($_POST);
         //關於我們seo欄位更新
         foreach($_POST['meta'] as $mt_name => $metafields){
             $sql="
