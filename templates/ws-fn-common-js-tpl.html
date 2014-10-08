@@ -864,3 +864,20 @@ function nav_formatter(idx,pan){
         $('input, textarea').placeholder();    
     });
 </script>
+<script type="text/javascript">
+    var closeMiniCart;
+    jQuery(function($){
+        $("#cart-zone").hover(function(){
+            clearTimeout(closeMiniCart);
+            if(!$("#minicart").is(":visible") ){
+                $.get("cart.php?func=ajax_cart_list",function(req){
+                    $("#minicart").html(req).show();
+                });
+            }
+        },function(){
+             closeMiniCart = setTimeout(function(){
+                $("#minicart").empty().hide();
+             },1000);
+        });
+    });
+</script>

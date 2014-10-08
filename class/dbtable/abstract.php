@@ -243,8 +243,12 @@ abstract class Dbtable_Abstract {
         return App::getHelper('dbtable')->getDbtable($item_class);
     }
     //與items一起寫入資料
-    function writeDataWithItems($post,$items){
-        $this->writeData($post);
+    function writeDataWithItems($post,$items,$force_insert=false){
+        if($force_insert){
+            $this->insert($post);
+        }else{
+            $this->writeData($post);
+        }
         $pk = ($post[$this->pk])?$post[$this->pk]:$this->get_insert_id();
         if(empty($pk)){
             throw new Exception("should be ".$this->pk." value write with items");

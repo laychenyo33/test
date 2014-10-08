@@ -52,12 +52,14 @@
         <tr>
             <th width="5%"> No.</th>
             <th width="10%"> {MSG_PRODUCT_IMAGE}</th>
-            <th width="30%"> {MSG_PRODUCT}</th>
+            <th width=""> {MSG_PRODUCT}</th>
+            <!-- START BLOCK : SPEC_TITLE -->
+            <th width="15%"> 規格</th>
+            <!-- END BLOCK : SPEC_TITLE -->
             <th width="10%"> {MSG_AMOUNT}</th>
-            <!-- START BLOCK : TAG_PRICE_TH -->
-            <th width="20%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
-            <th width="15%"> {MSG_SUBTOTAL}</th>
-            <!-- END BLOCK : TAG_PRICE_TH -->
+            <th width="10%"> {MSG_PRODUCT_PRICE}{VALUE_P_DISCOUNT}</th>
+            <th width="10%"> {MSG_DISCOUNT}</th>
+            <th width="10%"> {MSG_SUBTOTAL}</th>
             <th width="10%"> {MSG_DEL}</th>
         </tr>
 
@@ -66,43 +68,45 @@
             <td>{VALUE_P_SERIAL}</td>
             <td><center><a href="{VALUE_P_SMALL_IMG}" rel="lightbox"><img src="{VALUE_P_SMALL_IMG}" width="60" alt="{VALUE_P_NAME}" border="0"/></a></center></td>
             <td class="cart_title"><a href="{VALUE_P_LINK}" target="_blank">{VALUE_P_NAME}</a></td>
+            <!-- START BLOCK : SPEC_FIELD -->
+            <td class="cart_title">{VALUE_SPEC}</td>
+            <!-- END BLOCK : SPEC_FIELD -->
             <td>
-                <select class="c_num" name="shop_value|{VALUE_P_SESS}">
-                        <!-- START BLOCK : TAG_CART_NUM -->
-                        <option value="{VALUE_CART_NUM}" {VALUE_CART_CURRENT}>{VALUE_CART_NUM}</option>
-                        <!-- END BLOCK : TAG_CART_NUM -->
+                <select class="c_num" name="shop_value|{CART_P_ID}">
+                    <!-- START BLOCK : TAG_CART_NUM -->
+                    <option value="{VALUE_CART_NUM}" {VALUE_CART_CURRENT}>{VALUE_CART_NUM}</option>
+                    <!-- END BLOCK : TAG_CART_NUM -->
                 </select>
             </td>
-            <!-- START BLOCK : TAG_PRICE_TD -->
             <td>{VALUE_P_SPECIAL_PRICE}</td>
+            <td>{TAG_QUANTITY_DISCOUNT}</td>
             <td>{VALUE_P_SUBTOTAL_PRICE}</td>
-            <!-- END BLOCK : TAG_PRICE_TD -->
             <td>
-                <a href="#"><input name="c_del" type="button" value="" style="cursor: pointer; border: 0; padding: 0; width: 13px; height: 14px; background: url({TAG_THEME_PATH}ws-table-delete.gif);" rel="{VALUE_P_SESS}"></a>
+                <a href="#" class="cart-del" pid="{VALUE_P_ID}" {TAG_PS_ID}><img src="{TAG_THEME_PATH}ws-table-delete.gif"/></a>
             </td>
         </tr>
         <!-- END BLOCK : TAG_CART_LIST -->
 
         <!-- START BLOCK : TAG_PLUS_FEE -->
         <tr>
-            <td colspan="4"></td>
+            <td colspan="{CART_FIELDS_NUMS}"></td>
             <td><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
-            <td> {VALUE_PLUS_FEE}</td>
+            <td> <span id="s_charge_fee" >{VALUE_PLUS_FEE}</span></td>
             <td></td>
         </tr>
         <!-- END BLOCK : TAG_PLUS_FEE -->
 
         <!-- START BLOCK : TAG_PRICE_TOTAL -->
         <tr>
-                <td colspan="4"></td>
+                <td colspan="{CART_FIELDS_NUMS}"></td>
             <td><div align="right">{MSG_SHIPPING_PRICE} :</div></td>
-            <td>{VALUE_SHIPPING_PRICE}</td>
+            <td><span id="ship_price">{VALUE_SHIPPING_PRICE}</span></td>
             <td></td>
         </tr> 
         <tr>
-                <td colspan="4"></td>
+                <td colspan="{CART_FIELDS_NUMS}"></td>
             <td class="cart_red"><div align="right">{MSG_TOTAL} :</div></td>
-            <td class="cart_red">{VALUE_TOTAL}</td>
+            <td class="cart_red"><span id="total_str">{VALUE_TOTAL}</span></td>
             <td></td>
         </tr>
         <!-- END BLOCK : TAG_PRICE_TOTAL -->
@@ -125,7 +129,9 @@
 
 {VALUE_ST_SHOPPING_TERM}
 {VALUE_ST_SHIPPING_TERM}
-
+<div id="del-cart-dialog" title="刪除購物車項目" style="display:none">
+    確定刪除嗎？
+</div>
 
 <script src="{TAG_ROOT_PATH}js/form_box.js" type="text/javascript"></script>
 <script>
@@ -137,21 +143,22 @@
                 AFTER : function() {  }, // 動作後執行擴充
         }, function(DATA){
                 //callback
-                location.href = '{TAG_ROOT_PATH}cart/?top='+ DATA;
+                var d = new Date();
+                location.href = '{TAG_ROOT_PATH}cart/?top='+ DATA+'&t=' + d.getTime();
         });
 
-        $("input[name=c_del]").click(function(evt){
-                evt.preventDefault();
-                if(confirm("{TAG_DELETE_CHECK_STR}")){
-                        var DEL_SESS = $(this).attr("rel");
-                        $("input[name=ajax_del]").val(DEL_SESS);
-                        $("input[name=ajax_act]").val("c_del");
-
-                        $("input[name=ajax_btn]").click();
-                }else{
-                        return false;
-                }
-        });
+//        $("input[name=c_del]").click(function(evt){
+//                evt.preventDefault();
+//                if(confirm("{TAG_DELETE_CHECK_STR}")){
+//                        var DEL_SESS = $(this).attr("rel");
+//                        $("input[name=ajax_del]").val(DEL_SESS);
+//                        $("input[name=ajax_act]").val("c_del");
+//
+//                        $("input[name=ajax_btn]").click();
+//                }else{
+//                        return false;
+//                }
+//        });
 
         //----
         $(".c_num,input[name=o_payment_type]").change(function(){
@@ -175,5 +182,61 @@
                 var $BODY = (window.opera) ? (document.compatMode == "CSS1Compat" ? $('html') : $('body')) : $('html,body');
                 $BODY.animate({ scrollTop: "{TAG_SCROLL_TOP}" }, 0);
         }
+        
+        $(".cart-del").click(function(evt){
+            evt.preventDefault();
+            $("#del-cart-dialog").data('activeRow',$(this).parents('tr'));
+            $("#del-cart-dialog").data('p_id',$(this).attr('pid'));
+            $("#del-cart-dialog").data('ps_id',$(this).attr('psid'));
+            $("#del-cart-dialog").dialog('open');
+        });
+        $("#del-cart-dialog").dialog({
+            autoOpen:false,
+            modal:true,
+            width:400,
+            height:180,
+            buttons:{
+                確定:function(){
+                    var data = {
+                        p_id: $("#del-cart-dialog").data('p_id'),
+                        ps_id: $("#del-cart-dialog").data('ps_id'),
+                        via_ajax:true
+                    };
+                    var dialog = $(this);
+                    $.post("{CART_PATH}?func=c_del",data,function(req){
+                        if(req.code==1){
+                            var activeRow = $("#del-cart-dialog").data('activeRow');
+                            var redirect = false;
+                            activeRow.remove();
+                            if($("tr.line").size()>0){
+                                $("tr.line").each(function(idx,elm){
+                                    $(elm).find("td.no").text(idx+1);
+                                });
+                            }
+                            $("#del-cart-dialog").data('activeRow',null);
+                            $("#del-cart-dialog").data('p_id',null);
+                            $("#del-cart-dialog").data('ps_id',null)
+                            $("#sub_total_str").text(req.subtotal_price);
+                            if(req.subtotal_price==0){
+                                redirect = true;
+                            }
+                            dialog.dialog('close');
+                            if(redirect){
+                                location.replace('{TAG_ROOT_PATH}products.htm');
+                            }else{
+                                $("#ship_price").text(req.shipping_price);
+                                $("#s_charge_fee").text(req.charge_fee);
+                                $("#total_str").text(req.total_price);
+                            }
+                        }else{
+                            alert('操作失敗!');
+                        }
+                    },'json');
+                },
+                取消:function(){
+                    $(this).dialog('close');
+                }
+            }
+        });        
     });
 </script>

@@ -123,19 +123,109 @@
             </td>
         </tr>
         <!-- END BLOCK : PRODUCTS_TYPE_FIELD -->
-        <!-- START BLOCK : PRODUCTS_PRICE_FIELD -->
+        <!-- START BLOCK : SPEC_ROWS -->
         <tr>
-            <th>前台價格顯示:</th>
+            <th>規格種類</th>
             <td>
-                <font color="#CC0000">{MSG_PRODUCT_SHOW_PRICE_NOTICE2}</font>
-                <a href="system-config.php">{MSG_PRODUCT_ON_CLICKS_THIS}</a>
+                <input type="radio" name="spec_sets" id="spec_sets_0" value="0" {TAG_SPEC_SETS_CHK0}/><label for="spec_sets_0">單一規格</label>&nbsp;&nbsp;
+                <input type="radio" name="spec_sets" id="spec_sets_1" value="1" {TAG_SPEC_SETS_CHK1}/><label for="spec_sets_1">多重規格</label>
             </td>
+            <th>數量折扣</th>
+            <td>
+                <div>
+                    <!-- START BLOCK : QUANTITY_DISCOUNT_RADIO -->
+                    <label><input type="radio" name="quantity_discount" id="quantity_discount_{VALUE_QUANTITY_DISCOUNT_KEY}" value="{VALUE_QUANTITY_DISCOUNT_KEY}" {CHECKED}/>{VALUE_QUANTITY_DISCOUNT_NAME}</label>
+                    <!-- END BLOCK : QUANTITY_DISCOUNT_RADIO -->
+                </div>
+                <div>
+                    <!-- START BLOCK : DISCOUNT_SET_SELECTOR -->
+                    <select name="discount_sets" id="discount_sets">
+                        <option value="0">選擇折扣組合</option>
+                        <!-- START BLOCK : DISCOUNT_SET_SELECT -->
+                        <option value="{VALUE_DISCOUNT_SET_KEY}" {SELECTED}>{VALUE_DISCOUNT_SET_NAME}</option>
+                        <!-- END BLOCK : DISCOUNT_SET_SELECT -->
+                    </select>
+                    <!-- START BLOCK : DISCOUNT_SET_SELECTOR -->
+                    {TAG_NO_DISCOUNT_SETS_EXISTS}
+                </div>
+            </td>
+        </tr>
+        <tr class="multiple_spec_sets"  {TAG_MULTIPLE_SPEC_HIDE}>
+            <th>規格:</th>
+            <td id="spec_setting" valign="top">
+                <span>請使用將規格類別拖至使用區，並依欲使用的層次安排項目順序</span>，然後請按
+                <button id="makeSpecTable" type="button" >產生規格表</button><br/>
+                <span class="label">規格分類</span>
+                <div id="drop_spec" class="connectedSortable">
+                    <!-- START BLOCK : SPEC_CATE_LIST -->
+                    <div class="spec_title" id="spec_title_{VALUE_PSC_ID}" rel="{VALUE_PSC_ID}">
+                        {VALUE_PSC_SUBJECT}
+                    </div>
+                    <!-- END BLOCK : SPEC_CATE_LIST -->
+                </div>                
+
+                <script type="text/javascript">
+                    jQuery(function($){
+                         $( "#origin_spec,#drop_spec" ).sortable({
+                            //revert: true,
+                            connectWith: ".connectedSortable",
+                            cursor: "move",
+                            placeholder: "sortable-placeholder",
+                            receive:function(evt,ui){
+                                if(ui.item.find(":hidden").size()>0){
+                                    ui.item.find(":hidden").remove();
+                                }else{
+                                    var hiddenField = $("<input type='hidden'/>").attr('name',"psc_id[]").val(ui.item.attr('rel'));
+                                    ui.item.append(hiddenField);
+                                }
+                            }
+                        }).disableSelection();
+                        $("#makeSpecTable").click(function(evt){
+                            var arr = [];
+                            $("#origin_spec .spec_title").each(function(idx,elm){
+                                arr.push($(elm).attr('rel'));
+                            });
+                            $.get("products.php", { func:'make_spec_table',pscid:arr } ,function(req){
+                                if(req.code){
+                                    $("#spec_table").html(req.html);
+                                }
+                            },'json');
+                        });
+                        $("a.ui-icon-trash").click(function(evt){
+                            evt.preventDefault();
+                            $(this).parent(".spec_title").remove();
+                        });
+                    });
+                </script>
+            </td>
+            <td colspan="2" id="spec_stage" valign="top">
+                <span class="label">規格表</span>           
+                <div id="origin_spec" class="connectedSortable">
+                    <!-- START BLOCK : SPEC_CATE_SORTED_LIST -->
+                    <div class="spec_title" id="spec_title_{VALUE_PSC_ID}" rel="{VALUE_PSC_ID}">
+                        {VALUE_PSC_SUBJECT}<input type="hidden" name="psc_id[]" value="{VALUE_PSC_ID}"/>
+                    </div>                    
+                    <!-- END BLOCK : SPEC_CATE_SORTED_LIST -->              
+                </div>                
+                <div id="spec_table" class="aciTree">{PRODUCTS_SPEC_TABLE}</div>                
+            </td>
+        </tr>        
+        <!-- END BLOCK : SPEC_ROWS -->        
+        <tr class="multiple_spec_sets"  {TAG_MULTIPLE_SPEC_HIDE}>
+            <th>價格:</th>
+            <td colspan="3">
+			<button type="button" class="spec_attr" rel="spec_price">價格</button>
+                        <div id="spec_price" class="specDialog" title="產品價格"></div>
+            </td>
+        </tr>
+        <!-- START BLOCK : PRODUCTS_PRICE_FIELD -->
+        <tr class="single_spec_sets" {TAG_SINGLE_SPEC_HIDE}>
             <th>產品價格:</th>
-            <td> 定價:
-                <input type="text" name="p_list_price" id="p_list_price" class="validate[custom[onlyNumber]]" value="{VALUE_P_LIST_PRICE}" size="7" /><br>
+            <td colspan="3"> 定價:
+                <input type="text" name="p_list_price" id="p_list_price" class="validate[custom[onlyNumber]]" value="{VALUE_P_LIST_PRICE}" size="7" />
                 特價:
                 <input TYPE="text" name="p_special_price" id="p_special_price" class="validate[custom[onlyNumber]]" value="{VALUE_P_SPECIAL_PRICE}" size="7" />
-            </td>
+            </td>                      
         </tr>
         <!-- END BLOCK : PRODUCTS_PRICE_FIELD -->
         <!-- START BLOCK : ONSALE_ROW -->
@@ -456,3 +546,52 @@
     });
 </script>
 <!-- END BLOCK : JS_SELECTIVE -->
+<script>
+    jQuery(function($){
+        $(".spec_attr").click(function(evt){
+            var dialogId = $(this).attr("rel");
+            var param = {
+                func:'spec_attr_table',
+                type:dialogId,
+                p_id: myform['now_p_id'].value
+            };
+            $.get('products.php',param,function(req){
+                $("#"+dialogId).html(req);
+                $("#"+dialogId).dialog("open");
+            });
+        });
+        $( ".specDialog" ).dialog({
+            autoOpen:false,
+            width:500,
+            height:500,
+            buttons:{
+                '儲存':function(){
+                    $.post('products.php?func=save_spec_attr',$(this).find('form').serialize());
+                    $(this).dialog("close");
+                },
+                "關閉":function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+        function single_sepc_config(){
+            $("tr.multiple_spec_sets").hide();
+            $("tr.single_spec_sets").show();
+        }
+        function multiple_sepc_config(){
+            $("tr.single_spec_sets").hide();
+            $("tr.multiple_spec_sets").show();
+        }
+        $(":radio[name=spec_sets]").click(function(evt){
+            console.log($(this).val());
+            switch($(this).val()){
+                case '0':
+                    single_sepc_config();
+                    break;
+                case '1':
+                    multiple_sepc_config();
+                    break;
+            }
+        });
+    });
+</script>

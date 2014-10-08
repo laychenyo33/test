@@ -35,13 +35,17 @@
     <!-- END BLOCK : MEMBER_LOGIN_FORM -->
     <!-- START BLOCK : SHOPPING_CART_ZONE -->
         <div class="cart_step"><img src="{TAG_THEME_PATH}cart_step2.png" /></div>
-        <table  border="0" align="center" cellpadding="0" cellspacing="0" class="cart_table">
+        <table  border="0" width="100%" align="center" cellpadding="0" cellspacing="0" class="cart_table">
             <tr>
                 <th width="5%"> No.</th>
                 <th width="15%"> {MSG_PRODUCT_IMAGE}</th>
                 <th width=""> {MSG_PRODUCT}</th>
+                <!-- START BLOCK : SPEC_TITLE -->
+                <th width=""> {MSG_SPEC}</th>
+                <!-- END BLOCK : SPEC_TITLE -->                    
                 <th width="12%"> {MSG_AMOUNT}</th>
-                <th width="12%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
+                <th width="12%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
+                <th width="12%"> {MSG_DISCOUNT}</th>                
                 <th width="12%"> {MSG_SUBTOTAL}</th>
             </tr>
             <!-- START BLOCK : SHOPPING_CART_LIST -->
@@ -49,45 +53,49 @@
                 <td>{VALUE_P_SERIAL}</td>
                 <td><a href="{VALUE_P_LINK}" target="_blank"><img src="{VALUE_P_SMALL_IMG}" width="60" alt="{VALUE_P_NAME}" border="0"/></a></td>
                 <td><a href="{VALUE_P_LINK}" target="_blank">{VALUE_P_NAME}</a></td>
+                <!-- START BLOCK : SPEC_FIELD -->
+                <td class="spec">{VALUE_SPEC}</td>
+                <!-- END BLOCK : SPEC_FIELD -->                     
                 <td>{VALUE_P_AMOUNT}</td>
                 <td>{VALUE_P_SPECIAL_PRICE}</td>
+                <td>{TAG_QUANTITY_DISCOUNT}</td>
                 <td>{VALUE_P_SUBTOTAL_PRICE}</td>
             </tr>
             <!-- END BLOCK : SHOPPING_CART_LIST -->
             <tr id="subtotal_row">
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right">{MSG_SUBTOTAL}:&nbsp;</div>
                 </td>
                 <td> <span id="subtotal_price">{VALUE_SUBTOTAL}</span></td>
             </tr>
             <!-- START BLOCK : MINUS_ROW -->
             <tr id="minus_row">
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right">折扣:&nbsp;</div>
                 </td>
                 <td> <span id="minus_price_str">-{VALUE_MINUS_PRICE}</span></td>
             </tr>
             <!-- END BLOCK : MINUS_ROW -->            
             <tr id="ship_row">
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right">{MSG_SHIPPING_PRICE}:&nbsp;</div>
                 </td>
                 <td> <span id="ship_price">{VALUE_SHIPPING_PRICE_STR}</span></td>
             </tr>
             <tr id="discount_row" style="display:none">
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right">折價:&nbsp;</div>
                 </td>
                 <td> <span id="s_minus_price" style="color:red">0</span></td>
             </tr>            
             <tr id="charge_fee_row">
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right"> {MSG_PLUS_FEE}:&nbsp;</div>
                 </td>
                 <td> <span id="s_charge_fee" >0</span></td>
             </tr>
             <tr>
-                <th colspan="5">
+                <th colspan="{CART_FIELDS_NUMS}">
                     <div align="right"> {MSG_TOTAL}:&nbsp;</div>
                 </th>
                 <th> <span id="s_total_price" origin-total-price="{VALUE_TOTAL}">{VALUE_TOTAL}</span></th>

@@ -10,6 +10,9 @@ class PRODUCTS{
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->ps = $cms_cfg['path_separator'];
         switch($_REQUEST["func"]){
+            case "p_ajax_get_prod_spec":
+                $this->p_ajax_get_prod_spec($_GET['parent']);
+                break;           
             case "p_ajax_get_p_name":
                 $this->ajax_get_p_name($_GET['term']);
                 break;
@@ -52,6 +55,7 @@ class PRODUCTS{
                 //$this->ws_load_tp($this->ws_tpl_file);
                 $this->load_product_detail_template();
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JQUERY_UI_SCRIPT");
                 if($cms_cfg['ws_module']['ws_pop_bigimg']==1){
                     $tpl->newBlock("JS_POP_IMG");
                 }elseif($cms_cfg['ws_module']['ws_pop_bigimg']==2){
@@ -566,51 +570,75 @@ class PRODUCTS{
                 ));
                 $this->products_show_pic($row["p_id"]);//顯示大圖資料
                 //當後台系統設定為詢價車,則強制把所有的價格隱藏
-                if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]!=1){
-                    $show_price=0;
-                }else{
-                    $show_price=1;
+                $show_price = (App::getHelper('session')->sc_cart_type==1)?1:0;
+                //詢價或加到購物車按鈕
+                if($show_price==0 || ($show_price==1 && $row['onsale']==1)){
+                    $tpl->newBlock("CART_SUBMIT");
+                    $tpl->assignGlobal(array(
+                        "SUBMIT_BTN_STR" => ($show_price)?$TPLMSG['PROD_TO_CART_SHOPPING']:$TPLMSG['PROD_TO_CART_INQUIRY'],
+                        "AJAX_SUBMIT_MSG" => ($show_price)?$TPLMSG['ADD_TO_SHOPPING']:$TPLMSG['ADD_TO_INQUIRY'],
+                        "MSG_WARNING_NOSPEC" => $TPLMSG['WARNING_ADD_NOSPEC'],
+                        "MSG_WARNING_NOAMOUNT" => $TPLMSG['WARNING_ADD_NOAMOUNT'],
+                        "MSG_WARNING_AMOUNTFORMAT" => $TPLMSG['WARNING_AMOUNT_FORMAT'],
+                    ));
                 }
-                //詢價商品或是購物商品
-                if($show_price==0 || $row['onsale']==0){
-                    if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]==0){
-                        if($cms_cfg["ws_module"]["ws_inquiry_type"] != 1){
-                            $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["INQUIRY_CART"]);
-                            $tpl->assignGlobal("VALUE_P_CART_TYPE","inquiry");
-                            $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_INQUIRY']);
-                        }else{
-                            $tpl->newBlock("SINGLE_INQUIRY");
+                if(App::configs()->ws_module->ws_cart_spec && $row['spec_sets']){
+                    $tpl->newBlock("MULTIPLE_SPEC_SETS");
+                    //產品規格
+                    $spectArr = $this->get_prodcuts_spec($row['p_id']);
+                    if($spectArr){
+                        $tpl->assign("SPEC_CATE",$spectArr['spec_cate']);
+                        foreach($spectArr['list'] as $set){
+                            $tpl->newBlock("PROD_SPEC_OPTION");
+                            $tpl->assign(array(
+                                "PS_ID"  => $set['ps_id'],
+                                "PST_SUBJECT" => $set['pst_subject'],
+                            ));
                         }
-                        //$tpl->gotoBlock("BIG_IMG".$this->template_str);
-                    }else{
-                        $tpl->assignGlobal("VALUE_P_LIST_PRICE" ,"");
-                        $tpl->assignGlobal("VALUE_P_SPECIAL_PRICE","");
+                        if($show_price){
+                            $tpl->newBlock("MULTIPLE_SPEC_PRICE");
+                        }
                     }
                 }else{
-                    $tpl->newBlock("CART_TYPE_SHOPPING");
-                    //$tpl->gotoBlock($show_style_str_p);
-                    //會員有登入顯示折扣價
-                    if(!empty($this->discount)){
-                        if($this->discount!=100){ //無折扣也不顯示
-                            $discount_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$row["p_special_price"]);
-                            $tpl->newBlock("SHOW_DISCOUNT");
-                            $tpl->assign("VALUE_P_DISCOUNT_PRICE",$discount_price);
+                    $tpl->newBlock("SINGLE_SPEC_SETS");
+                    //詢價商品或是購物商品
+                    if($show_price==0 || $row['onsale']==0){
+                        if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]==0){
+                            if($cms_cfg["ws_module"]["ws_inquiry_type"] != 1){
+                                $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["INQUIRY_CART"]);
+                                $tpl->assignGlobal("VALUE_P_CART_TYPE","inquiry");
+                                $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_INQUIRY']);
+                            }else{
+                                $tpl->newBlock("SINGLE_INQUIRY");
+                            }
                             //$tpl->gotoBlock("BIG_IMG".$this->template_str);
+                        }else{
+                            $tpl->assignGlobal("VALUE_P_LIST_PRICE" ,"");
+                            $tpl->assignGlobal("VALUE_P_SPECIAL_PRICE","");
                         }
-                    }
-                    $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["SHOPPING_CART"]);
-                    $tpl->assignGlobal("VALUE_P_CART_TYPE","shopping");
-                    $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_SHOPPING']);
-                    if($row["p_list_price"]>0 && $row["p_special_price"]>0){
-                        $tpl->newBlock("FULL_PRICE");
-                        $tpl->assign(array(
-                            "VALUE_P_LIST_PRICE" => $row["p_list_price"],
-                            "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"],                        
-                        ));
                     }else{
-                        $tpl->newBlock("SINGLE_PRICE");
+                        $tpl->newBlock("CART_TYPE_SHOPPING");
+                        //$tpl->gotoBlock($show_style_str_p);
+                        //會員有登入顯示折扣價
+                        if(!empty($this->discount)){
+                            if($this->discount!=100){ //無折扣也不顯示
+                                $discount_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$row["p_special_price"]);
+                                $tpl->newBlock("SHOW_DISCOUNT");
+                                $tpl->assign("VALUE_P_DISCOUNT_PRICE",$discount_price);
+                                //$tpl->gotoBlock("BIG_IMG".$this->template_str);
+                            }
+                        }
+                        $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["SHOPPING_CART"]);
+                        $tpl->assignGlobal("VALUE_P_CART_TYPE","shopping");
+                        $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_SHOPPING']);
+                        if($row["p_list_price"]>0 && $row["p_special_price"]>0){ //有特價時
+                            $tpl->newBlock("FULL_PRICE");
+                        }else{ //只有定價時
+                            $tpl->newBlock("SINGLE_PRICE");
+                        }
                         $tpl->assign(array(
-                            "VALUE_P_LIST_PRICE" => $row["p_list_price"],                      
+                            "VALUE_P_LIST_PRICE" => number_format($row["p_list_price"]),
+                            "VALUE_P_SPECIAL_PRICE" => number_format($row["p_special_price"]),
                         ));
                     }
                     //$tpl->gotoBlock("BIG_IMG".$this->template_str);
@@ -618,6 +646,7 @@ class PRODUCTS{
                     unset($amountArr[0]);
                     App::getHelper('main')->multiple_select('amounts',$amountArr,1,$tpl);
                 }
+                $this->quantity_discount($tpl,$row);
                 //影片
                 if($cms_cfg['ws_module']['ws_products_mv'] && $row["p_mv"]){
                     if($cms_cfg['ws_module']['ws_products_mv_youtube']){
@@ -1097,6 +1126,80 @@ class PRODUCTS{
     function redirect_detect(){
         new Redirectdetect;
         die();
+    }
+    
+    function get_prodcuts_spec($p_id,$parent=0){
+        global $cms_cfg,$ws_array,$TPLMSG;
+        $db = App::getHelper('db');
+        $sql = "select * from ".$db->prefix("products_spec")." where p_id='{$p_id}' and parent='{$parent}'";
+        $sql = "select b.ps_id,b.childs,pst_subject,pst_sort,psc_id from ".$db->prefix("products_spec_title")." as a inner join (".$sql.") as b on a.pst_id=b.pst_id ";
+        $sql = "select a.*,b.psc_subject from ({$sql}) as a inner join ".$db->prefix("products_spec_cate")." as b on a.psc_id=b.psc_id order by pst_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        while($row = $db->fetch_array($res,1)){
+            $dataSets[] = $row;
+        }
+        if($dataSets){
+            $returnData['list'] = $dataSets;
+            $returnData['spec_cate'] = $dataSets[0]['psc_subject'];
+            return $returnData;
+        }
+    }
+    function get_prodcuts_spec_extend($ps_id){
+        global $cms_cfg,$ws_array,$TPLMSG;
+        $db = App::getHelper('db');
+        $sql = "SELECT price, quantity FROM  ".$db->prefix("products_spec_attributes")." where ps_id = '{$ps_id}'";
+        return $db->query_firstRow($sql,true);
+    }
+    function p_ajax_get_prod_spec($parent){
+        global $cms_cfg,$ws_array,$TPLMSG;
+        $db = App::getHelper('db');
+        $sql = "select p_id from ".$db->prefix("products_spec")." where ps_id='{$parent}'";
+        list($p_id) = $db->query_firstRow($sql,0);
+        $result['code']=0;
+        if($p_id){
+            $dataSets = $this->get_prodcuts_spec($p_id,$parent);
+            if($dataSets){
+                $result['code']=1;
+                $result['child']=$dataSets['list'];
+                $result['cate']=$dataSets['spec_cate'];
+            }else{
+                $extend = $this->get_prodcuts_spec_extend($parent);
+                if($extend){
+                    $result['code']=2;
+                    $result['img'] = $this->get_spec_img($parent);
+                    $result['extend'] = $extend;
+                }
+            }
+        }
+        echo json_encode($result);
+    }
+    function quantity_discount($tpl,$row){
+        global $TPLMSG;
+        if($row['quantity_discount']){
+            $discountList = App::getHelper('dbtable')->products_discount->getDiscountList($row['discount_sets']);
+            if(!empty($discountList)){
+                $tpl->newBlock("QTY_DISCOUNT");
+                $tpl->assign("MSG_QTN_DESC",$TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC']);
+                foreach($discountList as $item){
+                    $tpl->newBlock("QTY_DISCOUNT_LIST");
+                    $tpl->assign(array(
+                        "MSG_DISCOUNT_ITEM" => sprintf($TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'],$item['qtyfloor'],100-$item['discount']*100),
+                        'QTYFLOOR' => $item['qtyfloor'],
+                        'DISCOUNT' => $item['discount']*100,
+                    ));
+                }
+            }
+        }
+    }
+   
+    function get_spec_img($ps_id){
+        $db = App::getHelper('db');
+        $sql = "select pst_img from ".$db->prefix("products_spec_title")." as pst inner join ".$db->prefix("products_spec")." as ps on pst.pst_id = ps.pst_id where ps_id='{$ps_id}'";
+        list($img) = $db->query_firstRow($sql,0);
+        if($img){
+            $img = App::configs()->file_root . $img;
+        }
+        return $img;
     }
 }
 ?>

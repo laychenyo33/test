@@ -1,0 +1,14 @@
+<div id="spec_dialog" title="{VALUE_SPEC_DIALOG_TITLE}">
+	<form id="specform" name="specform" method="post" action="products.php" >
+	<!-- START BLOCK : SPEC_TITLE_ZONE -->
+    <!-- START BLOCK : SPEC_LIST -->
+		<input type="checkbox" name="pst_id[]" value="{VALUE_PST_ID}"> {VALUE_PST_SUBJECT}
+    <!-- END BLOCK : SPEC_LIST -->
+        <input type="hidden" name="func" value="spec_title_replace">
+        <input type="hidden" name="psc_id" value="{VALUE_PSC_ID}">
+    <!-- END BLOCK : SPEC_TITLE_ZONE -->
+    <input type="hidden" name="p_id" value="{VALUE_P_ID}">
+    <div style="text-align:right;margin:30px 0 0 30px;"><button type="button" id="spec_submit">確定</button></div>
+    </form>
+</div>
+

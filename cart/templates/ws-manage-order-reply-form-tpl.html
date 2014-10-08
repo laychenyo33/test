@@ -256,10 +256,14 @@
                 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="producttable">
                     <tr>
                         <th width="5%"> No.</th>
-                        <th width="40%"> 產品</th>
+                        <th width=""> 產品</th>
+                        <!-- START BLOCK : SPEC_TITLE -->
+                        <th width="25%"> 規格</th>
+                        <!-- END BLOCK : SPEC_TITLE -->                        
                         <th width="10%"> 數量</th>
-                        <th width="25%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
-                        <th width="20%"> 小計</th>
+                        <th width="10%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
+                        <th width="10%"> {MSG_DISCOUNT}</th>
+                        <th width="10%"> 小計</th>
                     </tr>
                     <!-- START BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
@@ -269,6 +273,11 @@
                         <td>
                             {VALUE_P_NAME}
                         </td>
+                        <!-- START BLOCK : SPEC_FIELD -->
+                        <td>
+                            {VALUE_SPEC}
+                        </td>
+                        <!-- END BLOCK : SPEC_FIELD -->                        
                         <td>
                             {VALUE_P_AMOUNT}
                         </td>
@@ -276,12 +285,15 @@
                             {VALUE_P_SELL_PRICE}
                         </td>
                         <td>
+                            {TAG_QUANTITY_DISCOUNT}
+                        </td>
+                        <td>
                             {VALUE_P_SUBTOTAL_PRICE}
                         </td>
                     </tr>
                     <!-- END BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
-                        <td colspan="4">
+                        <td colspan="{CART_FIELD_NUMS}">
                             <div align="right"> 小計:&nbsp;</div>
                         </td>
                         <td>
@@ -289,7 +301,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="{CART_FIELD_NUMS}">
                             <div align="right"> 運費:&nbsp;</div>
                         </td>
                         <td>
@@ -297,7 +309,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="{CART_FIELD_NUMS}">
                             <div align="right"> 手續費:&nbsp;</div>
                         </td>
                         <td>
@@ -305,7 +317,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="4">
+                        <th colspan="{CART_FIELD_NUMS}">
                             <div align="right"> 合計:&nbsp;</div>
                         </th>
                         <th> 

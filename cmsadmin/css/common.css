@@ -653,6 +653,77 @@ span.current{color:#f00}
 	color: #666;
 }
 #previewlink{color:#aa0;font-size:18px;line-height:30px;}
+#spec_setting{}
+#spec_stage{}
+#spec_setting .label,#spec_stage .label{font-size:14px;line-height:30px;}
+#drop_spec{
+    border:2px #FF0000 dashed;
+}
+#origin_spec{
+    border:2px #00f dashed;
+}
+#origin_spec,#drop_spec{
+    clear:both;
+    margin:5px 0;
+    height:29px;
+}
+#spec_table{
+    clear:both;
+    margin:5px 2px;
+}
+#spec_table .row{
+    clear:both;
+}
+#drop_spec .spec_title{
+    float:left;
+    border:1px solid #bbb;
+    width:50px;
+    height:25px;
+    background:#fff;
+    color:#ffbbff;
+    line-height:25px;
+    text-align:center;
+    margin:1px 5px;
+    position:relative;    
+}
+#origin_spec .spec_title,#spec_table .row .item,#spec_table .row .empty{
+    float:left;
+    border:1px solid grey;
+    width:60px;
+    height:25px;
+    background:#CCC;
+    color:#ff00ff;
+    line-height:25px;
+    text-align:center;
+    margin:1px 5px;
+    position:relative; 
+    padding:0 5px;
+}
+#spec_table .row .empty{
+    border:1px solid #fff;
+    background:#fff;
+}
+#origin_spec .sortable-placeholder,#drop_spec .sortable-placeholder{
+    float:left;
+    border: 1px #f00 dotted;
+    width:50px;
+    height:25px;
+    margin:0 5px;
+}
+#origin_spec .spec_title .ui-icon-trash{
+    display:block;
+    width:16px;
+    height:16px;
+    position:absolute;
+    top:0;right:0;
+}
+#spec_table .row .item {
+    text-align:left;
+}
+#spec_table .row .item *{
+    padding:0;
+    margin:0;
+}
 /*敘述區塊使用*/
 .desc{padding:5px 8px 0 8px}
 .desc ul{ margin:0;;list-style-position: inside}
@@ -663,6 +734,12 @@ span.current{color:#f00}
 .app_chk_box{float:left;margin:5px;border:1px solid grey;padding:4px;line-height:20px;}
 .app_chk_box input{margin:0}
 .app_chk_box .child{margin:0 0 0 20px;float:none;border:none;padding:0}
+/*產品規格價錢*/
+.gg{}
+.gg span{}
+.gg .gg{
+    margin-left:20px;
+}
 .connectedSortable{
     list-style: none;
     margin:0;

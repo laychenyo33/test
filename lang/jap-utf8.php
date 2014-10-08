@@ -183,6 +183,7 @@ $TPLMSG['CART_FINISH_SHOPPING'] = "完了";
 $TPLMSG['CART_FINISH_INQUIRY'] = "完了";
 $TPLMSG['CART_DELETE_CHECK'] = "あなたはデータを削除してもよろしいですか？";
 $TPLMSG['CART_EMPTY'] = "The cart is empty!";
+$TPLMSG['CART_SPEC_TITLE'] = "Specification";
 $TPLMSG['SHIPPING_PRICE'] = "配送費";
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "サービスセンター";
@@ -433,6 +434,7 @@ $TPLMSG['COPY_URL_DONE'] = "Replicated URL!";
 
 $TPLMSG['STATUS_OFF'] = "off";
 $TPLMSG['STATUS_ON'] = "on";
+$TPLMSG['QUANTITY_DISCOUNT'] = $TPLMSG['MEMBER_DISCOUNT'];
 $TPLMSG['CLASSIFY_OTHER'] = "Other";
 
 //pagiation
@@ -440,4 +442,18 @@ $TPLMSG['PAGINATION_FIRST_PAGE'] = "first page";
 $TPLMSG['PAGINATION_LAST_PAGE'] = "last page";
 $TPLMSG['PAGINATION_PREV_FEW_PAGE'] = "prev %d pages";
 $TPLMSG['PAGINATION_NEXT_FEW_PAGE'] = "next %d pages";
+
+$TPLMSG['CART_PRODUCT_NAME'] = "item name";
+$TPLMSG['OPERATION'] = "operation";
+
+$TPLMSG['PROD_TO_CART_INQUIRY'] = "Inquiry";
+$TPLMSG['PROD_TO_CART_SHOPPING'] = "add to cart";
+$TPLMSG['ADD_TO_INQUIRY'] = "add to inquiry";
+$TPLMSG['ADD_TO_SHOPPING'] = "add to shopping";
+$TPLMSG['WARNING_ADD_NOSPEC'] = "please select specification!";
+$TPLMSG['WARNING_ADD_NOAMOUNT'] = "please select amount!";
+$TPLMSG['WARNING_AMOUNT_FORMAT'] = "amount format error!";
+
+$TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = "buy %d and get discount of %d %";
+$TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discounts";
 ?>

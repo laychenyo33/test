@@ -8,7 +8,7 @@
                  </tr>
             </table>
             <form name="myform" method="post" action="login.php?func=check_data" id="formID" class="formular">
-              <table width="90%" border="0" align="center" cellpadding="4" cellspacing="1" class="inquiry_table">
+              <table width="100%" border="0" align="center" cellpadding="4" cellspacing="1" class="inquiry_table">
                     <tr class="altrow1">
                         <td colspan="2">{MSG_MEMBER_LOGIN}</td>
                     </tr>
@@ -34,11 +34,14 @@
             </form>
     <!-- END BLOCK : MEMBER_LOGIN_FORM -->
     <!-- START BLOCK : INQUIRY_CART_ZONE -->
-        <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="inquiry_table">
+        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="inquiry_table">
             <tr>
                 <th width="5%"> No.</th>
-                <th width="15%"> {MSG_PRODUCT_IMAGE}</th>
-                <th width="60%"> {MSG_PRODUCT}</th>
+                <th width="20%"> {MSG_PRODUCT_IMAGE}</th>
+                <th width=""> {MSG_PRODUCT}</th>
+                <!-- START BLOCK : SPEC_TITLE -->
+                <th width=""> {MSG_SPEC}</th>
+                <!-- END BLOCK : SPEC_TITLE -->                
                 <th width="20%"> {MSG_AMOUNT}</th>
             </tr>
             <!-- START BLOCK : INQUIRY_CART_LIST -->
@@ -46,6 +49,9 @@
                 <td class="no">{VALUE_P_SERIAL}</td>
                 <td><center><a href="{VALUE_P_LINK}" target="_blank"><img src="{VALUE_P_SMALL_IMG}" width="60" alt="{VALUE_P_NAME}" border="0"/></a></center></td>
                 <td class="title"><a href="{VALUE_P_LINK}" target="_blank">{VALUE_P_NAME}</a></td>
+                <!-- START BLOCK : SPEC_FIELD -->
+                <td class="spec">{VALUE_SPEC}</td>
+                <!-- END BLOCK : SPEC_FIELD -->                
                 <td>{VALUE_P_AMOUNT}</td>
             </tr>
             <!-- END BLOCK : INQUIRY_CART_LIST -->
@@ -53,7 +59,7 @@
     <!-- END BLOCK : INQUIRY_CART_ZONE -->
     <!-- START BLOCK : MEMBER_DATA_FORM -->
 <form name="myform" method="post" action="cart.php?func=c_replace" id="formID" class="formular">
-        <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="member_table">
+        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="member_table">
             <!-- START BLOCK : PAYMENT_TYPE -->
             <tr class="altrow">
                 <th>

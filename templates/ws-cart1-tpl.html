@@ -8,27 +8,35 @@
     <th width="5%"> No.</th>
     <th width="15%"> {MSG_PRODUCT_IMAGE}</th>
     <th width=""> {MSG_PRODUCT}</th>
+    <!-- START BLOCK : SPEC_TITLE -->
+    <th width=""> {MSG_SPEC}</th>
+    <!-- END BLOCK : SPEC_TITLE -->
     <th width="12%"> {MSG_AMOUNT}</th>
-    <th width="12%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
+    <th width="12%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
+    <th width="12%"> {MSG_DISCOUNT}</th>
     <th width="12%"> {MSG_SUBTOTAL}</th>
-    <th width="7%"> {MSG_DEL}</th>
+    <th width="7%"> {MSG_OPERATION}</th>
 </tr>
 <!-- START BLOCK : SHOPPING_CART_LIST -->
 <tr {TAG_TR_CLASS} class="line">
     <td  class="no">{VALUE_P_SERIAL}</td>
     <td><center><a href="{VALUE_P_SMALL_IMG}" rel="lightbox[roadtrip]" ><img src="{VALUE_P_SMALL_IMG}" width="60" alt="{VALUE_P_NAME}" border="0"/></a></center></td>
     <td class="title"><a href="{VALUE_P_LINK}" target="_blank">{VALUE_P_NAME}</a></td>
-    <td><input type="text" name="shop_value[{VALUE_P_ID}]" value="{VALUE_P_AMOUNT}" size="2" class="spinner" readonly/></td>
+    <!-- START BLOCK : SPEC_FIELD -->
+    <td class="spec">{VALUE_SPEC}</td>
+    <!-- END BLOCK : SPEC_FIELD -->
+    <td><input type="text" name="shop_value[{VALUE_P_ID}]{TAG_PS_ID_STR}" value="{VALUE_P_AMOUNT}" size="2" class="spinner" readonly/></td>
     <td><span class="up">{VALUE_P_SPECIAL_PRICE}</span></td>
+    <td><span class="dc">{TAG_QUANTITY_DISCOUNT}</span></td>
     <td><span class="sp">{VALUE_P_SUBTOTAL_PRICE}</span></td>
     <td>
-        <a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','cart.php?func=c_del&p_id={VALUE_P_ID}');return false;">
-        <img src="{TAG_THEME_PATH}ws-table-delete.gif" border="0" /></a>
+        <a href="#" class="prodToCollect" rel="{VALUE_P_ID}">收藏</span>
+        <a href="#" class="cart-del" pid="{VALUE_P_ID}" {TAG_PS_ID}><img src="{TAG_THEME_PATH}ws-table-delete.gif" border="0" /></a>
     </td>
 </tr>
 <!-- END BLOCK : SHOPPING_CART_LIST -->
 <tr>
-    <td colspan="5">
+    <td colspan="{CART_FIELDS_NUMS}">
         <div align="right">{MSG_SUBTOTAL}:&nbsp;</div>
     </td>
     <td> <span id="sub_total_str">{VALUE_SUBTOTAL}</span></td>
@@ -44,18 +52,12 @@
 </tr> 
 <!-- END BLOCK : MINUS_ROW -->
 <tr>
-    <td colspan="5">
-        <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;
-        </div>
-    </td>
+    <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
     <td> <span id="ship_price">{VALUE_SHIPPING_PRICE_STR}</span></td>
     <td></td>
 </tr> 
 <tr>
-    <th colspan="5">
-        <div align="right"> {MSG_TOTAL}:&nbsp;
-        </div>
-    </th>
+    <th colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
     <th> <span id="total_str">{VALUE_TOTAL}</span>    </th>
     <th></th>
 </tr> 
@@ -77,6 +79,9 @@
 </div>
 <div class="cart-finish-bottom">
     {MSG_SHOPPING_TERM}
+</div>
+<div id="del-cart-dialog" title="刪除購物車項目" style="display:none">
+    確定刪除嗎？
 </div>
 <script type="text/javascript">
     jQuery(function($){
@@ -105,9 +110,9 @@
            $(":radio[name=shipment_type]").click(function(evt){
                 var dataStr = "func=ajax_show_ship_price&shipment_type="+$(this).val();
                 $.post("{TAG_ROOT_PATH}cart.php",dataStr,function(req){
-                    $("#sub_total_str").text(req.sub_total_price);
+                    $("#sub_total_str").text(req.subtotal_price);
                     $("#ship_price").text(req.shipping_price);
-                    $("#o_subtotal_price").val(req.sub_total_price);
+                    $("#o_subtotal_price").val(req.subtotal_price);
                     $("#o_plus_price").val(req.shipping_price);
                     $("#total_str").text(req.total_price);
                     //$("#formID").trigger("calculate");
@@ -141,11 +146,11 @@
                     if(cur != ui.value){
                         $.post("{TAG_ROOT_PATH}cart.php?func=c_mod",data,function(req){
                             if(req.code == '1'){
-                                var ans = parseInt(elm.parents('tr').find('.up').text()) * ui.value;
-                                elm.parents('tr').find('.sp').text(ans);
-                                $("#sub_total_str").text(req.sub_total_price);
+                                elm.parents('tr').find('.dc').text(req.product.discount<1?req.product.discount:'');
+                                elm.parents('tr').find('.sp').text(req.product.subtotal_price);
+                                $("#sub_total_str").text(req.subtotal_price);
                                 $("#ship_price").text(req.shipping_price);
-                                $("#o_subtotal_price").val(req.sub_total_price);
+                                $("#o_subtotal_price").val(req.subtotal_price);
                                 $("#o_plus_price").val(req.shipping_price>=0?req.shipping_price:0);
                                 $("#minus_price_str").text('-'+req.minus_price);
                                 $("#total_str").text(req.total_price);
@@ -159,7 +164,88 @@
                 },
                 change: function( event, ui ) {
                 }            
-            });          
+            }).change(function(evt){
+                var nv = $(this).val();
+                nv = parseInt(nv.replace(/[^\d\.]/,'')); 
+                $(this).val(nv);
+                $(this).spinner("value",$(this).val());
+                var elm = $(this);
+                var data = "via_ajax=1&"+$(this).attr("name")+"="+$(this).val();
+                $.post("{TAG_ROOT_PATH}cart.php?func=c_mod",data,function(req){
+                    if(req.code == '1'){
+                        elm.parents('tr').find('.dc').text(req.product.discount<1?req.product.discount:'');
+                        elm.parents('tr').find('.sp').text(req.product.subtotal_price);
+                        $("#sub_total_str").text(req.subtotal_price);
+                        $("#ship_price").text(req.shipping_price>=0?req.shipping_price:'運費另議');
+                        $("#o_subtotal_price").val(req.subtotal_price);
+                        $("#o_plus_price").val(req.shipping_price>=0?req.shipping_price:0);
+                        $("#formID").trigger("calculate");
+                    }else{
+                        alert('error occure!');
+                        elm.val(cur);
+                    }
+                },'json');                
+            });
+            $(".cart-del").click(function(evt){
+                evt.preventDefault();
+                $("#del-cart-dialog").data('activeRow',$(this).parents('tr'));
+                $("#del-cart-dialog").data('p_id',$(this).attr('pid'));
+                $("#del-cart-dialog").data('ps_id',$(this).attr('psid'));
+                $("#del-cart-dialog").dialog('open');
+            });
+            $("#del-cart-dialog").dialog({
+                autoOpen:false,
+                modal:true,
+                width:400,
+                height:180,
+                buttons:{
+                    確定:function(){
+                        var data = {
+                            p_id: $("#del-cart-dialog").data('p_id'),
+                            ps_id: $("#del-cart-dialog").data('ps_id'),
+                            via_ajax:true
+                        };
+                        var dialog = $(this);
+                        $.post("cart.php?func=c_del",data,function(req){
+                            if(req.code==1){
+                                var activeRow = $("#del-cart-dialog").data('activeRow');
+                                var redirect = false;
+                                activeRow.remove();
+                                if($("tr.line").size()>0){
+                                    $("tr.line").each(function(idx,elm){
+                                        $(elm).find("td.no").text(idx+1);
+                                    });
+                                }
+                                $("#del-cart-dialog").data('activeRow',null);
+                                $("#del-cart-dialog").data('p_id',null);
+                                $("#del-cart-dialog").data('ps_id',null)
+                                $("#sub_total_str").text(req.subtotal_price);
+                                if(req.subtotal_price==0){
+                                    redirect = true;
+                                }
+                                dialog.dialog('close');
+                                if(redirect)location.replace('products.htm');
+                            }else{
+                                alert('操作失敗!');
+                            }
+                        },'json');
+                    },
+                    取消:function(){
+                        $(this).dialog('close');
+                    }
+                }
+            });
+            $(".prodToCollect").click(function(evt){
+                evt.preventDefault();
+                var data = new Object();
+                data.p_id = $(this).attr('rel');
+                $.post("{TAG_ROOT_PATH}member.php?func=ajax&action=collect",data,function(res){
+                    alert(res.msg);
+                    if(res.code==1){
+                        $("#collectnums").text(res.nums);
+                    }
+                },'json');
+            });            
        });
     });
 </script>

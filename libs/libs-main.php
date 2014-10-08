@@ -324,13 +324,13 @@ class MAINFUNC{
                 $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['new_cart_path'].'?func=c_order');
                 $tpl->assignGlobal("ADMIN_ORDER_PATH" , $cms_cfg['new_cart_path'].'admin.php');
                 //購物車購物數量
-                $tpl->assignGlobal("MSG_CART_NUMS",count(App::getHelper('session')->id));
+                $tpl->assignGlobal("MSG_CART_NUMS",App::getHelper('session')->getModuleCart()->count());
             }else{
                 $tpl->assignGlobal("CART_PATH" , $cms_cfg['base_root']."cart.php");
                 $tpl->assignGlobal("MEMBER_ORDER_PATH" , $cms_cfg['base_root']."member.php?func=m_zone&mzt=order");
                 $tpl->assignGlobal("ADMIN_ORDER_PATH" , $cms_cfg['manage_root'].'order.php');
                 //購物車購物數量
-                $tpl->assignGlobal("MSG_CART_NUMS",count(App::getHelper('session')->CART_PID));
+                $tpl->assignGlobal("MSG_CART_NUMS",App::getHelper('session')->modules()->cart->count());
             }
             //有會員即顯示會員登入區
             if($cms_cfg["ws_module"]["ws_member"]==1){
@@ -641,6 +641,7 @@ class MAINFUNC{
         if($cms_cfg['ws_module']['ws_news_unique_cate']) $tpl->newBlock("AUTHORITY_NEWS_UNIQUE_CATE");
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_order"] && $cms_cfg["ws_module"]["ws_order"])?$tpl->newBlock( "AUTHORITY_ORDER" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_products"])?$tpl->newBlock( "AUTHORITY_PRODUCTS" ):"";
+        ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_cart_spec"])?$tpl->newBlock( "AUTHORITY_PRODUCTS_SPEC" ):"";
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products_cate"] && $cms_cfg["ws_module"]["ws_products"]){
             $tpl->newBlock("AUTHORITY_PRODUCTS_CATE");
             $tpl->gotoBlock( "AUTHORITY_PRODUCTS" );

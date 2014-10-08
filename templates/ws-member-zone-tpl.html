@@ -221,38 +221,46 @@
                 <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
                     <tr class="altrow">
                         <th width="5%"> No.</th>
-                        <th width="40%"> {MSG_PRODUCT}</th>
+                        <th width=""> {MSG_PRODUCT}</th>
+                        <!-- START BLOCK : SPEC_TITLE_ORDER -->
+                        <th width=""> {MSG_SPEC}</th>
+                        <!-- END BLOCK : SPEC_TITLE_ORDER -->    
                         <th width="10%"> {MSG_AMOUNT}</th>
-                        <th width="25%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
-                        <th width="20%"> {MSG_SUBTOTAL}</th>
+                        <th width="10%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
+                        <th width="10%"> {MSG_DISCOUNT}</th>
+                        <th width="10%"> {MSG_SUBTOTAL}</th>
                     </tr>
                     <!-- START BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
                         <td>{VALUE_P_SERIAL}</td>
                         <td>{VALUE_P_NAME}</td>
+                        <!-- START BLOCK : SPEC_FIELD_ORDER -->
+                        <td>{VALUE_SPEC}</td>
+                        <!-- END BLOCK : SPEC_FIELD_ORDER -->  
                         <td class="nums">{VALUE_P_AMOUNT}</td>
                         <td class="nums">{VALUE_P_SELL_PRICE}</td>
+                        <td class="nums">{TAG_QUANTITY_DISCOUNT}</td>
                         <td class="nums">{VALUE_P_SUBTOTAL_PRICE}</td>
                     </tr>
                     <!-- END BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_SUBTOTAL}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_SUBTOTAL}:&nbsp;</div></td>
                         <td class="nums">{VALUE_O_SUBTOTAL_PRICE}</td>
                     </tr>
                     <tr>
-                        <td colspan="4"><div align="right"> 折扣:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> 折扣:&nbsp;</div></td>
                         <td class="nums"><span style="color:red">{VALUE_O_MINUS_PRICE}</span></td>
                     </tr>
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
                         <td class="nums">{VALUE_O_PLUS_PRICE}</td>
                     </tr>
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
                         <td class="nums"> {VALUE_O_CHARGE_FEE}</td>
                     </tr>                    
                     <tr>
-                        <th colspan="4"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
+                        <th colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
                         <th class="nums"> {VALUE_O_TOTAL_PRICE}</th>
                     </tr>
                 </table>
@@ -346,13 +354,19 @@
                 <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
                     <tr class="altrow">
                         <th width="5%"> No.</th>
-                        <th width="40%"> {MSG_PRODUCT}</th>
+                        <th width=""> {MSG_PRODUCT}</th>
+                        <!-- START BLOCK : SPEC_TITLE -->
+                        <th width=""> {MSG_SPEC}</th>
+                        <!-- END BLOCK : SPEC_TITLE -->    
                         <th width="10%"> {MSG_AMOUNT}</th>
                     </tr>
                     <!-- START BLOCK : INQUIRY_ITEMS_LIST -->
                     <tr>
                         <td>{VALUE_P_SERIAL}</td>
                         <td>{VALUE_P_NAME}</td>
+                        <!-- START BLOCK : SPEC_FIELD -->
+                        <td>{VALUE_SPEC}</td>
+                        <!-- END BLOCK : SPEC_FIELD -->  
                         <td>{VALUE_P_AMOUNT}</td>
                     </tr>
                     <!-- END BLOCK : INQUIRY_ITEMS_LIST -->

@@ -34,6 +34,8 @@ class ORDER{
                 $this->current_class="O";
                 $this->ws_tpl_file = "templates/ws-manage-order-reply-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->order_reply_form();
                 $this->ws_tpl_type=1;
                 break;
@@ -235,8 +237,8 @@ class ORDER{
                                           "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                                           "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                           "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
-                                          "VALUE_O_PAYMENT_TYPE"=>$ws_array["payment_type"][$row["o_payment_type"]],
-                                          "VALUE_O_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$row['o_shippment_type']],
+                                          "VALUE_O_PAYMENT_TYPE"=> $main->multi_map_value($ws_array["payment_type"],$row["o_payment_type"]),
+                                          "VALUE_O_SHIPPMENT_TYPE" => $main->multi_map_value($ws_array["shippment_type"],$row['o_shippment_type']),
                                           "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
                                           "VALUE_O_ATM_LAST5" => $row["o_atm_last5"],
                                           "VALUE_O_DELIVERY_STR" => sprintf("%s %s",date("Y年m月d日",$dts),$ws_array["deliery_timesec"][$row['o_deliver_time_sec']]),
@@ -280,20 +282,29 @@ class ORDER{
                 //訂購產品列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 $selectrs = $db->query($sql);
-                $total_price=0;
                 $i=0;
+                if($cms_cfg['ws_module']['ws_cart_spec']){
+                    $tpl->newBlock("SPEC_TITLE");
+                    $tpl->assignGlobal("CART_FIELD_NUMS",6);
+                }else{
+                    $tpl->assignGlobal("CART_FIELD_NUMS",5);
+                }                   
                 while($row = $db->fetch_array($selectrs,1)){
                     $i++;
-                    $sub_total_price = $row["p_sell_price"] * $row["oi_amount"];
-                    $total_price = $total_price+$sub_total_price;
+                    $sub_total_price = round($row["price"] * $row["amount"] * $row['discount']);
                     $tpl->newBlock( "ORDER_ITEMS_LIST" );
                     $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                         "VALUE_P_NAME" => $row["p_name"],
-                                        "VALUE_P_SELL_PRICE" => $row["p_sell_price"],
-                                        "VALUE_P_AMOUNT" => $row["oi_amount"],
+                                        "VALUE_P_SELL_PRICE" => $row["price"],
+                                        "VALUE_P_AMOUNT" => $row["amount"],
+                                        "TAG_QUANTITY_DISCOUNT" => $row['discount']<1?$row['discount']:'',
                                         "VALUE_P_SUBTOTAL_PRICE"  => $sub_total_price,
                                         "VALUE_P_SERIAL"  => $i,
                     ));
+                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                        $tpl->newBlock("SPEC_FIELD");
+                        $tpl->assign("VALUE_SPEC",$row["spec"]);
+                    }                       
                 }
             }else{
                 header("location : order.php?func=o_list");

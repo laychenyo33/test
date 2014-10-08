@@ -190,7 +190,8 @@ class ORDER{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //欄位名稱
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['MODIFY'],
-                                  "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_PRICE']
+                                  "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_PRICE'],
+                                  "MSG_DISCOUNT" => $TPLMSG['QUANTITY_DISCOUNT'],
         ));
         //相關參數
         if(!empty($_REQUEST['nowp'])){
@@ -297,18 +298,29 @@ class ORDER{
                 $selectrs = $db->query($sql);
                 $total_price=0;
                 $i=0;
+                if($cms_cfg['ws_module']['ws_cart_spec']){
+                    $tpl->newBlock("SPEC_TITLE");
+                    $tpl->assignGlobal("CART_FIELD_NUMS",6);
+                }else{
+                    $tpl->assignGlobal("CART_FIELD_NUMS",5);
+                }                 
                 while($row = $db->fetch_array($selectrs,1)){
                     $i++;
-                    $sub_total_price = $row["p_sell_price"] * $row["oi_amount"];
+                    $sub_total_price = round($row["price"] * $row["amount"] * $row['discount']);
                     $total_price = $total_price+$sub_total_price;
                     $tpl->newBlock( "ORDER_ITEMS_LIST" );
                     $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                         "VALUE_P_NAME" => $row["p_name"],
-                                        "VALUE_P_SELL_PRICE" => $row["p_sell_price"],
-                                        "VALUE_P_AMOUNT" => $row["oi_amount"],
+                                        "VALUE_P_SELL_PRICE" => $row["price"],
+                                        "VALUE_P_AMOUNT" => $row["amount"],
+                                        "TAG_QUANTITY_DISCOUNT" => ($row['discount']<1)?$row['discount']:'',
                                         "VALUE_P_SUBTOTAL_PRICE"  => $sub_total_price,
                                         "VALUE_P_SERIAL"  => $i,
                     ));
+                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                        $tpl->newBlock("SPEC_FIELD");
+                        $tpl->assign("VALUE_SPEC",$row["spec"]);
+                    }                     
                 }
             }else{
                 header("location : ".$_SERVER['PHP_SELF']."?func=o_list");

@@ -7,8 +7,12 @@
                 <th width="5%"> No.</th>
                 <th width="15%"> {MSG_PRODUCT_IMAGE}</th>
                 <th width=""> {MSG_PRODUCT}</th>
+                <!-- START BLOCK : SPEC_TITLE -->
+                <th width=""> {MSG_SPEC}</th>
+                <!-- END BLOCK : SPEC_TITLE -->                     
                 <th width="12%"> {MSG_AMOUNT}</th>
-                <th width="12%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
+                <th width="12%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
+                <th width="12%"> {MSG_DISCOUNT}</th>                
                 <th width="12%"> {MSG_SUBTOTAL}</th>
             </tr>
             <!-- START BLOCK : SHOPPING_CART_LIST -->
@@ -16,39 +20,43 @@
                 <td>{VALUE_P_SERIAL}</td>
                 <td><center><a href="{VALUE_P_LINK}"><img src="{VALUE_P_SMALL_IMG}" width="60"  border="0"/></a></center></td>
                 <td>{VALUE_P_NAME}</td>
+                <!-- START BLOCK : SPEC_FIELD -->
+                <td class="spec">{VALUE_SPEC}</td>
+                <!-- END BLOCK : SPEC_FIELD -->                  
                 <td>{VALUE_P_AMOUNT}</td>
                 <td>{VALUE_P_SPECIAL_PRICE}</td>
+                <td>{TAG_QUANTITY_DISCOUNT}</td>
                 <td>{VALUE_P_SUBTOTAL_PRICE}</td>
             </tr>
             <!-- END BLOCK : SHOPPING_CART_LIST -->
             <tr>
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right">{MSG_SUBTOTAL}:&nbsp;</div>
                 </td>
                 <td> <span id="subtotal_price">{VALUE_SUBTOTAL}</span></td>
             </tr>            
             <!-- START BLOCK : MINUS_ROW -->
             <tr id="minus_row">
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right">折扣:&nbsp;</div>
                 </td>
                 <td> <span id="minus_price_str">-{VALUE_MINUS_PRICE}</span></td>
             </tr> 
             <!-- END BLOCK : MINUS_ROW -->               
             <tr>
-                <td colspan="5">
+                <td colspan="{CART_FIELDS_NUMS}">
                     <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div>
                 </td>
                 <td> {VALUE_SHIPPING_PRICE_STR} </td>
             </tr>
             <!-- START BLOCK : CHARGE_FEE_ROW -->
             <tr>
-                <td colspan="5"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
+                <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
                 <td align="left"> {VALUE_CHARGE_FEE}</td>
             </tr>            
             <!-- END BLOCK : CHARGE_FEE_ROW -->            
             <tr>
-                <th colspan="5">
+                <th colspan="{CART_FIELDS_NUMS}">
                     <div align="right"> {MSG_TOTAL}:&nbsp;</div>
                 </th>
                 <th> {VALUE_TOTAL}</th>

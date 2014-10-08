@@ -15,14 +15,20 @@ class Model_Session extends Model_Modules implements arrayaccess {
     //put your code here
     static protected $_handler;
     protected $_session;
-    function __construct($sess_cookie_name) {
+    function __construct($sess_cookie_name,$options=null) {
+        parent::__construct($this, $options['modules']);
         if(!session_id()){
             session_start();
         }
         $this->_session =&$_SESSION[$sess_cookie_name];
     }
     function &__get($name){
-        return $this->_session[$name];
+        if(method_exists($this, 'getModule'.  ucfirst($name))){
+            $method = 'getModule'.  ucfirst($name);
+            return $this->$method();
+        }else{
+            return $this->_session[$name];
+        }
     }
     function __set($name,$value){
         $this->_session[$name] = $value;
@@ -33,9 +39,9 @@ class Model_Session extends Model_Modules implements arrayaccess {
     function __unset($name) {
         unset($this->_session[$name]);
     }
-    static function factory($sess_cookie_name){
+    static function factory($sess_cookie_name,$options){
         if(self::$_handler === null){
-            self::$_handler = new self($sess_cookie_name);
+            self::$_handler = new self($sess_cookie_name,$options);
         }
         return self::$_handler;
     }
@@ -65,4 +71,10 @@ class Model_Session extends Model_Modules implements arrayaccess {
     public function offsetGet($offset) {
         return isset($this->_session[$offset]) ? $this->_session[$offset] : null;
     }    
+    public function modules(){
+        return $this;
+    }
+    public function getModuleCart(){
+        return $this->getModule('cart');
+    }
 }
