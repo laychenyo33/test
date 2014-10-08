@@ -14,6 +14,9 @@
 			$this -> order = ($cms_cfg["ws_module"]["ws_select_order"] == 1) ? "desc" : "asc";
 	
 			switch($_REQUEST["func"]) {
+                            case "ajax":
+                                $this->ajax();
+                                break;
 				case "c_add" :
 					$this -> ws_tpl_file = "templates/ws-cart-tpl.html";
 					$this -> ws_load_tp($this -> ws_tpl_file);
@@ -654,6 +657,16 @@
 						$tpl -> newBlock("TAG_PRICE_TD");
 						$tpl -> assign("VALUE_O_TOTAL_PRICE", $row["o_total_price"]);
 					}
+                                        if($row['o_payment_type']==1 && $row['o_atm_last5']=='' && $row['o_status']==0){ //新訂單未匯款的訂單
+                                            $tpl->newBlock("UNATM_FIELD");
+                                            $tpl->assign(array(
+                                                "VALUE_O_ID" => $row['o_id']
+                                            ));
+                                        }            
+                                        if($row['o_status']==0 && $cms_cfg['ws_module']['ws_order_cancel']){
+                                            $tpl->newBlock("BTN_CANCEL_ORDER");
+                                            $tpl->assign("VALUE_O_ID",$row['o_id']);
+                                        }                                        
 				}
 	
 				$tpl -> newBlock("PAGE_DATA_SHOW");
@@ -721,7 +734,13 @@
 	
 					$tpl -> assignGlobal("VALUE_O_INVOICE_TYPE", $invoice_type);
 	
-					if ($row["o_invoice_type"] == 2) {
+					if ($row["o_payment_type"] == 1) {
+                                            $tpl -> newBlock("ATM_LAST5");
+                                            $tpl->assign(array(
+                                                "VALUE_O_ATM_LAST5" => $row['o_atm_last5']?$row['o_atm_last5']:'NA',
+                                            ));
+                                        }
+                                        if ($row["o_invoice_type"] == 2) {
 						$tpl -> newBlock("TAG_INVOICE_TRI");
 					}
 	
@@ -1136,6 +1155,83 @@
                     $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_LOGIN']);        
                     $tpl->assignGlobal("TAG_RETURN_URL",$_SERVER['REQUEST_URI']);
                 }                  
+                     
+                function ajax(){
+                    $method = __FUNCTION__."_".$_GET['action'];       
+                    if(method_exists($this, $method)){
+                        $this->$method();
+                    }else{
+                        throw new Exception($method."doesn't exists!");
+                    }        
+                }
+                
+                function ajax_write_last5(){
+                    global $db,$cms_cfg,$main;
+                    $res['code']=0;
+                    if($_POST['o_id'] && $_POST['o_atm_last5']){
+                        $sql = "select *  from ".$db->prefix("order")." where o_id='".$db->quote($_POST['o_id'])."'";
+                        $qs = $db->query($sql);
+                        if($db->numRows($qs)){
+                            $orderData = $db->fetch_array($qs,1);
+                            $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
+                            $db->query($sql);
+                            if($err = $db->report()){
+                                $res['msg'] = $err;
+                            }else{
+                                $res['code']=1;
+                                //寄發通知信
+                                $tpl = App::getHelper('main')->get_mail_tpl("remit-notification");
+                                $tpl->newBlock("REMIT_LAST5");
+                                $tpl->assign(array(
+                                    "MSG_O_ID"      => $_POST['o_id'],
+                                    "MSG_ATM_LAST5" => $_POST['o_atm_last5'],
+                                ));
+                                $mail_content = $tpl->getOutputContent();
+                                $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$orderData['o_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."atm轉帳訂單匯款完成通知",'atm','','',1);
+                            }
+                        }
+                    }
+                    echo json_encode($res);
+                }
+                
+                //取消訂單
+                function ajax_cancel_order(){
+                    global $db,$cms_cfg,$main,$ws_array;
+                    $sql = "select * from ".$db->prefix("order")." where o_id='".$_POST['o_id']."'";
+                    $order = $db->query_firstrow($sql);
+                    if($order){
+                        $res['code'] = 1;
+                        if($order['o_status']==0){
+                            $order['o_status'] = 9;//取消訂單的狀態
+                            $sql = "update ".$db->prefix("order")." set o_status='9' where o_id='".$_POST['o_id']."'";
+                            $db->query($sql);
+                            if($err = $db->report()){
+                                $res['code'] = 0;
+                                $res['msg'] = $err;
+                            }else{
+                                //寄發通知信
+                                $tpl = App::getHelper('main')->get_mail_tpl("order-cancel");
+                                $tpl->newBlock("SHOPPING_ORDER");
+                                $tpl->assign(array(
+                                    "MSG_CANCEL_TIME" => date("Y-m-d H:i:s"),
+                                    "MSG_O_ID" => $_POST['o_id'],
+                                ));
+                                $mail_content = $tpl->getOutputContent();
+                                //$main->ws_mail_send_simple($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","系統通知");                
+                                //ws_mail_send($from,$to,$mail_content,$mail_subject,$mail_type,$goto_url,$admin_subject=null,$none_header=0){
+                                $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$order['o_email'],$mail_content,$_SESSION[$cms_cfg['sess_cookie_name']]['sc_company']."購物訂單線上取消通知","","",null,1);                
+                                $res['msg'] = $ws_array["order_status"][$order['o_status']];                    
+                            }
+                        }else{
+                            $res['code'] = 0;
+                            $res['msg'] = "訂單非新訂單，無法線上取消，請聯絡客服";
+                        }
+                    }else{
+                        $res['code'] = 0;
+                        $res['msg'] = "訂單不存在!";
+                    }
+                    echo json_encode($res);
+                }                
 	
 	}
 ?>
