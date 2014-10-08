@@ -17,7 +17,7 @@ class epaper_register {
     
     protected function _isDataValid(&$data){
         global $TPLMSG,$main;
-        $main->magic_gpc($data);
+        //$main->magic_gpc($data);
         $result = array(false,'');
         if(!empty($data['name']) && !empty($data['email'])){
             if(strtolower($data['name'])!='name' && strtolower($data['email'])!='e-mail'){
