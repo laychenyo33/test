@@ -301,7 +301,11 @@
 			#$this->ck[3] = strtolower(urlencode('HashKey='.$this->all_cfg["HashKey"].'&'.implode("&",$all_value_array).'&HashIV='.$this->all_cfg["HashIV"]));
 			#echo implode('<br /><br />',$this->ck);
 
-			return md5(strtolower(urlencode('HashKey='.$this->all_cfg["HashKey"].'&'.implode("&",$all_code_array).'&HashIV='.$this->all_cfg["HashIV"])));
+                        $combineStr = strtolower(urlencode('HashKey='.$this->all_cfg["HashKey"].'&'.implode("&",$all_code_array).'&HashIV='.$this->all_cfg["HashIV"]));
+                        //調整成.net的編碼結果
+                        $combineStr2 = preg_replace(array('/%21/','/%2a/','/%28/','/%29/'), array('!','*','(',')'), $combineStr); 
+                        $encode = md5($combineStr2);
+			return $encode;
 		}
 		
 		// 會員訂單管理顯示資料
