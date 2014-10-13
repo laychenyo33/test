@@ -826,10 +826,7 @@ class PRODUCTS{
                    $k++;
                    //顯示大圖
                    $tpl->newBlock("BIG_IMG_LIST");
-                   if(is_file($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$value)){
-                       list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$value);
-                       $dimensions = $main->resize_dimensions($cms_cfg['big_img_width'][$this->show_style],$cms_cfg['big_img_height'][$this->show_style],$width,$height);
-                   }
+                   $dimensions = $main->resizeto($cms_cfg["file_root"].$value,$cms_cfg['big_img_width'][$this->show_style],$cms_cfg['big_img_height'][$this->show_style]);
                    $tpl->assign("VALUE_P_BIG_IMG",$cms_cfg["file_root"].$value);
                    $tpl->assign("VALUE_P_BIG_IMG_W",$dimensions["width"]);
                    $tpl->assign("VALUE_P_BIG_IMG_H",$dimensions["height"]);
