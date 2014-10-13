@@ -196,7 +196,9 @@ class NEWS{
             }      
         }
         //上下筆連結
-        $this->news_next_previous($row['n_id'], $row['nc_id']);
+        if(App::configs()->ws_module->ws_news_nextlink){
+            $this->news_next_previous($row['n_id'], $row['nc_id']);
+        }
     }
     
     /*由$row取得該筆記錄的url

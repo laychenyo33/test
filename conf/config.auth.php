@@ -39,6 +39,7 @@ $cms_cfg["ws_module"]=array(
         "ws_news"=>1,               //最新消息
         "ws_news_unique_cate"=>0,   //最新消息獨立類別，類似au_cate，將特定news類別集合為獨立頁面
         "ws_news_upfiles"=>0,       //最新消息上傳附檔
+        "ws_news_nextlink"=>0,      //最新消息詳細頁--上下筆連結
         "ws_new_product"=>0,        //最新產品
         "ws_products"=>1,           //產品管理
         "ws_products_related"=>0,   //產品詳細頁--相關產品
