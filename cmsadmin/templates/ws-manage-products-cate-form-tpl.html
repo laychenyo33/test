@@ -118,30 +118,38 @@
       <tr>
         <th>相關分類:</th>
         <td colspan="3">
-            <input name="pc_related_cate" type="text"  id="pc_related_cate" value="{VALUE_PC_RELATED_CATE}" size="60" readonly>
-            <a href="javascript:upload_window('products.php?func=p_select_cate&pc_id_str={VALUE_PC_RELATED_CATE}&id={VALUE_P_ID}','pc_related_cate')">選擇分類</a><br>
-            <table border="1" cellpadding="1" cellspacing="1" class="pagetable">
-              <tr>
-                 <td>原有分類：</td>
-                 <td>新選擇分類：</td>
-              </tr>
-              <tr>
-                 <td>&nbsp;<span id="old_cate">{VALUE_NAME_STR}</span></td>
-                 <td>&nbsp;<span id="new_cate"></span></td>
-              </tr>
-            </table>
+            <div class="desc">
+                <span>操作說明:</span>
+                <ul>
+                    <li>請使用<span class="green">產品分類id</span>或<span class="green">產品分類名稱</span>檢索</li>
+                    <li>使用產品分類id需<span class="green">從頭輸入</span>，使用產品分類名稱可輸入<span class="green">任意位置的連續字元</span></li>
+                </ul>
+            </div>
+            <div class="related-prod-selector">
+              <input type="hidden" name="pc_related_cate" type="text"  id="pc_related_cate" value="{VALUE_PC_RELATED_CATE}" >              
+              搜尋: <input data-autocomplete type="text" style="margin:0">
+              <div id="data-list">
+                  <ul data-list>
+                    <li data-item>
+                      <span data-label>Example label</span>
+                      <a href="#" data-remove>x</a>
+                    </li>
+                  </ul>
+                  <div class="clear"></div>
+              </div>
+            </div>
         </td>
       </tr>
        <tr>
         <th>非自訂頁<br>上方簡述</th>
         <td colspan="3">
-            <textarea id="elm2" name="pc_seo_short_desc" cols="50" rows="5" >{VALUE_PC_SEO_SHORT_DESC}</textarea>
+            <textarea class="mceEditor" name="pc_seo_short_desc" cols="50" rows="5" >{VALUE_PC_SEO_SHORT_DESC}</textarea>
         </td>
       </tr>
       <tr>
         <th>非自訂頁<br>下方簡述</th>
         <td colspan="3">
-            <textarea id="elm3" name="pc_seo_down_short_desc" cols="50" rows="5" >{VALUE_PC_SEO_DOWN_SHORT_DESC}</textarea>
+            <textarea class="mceEditor" name="pc_seo_down_short_desc" cols="50" rows="5" >{VALUE_PC_SEO_DOWN_SHORT_DESC}</textarea>
         </td>
       </tr>
       <tr>
@@ -203,3 +211,20 @@
     <br>
 </div>
 <!-- INCLUDE BLOCK : FOOTER -->
+<!-- 
+    特效說明請參考:https://github.com/punkave/jquery-selective 
+-->
+<script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery.selective.js"></script>
+<script type="text/javascript">
+    jQuery(function($){
+        var originData = $("#pc_related_cate").val().split(',');
+        $(".related-prod-selector").selective({
+            source: 'products.php?func=p_select_cate2',
+            preventDuplicates: true,
+            data: originData,
+        });
+        $(".related-prod-selector").change(function(evt){
+            $(":hidden[name=pc_related_cate]").val($(".related-prod-selector").selective('get').toString());
+        });
+    });
+</script>

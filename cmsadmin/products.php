@@ -132,6 +132,7 @@ class PRODUCTS{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_PREVIEWS_PIC");
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->products_cate_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -146,6 +147,7 @@ class PRODUCTS{
                     $tpl->newBlock("JS_FORMVALID");
                     $tpl->newBlock("JS_PREVIEWS_PIC");
                     $tpl->newBlock("JS_MAIN");
+                    $tpl->newBlock("JS_JQ_UI");
                     $this->products_cate_form("mod");
                     $this->ws_tpl_type=1;
                 }
@@ -280,6 +282,9 @@ class PRODUCTS{
                 $this->select_cate($_REQUEST["pc_id_str"],$_REQUEST["id"]);
                 $tpl->printToScreen();
                 break;
+            case "p_select_cate2"://選擇分類
+                $this->select_cate2();
+                break;
             case "p_select_products"://選擇相關產品
                 $this->ws_tpl_file = "templates/ws-manage-related-products-list-tpl.html";
                 $tpl = new TemplatePower( $this->ws_tpl_file );
@@ -287,6 +292,9 @@ class PRODUCTS{
                 $this->select_products($_REQUEST["p_id_str"],$_REQUEST["id"]);
                 $tpl->printToScreen();
                 break;
+            case "p_select_products2"://選擇相關產品
+                $this->select_products2();
+                break;            
             case "related_items"://相關項目
                 $this->ws_tpl_file = "templates/ws-manage-related-items-list-tpl.html";
                 $tpl = new TemplatePower( $this->ws_tpl_file );
@@ -2931,6 +2939,48 @@ class PRODUCTS{
             $sql = "delete from ".$db->prefix("products_img")." where p_id not in(select p_id from ".$db->prefix("products").")";
             $db->query($sql,true);
         }
+    }
+    //ajax取得產名稱
+    function select_products2(){
+        if(App::getHelper('request')->isGet()){
+            $sql = "select * from ".App::getHelper('db')->prefix("products")." where p_status='1' and (p_id like '".$_GET['term']."%' || p_name like '%".$_GET['term']."%') order by p_name ";
+        }elseif(App::getHelper('request')->isPost()){
+            if($_POST['values']){
+                $sql = "select * from ".App::getHelper('db')->prefix("products")." where p_status='1' and p_id in(".implode(',',$_POST['values']).") order by p_name ";
+            }
+        }
+        if($sql){
+            $result = array();
+            $res = App::getHelper('db')->query($sql);
+            while($row = App::getHelper('db')->fetch_array($res,1)){
+                $result[] = array(
+                    'value' => $row['p_id'],
+                    'label' => $row['p_name'],
+                );
+            }
+            echo json_encode($result);
+        }
+    }
+    //ajax取得相關分類
+    function select_cate2(){
+        if(App::getHelper('request')->isGet()){
+            $sql = "select * from ".App::getHelper('db')->prefix("products_cate")." where pc_status='1' and (pc_id like '".$_GET['term']."%' || pc_name like '%".$_GET['term']."%') order by pc_name ";
+        }elseif(App::getHelper('request')->isPost()){
+            if($_POST['values']){
+                $sql = "select * from ".App::getHelper('db')->prefix("products_cate")." where pc_status='1' and pc_id in(".implode(',',$_POST['values']).") order by pc_name ";
+            }
+        }
+        if($sql){
+            $result = array();
+            $res = App::getHelper('db')->query($sql);
+            while($row = App::getHelper('db')->fetch_array($res,1)){
+                $result[] = array(
+                    'value' => $row['pc_id'],
+                    'label' => $row['pc_name'],
+                );
+            }
+            echo json_encode($result);
+        }        
     }
 }
 //ob_end_flush();
