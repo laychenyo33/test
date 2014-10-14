@@ -673,7 +673,18 @@ class PRODUCTS{
                 }
             }            
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-            $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            //$goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            $goto_url=App::getHelper('request')->get_link('query',array(
+                'scriptName' => $cms_cfg["manage_url"]."products.php",
+                'params'        => array(
+                    'func'      => 'pc_list',
+                    'pc_parent' => $_REQUEST["pc_parent"],
+                    'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                    'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                    'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                    'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                ),
+            ));                 
             $this->goto_target_page($goto_url);
         }else{
             $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -697,7 +708,18 @@ class PRODUCTS{
                 //刪除pc_parent(分類)及pc_id(產品)皆不存在的分類及產品
                 $this->products_cate_del_sub();
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_id=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                //$goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_id=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $goto_url=App::getHelper('request')->get_link('query',array(
+                    'scriptName' => $cms_cfg["manage_url"]."products.php",
+                    'params'        => array(
+                        'func'      => 'pc_list',
+                        'pc_parent' => $_REQUEST["pc_id"],
+                        'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                        'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                        'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                        'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                    ),
+                ));                     
                 $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -717,7 +739,7 @@ class PRODUCTS{
         //沒有分類先建立分類
         if($row["pc_total"]<1){
             $tpl->assignGlobal( "MSG_CREATE_CATE_FIRST" , $TPLMSG["CREATE_CATE_FIRST"]);
-            $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_add";
+            $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_add";                
             $this->goto_target_page($goto_url);
         }else{
             //產品管理分類
@@ -1333,11 +1355,45 @@ class PRODUCTS{
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);                 
                 if(isset($_POST['submit2'])){
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_add&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=p_add&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'p_add',
+                            'pc_parent' => $_REQUEST["pc_id"],
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                 }elseif(isset($_POST['submit3'])){
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_add&pc_parent=".$_REQUEST["pc_id"]."&copy=".$this->p_id."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=p_add&pc_parent=".$_REQUEST["pc_id"]."&copy=".$this->p_id."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'p_add',
+                            'pc_parent' => $_REQUEST["pc_id"],
+                            'copy'      => $this->p_id,
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                 }else{
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'p_list',
+                            'pc_parent' => $_REQUEST["pc_id"],
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                 }
                 if($_POST['via_ajax']){
                     $returnJson['code']=1;
@@ -1381,7 +1437,18 @@ class PRODUCTS{
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                //$goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $goto_url=App::getHelper('request')->get_link('query',array(
+                    'scriptName' => $cms_cfg["manage_url"]."products.php",
+                    'params'        => array(
+                        'func'      => 'p_list',
+                        'pc_parent' => $_REQUEST["pc_parent"],
+                        'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                        'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                        'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                        'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                    ),
+                ));                
                 $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1425,7 +1492,18 @@ class PRODUCTS{
                     $db_msg = $db->report();
                     if ( $db_msg == "" ) {
                         $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                        $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                        //$goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                        $goto_url=App::getHelper('request')->get_link('query',array(
+                            'scriptName' => $cms_cfg["manage_url"]."products.php",
+                            'params'        => array(
+                                'func'      => 'pc_list',
+                                'pc_parent' => $_REQUEST["pc_parent"],
+                                'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                                'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                                'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                                'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                            ),
+                        ));                             
                         $this->goto_target_page($goto_url);
                     }else{
                         $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1451,7 +1529,18 @@ class PRODUCTS{
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'p_list',
+                            'pc_parent' => $_REQUEST["pc_parent"],
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1475,6 +1564,16 @@ class PRODUCTS{
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                     $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'pa_list',
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1503,7 +1602,18 @@ class PRODUCTS{
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'pc_list',
+                            'pc_parent' => $_REQUEST["pc_parent"],
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1528,7 +1638,18 @@ class PRODUCTS{
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'p_list',
+                            'pc_parent' => $_REQUEST["pc_parent"],
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1561,7 +1682,18 @@ class PRODUCTS{
             }
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."products.php?func=".$ws_table."_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                //$goto_url=$cms_cfg["manage_url"]."products.php?func=".$ws_table."_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $goto_url=App::getHelper('request')->get_link('query',array(
+                    'scriptName' => $cms_cfg["manage_url"]."products.php",
+                    'params'        => array(
+                        'func'      => $ws_table."_list",
+                        'pc_parent' => (in_array($ws_table,array('p','pc')))?$_REQUEST["pc_parent"]:null,
+                        'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                        'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                        'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                        'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                    ),
+                ));                     
                 $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1649,7 +1781,18 @@ class PRODUCTS{
                     ";
                     $rs = $db->query($sql);
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'pc_list',
+                            'pc_parent' => $_REQUEST["pc_parent"],
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1759,7 +1902,18 @@ class PRODUCTS{
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=p_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'p_list',
+                            'pc_parent' => $_REQUEST["pc_parent"],
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -1814,7 +1968,17 @@ class PRODUCTS{
                 if ( $db_msg == "" ) {
                     $this->pc_id=$db->get_insert_id();
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    //$goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    $goto_url=App::getHelper('request')->get_link('query',array(
+                        'scriptName' => $cms_cfg["manage_url"]."products.php",
+                        'params'        => array(
+                            'func'      => 'pa_list',
+                            'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                            'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                            'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                            'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                        ),
+                    ));                         
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -2595,7 +2759,17 @@ class PRODUCTS{
         }
         if ( $db_msg == "" ) {
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-            $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            //$goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            $goto_url=App::getHelper('request')->get_link('query',array(
+                'scriptName' => $cms_cfg["manage_url"]."products.php",
+                'params'        => array(
+                    'func'      => 'pa_list',
+                    'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                    'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                    'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                    'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                ),
+            ));                 
             $this->goto_target_page($goto_url);
         }else{
             $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -2617,7 +2791,17 @@ class PRODUCTS{
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                //$goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $goto_url=App::getHelper('request')->get_link('query',array(
+                    'scriptName' => $cms_cfg["manage_url"]."products.php",
+                    'params'        => array(
+                        'func'      => 'pa_list',
+                        'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                        'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                        'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                        'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                    ),
+                ));                     
                 $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -2797,7 +2981,17 @@ class PRODUCTS{
         }
         if ( $db_msg == "" ) {
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-            $goto_url=$cms_cfg["manage_url"]."products.php?func=ca_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            //$goto_url=$cms_cfg["manage_url"]."products.php?func=ca_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            $goto_url=App::getHelper('request')->get_link('query',array(
+                'scriptName' => $cms_cfg["manage_url"]."products.php",
+                'params'        => array(
+                    'func'      => 'ca_list',
+                    'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                    'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                    'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                    'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                ),
+            ));                 
             $this->goto_target_page($goto_url);
         }else{
             $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
@@ -2818,7 +3012,17 @@ class PRODUCTS{
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."products.php?func=ca_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                //$goto_url=$cms_cfg["manage_url"]."products.php?func=ca_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                $goto_url=App::getHelper('request')->get_link('query',array(
+                    'scriptName' => $cms_cfg["manage_url"]."products.php",
+                    'params'        => array(
+                        'func'      => 'ca_list',
+                        'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                        'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                        'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                        'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                    ),
+                ));                     
                 $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
