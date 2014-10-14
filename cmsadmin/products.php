@@ -1141,6 +1141,10 @@ class PRODUCTS{
             $this->ca_checkbox($row['p_ca']);        
         }
         $this->products_classify($row['classify_id']);
+        if(App::getHelper('session')->sc_cart_type==1){
+            $tpl->newBlock("ONSALE_ROW");
+            $main->multiple_radio("onsale",App::defaults()->yesno_status,isset($row['onsale'])? $row['onsale'] : 1, $tpl);
+        }
     }
 //產品管理--資料更新================================================================
     function products_replace(){
