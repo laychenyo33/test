@@ -1,5 +1,7 @@
 <?php
-$cms_cfg['debug'] = false;
+$cms_cfg['debug'] = false; //顯示錯誤
+$cms_cfg['log_errors'] = false; //儲存記錄錯誤於檔案
+$cms_cfg['error_log'] = "phperror.log"; //錯誤記錄檔名 ，存在當前路徑下的 log/ 
 /*
 server name
 */

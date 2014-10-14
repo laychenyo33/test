@@ -11,6 +11,11 @@ include_once(APP_ROOT_PATH."conf/config.inc.php");
 include_once(APP_ROOT_PATH."libs/libs-mysql.php");
 $db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name'],$cms_cfg['tb_prefix']);
 $_SESSION[$cms_cfg['sess_cookie_name']]['SERVER_ID']=1;
+//設定錯誤報告
+ini_set("display_errors",$cms_cfg['debug']);
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+ini_set("log_errors",$cms_cfg['log_errors']);
+ini_set("error_log","log/".$cms_cfg['error_log']);
 //取得網站的設定
 $sql="select * from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
 $selectrs = $db->query($sql);
