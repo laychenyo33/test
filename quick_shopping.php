@@ -68,38 +68,8 @@ class PRODUCTS{
                                 "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['file_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
                                 "VALUE_P_SERIAL"    => $i,
                                 "VALUE_PC_NAME"     => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
-                                "VALUE_P_SPECIAL_PRICE" => $row["p_list_price"],
+                                "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"]?$row["p_special_price"]:$row["p_list_price"],
             ));
-            //購物車
-            //會員有登入改為顯示折扣價
-            if(!empty($this->discount)){
-                $tpl->assign("MSG_SPECIAL_PRICE",$TPLMSG["PRODUCT_DISCOUNT_PRICE"]);
-                if($this->discount!=100){ //無折扣也不顯示
-                    $discount_price=floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]/100*$row["p_list_price"]);
-                    $tpl->assign("VALUE_P_SPECIAL_PRICE",$discount_price);
-                }
-            }
-            $tpl->gotoBlock("_ROOT");
-        }
-        if($i==0){
-            $tpl->assignGlobal("MSG_NO_DATA",$TPLMSG['NO_DATA']);
-        }else{
-            $tpl->newBlock( "PAGE_DATA_SHOW" );
-            $tpl->assign( array("VALUE_TOTAL_RECORDS"  => $page["total_records"],
-                                "VALUE_TOTAL_PAGES"  => $page["total_pages"],
-                                "VALUE_PAGES_STR"  => $page["pages_str"],
-                                "VALUE_PAGES_LIMIT"=>$this->one_page_limit
-            ));
-            if($page["bj_page"]){
-                $tpl->newBlock( "PAGE_BACK_SHOW" );
-                $tpl->assign( "VALUE_PAGES_BACK"  , $page["bj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
-            if($page["nj_page"]){
-                $tpl->newBlock( "PAGE_NEXT_SHOW" );
-                $tpl->assign( "VALUE_PAGES_NEXT"  , $page["nj_page"]);
-                $tpl->gotoBlock("PAGE_DATA_SHOW");
-            }
         }
     }
     //顯示訊息並重新導向
