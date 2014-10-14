@@ -23,3 +23,4 @@ Thumbs.db
 /conf/creditcard.php
 .git-ftp.log
 /thumbs/*
+phperror.log

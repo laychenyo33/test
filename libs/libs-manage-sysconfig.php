@@ -8,7 +8,11 @@ define('APP_ROOT_PATH', realpath(dirname(__FILE__).'/../') . DIRECTORY_SEPARATOR
 $db = new DB($cms_cfg['db_host'],$cms_cfg['db_user'],$cms_cfg['db_password'],$cms_cfg['db_name'],$cms_cfg['tb_prefix']);
 $mainfunc_class = class_exists("MAINFUNC_NEW")?"MAINFUNC_NEW":"MAINFUNC";
 $main = new $mainfunc_class;
-
+//設定錯誤報告
+ini_set("display_errors",$cms_cfg['debug']);
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+ini_set("log_errors",$cms_cfg['log_errors']);
+ini_set("error_log","log/".$cms_cfg['error_log']);
 //取得網站的設定
 $sql="select * from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
 $selectrs = $db->query($sql);
