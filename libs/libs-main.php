@@ -2020,11 +2020,7 @@ class MAINFUNC{
             parse_str($str,$add_str);
             $arr_str=array_merge($arr_str,$add_str);
         }
-        foreach($arr_str as $key=>$v){
-           $return_string[$key]=sprintf("%s=%s",$key,$v);
-        }
-        $return_string=implode("&",$return_string);
-        return $return_string;
+        return http_build_query($arr_str);
     }    
     function load_privacy_term(){
         global $tpl,$cms_cfg,$db;
