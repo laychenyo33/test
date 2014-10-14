@@ -68,7 +68,7 @@ class PRODUCTS{
                                 "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['file_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
                                 "VALUE_P_SERIAL"    => $i,
                                 "VALUE_PC_NAME"     => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
-                                "VALUE_P_SPECIAL_PRICE" => $row["p_list_price"],
+                                "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"]?$row["p_special_price"]:$row["p_list_price"],
             ));
             //購物車
             //會員有登入改為顯示折扣價
