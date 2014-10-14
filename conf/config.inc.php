@@ -162,6 +162,8 @@ $cms_cfg['admin_subject'] = " from ".$_SERVER["HTTP_HOST"]."--[For Administrator
 //電子報產品敘述文字長度限制
 $cms_cfg['epaper_product_desc_limit'] = 150;    
 $cms_cfg['index_pop_ad_cate'] = 6;
+//設定時區
+date_default_timezone_set('Asia/Taipei');
 include_once("config.auth.php");
 
 ?>
