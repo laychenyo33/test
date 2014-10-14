@@ -607,6 +607,9 @@ class PRODUCTS{
                         ));
                     }
                     //$tpl->gotoBlock("BIG_IMG".$this->template_str);
+                    $amountArr = range(0,100);
+                    unset($amountArr[0]);
+                    App::getHelper('main')->multiple_select('amounts',$amountArr,1,$tpl);
                 }
                 //影片
                 if($cms_cfg['ws_module']['ws_products_mv'] && $row["p_mv"]){
