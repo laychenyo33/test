@@ -565,7 +565,7 @@ class PRODUCTS{
                     $show_price=1;
                 }
                 //詢價商品或是購物商品
-                if($show_price==0){
+                if($show_price==0 || $row['onsale']==0){
                     if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]==0){
                         if($cms_cfg["ws_module"]["ws_inquiry_type"] != 1){
                             $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["INQUIRY_CART"]);
