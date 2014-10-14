@@ -1,5 +1,5 @@
 <?
-putenv("TZ=Asia/Taipei");
+//putenv("TZ=Asia/Taipei");
 class DB {
   var $no_error = 0;
   var $on_error = "report";
