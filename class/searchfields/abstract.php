@@ -61,7 +61,10 @@ class searchFields_abstract {
                             }else{
                                 $callback = array($this,$this->default_compare);
                             }
-                            $tmp .= (($tmp)?" or ":""). call_user_func($callback,$field['fields'], $sk);
+                            $return = call_user_func($callback,$field['fields'], $sk);
+                            if($return){
+                                $tmp .= (($tmp)?" or ":"").$return;
+                            }
                         }
                     }
                 }            
