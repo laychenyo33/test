@@ -583,6 +583,7 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 .member_zone_table  tr.altrow {
 	background-color: #EAEAEA;
 }
+.member_zone_table  .nums{text-align:center}
 /* login & logout */
 .login_msg_error {
     font-size: 12px;
