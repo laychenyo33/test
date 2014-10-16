@@ -22,26 +22,36 @@
             </tr>
             <!-- END BLOCK : SHOPPING_CART_LIST -->
             <tr>
-                <td colspan="4">
-                    <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;
-                    </div>
+                <td colspan="5">
+                    <div align="right">{MSG_SUBTOTAL}:&nbsp;</div>
                 </td>
-                <td colspan="2"> {VALUE_SHIPPING_PRICE_STR}
+                <td> <span id="subtotal_price">{VALUE_SUBTOTAL}</span></td>
+            </tr>            
+            <!-- START BLOCK : MINUS_ROW -->
+            <tr id="minus_row">
+                <td colspan="5">
+                    <div align="right">折扣:&nbsp;</div>
                 </td>
+                <td> <span id="minus_price_str">-{VALUE_MINUS_PRICE}</span></td>
+            </tr> 
+            <!-- END BLOCK : MINUS_ROW -->               
+            <tr>
+                <td colspan="5">
+                    <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div>
+                </td>
+                <td> {VALUE_SHIPPING_PRICE_STR} </td>
             </tr>
             <!-- START BLOCK : CHARGE_FEE_ROW -->
             <tr>
-                <td colspan="4"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
-                <td colspan="2" align="left"> {VALUE_CHARGE_FEE}</td>
+                <td colspan="5"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
+                <td align="left"> {VALUE_CHARGE_FEE}</td>
             </tr>            
             <!-- END BLOCK : CHARGE_FEE_ROW -->            
             <tr>
-                <th colspan="4">
-                    <div align="right"> {MSG_TOTAL}:&nbsp;
-                    </div>
+                <th colspan="5">
+                    <div align="right"> {MSG_TOTAL}:&nbsp;</div>
                 </th>
-                <th colspan="2"> {VALUE_TOTAL}
-                </th>
+                <th> {VALUE_TOTAL}</th>
             </tr>
         </table>
     <!-- END BLOCK : SHOPPING_CART_ZONE  -->
