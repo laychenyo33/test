@@ -352,7 +352,7 @@ class PRODUCTS{
                 }
             }else{
                     $func_str="products.php?func=".$mode;
-                    $sql = $main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoDatas);
+                    $sql = $main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoData);
             }
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
