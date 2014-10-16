@@ -66,7 +66,7 @@ class PRINT_PAGE{
                     "VALUE_O_CONTENT" => $row["o_content"],
                     "VALUE_O_PLUS_PRICE" => App::getHelper('main')->format_shipprice_str($row['o_shippment_type'],$row["o_plus_price"]),
                     "VALUE_O_CHARGE_FEE" => $row["o_charge_fee"],
-                    "VALUE_O_MINUS_PRICE" => $row["o_minus_price"],
+                    "VALUE_O_MINUS_PRICE" => ($row["o_minus_price"]?"-":"").$row["o_minus_price"],
                     "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                     "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                     "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
