@@ -184,19 +184,17 @@ class PRODUCTS{
                 if($cms_cfg['ws_module']['ws_seo']){
                     //顯示上方簡述資料
                     if(trim($row["pc_seo_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示上方簡述資料
-                        $row["pc_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_seo_short_desc"]);
                         $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                        $tpl->assign("VALUE_PC_SHORT_DESC",  $row["pc_seo_short_desc"]);
+                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_short_desc"],'out'));
                     }
                     //顯示下方簡述資料
                     if(trim($row["pc_seo_down_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示下方簡述資料
-                        $row["pc_seo_down_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_seo_down_short_desc"]);
                         $tpl->newBlock("PRODUCTS_CATE_DOWN_SHORT_DESC");
-                        $tpl->assign("VALUE_PC_SHORT_DESC",  $row["pc_seo_down_short_desc"]);
+                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_down_short_desc"],'out'));
                     }
                 }
                 //pc_cate_desc
-                if($row['pc_desc']){
+                if($row['pc_desc']  && $row["pc_custom_status"]==0){
                     $tpl->newBlock('PRODUCTS_CATE_DESC');
                     $tpl->assign(array(
                         "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out'),
@@ -354,7 +352,7 @@ class PRODUCTS{
                 }
             }else{
                     $func_str="products.php?func=".$mode;
-                    $sql = $main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoDatas);
+                    $sql = $main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql,$showNoData);
             }
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
@@ -565,7 +563,7 @@ class PRODUCTS{
                     $show_price=1;
                 }
                 //詢價商品或是購物商品
-                if($show_price==0){
+                if($show_price==0 || $row['onsale']==0){
                     if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]==0){
                         if($cms_cfg["ws_module"]["ws_inquiry_type"] != 1){
                             $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["INQUIRY_CART"]);
@@ -607,6 +605,9 @@ class PRODUCTS{
                         ));
                     }
                     //$tpl->gotoBlock("BIG_IMG".$this->template_str);
+                    $amountArr = range(0,100);
+                    unset($amountArr[0]);
+                    App::getHelper('main')->multiple_select('amounts',$amountArr,1,$tpl);
                 }
                 //影片
                 if($cms_cfg['ws_module']['ws_products_mv'] && $row["p_mv"]){

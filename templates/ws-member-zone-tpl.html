@@ -228,26 +228,30 @@
                     <tr>
                         <td>{VALUE_P_SERIAL}</td>
                         <td>{VALUE_P_NAME}</td>
-                        <td>{VALUE_P_AMOUNT}</td>
-                        <td>{VALUE_P_SELL_PRICE}</td>
-                        <td>{VALUE_P_SUBTOTAL_PRICE}</td>
+                        <td class="nums">{VALUE_P_AMOUNT}</td>
+                        <td class="nums">{VALUE_P_SELL_PRICE}</td>
+                        <td class="nums">{VALUE_P_SUBTOTAL_PRICE}</td>
                     </tr>
                     <!-- END BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
                         <td colspan="4"><div align="right"> {MSG_SUBTOTAL}:&nbsp;</div></td>
-                        <td>{VALUE_O_SUBTOTAL_PRICE}</td>
+                        <td class="nums">{VALUE_O_SUBTOTAL_PRICE}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><div align="right"> 折扣:&nbsp;</div></td>
+                        <td class="nums"><span style="color:red">{VALUE_O_MINUS_PRICE}</span></td>
                     </tr>
                     <tr>
                         <td colspan="4"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
-                        <td>{VALUE_O_PLUS_PRICE}</td>
+                        <td class="nums">{VALUE_O_PLUS_PRICE}</td>
                     </tr>
                     <tr>
                         <td colspan="4"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
-                        <td> {VALUE_O_CHARGE_FEE}</td>
+                        <td class="nums"> {VALUE_O_CHARGE_FEE}</td>
                     </tr>                    
                     <tr>
                         <th colspan="4"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
-                        <th> {VALUE_O_TOTAL_PRICE}</th>
+                        <th class="nums"> {VALUE_O_TOTAL_PRICE}</th>
                     </tr>
                 </table>
             </td>

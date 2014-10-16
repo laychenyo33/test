@@ -54,30 +54,43 @@
                 <td>{VALUE_P_SUBTOTAL_PRICE}</td>
             </tr>
             <!-- END BLOCK : SHOPPING_CART_LIST -->
+            <tr id="subtotal_row">
+                <td colspan="5">
+                    <div align="right">{MSG_SUBTOTAL}:&nbsp;</div>
+                </td>
+                <td> <span id="subtotal_price">{VALUE_SUBTOTAL}</span></td>
+            </tr>
+            <!-- START BLOCK : MINUS_ROW -->
+            <tr id="minus_row">
+                <td colspan="5">
+                    <div align="right">折扣:&nbsp;</div>
+                </td>
+                <td> <span id="minus_price_str">-{VALUE_MINUS_PRICE}</span></td>
+            </tr>
+            <!-- END BLOCK : MINUS_ROW -->            
             <tr id="ship_row">
-                <td colspan="3">&nbsp;</td>
-                <td>
+                <td colspan="5">
                     <div align="right">{MSG_SHIPPING_PRICE}:&nbsp;</div>
                 </td>
-                <td colspan="2"> <span id="ship_price">{VALUE_SHIPPING_PRICE_STR}</span></td>
+                <td> <span id="ship_price">{VALUE_SHIPPING_PRICE_STR}</span></td>
             </tr>
             <tr id="discount_row" style="display:none">
-                <td colspan="4">
+                <td colspan="5">
                     <div align="right">折價:&nbsp;</div>
                 </td>
-                <td colspan="2"> <span id="s_minus_price" style="color:red">0</span></td>
+                <td> <span id="s_minus_price" style="color:red">0</span></td>
             </tr>            
             <tr id="charge_fee_row">
-                <td colspan="4">
+                <td colspan="5">
                     <div align="right"> {MSG_PLUS_FEE}:&nbsp;</div>
                 </td>
-                <td colspan="2"> <span id="s_charge_fee" >0</span></td>
-            </tr>            
+                <td> <span id="s_charge_fee" >0</span></td>
+            </tr>
             <tr>
-                <th colspan="4">
+                <th colspan="5">
                     <div align="right"> {MSG_TOTAL}:&nbsp;</div>
                 </th>
-                <th colspan="2"> <span id="s_total_price" origin-total-price="{VALUE_TOTAL}">{VALUE_TOTAL}</span></th>
+                <th> <span id="s_total_price" origin-total-price="{VALUE_TOTAL}">{VALUE_TOTAL}</span></th>
             </tr>
         </table>
     <!-- END BLOCK : SHOPPING_CART_ZONE -->
@@ -340,7 +353,7 @@
         <input type="hidden" name="o_charge_fee" id="o_charge_fee" value="0"/>
         <input type="hidden" name="o_plus_price" id="o_plus_price" origin-value="{VALUE_SHIPPING_PRICE}" value="{VALUE_SHIPPING_PRICE}"/>
         <input type="hidden" name="o_subtotal_price" id="o_subtotal_price" value="{VALUE_SUBTOTAL}"/>
-        <input type="hidden" name="o_minus_price" id="o_minus_price" value="0"/>
+        <input type="hidden" name="o_minus_price" id="o_minus_price" value="{VALUE_MINUS_PRICE}"/>
         <input type="hidden" name="o_total_price" id="o_total_price" value="{VALUE_TOTAL}"/>
         </form>
     <!-- END BLOCK : MEMBER_DATA_FORM -->
@@ -392,7 +405,7 @@
                var ship_price = parseInt($("#o_plus_price").val());
                var subtotal_price = parseInt($("#o_subtotal_price").val());
                var minus_price = parseInt($("#o_minus_price").val());
-               var total_price = subtotal_price + ship_price + charge_fee - minus_price;
+               var total_price = subtotal_price + (ship_price<0?0:ship_price) + charge_fee - minus_price;
                $("#s_charge_fee").text(charge_fee);
                $("#s_ship_price").text(ship_price);
                $("#s_minus_price").text(minus_price);

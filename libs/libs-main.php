@@ -2317,5 +2317,25 @@ class MAINFUNC{
             die();
         }        
     }
+    //格式化運費文字
+    function format_shipprice_str($shipment_type,$shipping_price){
+        if(empty($shipment_type))return 0;
+        if( $shipment_type<3 ){
+            switch($shipping_price){
+                case -2:
+                case -1:
+                    $shipping_price_str = "運費另計";
+                    break;
+                case 0:
+                    $shipping_price_str = "免運費";
+                    break;
+                default:
+                    $shipping_price_str = $shipping_price;
+            }
+        }else{
+            $shipping_price_str = "運費另計";
+        }
+        return $shipping_price_str;
+    }    
 }
 ?>

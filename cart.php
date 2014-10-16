@@ -368,6 +368,7 @@ class CART{
             $total_money=$subtotal_money+$shipping_price;
             $tpl->assignGlobal("VALUE_SHIPPING_PRICE",$shipping_price);
             $tpl->assignGlobal("VALUE_SHIPPING_PRICE_STR",($_POST['shipment_type']<3 && $shipping_price===0)?"滿額免運費":$shipping_price);
+            $tpl->assignGlobal("VALUE_MINUS_PRICE",0);
             $tpl->assignGlobal("VALUE_SUBTOTAL",$subtotal_money);
             $tpl->assignGlobal("VALUE_TOTAL",$total_money);
             //購物說明

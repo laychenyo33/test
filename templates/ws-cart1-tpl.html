@@ -29,12 +29,20 @@
 <!-- END BLOCK : SHOPPING_CART_LIST -->
 <tr>
     <td colspan="5">
-        <div align="right"> {MSG_SUBTOTAL}:&nbsp;
-        </div>
+        <div align="right">{MSG_SUBTOTAL}:&nbsp;</div>
     </td>
     <td> <span id="sub_total_str">{VALUE_SUBTOTAL}</span></td>
     <td></td>
 </tr> 
+<!-- START BLOCK : MINUS_ROW -->
+<tr>
+    <td colspan="5">
+        <div align="right">折扣:&nbsp;</div>
+    </td>
+    <td> <span id="minus_price_str">-{VALUE_MINUS_PRICE}</span></td>
+    <td></td>
+</tr> 
+<!-- END BLOCK : MINUS_ROW -->
 <tr>
     <td colspan="5">
         <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;
@@ -97,11 +105,12 @@
            $(":radio[name=shipment_type]").click(function(evt){
                 var dataStr = "func=ajax_show_ship_price&shipment_type="+$(this).val();
                 $.post("{TAG_ROOT_PATH}cart.php",dataStr,function(req){
-                    $("#sub_total_str").text(req.total_price);
+                    $("#sub_total_str").text(req.sub_total_price);
                     $("#ship_price").text(req.shipping_price);
-                    $("#o_subtotal_price").val(req.total_price);
+                    $("#o_subtotal_price").val(req.sub_total_price);
                     $("#o_plus_price").val(req.shipping_price);
-                    $("#formID").trigger("calculate");
+                    $("#total_str").text(req.total_price);
+                    //$("#formID").trigger("calculate");
                 },"json");
            });
            $("#formID").bind("calculate",function(evt){
@@ -138,7 +147,9 @@
                                 $("#ship_price").text(req.shipping_price);
                                 $("#o_subtotal_price").val(req.sub_total_price);
                                 $("#o_plus_price").val(req.shipping_price>=0?req.shipping_price:0);
-                                $("#formID").trigger("calculate");
+                                $("#minus_price_str").text('-'+req.minus_price);
+                                $("#total_str").text(req.total_price);
+                                //$("#formID").trigger("calculate");
                             }else{
                                 alert('error occure!');
                                 elm.val(cur);

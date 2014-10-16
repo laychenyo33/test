@@ -500,8 +500,8 @@ class PRODUCTS{
                                               "VALUE_PC_SEO_KEYWORD" => $row["pc_seo_keyword"],
                                               "VALUE_PC_SEO_DESCRIPTION" => $row["pc_seo_description"],
                                               "VALUE_PC_SEO_H1" => $row["pc_seo_h1"],
-                                              "VALUE_PC_SEO_SHORT_DESC" => $row["pc_seo_short_desc"],
-                                              "VALUE_PC_SEO_DOWN_SHORT_DESC" => $row["pc_seo_down_short_desc"],
+                                              "VALUE_PC_SEO_SHORT_DESC" => App::getHelper('main')->content_file_str_replace($row["pc_seo_short_desc"],'out'),
+                                              "VALUE_PC_SEO_DOWN_SHORT_DESC" => App::getHelper('main')->content_file_str_replace($row["pc_seo_down_short_desc"],'out'),
                                               "STR_PC_UP_SORT_CK1" => ($row["pc_up_sort"])?"checked":"",
                                               "STR_PC_UP_SORT_CK0" => ($row["pc_up_sort"])?"":"checked",
                                               "VALUE_PC_CROSS_CATE" => $row["pc_cross_cate"],
@@ -528,142 +528,45 @@ class PRODUCTS{
     //產品管理分類--資料更新
     function products_cate_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        if($this->seo){
-            $add_field_str="pc_name_alias,
-                            pc_seo_filename,
-                            pc_seo_title,
-                            pc_seo_keyword,
-                            pc_seo_description,
-                            pc_seo_short_desc,
-                            pc_seo_down_short_desc,
-                            pc_seo_h1,
-                            pc_up_sort,";
-            $add_value_str="'".htmlspecialchars($_REQUEST["pc_name_alias"])."',
-                            '".trim($_REQUEST["pc_seo_filename"])."',
-                            '".htmlspecialchars($_REQUEST["pc_seo_title"])."',
-                            '".htmlspecialchars($_REQUEST["pc_seo_keyword"])."',
-                            '".htmlspecialchars($_REQUEST["pc_seo_description"])."',
-                            '".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"],'in'))."',
-                            '".$_REQUEST["pc_seo_down_short_desc"]."',
-                            '".htmlspecialchars($_REQUEST["pc_seo_h1"])."',
-                            '".$_REQUEST["pc_up_sort"]."',";
-            $update_str="pc_name_alias='".htmlspecialchars($_REQUEST["pc_name_alias"])."',
-                         pc_seo_filename='".trim($_REQUEST["pc_seo_filename"])."',
-                         pc_seo_title='".htmlspecialchars($_REQUEST["pc_seo_title"])."',
-                         pc_seo_keyword='".htmlspecialchars($_REQUEST["pc_seo_keyword"])."',
-                         pc_seo_description='".htmlspecialchars($_REQUEST["pc_seo_description"])."',
-                         pc_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["pc_seo_short_desc"],'in'))."',
-                         pc_seo_down_short_desc='".$_REQUEST["pc_seo_down_short_desc"]."',
-                         pc_seo_h1='".htmlspecialchars($_REQUEST["pc_seo_h1"])."',
-                         pc_up_sort='".$_REQUEST["pc_up_sort"]."',";
-        }
-        switch ($_REQUEST["action_mode"]){
-            case "add":
-                $sql="
-                insert into ".$cms_cfg['tb_prefix']."_products_cate(
-                    pc_parent,
-                    pc_status,
-                    pc_sort,
-                    pc_name,
-                    pc_custom_status,
-                    pc_custom,
-                    pc_show_style,
-                    pc_cate_img,
-                    pc_desc,
-                    pc_redirect_url,
-                    pc_related_cate,
-                    pc_modifydate,
-                    ".$add_field_str."
-                    pc_cross_cate,
-                    pc_locked,
-                    pc_modifyaccount
-                ) values (
-                    '".$_REQUEST["pc_parent"]."',
-                    '".$_REQUEST["pc_status"]."',
-                    '".$_REQUEST["pc_sort"]."',
-                    '".htmlspecialchars($_REQUEST["pc_name"])."',
-                    '".$_REQUEST["pc_custom_status"]."',
-                    '".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"],'in'))."',
-                    '".$_REQUEST["pc_show_style"]."',
-                    '".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
-                    '".$main->content_file_str_replace($_REQUEST["pc_desc"],'in')."',
-                    '".$_REQUEST["pc_redirect_url"]."',
-                    '".$_REQUEST["pc_related_cate"]."',
-                    '".date("Y-m-d H:i:s")."',
-                    ".$add_value_str."
-                    '".$_REQUEST["pc_cross_cate"]."',
-                    '".$_REQUEST["pc_locked"]."',
-                    '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
-                )";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                if ( $db_msg == "" ) {
-                    $this->pc_id=$db->get_insert_id();
-                    //取得新的分類階層
-                    $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_cate","pc_id","pc",$this->pc_id,"",2);
-                    if(!empty($products_cate_layer)){
-                        $pc_layer="0-".implode("-",$products_cate_layer);
-                        $pc_level=count($products_cate_layer)+1;
-                    }else{
-                        $pc_layer="0-".$this->pc_id;
-                        $pc_level=1;
-                    }
-                    $sql="
-                        update ".$cms_cfg['tb_prefix']."_products_cate set
-                            pc_layer='".$pc_layer."',
-                            pc_level='".$pc_level."'
-                        where pc_id='".$this->pc_id."'
-                    ";
-                    $rs = $db->query($sql);
-                    $db_msg = $db->report();
-                }
-                break;
-            case "mod":
-                //取得新的分類階層
-                $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_cate","pc_id","pc",$_REQUEST["pc_parent"],"",2);
-                if(!empty($products_cate_layer)){
-                    $pc_layer="0-".implode("-",$products_cate_layer)."-".$_REQUEST["now_pc_id"];
-                    $pc_level=count($products_cate_layer)+1;
-                }else{
-                    $pc_layer="0-".$_REQUEST["now_pc_id"];
-                    $pc_level=1;
-                }
-                $sql="
-                update ".$cms_cfg['tb_prefix']."_products_cate set
-                    pc_parent='".$_REQUEST["pc_parent"]."',
-                    pc_layer='".$pc_layer."',
-                    pc_status='".$_REQUEST["pc_status"]."',
-                    pc_sort='".$_REQUEST["pc_sort"]."',
-                    pc_name='".htmlspecialchars($_REQUEST["pc_name"])."',
-                    pc_level='".$pc_level."',
-                    pc_custom_status='".$_REQUEST["pc_custom_status"]."',
-                    pc_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pc_custom"],'in'))."',
-                    pc_show_style='".$_REQUEST["pc_show_style"]."',
-                    pc_cate_img='".$main->file_str_replace($_REQUEST["pc_cate_img"])."',
-                    pc_desc='".$main->content_file_str_replace($_REQUEST["pc_desc"],'in')."',
-                    pc_redirect_url='".$_REQUEST["pc_redirect_url"]."',
-                    pc_related_cate='".$_REQUEST["pc_related_cate"]."',
-                    pc_modifydate='".date("Y-m-d H:i:s")."',
-                    ".$update_str."
-                    pc_cross_cate='".$_REQUEST["pc_cross_cate"]."',
-                    pc_locked='".$_REQUEST["pc_locked"]."',
-                    pc_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
-                where pc_id='".$_REQUEST["now_pc_id"]."'";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                break;
-        }
+        $writeData = array_merge($_POST,array(
+            'pc_id'             => $_REQUEST["now_pc_id"],
+            "pc_seo_short_desc" => $main->content_file_str_replace($_POST["pc_seo_short_desc"],'in'),
+            "pc_seo_down_short_desc" => $main->content_file_str_replace($_POST["pc_seo_down_short_desc"],'in'),
+            "pc_name"           => htmlspecialchars($_POST["pc_name"]),
+            "pc_custom"         => $main->content_file_str_replace($_POST["pc_custom"],'in'),
+            "pc_cate_img"       => $main->file_str_replace($_REQUEST["pc_cate_img"]),
+            "pc_desc"           => $main->content_file_str_replace($_REQUEST["pc_desc"],'in'),
+            "pc_modifydate"     => date("Y-m-d H:i:s"),
+            "pc_modifyaccount"  => App::getHelper('session')->USER_ACCOUNT,
+        ));
+        App::getHelper('dbtable')->products_cate->writeData($writeData);
+        $this->pc_id = ($_REQUEST["now_pc_id"])? $_REQUEST["now_pc_id"] : App::getHelper('dbtable')->products_cate->get_insert_id();
+        //更新分類階層
+        $products_cate_layer=$main->get_layer(App::getHelper('db')->prefix("products_cate"),"pc_id","pc",$_POST["pc_parent"],"",2);
+        if(!empty($products_cate_layer)){
+            $pc_layer="0-".implode("-",$products_cate_layer)."-".$this->pc_id;
+            $pc_level=count($products_cate_layer)+1;
+        }else{
+            $pc_layer="0-".$this->pc_id;
+            $pc_level=1;
+        }        
+        $pc_attr = array(
+            'pc_id'      => $this->pc_id,
+            'pc_layer'   => $pc_layer,
+            "pc_level"   => $pc_level,
+        );
+        App::getHelper('dbtable')->products_cate->writeData($pc_attr);
+        $db_msg = App::getHelper('dbtable')->products_cate->report();
         if ( $db_msg == "" ) {
             //更新產品的products category layer
             $sql="
-                update ".$cms_cfg['tb_prefix']."_products set
+                update ".App::getHelper('db')->prefix("products")." set
                     pc_layer='".$pc_layer."'
-                where pc_id='".$_REQUEST["now_pc_id"]."'";
+                where pc_id='".$this->pc_id."'";
             $rs = $db->query($sql);
             if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_cates']){//有應用領域
                 if($_POST['pa_id_str']){
-                    $pc_id = $_REQUEST["now_pc_id"]?$_REQUEST["now_pc_id"]:$this->pc_id;
-                    $db_msg .= $this->write_application($pc_id,$_POST['pa_id_str'],true);
+                    $db_msg .= $this->write_application($this->pc_id,$_POST['pa_id_str'],true);
                 }
             }            
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
@@ -1135,199 +1038,53 @@ class PRODUCTS{
             $this->ca_checkbox($row['p_ca']);        
         }
         $this->products_classify($row['classify_id']);
+        if(App::getHelper('session')->sc_cart_type==1){
+            $tpl->newBlock("ONSALE_ROW");
+            $main->multiple_radio("onsale",App::defaults()->yesno_status,isset($row['onsale'])? $row['onsale'] : 1, $tpl);
+        }
     }
 //產品管理--資料更新================================================================
     function products_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        if($this->seo){
-            $add_field_str="p_name_alias,
-                            p_seo_filename,
-                            p_seo_title,
-                            p_seo_keyword,
-                            p_seo_description,
-                            p_seo_h1,
-                            p_up_sort,";
-            $add_value_str="'".htmlspecialchars($_REQUEST["p_name_alias"])."',
-                            '".trim($_REQUEST["p_seo_filename"])."',
-                            '".htmlspecialchars($_REQUEST["p_seo_title"])."',
-                            '".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
-                            '".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                            '".htmlspecialchars($_REQUEST["p_seo_h1"])."',
-                            '".$_REQUEST["p_up_sort"]."',";
-            $update_str="p_name_alias = '".htmlspecialchars($_REQUEST["p_name_alias"])."',
-                         p_seo_filename='".trim($_REQUEST["p_seo_filename"])."',
-                         p_seo_title='".htmlspecialchars($_REQUEST["p_seo_title"])."',
-                         p_seo_keyword='".htmlspecialchars($_REQUEST["p_seo_keyword"])."',
-                         p_seo_description='".htmlspecialchars($_REQUEST["p_seo_description"])."',
-                         p_seo_h1='".htmlspecialchars($_REQUEST["p_seo_h1"])."',
-                         p_up_sort='".$_REQUEST["p_up_sort"]."',";
+        //寫入產品前的處理
+        $this->p_type=$_REQUEST["p_type1"]+$_REQUEST["p_type2"]+$_REQUEST["p_type3"];
+        //取得分類階層
+        $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_cate","pc_id","pc",$_REQUEST["pc_id"],"",2);
+        if(!empty($products_cate_layer)){
+            $pc_layer="0-".implode("-",$products_cate_layer);
+        }else{
+            $pc_layer="0-".$_REQUEST["pc_id"];
         }
+        $p_desc_strip_str=$main->replace_html_tags($_REQUEST["p_desc"]);        
+        $writeData = array_merge($_POST,array(
+            'p_id'         => $_REQUEST["now_p_id"],
+            'pc_layer'     => $pc_layer,
+            'p_custom'     => $main->content_file_str_replace($_REQUEST["p_custom"],'in'),
+            'p_type'       => $this->p_type,
+            'p_small_img'  => $main->file_str_replace($_REQUEST["p_small_img"]),
+            'p_spec'       => $main->content_file_str_replace($_REQUEST["p_spec"],'in'),
+            'p_character'  => $main->content_file_str_replace($_REQUEST["p_character"],'in'),
+            'p_desc'       => $main->content_file_str_replace($_REQUEST["p_desc"],'in'),
+            'p_desc_strip' => htmlspecialchars($p_desc_strip_str),
+            'p_seo_short_desc' => $main->content_file_str_replace($_REQUEST["p_seo_short_desc"],'in'),
+            'p_modifydate' => date("Y-m-d H:i:s"),
+            'p_modifyaccount' => App::getHelper('session')->USER_ACCOUNT,
+        ));        
+        if(App::configs()->ws_module->ws_products_upfiles){
+            $writeData['p_attach_file1'] = $main->file_str_replace($_REQUEST["p_attach_file1"]);
+            $writeData['p_attach_file2'] = $main->file_str_replace($_REQUEST["p_attach_file2"]);
+        } 
         if($cms_cfg['ws_module']['ws_products_info_fields']){
             for($j=1;$j<=$cms_cfg['ws_module']['ws_products_info_fields'];$j++){
-                switch($_REQUEST["action_mode"]){
-                    case "add":
-                        $add_extra_fields .= "p_info_field".$j."_title,";
-                        $add_extra_fields .= "p_info_field".$j.",";
-                        $add_extra_values .= "'".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
-                        $add_extra_values .= "'".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j],'in'))."',";
-                        break;
-                    case "mod":
-                        $update_extra_fields .= "p_info_field".$j."_title ='".$db->quote($_REQUEST['p_info_field'.$j.'_title'])."',";
-                        $update_extra_fields .= "p_info_field".$j."='".$db->quote($main->content_file_str_replace($_REQUEST['p_info_field'.$j],'in'))."',";
-                        break;
-                }
+                $writeData["p_info_field".$j."_title"] = $_REQUEST['p_info_field'.$j.'_title'];
+                $writeData["p_info_field".$j] = $main->content_file_str_replace($_REQUEST['p_info_field'.$j],'in');
             }
-        }
-        switch ($_REQUEST["action_mode"]){
-            case "add":
-                $this->p_type=$_REQUEST["p_type1"]+$_REQUEST["p_type2"]+$_REQUEST["p_type3"];
-                //取得分類階層
-                $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_cate","pc_id","pc",$_REQUEST["pc_id"],"",2);
-                if(!empty($products_cate_layer)){
-                    $pc_layer="0-".implode("-",$products_cate_layer);
-                }else{
-                    $pc_layer="0-".$_REQUEST["pc_id"];
-                }
-                $p_desc_strip_str=$main->replace_html_tags($_REQUEST["p_desc"]);
-                $sql="
-                    INSERT INTO ".$cms_cfg['tb_prefix']."_products(
-                        pc_id,
-                        pc_layer,
-                        p_status,
-                        p_sort,
-                        p_new_sort,
-                        p_hot_sort,
-                        p_pro_sort,
-                        p_name,
-                        p_custom_status,
-                        p_custom,
-                        p_show_style,
-                        p_type,
-                        p_show_price,
-                        p_list_price,
-                        p_special_price,
-                        p_serial,
-                        p_small_img,
-                        p_related_products,
-                        p_spec_title,
-                        p_spec,
-                        p_character_title,
-                        p_character,
-                        p_desc_title,
-                        p_desc,
-                        p_desc_strip,
-                        p_seo_short_desc,
-                        p_attach_file1,
-                        p_attach_file2,
-                        p_mv,
-                        p_ca,
-                        ".$add_extra_fields."
-                        p_modifydate,
-                        ".$add_field_str."
-                        p_cross_cate,
-                        p_locked,
-                        classify_id,
-                        p_modifyaccount
-                    ) VALUES (
-                        '".$_REQUEST["pc_id"]."',
-                        '".$pc_layer."',
-                        '".$_REQUEST["p_status"]."',
-                        '".$_REQUEST["p_sort"]."',
-                        '".$_REQUEST["p_new_sort"]."',
-                        '".$_REQUEST["p_hot_sort"]."',
-                        '".$_REQUEST["p_pro_sort"]."',
-                        '".htmlspecialchars($_REQUEST["p_name"])."',
-                        '".$_REQUEST["p_custom_status"]."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"],'in'))."',
-                        '".$_REQUEST["p_show_style"]."',
-                        '".$this->p_type."',
-                        '".$_REQUEST["p_show_price"]."',
-                        '".$_REQUEST["p_list_price"]."',
-                        '".$_REQUEST["p_special_price"]."',
-                        '".htmlspecialchars($_REQUEST["p_serial"])."',
-                        '".$main->file_str_replace($_REQUEST["p_small_img"])."',
-                        '".$_REQUEST["p_related_products"]."',
-                        '".$db->quote($_REQUEST["p_spec_title"])."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"],'in'))."',
-                        '".$db->quote($_REQUEST["p_character_title"])."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"],'in'))."',
-                        '".$db->quote($_REQUEST["p_desc_title"])."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"],'in'))."',
-                        '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
-                        '".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"],'in'))."',
-                        '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
-                        '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
-                        '".$db->quote($_REQUEST["p_mv"])."',
-                        '".implode(',',(array)$_REQUEST["p_ca"])."',
-                        ".$add_extra_values."    
-                        '".date("Y-m-d H:i:s")."',
-                        ".$add_value_str."
-                        '".$_REQUEST["p_cross_cate"]."',
-                        '".$_REQUEST["p_locked"]."',
-                        '".$_REQUEST["classify_id"]."',
-                        '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
-                    )";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                $this->p_id=$db->get_insert_id();
-                break;
-            case "mod":
-                $this->p_type=$_REQUEST["p_type1"]+$_REQUEST["p_type2"]+$_REQUEST["p_type3"];
-                //取得分類階層
-                $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_cate","pc_id","pc",$_REQUEST["pc_id"],"",2);
-                if(!empty($products_cate_layer)){
-                    $pc_layer="0-".implode("-",$products_cate_layer);
-                }else{
-                    $pc_layer="0-".$_REQUEST["pc_id"];
-                }
-                $p_desc_strip_str=$main->replace_html_tags($_REQUEST["p_desc"]);
-                $sql="
-                UPDATE ".$cms_cfg['tb_prefix']."_products SET
-                    pc_id = '".$_REQUEST["pc_id"]."',
-                    pc_layer = '".$pc_layer."',
-                    p_status = '".$_REQUEST["p_status"]."',
-                    p_sort = '".$_REQUEST["p_sort"]."',
-                    p_new_sort = '".$_REQUEST["p_new_sort"]."',
-                    p_hot_sort = '".$_REQUEST["p_hot_sort"]."',
-                    p_pro_sort = '".$_REQUEST["p_pro_sort"]."',
-                    p_name = '".htmlspecialchars($_REQUEST["p_name"])."',
-                    p_custom_status = '".$_REQUEST["p_custom_status"]."',
-                    p_custom = '".$db->quote($main->content_file_str_replace($_REQUEST["p_custom"],'in'))."',
-                    p_show_style = '".$_REQUEST["p_show_style"]."',
-                    p_type = '".$this->p_type."',
-                    p_show_price = '".$_REQUEST["p_show_price"]."',
-                    p_list_price = '".$_REQUEST["p_list_price"]."',
-                    p_special_price = '".$_REQUEST["p_special_price"]."',
-                    p_serial = '".htmlspecialchars($_REQUEST["p_serial"])."',
-                    p_small_img = '".$main->file_str_replace($_REQUEST["p_small_img"])."',
-                    p_related_products = '".$_REQUEST["p_related_products"]."',
-                    p_spec_title = '".$db->quote($_REQUEST["p_spec_title"])."',
-                    p_spec = '".$db->quote($main->content_file_str_replace($_REQUEST["p_spec"],'in'))."',
-                    p_character_title = '".$db->quote($_REQUEST["p_character_title"])."',
-                    p_character = '".$db->quote($main->content_file_str_replace($_REQUEST["p_character"],'in'))."',
-                    p_desc_title = '".$db->quote($_REQUEST["p_desc_title"])."',
-                    p_desc = '".$db->quote($main->content_file_str_replace($_REQUEST["p_desc"],'in'))."',
-                    p_desc_strip = '".$db->quote(htmlspecialchars($p_desc_strip_str))."',
-                    p_seo_short_desc='".$db->quote($main->content_file_str_replace($_REQUEST["p_seo_short_desc"],'in'))."',
-                    p_attach_file1 = '".$main->file_str_replace($_REQUEST["p_attach_file1"])."',
-                    p_attach_file2 = '".$main->file_str_replace($_REQUEST["p_attach_file2"])."',
-                    p_mv = '".$db->quote($_REQUEST["p_mv"])."',
-                    p_ca = '".implode(',',(array)$_REQUEST["p_ca"])."',
-                    ".$update_extra_fields."    
-                    p_modifydate = '".date("Y-m-d H:i:s")."',
-                    ".$update_str."
-                    p_cross_cate = '".$_REQUEST["p_cross_cate"]."',
-                    p_locked = '".$_REQUEST["p_locked"]."',
-                    classify_id = '".$_REQUEST["classify_id"]."',
-                    p_modifyaccount = '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
-                WHERE p_id ='".$_REQUEST["now_p_id"]."' ";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                $this->p_id=$_REQUEST["now_p_id"];
-                break;
-        }
+        }        
+        App::getHelper('dbtable')->products->writeData($writeData);
+        $db_msg = App::getHelper('dbtable')->products->report();
         $returnJson['code']=0;
         if ( $db_msg == "" ) {
+            $this->p_id = $_REQUEST["now_p_id"]? $_REQUEST["now_p_id"] :  App::getHelper('dbtable')->products->get_insert_id();
             $p_big_img_replace_str="";
             for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){
                     $p_img_target="p_big_img".$j;
