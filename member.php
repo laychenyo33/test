@@ -593,7 +593,7 @@ class MEMBER{
                                               "VALUE_O_RECI_ADDRESS" => $row["o_reci_city"].$row["o_reci_area"].$row["o_reci_address"],
                                               "VALUE_O_RECI_TEL" => $row["o_reci_tel"],
                                               "VALUE_O_RECI_EMAIL" => $row["o_reci_email"],
-                                              "VALUE_O_PLUS_PRICE" => $row["o_plus_price"],
+                                              "VALUE_O_PLUS_PRICE" => App::getHelper('main')->format_shipprice_str($row['o_shippment_type'],$row["o_plus_price"]),
                                               "VALUE_O_CHARGE_FEE" => $row["o_charge_fee"],
                                               "VALUE_O_MINUS_PRICE" => $row["o_minus_price"],
                                               "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
