@@ -184,15 +184,13 @@ class PRODUCTS{
                 if($cms_cfg['ws_module']['ws_seo']){
                     //顯示上方簡述資料
                     if(trim($row["pc_seo_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示上方簡述資料
-                        $row["pc_seo_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_seo_short_desc"]);
                         $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                        $tpl->assign("VALUE_PC_SHORT_DESC",  $row["pc_seo_short_desc"]);
+                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_short_desc"],'out'));
                     }
                     //顯示下方簡述資料
                     if(trim($row["pc_seo_down_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示下方簡述資料
-                        $row["pc_seo_down_short_desc"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["pc_seo_down_short_desc"]);
                         $tpl->newBlock("PRODUCTS_CATE_DOWN_SHORT_DESC");
-                        $tpl->assign("VALUE_PC_SHORT_DESC",  $row["pc_seo_down_short_desc"]);
+                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_down_short_desc"],'out'));
                     }
                 }
                 //pc_cate_desc
