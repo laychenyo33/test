@@ -196,7 +196,7 @@ class PRODUCTS{
                     }
                 }
                 //pc_cate_desc
-                if($row['pc_desc']){
+                if($row['pc_desc']  && $row["pc_custom_status"]==0){
                     $tpl->newBlock('PRODUCTS_CATE_DESC');
                     $tpl->assign(array(
                         "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out'),
