@@ -1,0 +1,154 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>內容變數管理</h1>
+<form name="myform" method="post" action="products.php?func=pt_replace"  class="formular" id="formID">
+	<table width="300" border="0" cellpadding="0" cellspacing="0" class="formtable" id="pt_table">
+		<tr>
+			<th width="120">變數名稱</th>
+			<th width="320">變數內容</th>
+			<th width="60">刪除</th>                        
+		</tr>
+		<!-- START BLOCK : TAG_PT_LIST -->
+		<tr class="pt_list" rel="{VALUE_PT_ROW}">
+			<td>
+				<input type="text" name="oname[{ID}]" value="{NAME}">
+			</td>
+			<td>
+				<input type="text" name="ovalue[{ID}]" value="{VALUE}" style="width:300px">
+			</td>
+                        <td>
+				<input type="button" name="pt_del" value=" 刪 除 " rel="{ID}">                            
+                        </td>
+		</tr>
+		<!-- END BLOCK : TAG_PT_LIST -->
+		<tr id="pt_list_end">
+			<td colspan="3">
+				<input type="button" name="pt_add" value=" 增加變數 ">
+				&nbsp;&nbsp;
+				<input type="submit" id="save" name="submit" value=" 儲存 " />
+				&nbsp;&nbsp;
+                                <span id="ajax-msg"></span>
+			</td>
+		</tr>
+                <tr>
+                    <td colspan="3">
+                        <div class="desc">
+                            內容變數設定及使用說明:
+                            <ul>
+                                <li>變數名稱不可重複</li>
+                                <li>變數名稱僅可使用於套編輯器的欄位</li>
+                                <li>實際使用時，請將變數名稱以{}包起來，例如var1，實際放的時候請用&#123;var1&#125;</li>
+                                <li>內容變數僅在前台會顯示內容，後台編輯時仍會以變數形式呈現，例如&#123;var1&#125;。</li>
+                                <li>此功能僅在行銷案件才會啟用</li>
+                                <li>此功能的優點在於日後需修改時，僅需在此處修改一次便可套用到對應的變數，但新增內容時可能沒有幫助。</li>
+                                <li>此功能沒有另外做列表，新增內容時建議開一個編輯視窗，一個內容變數視窗，以利使用。</li>
+                                <li>資料表欄位有長度限制，最大長度是255個字元，文字過長在儲存時會自動從尾端刪節。</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+	</table>
+</form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->
+
+<script>
+	$(function(){
+		$(document).tip_box({
+			BG : "#FFF", //背景顏色
+			BC : "#CCC", //邊框顏色
+			COLOR : "#000", //文字顏色
+			SHADOW : "#333", //陰影顏色
+			DIR : "1", //出現位置 : 1 => 上方, 2 => 右方 , 3 => 下方, 4 => 左方
+			VAL_FROM : "4", //內容取得位置 : 1 => rel參數, 2 => href參數 , 3 => src參數, 4 => value參數
+			ACT_ID : ".img_manage", //指定啟動元素 ID or Class (css 選取方法)
+			VAL_ID : "", //指定內容元素 ID
+			AFTER :  function() {  }, // 動作後執行擴充
+		},function(VAL){
+			//callback
+			return '<img src="'+ VAL +'" width="150">';
+		});
+		
+		$(document).on("click",".clear",function(){
+			$(this).prev("input[class=img_manage]").val("");
+		})
+		
+                $("#save").click(function(evt){
+                    evt.preventDefault();
+                    $("#ajax-msg").removeClass('ajax-error');
+                    $("#ajax-msg").text("儲存中....");
+                    var data = $(myform).serialize();
+                    $.post("system-config.php?func=sys-vars",data,function(req){
+                        if(req=='1'){
+                            location.reload();
+//                            $("#ajax-msg").text("已儲存").delay(1000).fadeOut(function(){
+//                                $("#ajax-msg").empty();
+//                                $("#ajax-msg").show();
+//                            });
+                        }else{
+                            $("#ajax-msg").addClass('ajax-error').text("無法儲存!請檢查是否變數名稱重覆!");
+                        }
+                    });
+                });
+		//----
+		$("input[name=pt_add]").click(function(){
+			var PT_ROW = 0;
+
+			$(".pt_list").each(function(){
+				var PT_LIST_ROW = Number($(this).attr("rel"));
+				if(PT_LIST_ROW >= PT_ROW){
+					PT_ROW = PT_LIST_ROW;
+				}
+			});
+			
+			PT_ROW++;
+			
+			$("#pt_list_end").before(
+				'<tr class="pt_list" rel="'+ PT_ROW +'">'+
+					'<td>'+
+						'<input type="text" name="nname['+ PT_ROW +']">'+
+					'</td>'+
+					'<td>'+
+						'<input type="text" name="nvalue['+ PT_ROW +']" value="" style="width:300px">'+
+					'</td>'+
+					'<td>'+
+						'<input type="button" name="pt_del" value=" 刪 除 "> '+
+					'</td>'+
+				'</tr>'
+			);
+		});
+		
+                
+                function delRow(rowObj){
+                    rowObj.remove();
+                    $("#ajax-msg").text("已刪除!").delay(1000).fadeOut(function(){
+                        $("#ajax-msg").empty().show();
+                    });
+                }
+		//----
+		$(document).on("click","input[name=pt_del]",function(){
+			if(!confirm('確定刪除此類別??')){
+				return false;
+			}
+                        $("#ajax-msg").removeClass('ajax-error');
+                        $("#ajax-msg").text("刪除中....");			
+			var PT_ID = $(this).attr('rel');
+			var obj = $(this);
+			if(PT_ID != ""){
+                            var params = { 
+                                id: PT_ID
+                            };
+                            $.post("system-config.php?func=sys-vars-del",params,function(req){
+                                if(req.code==1){
+                                    delRow(obj.parents(".pt_list"));
+                                }else{
+                                    $("#ajax-msg").addClass('ajax-error').text("沒有刪除任何記錄!");
+                                }
+                            },'json');
+			}else{
+                            delRow(obj.parents(".pt_list"));
+                        }
+			
+		});
+	});
+</script>

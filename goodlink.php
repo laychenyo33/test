@@ -90,12 +90,12 @@ class GOODLINK{
                 "VALUE_LC_ID"  => $row["lc_id"],
                 "VALUE_L_ID"  => $row["l_id"],
                 "VALUE_L_SUBJECT" => $row["l_subject"],
-                "VALUE_L_LINK" => $main->content_file_str_replace($row["l_url"],'out'),
+                "VALUE_L_LINK" => $main->content_file_str_replace($row["l_url"],'out2'),
                 "VALUE_L_MODIFYDATE" => substr($row["l_modifydate"],0,10),
                 "VALUE_L_TARGET" => ($row["l_pop"])?"_blank":"_parent",
                 "VALUE_L_SERIAL" => $i,
                 "VALUE_L_S_PIC" => $img,
-                "VALUE_L_STRIP_CONTENT" => $main->content_file_str_replace(strip_tags($row["l_content"]),'out'),
+                "VALUE_L_STRIP_CONTENT" => $main->content_file_str_replace(strip_tags($row["l_content"]),'out2'),
             ));
         }
     }

@@ -155,7 +155,7 @@ class CONTACTUS{
         $row = $db->fetch_array($selectrs,1);
         $contentus_term=trim($row["st_contactus_term"]);
         if(!empty($contentus_term)){
-            $row["st_contactus_term"]=$main->content_file_str_replace($row["st_contactus_term"],'out');
+            $row["st_contactus_term"]=$main->content_file_str_replace($row["st_contactus_term"],'out2');
             $tpl->assignGlobal("MSG_CONTACTUS_TERM",$row["st_contactus_term"]);
         }
         //啟用驗証碼顯示錯誤訊息

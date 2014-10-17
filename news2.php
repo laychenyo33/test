@@ -177,7 +177,7 @@ class NEWS{
         $tpl->newBlock( "NEWS_SHOW" );
         $tpl->assign( array("VALUE_N_ID"  => $row["n_id"],
                             "VALUE_N_SUBJECT" => $row["n_subject"],
-                            "VALUE_N_CONTENT" => $main->content_file_str_replace($row["n_content"],'out'),
+                            "VALUE_N_CONTENT" => $main->content_file_str_replace($row["n_content"],'out2'),
                             "VALUE_N_MODIFYDATE" => $row["n_modifydate"],
         ));
         //指定TAG_LAYER

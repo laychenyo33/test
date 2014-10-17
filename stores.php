@@ -108,7 +108,7 @@ class STORES{
             $tpl->assign( array("VALUE_SDC_ID"  => $row["sdc_id"],
                                 "VALUE_SD_ID"  => $row["sd_id"],
                                 "VALUE_SD_NAME" => $row["sd_name"],
-                                "VALUE_SD_DESC" => $main->content_file_str_replace($row["sd_desc"],'out'),
+                                "VALUE_SD_DESC" => $main->content_file_str_replace($row["sd_desc"],'out2'),
                                 "VALUE_SD_SERIAL" => $i,
                                 "VALUE_SD_IMG" => $sd_img,
                                 "VALUE_SD_URL" => $row['sd_url'],
