@@ -87,7 +87,7 @@ class SERVICE{
         }
         if($rsnum > 0){
             $tpl->newBlock( "SERVICE_TERM_SHOW" );
-            $tpl->assignGlobal( "VALUE_SERVICE_TERM_CONTENT" , $main->content_file_str_replace($row[$field],'out'));
+            $tpl->assignGlobal( "VALUE_SERVICE_TERM_CONTENT" , $main->content_file_str_replace($row[$field],'out2'));
         }
     }
 }

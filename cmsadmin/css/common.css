@@ -692,3 +692,30 @@ span.current{color:#f00}
 .related-prod-selector li span{}
 .related-prod-selector li a{padding:1px 2px;background:red;color:white;}
 .related-prod-selector .clear{clear:both}
+
+#pt_table{
+	width: 500px;
+}
+#pt_table th{
+	padding: 6px 0;
+	text-align: center;
+	letter-spacing: 0.05em;
+}
+#pt_table .pt_list td{
+	text-align: center;
+}
+#pt_table .pt_list input{
+	margin: auto;
+}
+#pt_table input[type=text]{
+	width: 60%;
+}
+#pt_table input[type=text] + .clear{
+	width: 30px;
+}
+#pt_table .img_manage{
+	
+}
+
+#ajax-msg{color:#00f}
+#ajax-msg.ajax-error{color:#f00}

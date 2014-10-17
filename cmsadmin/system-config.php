@@ -14,6 +14,18 @@ class SYSTEMCFG{
         global $db,$cms_cfg,$tpl;
         $this->current_class="SC";
         switch($_REQUEST["func"]){
+            case "sys-vars":
+                $this->current_class="SV";
+                $this->ws_tpl_file = "templates/ws-manage-system-vars-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                App::getHelper('main')->res_init('tip','get','box');
+                $this->system_vars();
+                $this->ws_tpl_type=1;
+                break;            
+            case "sys-vars-del":
+                $this->system_vars_del();
+                break;
             case "sc_mod":  //系統設定
                 $this->ws_tpl_file = "templates/ws-manage-system-config-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -330,6 +342,73 @@ class SYSTEMCFG{
             }
         }
     }       
+    
+    function system_vars($pt_id=0,$pt_select=false){
+            global $db,$cms_cfg,$tpl;
+            if(App::getHelper('request')->isAjax()){
+                if(App::getHelper('request')->isPost()){
+                    $res['code'] = 1;
+                    //新值
+                    if(is_array($_POST['nname'])){
+                        foreach($_POST['nname'] as $k => $v){
+                            $varSet = array(
+                                'name' => $_POST['nname'][$k],
+                                'value' => $_POST['nvalue'][$k],
+                            );
+                            App::getHelper('dbtable')->system_vars->writeData($varSet);
+                        }
+                    }
+                    if(App::getHelper('dbtable')->system_vars->report()==""){
+                        //舊值
+                        if(is_array($_POST['oname'])){
+                            foreach($_POST['oname'] as $k => $v){
+                                $varSet = array(
+                                    'id'   => $k,
+                                    'name' => $_POST['oname'][$k],
+                                    'value' => $_POST['ovalue'][$k],
+                                );
+                                App::getHelper('dbtable')->system_vars->writeData($varSet);
+                            }
+                        }
+                        if(App::getHelper('dbtable')->system_vars->report()!==""){
+                            $res['code'] = 0;
+                        }
+                    }else{
+                        $res['code'] = 0;
+                    }
+                    echo $res['code'];
+                }
+                die();
+            }
+
+            $sql="select * from ".$cms_cfg['tb_prefix']."_system_vars order by id ".$cms_cfg["sort_pos"];
+            $selectrs = $db->query($sql);
+            $rsnum    = $db->numRows($selectrs);
+
+            if(!empty($rsnum)){
+                    while($row = $db->fetch_array($selectrs,1)){
+                            $tpl->newBlock("TAG_PT_LIST");
+                            foreach($row as $k => $v){
+                                $tpl->assign(strtoupper($k),$v);
+                            }
+                    }
+            }
+    }    
+    //刪除系統變數
+    function system_vars_del(){
+        if(App::getHelper('request')->isAjax() && App::getHelper('request')->isPost() ){
+            if(isset($_POST['id'])){
+                $res['code'] = 0;
+                App::getHelper('dbtable')->system_vars->del($_POST['id']);
+                if(App::getHelper('dbtable')->system_vars->affected_rows()>0){
+                    $res['code'] = 1;
+                }
+                echo json_encode($res);
+            }
+        }
+        die();
+    }
+    
 }
 //ob_end_flush();
 ?>

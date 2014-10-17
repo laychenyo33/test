@@ -185,19 +185,19 @@ class PRODUCTS{
                     //顯示上方簡述資料
                     if(trim($row["pc_seo_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示上方簡述資料
                         $tpl->newBlock("PRODUCTS_CATE_SHORT_DESC");
-                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_short_desc"],'out'));
+                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_short_desc"],'out2'));
                     }
                     //顯示下方簡述資料
                     if(trim($row["pc_seo_down_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示下方簡述資料
                         $tpl->newBlock("PRODUCTS_CATE_DOWN_SHORT_DESC");
-                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_down_short_desc"],'out'));
+                        $tpl->assign("VALUE_PC_SHORT_DESC",  App::getHelper('main')->content_file_str_replace($row["pc_seo_down_short_desc"],'out2'));
                     }
                 }
                 //pc_cate_desc
                 if($row['pc_desc']  && $row["pc_custom_status"]==0){
                     $tpl->newBlock('PRODUCTS_CATE_DESC');
                     $tpl->assign(array(
-                        "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out'),
+                        "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out2'),
                     ));
                 }
             }else{
@@ -221,7 +221,7 @@ class PRODUCTS{
                     //顯示產品主頁自訂頁
                     if(trim($row["mt_seo_custom"])) {
     //                        $row["mt_seo_custom"]=preg_replace("/src=\"([^>]+)upload_files/","src=\"".$cms_cfg["file_root"]."upload_files",$row["mt_seo_custom"]);
-                            $row["mt_seo_custom"]=$main->content_file_str_replace($row["mt_seo_custom"],'out');
+                            $row["mt_seo_custom"]=$main->content_file_str_replace($row["mt_seo_custom"],'out2');
                             $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
                             $tpl->assign("VALUE_PC_CUSTOM",$row["mt_seo_custom"]);
                             $custom=1;
@@ -274,7 +274,7 @@ class PRODUCTS{
                                          "VALUE_PC_SHOW_STYLE" => $row["pc_show_style"],
                                          "VALUE_PC_CATE_IMG" => $pc_img,
                                          "VALUE_PC_SERIAL" => $i,
-                                         "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out'),
+                                         "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out2'),
                     ));
                     $dimensions["width"]=$cms_cfg['small_img_width'];
                     $dimensions["height"]=$cms_cfg['small_img_height'];
@@ -301,7 +301,7 @@ class PRODUCTS{
         //階層
         $func_str="";
         if($row["pc_custom_status"]==1){//自訂頁面
-                $row["pc_custom"] = $main->content_file_str_replace($row["pc_custom"],'out');
+                $row["pc_custom"] = $main->content_file_str_replace($row["pc_custom"],'out2');
                 $tpl->newBlock("PRODUCTS_CATE_CUSTOM");
                 $tpl->assign("VALUE_PC_CUSTOM",$row["pc_custom"]);
         }else{
@@ -531,7 +531,7 @@ class PRODUCTS{
                     "VALUE_P_ID"         => $row["p_id"]
                 ));
                 $tpl->newBlock("PRODUCTS_DETAIL_CUSTOM");
-                $row["p_custom"] = $main->content_file_str_replace($row["p_custom"],'out');
+                $row["p_custom"] = $main->content_file_str_replace($row["p_custom"],'out2');
                 $tpl->assign("VALUE_P_CUSTOM",$row["p_custom"]);
                 if($cms_cfg['ws_module']['ws_products_custom_inquiry']){
                     $tpl->newBlock("INQUIRY_IN_CUSTOM");
@@ -671,7 +671,7 @@ class PRODUCTS{
                     if(trim($ck_str)!=""){
                         $tmp = array(
                             'title'=>($cms_cfg["ws_module"]["ws_products_title"]==1)?$row[$property['field']."_title"]:$property['defaultTitle'],
-                            'data'=>$main->content_file_str_replace($row[$property['field']],'out')
+                            'data'=>$main->content_file_str_replace($row[$property['field']],'out2')
                         );
                         $domtabData[$property['sort']] = $tmp;
                     }

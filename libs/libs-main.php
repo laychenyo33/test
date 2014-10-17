@@ -658,6 +658,7 @@ class MAINFUNC{
         ($cms_cfg["ws_module"]["ws_member_msg"])?$tpl->newBlock( "AUTHORITY_MEMBER_MESSAGE" ):"";//會員公告
         ($cms_cfg['ws_module']['ws_multi_shipprice'])?$tpl->newBlock( "AUTHORITY_MULTI_SHIPPRICE" ):"";//訂單金額區段運費管理
         ($cms_cfg['ws_module']['ws_multi_chargefee'])?$tpl->newBlock( "AUTHORITY_MULTI_CHARGEFEE" ):"";//訂單金額區段手續費管理
+        if($cms_cfg["ws_module"]["ws_seo"]) $tpl->newBlock("AUTHORITY_SYSVARS"); //內容變數
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
     }
@@ -1151,6 +1152,13 @@ class MAINFUNC{
                 )
             )
         );
+        if($direction=='out2'){
+            $direction = "out";
+            if(App::configs()->ws_module->ws_seo){
+                $replace_option[$direction]['pattern'] = array_merge($replace_option[$direction]['pattern'],App::getHelper('sysvars')->getPattern());
+                $replace_option[$direction]['replace'] = array_merge($replace_option[$direction]['replace'],App::getHelper('sysvars')->getReplace());
+            }
+        }
         return preg_replace( $replace_option[$direction]['pattern'] , $replace_option[$direction]['replace'] , $content);
     }    
     //鎖滑鼠右鍵功能
