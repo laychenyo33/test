@@ -1155,8 +1155,8 @@ class MAINFUNC{
         if($direction=='out2'){
             $direction = "out";
             if(App::configs()->ws_module->ws_seo){
-                $replace_option[$direction]['pattern'] = array_merge($replace_option[$direction]['pattern'],App::getHelper('sysvars')->getPattern());
-                $replace_option[$direction]['replace'] = array_merge($replace_option[$direction]['replace'],App::getHelper('sysvars')->getReplace());
+                $replace_option[$direction]['pattern'] = array_merge($replace_option[$direction]['pattern'],(array)App::getHelper('sysvars')->getPattern());
+                $replace_option[$direction]['replace'] = array_merge($replace_option[$direction]['replace'],(array)App::getHelper('sysvars')->getReplace());
             }
         }
         return preg_replace( $replace_option[$direction]['pattern'] , $replace_option[$direction]['replace'] , $content);
