@@ -626,7 +626,7 @@ class EBOOK{
                         eb_modifyaccount
                     ) VALUES (
                         '".$_REQUEST["ebc_id"]."',
-                        '".$_REQUEST["ebc_layer"]."',
+                        '".$ebc_layer."',
                         '".$_REQUEST["eb_status"]."',
                         '".$_REQUEST["eb_sort"]."',
                         '".htmlspecialchars($_REQUEST["eb_name"])."',
