@@ -87,6 +87,9 @@
 			<div class="btn01">
 				<div class="btn02"><a href="javascript:document.myform.submit();">Inquiry</a></div>
 				<div class="btn02"><a href="javascript:addBookmarkForBrowser(document.title,document.URL);">Favorite</a></div>
+                                <!-- START BLOCK : PROD_COLLECT -->
+				<div class="btn02"><a href="#" class="prodToCollect" rel="{VALUE_P_ID}">我要收藏(<span id="collectnums">{MSG_COLLECT_NUMS}</span>)</a></div>
+                                <!-- END BLOCK : PROD_COLLECT -->
 			</div>
 
             <!-- START BLOCK : ATTACH_FILE1 -->
@@ -170,3 +173,18 @@
        <div id="ytplayer"></div>
 </div>
 <!-- END BLOCK : MV_CONTAINER -->
+<script type="text/javascript">
+    jQuery(function($){
+        $(".prodToCollect").click(function(evt){
+            evt.preventDefault();
+            var data = new Object();
+            data.p_id = $(this).attr('rel');
+            $.post("{TAG_ROOT_PATH}member.php?func=ajax&action=collect",data,function(res){
+                alert(res.msg);
+                if(res.code==1){
+                    $("#collectnums").text(res.nums);
+                }
+            },'json');
+        });
+    });
+</script>

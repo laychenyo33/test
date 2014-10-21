@@ -65,6 +65,7 @@ class PRODUCTS{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $main->header_footer("",$TPLMSG["PRODUCTS"]);
                 $this->products_search();
+                $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
                 $this->ws_tpl_type=1;
                 break;
             default:    //產品分類列表
@@ -294,9 +295,11 @@ class PRODUCTS{
                     }
                 }
             }
+            $main->pageview_history($main->get_main_fun(),$this->parent,App::getHelper('session')->MEMBER_ID);
         }else{
             //最新產品、促銷產品、熱門產品
             $main->header_footer("");
+            $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
         }
         //階層
         $func_str="";
@@ -503,6 +506,8 @@ class PRODUCTS{
         $row = $db->fetch_array($selectrs,1);
         $rsnum    = $db->numRows($selectrs);
         if ($rsnum > 0) {
+            //寫入產品瀏覽記錄
+            $main->pageview_history($main->get_main_fun(),$row['p_id'],App::getHelper('session')->MEMBER_ID);         
             //取得左方分類列表--brother layer
             //$this->left_cate_list($row["pc_id"]);
             $seo_H1=(trim($row["p_seo_h1"]))?$row["p_seo_h1"]:$row["p_name"];
@@ -712,6 +717,11 @@ class PRODUCTS{
                 //相關產品
                 if($cms_cfg["ws_module"]["ws_products_related"]==1){
                     $this->related_products($row["p_related_products"],$row["pc_id"],$cms_cfg['ws_module']['ws_products_related_effect']);
+                }
+                //收藏數量
+                if(App::configs()->ws_module->ws_products_collect){
+                    $tpl->newBlock("PROD_COLLECT");
+                    $tpl->assign("MSG_COLLECT_NUMS",$main->collect_nums($row['p_id']));
                 }
             }
         }else{

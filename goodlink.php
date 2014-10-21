@@ -14,16 +14,12 @@ class GOODLINK{
                 $this->ws_tpl_file = "templates/ws-goodlink-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->goodlink_list();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("lc",$_REQUEST["lc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
             default:    //相關網站列表
                 $this->ws_tpl_file = "templates/ws-goodlink-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->goodlink_list();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("lc",$_REQUEST["lc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
         }
@@ -68,6 +64,7 @@ class GOODLINK{
         }else{
             $lc_id=0;
         }
+        $main->pageview_history($main->get_main_fun(),$lc_id,App::getHelper('session')->MEMBER_ID);                
         $sql="select * from ".$cms_cfg['tb_prefix']."_goodlink where l_status='1' ".$and_str." order by l_sort ".$cms_cfg['sort_pos'].",l_modifydate desc";
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);

@@ -78,12 +78,13 @@ class EBOOK{
     }
     //EBOOK--列表================================================================
     function ebook_list($mode){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //預設EBOOK列表
         $sql="select ebc_id from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_status='1' order by ebc_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         $this->parent=($_REQUEST["ebc_parent"])?$_REQUEST["ebc_parent"]:$row["ebc_id"];
+        $main->pageview_history($main->get_main_fun(),$this->parent,App::getHelper('session')->MEMBER_ID);        
         //分類標題
         $sql = "select ebc_name from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_status='1' and ebc_id='".$this->parent."'";
         $selectrs = $db->query($sql);
@@ -205,7 +206,8 @@ class EBOOK{
                         foreach($ebook_cate_layer as $cblink) {
                             $main->layer_link($cblink);
                         }
-                    }                    
+                    }
+                    $main->pageview_history($main->get_main_fun(),$row['eb_id'],App::getHelper('session')->MEMBER_ID);
                 }
             }
         }

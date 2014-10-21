@@ -16,8 +16,6 @@ class GALLERY{
                 $this->ws_tpl_file = "templates/ws-gallery-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->{$list_method}();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("gc",$_REQUEST["gc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
             case "g_show"://活動剪影顯示
@@ -25,16 +23,12 @@ class GALLERY{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_POP_IMG");
                 $this->gallery_show();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("g",$_REQUEST["g_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
             default:    //活動剪影列表
                 $this->ws_tpl_file = "templates/ws-gallery-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->{$list_method}();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("gc",$_REQUEST["gc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
         }
@@ -75,6 +69,7 @@ class GALLERY{
         }else{
             $gc_id=0;
         }
+        $main->pageview_history($main->get_main_fun(),$gc_id,App::getHelper('session')->MEMBER_ID);
         $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where g_status='1'  ".$and_str." order by g_sort ".$cms_cfg['sort_pos'].",g_modifydate desc";
         $selectrs = $db->query($sql,true);
         $total_records    = $db->numRows($selectrs);
@@ -115,6 +110,7 @@ class GALLERY{
         $sql="select * from ".$cms_cfg['tb_prefix']."_gallery where g_id='".$_REQUEST["g_id"]."'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
+        $main->pageview_history($main->get_main_fun(),$row['g_id'],App::getHelper('session')->MEMBER_ID);
         $main->header_footer("gallery",$row["g_subject"]);
         $main->layer_link($row["g_subject"]);
         $tpl->newBlock( "GALLERY_SHOW" );
@@ -208,7 +204,8 @@ class GALLERY{
             $tpl->newBlock("JS_LAZYLOAD");
         }else{
             $method = "dirlist";
-}
+        }
+        $main->pageview_history($main->get_main_fun(),$_GET['gc_id'],App::getHelper('session')->MEMBER_ID);        
         $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_cate where gc_status='1' ".$and_str." order by gc_sort ".$cms_cfg['sort_pos'];
         $res = $db->query($sql,true);
         while($row = $db->fetch_array($res,1)){

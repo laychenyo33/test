@@ -25,24 +25,18 @@ class NEWS{
                 $this->ws_tpl_file = "templates/ws-news-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->news_list();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("nc",$_REQUEST["nc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
             case "n_show"://最新消息顯示
                 $this->ws_tpl_file = "templates/ws-news-show-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->news_show();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("n",$_REQUEST["n_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
             default:    //最新消息列表
                 $this->ws_tpl_file = "templates/ws-news-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $this->news_list();
-                //page view record --ph_type,ph_type_id,m_id
-                $main->pageview_history("nc",$_REQUEST["nc_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
                 $this->ws_tpl_type=1;
                 break;
         }
@@ -100,6 +94,7 @@ class NEWS{
         }else{
             $main->layer_link($ws_array['main'][$this->news_class['filename']]);
         }
+        $main->pageview_history($this->news_class['filename'],$cate_row['nc_id'],App::getHelper('session')->MEMBER_ID);
         $sql="select n.* from ".$cms_cfg['tb_prefix']."_news as n inner join ".$db->prefix("news_cate")." as nc on n.nc_id=nc.nc_id and nc.nc_indep='1' and nc.nc_indep_id = (select id from ".$db->prefix("news_cate_class")." where filename='".$this->news_class['filename']."') where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_showdate desc,n_sort ".$cms_cfg['sort_pos'].",n_modifydate desc";
         $selectrs = $db->query($sql);
         $total_records = $db->numRows($selectrs);
@@ -160,6 +155,7 @@ class NEWS{
         $sql="select * from ".$cms_cfg['tb_prefix']."_news where ".$and_str;
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
+        $main->pageview_history($this->news_class['filename'],$row['n_id'],App::getHelper('session')->MEMBER_ID);
         //左側選單
         $cate_row = $this->left_cate_list($row['nc_id']);        
         //header footer

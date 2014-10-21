@@ -11,8 +11,6 @@ class ABOUTUS{
         $this->au_cate = $_REQUEST['au_cate']?$_REQUEST['au_cate']:'aboutus';        
         $this->ws_load_tp($this->ws_tpl_file);
         $this->aboutus_list();
-        //page view record --ph_type,ph_type_id,m_id
-        $main->pageview_history("au",$_REQUEST["au_id"],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);
         $main->layer_link();
         $tpl->printToScreen();
     }
@@ -50,6 +48,7 @@ class ABOUTUS{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //左側選單
         $row = $this->left_cate_list();
+        $main->pageview_history($main->get_main_fun(),$row['au_id'],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID']);        
         if($row){
             $main->layer_link($row["au_subject"]);
             $tpl->assignGlobal( "VALUE_AU_CONTENT" , $main->content_file_str_replace($row["au_content"],'out2'));

@@ -51,6 +51,7 @@ class APPLICATON{
         $show_style_str_p_desc="SHOW_STYLE_P1_DESC";
  
         if(!$_GET['f'] && !$_GET['pa_id']){
+            $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
             $main->layer_link($TPLMSG['APPLICATION']);
             $dirname="application";
             //顯示產品主頁 SEO H1 標題
@@ -127,6 +128,7 @@ class APPLICATON{
             $res = $db->query($sql);
             if($db->numRows($res)){
                 $app_row = $db->fetch_array($res,1);
+                $main->pageview_history($main->get_main_fun(),$app_row['pa_id'],App::getHelper('session')->MEMBER_ID);
                 //設定seo
                 $meta_array=array("meta_title"=>$app_row["pa_seo_title"],
                                   "meta_keyword"=>$app_row["pa_seo_keyword"],

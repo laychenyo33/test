@@ -425,6 +425,85 @@
         <!-- END BLOCK : CONTACTUS_REPLY_LIST -->
     </table>
     <!-- END BLOCK : CONTACTUS_DETAIL_ZONE -->
+    <!-- START BLOCK : MEMBER_PAGEVIEW -->
+    <span>說明:顯示最新20筆瀏覽記錄</span>
+    <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
+        <tr>
+            <th width="5%"> No.</th>
+            <th width="25%">頁面類別</th>
+            <th width="50%">網址</th>
+            <th width="20%">瀏覽時間</th>
+        </tr>
+        <!-- START BLOCK : HISTORY_LIST -->
+        <tr>
+            <td>{TAG_SERIAL}</td>
+            <td>{MSG_PAGE_TYPE}</td>
+            <td><a href="{MSG_REQUEST_URI}" target="history">{MSG_REQUEST_URI}</a></td>
+            <td>{MSG_MODIFYDATE}</td>
+        </tr>
+        <!-- END BLOCK : HISTORY_LIST -->
+    </table>
+    <!-- END BLOCK : MEMBER_PAGEVIEW -->
+    <!-- START BLOCK : MEMBER_COLLECT -->
+    <form name="myform" action="{TAG_ROOT_PATH}member.php?func=m_zone&mzt=collect&act=delete" method="post">
+        <div>說明:顯示最新20筆收藏記錄</div>
+        <div class="operator"><input type="button" class="op-del" value="刪除"/></div>
+        <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
+            <tr>
+                <th width="7%"> 刪除</th>
+                <th width="7%"> No.</th>
+                <th width="15%">產品圖片</th>
+                <th width="">產品名稱</th>
+                <!-- START BLOCK : SHOP_TITLE -->
+                <th width="12%">特價</th>
+                <th width="12%">加入購物車</th>
+                <!-- END BLOCK : SHOP_TITLE -->
+                <th width="12%">收藏時間</th>
+            </tr>
+            <!-- START BLOCK : COLLECT_LIST -->
+            <tr>
+                <td><input type="checkbox" name="delete[]" value="{COLLECT_ID}"/></td>
+                <td>{TAG_SERIAL}</td>
+                <td><a href="{VALUE_P_LINK}"><img src="{VALUE_P_SMALL_IMG}" width="{VALUE_P_SMALL_IMG_W}" height="{VALUE_P_SMALL_IMG_H}"/></a></td>
+                <td><a href="{VALUE_P_LINK}">{VALUE_P_NAME}</a></td>
+                <!-- START BLOCK : SHOP_FIELD -->
+                <td>{VALUE_P_PRICE}</td>
+                <td>{TAG_CART_LINK}</td>
+                <!-- END BLOCK : SHOP_FIELD -->
+                <td>{MSG_CREATEDATE}</td>
+            </tr>
+            <!-- END BLOCK : COLLECT_LIST -->
+        </table>
+        <div class="operator"><input type="button" class="op-del" value="刪除"/></div>
+        <script type="text/javascript">
+            jQuery(function($){
+                $(".op-del").click(function(evt){
+                    if(confirm("確定刪除嗎?")){
+                        $(myform).trigger("submit");
+                    }
+                });
+                $(".prodToCart").click(function(evt){
+                     evt.preventDefault();
+                     var formData = "func=c_add";
+                     if($(this).attr('rel')!=''){
+                         formData += "&p_id="+$(this).attr('rel');
+                     }
+                     formData += "&amount=1&via_ajax=1";
+                     $.post("{CART_PATH}",formData,function(req){
+                         if(req.code=='1'){
+                             alert("已加入購物車");
+                         }else{
+                             alert(req.msg);
+                         }
+                         $("#cart-nums").text(req.cart_nums);
+                     },'json');
+                });               
+            });
+        </script>
+    </form>
+    <!-- END BLOCK : MEMBER_COLLECT -->
+    <div align="center">
+        <font size='3' color="#ff0000"> {MSG_NO_DATA}</font>
     </div>
     <!-- INCLUDE BLOCK : ./templates/ws-fn-pagination-tpl.html -->
 </div>

@@ -11,6 +11,7 @@ class PRODUCTS{
         $this->ws_tpl_file = "templates/ws-quick-shopping-tpl.html";
         $this->ws_load_tp($this->ws_tpl_file);
         $this->products_list();
+        $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);        
         //有廣告模組才啟動廣告
         if($cms_cfg["ws_module"]["ws_ad"]==1) $main->ad_list(0);
         $tpl->printToScreen();

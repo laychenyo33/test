@@ -146,6 +146,8 @@ $TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
 $TPLMSG["MEMBER_EPAPER"] = "Occasionally, we email newsletters to our members. Would you like to receive this information?";
 $TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"] = '%1$s %2$s';
 $TPLMSG["MEMBER_ACCOUNT_EXISTS"] = "Üye Hesabı var olmuştur!";
+$TPLMSG['MEMBER_FOOTPRINT'] = "My Footprint";
+$TPLMSG['MEMBER_COLLECT'] = "My Collection";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "Ürünler";
