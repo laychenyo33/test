@@ -281,6 +281,7 @@ class MAINFUNC{
                 ));
             }
             $tpl->assignGlobal("MSG_HOME",$TPLMSG['HOME']);
+            $tpl->assignGlobal("MSG_SITE_NAME",App::getHelper('session')->sc_company);
             $tpl->assignGlobal("TAG_THEME_PATH" , $cms_cfg['default_theme']);
             $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
             $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);
