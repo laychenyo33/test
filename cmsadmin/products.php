@@ -1996,6 +1996,8 @@ class PRODUCTS{
     }
     function get_items_name($id_str,$type){
         global $db,$tpl,$cms_cfg;
+        //啟用selective特效
+        $tpl->newBlock("JS_SELECTIVE");
         if(trim($id_str)){
             if($type=="pc"){
                 $sql="select pc_id,pc_name from ".$cms_cfg['tb_prefix']."_products_cate where pc_id in (".$id_str.")";
