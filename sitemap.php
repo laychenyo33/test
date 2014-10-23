@@ -32,7 +32,9 @@ class SITEMAP{
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-sitemap"); //主要顯示區域的css設定
         $main->layer_link($TPLMSG["SITEMAP"]);
         $main->header_footer("sitemap", $TPLMSG["SITEMAP"]);
-        $main->left_fix_cate_list(); //顯示產品分類
+        //$main->left_fix_cate_list(); //顯示產品分類
+        $leftmenu = new Leftmenu_Products($tpl);
+        $leftmenu->make();        
         $main->google_code(); //google analystics code , google sitemap code
     }
 
