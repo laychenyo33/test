@@ -150,7 +150,9 @@ class CART{
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['CART_INQUIRY']); //麵包屑
         $main->header_footer("");
         $main->google_code(); //google analystics code , google sitemap code
-        $main->left_fix_cate_list();
+        //$main->left_fix_cate_list();
+        $leftmenu = new Leftmenu_Products($tpl);
+        $leftmenu->make();        
     }
 
     function cart_add($via_ajax){
