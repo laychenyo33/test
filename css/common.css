@@ -451,8 +451,8 @@
 .cart-login_f_btn input{background-color: #FF8F00;color: #FFFFFF; padding:3px;}
 .cart-login-m_btn{ margin-top:10px;}
 .cart-login-m_btn02 input{background-color: #FF8F00;color: #FFFFFF; width: 100px;}
-.cart-login-m_btn a{ display:block;background:url(../images/btnbg.png) no-repeat center center; width:110px; height:41px; line-height:38px;  color:#DD003E;font-family:"微軟正黑體";font-weight:bold;}
-.cart-login-m_btn a:hover{background:url(../images/btnbg_v.png) no-repeat center center;}
+.cart-login-m_btn a{ display:block; width:110px; height:41px; line-height:38px;  color:#DD003E;font-family:"微軟正黑體";font-weight:bold;}
+.cart-login-m_btn a:hover{}
 #cart-login-member{
     float:left;
     width:280px;
