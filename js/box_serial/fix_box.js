@@ -108,9 +108,17 @@ $(".class or #id").fix_box();
 			var OBJ = THIS.eq(KEY);
 			var THIS_W = OBJ.width();
 			var THIS_H = OBJ.height();
+			var THIS_POSITION = OBJ.css("position");
 			var IMG_SRC = OBJ.find("img").attr("src");
 			
-			THIS.css({ "position":"relative" });
+			switch(THIS_POSITION){
+				default:
+					OBJ.css({ "position":"relative" });
+				break;
+				case "absolute":
+				break;
+			}
+			
 			OBJ.find("img").hide();
 
 			var IMG = new Image();
