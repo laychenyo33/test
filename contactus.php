@@ -26,10 +26,16 @@ class CONTACTUS{
                 $this->ws_tpl_type=0;
                 break;
             default:    //聯絡我們列表
-                $this->ws_tpl_file = "templates/ws-contactus-form-style".$this->form_style."-tpl.html";
-                $this->ws_load_tp($this->ws_tpl_file);
-                $tpl->newBlock("JS_FORMVALID");
-                $this->contactus_form();
+                if(!$this->m_id && App::configs()->ws_module->ws_contactus_login){
+                    $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $tpl->assignGlobal("TAG_RETURN_URL",$_SERVER['REQUEST_URI']);
+                }else{
+                    $this->ws_tpl_file = "templates/ws-contactus-form-style".$this->form_style."-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $tpl->newBlock("JS_FORMVALID");
+                    $this->contactus_form();
+                }
                 $this->ws_tpl_type=1;
                 break;
         }
@@ -82,7 +88,19 @@ class CONTACTUS{
                     $tpl->assignGlobal("VALUE_".strtoupper($k),$v );
                 }
             }
+            $cu_contact_s = $sess_contactus["cu_contact_s"];
         }else{
+            if($this->m_id){
+                $memData = App::getHelper('dbtable')->member->getData($this->m_id)->getDataRow();
+                if($memData){
+                    foreach($memData as $k => $v){
+                        $k = str_replace("m_","cu_",$k);
+                        $tpl->assignGlobal("VALUE_".strtoupper($k),$v );
+                    }
+                    $cu_name = sprintf($TPLMSG['MEMBER_NAME_SET_'.App::configs()->ws_module->ws_contactus_s_style],$memData['m_fname'],$memData['m_lname'] );
+                    $cu_contact_s = $memData["m_contact_s"];
+                }
+            }
             $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
         }
         foreach($ws_array["contactus_cate"] as $key =>$value){
@@ -116,9 +134,9 @@ class CONTACTUS{
             'blockName' => 'Contactus',
             'fieldData' => array(
                 'contact' => array(
-                    'name' => $sess_contactus['cu_name'],
+                    'name' => $sess_contactus['cu_name']? $sess_contactus['cu_name'] : $cu_name,
                 ),
-                'courtesyTitle' => $sess_contactus['cu_contact_s'],
+                'courtesyTitle' => $sess_contactus['cu_contact_s']?$sess_contactus['cu_contact_s']:$cu_contact_s,
             ),
         ));
         $tpl->assignGlobal("TAG_CONTACT_WITH_S",$contactField->get_html());
