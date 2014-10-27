@@ -573,6 +573,9 @@ class MEMBER{
 
                 ));
             }
+            if($cms_cfg["ws_module"]['ws_delivery_timesec']){ //是否顯示配送區間
+                $tpl->newBlock("DELIVERY_TIMESEC");
+            }            
             //帶入要回覆的訂單資料
             if(!empty($_REQUEST["o_id"])){
                 $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and o_id='".$_REQUEST["o_id"]."' and del='0' ";
