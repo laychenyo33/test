@@ -25,6 +25,7 @@ class PRODUCTS{
                     $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
                     $this->ws_load_tp($this->ws_tpl_file);
                     $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG["MEMBER_LOGIN"]);
+                    $tpl->assignGlobal( "TAG_RETURN_URL",$_SERVER['REQUEST_URI']);
                     $tpl->assignGlobal( "MSG_LOGIN_NOTICE1",$TPLMSG['LOGIN_NOTICE1']);
                     App::getHelper('main')->header_footer("");
                 }else{
