@@ -156,7 +156,7 @@ class VIDEO{
             $tpl->assign( array( "VALUE_CATE_NAME" => $row["vc_subject"],
                                  "VALUE_CATE_LINK"  => $cate_link,
             ));
-            if(($_REQUEST["vc_id"]==$row["vc_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["vc_seo_filename"] || $_REQUEST["d"]==$row["vc_seo_filename"]))){
+            if(($sel_top_record && $i==1) || ($_REQUEST["vc_id"]==$row["vc_id"]) || ($this->ws_seo && ($_REQUEST["f"]==$row["vc_seo_filename"] || $_REQUEST["d"]==$row["vc_seo_filename"]))){
                 $tpl->assign("TAG_CURRENT_CLASS", "class=\"current\"");
                 $current_row = $row;
             }
