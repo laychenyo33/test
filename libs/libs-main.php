@@ -272,12 +272,12 @@ class MAINFUNC{
                                      "HEADER_META_TITLE" => ($meta_array["meta_title"])?$meta_array["meta_title"]:$_SESSION[$cms_cfg['sess_cookie_name']]["sc_meta_title"],
                                      "HEADER_META_KEYWORD" => ($meta_array["meta_keyword"])?$meta_array["meta_keyword"]:$_SESSION[$cms_cfg['sess_cookie_name']]["sc_meta_keyword"],
                                      "HEADER_META_DESCRIPTION" => ($meta_array["meta_description"])?$meta_array["meta_description"]:$_SESSION[$cms_cfg['sess_cookie_name']]["sc_meta_description"],
-                                     "HEADER_SHORT_DESC" => ($meta_array["seo_short_desc"])?$meta_array["seo_short_desc"]:"",
+                                     "HEADER_SHORT_DESC" => ($meta_array["seo_short_desc"])?$this->content_file_str_replace($meta_array["seo_short_desc"],'out2'):"",
                                      "TAG_MAIN_FUNC" => ($meta_array["seo_h1"])?$meta_array["seo_h1"]:$seo_h1,
             ));
             if($meta_array["seo_short_desc"]){
                 $tpl->newBlock("SEO_SHORT_DESC");
-                $tpl->assign("VALUE_SEO_SHORT_DESC",$meta_array["seo_short_desc"]);
+                $tpl->assign("VALUE_SEO_SHORT_DESC",$this->content_file_str_replace($meta_array["seo_short_desc"],'out2'));
             }
         }
         if($e==1){  //第一次執行才做
