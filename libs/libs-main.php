@@ -2008,7 +2008,7 @@ class MAINFUNC{
             while($row = $db->fetch_array($res,1)){
                 $prod_arr[$row['p_id']]=$row['p_name'];
             }
-            $this->multiple_checkbox("PRODUCT_LIST",$prod_arr,$value);
+            $this->multiple_checkbox("PRODUCT_LIST",$prod_arr,$value,$tpl);
         }        
     }    
     //隨機產生密碼
