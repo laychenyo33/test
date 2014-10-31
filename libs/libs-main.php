@@ -2050,11 +2050,14 @@ class MAINFUNC{
         return http_build_query($arr_str);
     }    
     function load_privacy_term(){
-        global $tpl,$cms_cfg,$db;
+        global $tpl,$cms_cfg,$db,$TPLMSG;
         $tpl->newBlock("JQUERY_UI_SCRIPT");
         $sql = " select st_privacy_policy from ".$cms_cfg['tb_prefix']."_service_term where st_id='1'";
         list($term) = $db->query_firstrow($sql,false);
-        $tpl->assignGlobal("MSG_PRIVACY_TERM",$term);
+        $tpl->assignGlobal(array(
+            "MSG_DIALOG_TITLE" => App::getHelper('session')->sc_company."-".$TPLMSG["PRIVACY_POLICY"],
+            "MSG_PRIVACY_TERM" => $term,
+        ));
     }
     //計算分頁的偏移值
     function get_pagination_offset($op_limit){
