@@ -760,3 +760,8 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 #missing-files-sitemap{padding:10px;margin-top:20px;border:1px solid grey;background:  #d3d0ce}
 #missing-files-sitemap h3{font-size:20px; }
 #missing-files-sitemap #desc{ margin-top:10px;}
+
+/*contactus inquiry products list*/
+.contact_prod_list{list-style: none}
+.contact_prod_list li{}
+.contact_prod_list li input[type=checkbox]{vertical-align: middle;margin:0 3px}
