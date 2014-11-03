@@ -1415,19 +1415,23 @@ class PRODUCTS{
         if(!empty($_REQUEST["sort_value"]) && !empty($ws_table)){
             if($ws_table=="pc"){
                 $table_name=$cms_cfg['tb_prefix']."_products_cate";
+                $prefix = "pc";
             }elseif($ws_table=="p" || $ws_table=="p_new" || $ws_table=="p_hot" || $ws_table=="p_pro"){
                 $table_name=$cms_cfg['tb_prefix']."_products";
+                $prefix = "p";
             }elseif($ws_table=="pa"){
                 $table_name=$cms_cfg['tb_prefix']."_products_application";
+                $prefix = "pa";
             }elseif($ws_table=="ca"){
                 $table_name=$cms_cfg['tb_prefix']."_products_ca";
+                $prefix = "ca";
             }
             foreach($_REQUEST["id"] as $key => $value){
                 $sql="update ".$table_name." set ".
                         $ws_table."_sort='".$_REQUEST["sort_value"][$value]."'".
                         ((in_array($ws_table,array('p','pc','pa')))?",".$ws_table."_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'":"").
-                        ",".$ws_table."_modifydate='".date("Y-m-d H:i:s")."'".
-                        " where ".$ws_table."_id='".$value."'";
+                        ",".$prefix."_modifydate='".date("Y-m-d H:i:s")."'".
+                        " where ".$prefix."_id='".$value."'";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
             }
