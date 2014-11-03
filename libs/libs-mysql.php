@@ -275,6 +275,12 @@ class DB {
             return $table_fields;
         }      
   }
+  function seek($rowId,$query_id=null){
+      if(is_resource($query_id)){
+          $this->query_result = $query_id;
+      }
+      mysql_data_seek($this->query_result, $rowId);
+  }  
   
 } // end of class
 
