@@ -63,32 +63,33 @@ class SERVICE{
             case "bonus":
                 $field="st_bonus_term";
                 break;
-            default:
-                $field="st_service_term";
-                break;
         }
         //服務條款
         $sql="select ".$field." from ".$cms_cfg['tb_prefix']."_service_term ";
         $selectrs = $db->query($sql);
-        $rsnum    = $db->numRows($selectrs);
-        $row = $db->fetch_array($selectrs,1);
-        foreach($ws_array["service_term_left_cate"] as $key =>$value){
-            $i++;
-            if($field==$key){
-                $tpl->assignGlobal( "TAG_MAIN_FUNC" , $value);
-                $main->layer_link($value);
+        if($db->numRows($selectrs)){
+            $rsnum    = $db->numRows($selectrs);
+            $row = $db->fetch_array($selectrs,1);
+            foreach($ws_array["service_term_left_cate"] as $key =>$value){
+                $i++;
+                $key = preg_replace(array('/^st_/i','/_term$/i'), array(''), $key);
+                $menuItem = array(
+                    'name' => $value,
+                    'link' => "service.php?st=".$key,
+                );
+                if($term_type===$key){
+                    $menuItem['tag_cur'] = "class='current'";
+                    $tpl->assignGlobal( "TAG_MAIN_FUNC" , $value);
+                    $main->layer_link($value);
+                }
+                $left_menu_items[] = $menuItem;
             }
-            $tpl->newBlock( "LEFT_CATE_LIST" );
-            $key=str_replace("st_","",$key);
-            $key=str_replace("_term","",$key);
-
-            $tpl->assign( array( "VALUE_CATE_NAME" => $value,
-                                 "VALUE_CATE_LINK"  => "service.php?st=".$key,
-            ));
-        }
-        if($rsnum > 0){
+            $leftMenu = new Leftmenu_Common($left_menu_items,$tpl);
+            $leftMenu->make();
             $tpl->newBlock( "SERVICE_TERM_SHOW" );
             $tpl->assignGlobal( "VALUE_SERVICE_TERM_CONTENT" , $main->content_file_str_replace($row[$field],'out2'));
+        }else{
+            App::getHelper('main')->js_notice($TPLMSG["PAGE_NO_EXITS"],App::configs()->base_root);
         }
     }
 }
