@@ -35,4 +35,18 @@ class Leftmenu_Products extends Leftmenu_Catewithitems {
         parent::__construct($tpl, $maxDigs, App::configs()->ws_module->ws_left_products);
     }
     
+    function checkCurrent($cateLink,$cateRow,$chkCate=true){
+        if(parent::checkCurrent($cateLink, $cateRow , $chkCate)){
+            return true;
+        }else{
+            if($chkCate){
+                if(App::configs()->ws_module->ws_seo){
+                    return App::getHelper('main')->is_current_or_child_cate($_GET['d'],$cateRow['pc_seo_filename'],true);
+                }else{
+                    return App::getHelper('main')->is_current_or_child_cate($_GET['pc_parent'],$cateRow['pc_id']);
+                }
+            }
+        }
+    }
+    
 }
