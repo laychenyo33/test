@@ -80,7 +80,7 @@ class Leftmenu_Catewithitems extends Leftmenu_Abstract {
             $tmp = array(
                 'name' => $cateRow[$this->cate['labelField']],
                 'link' => $cateLink,
-                'tag_cur' => (strcasecmp(urldecode($_SERVER['REQUEST_URI']), $cateLink)==0)?"class='current'":"",
+                'tag_cur' => ($this->checkCurrent($cateLink,$cateRow))?"class='current'":"",
             );
             if($digs<$maxDigs){
                 $sub = array();
@@ -107,11 +107,11 @@ class Leftmenu_Catewithitems extends Leftmenu_Abstract {
                 $tmp = array(
                     'name' => $itemRow[$this->items['labelField']],
                     'link' => $p_link,
-                    'tag_cur' => (strcasecmp(urldecode($_SERVER['REQUEST_URI']), $p_link)==0)?"class='current'":"",
+                    'tag_cur' => $this->checkCurrent($p_link, $itemRow , false)?"class='current'":"",
                 );
                 if($tmp['tag_cur']!=''){
                     $container['active'] = true;
-                }                
+                }
                 $container[] = $tmp;
             }
         }
@@ -149,5 +149,11 @@ class Leftmenu_Catewithitems extends Leftmenu_Abstract {
                 break;
         }
         return $order;        
+    }
+    
+    function checkCurrent($cateLink,$cateRow,$chkCate=true){
+        if(strcasecmp(urldecode($_SERVER['REQUEST_URI']), $cateLink)==0){
+            return true;
+        }
     }
 }
