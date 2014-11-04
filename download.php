@@ -89,7 +89,8 @@ class DOWNLOAD{
             );
             $main->header_footer($meta_array);
         }else{
-            $main->header_footer("download",$TPLMSG["DOWNLOAD"]);
+            $h1 = $crow['dc_subject']?$crow['dc_subject']:$TPLMSG['DOWNLOAD'];
+            $main->header_footer("download",$h1);
         }
         $dc_id=$crow["dc_id"];        
         $main->pageview_history($main->get_main_fun(),$dc_id,App::getHelper('session')->MEMBER_ID);
