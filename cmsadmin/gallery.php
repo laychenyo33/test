@@ -901,11 +901,15 @@ class GALLERY{
         global $tpl,$db,$cms_cfg,$main;
         if($_POST && $_GET['act']=="save"){
             //修改檔案
-            if($_POST['gp_desc']){
-                foreach($_POST['gp_desc'] as $gpid => $desc){
-                    $sql = "update ".$cms_cfg['tb_prefix']."_gallery_pics set gp_desc='".$db->quote($_POST['gp_desc'][$gpid])."' where id='".$db->quote($gpid)."'";
-                    $db->query($sql,true);
+            $sort=1;
+            foreach($_POST['sort'] as $gpid => $fixed){
+                $sql = "update ".$cms_cfg['tb_prefix']."_gallery_pics set sort='{$sort}' ";
+                if($_POST['gp_desc'][$gpid]){
+                    $sql .= ",gp_desc='".$db->quote($_POST['gp_desc'][$gpid])."'";
                 }
+                $sql .= " where id='".$gpid."'";
+                $db->query($sql,true);
+                $sort++;
             }
             $this->ws_tpl_type=0;
             header("location: gallery.php?func=gp_file&gc_id=".$_POST['gc_id']);
@@ -914,6 +918,7 @@ class GALLERY{
             $template = "templates/ws-manage-gallery-pic-tpl.html";
             $tpl = new TemplatePower($template);
             $tpl->prepare();
+            $tpl->newBlock("JS_JQ_UI");
             $tpl->newBlock("JS_MAIN");
             $tpl->newBlock("JS_PREVIEWS_PIC");    
             $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
@@ -926,7 +931,7 @@ class GALLERY{
             //更新gc_dir的圖片到資料庫
             $this->gp_db_update($_GET['gc_id'],$gc_dir);
             //顯示原有檔案列表
-            $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_GET['gc_id']."'";
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$_GET['gc_id']."' order by sort ";
             $res = $db->query($sql,true);
             while($row = $db->fetch_array($res,1)){
                 $tpl->newBlock("GALLERY_PICS_LIST");

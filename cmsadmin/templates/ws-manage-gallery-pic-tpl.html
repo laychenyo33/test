@@ -125,15 +125,19 @@
         span.del{ display:inline-block;width:18px;height:18px;cursor:pointer;background:#f00;vertical-align: middle;margin:0 3px }
     </style>
 </head>
-<body>
+<body style="width:600px;">
     <form name="myform" action="gallery.php?func=gp_file&act=save" method="post">
-    <!-- START BLOCK : GALLERY_PICS_LIST -->
-    <div class="gallery_file_list">
-        <div class="gallery_file"><img src="{VALUE_GP_FILE}" height="80"/></div>
-        <div class="gallery_desc"><a href="#" class="mod">{VALUE_GP_DESC}</a><input type="hidden" name="all_gp_id[]" value="{VALUE_GP_ID}"/></div>
+    <div class="desc">拖曳圖片可進行排序</div>
+    <div id="gallery_file_zone">
+        <!-- START BLOCK : GALLERY_PICS_LIST -->
+        <div class="gallery_file_list">
+            <input type="hidden" name="sort[{VALUE_GP_ID}]" value="1"/>
+            <div class="gallery_file"><img src="{VALUE_GP_FILE}" height="80"/></div>
+            <div class="gallery_desc"><a href="#" class="mod">{VALUE_GP_DESC}</a><input type="hidden" name="all_gp_id[]" value="{VALUE_GP_ID}"/></div>
+        </div>
+        <!-- END BLOCK : GALLERY_PICS_LIST -->
+        <div style="clear:both;" ></div>
     </div>
-    <!-- END BLOCK : GALLERY_PICS_LIST -->
-    <div style="clear:both;" ></div>
     <input type="submit" value="儲存"/>
     <input type="hidden" name="gc_id" value="{VALUE_GC_ID}"/>
     </form>
@@ -155,6 +159,7 @@
                       });
                   }
                });
+               $("#gallery_file_zone").sortable();
                $(".gallery_file_list").samesize("height");
            });
         });
