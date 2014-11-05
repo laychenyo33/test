@@ -247,7 +247,7 @@ class GALLERY{
             $tpl->assign("VALUE_GC_DESC",$main->content_file_str_replace($cate['gc_desc'],'out2'));
         }
         if($cms_cfg["ws_module"]['ws_gallery_update_db']){
-            $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$cate['gc_id']."'";
+            $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$cate['gc_id']."' order by sort ";
             $res = $db->query($sql,true);
             if($db->numRows($res)){
                 while($row = $db->fetch_array($res,1)){

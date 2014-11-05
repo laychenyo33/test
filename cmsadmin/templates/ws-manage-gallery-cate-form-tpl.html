@@ -77,7 +77,7 @@
     <input name="jp" type="hidden" id="jp" value="{VALUE_JUMP_PAGE}">
 </form>
 </div>
-<div id="dialog" title="編輯圖片" style="display:none"><iframe id="gpwin" style="border:none;width:630px;height:440px;overflow:auto" ></iframe></div>
+<div id="dialog" title="編輯圖片" style="display:none"><iframe id="gpwin" style="border:none;width:600px;height:440px;overflow:auto" ></iframe></div>
 <!-- INCLUDE BLOCK : FOOTER -->
 <script type="text/javascript">
     jQuery(function($){
@@ -85,8 +85,9 @@
             var gpwin = $("#gpwin");
             $("#dialog").dialog({
                 autoOpen:false,
+                modal:true,
                 width:660,
-                height:500
+                height:515
             });
            //設定更新資料庫裡的圖片內容
            $("#update_pic").click(function(evt){
