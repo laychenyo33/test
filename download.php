@@ -31,6 +31,12 @@ class DOWNLOAD{
                     $this->ws_tpl_type=0;
                     $this->download_file($_GET['d_id']);
                     break;
+                case "tlist":
+                    $this->ws_tpl_type=1;
+                    $this->ws_tpl_file = "templates/ws-download-withtime-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $this->download_list_withtime();
+                    break;                
                 case "search":
                     $condition = " and d_subject like '%{$_GET['kw']}%' ";
                 default:
@@ -186,6 +192,84 @@ class DOWNLOAD{
             }
         }
     }
+//檔案下載-(依時間)-列表================================================================
+    function download_list_withtime(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        //檔案下載列表
+        $crow = $this->left_cate_list();
+        $main->header_footer("download",$TPLMSG["DOWNLOAD"]);
+        $dc_id=$crow["dc_id"];        
+        if(isset($ws_array['download_time_sets'][$_GET['sets']])){
+            $data_title = array();
+            $cate_arr = $ws_array['download_time_sets'][$_GET['sets']]['dc_id'];
+            $time_fields = $ws_array['download_time_sets'][$_GET['sets']]['time_fields'];
+            foreach($time_fields as $tfield){
+                $data_title[] = $ws_array['season_month']['label'][$tfield];
+                $query_fields[] = $db->fieldname($tfield);
+                $query_cond[] = $db->fieldname($tfield)." is not null";
+                $order_fields[] = $db->fieldname($tfield)." desc ";
+            }
+            $query_fields_str = implode(',',$query_fields);
+            $query_cond_str = implode(' and ',$query_cond);
+            $order_fields_str = implode(',',$order_fields);
+        }else{
+            header("location:".$cms_cfg['base_root']);
+            die();
+        }
+        if($dc_id!=0){
+            $and_str=" and d.dc_id='".$dc_id."'";
+            $ext=($this->ws_seo)?".htm":".php";
+            $main->layer_link($TPLMSG['DOWNLOAD'],$cms_cfg['base_root']."download".$ext)->layer_link($crow['dc_subject']);
+        }else{
+            $main->layer_link($TPLMSG['DOWNLOAD'])->layer_link($ws_array['download_time_sets'][$_GET['sets']]['label']);
+            $tpl->assignGlobal("TAG_MAIN_FUNC",$ws_array['download_time_sets'][$_GET['sets']]['label']);
+        }
+        //輸出欄位
+        //輸出分類欄位
+        foreach($cate_arr as $dc_id){
+            $sql = "select dc_subject from ".$db->prefix("download_cate")." where dc_id='{$dc_id}'";
+            list($dc_subject) = $db->query_firstRow($sql,0);
+            $data_title[] = $dc_subject;
+        }
+        foreach($data_title as $dtitle){
+            $tpl->newBlock("CATE_TITLE");
+            $tpl->assign("TITLE_NAME",$dtitle);
+        }
+        $sql = "select {$query_fields_str},group_concat(d_id) as d_ids from ".$db->prefix("download")." where dc_id in (".implode(',',$cate_arr).") and {$query_cond_str} group by {$query_fields_str} order by {$order_fields_str}";
+        $res = $db->query($sql,true);
+        while($row = $db->fetch_array($res,1)){
+            $dbox = array();
+            $tpl->newBlock("DOWNLOAD_LIST");
+            foreach($time_fields as $tfield){
+                if($tfield=='season'){
+                    $dbox[$tfield] = $ws_array['season_month']['season'][$row[$tfield]];
+                }else{
+                    $dbox[$tfield] = $row[$tfield];
+                }
+            }
+            foreach($cate_arr as $dc_id){
+                $dbox[$dc_id] = array();
+            }
+            //取得下載連結
+            $sql = "select * from ".$db->prefix("download")." where d_id in(".$row['d_ids'].")";
+            $res1 = $db->query($sql,true);
+            while($row2 = $db->fetch_array($res1,1)){
+                //$dbox[$row2['dc_id']][] = $main->mk_link('下載',$cms_cfg['base_root']."download.php?func=dl&d_id=".$row2['d_id'],array('title'=>$row2['d_subject']));
+                $dbox[$row2['dc_id']][] = $main->mk_link('下載',$cms_cfg['file_root'].$row2["d_filepath"],array('title'=>$row2['d_subject']));
+            }
+            //輸出下載連結
+            foreach($dbox as $field_data){
+                $tpl->newBlock("CATE_VALUE");
+                if(is_array($field_data)){
+                    $tpl->assign("FIELD_DATA",implode(',',$field_data));
+                }else{
+                    $tpl->assign("FIELD_DATA",$field_data);
+                }
+            }
+        }
+
+    }
+    
     function left_cate_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //檔案下載分類

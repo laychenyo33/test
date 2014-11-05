@@ -82,6 +82,41 @@
             </td>
         </tr>
         <tr>
+            <th>時間條件:</th>
+            <td>
+                年份:<select name="year" id="year">
+                    <option value=''>請選擇</option>
+                    <!-- START BLOCK : YEAR_SELECT -->
+                    <option value='{VALUE_YEAR_KEY}' {SELECTED}>{VALUE_YEAR_NAME}</option>
+                    <!-- END BLOCK : YEAR_SELECT -->
+                </select>&nbsp;&nbsp;
+                季別:<select name="season" id="season">
+                    <option value=''>請選擇</option>
+                    <!-- START BLOCK : SEASON_SELECT -->
+                    <option value='{VALUE_SEASON_KEY}' {SELECTED}>{VALUE_SEASON_NAME}</option>
+                    <!-- END BLOCK : SEASON_SELECT -->
+                </select>&nbsp;&nbsp;
+                月別:<select name="month" id="month">
+                    <option value=''>請選擇</option>
+                    <!-- START BLOCK : MONTH_SELECT -->
+                    <option value='{VALUE_MONTH_KEY}' {TAG_OPTION_REL} {SELECTED}>{VALUE_MONTH_NAME}</option>
+                    <!-- END BLOCK : MONTH_SELECT -->
+                </select>
+                <script type="text/javascript">
+                    jQuery(function($){
+                        $("#season").change(function(evt){
+                            var s = $(this).val();
+                            $("#month").find("option:gt(0)").hide();
+                            $("#month").find("option").filter('[rel='+s+']').show();
+                            $("#month").find("option:first").attr('selected',true);
+                        });
+                        $("#month").find(":not(:eq(0),[rel='"+$("#season").val()+"'])").hide();
+                        //$("#season").trigger("change");
+                    });
+                </script>
+            </td>
+        </tr>
+        <tr>
             <th>&nbsp;</th>
             <td>
                 <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" />

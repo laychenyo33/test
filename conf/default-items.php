@@ -116,6 +116,28 @@ $ws_array['models_options'] = array(
         ),
     ),
 );
+$ws_array['season_month'] = array(
+    'label' => array('year'=>'年份','season'=>'季別','month'=>'月別'),
+    'season' => array(1=>"第一季",2=>"第二季",3=>"第三季",4=>"第四季"),
+    'month' => array( 
+        1 => array('label'=>'1月','htmlOptions'=>array('rel'=>1)),
+        2 => array('label'=>'2月','htmlOptions'=>array('rel'=>1)),
+        3 => array('label'=>'3月','htmlOptions'=>array('rel'=>1)),
+        4 => array('label'=>'4月','htmlOptions'=>array('rel'=>2)),
+        5 => array('label'=>'5月','htmlOptions'=>array('rel'=>2)),
+        6 => array('label'=>'6月','htmlOptions'=>array('rel'=>2)),
+        7 => array('label'=>'7月','htmlOptions'=>array('rel'=>3)),
+        8 => array('label'=>'8月','htmlOptions'=>array('rel'=>3)),
+        9 => array('label'=>'9月','htmlOptions'=>array('rel'=>3)),
+        10 => array('label'=>'10月','htmlOptions'=>array('rel'=>4)),
+        11 => array('label'=>'11月','htmlOptions'=>array('rel'=>4)),
+        12 => array('label'=>'12月','htmlOptions'=>array('rel'=>4)),
+    ),
+);
+$ws_array['download_time_sets'] = array(
+    'xkdfkja' => array('label'=>'財務報表','time_fields'=>array('year','season'),'dc_id'=>array(2,1)),
+    'xjdfkjb' => array('label'=>'公司年報','time_fields'=>array('year'),'dc_id'=>array(3)),
+);
 $ws_array["country_array"]=array(
 "Afghanistan",
 "Albania", 
