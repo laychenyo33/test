@@ -235,7 +235,7 @@ $TPLMSG["EBOOK_DOWNLOAD"]="Download";
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "Just a moment!!<BR>This page will be redirected!!";
 $TPLMSG['ACTION_TERM_JS'] = "Your data has been submitted!!";
-$TPLMSG["ACCOUNT_EXIST"] ="This accout is existed! Please input new account!";
+$TPLMSG["ACCOUNT_EXIST"] ="This account is existed! Please input new account!";
 
 
 //ERROR MESSAGE
@@ -314,8 +314,8 @@ $TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "Account activating failed!";
 $TPLMSG['REGISTER_NOTIFICATION'] = "Please click on the link in the mail send by system after you submit the info , which is process of activating your account.";
 $TPLMSG['CONTACTUS_PRODUCT_LIST'] = "Product List";
 $TPLMSG['CONTACTUS_POSITION'] = "Department & Position";
-$TPLMSG['EPAPER_HEADER'] = "電子報頁首";
-$TPLMSG['EPAPER_FOOTER'] = "電子報頁尾";
+$TPLMSG['EPAPER_HEADER'] = "E-Paper Header";
+$TPLMSG['EPAPER_FOOTER'] = "E-Paper Footer";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "You've been remove from mail list";
 $TPLMSG['GALLERY'] = "Gallery";
 $TPLMSG["PAGE_NO_EXITS"] = "This Page doesn't exists!";
@@ -384,26 +384,26 @@ $TPLMSG['W_SAT'] = "Sat";
 
 /*新增語彙*/
 /*以下是支付寶相關字彙*/
-$TPLMSG["PAYMENT_ALI"] = "支付寶";
-$TPLMSG["PAYMENT_TEN"] = "財付通";
-$TPLMSG['ALI_FAIL_TITLE'] = "交易失敗";
-$TPLMSG['ALI_OK_TITLE'] = "交易完成";
-$TPLMSG["ALI_TITLE"] = "購物訊息";
-$TPLMSG['ALI_FALE_MESSAGE'] = "產品售完或已下架";
-$TPLMSG["ALI_SHIP_MSG"] = "請於支付寶平台確認運費";
-$TPLMSG["MEMBER_ALI_QUERY"] = "查詢支付寶訂單";
-$TPLMSG['SHIPPMENT_1'] = "臺灣本島";
-$TPLMSG['SHIPPMENT_2'] = "離島地區(澎湖、金門、馬祖)";
-$TPLMSG['SHIPPMENT_3'] = "中國大陸(支付寶)";
-$TPLMSG['THANKS_FOR_ORDER'] = "大黑松小倆口感謝您的訂購!";
-$TPLMSG['INVOICE_TYPE_2'] = "二聯式";
-$TPLMSG['INVOICE_TYPE_3'] = "三聯式";
-$TPLMSG['ORDER_BUYER_INFO'] = "訂購者資訊";
-$TPLMSG['ORDER_RECI_INFO'] = "收件者資訊";
-$TPLMSG['ORDER_INVOICE_INFO'] = "發票資訊";
-$TPLMSG['DELIVER_STR'] = "配送日期及時段";
-$TPLMSG['VAT_NUMBER'] = "統一編號";
-$TPLMSG['PRODUCT_PRICE'] = "價格";
+$TPLMSG['PAYMENT_ALI'] = "Paypal";
+$TPLMSG['PAYMENT_TEN'] = "Caifutong";
+$TPLMSG['ALI_FAIL_TITLE'] = "Transaction fails";
+$TPLMSG['ALI_OK_TITLE'] = "Completion of the transaction";
+$TPLMSG['ALI_TITLE'] = "Shopping Information";
+$TPLMSG['ALI_FALE_MESSAGE'] = "Products are sold out or have been off the shelf";
+$TPLMSG['ALI_SHIP_MSG'] = "Please confirm shipping Alipay platform";
+$TPLMSG['MEMBER_ALI_QUERY'] = "Discover Paypal Order";
+$TPLMSG['SHIPPMENT_1'] = "Taiwan Island";
+$TPLMSG['SHIPPMENT_2'] = "Outlying islands (Penghu, Kinmen and Matsu)";
+$TPLMSG['SHIPPMENT_3'] = "Chinese mainland (Alipay)";
+$TPLMSG['THANKS_FOR_ORDER'] = "Large pine lovers appreciate your order!";
+$TPLMSG['INVOICE_TYPE_2'] = "Two-coupled";
+$TPLMSG['INVOICE_TYPE_3'] = "Triple formula";
+$TPLMSG['ORDER_BUYER_INFO'] = "Subscriber Information";
+$TPLMSG['ORDER_RECI_INFO'] = "Recipient information";
+$TPLMSG['ORDER_INVOICE_INFO'] = "Invoice Information";
+$TPLMSG['DELIVER_STR'] = "Delivery date and time";
+$TPLMSG['VAT_NUMBER'] = "Unified Numbering";
+$TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
 
 //關閉網站
