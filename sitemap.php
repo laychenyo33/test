@@ -95,145 +95,81 @@ class SITEMAP{
                                  "VALUE_CONTACTUS_LINK" =>$cms_cfg["base_root"]."contactus".$ext,
                                  "VALUE_GALLERY_LINK" =>$cms_cfg["base_root"]."gallery".$ext,
         ));
-
-        //主分類
-        $sql="select pc_id,pc_parent,pc_name,pc_layer,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent=0 and pc_status='1' order by pc_sort ".$cms_cfg['sort_pos']." ";
-        $selectrs = $db->query($sql);
-        while($row = $db->fetch_array($selectrs,1)){
-            if($this->ws_seo){
-                if(trim($row["pc_seo_filename"]) !=""){
-                    $pc_link=$cms_cfg["base_root"].$row["pc_seo_filename"].".htm";
-                }else{
-                    $pc_link=$cms_cfg["base_root"]."category-".$row["pc_id"].".htm";
-                }
-            }else{
-                $pc_link=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row["pc_id"];
+        $map = $this->get_product_layer();
+        $this->print_product_layer($map);
+    }
+    
+    function get_product_layer($parent=0,$container=array()){
+        global $cms_cfg;
+        $db = App::getHelper("db");
+        $sql = "select * from ".$db->prefix("products_cate")." where pc_status='1' and pc_parent='{$parent}' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos'].",pc_modifydate desc ";
+        $res = $db->query($sql);
+        while($cate = $db->fetch_array($res,1)){
+            $item = array(
+                'name' => $cate['pc_name'],
+                'link' => App::getHelper('request')->get_link("productscate",$cate),
+            );
+            if($sub = $this->get_product_layer($cate['pc_id'])){
+                $item['sub'] = $sub;
             }
-            $tpl->newBlock("PRODUCTS_CATE_MAIN");
-            $tpl->assign( array( "VALUE_PC_NAME"  => $row["pc_name"],
-                                 "VALUE_PC_LINK"  => $pc_link,
-            ));
-            //搜尋次分類
-            $sql1="select pc_id,pc_name,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_layer like '".$row["pc_layer"]."-%' and pc_status='1' order by pc_sort ".$cms_cfg['sort_pos']." ";
-            $selectrs1 = $db->query($sql1);
-            $rsnum1     = $db->numRows($selectrs1);
-            if($rsnum1 > 0) {
-                $tpl->assign(array(
-                        "TAG_UL1"  => "<ul>",
-                        "TAG_UL2"  => "</ul>"
-                ));
+            $container[] = $item;
+        }
+        if($cms_cfg['ws_module']['ws_sitemap_product']){
+            $sql = "select p.*,pc.pc_seo_filename from ".$db->prefix("products")." as p inner join ".$db->prefix("products_cate")." as pc on p.pc_id=pc.pc_id where p_status='1' and p.pc_id='{$parent}' order by p_sort ".$cms_cfg['sort_pos'].",p_modifydate desc ";
+            $res1 = $db->query($sql,true);
+            $products = array();
+            while($prod = $db->fetch_array($res1,1)){
+                $item = array(
+                    'name' => $prod['p_name'],
+                    'link' => App::getHelper('request')->get_link("products",$prod),
+                );
+                $products[] = $item;
             }
-            while($row1 = $db->fetch_array($selectrs1,1)){
-                if($this->ws_seo){
-                    if(trim($row1["pc_seo_filename"]) !=""){
-                        $pc_link1=$cms_cfg["base_root"].$row1["pc_seo_filename"].".htm";
-                    }else{
-                        $pc_link1=$cms_cfg["base_root"]."category-".$row1["pc_id"].".htm";
-                    }
-                }else{
-                    $pc_link1=$cms_cfg["base_root"]."products.php?func=p_list&pc_parent=".$row1["pc_id"];
-                }
-                $tpl->newBlock("PRODUCTS_CATE_SUB");
-                $tpl->assign( array( "VALUE_PC_NAME"  => $row1["pc_name"],
-                                     "VALUE_PC_LINK"  => $pc_link1,
-                ));
-                //搜尋產品(設定要顯示才執行)
-                if($cms_cfg["ws_module"]["ws_sitemap_product"]) {
-                    $sql2="select p.pc_id,p.p_id,p.p_name,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.pc_id='".$row1["pc_id"]."' and p.p_status='1' ";
-                    if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
-                        $sql2 .=  " and p.p_type not in ('1','3','5','7') ";
-                    }
-                    $sql2 .=  " order by p.p_sort ".$cms_cfg['sort_pos']." ";
-                    $selectrs2 = $db->query($sql2);
-                    $rsnum2    = $db->numRows($selectrs2);
-                    if($rsnum2 > 0) {
-                        $tpl->assign(array(
-                                "TAG_PRODUCT_UL1"  => "<ul>",
-                                "TAG_PRODUCT_UL2"  => "</ul>"
-                        ));
-                    }
-                    $k=0;
-                    while($row2 = $db->fetch_array($selectrs2,1)){
-                        $k++;
-                        if($this->ws_seo){
-                            $dirname=(trim($row2["pc_seo_filename"])!="")?trim($row2["pc_seo_filename"]):"products";
-                            if(trim($row2["p_seo_filename"]) !=""){
-                                $p_link2=$cms_cfg["base_root"].$dirname."/".$row2["p_seo_filename"].".html";
-                            }else{
-                                $p_link2=$cms_cfg["base_root"].$dirname."/products-".$row2["p_id"]."-".$row2["pc_id"].".html";
-                            }
-                        }else{
-                            $p_link2=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row2["p_id"]."&pc_parent=".$row2["pc_id"];
-                        }
-                        $tpl->newBlock("PRODUCTS_LIST");
-                        $tpl->assign( array( "VALUE_P_NAME"  => $row2["p_name"],
-                                             "VALUE_P_LINK"  => $p_link2,
-                        ));
-                        $tpl->gotoBlock("PRODUCTS_CATE_SUB");
-                    }
-                }
-                $tpl->gotoBlock("PRODUCTS_CATE_MAIN");
-            }
-            //搜尋主分類產品
-            if($cms_cfg["ws_module"]["ws_sitemap_product"]) {
-                $sql3="select p.pc_id,p.p_id,p.p_name,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.pc_id='".$row["pc_id"]."' and p.p_status='1' ";
-                if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
-                    $sql3 .=  " and p.p_type not in ('1','3','5','7') ";
-                }
-                $sql3 .=  " order by p.p_sort ".$cms_cfg['sort_pos']." ";
-                $selectrs3 = $db->query($sql3);
-                $rsnum3    = $db->numRows($selectrs3);
-                if($rsnum3 > 0) {
-                    $tpl->assign(array(
-                            "TAG_UL1"  => "<ul>",
-                            "TAG_UL2"  => "</ul>"
-                    ));
-                }
-                while($row3 = $db->fetch_array($selectrs3,1)){
-                    if($this->ws_seo){
-                        $dirname=(trim($row3["pc_seo_filename"])!="")?trim($row3["pc_seo_filename"]):"products";
-                        if(trim($row3["p_seo_filename"]) !=""){
-                            $p_link3=$cms_cfg["base_root"].$dirname."/".$row3["p_seo_filename"].".html";
-                        }else{
-                            $p_link3=$cms_cfg["base_root"].$dirname."/products-".$row3["p_id"]."-".$row3["pc_id"].".html";
-                        }
-                    }else{
-                        $p_link3=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row3["p_id"]."&pc_parent=".$row3["pc_id"];
-                    }
-                    $tpl->newBlock("PRODUCTS_MAIN");
-                    $tpl->assign( array( "VALUE_P_NAME"  => $row3["p_name"],
-                                         "VALUE_P_LINK"  => $p_link3,
-                                         "TAG_BR" => ($k==1)?"<br>":"",
-                    ));
-                }
-                $tpl->gotoBlock("PRODUCTS_CATE_MAIN");
+            if($products){
+                $container['products'] = $products;
             }
         }
-        //顯示未分類產品
-        if($cms_cfg["ws_module"]["ws_sitemap_product"]) {
-            $sql4 = "SELECT pc_id,p_id,p_name,p_seo_filename FROM ".$cms_cfg['tb_prefix']."_products WHERE pc_id='0' AND p_status='1' ";
-            if(empty($_SESSION[$cms_cfg["sess_cookie_name"]]["MEMBER_ID"]) && $cms_cfg["ws_module"]["ws_new_product_login"]==1){
-                $sql4 .=  " and p_type not in ('1','3','5','7') ";
-            }
-            $sql4 .=  " order by p_sort ".$cms_cfg['sort_pos']." ";
-            $selectrs4 = $db->query($sql4);
-            while($row4 = $db->fetch_array($selectrs4,1)){
-                if($this->ws_seo){
-                    if(trim($row4["p_seo_filename"]) !=""){
-                        $p_link4=$cms_cfg["base_root"]."products/".$row4["p_seo_filename"].".html";
-                    }else{
-                        $p_link4=$cms_cfg["base_root"]."products/products-".$row4["p_id"]."-".$row4["pc_id"].".html";
-                    }
-                }else{
-                    $p_link4=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row4["p_id"]."&pc_parent=".$row4["pc_id"];
+        return $container;
+    }
+    //輸出產品結構
+    function print_product_layer($layer,$deep=0){
+        global $tpl;
+        if(isset($layer['products'])){
+            $products = $layer['products'];
+            unset($layer['products']);
+        }
+        $zoneBlockName = "PRODUCTS_CATE".$deep."_ZONE";
+        $listBlockName = "PRODUCTS_CATE".$deep."_LIST";
+        $prodZoneBlockName = "PRODUCTS_CATE".$deep."_PROD_ZONE";
+        $prodListBlockName = "PRODUCTS_CATE".$deep."_PROD_LIST";
+        $tpl->newBlock($zoneBlockName);
+        $tpl->assign("LAYER_ID","layer".$deep);
+        if($layer){
+            foreach($layer as $item){
+                $tpl->newBlock($listBlockName);
+                $tpl->assign(array(
+                    "VALUE_PC_LINK" => $item['link'],
+                    "VALUE_PC_NAME" => $item['name'],
+                ));
+                if($item['sub']){
+                    $this->print_product_layer($item['sub'], $deep+1);
                 }
-                $tpl->newBlock("PRODUCTS_NONE");
-                $tpl->assign( array("VALUE_P_NAME"  => $row4["p_name"],
-                                    "VALUE_P_LINK"  => $p_link4,
+            }
+            
+        }
+        if($products){
+            $tpl->newBlock($prodZoneBlockName);
+            $tpl->assign(array(
+                "TAG_PRODUCTS_CLASS" => 'class="sitemap-products"',                
+            ));
+            foreach($products as $item){
+                $tpl->newBlock($prodListBlockName);
+                $tpl->assign(array(
+                    "VALUE_P_LINK" => $item['link'],
+                    "VALUE_P_NAME" => $item['name'],
                 ));
             }
         }
     }
-
 }
 ?>
