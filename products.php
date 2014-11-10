@@ -182,7 +182,7 @@ class PRODUCTS{
                 if(!empty($row["pc_id"])){
                     $this->parent=$row["pc_id"];
                 }
-                $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
+                $dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"category-".$row['pc_id'];
                 if($cms_cfg['ws_module']['ws_seo']){
                     //顯示上方簡述資料
                     if(trim($row["pc_seo_short_desc"]) && empty($_REQUEST["nowp"]) && $row["pc_custom_status"]==0){//只在產品列表第一頁顯示上方簡述資料
