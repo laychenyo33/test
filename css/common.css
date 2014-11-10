@@ -780,3 +780,60 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 #sitemap #product .layer3{}
 #sitemap #product .sitemap-products{ }
 #sitemap #product .sitemap-products a{ border-right: 1px solid #999999; color: #000; display: inline-block; margin: 0 5px 0 0; padding: 0 10px 0 0;  }
+
+/* 聯絡我們  */
+.contact_table1{
+	float:left;
+	width:350px;
+}
+.contact_table1 span{
+	color:#F00;
+	font-weight:bold;
+}
+.contact_table1 input,.contact_table1 select{
+	border:1px solid #999;
+	width: 180px;
+}
+.contact_table1 td{
+	padding:0 0 15px 0;
+}
+.contact_table2{
+	color:#000;	
+	float:left;
+	width:300px;
+}
+.contact_table2 textarea{
+	border:1px solid #999;
+	width:300px;
+	height:150px;
+	line-height:22px;
+}
+
+.contact_btn{
+  width: 80px;
+  height: 30px;
+  color: #0f1214;
+  margin:10px 5px 0 0;
+  border:none;
+  border-radius:5px;
+  border:1px solid #ccc;
+  background: -webkit-linear-gradient(top,#fff,#dadada);
+  background: -moz-linear-gradient(top,#fff,#dadada);
+  background: -ms-linear-gradient(top,#fff,#dadada);
+  background: -o-linear-gradient(top,#fff,#dadada);
+  background: linear-gradient(top,#fff,#dadada);
+}
+.contact_btn:hover{
+  background: -webkit-linear-gradient(top,#fff,#c9c9c9);
+  background: -moz-linear-gradient(top,#fff,#c9c9c9);
+  background: -ms-linear-gradient(top,#fff,#c9c9c9);
+  background: -o-linear-gradient(top,#fff,#c9c9c9);
+  background: linear-gradient(top,#fff,#c9c9c9);
+}
+.contact_btn:active{
+  background: -webkit-linear-gradient(top,#fff,#dadada);
+  background: -moz-linear-gradient(top,#fff,#dadada);
+  background: -ms-linear-gradient(top,#fff,#dadada);
+  background: -o-linear-gradient(top,#fff,#dadada);
+  background: linear-gradient(top,#fff,#dadada);
+}
