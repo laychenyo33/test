@@ -36,89 +36,34 @@
 .product_table td a:active {
 	color: #666666;
 }
-.product_table  tr.altrow {
-	background-color: #EAEAEA;
-}
-.product_table  tr.altrow1 {
-	background-color: #abce03;
-}
-.product_table  tr.altrow2 {
-	background-color: #cccccc;
-}
+
 /* download */
-.download_table {
-	font-size: 12px;
-	line-height: 1.2;
-	height: 24px;
-	top: 5px;
+.download_table{
+	width:650px;
+	margin:20px 0px 0px 30px;
+	color: #000;
+}
+.download_table a{
+	color: #000;
+}
+.download_table a:hover{
+	color: #069;
+}
+.download_table th{
+	color: #069;
 	font-weight: normal;
-	padding-top: 4px;
-	text-align: left;
-	padding-right: 8px;
-	padding-left: 8px;
-	border-top-color: #D6C9A0;
-	border-left-color: #D6C9A0;
-	border-top-width: 1px;
-	border-left-width: 1px;
-	border-top-style: solid;
-	border-left-style: solid;
-	background-color: #FFFFFF;
-	color: #666666;
- }
-.download_table th {
-	color: #FFFFFF;
-	background-color: #980203;
-	font-size: 12px;
-	line-height: 1.2;
-	height: auto;
-	top: 5px;
-	font-weight: bold;
-	padding-top: 4px;
-	text-align: center;
-	padding-right: 6px;
-	padding-left: 6px;
-	border-right-color: #D6C9A0;
-	border-bottom-color: #D6C9A0;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-right-style: solid;
-	border-bottom-style: solid;
-	padding-bottom: 4px;
- }
-.download_table td {
-	font-family: "Arial", "Helvetica", "sans-serif";
-	height: auto;
-	font-size: 12px;
- 	text-align: left;
-	padding-left: 8px;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	border-bottom-color: #D6C9A0;
-	border-right-width: 1px;
-	border-right-style: solid;
-	border-right-color: #D6C9A0;
-	padding-top: 4px;
-	padding-right: 8px;
-	padding-bottom: 4px;
+	border-top: 1px dotted #069;
+	border-bottom: 2px solid #069;
 }
-.download_table td a:link {
-	text-decoration: none;
-	color: #666666;
+.download_table td{
+	border-bottom:1px dotted #CCC;
+	text-align:center;
+	padding: 5px 0px;	
 }
-.download_table td a:visited {
-	color: #666666;
-	text-decoration: none;
- }
-.download_table td a:hover {
-	color: #FF0000;
-	text-decoration: none;
- }
-.download_table td a:active {
-	color: #666666;
- }
-.download_table  tr.altrow {
-	background-color: #EAEAEA;
- }
+
+
+
+
  /*購物車頁面 */
 
 .cart_step{
