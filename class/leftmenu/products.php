@@ -40,8 +40,9 @@ class Leftmenu_Products extends Leftmenu_Catewithitems {
             return true;
         }else{
             if($chkCate){
-                if(App::configs()->ws_module->ws_seo){
-                    return App::getHelper('main')->is_current_or_child_cate($_GET['d'],$cateRow['pc_seo_filename'],true);
+                $cate_filename = $_GET['d']?$_GET['d']:$_GET['f'];
+                if(App::configs()->ws_module->ws_seo && !empty($cate_filename)){
+                    return App::getHelper('main')->is_current_or_child_cate($cate_filename,$cateRow['pc_seo_filename'],true);
                 }else{
                     return App::getHelper('main')->is_current_or_child_cate($_GET['pc_parent'],$cateRow['pc_id']);
                 }

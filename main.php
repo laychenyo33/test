@@ -58,7 +58,7 @@ class MAINDEFAULT{
     function show_category_list(){
         global $db,$tpl,$cms_cfg,$main;
         //$sql="select a.pc_id,a.pc_parent,a.pc_name from ws_products_cate as a,ws_products_cate as b where a.pc_parent='0' or b.pc_parent=a.pc_id ";
-        $sql="select pc_id,pc_parent,pc_name,pc_cate_img,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1'";
+        $sql="select pc_id,pc_parent,pc_name,pc_cate_img,pc_seo_filename from ".$cms_cfg['tb_prefix']."_products_cate where pc_parent='0' and pc_status='1' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
