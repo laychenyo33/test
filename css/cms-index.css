@@ -362,22 +362,29 @@ h2 a{color:#4f4f4f;}
 
 
 /* news */
-.news{
+.news_list{
 	width:680px;
 	height:110px;
 	padding:20px 0 0 0;
-	line-height:1.5em;
 	border-bottom:1px dashed #CCC;
-	}
-.news a{
-	color:#069;
-	font-weight:bold;
-	}
-.news img{
+	}	
+.news_list img{
 	float:left;
 	margin-right:10px;
 	border:1px solid #CCC;
 	}
+.news_date{
+
+	}
+.news_date a{
+	color:#069;
+	font-weight:bold;
+	}	
+.news_text{
+	line-height: 22px;
+
+	}
+
 
 
 /* contact us */
@@ -425,3 +432,40 @@ h2 a{color:#4f4f4f;}
 
 
 
+/*電子型錄*/
+.ebook_left_list{
+	width: 180px;
+	margin: 0 auto;
+	margin-top:20px;	
+}
+.ebook_left_pic{
+	width:180px;
+	height: 212px;
+}
+.ebook_left_title{
+	width:180px;
+	margin: 5px 0 0 0;
+	text-align:center;
+}
+.ebook_left_title a{
+	color: #000;
+}
+
+.ebook_list{
+	width: 180px;
+	height: 212px;
+	float: left;
+	margin:0 60px 50px 0;
+}
+.ebook_pic{
+	width:180px;
+	height: 212px;
+}
+.ebook_title{
+	width:180px;
+	margin: 5px 0 0 0;
+	text-align:center;
+}
+.ebook_title a{
+	color: #000;
+}

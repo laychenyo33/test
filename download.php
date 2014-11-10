@@ -175,6 +175,7 @@ class DOWNLOAD{
             if($cms_cfg['ws_module']['ws_download_thumb']){
                 $tpl->newBlock("THUMB_COLUMN");
                 $tpl->assign(array(
+                    "VALUE_D_SUBJECT" => $row["d_subject"],
                     "VALUE_D_THUMB" => trim($row["d_thumb"])?$cms_cfg['file_root'].$row["d_thumb"]:$cms_cfg['default_ebook_pic'],                    
                 ));
             }

@@ -6,25 +6,27 @@
   </tr>
 </table>
 <!-- END BLOCK : SEO_SHORT_DESC -->
-        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="download_table">
+        <table class="download_table" width="90%" border="0" cellpadding="0" cellspacing="0">
         <tr>
-          <th width="44" height="24" >NO.</th>
-          <th width="139" height="24" >{MSG_CATE}</th>
+          <th width="5%" height="24" >NO.</th>
+          <th width="25%" height="24" >{MSG_CATE}</th>
           <!-- START BLOCK : THUMB_TITLE -->
-          <th>{MSG_THUMB}</th>
-          <!-- END BLOCK : THUMB_TITLE -->
-          <th width="341" height="24" >{MSG_SUBJECT}</th>
-          <th width="141" height="24" >{MSG_DATE}</th>
+          <th width="15%">{MSG_THUMB}</th>
+          <!-- END BLOCK : THUMB_TITLE -->          
+          <th width="" height="24" >{MSG_SUBJECT}</th>
+          <th width="15%" height="24" >{MSG_DATE}</th>
+          <th width="10%" height="24" >&nbsp;</th>
         </tr>
         <!-- START BLOCK : DOWNLOAD_LIST -->
         <tr {TAG_TR_CLASS}>
-          <td height="24" class="no">{VALUE_D_SERIAL}</td>
+          <td height="24">{VALUE_D_SERIAL}</td>
           <td>{TAG_DTYPE}<a href="{VALUE_DC_LINK}">{VALUE_DC_SUBJECT}</a></td>
           <!-- START BLOCK : THUMB_COLUMN -->
-          <td><img src="{VALUE_D_THUMB}" width="80"/></td>
-          <!-- END BLOCK : THUMB_COLUMN -->
-          <td class="title"><a href="{VALUE_D_LINK}" target="_blank">{VALUE_D_SUBJECT}</a></td>
-          <td class="date">{VALUE_D_MODIFYDATE}</td>
+          <td><img src="{VALUE_D_THUMB}" title="{VALUE_D_SUBJECT}" alt="{VALUE_D_SUBJECT}" width="80"/></td>
+          <!-- END BLOCK : THUMB_COLUMN -->          
+          <td>{VALUE_D_SUBJECT}</td>
+          <td>{VALUE_D_MODIFYDATE}</td>
+          <td><a href="{VALUE_D_LINK}" target="_blank"><img src="{TAG_THEME_PATH}download_btn.png" border="0"/></a></td>    
         </tr>
         <!-- END BLOCK : DOWNLOAD_LIST -->
         </table>

@@ -9,7 +9,7 @@
 <form name="myform" method="post" action="contactus.php?func=cu_replace"  id="formID" class="formular" >
     (<span style="color:#F00; font-weight:bold"> * </span>) Marked with an asterisk are required fields, please do not blank!<br /><br />
 
-    <div class="contact1">
+    <div class="contact_table1">
           <table width="350" border="0" cellspacing="0" cellpadding="0">
             <tr class="altrow">
               <td width="128">{MSG_CONTACT_PERSON}</td>
@@ -124,11 +124,11 @@
           </table>
         <input type="hidden" name="callback" value="1">
     </div>
-    <div class="contact2">     
+    <div class="contact_table2">     
         Please fill in your questions :<br /><br />
         <textarea name="cu_content" id="cu_content" type="textarea" class="validate[required]" cols="50" rows="5" class="text_area">{VALUE_CU_CONTENT}</textarea>
         <div class="ctbtn">
-            <input type="reset" class="ctbtn1" value="CLEAN"><input type="submit" class="ctbtn1" value="{MSG_MODE}" name="Submit" />
+            <input type="reset" class="contact_btn" value="CLEAN"><input type="submit" class="contact_btn" value="{MSG_MODE}" name="Submit" />
         </div>
     </div>
 </form>
