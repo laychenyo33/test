@@ -231,6 +231,7 @@ $TPLMSG["FORGOT_PASSWORD"]="Şifre unuttum";
 //EBOOK
 $TPLMSG["EBOOK"]="E-katalog";
 $TPLMSG["EBOOK_DOWNLOAD"]="Download";
+$TPLMSG["EBOOK_PRINT"] ="baskı";
 
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "Sadece bir an!!<BR>Bu sayfa yönlendirilmesi olacaktır!!";
