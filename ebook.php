@@ -168,6 +168,10 @@ class EBOOK{
     //EBOOK詳細頁
     function ebook_show() {
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        $tpl->assignGlobal(array(
+            "TAG_PAGE_PRINT"    => $TPLMSG["EBOOK_PRINT"],
+            "TAG_PAGE_DOWNLOAD" => $TPLMSG["EBOOK_DOWNLOAD"],
+        ));
         $this->parent=($_REQUEST["ebc_parent"])?$_REQUEST["ebc_parent"]:0;
         $sql="select * from ".$cms_cfg['tb_prefix']."_ebook where eb_status='1' and ebc_id = '".$this->parent."' order by eb_sort asc, eb_modifyaccount desc ";
         //取得總筆數

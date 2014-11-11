@@ -235,6 +235,7 @@ $TPLMSG["FORGOT_PASSWORD"]="忘记密码";
 //EBOOK
 $TPLMSG["EBOOK"]="电子型录";
 $TPLMSG["EBOOK_DOWNLOAD"]="下载";
+$TPLMSG["EBOOK_PRINT"] ="列印";
 
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "资料已处理完成<BR>请静待2秒回到列表页面!!";

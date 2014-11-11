@@ -231,6 +231,7 @@ $TPLMSG['FORGOT_PASSWORD'] = "ลืมรหัสผ่าน";
 //EBOOK
 $TPLMSG['EBOOK'] = "E-แคตตาล็อก";
 $TPLMSG['EBOOK_DOWNLOAD'] = "ดาวน์โหลด";
+$TPLMSG["EBOOK_PRINT"] ="พิมพ์";
 
 //ACTION MESSAGE
 $TPLMSG['ACTION_TERM'] = "กรุณารอสักครู่ !! <BR> หน้านี้จะถูกนำไป !!";
