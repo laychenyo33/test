@@ -681,6 +681,7 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 /*SITEMAP*/
 #sitemap {height: auto;overflow: hidden;padding: 15px 5px 20px;width: 650px;}
 #sitemap a { text-decoration: none;}
+#sitemap li {list-style: outside disc;margin-left: 10px;color: #4d4c4c;line-height: 22px;font-size: 13px;}
 #sitemap > ul > li > a { color: #000;}
 #sitemap #product{ }
 #sitemap #product ul { list-style: none; margin: 0; }
@@ -749,3 +750,86 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
   background: -o-linear-gradient(top,#fff,#dadada);
   background: linear-gradient(top,#fff,#dadada);
 }
+
+/*icomoon*/
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot?camh3');
+	src:url('fonts/icomoon.eot?#iefixcamh3') format('embedded-opentype'),
+		url('fonts/icomoon.woff?camh3') format('woff'),
+		url('fonts/icomoon.ttf?camh3') format('truetype'),
+		url('fonts/icomoon.svg?camh3#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-print:before {
+	content: "\e600";
+}
+.icon-download:before {
+	content: "\e601";
+}
+.btn-ebook {
+	font-size:25px;
+	color: #666;
+	float: left;
+	margin-right:30px;
+}
+
+.btn-ebook span{
+	display:block;	
+}
+.btn-ebook-out {
+	width:150px;
+	margin:0 auto;
+	padding: 10px 0 50px 0px;
+}		
+
+#payment_extend_info{
+    color:#f00;
+}
+#member-join-term{padding:10px 20px;}
+#member-join-term ul{list-style-position: inside}
+#member-join-term ul li{font-size:14px;line-height:25px;}
+#member-join-term ul li a{font-size:14px;}
+#member-join-action{margin-top:20px;text-align:center;}
+#member-join-action input{margin:0 10px;font-size:18px;}
+.epaper-note{font-size:14px;line-height:25px;color:#5a0;cursor:pointer}
+.epaper-note:hover{color:#f00;}
+
+#del-cart-dialog{
+    font-size:20px;text-align:center;line-height:40px;
+    padding:20px 0;
+}
+
+#minicart{display:none;position:absolute;width:223px;overflow: hidden;border:1px solid #f00;left:-2px;top:40px;background:#fff}
+#minicart #minicart-subtotal{text-align: left;line-height:30px;font-size:14px}
+#minicart #minicart-button{width:223px;}
+#minicart #minicart-button #minicart-button-sp{float:left;display:block;width:1px;height:20px;border:1px solid #fff;background:#f00}
+#minicart #minicart-button a{display:block;width:109px;height:20px;float:left;text-align:center;border-top:1px solid #f00;line-height:20px;background:#f00;color:#fff}
+#minicart .cart-item{clear:both;width:223px}
+#minicart .cart-item div{float:left}
+#minicart .cart-item .img{width:60px;}
+#minicart .cart-item .info{width:123px;text-align:left}
+#minicart .cart-item .nums{width:40px;text-align:center}
+#minicart .amount{color:#f00}
+
+/*數量折扣*/
+#quantity-discount{padding:10px 5px;border:2px dotted grey;margin:5px 0 10px 0;}
+#quantity-discount #title{color:#f00}
+#quantity-discount ul{list-style: none;padding:0;margin-top:5px;}
+#quantity-discount ul li{color:#0a0}

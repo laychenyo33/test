@@ -39,10 +39,15 @@
                 <tr>                
                   <td align="center">&nbsp;</td>                
                   <td align="center">
-                    <a href="{TAG_ROOT_PATH}ebook.php?func=print&fileID={VALUE_EB_ID}" target="_blank">
-                      <img src="{TAG_THEME_PATH}but_print.gif" border="0" width="121" height="50" /></a>
-                    <a href="{TAG_ROOT_PATH}ebook.php?func=download&fileID={VALUE_EB_ID}">
-                      <img src="{TAG_THEME_PATH}but_download.gif" border="0" width="152" height="50" /></a></td>                
+                      <div class="btn-ebook-out">
+                      <!--<img src="{TAG_THEME_PATH}but_print.gif" border="0" width="121" height="50" />-->
+                      <a href="{TAG_ROOT_PATH}ebook.php?func=print&fileID={VALUE_EB_ID}" target="_blank"><div class="icon-print btn-ebook"><span>Print</span></div></a>
+                    
+                    
+                      <!--<img src="{TAG_THEME_PATH}but_download.gif" border="0" width="152" height="50" />-->
+                      <a href="{TAG_ROOT_PATH}ebook.php?func=download&fileID={VALUE_EB_ID}"><div class="icon-download btn-ebook"><span>Download</span></div></a>
+                      </div>
+                  </td>                
                   <td align="center">&nbsp;</td>              
                 </tr>            
               </tbody>        
