@@ -70,7 +70,7 @@ class DOWNLOAD{
         $tpl->assignGlobal( "SUBMENU_TYPE" , "submenu02"); //左側選單的容器類別
 //        if($_REQUEST["f"]=="download"){
 //        }
-        $main->header_footer("download", $TPLMSG["DOWNLOAD"]);
+        //$main->header_footer("download", $TPLMSG["DOWNLOAD"]);
         $main->google_code(); //google analystics code , google sitemap code
     }
 
