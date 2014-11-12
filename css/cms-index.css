@@ -156,7 +156,7 @@ body{
 }
 
 #header{
-	height:70px;
+	height:60px;
 	background:url(../images/header.jpg) no-repeat;
 	}
 #path{
@@ -224,22 +224,24 @@ h2 a{color:#4f4f4f;}
 #page {
 	clear:both;
 	text-align:center;
-	font-size: 13px;
+	font-size: 15px;
 	letter-spacing: 1px;
 	margin: 0px;
 	height: 30px;
 	padding: 10px 0 0 0;
-	color: #FF0;
+	color: #333;
 }
 #page a {
-	font-size: 13px;
-	color:#FFF;
+	font-size: 15px;
+	color:#000;
 	letter-spacing: 1px;
-	margin:0;
-	padding: 0 3px 0 2px;
 }
 #page a:hover {
-	color:#FF0;
+	color: #1470c5;
+}
+#page .current {
+	color: #1470c5;
+	font-size: 15px;
 }
 /* products */
 
@@ -469,3 +471,5 @@ h2 a{color:#4f4f4f;}
 .ebook_title a{
 	color: #000;
 }
+
+
