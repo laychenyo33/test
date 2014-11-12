@@ -688,8 +688,11 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 #sitemap #product ul li { list-style:none; margin-left:0px; padding: 10px 0 0 20px;clear:both; }
 #sitemap #product ul li a{ color: #db422c; margin: 0; }
 #sitemap #product .layer0 > li > a:before { content:' '; display: inline-block; width: 18px; height:10px; background: url(../images/arr_01.png) no-repeat left 2px;}
+#sitemap #product .layer0 > .sitemap-products > a:before { background-image:none;}
 #sitemap #product .layer1 > li > a:before { content:' '; display: inline-block; width: 14px; height:10px; background: url(../images/arr_02.png) no-repeat left 2px;}
+#sitemap #product .layer1 > .sitemap-products > a:before { background-image:none;}
 #sitemap #product .layer2 > li > a:before { content:' '; display: inline-block; width: 10px; height:10px; background: url(../images/arr_03.png) no-repeat left 2px;}
+#sitemap #product .layer2 > .sitemap-products > a:before { background-image:none;}
 #sitemap #product .layer3{}
 #sitemap #product .sitemap-products{ }
 #sitemap #product .sitemap-products a{ border-right: 1px solid #999999; color: #000; display: inline-block; margin: 0 5px 0 0; padding: 0 10px 0 0;  }
