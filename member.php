@@ -392,7 +392,7 @@ class MEMBER{
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_NAME"]=$_REQUEST["m_name"];
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE"]="";
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=100;
-                        $goto_url=$cms_cfg["base_url"]."cart.php";
+                        $goto_url = ($cms_cfg['new_cart_path'])? $cms_cfg['new_cart_path'] : $cms_cfg['base_root']."cart.php";
                     }
 //                    $this->ws_tpl_file = "templates/ws-mail-tpl.html";
 //                    $mtpl = new TemplatePower( $this->ws_tpl_file );
