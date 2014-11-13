@@ -458,6 +458,10 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
     color: #3A85A0;
     text-align: left;
 }
+.pagetable a.link{font-size:14px;padding:0 3px;color:#55f}
+.pagetable a.first{}
+.pagetable a.last{}
+.pagetable span.current{font-size:14px;padding:0 3px;}
 
 .catetable{
     background-color:#FFF;

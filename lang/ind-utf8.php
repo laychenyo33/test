@@ -434,4 +434,10 @@ $TPLMSG['COPY_URL_DONE'] = "Replicated URL!";
 $TPLMSG['STATUS_OFF'] = "off";
 $TPLMSG['STATUS_ON'] = "on";
 $TPLMSG['CLASSIFY_OTHER'] = "Other";
+
+//pagiation
+$TPLMSG['PAGINATION_FIRST_PAGE'] = "first page";
+$TPLMSG['PAGINATION_LAST_PAGE'] = "last page";
+$TPLMSG['PAGINATION_PREV_FEW_PAGE'] = "prev %d pages";
+$TPLMSG['PAGINATION_NEXT_FEW_PAGE'] = "next %d pages";
 ?>

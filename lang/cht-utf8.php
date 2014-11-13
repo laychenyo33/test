@@ -455,4 +455,10 @@ $TPLMSG['COPY_URL_DONE'] = "已複製網址!";
 $TPLMSG['STATUS_OFF'] = "停用";
 $TPLMSG['STATUS_ON'] = "啟用";
 $TPLMSG['CLASSIFY_OTHER'] = "其他";
+    
+//pagiation
+$TPLMSG['PAGINATION_FIRST_PAGE'] = "第一頁";
+$TPLMSG['PAGINATION_LAST_PAGE'] = "最後頁";
+$TPLMSG['PAGINATION_PREV_FEW_PAGE'] = "前%d頁";
+$TPLMSG['PAGINATION_NEXT_FEW_PAGE'] = "後%d頁";
 ?>
