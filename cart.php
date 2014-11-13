@@ -560,6 +560,7 @@ class CART{
             //顯示付款方式
             $tpl->newBlock("PAYMENT_TYPE");
             $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
+            $tpl->assign("MSG_PAYMENT_ATM" , $TPLMSG["PAYMENT_ATM"]);
             foreach($ws_array["payment_type"] as $i => $v){
                 $tpl->newBlock("PAYMENT_TYPE_ITEMS");
                 $tpl->assign("VALUE_PAYMENT_TYPE_ID" , $i);
