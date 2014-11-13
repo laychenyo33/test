@@ -1133,8 +1133,8 @@ class MAINFUNC{
                     '%^('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/|tinymce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
                     '%^('.$cms_cfg['base_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
                     '%^('.$cms_cfg['file_root'].')([^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg))%i',
-                    '%(\A|=\s*[\'"])(\.\./|'.$cms_cfg['file_root'].')*(upload_files/[^"\'\s]+)%i',
-                    '%(\A|=\s*[\'"])(\.\./|'.$cms_cfg['base_root'].')*(images/[^"\'\s]+)%i',
+                    '%(\A|=\s*\\\*[\'"])(\.\./|'.$cms_cfg['file_root'].')*(upload_files/[^"\'\s]+)%i',
+                    '%(\A|=\s*\\\*[\'"])(\.\./|'.$cms_cfg['base_root'].')*(images/[^"\'\s]+)%i',
                 ),
                 'replace' => array(
                     '{TAG_SECURE_SCHEME}{TAG_SERVER}{TAG_FILE_ROOT}$3',
