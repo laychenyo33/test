@@ -351,7 +351,7 @@ class MEMBER{
                         '".$_REQUEST["m_account"]."',
                         '".$_REQUEST["m_epaper_status"]."'
                     )";//新增時e-mail等於account
-                $goto_url=$cms_cfg["base_url"];
+                $goto_url=$cms_cfg["base_root"]."products.htm";
                 break;
             case "mod":
                 $sql="
@@ -392,7 +392,7 @@ class MEMBER{
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_NAME"]=$_REQUEST["m_name"];
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE"]="";
                         $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=100;
-                        $goto_url=$cms_cfg["base_url"]."cart.php?func=c_finish";
+                        $goto_url=$cms_cfg["base_url"]."cart.php";
                     }
 //                    $this->ws_tpl_file = "templates/ws-mail-tpl.html";
 //                    $mtpl = new TemplatePower( $this->ws_tpl_file );
