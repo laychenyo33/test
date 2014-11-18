@@ -1509,6 +1509,20 @@ class MAINFUNC{
                     }
                 }  
             }
+            ////faq
+            if(in_array('faq',$sw)){
+                $sql = "select * from ".$cms_cfg['tb_prefix']."_faq_cate where fc_status='1' order  by fc_sort ".$cms_cfg['sort_pos'];
+                $res = $db->query($sql);
+                if($db->numRows($res)){
+                    $menu_arr['faq']=array();
+                    while($row=$db->fetch_array($res,1)){
+                        $menu_arr['faq'][] = array(
+                            "name" => $row['fc_subject'],
+                            "link" => $cms_cfg['base_root']."faq/flist-".$row['fc_id'].".htm",
+                        );
+                    }
+                }  
+            }
         }
         /*加入自訂的區塊*/
         if(is_array($extra)){
