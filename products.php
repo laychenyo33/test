@@ -299,7 +299,6 @@ class PRODUCTS{
             $main->pageview_history($main->get_main_fun(),$this->parent,App::getHelper('session')->MEMBER_ID);
         }else{
             //最新產品、促銷產品、熱門產品
-            $main->header_footer("");
             $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
         }
         //階層
@@ -319,18 +318,21 @@ class PRODUCTS{
                 $sql .= " and p.p_status='1' order by p.p_up_sort desc,p.p_new_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_NEW']);
                 $main->layer_link($TPLMSG['PRODUCT_NEW']);
+                $main->header_footer("new_products",$TPLMSG['PRODUCT_NEW']);
             //熱門產品
             }elseif($mode=="p_hot"){
                 $sql .=  " and p.p_type & 2 = '2' ";
                 $sql .= " and p.p_status='1' order by p.p_up_sort desc,p.p_hot_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_HOT']);
                 $main->layer_link($TPLMSG['PRODUCT_HOT']);
+                $main->header_footer("hot_products",$TPLMSG['PRODUCT_HOT']);
             //促銷產品
             }elseif($mode=="p_pro"){
                 $sql .=  " and p.p_type & 4 = '4' ";
                 $sql .= " and p.p_status='1' order by p.p_up_sort desc,p.p_pro_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_PROMOTION']);
                 $main->layer_link($TPLMSG['PRODUCT_PROMOTION']);
+                $main->header_footer("pro_products",$TPLMSG['PRODUCT_PROMOTION']);
             }else{
                 $sql .=  " and p.pc_id = '".$this->parent."' ";
                 if(isset($_GET['classify_id'])){
