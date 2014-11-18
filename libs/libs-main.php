@@ -189,9 +189,11 @@ class MAINFUNC{
             $tpl->assignGlobal( "MSG_LOGIN_FORGOT_PASSWORD",$TPLMSG["LOGIN_FORGOT_PASSWORD"]);
             $tpl->assignGlobal( "MSG_LOGIN_REGISTER",$TPLMSG["LOGIN_REGISTER"]);
             $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG['MEMBER_LOGIN']);
+            $tpl->assignGlobal( "MEMBER_LOGINSTATUS_SWITCH",$this->mk_link($TPLMSG['MEMBER_LOGIN'], App::configs()->base_root . "member.php"));
             //載入驗証碼
             $this->security_zone($cms_cfg['security_image_width'],$cms_cfg['security_image_height']);
         }else{
+            $tpl->assignGlobal( "MEMBER_LOGINSTATUS_SWITCH",$this->mk_link($TPLMSG["MEMBER_LOGOUT"], App::configs()->base_root . "login.php?func=logout"));
             $tpl->newBlock( "MEMBER_INFO" );
             $tpl->assign("TAG_LOGIN_MEMBER_CATE",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_CATE']);
             $tpl->assign("TAG_LOGIN_MEMBER_NAME",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_NAME']);
