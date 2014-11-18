@@ -1518,7 +1518,7 @@ class MAINFUNC{
                     while($row=$db->fetch_array($res,1)){
                         $menu_arr['faq'][] = array(
                             "name" => $row['fc_subject'],
-                            "link" => $cms_cfg['base_root']."faq/flist-".$row['fc_id'].".htm",
+                            "link" => App::getHelper('request')->get_link("faqcate",$row),
                         );
                     }
                 }  
