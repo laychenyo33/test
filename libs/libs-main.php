@@ -1504,7 +1504,7 @@ class MAINFUNC{
                     while($row=$db->fetch_array($res,1)){
                         $menu_arr['news'][] = array(
                             "name" => $row['nc_subject'],
-                            "link" => $cms_cfg['base_root']."news/".$row['nc_seo_filename'].".htm",
+                            "link" => App::getHelper('request')->get_link("newscate",$row),
                         );
                     }
                 }  
