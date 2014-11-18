@@ -65,6 +65,7 @@ class PRODUCTS{
                 $this->ws_tpl_file = "templates/ws-products-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $main->header_footer("",$TPLMSG["PRODUCTS"]);
+                $tpl->newBlock("JS_POP_IMG");
                 $this->products_search();
                 $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
                 $this->ws_tpl_type=1;
