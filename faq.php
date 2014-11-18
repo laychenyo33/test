@@ -17,10 +17,12 @@ class FAQ{
             $this->func_str=$cms_cfg['base_root'].$_REQUEST["f"];
         }
         switch($_REQUEST["func"]){
+            case "search":
+                $condition = " and (f_subject like '%{$_GET['kw']}%' or f_content like '%{$_GET['kw']}%') ";
             case "f_list"://問與答列表
                 $this->ws_tpl_file = "templates/ws-faq-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
-                $this->faq_list();
+                $this->faq_list($condition);
                 $this->ws_tpl_type=1;
                 break;
             default:    //問與答列表
@@ -62,7 +64,7 @@ class FAQ{
     }
 
 //問與答--列表================================================================
-    function faq_list(){
+    function faq_list($con){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         $cate = $this->left_cate_list();
         //問與答列表
@@ -70,6 +72,7 @@ class FAQ{
             $and_str="and fc_id='".$cate['fc_id']."'";
         }
         $main->pageview_history($main->get_main_fun(),$cate['fc_id'],App::getHelper('session')->MEMBER_ID);
+        $and_str .= $con;
         $sql="select * from ".$cms_cfg['tb_prefix']."_faq where f_status='1' ".$and_str." order by f_sort ".$cms_cfg['sort_pos']." ";
         //取得總筆數
         $selectrs = $db->query($sql);

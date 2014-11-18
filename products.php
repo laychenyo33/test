@@ -65,6 +65,7 @@ class PRODUCTS{
                 $this->ws_tpl_file = "templates/ws-products-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $main->header_footer("",$TPLMSG["PRODUCTS"]);
+                $tpl->newBlock("JS_POP_IMG");
                 $this->products_search();
                 $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
                 $this->ws_tpl_type=1;
@@ -299,7 +300,6 @@ class PRODUCTS{
             $main->pageview_history($main->get_main_fun(),$this->parent,App::getHelper('session')->MEMBER_ID);
         }else{
             //最新產品、促銷產品、熱門產品
-            $main->header_footer("");
             $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);
         }
         //階層
@@ -319,18 +319,21 @@ class PRODUCTS{
                 $sql .= " and p.p_status='1' order by p.p_up_sort desc,p.p_new_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_NEW']);
                 $main->layer_link($TPLMSG['PRODUCT_NEW']);
+                $main->header_footer("new_products",$TPLMSG['PRODUCT_NEW']);
             //熱門產品
             }elseif($mode=="p_hot"){
                 $sql .=  " and p.p_type & 2 = '2' ";
                 $sql .= " and p.p_status='1' order by p.p_up_sort desc,p.p_hot_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_HOT']);
                 $main->layer_link($TPLMSG['PRODUCT_HOT']);
+                $main->header_footer("hot_products",$TPLMSG['PRODUCT_HOT']);
             //促銷產品
             }elseif($mode=="p_pro"){
                 $sql .=  " and p.p_type & 4 = '4' ";
                 $sql .= " and p.p_status='1' order by p.p_up_sort desc,p.p_pro_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc";
                 $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['PRODUCT_PROMOTION']);
                 $main->layer_link($TPLMSG['PRODUCT_PROMOTION']);
+                $main->header_footer("pro_products",$TPLMSG['PRODUCT_PROMOTION']);
             }else{
                 $sql .=  " and p.pc_id = '".$this->parent."' ";
                 if(isset($_GET['classify_id'])){
@@ -790,6 +793,7 @@ class PRODUCTS{
             $tpl->assignGlobal( array("MSG_NAME"  => $TPLMSG['PRODUCT_NAME'],
                                       "MSG_SUBJECT"  => $TPLMSG['SUBJECT'],
                                       "MSG_MODE" => $TPLMSG['MANAGE_CATE'],
+                                      "MSG_IMG" => $TPLMSG['PRODUCT_IMG'],
                                       "MSG_CATE" => $TPLMSG['PRODUCT']."&nbsp;".$TPLMSG['CATE'],
                                       "VALUE_KW" => $_REQUEST["kw"],
                                       "VALUE_TOTAL_BOX" => $rsnum,
@@ -802,9 +806,14 @@ class PRODUCTS{
                 if($i%2){
                     $tpl->assign("TAG_TR_CLASS","class='altrow1'");
                 }
+                $p_img = $row['p_small_img']?$cms_cfg['base_root'] . $row['p_small_img'] : $cms_cfg['default_preview_pic'];
+                $dimension = $main->resizeto($p_img,120,120);
                 $tpl->assign( array("VALUE_PC_ID"  => $row["pc_id"],
                                     "VALUE_P_ID"  => $row["p_id"],
                                     "VALUE_P_NAME" => $row["p_name"],
+                                    "VALUE_P_IMG" => $p_img,
+                                    "VALUE_P_IMG_W" => $dimension['width'],
+                                    "VALUE_P_IMG_H" => $dimension['height'],
                                     "VALUE_P_SERIAL" => $i,
                                     "VALUE_PC_NAME"  => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
                                     "VALUE_PC_LINK" => $this->get_link($row),

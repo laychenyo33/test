@@ -1447,7 +1447,7 @@ class MAINFUNC{
                     }
                     $menu_arr[$row['au_cate']][]=array(
                         'name'=>$row['au_subject'],
-                        'link'=> ($i==1)?$cms_cfg['base_root'].$row['au_cate'].".htm" : (($cms_cfg["ws_module"]['ws_seo'])?$cms_cfg['base_root'].$row['au_cate'].'-'.$row['au_id'].".html":$cms_cfg['base_root']."aboutus.php?au_cate=".$row['au_cate']."&au_id=".$row['au_id']),
+                        'link'=> ($i==1)?$cms_cfg['base_root'].$row['au_cate'].".htm" : App::getHelper('request')->get_link('aboutus',$row),
                     );
                     $i++;
                 }
@@ -1470,12 +1470,13 @@ class MAINFUNC{
                                 $sql = "select * from ".$cms_cfg['tb_prefix']."_products where pc_id='".$row2['pc_id']."' and p_status='1' order by p_sort ".$cms_cfg['sort_pos'];
                                 $p_res = $db->query($sql);
                                 $p_n = $db->numRows($p_res);
-                                $pc_link=$cms_cfg['base_root'].$row2['pc_seo_filename'].".htm";
+                                $pc_link = App::getHelper('request')->get_link("productscate",$row2);
                                 $submenu.="<li><span rel='{$pc_link}'>".$row2['pc_name']."</span>\n ";
                                 if($p_n){
                                     $submenu.="<ul>\n";
                                     while($row3=$db->fetch_array($p_res,1)){
-                                        $p_link=$cms_cfg['base_root'].$row2['pc_seo_filename']."/".$row3['p_seo_filename'].".html";
+                                        if($row2['pc_seo_filename'])$row3['pc_seo_filename'] = $row2['pc_seo_filename'];
+                                        $p_link = App::getHelper('request')->get_link("products",$row3);
                                         $p_name=$row3['p_name'];
                                         $submenu.="<li><span rel='".$p_link."'>".$p_name."</span></li>\n";
                                     }
@@ -1489,7 +1490,7 @@ class MAINFUNC{
                         }
                         $menu_arr['products'][] = array(
                             'name'    => $row['pc_name'],
-                            'link'    => $cms_cfg['base_root'].$row['pc_seo_filename'].".htm",
+                            'link'    => App::getHelper('request')->get_link("productscate",$row),
                             'submenu' => $submenu,
                         );
                     }
@@ -1504,7 +1505,21 @@ class MAINFUNC{
                     while($row=$db->fetch_array($res,1)){
                         $menu_arr['news'][] = array(
                             "name" => $row['nc_subject'],
-                            "link" => $cms_cfg['base_root']."news/".$row['nc_seo_filename'].".htm",
+                            "link" => App::getHelper('request')->get_link("newscate",$row),
+                        );
+                    }
+                }  
+            }
+            ////faq
+            if(in_array('faq',$sw)){
+                $sql = "select * from ".$cms_cfg['tb_prefix']."_faq_cate where fc_status='1' order  by fc_sort ".$cms_cfg['sort_pos'];
+                $res = $db->query($sql);
+                if($db->numRows($res)){
+                    $menu_arr['faq']=array();
+                    while($row=$db->fetch_array($res,1)){
+                        $menu_arr['faq'][] = array(
+                            "name" => $row['fc_subject'],
+                            "link" => App::getHelper('request')->get_link("faqcate",$row),
                         );
                     }
                 }  

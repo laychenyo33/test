@@ -31,6 +31,8 @@ class DOWNLOAD{
                     $this->ws_tpl_type=0;
                     $this->download_file($_GET['d_id']);
                     break;
+                case "search":
+                    $condition = " and d_subject like '%{$_GET['kw']}%' ";
                 default:
                     $this->ws_tpl_type=1;
                     if(!empty($_REQUEST["type"])){
@@ -42,7 +44,7 @@ class DOWNLOAD{
                     }
                     $this->ws_tpl_file = "templates/ws-download-tpl.html";
                     $this->ws_load_tp($this->ws_tpl_file);
-                    $this->download_list();
+                    $this->download_list($condition);
             }
         }        
         if($this->ws_tpl_type){
@@ -75,7 +77,7 @@ class DOWNLOAD{
     }
 
 //檔案下載--列表================================================================
-    function download_list(){
+    function download_list($con){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //檔案下載列表
         $crow = $this->left_cate_list();
@@ -102,6 +104,7 @@ class DOWNLOAD{
         }else{
             $main->layer_link($TPLMSG['DOWNLOAD']);
         }
+        $and_str .= $con;
         $sql="select d.*,dc.*,'0' as dtype from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id
                   where  d.d_status='1' and d.d_public='1' ".$and_str;
         if($this->member_download && $this->is_login){

@@ -221,42 +221,10 @@ class SYSTEMCFG{
     }
     //資料更新
     function system_config_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $sql="
-            update ".$cms_cfg['tb_prefix']."_system_config set
-                sc_status='".$db->quote($_REQUEST["sc_status"])."',
-                sc_close_msg='".$db->quote($_REQUEST["sc_close_msg"])."',
-                sc_default_front_page ='".$db->quote($_REQUEST["sc_default_front_page"])."',
-                sc_company='".$db->quote($_REQUEST["sc_company"])."',
-                sc_cart_type='".$db->quote($_REQUEST["sc_cart_type"])."',
-                sc_email='".$db->quote($_REQUEST["sc_email"])."',
-                sc_one_page_limit='".$db->quote($_REQUEST["sc_one_page_limit"])."',
-                sc_meta_title='".$db->quote($_REQUEST["sc_meta_title"])."',
-                sc_meta_keyword='".$db->quote($_REQUEST["sc_meta_keyword"])."',
-                sc_meta_description='".$db->quote($_REQUEST["sc_meta_description"])."',
-                sc_short_desc='".$db->quote($_REQUEST["sc_short_desc"])."',
-                sc_seo_h1='".$db->quote($_REQUEST["sc_seo_h1"])."',
-                sc_im_status='".$db->quote($_REQUEST["sc_im_status"])."',
-                sc_im_starttime='".$db->quote($_REQUEST["sc_im_starttime_h"]).":".$db->quote($_REQUEST["sc_im_starttime_i"]).":00',
-                sc_im_endtime='".$db->quote($_REQUEST["sc_im_endtime_h"]).":".$db->quote($_REQUEST["sc_im_endtime_i"]).":00',
-                sc_im_msn='".$db->quote($_REQUEST["sc_im_msn"])."',
-                sc_desc_title_default='".$db->quote($_REQUEST["sc_desc_title_default"])."',
-                sc_character_title_default='".$db->quote($_REQUEST["sc_character_title_default"])."',
-                sc_spec_title_default='".$db->quote($_REQUEST["sc_spec_title_default"])."',
-				sc_ga_code='".$db->quote($_REQUEST["sc_ga_code"])."',
-                ";
-        if($cms_cfg["ws_module"]["ws_version"]=="ips" || $cms_cfg["ws_module"]["ws_version"]=="ipc"){
-            $sql .="sc_shipping_price='".$db->quote($_REQUEST["sc_shipping_price"])."',
-                    sc_shipping_price2='".$db->quote($_REQUEST["sc_shipping_price2"])."',
-                    sc_no_shipping_price='".$db->quote($_REQUEST["sc_no_shipping_price"])."',
-                    sc_service_fee='".$db->quote($_REQUEST["sc_service_fee"])."',";
-        }
-        if($cms_cfg["ws_module"]["ws_ad"]==1){
-            $sql .="sc_ad_sort_type='".$db->quote($_REQUEST["sc_ad_sort_type"])."',";
-        }
-        $sql .="sc_im_skype='".$db->quote($_REQUEST["sc_im_skype"])."' where sc_id='1'";
-        $rs = $db->query($sql);
-        $db_msg = $db->report();
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;   
+        $writeData = array_merge($_POST,array('sc_id' => 1));
+        App::getHelper('dbtable')->system_config->writeData($writeData);
+        $db_msg = App::getHelper('dbtable')->system_config->report();
         if ( $db_msg == "" ) {
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$cms_cfg["manage_url"]."system-config.php?func=sc_mod";
