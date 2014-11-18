@@ -279,7 +279,7 @@ class AD{
             $tpl->newBlock( "TAG_SELECT_AD_CATE" );
             $tpl->assign( array( "TAG_SELECT_AD_CATE_NAME"  => $value,
                                  "TAG_SELECT_AD_CATE_VALUE" => $key,
-                                 "STR_ADC_SEL"       => ($key==$row["ad_cate"])?"selected":""
+                                 "STR_ADC_SEL"       => (($action_mode==="add" && $key==$_GET['ad_cate']) || $key==$row["ad_cate"])?"selected":""
             ));
         }
     }
