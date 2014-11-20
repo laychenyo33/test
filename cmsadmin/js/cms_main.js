@@ -273,11 +273,7 @@ function resize_opener(){
 function click_all(form) {
     checked = form.check_box?true:false;
     $(form).find(":checkbox").each( function() {
-        if(checked){
-            $(this).removeAttr("checked");
-        }else{
-            $(this).attr("checked",'true');
-        }
+        this.checked = !checked;
     });
     form.check_box = checked?false:true;
 }
