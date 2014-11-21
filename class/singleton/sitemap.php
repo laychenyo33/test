@@ -56,7 +56,7 @@ class Singleton_Sitemap{
                                  "VALUE_CONTACTUS_LINK" =>$cms_cfg["base_root"]."contactus".$ext,
                                  "VALUE_GALLERY_LINK" =>$cms_cfg["base_root"]."gallery".$ext,
         ));
-
+        $this->aboutus_list();
         $map = $this->get_product_layer();
         $this->print_product_layer($map);
     }
@@ -131,6 +131,20 @@ class Singleton_Sitemap{
                     "VALUE_P_NAME" => $item['name'],
                 ));
             }
+        }
+    }    
+    
+    
+    function aboutus_list(){
+        global $tpl;
+        $sql = "select  distinct au_cate from ".App::getHelper('db')->prefix("aboutus");
+        $res = App::getHelper('db')->query($sql,1);
+        while($row = App::getHelper('db')->fetch_array($res,1)){
+            $tpl->newBlock("ABOUTUS_LIST");
+            $tpl->assign(array(
+                "TAG_NAME" => App::defaults()->main[$row['au_cate']],
+                "TAG_LINK" => App::configs()->base_root . $row['au_cate'] . ".htm",
+            ));
         }
     }    
     
