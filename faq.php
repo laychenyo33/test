@@ -20,15 +20,10 @@ class FAQ{
             case "search":
                 $condition = " and (f_subject like '%{$_GET['kw']}%' or f_content like '%{$_GET['kw']}%') ";
             case "f_list"://問與答列表
-                $this->ws_tpl_file = "templates/ws-faq-tpl.html";
-                $this->ws_load_tp($this->ws_tpl_file);
-                $this->faq_list($condition);
-                $this->ws_tpl_type=1;
-                break;
             default:    //問與答列表
                 $this->ws_tpl_file = "templates/ws-faq-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
-                $this->faq_list();
+                $this->faq_list($condition);
                 $this->ws_tpl_type=1;
                 break;
         }
