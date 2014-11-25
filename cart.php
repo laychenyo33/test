@@ -514,7 +514,7 @@ class CART{
             $tpl->assignGlobal(array(
                  "VALUE_M_COMPANY_NAME" => $tmpForm["m_company_name"],                
                  "VALUE_M_VAT_NUMBER" => $tmpForm["m_vat_number"],
-                 "VALUE_CONTENT" => $tmpForm["content"],
+                 "VALUE_CONTENT" => $tmpForm["o_content"],
             ));
         }
         //國家下拉選單
@@ -617,7 +617,7 @@ class CART{
                             "VALUE_M_RECI_TEL" => $_REQUEST["m_reci_tel"],
                             "VALUE_M_RECI_EMAIL" => $_REQUEST["m_reci_email"],
                             "VALUE_M_RECI_CELLPHONE" => $_REQUEST["m_reci_cellphone"],
-                            "VALUE_CONTENT" => nl2br($_REQUEST["content"]),
+                            "VALUE_O_CONTENT" => nl2br($_REQUEST["o_content"]),
                             "VALUE_O_ID" => $this->o_id,
                             "VALUE_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]],
                             "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
@@ -736,7 +736,7 @@ class CART{
                             "VALUE_M_RECI_TEL" => $_REQUEST["m_reci_tel"],
                             "VALUE_M_RECI_EMAIL" => $_REQUEST["m_reci_email"],
                             "VALUE_M_RECI_CELLPHONE" => $_REQUEST["m_reci_cellphone"],
-                            "VALUE_CONTENT" => nl2br($_REQUEST["content"]),
+                            "VALUE_O_CONTENT" => nl2br($_REQUEST["o_content"]),
                             "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
         ));
         //訂購人
@@ -1014,6 +1014,7 @@ class CART{
                 unset($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"]);
                 unset($_SESSION[$cms_cfg['sess_cookie_name']]["amount"]);
                 unset($_SESSION[$cms_cfg['sess_cookie_name']]["shipment_type"]);
+                unset(App::getHelper('session')->tmpForm);//結帳表單暫存
                 //$tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 //$goto_url=$cms_cfg["base_url"]."member.php?".$func_str;
                 //$this->goto_target_page($goto_url,2);
