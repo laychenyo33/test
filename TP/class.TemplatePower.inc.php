@@ -688,40 +688,44 @@ class TemplatePower extends TemplatePowerParser
 	 * 
 	 * @access public
      */
-    function newBlock( $blockname )
+    function newBlock( $blockname,$singleton=false )
     {
-        $parent = &$this->content[ $this->parent[$blockname] .'_'. $this->index[$this->parent[$blockname]] ];
+        if(!$singleton || !isset( $this->defBlock[ $blockname ] ) ){
+            $parent = &$this->content[ $this->parent[$blockname] .'_'. $this->index[$this->parent[$blockname]] ];
 
-		    $lastitem = sizeof( $parent );
-        $lastitem > 1 ? $lastitem-- : $lastitem = 0;
+                        $lastitem = sizeof( $parent );
+            $lastitem > 1 ? $lastitem-- : $lastitem = 0;
 
-		    $ind_blockname = $blockname .'_'. $this->index[ $blockname ];
-		
-        if ( !isset( $parent[ $lastitem ]["_B:$blockname"] ))
-        {
-           //ok, there is no block found in the parentblock with the name of {$blockname}
+                        $ind_blockname = $blockname .'_'. $this->index[ $blockname ];
 
-           //so, increase the index counter and create a new {$blockname} block
-            $this->index[ $blockname ] += 1;
-
-            $ind_blockname = $blockname .'_'. $this->index[ $blockname ];			
-			
-            if (!isset( $this->content[ $ind_blockname ] ) )
+            if ( !isset( $parent[ $lastitem ]["_B:$blockname"] ))
             {
-                 $this->content[ $ind_blockname ] = Array();
+               //ok, there is no block found in the parentblock with the name of {$blockname}
+
+               //so, increase the index counter and create a new {$blockname} block
+                $this->index[ $blockname ] += 1;
+
+                $ind_blockname = $blockname .'_'. $this->index[ $blockname ];			
+
+                if (!isset( $this->content[ $ind_blockname ] ) )
+                {
+                     $this->content[ $ind_blockname ] = Array();
+                }
+
+               //tell the parent where his (possible) children are located
+                $parent[ $lastitem ]["_B:$blockname"] = $ind_blockname;
             }
 
-           //tell the parent where his (possible) children are located
-            $parent[ $lastitem ]["_B:$blockname"] = $ind_blockname;
+           //now, make a copy of the block defenition
+            $blocksize = sizeof( $this->content[ $ind_blockname ] );
+
+            $this->content[ $ind_blockname ][ $blocksize ] = Array( $blockname );
+
+           //link the current block to the block we just created
+            $this->currentBlock = &$this->content[ $ind_blockname ][ $blocksize ];
+        }else{
+            $this->gotoBlock($blockname);
         }
-
-       //now, make a copy of the block defenition
-        $blocksize = sizeof( $this->content[ $ind_blockname ] );
-
-        $this->content[ $ind_blockname ][ $blocksize ] = Array( $blockname );
-
-       //link the current block to the block we just created
-        $this->currentBlock = &$this->content[ $ind_blockname ][ $blocksize ];
     }
 
     /**
