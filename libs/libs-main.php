@@ -189,9 +189,11 @@ class MAINFUNC{
             $tpl->assignGlobal( "MSG_LOGIN_FORGOT_PASSWORD",$TPLMSG["LOGIN_FORGOT_PASSWORD"]);
             $tpl->assignGlobal( "MSG_LOGIN_REGISTER",$TPLMSG["LOGIN_REGISTER"]);
             $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG['MEMBER_LOGIN']);
+            $tpl->assignGlobal( "MEMBER_LOGINSTATUS_SWITCH",$this->mk_link($TPLMSG['MEMBER_LOGIN'], App::configs()->base_root . "member.php"));
             //載入驗証碼
             $this->security_zone($cms_cfg['security_image_width'],$cms_cfg['security_image_height']);
         }else{
+            $tpl->assignGlobal( "MEMBER_LOGINSTATUS_SWITCH",$this->mk_link($TPLMSG["MEMBER_LOGOUT"], App::configs()->base_root . "login.php?func=logout"));
             $tpl->newBlock( "MEMBER_INFO" );
             $tpl->assign("TAG_LOGIN_MEMBER_CATE",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_CATE']);
             $tpl->assign("TAG_LOGIN_MEMBER_NAME",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_NAME']);
@@ -334,6 +336,7 @@ class MAINFUNC{
             if($cms_cfg["ws_module"]["ws_member"]==1){
                 $this->login_zone();
             }
+            $this->google_code(); //google analystics code , google sitemap code
             $this->mouse_disable(); //鎖滑鼠右鍵功能
             $this->clearfield(); //搜尋區塊, 投入true值啟用autocomplete 
             //下拉式選單
@@ -1099,18 +1102,22 @@ class MAINFUNC{
     }
     function google_code(){
         global $tpl,$db,$cms_cfg;
-        $sql="select sc_ga_code,sc_gs_code,sc_gs_datetime,sc_gs_filename from ".$cms_cfg['tb_prefix']."_system_config";
-        $selectrs = $db->query($sql);
-        $row = $db->fetch_array($selectrs,1);
-        if(trim($row["sc_ga_code"])!="" && $cms_cfg['ws_online']){
-            $ga_domain=str_replace("www.","",$cms_cfg['server_name']);
-            $tpl->newBlock("GOOGLE_ANALYTICS");
-            $tpl->assign("VALUE_GA_CODE",$row["sc_ga_code"]);
-            $tpl->assign("VALUE_GA_DOMAIN",$ga_domain);
-        }
-        if(trim($row["sc_gs_code"])!=""){
-            $tpl->newBlock("GOOGLE_SITEMAP_METATAG");
-            $tpl->assign("VALUE_GS_CODE",$row["sc_gs_code"]);
+        static $c;
+        $c++;
+        if($c==1){
+            $sql="select sc_ga_code,sc_gs_code,sc_gs_datetime,sc_gs_filename from ".$cms_cfg['tb_prefix']."_system_config";
+            $selectrs = $db->query($sql);
+            $row = $db->fetch_array($selectrs,1);
+            if(trim($row["sc_ga_code"])!="" && $cms_cfg['ws_online']){
+                $ga_domain=str_replace("www.","",$cms_cfg['server_name']);
+                $tpl->newBlock("GOOGLE_ANALYTICS",true);
+                $tpl->assign("VALUE_GA_CODE",$row["sc_ga_code"]);
+                $tpl->assign("VALUE_GA_DOMAIN",$ga_domain);
+            }
+            if(trim($row["sc_gs_code"])!=""){
+                $tpl->newBlock("GOOGLE_SITEMAP_METATAG",true);
+                $tpl->assign("VALUE_GS_CODE",$row["sc_gs_code"]);
+            }
         }
     }
     //圖檔檔案路徑替換避免破圖

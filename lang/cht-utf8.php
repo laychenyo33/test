@@ -281,10 +281,10 @@ $TPLMSG['TRANSFER_ACCOUNT'] = "轉帳帳號";
 
 $TPLMSG['SELECT_COUNTRY'] = "選擇國家";
 
-$TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
-$TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
-$TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
-$TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
+$TPLMSG['EPAPER_REGISTERED'] = "已為您提交的email訂閱電子報";
+$TPLMSG['EPAPER_EMAIL_EXISTED'] = "E-mail已在電子報發送名單!";
+$TPLMSG['EPAPER_MISSING_DATA'] = "E-mail資料不存在!";
+$TPLMSG['EPAPER_EMAIL_INVALID'] = "E-mail無效!";
 $TPLMSG['EPAPER_SENT'] = "電子報發送完成";
 
 $TPLMSG['SLIDE_BOX_IMAGE'] = "圖片";

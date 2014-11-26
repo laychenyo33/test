@@ -2412,108 +2412,18 @@ class PRODUCTS{
     //應用領域儲存
     function products_application_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        if($this->seo){
-            $seo_fields = array(
-                "pa_name_alias"=>array(
-                    'filter'=>array('htmlspecialchars')
-                ),
-                "pa_seo_filename"=>array(
-                    //'filter'=>array('htmlspecialchars')
-                ),
-                "pa_seo_title"=>array(
-                    'filter'=>array('htmlspecialchars')
-                ),
-                "pa_seo_keyword"=>array(
-                    'filter'=>array('htmlspecialchars')              
-                ),
-                "pa_seo_description"=>array(
-                    'filter'=>array('htmlspecialchars')  
-                ),
-                "pa_seo_short_desc"=>array(
-                    'filter'=>array(array('callback'=>array($main,'content_file_str_replace'),'params'=>array('in'))),
-                ),
-                "pa_seo_down_short_desc"=>array(
-                    'filter'=>array(array('callback'=>array($main,'content_file_str_replace'),'params'=>array('in'))),
-                ),
-                "pa_seo_h1"=>array(
-                    'filter'=>array('htmlspecialchars')   
-                ));
-            $add_field_str='';
-            $add_value_str='';
-            $update_str="";                
-            foreach($seo_fields as $field => $info){
-                $val = trim($_REQUEST[$field]);
-                if(is_array($info['filter'])){
-                    foreach($info['filter'] as $callback){
-                        if(is_string($callback)){
-                            $val = call_user_func($callback,$val);
-                        }elseif(is_array($callback)){
-                            if(!isset($callback['callback'])){
-                                $callback = array('callback'=>$callback);
-                            }
-                            $params = array($val);
-                            if(isset($callback['params'])){
-                                $params = array_merge($params,$callback['params']);
-                            }
-                            $val = call_user_func_array($callback['callback'],$params);
-                        }
-                    }
-                }
-                $add_field_str .= "".$field.",";
-                $add_value_str .= "'".$val."',";
-                $update_str    .= "".$field."='".$val."',";                
-            }
-        }
-        switch ($_REQUEST["action_mode"]){
-            case "add":
-                $sql="
-                insert into ".$cms_cfg['tb_prefix']."_products_application(
-                    pa_parent,
-                    pa_status,
-                    pa_sort,
-                    pa_name,
-                    pa_custom_status,
-                    pa_custom,
-                    pa_small_img,
-                    pa_modifydate,
-                    ".$add_field_str."
-                    pa_modifyaccount
-                ) values (
-                    '".$_REQUEST["pa_parent"]."',
-                    '".$_REQUEST["pa_status"]."',
-                    '".$_REQUEST["pa_sort"]."',
-                    '".htmlspecialchars($_REQUEST["pa_name"])."',
-                    '".$_REQUEST["pa_custom_status"]."',
-                    '".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"],'in'))."',
-                    '".$main->file_str_replace($_REQUEST["pa_small_img"])."',
-                    '".date("Y-m-d H:i:s")."',
-                    ".$add_value_str."
-                    '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
-                )";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                if ( $db_msg == "" ) {
-                    $this->pa_id=$db->get_insert_id();
-                }
-                break;
-            case "mod":
-                $sql="
-                update ".$cms_cfg['tb_prefix']."_products_application set
-                    pa_parent='".$_REQUEST["pa_parent"]."',
-                    pa_status='".$_REQUEST["pa_status"]."',
-                    pa_sort='".$_REQUEST["pa_sort"]."',
-                    pa_name='".htmlspecialchars($_REQUEST["pa_name"])."',
-                    pa_custom_status='".$_REQUEST["pa_custom_status"]."',
-                    pa_custom='".$db->quote($main->content_file_str_replace($_REQUEST["pa_custom"],'in'))."',
-                    pa_small_img='".$main->file_str_replace($_REQUEST["pa_small_img"])."',
-                    pa_modifydate='".date("Y-m-d H:i:s")."',
-                    ".$update_str."
-                    pa_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
-                where pa_id='".$_REQUEST["now_pa_id"]."'";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                break;
-        }
+        $dbtable = App::getHelper('dbtable')->products_application;
+        $writeData = array_merge($_POST,array(
+            'pa_id' => $_POST["now_pa_id"],
+            'pa_name' => htmlspecialchars($_POST["pa_name"]),
+            'pa_custom' => $main->content_file_str_replace($_POST["pa_custom"],'in'),
+            'pa_small_img' => $main->file_str_replace($_POST["pa_small_img"]),
+            'pa_modifyaccount' => $_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"],
+            'pa_seo_short_desc'      => isset($_POST["pa_seo_short_desc"])?$main->content_file_str_replace($_POST["pa_seo_short_desc"],'in'):null,
+            'pa_seo_down_short_desc' => isset($_POST["pa_seo_down_short_desc"])?$main->content_file_str_replace($_POST["pa_seo_down_short_desc"],'in'):null,
+        ));
+        $dbtable->writeData($writeData);
+        $db_msg = $dbtable->report();
         if ( $db_msg == "" ) {
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             //$goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
