@@ -281,6 +281,10 @@ class DB {
       }
       mysql_data_seek($this->query_result, $rowId);
   }  
+  //把欄位包起來
+  function fieldname($fieldname){
+      return "`{$fieldname}`";
+  }  
   
 } // end of class
 
