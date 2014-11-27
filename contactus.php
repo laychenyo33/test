@@ -321,7 +321,11 @@ class CONTACTUS{
                         ));
                     }
                     $mail_content=$tpl->getOutputContent();
-                    $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["cu_email"],$mail_content,$TPLMSG['CONTACT_US'],"cu","");
+                    if($_REQUEST["cu_email"]){
+                        $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["cu_email"],$mail_content,$TPLMSG['CONTACT_US'],"cu","");
+                    }else{
+                        $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$mail_content,$TPLMSG['CONTACT_US'],"epaper","");
+                    }
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
                 }
