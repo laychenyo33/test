@@ -7,18 +7,21 @@
                 <td class="cart_title_icon">{MSG_MEMBER_LOGIN}</td>
               </tr>
               <tr>
-                <td><input class="ipt1" type="text" name="mm_account" placeholder="{MSG_LOGIN_ACCOUNT}{MSG_LOGIN_EX_DESC}"></td>
+                <td><input class="ipt1 iptbox" type="text" name="mm_account" placeholder="{MSG_LOGIN_ACCOUNT}{MSG_LOGIN_EX_DESC}"></td>
               </tr>
               <tr>
-                <td><input class="ipt1" type="password" name="mm_password" placeholder="{MSG_LOGIN_PASSWORD}"></td>
+                <td><input class="ipt1 iptbox" type="password" name="mm_password" placeholder="{MSG_LOGIN_PASSWORD}"></td>
               </tr>
               <tr>
-                <td><input class="ipt2" type="text" name="security" placeholder="{MSG_LOGIN_SECURITY}"> {TAG_IMAGE_SECURITY_IMAGE}&nbsp;&nbsp;<br/>
+                <td><input class="ipt2 iptbox" style="float: left;" type="text" name="security" placeholder="{MSG_LOGIN_SECURITY}"> <div class="security_pic">{TAG_IMAGE_SECURITY_IMAGE}</div>&nbsp;&nbsp;<br/>
                     <font color="red">{MSG_ERROR_MESSAGE}</font>
                 </td>
               </tr>
               <tr>
-                <td class="fg_pw"><a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a> <input type="image" class="v_mid" src="{TAG_THEME_PATH}btn_login.png"></td>
+                <td class="fg_pw">
+                <a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a>
+                <input type="button" class="shop_btn" value="登入" onclick="loginform.submit();" />
+                </td>
               </tr>
             </table>
             </div>
@@ -31,7 +34,7 @@
                 <td class="cart_title_icon">{MSG_LOGIN_REGISTER}</td>
               </tr>
               <tr>
-                <td><a href="{TAG_ROOT_PATH}member.php?func=m_add"><img style="padding-top: 20px;" src="{TAG_THEME_PATH}btn_add_member.png"></a></td>
+                <td><a href="{TAG_ROOT_PATH}member.php?func=m_add"><div class="firstbuy_btn"><span>您不需先加入會員，按此即可完成結帳</span><br>※如您已是會員，請由左邊選項登入</div></a></td>
               </tr>
             </table>
             </div>

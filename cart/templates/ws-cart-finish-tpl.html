@@ -21,11 +21,14 @@
           </tr>
           <tr>
             <td>
-                <input class="ipt2 iptbox"  name="security" maxlength="4" size="4" type="text" placeholder="{MSG_LOGIN_SECURITY}"> {TAG_IMAGE_SECURITY_IMAGE}<br/><font color="#ff0000">{MSG_ERROR_MESSAGE}</font>             
+                <input class="ipt2 iptbox" style="float: left;" name="security" maxlength="4" size="4" type="text" placeholder="{MSG_LOGIN_SECURITY}"> <div class="security_pic">{TAG_IMAGE_SECURITY_IMAGE}</div><br/><font color="#ff0000">{MSG_ERROR_MESSAGE}</font>             
             </td>
           </tr>
           <tr>
-              <td class="fg_pw"><a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a> <a href="#" onclick="myform.submit();return false;"><img src="{TAG_THEME_PATH}btn_login.png"></a></td>
+              <td class="fg_pw">
+              <a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a>
+              <input type="button" class="shop_btn" value="登入" onclick="myform.submit();return false;" />
+              </td>
           </tr>
         </table>
         </div>
@@ -38,7 +41,7 @@
             <td class="cart_title_icon">{TAG_FS_SHOPPING}</td>
           </tr>
           <tr>
-            <td><a href="#" id="first"><img style="padding-top: 20px;" src="{TAG_THEME_PATH}/btn_firstbuy.png"></a></td>
+            <td><a href="#" id="first"><div class="firstbuy_btn"><span>您不需先加入會員，按此即可完成結帳</span><br>※如您已是會員，請由左邊選項登入</div></a></td>
           </tr>
         </table>
         </div>
@@ -342,7 +345,7 @@
             
 
             <div class="cart_btn">
-            <input type="image" src="{TAG_THEME_PATH}btn_next.png">
+            <input type="button" class="shop_btn" id="gotopreview" value="下一步" />
             </div>
 
             <br /><br />
@@ -481,7 +484,9 @@
 					location.href = '{TAG_ROOT_PATH}';
 				}
 			});
-			
+			$("#gotopreview").click(function(){
+                            $(myform).trigger('submit');
+                        });
 			//----
 			{MSG_PAYMENT_ALERT}
 		});
