@@ -25,8 +25,12 @@
 <tr>
     <td width="55%">&nbsp;</td>
     <td width="15%">&nbsp;</td>
-    <td width="15%"><input type="button" name="back" onClick="javascript:cart_continue(this.form,'{LINK_CONTINUE}');" value="{MSG_CONTINUE_INQUIRY}" /></td>
-    <td width="15%"><input type="button" name="finish" onclick="javascript:cart_finish(this.form);" value="{MSG_FINISH_INQUIRY}" /></td>
+    <td width="15%">
+        <input type="button" class="shop_btn" value="{MSG_CONTINUE_INQUIRY}" onClick="javascript:cart_continue(this.form,'{LINK_CONTINUE}');" />
+    </td>
+    <td width="15%">
+        <input type="button" class="shop_btn" value="{MSG_FINISH_INQUIRY}" onclick="javascript:cart_finish(this.form);" />
+    </td>
 </tr>
 </table>
 <input type="hidden" name="cart_type" value="inquiry">
