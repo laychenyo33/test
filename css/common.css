@@ -181,6 +181,73 @@
 }
 
 
+/*購物車按鈕*/
+.shop_btn{
+  width: 80px;
+  height: 30px;
+  color: #0f1214;
+  margin:10px 5px 0 0;
+  border:none;
+  border-radius:5px;
+  border:1px solid #ccc;
+  background: -webkit-linear-gradient(top,#fff,#dadada);
+  background: -moz-linear-gradient(top,#fff,#dadada);
+  background: -ms-linear-gradient(top,#fff,#dadada);
+  background: -o-linear-gradient(top,#fff,#dadada);
+  background: linear-gradient(top,#fff,#dadada);
+}
+.shop_btn:hover{
+  background: -webkit-linear-gradient(top,#fff,#c9c9c9);
+  background: -moz-linear-gradient(top,#fff,#c9c9c9);
+  background: -ms-linear-gradient(top,#fff,#c9c9c9);
+  background: -o-linear-gradient(top,#fff,#c9c9c9);
+  background: linear-gradient(top,#fff,#c9c9c9);
+}
+.shop_btn:active{
+  background: -webkit-linear-gradient(top,#fff,#dadada);
+  background: -moz-linear-gradient(top,#fff,#dadada);
+  background: -ms-linear-gradient(top,#fff,#dadada);
+  background: -o-linear-gradient(top,#fff,#dadada);
+  background: linear-gradient(top,#fff,#dadada);
+}
+.security_pic img:first-child{ width:100px; height: 20px;}
+
+
+/*第一次購物按鈕*/
+.firstbuy_btn{
+  padding:13px 23px;
+  text-align:center;
+  color: #515151;
+  letter-spacing:1px;
+  line-height:22px;
+  margin:10px 5px 0 0;
+  border:none;
+  border-radius:5px;
+  border:1px solid #ccc;
+  background: -webkit-linear-gradient(top,#fff,#dadada);
+  background: -moz-linear-gradient(top,#fff,#dadada);
+  background: -ms-linear-gradient(top,#fff,#dadada);
+  background: -o-linear-gradient(top,#fff,#dadada);
+  background: linear-gradient(top,#fff,#dadada);
+}
+.firstbuy_btn span{
+  color: #ae2626;
+}
+.firstbuy_btn:hover{
+  background: -webkit-linear-gradient(top,#fff,#c9c9c9);
+  background: -moz-linear-gradient(top,#fff,#c9c9c9);
+  background: -ms-linear-gradient(top,#fff,#c9c9c9);
+  background: -o-linear-gradient(top,#fff,#c9c9c9);
+  background: linear-gradient(top,#fff,#c9c9c9);
+}
+.firstbuy_btn:active{
+  background: -webkit-linear-gradient(top,#fff,#dadada);
+  background: -moz-linear-gradient(top,#fff,#dadada);
+  background: -ms-linear-gradient(top,#fff,#dadada);
+  background: -o-linear-gradient(top,#fff,#dadada);
+  background: linear-gradient(top,#fff,#dadada);
+}
+
 /*購物登入頁面 */
 .v_mid{
 	vertical-align: middle;	
@@ -460,42 +527,54 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 .member_table tr.altrow {
 	background-color: #cccccc;
 }
-/* member zone form */
+
+/*會員資料管理頁面*/
+#member_login_info{
+	padding: 20px 0 0 30px;	
+}
+#member_login_func{
+	padding: 10px 0 0 30px;	
+}
+#member_login_func a{
+	color:#000;
+}
+#member_login_func a:hover{
+	color:#c14948;
+}
+#member_login_func p{
+	padding: 0 0 5px 0;
+}
+
 .member_zone_table {
-	height: 24px;
-	padding: 4px 8px 0px 0px;
-	text-align: left;
-	border-top: 1px solid #D6C9A0;
-	border-left: 1px solid #D6C9A0;	
-	background-color: #FFFFFF;
-	color: #666666;
+	border-left: 1px solid #ccc;	
+	border-top: 1px solid #ccc;
+	color: #666;
 }
 .member_zone_table th {
-	color: #FFFFFF;
-	background-color: #980203;
-	font-weight: bold;
+	color: #FFF;
+	background-color: #666;
 	text-align: center;
-	padding: 4px 6px;
-	border-right: 1px solid #D6C9A0;
-	border-bottom: 1px solid #D6C9A0;
+	padding: 4px 0px;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
 .member_zone_table td {
-	text-align: left;
-	padding: 4px 8px;
-	border-right: 1px solid #D6C9A0;
-	border-bottom: 1px solid #D6C9A0;
+	padding: 4px 0px;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 }
 .member_zone_table td a {
-	color: #666666;
+	color: #666;
 }
 .member_zone_table td a:hover {
-	color: #FF0000;
+	color: #c14948;
 	text-decoration: none;
 }
 .member_zone_table  tr.altrow {
-	background-color: #EAEAEA;
+	background-color: #ccc;
 }
-.member_zone_table  .nums{text-align:center}
+
+
 /* login & logout */
 .login_msg_error {
     font-size: 12px;
@@ -877,3 +956,4 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 #quantity-discount #title{color:#f00}
 #quantity-discount ul{list-style: none;padding:0;margin-top:5px;}
 #quantity-discount ul li{color:#0a0}
+
