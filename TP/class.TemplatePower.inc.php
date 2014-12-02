@@ -690,7 +690,8 @@ class TemplatePower extends TemplatePowerParser
      */
     function newBlock( $blockname,$singleton=false )
     {
-        if(!$singleton || !isset( $this->defBlock[ $blockname ] ) ){
+        $issetBlock = ($this->index[ $blockname ]>0)?true:false;
+        if(!$issetBlock || !$singleton  ){
             $parent = &$this->content[ $this->parent[$blockname] .'_'. $this->index[$this->parent[$blockname]] ];
 
                         $lastitem = sizeof( $parent );
