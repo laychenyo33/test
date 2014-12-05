@@ -779,7 +779,7 @@ class PRODUCTS{
             //產品管理列表
             $sql="select p.*,pc.pc_name,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id > '0' and p.p_status=1";
             //附加條件
-            $and_str .= " and (p.p_name like '%".$_REQUEST["kw"]."%' or p.p_spec like '%".$_REQUEST["kw"]."%' or p.p_character like '%".$_REQUEST["kw"]."%' or p.p_desc like '%".$_REQUEST["kw"]."%')";
+            $and_str .= " and (pc.pc_name like '%".$_REQUEST["kw"]."%' || pc.pc_desc like '%".$_REQUEST["kw"]."%' || p.p_name like '%".$_REQUEST["kw"]."%' or p.p_spec like '%".$_REQUEST["kw"]."%' or p.p_character like '%".$_REQUEST["kw"]."%' or p.p_desc like '%".$_REQUEST["kw"]."%')";
             $sql .= $and_str;
             //取得總筆數
             $selectrs = $db->query($sql);
