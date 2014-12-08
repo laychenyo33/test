@@ -379,7 +379,7 @@ class NEWS{
             if($_REQUEST["st"]=="n_content"){
                 $and_str .= " and n.n_content like '%".$_REQUEST["sk"]."%'";
             }
-            $sql .= $and_str." order by n_showdate desc,nc.nc_sort ".$cms_cfg['sort_pos'].",n.n_sort ".$cms_cfg['sort_pos'].",n.n_modifydate desc ";
+            $sql .= $and_str." order by n.n_top desc,n_showdate desc,nc.nc_sort ".$cms_cfg['sort_pos'].",n.n_sort ".$cms_cfg['sort_pos'].",n.n_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);
@@ -435,7 +435,7 @@ class NEWS{
     }
 //最新消息--表單================================================================
     function news_form($action_mode){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         if($this->seo){
             $tpl->newBlock("SEO_EDIT_ZONE");
         }
@@ -536,6 +536,8 @@ class NEWS{
             $tpl->newBlock("WYSIWYG_TINYMCE1");
             $tpl->assign( "VALUE_N_CONTENT" , $main->content_file_str_replace($row["n_content"],'out') );
         }
+        //置頂選項
+        $main->multiple_radio("top",$ws_array['yesno_status'],$row['n_top']);
     }
 //最新消息--資料更新================================================================
     function news_replace(){
@@ -564,6 +566,7 @@ class NEWS{
                         nc_id,
                         n_status,
                         n_sort,
+                        n_top,
                         n_hot,
                         n_pop,
                         n_subject,
@@ -581,6 +584,7 @@ class NEWS{
                         '".$_REQUEST["nc_id"]."',
                         '".$_REQUEST["n_status"]."',
                         '".$_REQUEST["n_sort"]."',
+                        '".$_REQUEST["n_top"]."',
                         '".$_REQUEST["n_hot"]."',
                         '".$_REQUEST["n_pop"]."',
                         '".htmlspecialchars($_REQUEST["n_subject"])."',
@@ -602,6 +606,7 @@ class NEWS{
                         nc_id='".$_REQUEST["nc_id"]."',
                         n_status='".$_REQUEST["n_status"]."',
                         n_sort='".$_REQUEST["n_sort"]."',
+                        n_top='".$_REQUEST["n_top"]."',
                         n_hot='".$_REQUEST["n_hot"]."',
                         n_pop='".$_REQUEST["n_pop"]."',
                         n_subject='".htmlspecialchars($_REQUEST["n_subject"])."',
