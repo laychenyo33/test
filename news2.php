@@ -95,7 +95,7 @@ class NEWS{
             $main->layer_link($ws_array['main'][$this->news_class['filename']]);
         }
         $main->pageview_history($this->news_class['filename'],$cate_row['nc_id'],App::getHelper('session')->MEMBER_ID);
-        $sql="select n.* from ".$cms_cfg['tb_prefix']."_news as n inner join ".$db->prefix("news_cate")." as nc on n.nc_id=nc.nc_id and nc.nc_indep='1' and nc.nc_indep_id = (select id from ".$db->prefix("news_cate_class")." where filename='".$this->news_class['filename']."') where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_showdate desc,n_sort ".$cms_cfg['sort_pos'].",n_modifydate desc";
+        $sql="select n.* from ".$cms_cfg['tb_prefix']."_news as n inner join ".$db->prefix("news_cate")." as nc on n.nc_id=nc.nc_id and nc.nc_indep='1' and nc.nc_indep_id = (select id from ".$db->prefix("news_cate_class")." where filename='".$this->news_class['filename']."') where (n_status='1' or (n_status='2' and n_startdate <= '".date("Y-m-d")."' and n_enddate >= '".date("Y-m-d")."')) ".$and_str." order by n_top desc,n_showdate desc,n_sort ".$cms_cfg['sort_pos'].",n_modifydate desc";
         $selectrs = $db->query($sql);
         $total_records = $db->numRows($selectrs);
         //取得分頁連結，重新組合包含limit的sql語法
