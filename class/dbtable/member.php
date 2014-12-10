@@ -3,6 +3,7 @@ class Dbtable_Member extends Dbtable_Abstract{
     //可修改的欄位
     protected $table = "member";
     protected $pk = "m_id";
+    protected $sort_col = "m_sort";
 
     
     //取得post資料欄位

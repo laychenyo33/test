@@ -3,20 +3,13 @@
 /* 勾選刪除時之檢查事項 */
 function FormCheckDel(form) {  
     delchecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        delchecked++;     
-    } else if(form.total_box.value > 1) { 
-    
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                delchecked++;
-            }   
-        }
-    }  
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            delchecked++;
+        }   
+    });
     if (delchecked==0) {
-        alert("請勾選欲刪除的項目!!")
-        return false;
+        alert("請勾選欲刪除的項目!!");
     } else {
         Scheck = confirm("您確定要刪除嗎?\n\r如果刪除的是分類,則分類底下所屬的資料會全部清除!!") 
    
@@ -24,229 +17,180 @@ function FormCheckDel(form) {
             form.method = "post";
             form.action = form.action + "?func=data_processing&process_type=del";
             form.submit();
-            return true; 
         } 
     }       
+    return false; 
 }  
   
 /* 勾選發送時之檢查事項 */
 function FormCheckSend(form) {  
     sendchecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        sendchecked++;     
-    } else if(form.total_box.value > 1) { 
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                sendchecked++; }   
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            sendchecked++;
         }
-    } 
-  
+    });
+
     if (sendchecked==0) {
-        alert("請勾選欲發送的項目 !!")
-        return false;
+        alert("請勾選欲發送的項目 !!");
     } else if(sendchecked == 1) {
         form.method = "post";
         form.action = form.action + "?func=data_processing&process_type=send";
         form.submit();
-        return true;
     } else {
-        alert("執行發送時,只能單選 !!")
-        return false;
+        alert("執行發送時,只能單選 !!");
     }  
+    return false;
 } 
 
 /* 勾選複製時之檢查事項 */
 function FormCheckCopy(form) {  
    
     copychecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        copychecked++;     
-    } else if(form.total_box.value > 1) { 
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                copychecked++; }   
-        }
-    } 
-  
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            copychecked++;
+        }   
+    });
     if (copychecked==0) {
-        alert("請勾選欲複製的項目 !!")
-        return false;
+        alert("請勾選欲複製的項目 !!");
     } else if(copychecked == 1) {
         form.method = "post";
         form.action = form.action + "?func=data_processing&process_type=copy";
         form.submit();
-        return true;
     } else {
-        alert("執行複製時，只能單選 !!")
-        return false;
+        alert("執行複製時，只能單選 !!");
     }  
+    return false;
 } 
 
 /* 勾選啟用時之檢查事項 */
 function FormCheckOn(form) {  
 
     onchecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        onchecked++;     
-    } else if(form.total_box.value > 1) { 
-    
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                onchecked++;
-            }   
-        }
-    }  
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            onchecked++;
+        }   
+    });
   
     if (onchecked==0) {
-        alert("請勾選欲啟用的項目!!")
-        return false;
+        alert("請勾選欲啟用的項目!!");
     } else {
-        Scheck = confirm("您確定要將狀態設為啟用嗎 ?") 
+        Scheck = confirm("您確定要將狀態設為啟用嗎 ?");
    
         if (Scheck==true) {
             form.method = "post";
             form.action = form.action + "?func=data_processing&process_type=status&value=1";
             form.submit();
-            return true; 
         } 
     }       
+    return false; 
 }  
 
 /* 勾選停用時之檢查事項 */
 function FormCheckOff(form) {  
    
     offchecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        offchecked++;     
-    } else if(form.total_box.value > 1) { 
-    
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                offchecked++;
-            }   
-        }
-    }  
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            offchecked++;
+        }   
+    });
   
     if (offchecked==0) {
-        alert("請勾選欲停用的項目!!")
-        return false;
+        alert("請勾選欲停用的項目!!");
     } else {
-        Scheck = confirm("您確定要將狀態設為停用嗎 ?") 
+        Scheck = confirm("您確定要將狀態設為停用嗎 ?");
    
         if (Scheck==true) {
             form.method = "post";
             form.action = form.action + "?func=data_processing&process_type=status&value=0";
             form.submit();
-            return true; 
         } 
     }       
+    return false; 
 }  
 /* 勾選更改排序值之檢查事項 */
 function FormCheckSort(form) {  
    
     sortchecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        sortchecked++;     
-    } else if(form.total_box.value > 1) { 
-    
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                sortchecked++;
-            }   
-        }
-    }  
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            sortchecked++;
+        }   
+    });
   
     if (sortchecked==0) {
-        alert("請勾選欲更改排序值的項目!!")
-        return false;
+        alert("請勾選欲更改排序值的項目!!");
     } else {
-        Scheck = confirm("您確定要更改排序值嗎 ?") 
-   
+        Scheck = confirm("您確定要更改排序值嗎 ?");
+
         if (Scheck==true) {
             form.method = "post";
             form.action = form.action + "?func=data_processing&process_type=sort";
             form.submit();
-            return true; 
-        } 
-    }       
+        }
+    }
+    return false;
 } 
 /* 勾選資料上鎖時之檢查事項 */
 function FormCheckLock(form) {  
 
     onchecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        onchecked++;     
-    } else if(form.total_box.value > 1) { 
-    
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                onchecked++;
-            }   
-        }
-    }  
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            onchecked++;
+        }   
+    });
   
     if (onchecked==0) {
-        alert("請勾選欲上鎖的項目!!")
-        return false;
+        alert("請勾選欲上鎖的項目!!");
     } else {
-        Scheck = confirm("您確定要將資料上鎖嗎 ?") 
+        Scheck = confirm("您確定要將資料上鎖嗎 ?"); 
    
         if (Scheck==true) {
             form.method = "post";
             form.action = form.action + "?func=data_processing&process_type=lock&value=1";
             form.submit();
-            return true; 
-        } 
-    }       
+        }
+    }
+    return false;
 }
 /* 勾選資料上鎖時之檢查事項 */
 function FormCheckUnlock(form) {  
 
     onchecked=0;
-    if (form.total_box.value ==1 && form['id[]'].checked==true) {
-        onchecked++;     
-    } else if(form.total_box.value > 1) { 
-    
-        for (var i=0;i<form.total_box.value;i++) {
-            var e = form['id[]'][i];
-            if (e.checked==true) { 
-                onchecked++;
-            }   
+    jQuery(form).find(":checkbox[name^=id]").each(function(idx,elm){
+        if (this.checked==true) { 
+            onchecked++;
         }
-    }  
-  
+    });
+
     if (onchecked==0) {
-        alert("請勾選欲解鎖的項目!!")
-        return false;
+        alert("請勾選欲解鎖的項目!!");
     } else {
-        Scheck = confirm("您確定要將資料解鎖嗎 ?") 
+        Scheck = confirm("您確定要將資料解鎖嗎 ?"); 
    
         if (Scheck==true) {
             form.method = "post";
             form.action = form.action + "?func=data_processing&process_type=lock&value=0";
             form.submit();
-            return true; 
-        } 
-    }       
+        }
+    }
+    return false; 
 }  
 /* 關鍵字搜尋 */
-function FormCheckQuery(form) {  
+function FormCheckQuery(form) {
     if (form.sk.value =="") {
-        alert("請輸入查詢的關鍵字!!")
+        alert("請輸入查詢的關鍵字!!");
         form.sk.focus();
-        return false;
     } else {
         form.method = "post";
         form.action = form.action + "?func="+form.ws_table.value+"_list";
         form.submit();
-        return true; 
-    }       
+    }
+    return false;
 }  
 
 // 開啟檔案管理視窗
