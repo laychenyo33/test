@@ -436,20 +436,6 @@ $TPLMSG['STATUS_ON'] = "เกี่ยวกับ";
 $TPLMSG['QUANTITY_DISCOUNT'] = "ส่วนลด";
 $TPLMSG['CLASSIFY_OTHER'] = "อื่น ๆ";
 
-$TPLMSG['CART_PRODUCT_NAME'] = "ชื่อรายการ";
-$TPLMSG['OPERATION'] = "การทำงาน";
-
-$TPLMSG['PROD_TO_CART_INQUIRY'] = "การสอบสวน";
-$TPLMSG['PROD_TO_CART_SHOPPING'] = "เพิ่มในรถเข็น";
-$TPLMSG['ADD_TO_INQUIRY'] = "เพิ่มไปยังสอบถามรายละเอียดเพิ่มเติม";
-$TPLMSG['ADD_TO_SHOPPING'] = "เพิ่มไปยังแหล่งช้อปปิ้ง";
-$TPLMSG['WARNING_ADD_NOSPEC'] = "กรุณาเลือกสเปค!";
-$TPLMSG['WARNING_ADD_NOAMOUNT'] = "กรุณาเลือกจำนวน!";
-$TPLMSG['WARNING_AMOUNT_FORMAT'] = "รูปแบบข้อผิดพลาดจำนวน!";
-
-$TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = "ซื้อ %d และได้รับส่วนลด %d%";
-$TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "สินค้านี้มีส่วนลดปริมาณ";
-
 //pagiation
 $TPLMSG['PAGINATION_FIRST_PAGE'] = "หน้าแรก";
 $TPLMSG['PAGINATION_LAST_PAGE'] = "หน้าสุดท้าย";
