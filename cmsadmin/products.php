@@ -973,6 +973,7 @@ class PRODUCTS{
                                           "TAG_SINGLE_SPEC_HIDE"   => ($row['spec_sets'])?"style='display:none'":"",
                                           "TAG_SPEC_SETS_CHK0" => ($row['spec_sets'])?"":"checked",
                                           "TAG_SPEC_SETS_CHK1" => ($row['spec_sets'])?"checked":"",                    
+                                          "VALUE_STOCKS" => $row["stocks"],
                 ));
                 //有排序欄位才重新指定排序值，複製產品不使用原先產品的排序值
                 if($row['p_sort']){
