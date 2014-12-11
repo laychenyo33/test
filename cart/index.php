@@ -165,7 +165,7 @@
 	
 		// 增加購買產品
 		function cart_add() {
-			global $cms_cfg;
+			global $cms_cfg,$TPLMSG;
                         App::getHelper('session')->CONTINUE_SHOPPING_URL=$_SERVER['HTTP_REFERER'];
                         $amount_arr = is_array($_REQUEST["amount"])?$_REQUEST["amount"]:(array)$_REQUEST["amount"];
                         $p_id_arr = is_array($_REQUEST["p_id"])?$_REQUEST["p_id"]:(array)$_REQUEST["p_id"];
@@ -183,6 +183,10 @@
                             }
                         }
 			if (!App::getHelper('request')->isAjax()) {
+                                if(App::getHelper('session')->sc_cart_type==1 && $stockStatus[0]>0){
+                                    App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY']);
+                                    die();
+                                }
 				if( $this->container->count() ){
 					header('location:'.$_SERVER['PHP_SELF']);
                                         die();
@@ -193,6 +197,10 @@
                                 $res['code'] = 1;
                                 $res['cart_nums'] = $this->container->count();
                                 $res['cart_info'] = $this->container->get_cart_info();
+                                if(App::getHelper('session')->sc_cart_type==1 && $stockStatus[0]>0){
+                                    $res['code'] = 0;
+                                    $res['msg'] = $TPLMSG['INVENTORY_SHORTAG_NOTIFY'];
+                                }
                                 echo json_encode($res);
                                 die();
 			}
@@ -255,10 +263,10 @@
 	
 					$tpl->newBlock("TAG_CART_LIST");
 					$p_link = $this->p_link_handle($row);
-	
+                                        $valid_stocks = $this->container->stockChecker->check($row['p_id'],$row['amount'],$row['ps_id']);        
 					$tpl->assign(array(
                                             "VALUE_P_ID" => $row['p_id'], 
-                                            "VALUE_P_NAME" => $row["p_name"], 
+                                            "VALUE_P_NAME" => $row["p_name"] . (!$valid_stocks?"<span>庫存不足</span>":""),
                                             "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"]) == "") ? $cms_cfg['default_preview_pic'] : $cms_cfg["file_url"] . $row["p_small_img"], 
                                             "VALUE_P_SPEC" => $row["spec"], 
                                             "VALUE_P_AMOUNT" => $row["amount"], 
@@ -268,7 +276,8 @@
                                             "VALUE_P_LINK" => $p_link, 
                                             "VALUE_P_SERIAL" => $i + 1, 
                                             "VALUE_P_SESS" => $sess, 
-                                            "CART_P_ID" => $p_id,                                             
+                                            "CART_P_ID" => $p_id,
+                                            "INVENTORY_SHORT_CLASS" => (!$valid_stocks)?"stocks_short":"",
                                         ));
 	
                                         $id_sets = explode(":",$p_id);
@@ -599,6 +608,7 @@
 			global $cms_cfg;
 	
 			if (!empty($form)) {
+                                $stockStatus = array();
 				foreach ($form as $sess_str => $num) {
 					unset($sess_array);
 					//echo $pass_num = (!is_int($num))?round($num):$num;
@@ -607,6 +617,7 @@
                                             $_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess_array[1]] = $num;
                                             $key = explode(":",$sess_array[1]);
                                             $result = (int)$this->container->update($key[0],$num,$key[1]);
+                                            $stockStatus[$result]+=1;
                                         }
                                         
 				}

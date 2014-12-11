@@ -460,4 +460,6 @@ $TPLMSG['WARNING_AMOUNT_FORMAT'] = "输入数值有误!回复原值";
 
 $TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = '%d个以上，%d％↓';
 $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "本产品有数量折扣";
+
+$TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "库存量不足订购数，请修改订购量，谢谢。";
 ?>

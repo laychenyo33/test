@@ -477,4 +477,6 @@ $TPLMSG['WARNING_AMOUNT_FORMAT'] = "輸入數值有誤!回復原值";
 
 $TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = '%d個以上，%d％↓';
 $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "本產品有數量折扣";
+
+$TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "庫存量不足訂購數，請修改訂購量，謝謝。";
 ?>
