@@ -36,9 +36,10 @@
 			$pay_desc=0, // 交易描述 (不可空值)
 			$shopping=0, // 商品資訊 (array)
 			$c_pay=0, // 交易方式
-			$c_s_pay=0 // 選擇預設付款子項目
+			$c_s_pay=0, // 選擇預設付款子項目
 			//$i_rul=0, // 商品促銷網址
 			//$remark=0, // 備註
+			$discount=false // 總金額已折扣
 		){
 			global $db,$cms_cfg;
 
@@ -59,10 +60,41 @@
 			
 			//取得商品資訊
 			if(!empty($shopping) && is_array($shopping)){
+				if($discount){
+					$shopping_num = count($shopping);
+					$price_split = round($this->all_cfg["TotalAmount"] / $shopping_num);
+					$price_sum = $price_split * $shopping_num;
+					
+					if($price_sum != $this->all_cfg["TotalAmount"]){
+						$first_price_split = $price_sum - $this->all_cfg["TotalAmount"];
+						$first_price_split = $first_price_split + $price_split;
+					}
+				}
+				
 				foreach($shopping as $sess_code => $row){
+					$shopping_row++;
+					
 					$p_name_array[] = $row["p_name"];
 					$p_num_array[] = $row["p_num"];
-					$p_price_array[] = $row["p_price"];
+					//$p_price_array[] = $row["p_price"];
+					
+					if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]) && $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]!=100){
+	                    $p_price_get = floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"] / 100 * $row["p_special_price"]);
+					}else{
+	                    $p_price_get = $row["p_special_price"];
+					}
+					
+					if($discount){
+						if($shopping_row == 1 && !empty($first_price_split)){
+							$p_price_get = $first_price_split;
+						}elseif($shopping_row == 1 && !empty($price_split)){
+							$p_price_get = $price_split;
+						}elseif($shopping_row > 1 && !empty($price_split)){
+							$p_price_get = $price_split;
+						}
+					}
+					
+					$p_price_array[] = $p_price_get;
 				}
 				
 				foreach($p_name_array as $p_key => $p_val){
