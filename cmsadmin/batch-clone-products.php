@@ -177,7 +177,7 @@ function products_cate_select($lang,$pc_parent=0, $indent="") {
         </form>
         <?php
         else:
-                $res = $db->query("show tables from ".$cms_cfg['db_name']);
+                $res = $db->query("show tables from `".$cms_cfg['db_name']."`");
                 while(list($tablename) = $db->fetch_array($res,false)){
                     $tmpArr = explode('_',$tablename);
                     $prefix[$tmpArr[0]] = $tmpArr[0]."_";
