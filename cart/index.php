@@ -184,7 +184,7 @@
                         }
 			if (!App::getHelper('request')->isAjax()) {
                                 if(App::getHelper('session')->sc_cart_type==1 && $stockStatus[0]>0){
-                                    App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY']);
+                                    App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['HTTP_REFERER']);
                                     die();
                                 }
 				if( $this->container->count() ){
