@@ -338,7 +338,12 @@ class ORDER{
         if ( $db_msg == "" ) {
             if($_REQUEST["o_status"] == 2){
                 $this->mail_delivery_notice($_REQUEST["o_id"]); //寄送出貨通知信                
-            } 
+            }elseif($_REQUEST["o_status"] == 3){
+                $order_prods = App::getHelper('dbtable')->order_items->getDataList("o_id='{$_POST['o_id']}'");
+                foreach($order_prods as $prod){
+                    App::getHelper('session')->getModule("cart")->stockchecker->runStocks($prod['p_id'],$prod['ps_id'],$prod['amount']);
+                }
+            }
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$_SERVER['PHP_SELF']."?func=o_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $this->goto_target_page($goto_url,2);
