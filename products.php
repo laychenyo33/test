@@ -601,7 +601,7 @@ class PRODUCTS{
                     }
                 }else{
                     $tpl->newBlock("SINGLE_SPEC_SETS");
-                    $tpl->assign("VALUE_STOCKS",App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],true));
+                    $tpl->assign("VALUE_STOCKS",App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true));
                     //詢價商品或是購物商品
                     if($show_price==0 || $row['onsale']==0){
                         if($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]==0){
@@ -643,7 +643,7 @@ class PRODUCTS{
                         ));
                     }
                     //$tpl->gotoBlock("BIG_IMG".$this->template_str);
-                    $amountArr = range(0,App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],true));
+                    $amountArr = range(0,App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true));
                     unset($amountArr[0]);
                     App::getHelper('main')->multiple_select('amounts',$amountArr,1,$tpl);
                 }
