@@ -364,6 +364,10 @@
 		// 完成訂單清單
 		function cart_finish() {
 			global $tpl, $db, $cms_cfg, $TPLMSG, $main, $ws_array;
+                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                            App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
+                            die();
+                        }
                         $payment_type = $this->container->get_payment_type();                        
 			if (empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"] == 1 && empty($_REQUEST["first"])) {
 				//驗証碼
