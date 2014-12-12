@@ -292,14 +292,14 @@ class ORDER{
                     $tpl->newBlock("SINGLE_ADDRESS");
                 }                
                 //訂購產品列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
+                $sql="select oi.*,p.p_small_img from ".$cms_cfg['tb_prefix']."_order_items as oi inner join ".$db->prefix("products")." as p on oi.p_id=p.p_id where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 $selectrs = $db->query($sql);
                 $i=0;
                 if($cms_cfg['ws_module']['ws_cart_spec']){
                     $tpl->newBlock("SPEC_TITLE");
-                    $tpl->assignGlobal("CART_FIELD_NUMS",6);
+                    $tpl->assignGlobal("CART_FIELD_NUMS",7);
                 }else{
-                    $tpl->assignGlobal("CART_FIELD_NUMS",5);
+                    $tpl->assignGlobal("CART_FIELD_NUMS",6);
                 }                   
                 while($row = $db->fetch_array($selectrs,1)){
                     $i++;
@@ -307,6 +307,7 @@ class ORDER{
                     $tpl->newBlock( "ORDER_ITEMS_LIST" );
                     $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                         "VALUE_P_NAME" => $row["p_name"],
+                                        "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['file_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
                                         "VALUE_P_SELL_PRICE" => $row["price"],
                                         "VALUE_P_AMOUNT" => $row["amount"],
                                         "TAG_QUANTITY_DISCOUNT" => $row['discount']<1?$row['discount']:'',
