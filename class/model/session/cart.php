@@ -328,5 +328,5 @@ class Model_Session_Cart extends Model_Modules {
             }
         }
         return true;
-    }    
+    }
 }

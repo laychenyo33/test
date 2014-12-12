@@ -468,6 +468,10 @@
 		function cart_replace() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $main, $allpay, $ws_array;
 	
+                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                            App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
+                            die();
+                        }
 			$this->o_id = $this->o_id_generator();
                         $shipment_type = $this->container->get_shipment_type();
                         $payment_type = $this->container->get_payment_type();

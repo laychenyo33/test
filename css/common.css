@@ -119,8 +119,10 @@
     
 }
 .cart_table tr.stocks_short{
-    
+    background:#f00;
+    color:grey;
 }
+.cart_table tr.stocks_short a{color:grey}
 .cart_table th {
 	color: #333333;
 	background-color: #cccccc;

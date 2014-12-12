@@ -175,6 +175,10 @@
                 alert("請先選擇付款方式");
                 return false;
             }
+            if($(".stocks_short").size()){
+                alert("部分選購產品庫存不足，請調整購買數量");
+                return false;
+            }
             $(myform).trigger('submit');
         });
         
