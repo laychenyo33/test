@@ -18,7 +18,7 @@
     <th width="7%"> {MSG_OPERATION}</th>
 </tr>
 <!-- START BLOCK : SHOPPING_CART_LIST -->
-<tr {TAG_TR_CLASS} class="line">
+<tr {TAG_TR_CLASS} class="line {INVENTORY_SHORT_CLASS}">
     <td  class="no">{VALUE_P_SERIAL}</td>
     <td><center><a href="{VALUE_P_SMALL_IMG}" rel="lightbox[roadtrip]" ><img src="{VALUE_P_SMALL_IMG}" width="60" alt="{VALUE_P_NAME}" border="0"/></a></center></td>
     <td class="title"><a href="{VALUE_P_LINK}" target="_blank">{VALUE_P_NAME}</a></td>
@@ -92,6 +92,10 @@
                evt.preventDefault();
                if($(":radio:checked").size()==0){
                    alert("請選擇送貨區域");
+                   return false;
+               }
+               if($("tr.stocks_short").size()>0){
+                   alert("購物車有產品庫存不足!");
                    return false;
                }
                var sz = $(":radio:checked").next().text();

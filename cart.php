@@ -362,8 +362,9 @@ class CART{
                 }else{
                     $p_link=$cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_id."&pc_parent=".$prod_row["pc_id"];
                 }
+                $valid_stocks = $this->container->stockChecker->check($prod_row['p_id'],$prod_row['amount'],$prod_row['ps_id']);        
                 $tpl->assign( array("VALUE_P_ID"  => $prod_row["p_id"],
-                                    "VALUE_P_NAME"  => $prod_row["p_name"],
+                                    "VALUE_P_NAME"  => $prod_row["p_name"] . (!$valid_stocks?"<span>庫存不足</span>":""),
                                     "VALUE_P_SMALL_IMG" => (trim($prod_row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$prod_row["p_small_img"],
                                     "VALUE_P_AMOUNT"  => $prod_row['amount'],
                                     "TAG_QUANTITY_DISCOUNT" => ($prod_row['discount']<1)?$prod_row['discount']:'',
@@ -371,7 +372,8 @@ class CART{
                                     "VALUE_P_SPECIAL_PRICE"  => $prod_row['price'],
                                     "VALUE_P_SUBTOTAL_PRICE"  => $prod_row["subtotal_price"],
                                     "VALUE_P_SERIAL"  => $i++,
-                                    "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK']
+                                    "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK'],
+                                    "INVENTORY_SHORT_CLASS" => (!$valid_stocks)?"stocks_short":"",
                 ));
                 $id_sets = explode(":",$p_id);
                 if(count($id_sets)==2){
@@ -762,6 +764,10 @@ class CART{
     //資料更新================================================================
     function cart_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
+        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+            App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
+            die();
+        }
 //        $this->ws_tpl_file = "templates/mail/cart".$this->cart_type."-finish.html";
 //        $tpl = new TemplatePower( $this->ws_tpl_file );
 //        $tpl->prepare();

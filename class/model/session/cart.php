@@ -67,6 +67,13 @@ class Model_Session_Cart extends Model_Modules {
         if($extra_id){
             $base_data_id = $this->combine_id($p_id, 0); //主要檔案內容
             $extra_data_id = $this->combine_id($p_id, $extra_id);
+            //檢查庫存
+            if(!$this->stockChecker->check(
+                    $p_id,
+                    $this->cart['products']['lists'][$extra_data_id]['amount'] + $amount,
+                    $extra_id )){
+                return false;
+            }
             if(!isset($this->cart['products']['data'][$base_data_id])){
                 $this->cart['products']['data'][$base_data_id] = $this->_query_product($p_id);
             }
@@ -81,6 +88,12 @@ class Model_Session_Cart extends Model_Modules {
             }
             $this->cart['products']['amount'][$extra_data_id]+=$amount;
         }else{
+            //檢查庫存
+            if(!$this->stockChecker->check(
+                    $p_id,
+                    $this->cart['products']['lists'][$p_id]['amount'] + $amount )){
+                return false;
+            }
             if(!isset($this->cart['products']['lists'][$p_id])){
                 $prod = $this->query_product($p_id,$amount);
                 $this->cart['products']['lists'][$p_id] = $prod;
@@ -100,6 +113,10 @@ class Model_Session_Cart extends Model_Modules {
     }
     //更新購物車項目
     function update($p_id,$amount,$extra_id=null){
+        //檢查庫存
+        if(!$this->stockChecker->check( $p_id, $amount, $extra_id )){
+            return false;
+        }
         if($extra_id){
             $p_id = $this->combine_id($p_id, $extra_id);
         }
@@ -301,4 +318,15 @@ class Model_Session_Cart extends Model_Modules {
         }
         return false;
     }
+    
+    function checkCartStocks(){
+        if(count($this->cart['products']['lists']) && $this->handler->sc_cart_type==1){
+            foreach($this->cart['products']['lists'] as $cartProd){
+                if(!$this->stockChecker->check( $cartProd['p_id'], $cartProd['amount'], $cartProd['ps_id'] )){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }    
 }
