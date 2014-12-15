@@ -81,6 +81,7 @@ class ORDER{
 //訂單--列表================================================================
     function order_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        $tpl->assignGlobal("TAG_NOW_CATE",$TPLMSG['NO_CATE']);
         //顯示ATM匯款標題
         if($cms_cfg["ws_module"]["ws_vaccount"]) {
             $tpl->newBlock("TITLE_ATM_TRANSFER");
@@ -96,7 +97,7 @@ class ORDER{
             if($i%4==0){
                 $tpl->assign("TAG_ORDER_STATUS_TRTD","</tr><tr>");
             }
-            if($key==$_REQUEST["o_status"]){
+            if(isset($_REQUEST["o_status"]) && $key==$_REQUEST["o_status"]){
                 $tpl->assignGlobal("TAG_NOW_CATE",$value);
             }
         }
