@@ -397,6 +397,7 @@ class PRODUCTS{
         ));
         //階層
         $tpl->assignGlobal("MSG_NOW_CATE" , $TPLMSG["NOW_CATE"]);
+        $func_str = $_SERVER['PHP_SELF']."?func=pc_list";
         $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_cate","pc_name","pc",$this->parent,$func_str);
         if(!empty($products_cate_layer)){
             $tpl->assignGlobal("TAG_PRODUCTS_CATE_LAYER",implode(" > ",$products_cate_layer));
@@ -741,6 +742,7 @@ class PRODUCTS{
             }
             //階層
             $tpl->assignGlobal("MSG_NOW_CATE" , $TPLMSG["NOW_CATE"]);
+            $func_str = $_SERVER['PHP_SELF']."?func=p_list";
             $products_cate_layer=$main->get_layer($cms_cfg['tb_prefix']."_products_cate","pc_name","pc",$this->parent,$func_str);
             if(!empty($products_cate_layer)){
                 $tpl->assignGlobal("TAG_PRODUCTS_CATE_LAYER",implode(" > ",$products_cate_layer));

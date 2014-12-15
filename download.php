@@ -174,6 +174,7 @@ class DOWNLOAD{
                                 "VALUE_DC_SUBJECT"  => $row["dc_subject"],
                                 "TAG_DTYPE"         => $row['dtype']?"<span class='dtype'>*</span>":"",
                                 "VALUE_D_LINK"  => $row['d_type']?$filepath:$dllink,
+                                "VALUE_D_TIMES"  => $row["d_times"],
             ));
             //如果下載顯示縮圖，開啟縮圖欄位
             if($cms_cfg['ws_module']['ws_download_thumb']){
@@ -230,6 +231,8 @@ class DOWNLOAD{
             if($row['d_public']=='1' || ($row['d_public']=='0' && $this->user_is_valid)){
                 $filepath = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row['d_filepath'];
                 if(file_exists($filepath)){
+                    $sql="update ".$cms_cfg['tb_prefix']."_download set d_times = d_times+1 where d_id='".$d_id."'";
+                    $db->query($sql);
                     $file = $main->file_str_replace($filepath,"#(.+/)([^/]+)$#i");
                     header("content-type: application/force-download");
                     header("content-disposition: attachment; filename=".$file);

@@ -20,7 +20,8 @@ class MEMBER{
                 break;
             case "m_zone"://會員專區
                 if(empty($this->m_id)){
-                    header("Location: member.php?func=m_add");
+                    App::getHelper('session')->TAG_RETURN_URL = $_SERVER['REQUEST_URI'];
+                    header("Location: member.php");
                     die();
                 }
                 $this->ws_tpl_file = "templates/ws-member-zone-tpl.html";
@@ -101,6 +102,10 @@ class MEMBER{
                 }
                 $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                if(!isset(App::getHelper('session')->TAG_RETURN_URL)){
+                    App::getHelper('session')->TAG_RETURN_URL = $_SERVER['HTTP_REFERER'];
+                }
+                $tpl->assignGlobal("TAG_RETURN_URL",App::getHelper('session')->TAG_RETURN_URL);
                 $this->ws_tpl_type=1;
                 break;
         }
