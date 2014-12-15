@@ -211,13 +211,15 @@ class AD{
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
+                $ad_start_ts = strtotime($row["ad_startdate"]);
+                $ad_end_ts = strtotime($row["ad_enddate"]);
                 $tpl->assignGlobal( array("VALUE_AD_ID"  => $row["ad_id"],
                                           "VALUE_AD_STATUS"  => $row["ad_status"],
                                           "VALUE_AD_SORT"  => $row["ad_sort"],
                                           "VALUE_AD_SUBJECT" => $row["ad_subject"],
                                           "VALUE_AD_LINK" => $main->content_file_str_replace($row["ad_link"],'out'),
-                                          "VALUE_AD_STARTDATE" => $row["ad_startdate"],
-                                          "VALUE_AD_ENDDATE" => $row["ad_enddate"],
+                                          "VALUE_AD_STARTDATE" => $ad_start_ts?$row["ad_startdate"]:"",
+                                          "VALUE_AD_ENDDATE" => $ad_end_ts?$row["ad_enddate"]:"",
                                           "VALUE_AD_SHOW_ZONE" => $row["ad_show_zone"],
                                           "STR_AD_STATUS_CK2" => ($row["ad_status"]==2)?"checked":"",
                                           "STR_AD_STATUS_CK1" => ($row["ad_status"]==1)?"checked":"",
