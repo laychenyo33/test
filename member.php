@@ -1057,12 +1057,14 @@ class MEMBER{
         global $db,$cms_cfg,$main;
         $res['code']=0;
         if($_POST['o_id'] && $_POST['o_atm_last5']){
-            $sql = "select *  from ".$db->prefix("order")." where o_id='".$db->quote($_POST['o_id'])."'";
-            $qs = $db->query($sql);
-            if($db->numRows($qs)){
-                $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
-                $db->query($sql);
-                if($err = $db->report()){
+            $order = App::getHelper('dbtable')->order->getData($_POST['o_id'])->getDataRow('o_id,o_email,o_atm_last5,remit_amount');
+            if($order){
+                $o_email = $order['o_email'];
+                unset($order['o_email']);
+                $order = array_merge($order,$_POST);
+                App::getHelper('dbtable')->order->writeData($order);
+                $err = App::getHelper('dbtable')->order->report();
+                if($err){
                     $res['msg'] = $err;
                 }else{
                     $res['code']=1;
