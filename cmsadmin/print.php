@@ -104,6 +104,8 @@ class PRINT_PAGE{
                         "VALUE_P_SUBTOTAL_PRICE"  => $sub_total_price,
                         "VALUE_P_SERIAL"  => $i,
                         "VALUE_P_SMALL_IMG" => $row['p_small_img']?$cms_cfg['file_root'].$row['p_small_img']:$cms_cfg['default_preview_pic'],
+                        "VALUE_SPEC" => $row["spec"],
+                        "VALUE_DISCOUNT" => ($row["discount"]<1)?$row["discount"]:'',
                     ));
                 }
             }
