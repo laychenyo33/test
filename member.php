@@ -524,7 +524,7 @@ class MEMBER{
                                     "VALUE_O_SERIAL" => $i,
                                     "VALUE_O_DETAIL" => $TPLMSG['DETAIL'],
                 ));
-                if($row['o_payment_type']==1 && $row['o_atm_last5']=='' && $row['o_status']==0){ //新訂單未匯款的訂單
+                if($row['o_payment_type']==1 && $row['o_atm_last5']=='' && $row['o_status']<2){ //未出貨訂單未匯款的訂單
                     $tpl->newBlock("UNATM_FIELD");
                     $tpl->assign(array(
                         "VALUE_O_ID" => $row['o_id']
