@@ -142,7 +142,8 @@ class ORDER{
                 "VALUE_O_MODIFYDATE" => $row["o_modifydate"],
                 "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                 "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
-                "VALUE_O_SERIAL" => $i 
+                "VALUE_O_SERIAL" => $i,
+                "STATUS_CLASS"   => "order_status_".$row['o_status'],
             ));
 
             //顯示ATM匯款狀態
