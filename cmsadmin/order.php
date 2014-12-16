@@ -101,17 +101,16 @@ class ORDER{
                 $tpl->assignGlobal("TAG_NOW_CATE",$value);
             }
         }
+        $search = new searchFields_order();
         //訂單列表
         $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id > '0' and del='0' ";
         //附加條件
         $and_str="";
         if($_REQUEST["o_status"]!=""){
-            $and_str .= " and o_status = '".$_REQUEST["o_status"]."'";
+            $and_str .= " o_status = '".$_REQUEST["o_status"]."'";
         }
-        if($_REQUEST["st"]=="o_name"){
-            $and_str .= " and o_name like '%".$_REQUEST["sk"]."%'";
-        }
-        $sql .= $and_str." order by o_modifydate desc ";
+        $and_str = $search->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
+        $sql .= ($and_str?"and":"").$and_str." order by o_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
@@ -127,6 +126,7 @@ class ORDER{
         $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
                                   "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
                                   "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                                  "TAG_SEARCH_FIELD" => $search->list_search_fields($_GET['st'], $_GET['sk']),
         ));
         $i=$page["start_serial"];
         while ( $row = $db->fetch_array($selectrs,1) ) {
@@ -142,7 +142,8 @@ class ORDER{
                 "VALUE_O_MODIFYDATE" => $row["o_modifydate"],
                 "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                 "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
-                "VALUE_O_SERIAL" => $i 
+                "VALUE_O_SERIAL" => $i,
+                "STATUS_CLASS"   => "order_status_".$row['o_status'],
             ));
 
             //顯示ATM匯款狀態

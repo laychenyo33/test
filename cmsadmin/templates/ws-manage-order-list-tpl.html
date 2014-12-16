@@ -32,7 +32,7 @@
         </ul>
         <ul>
           <li>
-            關鍵字<input type="text" id="sk" name="sk" class="seinput" value="{VALUE_SEARCH_KEYWORD}"/><input type="button" value="搜尋" Onclick="Javascript:return FormCheckQuery(myform)" />
+            {TAG_SEARCH_FIELD}
           </li>
         </ul>
       </div>
@@ -70,7 +70,7 @@
       <td>{VALUE_O_TRN_TIME}</td>
       <!-- END BLOCK : ATM_TRANSFER_STATE -->
       <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','order.php?func=o_del&o_id={VALUE_O_ID}&st={VALUE_SEARCH_TARGET}&sk={VALUE_SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}');"><img src="images/icon-del2.gif" width="10" height="9" border="0" /></a></td>
-      <td>{VALUE_O_STATUS}</td>
+      <td><span class="{STATUS_CLASS}">{VALUE_O_STATUS}</span></td>
       <td><a href="print.php?func=order_detail&o_id={VALUE_O_ID}" target="print">列印</a></td>
     </tr>
     <!-- END BLOCK : ORDER_LIST -->
