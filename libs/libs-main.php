@@ -1779,15 +1779,15 @@ class MAINFUNC{
             $tpl->newBlock(strtoupper($blockname)."_CHECKBOX");
             $tpl->assign(array(
                 "VALUE_".strtoupper($blockname)."_KEY"  => $k, 
-                "VALUE_".strtoupper($blockname)."_NAME" => is_array($v)?$v['label']:$v, 
+                "VALUE_".strtoupper($blockname)."_NAME" => $this->t_array($v)?$v['label']:$v, 
                 "CHECKED"                   => (@in_array($k,$values))?"checked":"",
             ));
-            if(isset($v['htmlOptions']) && is_array($v['htmlOptions'])){
+            if(isset($v['htmlOptions']) && $this->t_array($v['htmlOptions'])){
                 foreach($v['htmlOptions'] as $m => $n){
                     $tpl->assign("TAG_OPTION_".  strtoupper($m),sprintf("%s='%s'",$m,$n));
                 }
             }
-            if(isset($v['exlabel']) && is_array($v['exlabel'])){
+            if(isset($v['exlabel']) && $this->t_array($v['exlabel'])){
                 $trans = array();
                 $sourceKey = explode(',',$v['exlabel']['source']);
                 foreach($sourceKey as $key){
@@ -1811,15 +1811,15 @@ class MAINFUNC{
             $tpl->newBlock(strtoupper($blockname)."_RADIO");
             $tpl->assign(array(
                 "VALUE_".strtoupper($blockname)."_KEY"  => $k, 
-                "VALUE_".strtoupper($blockname)."_NAME" => is_array($v)?$v['label']:$v,
+                "VALUE_".strtoupper($blockname)."_NAME" => $this->t_array($v)?$v['label']:$v,
                 "CHECKED"                   => ($k==$values)?"checked":"",
             ));
-            if(isset($v['htmlOptions']) && is_array($v['htmlOptions'])){
+            if(isset($v['htmlOptions']) && $this->t_array($v['htmlOptions'])){
                 foreach($v['htmlOptions'] as $m => $n){
                     $tpl->assign("TAG_OPTION_".  strtoupper($m),sprintf("%s='%s'",$m,$n));
                 }
             }
-            if(isset($v['exlabel']) && is_array($v['exlabel'])){
+            if(isset($v['exlabel']) && $this->t_array($v['exlabel'])){
                 $trans = array();
                 $sourceKey = explode(',',$v['exlabel']['source']);
                 foreach($sourceKey as $key){
@@ -1843,15 +1843,15 @@ class MAINFUNC{
             $tpl->newBlock(strtoupper($blockname)."_SELECT");
             $tpl->assign(array(
                 "VALUE_".strtoupper($blockname)."_KEY"  => $k, 
-                "VALUE_".strtoupper($blockname)."_NAME" => is_array($v)?$v['label']:$v,
+                "VALUE_".strtoupper($blockname)."_NAME" => $this->t_array($v)?$v['label']:$v,
                 "SELECTED"                   => (in_array($k,$values))?"selected":"",
             ));
-            if(isset($v['htmlOptions']) && is_array($v['htmlOptions'])){
+            if(isset($v['htmlOptions']) && $this->t_array($v['htmlOptions'])){
                 foreach($v['htmlOptions'] as $m => $n){
                     $tpl->assign("TAG_OPTION_".  strtoupper($m),sprintf("%s='%s'",$m,$n));
                 }
             }
-            if(isset($v['exlabel']) && is_array($v['exlabel'])){
+            if(isset($v['exlabel']) && $this->t_array($v['exlabel'])){
                 $trans = array();
                 $sourceKey = explode(',',$v['exlabel']['source']);
                 foreach($sourceKey as $key){
@@ -1873,7 +1873,7 @@ class MAINFUNC{
         }
         if(is_array($values)){
             foreach($values as $k){
-                $tmp[] = is_array($datas[$k])?$datas[$k]['label']:$datas[$k];
+                $tmp[] = $this->t_array($datas[$k])?$datas[$k]['label']:$datas[$k];
             }
         }
         return implode(',',$tmp);
@@ -2396,6 +2396,10 @@ class MAINFUNC{
         $res = $db->query($sql);
         list($collectNums) = $db->fetch_array($res,0);
         return is_null($collectNums)?0:$collectNums;
+    }    
+    //判別是否為陣列或Model_Arrayaccess類別物件
+    function t_array($v){
+        return is_array($v) || is_a($v,'Model_Arrayaccess');
     }    
 }
 ?>
