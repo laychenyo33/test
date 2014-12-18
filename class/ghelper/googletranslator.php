@@ -8,8 +8,14 @@ class Ghelper_GoogleTranslator implements Ghelper_ITranslator
 {
 
     //private string UrlTemplate = "http://translate.google.com.hk/?langpair={0}&text={1}";    //google翻译URL模板:GET方式请求
-    private $UrlTemplate = "https://translate.google.com.tw/";     //google翻译URL模板:POST方式请求
-
+    //google翻译URL模板:POST方式请求
+    private $UrlTemplate = array(
+        "https://translate.google.com.hk/",
+        "https://translate.google.com.tw/",
+        "https://translate.google.com/",
+    );
+    
+    private $run = 0;
     #region 常用语言编码
     private $AutoDetectLanguage = "auto"; //google自动判断来源语系
     
@@ -35,7 +41,8 @@ class Ghelper_GoogleTranslator implements Ghelper_ITranslator
         $strReturn = "";
 
         #region POST方式实现，无长度限制
-        $url = $this->UrlTemplate;
+        $idx = $this->run % count($this->UrlTemplate);
+        $url = $this->UrlTemplate[$idx];
 
         //组织请求的数据
         $postData = sprintf("langpair=%s&text=%s", urlencode($sourceLanguageCode . "|" . $targetLanguageCode), urlencode($sourceText));
@@ -99,6 +106,7 @@ class Ghelper_GoogleTranslator implements Ghelper_ITranslator
             //$strReturn = urldecode($strReturn);
 
         }
+        $this->run++;
         return $strReturn;
     }
 } 
