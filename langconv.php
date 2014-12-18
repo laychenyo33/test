@@ -96,7 +96,7 @@ CON;
              </script>
 JSJ;
                     flush();
-                    $s = rand(1,3);
+                    $s = 1;
                     sleep($s);
                 }
                 echo <<<JSJ
