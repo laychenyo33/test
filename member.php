@@ -42,6 +42,7 @@ class MEMBER{
                 }                
                 $tpl->newBlock("JQUERY_UI_SCRIPT");
                 $tpl->newBlock("DATEPICKER_SCRIPT");
+                if($cms_cfg['ws_module']['ws_address_type']=='tw')$main->res_init("zone",'box');
                 $this->member_form("add");
                 $this->ws_tpl_type=1;
                 break;
@@ -55,6 +56,7 @@ class MEMBER{
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JQUERY_UI_SCRIPT");
                 $tpl->newBlock("DATEPICKER_SCRIPT");
+                if($cms_cfg['ws_module']['ws_address_type']=='tw')$main->res_init("zone",'box');
                 $this->member_form("mod");
                 $this->ws_tpl_type=1;
                 break;
