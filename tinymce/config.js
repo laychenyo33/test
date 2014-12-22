@@ -9,7 +9,7 @@
 		tinymce.init({
 			selector: SELECT,
 			theme: "modern",
-			width: 700,
+			width: 760,
 			height: 200,
 			language : 'zh_TW',
 			
@@ -18,74 +18,49 @@
 			filemanager_title:"檔案管理" ,
 			external_plugins: { "filemanager" : ROOT_PATH +"filemanager/plugin.min.js"},
 			
+			/*plugins: [
+	                "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+	                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+	                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern save"
+	        ],
+	
+	        toolbar1: "save newdocument fullpage | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+	        toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor",
+	        toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+	
+	        menubar: false,
+	        toolbar_items_size: 'small',
+			*/
+			
 			plugins: [
 			     "image responsivefilemanager advlist autolink link lists charmap print preview hr anchor pagebreak spellchecker",
 			     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-			     "save table contextmenu directionality emoticons template paste textcolor"
-			   ],
+			     "save table contextmenu directionality emoticons template paste textcolor colorpicker youTube "
+			],
+			  
+			toolbar1: "insertfile undo redo | styleselect | fontselect | fontsizeselect | bold italic underline | colorpicker forecolor backcolor | youTube",
+			toolbar2: "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink anchor | responsivefilemanager image media |  preview emoticons print code ",
+			 			
+			//toolbar1: "insertfile undo redo | styleselect formatselect fontselect fontsizeselect | cut copy paste pastetext | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink anchor | image responsivefilemanager media |  preview emoticons print code ",
+			//toolbar1 : "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect | insertdatetime | table",
+			//toolbar2 : "insertdate inserttime | fontselect | fontsizeselect | colorpicker forecolor backcolor | insertfile | image | cleanup | media | link unlink anchor insertfile | print preview code | ",
+			//toolbar3 : "strikethrough charmap iespell subscript superscript | hr removeformat | ltr rtl | visualchars nonbreaking pagebreak restoredraft visualblocks",
+			//fullscreen  spellchecker blockquote newdocument save | cut copy paste pastetext pasteword insertdate inserttime | cut copy paste pastetext pasteword 
+			menubar: true,
+			image_advtab: true,
+	        //toolbar_items_size: 'small',
 			
-			toolbar1: "insertfile undo redo | styleselect fontselect fontsizeselect | cut copy paste pastetext | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink anchor | image responsivefilemanager media |  preview emoticons print code ",
-				
-			/*
-			style_formats: [
-				{title: 'Bold text', inline: 'b'},
-			    {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
-			    {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
-			    {title: 'Example 1', inline: 'span', classes: 'example1'},
-			    {title: 'Example 2', inline: 'span', classes: 'example2'},
-			    {title: 'Table styles'},
-			    {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
-			]
-			*/
-                        convert_urls: false,
-                        paste_auto_cleanup_on_paste : true,
-                        paste_postprocess : function(pl, o) {
-                            // remove &nbsp
-                            o.node.innerHTML = o.node.innerHTML.replace(/&nbsp;/ig, " ");
-                         },
-                         extended_valid_elements : "iframe[src|width|height|name|align],span[style|id|nam|class|lang]",
-                        paste_retain_style_properties : "margin padding width height font-size font-weight font-family color text-align ul ol li text-decoration border background float display background-color",
-                        paste_word_valid_elements: "b,strong,i,em,h1,h2,table,tr,th,td,ul,ol,li,style,img",
-                        paste_data_images: true,
-                        template_replace_values: {
-                            username : "Jack Black",
-                            staffid : "991234",
-                            mybb: function(e){
-                                e.innerHTML = 'mybb';
-                            }
-                        },           
-                        templates : [
-                            {
-                                title: "edm01單欄",
-                                url: "templates/epaper/edm01-single-column.html",
-                                description: "edm01的單欄表格"
-                            },
-                            {
-                                title: "edm01雙欄",
-                                url: "templates/epaper/edm01-double-column.html",
-                                description: "edm01的雙欄表格"
-                            },
-                            {
-                                title: "edm02示範內容",
-                                url: "templates/epaper/edm02-template.html",
-                                description: "edm02的示範內容"
-                            },
-                            {
-                                title: "edm02空白區域",
-                                url: "templates/epaper/edm02-empty-block.html",
-                                description: "edm02的空白區域"
-                            },
-                            {
-                                title: "Editor Details",
-                                url: "templates/epaper/editor_details.htm",
-                                description: "Adds Editor Name and Staff ID"
-                            },
-                            {
-                                title: "Timestamp",
-                                url: "templates/epaper/time.htm",
-                                description: "Adds an editing timestamp."
-                            }
-                        ]                                
+			
+            convert_urls: false,
+            paste_auto_cleanup_on_paste : true,
+            paste_postprocess : function(pl, o) {
+                // remove &nbsp
+                o.node.innerHTML = o.node.innerHTML.replace(/&nbsp;/ig, " ");
+             },
+            extended_valid_elements : "iframe[src|width|height|name|align],span[style|id|nam|class|lang]",
+            paste_retain_style_properties : "margin padding width height font-size font-weight font-family color text-align ul ol li text-decoration border background float display background-color",
+            paste_word_valid_elements: "b,strong,i,em,h1,h2,table,tr,th,td,ul,ol,li,style,img",
+            paste_data_images: true
 
 		});
 	}
