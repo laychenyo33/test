@@ -801,7 +801,7 @@ span.current{color:#f00}
 #ajax-msg{color:#00f}
 #ajax-msg.ajax-error{color:#f00}
 
-.order_status_0{}
+.order_status_0{color:#00f}
 .order_status_1{color:rgb(139,51,51)}
 .order_status_2{color:rgb(44,114,48)}
 .order_status_3{color:#000}
