@@ -770,6 +770,8 @@ class MAINFUNC{
         $MAIL_HEADER  .= "X-Priority: 1\n";
         $MAIL_HEADER  .= "Message-ID: <".time()."-".$from_email[0].">\n";
         $MAIL_HEADER  .= "X-Mailer: PHP v".phpversion()."\n";          // These two to help avoid spam-filters
+        $MAIL_HEADER  .= "mailed-by: ".$cms_cfg['server_name']."\n";   // 寄出的主機
+        $MAIL_HEADER  .= "signed-by: ".$cms_cfg['server_name']."\n";   // 驗證的主機
         $to_email = explode(",",$to);
         for($i=0;$i<count($to_email);$i++){
             if($i!=0 && $i%2==0){
@@ -799,6 +801,8 @@ class MAINFUNC{
             $MAIL_HEADER  .= "X-Priority: 1\n";
             $MAIL_HEADER  .= "Message-ID: <".time()."-".$to_email[0].">\n";
             $MAIL_HEADER  .= "X-Mailer: PHP v".phpversion()."\n";          // These two to help avoid spam-filters
+            $MAIL_HEADER  .= "mailed-by: ".$cms_cfg['server_name']."\n";   // 寄出的主機
+            $MAIL_HEADER  .= "signed-by: ".$cms_cfg['server_name']."\n";   // 驗證的主機            
             if($admin_subject){
                 $subject = $this->format_mail_subject($admin_subject);
             }else{
@@ -837,6 +841,8 @@ class MAINFUNC{
         $MAIL_HEADER  .= "X-Priority: 1\n";
         $MAIL_HEADER  .= "Message-ID: <".time()."-".$from_email[0].">\n";
         $MAIL_HEADER  .= "X-Mailer: PHP v".phpversion()."\n";          // These two to help avoid spam-filters
+        $MAIL_HEADER  .= "mailed-by: ".$cms_cfg['server_name']."\n";   // 寄出的主機
+        $MAIL_HEADER  .= "signed-by: ".$cms_cfg['server_name']."\n";   // 驗證的主機        
         $to_email = explode(",",$to);
         for($i=0;$i<count($to_email);$i++){
             if($i!=0 && $i%2==0){
