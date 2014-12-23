@@ -525,6 +525,7 @@ class MEMBER{
                                     "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
                                     "VALUE_O_SERIAL" => $i,
                                     "VALUE_O_DETAIL" => $TPLMSG['DETAIL'],
+                                    "STATUS_CLASS"   => "order_status_".$row['o_status'],
                 ));
                 if($row['o_payment_type']==1 && $row['o_atm_last5']=='' && $row['o_status']<2){ //未出貨訂單未匯款的訂單
                     $tpl->newBlock("UNATM_FIELD");
