@@ -847,7 +847,8 @@ class CART{
             $lname = mb_substr($_POST['m_name'], 0, $lname_len ,"utf8");            
             $memberData = array_merge($_POST,array(
                 'mc_id'     => '1',
-                'm_status' => '1',
+                'm_status'  => '1',
+                'm_account' => $_POST['m_email'],
                 'm_sort'    => App::getHelper('dbtable')->member->get_max_sort_value(),
                 'm_fname'   => $fname,
                 'm_lname'   => $lname,
