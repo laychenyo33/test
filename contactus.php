@@ -185,6 +185,7 @@ class CONTACTUS{
             $tpl->assignGlobal("MSG_ERROR_MESSAGE",$TPLMSG['SECURITY_ERROR']);
         }
         if($cms_cfg['ws_module']['ws_address_type']=='tw'){
+            $main->res_init('zone','box');
             $tpl->newBlock("TW_ADDRESS");
         }else{
             $tpl->newBlock("SINGLE_ADDRESS");
