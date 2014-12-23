@@ -982,6 +982,7 @@ class MEMBER{
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
         $tpl->newBlock( "REGISTER_SEND_PASSWORD_SUCCESSFULLY" );
         $tpl->newBlock( "LANG_".strtoupper($cms_cfg['language']) );
+        $main->layer_link($TPLMSG["FORGOT_PASSWORD"]);
     }
     //會員紅利
     function member_bonus(){}
