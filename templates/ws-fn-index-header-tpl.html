@@ -22,8 +22,12 @@
     jQuery(function($){
         $(document).ready(function(){
             //弹出式广告
-            $("a[rel^='prettyPhoto']").prettyPhoto();
-            $.prettyPhoto.open('pop_ad.php?iframe=true&width=780&height=95%');
+            var indexPop = getCookie('index_pop');
+            if(!indexPop){
+                $("a[rel^='prettyPhoto']").prettyPhoto();
+                $.prettyPhoto.open('pop_ad.php?iframe=true&width=780&height=95%');
+                setCookie('index_pop',1);
+            }
         });
     });
 </script>
