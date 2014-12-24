@@ -15,7 +15,8 @@
         <!-- END BLOCK : AUTHORITY_ADMIN -->
         <!-- START BLOCK : INDEX_BANNER -->
         <h3><a href="{TAG_MANAGE_ROOT}system-config.php?func=sc_banner" {TAG_IB_CURRENT}>首頁banner管理</a></h3>
-        <!-- END BLOCK : INDEX_BANNER -->        
+        <!-- END BLOCK : INDEX_BANNER -->
+        <h3><a href="{TAG_MANAGE_ROOT}system-config.php?func=sf_mod" {TAG_SF_CURRENT}>運費設定</a></h3>
         <h3><a href="#" class="img_manage">圖檔管理</a></h3>
         <h3><a href="#" class="file_manage">檔案管理</a></h3>
     </div>
@@ -42,10 +43,15 @@
     <!-- START BLOCK : AUTHORITY_PRODUCTS -->
     <h2>產品管理</h2>
     <div class="pane" {CSS_BLOCK_PRODUCTS}>
+        <!-- START BLOCK : AUTHORITY_PRODUCTS_SPEC -->
+        <h3><a href="spec.php?func=psc_list" {TAG_PSC_CURRENT}>規格分類管理</a></h3>
+        <h3><a href="spec.php?func=pst_list" {TAG_PST_CURRENT}>規格標題管理</a></h3>
+        <!-- END BLOCK : AUTHORITY_PRODUCTS_SPEC -->
         <!-- START BLOCK : AUTHORITY_PRODUCTS_CATE -->
         <h3><a href="{TAG_MANAGE_ROOT}products.php?func=pc_list" {TAG_PC_CURRENT}>產品分類管理</a></h3>
         <!-- END BLOCK : AUTHORITY_PRODUCTS_CATE -->
         <h3><a href="{TAG_MANAGE_ROOT}products.php?func=p_list" {TAG_P_CURRENT}>產品管理</a></h3>
+        <h3><a href="{TAG_MANAGE_ROOT}discountsets.php?func=list" {TAG_PDS_CURRENT}>數量折扣組合管理</a></h3>
         <!-- START BLOCK : AUTHORITY_NEW_PRODUCTS -->
         <h3><a href="{TAG_MANAGE_ROOT}products.php?func=p_new_list" {TAG_PN_CURRENT}>新產品管理</a></h3>
         <!-- END BLOCK : AUTHORITY_NEW_PRODUCTS -->
@@ -79,6 +85,7 @@
     <div class="pane" {CSS_BLOCK_DOWNLOAD}>
         <h3><a href="{TAG_MANAGE_ROOT}download.php?func=dc_list" {TAG_DC_CURRENT}>檔案下載分類管理</a></h3>
         <h3><a href="{TAG_MANAGE_ROOT}download.php?func=d_list" {TAG_D_CURRENT}>檔案下載管理</a></h3>
+        <h3><a href="{TAG_MANAGE_ROOT}download.php?func=d_list_withtime" {TAG_DT_CURRENT}>檔案下載管理(依時間)</a></h3>
         <h3><a href="#" class="img_manage">圖檔管理</a></h3>
         <h3><a href="#" class="file_manage">檔案管理</a></h3>
     </div>
@@ -107,6 +114,12 @@
         <!-- START BLOCK : AUTHORITY_MULTI_CHARGEFEE -->
         <h3><a href="{TAG_MANAGE_ROOT}chargefee.php" {TAG_CFL_CURRENT}>手續費管理</a></h3>        
         <!-- END BLOCK : AUTHORITY_MULTI_CHARGEFEE -->
+        <!-- START BLOCK : AUTHORITY_MULTI_DISCOUNT -->
+        <h3><a href="{TAG_MANAGE_ROOT}discount.php" {TAG_DCL_CURRENT}>滿額折扣管理</a></h3>
+        <!-- END BLOCK : AUTHORITY_MULTI_DISCOUNT -->
+        <!-- START BLOCK : AUTHORITY_ORDER_EXPORT -->
+        <h3><a href="{ADMIN_ORDER_PATH}?func=o_ex" {TAG_OE_CURRENT}>匯出訂單</a></h3>
+        <!-- END BLOCK : AUTHORITY_ORDER_EXPORT -->
         <h3><a href="{TAG_MANAGE_ROOT}service.php?func=st_term&term_type=st_order_mail" {TAG_ST_ORDER_CURRENT}>購物確認信編輯</a></h3>
         <h3><a href="{TAG_MANAGE_ROOT}service.php?func=st_term&term_type=st_shopping_term" {TAG_ST_SHOPPING_TERM_CURRENT}>購物說明</a></h3>
         <h3><a href="{TAG_MANAGE_ROOT}service.php?func=st_term&term_type=st_service_term" {TAG_ST_SERVICE_TERM_CURRENT}>服務條款</a></h3>

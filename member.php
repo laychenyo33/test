@@ -525,6 +525,7 @@ class MEMBER{
                                     "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
                                     "VALUE_O_SERIAL" => $i,
                                     "VALUE_O_DETAIL" => $TPLMSG['DETAIL'],
+                                    "STATUS_CLASS"   => "order_status_".$row['o_status'],
                 ));
                 if($row['o_payment_type']==1 && $row['o_atm_last5']=='' && $row['o_status']<2){ //未出貨訂單未匯款的訂單
                     $tpl->newBlock("UNATM_FIELD");
@@ -570,6 +571,8 @@ class MEMBER{
                                       "MSG_PAYMENT_TYPE"   => $TPLMSG['PAYMENT_TYPE'],
                                       "MSG_DELIVER_STR"   => $TPLMSG['DELIVER_STR'],
                                       "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
+                                      "MSG_SPEC" => $TPLMSG['CART_SPEC_TITLE'],
+                                      "MSG_DISCOUNT" => $TPLMSG['QUANTITY_DISCOUNT'],
             ));
             //相關參數
             if(!empty($_REQUEST['nowp'])){
@@ -617,8 +620,8 @@ class MEMBER{
                                               "VALUE_O_STATUS_SUBJECT" => $ws_array["order_status"][$row["o_status"]],
                                               "VALUE_O_CONTENT" => $row["o_content"],
                                               "VALUE_O_PAYMENT_TYPE" => $main->multi_map_value($ws_array["payment_type"],$row['o_payment_type']),
-                                              "VALUE_O_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$row['o_shippment_type']],
-                                              "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
+                                              "VALUE_O_SHIPPMENT_TYPE" => $main->multi_map_value($ws_array["shippment_type"],$row['o_shippment_type']),
+                                              "VALUE_O_INVOICE_TYPE" => $main->multi_map_value($ws_array["invoice_type"],$row['o_invoice_type']),
                                               "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
                                               "VALUE_O_DELIVER_DATE" => (strtotime($row["o_deliver_date"]))?date("Y年m月d日",strtotime($row["o_deliver_date"])):"",
                                               "VALUE_O_DELIVER_TIMESEC" => $ws_array["deliery_timesec"][$row["o_deliver_time_sec"]],                      
@@ -637,20 +640,30 @@ class MEMBER{
                     //訂購產品列表
                     $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                     $selectrs = $db->query($sql);
-                    $total_price=0;
                     $i=0;
+                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                        $tpl->newBlock("SPEC_TITLE_ORDER");
+                        $tpl->assignGlobal("CART_FIELDS_NUMS",6);
+                    }else{
+                        $tpl->assignGlobal("CART_FIELDS_NUMS",5);
+                    }
                     while($row = $db->fetch_array($selectrs,1)){
                         $i++;
-                        $sub_total_price = $row["p_sell_price"] * $row["oi_amount"];
-                        $total_price = $total_price+$sub_total_price;
+                        $sub_total_price = round($row["price"] * $row["amount"] * $row['discount']);
                         $tpl->newBlock( "ORDER_ITEMS_LIST" );
                         $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                             "VALUE_P_NAME" => $row["p_name"],
-                                            "VALUE_P_SELL_PRICE" => $row["p_sell_price"],
-                                            "VALUE_P_AMOUNT" => $row["oi_amount"],
+                                            "VALUE_P_SELL_PRICE" => $row["price"],
+                                            "VALUE_P_AMOUNT" => $row["amount"],
+                                            "TAG_QUANTITY_DISCOUNT" => ($row['discount']<1)?$row['discount']:'',
                                             "VALUE_P_SUBTOTAL_PRICE"  => $sub_total_price,
                                             "VALUE_P_SERIAL"  => $i,
+                                            "VALUE_P_SPEC" => $row['spec'],
                         ));
+                        if($cms_cfg['ws_module']['ws_cart_spec']){
+                            $tpl->newBlock("SPEC_FIELD_ORDER");
+                            $tpl->assign("VALUE_SPEC",$row["spec"]);
+                        }
                     }
                 }else{
                     header("location : member.php");
@@ -718,7 +731,8 @@ class MEMBER{
                                       "MSG_REPLY" => $TPLMSG['REPLY'],
                                       "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'],
                                       "MSG_PRODUCT" => $TPLMSG['PRODUCT'],
-                                      "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE']
+                                      "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE'],
+                                      "MSG_SPEC" => $TPLMSG['CART_SPEC_TITLE'],
             ));
             //相關參數
             if(!empty($_REQUEST['nowp'])){
@@ -760,6 +774,9 @@ class MEMBER{
                     $selectrs = $db->query($sql);
                     $total_price=0;
                     $i=0;
+                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                        $tpl->newBlock("SPEC_TITLE");
+                    }                    
                     while($row = $db->fetch_array($selectrs,1)){
                         $i++;
                         $sub_total_price = $row["p_sell_price"] * $row["ii_amount"];
@@ -767,9 +784,14 @@ class MEMBER{
                         $tpl->newBlock( "INQUIRY_ITEMS_LIST" );
                         $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                             "VALUE_P_NAME" => $row["p_name"],
-                                            "VALUE_P_AMOUNT" => $row["ii_amount"],
+                                            "VALUE_P_AMOUNT" => $row["amount"],
                                             "VALUE_P_SERIAL"  => $i,
+                                            "VALUE_P_SPEC" => $row["spec"],
                         ));
+                        if($cms_cfg['ws_module']['ws_cart_spec']){
+                            $tpl->newBlock("SPEC_FIELD");
+                            $tpl->assign("VALUE_SPEC",$row["spec"]);
+                        }                        
                     }
                 }else{
                     header("location : member.php");
@@ -1036,12 +1058,14 @@ class MEMBER{
         global $db,$cms_cfg,$main;
         $res['code']=0;
         if($_POST['o_id'] && $_POST['o_atm_last5']){
-            $sql = "select *  from ".$db->prefix("order")." where o_id='".$db->quote($_POST['o_id'])."'";
-            $qs = $db->query($sql);
-            if($db->numRows($qs)){
-                $sql = "update ".$db->prefix("order")." set o_atm_last5='".$_POST['o_atm_last5']."' where o_id='".$_POST['o_id']."'";
-                $db->query($sql);
-                if($err = $db->report()){
+            $order = App::getHelper('dbtable')->order->getData($_POST['o_id'])->getDataRow('o_id,o_email,o_atm_last5,remit_amount');
+            if($order){
+                $o_email = $order['o_email'];
+                unset($order['o_email']);
+                $order = array_merge($order,$_POST);
+                App::getHelper('dbtable')->order->writeData($order);
+                $err = App::getHelper('dbtable')->order->report();
+                if($err){
                     $res['msg'] = $err;
                 }else{
                     $res['code']=1;

@@ -1,8 +1,8 @@
 <form name="myform" method="post" action="{CART_PATH}" style="margin:0px;padding:0px;">
-    <input name="amount" value="1" size="2" type="hidden" />
+    <input name="amount" id="amount" value="1" size="2" type="hidden" />
     <input type="hidden" name="func" value="c_add">
-    <input type="hidden" name="cart_type" value="{VALUE_P_CART_TYPE}">
-    <input type="hidden" name="p_id" value="{VALUE_P_ID}">    
+    <input type="hidden" name="cart_type" value="{VALUE_P_CART_TYPE}"> 
+    <input type="hidden" name="ps_id" value="">    
     <!-- START BLOCK : PRODUCTS_DETAIL_CUSTOM -->
     <!-- START BLOCK : INQUIRY_IN_CUSTOM -->
     <div class="btn01">
@@ -70,28 +70,57 @@
             <!-- END BLOCK : BTN_YOUTUBE_MV_SHOW -->            
             <!-- START BLOCK : BTN_LINK_MV_SHOW -->
             <div class="icon01 video"><a href="{VALUE_P_MV_URL}" target="_blank">VIDEO</a></div>       
-            <!-- END BLOCK : BTN_LINK_MV_SHOW -->            
-            <!-- START BLOCK : CART_TYPE_SHOPPING -->
-            <!-- START BLOCK : SINGLE_PRICE -->
-            {MSG_PRODUCT_LIST_PRICE}:<span class="cash">{VALUE_P_LIST_PRICE}</span>
-            <!-- END BLOCK : SINGLE_PRICE -->
-            <!-- START BLOCK : FULL_PRICE -->
-            {MSG_PRODUCT_LIST_PRICE}:<s>{VALUE_P_LIST_PRICE}</s><br/>
-            {MSG_PRODUCT_SPECIAL_PRICE}:<span class="cash">{VALUE_P_SPECIAL_PRICE}</span>
-            <!-- END BLOCK : FULL_PRICE -->
-            <!-- END BLOCK : CART_TYPE_SHOPPING -->
-
+            <!-- END BLOCK : BTN_LINK_MV_SHOW -->
+            <!-- START BLOCK : MULTIPLE_SPEC_SETS -->
+                <div id="products-spec">
+                    產品規格: 
+                    <select class="prod_spec">
+                        <option value=''>{SPEC_CATE}</option>
+                        <!-- START BLOCK : PROD_SPEC_OPTION -->
+                        <option value="{PS_ID}">{PST_SUBJECT}</option>
+                        <!-- END BLOCK : PROD_SPEC_OPTION -->
+                    </select>
+                </div>
+                <!-- START BLOCK : MULTIPLE_SPEC_PRICE -->
+                <div class="show_price">
+                    特價: <span id="prod_price"></span>
+                </div> 
+                <!-- END BLOCK : MULTIPLE_SPEC_PRICE -->
+            <!-- END BLOCK : MULTIPLE_SPEC_SETS -->
+            <!-- START BLOCK : SINGLE_SPEC_SETS -->
+                <!-- START BLOCK : CART_TYPE_SHOPPING -->
+                    <!-- START BLOCK : SINGLE_PRICE -->
+                    {MSG_PRODUCT_LIST_PRICE}:<span class="cash">{VALUE_P_LIST_PRICE}</span>
+                    <!-- END BLOCK : SINGLE_PRICE -->
+                    <!-- START BLOCK : FULL_PRICE -->
+                    {MSG_PRODUCT_LIST_PRICE}:<s>{VALUE_P_LIST_PRICE}</s><br/>
+                    {MSG_PRODUCT_SPECIAL_PRICE}:<span class="cash">{VALUE_P_SPECIAL_PRICE}</span>
+                    <!-- END BLOCK : FULL_PRICE -->
+                <!-- END BLOCK : CART_TYPE_SHOPPING -->
+            <!-- END BLOCK : SINGLE_SPEC_SETS -->
+            <div class="no_stocks" {TAG_NO_STOCK_MSG_ZONE}>無現貨，到貨通知</div>
+            <!-- START BLOCK : QTY_DISCOUNT -->
+            <div id="quantity-discount">
+                <span id="title">{MSG_QTN_DESC}</span>
+                <ul>
+                    <!-- START BLOCK : QTY_DISCOUNT_LIST -->
+                    <li>{MSG_DISCOUNT_ITEM}</li>
+                    <!-- END BLOCK : QTY_DISCOUNT_LIST -->
+                </ul>
+            </div>
+            <!-- END BLOCK : QTY_DISCOUNT -->
             <!-- START BLOCK : SHOW_DISCOUNT -->
             <div>{MSG_PRODUCT_DISCOUNT_PRICE}:<span class="red">{VALUE_P_DISCOUNT_PRICE}</span></div>
             <!-- END BLOCK : SHOW_DISCOUNT -->
 			<div class="btn01">
-				<div class="btn02"><a href="javascript:document.myform.submit();">Inquiry</a></div>
+                                <!-- START BLOCK : CART_SUBMIT -->
+				<div class="btn02"><a href="#" class="prodToCart" rel="{VALUE_P_ID}">{SUBMIT_BTN_STR}</a></div>
+                                <!-- END BLOCK : CART_SUBMIT -->
 				<div class="btn02"><a href="javascript:addBookmarkForBrowser(document.title,document.URL);">Favorite</a></div>
                                 <!-- START BLOCK : PROD_COLLECT -->
 				<div class="btn02"><a href="#" class="prodToCollect" rel="{VALUE_P_ID}">我要收藏(<span id="collectnums">{MSG_COLLECT_NUMS}</span>)</a></div>
                                 <!-- END BLOCK : PROD_COLLECT -->
 			</div>
-
             <!-- START BLOCK : ATTACH_FILE1 -->
             <a href="{VALUE_PAF_LINK}" target="_blank"><img src="{ATTACH_ICON}" border="0"/></a>
             <!-- END BLOCK : ATTACH_FILE1 -->
@@ -186,5 +215,112 @@
                 }
             },'json');
         });
+        $(".spinner").spinner({
+            min: 1,
+            spin: function( event, ui ) {
+                $(this).data('currentValue',ui.value);
+            },
+            change: function( event, ui ) {
+            }            
+        });                 
+        $(".prodToCart").click(function(evt){
+             evt.preventDefault();
+             var formData = $(myform).serialize();
+             if($(this).attr('rel')!=''){
+                 formData += "&p_id="+$(this).attr('rel');
+             }
+             formData += "&via_ajax=1";
+             if($(".prod_spec").size() && $(myform['ps_id']).val()==''){
+                 alert("{MSG_WARNING_NOSPEC}");
+                 return;
+             }
+             if($("#amount").val()==""){
+                 alert("{MSG_WARNING_NOAMOUNT}");
+                 return;
+             }
+             $.post("{CART_PATH}",formData,function(req){
+                 if(req.code=='1'){
+                     alert("{AJAX_SUBMIT_MSG}");
+                     //$("#cart-zone").trigger('mouseenter');
+                     //closeMiniCart = setTimeout(function(){
+                     //   $("#minicart").empty().hide();
+                     //},2000);
+                 }else{
+                     alert(req.msg);
+                 }
+                 $("#cart-nums").text(req.cart_nums);
+             },'json');
+        });        
+        $("#amount").change(function(evt){
+            var v = $("#amount").val();
+            var nv = parseInt(v);
+            if(isNaN(nv)){
+                alert("{MSG_WARNING_AMOUNTFORMAT}");
+                $("#amount").val($("#amount").data('currentValue'));
+            }else{
+                $("#amount").data('currentValue',nv);
+                $("#amount").val(nv);
+            }
+        });
+        $("#amount").data('currentValue',$("#amount").val());
+    });
+</script>
+<script>
+    jQuery(function($){
+        function check_prod_spec_data(evt){
+            var paretObject = this;
+            $(paretObject).trigger("reset_child");
+            if($(this).val()!=''){
+                var param = {
+                    func: 'p_ajax_get_prod_spec',
+                    parent: $(this).val()
+                };
+                $.get('{TAG_ROOT_PATH}products.php',param,function(req){
+                    if(req.code==1){
+                        var childSelect = $("<select></select>").addClass("prod_spec");
+                        childSelect.append("<option value=''>"+req.cate+"</option>");
+                        for(var j=0;j<req.child.length;j++){
+                            childSelect.append("<option value='"+req.child[j].ps_id+"'>"+req.child[j].pst_subject+"</option>");
+                        }
+                        childSelect.change(check_prod_spec_data);
+                        childSelect.on('reset_child',reset_child);                    
+                        paretObject.child = childSelect;
+                        $(paretObject).after(childSelect);
+                    }else if(req.code==2){
+                        if(req.extend.quantity==0){
+                            $(".no_stocks").show();
+                            $("#cart-handler").hide();
+                        }else{
+                            $(".no_stocks").hide();
+                            $("#cart-handler").show();
+                        }
+                        if($(paretObject).next().is("img")){
+                            $(paretObject).next().remove();
+                        }
+                        if(req.img!=''){
+                            var simg = $("<img/>").attr('src',req.img).css('height',20);
+                            $(paretObject).after(simg);
+                            paretObject.child = simg;
+                        }
+                        $("#inventory").text(req.extend.quantity);
+                        $("#prod_price").text("NT$ "+req.extend.price);
+                        $(myform['ps_id']).val($(paretObject).val());
+                    }else if(req.code==0){
+                        alert('get data failed!');
+                    }
+                },'json');
+            }
+        }
+        function reset_child(evt){
+            if(this.child){
+                $(this.child).trigger("reset_child");
+                $(this.child).remove();
+                $("#prod_price").html('');
+                myform['ps_id'].value='';
+            }
+            $("#inventory").text('');
+        }
+        $(".prod_spec").change(check_prod_spec_data);
+        $(".prod_spec").on('reset_child',reset_child);
     });
 </script>

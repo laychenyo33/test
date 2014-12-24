@@ -9,10 +9,12 @@
                         <th width="5%"> No.</th>
                         <th width="15%"> 產品圖</th>
                         <th width="14%"> 貨號</th>
-                        <th width="24%"> 產品</th>
+                        <th width=""> 產品</th>
+                        <th width="15%"> 規格</th>
                         <th width="10%"> 數量</th>
-                        <th width="16%"> 價格</th>
-                        <th width="16%"> 小計</th>
+                        <th width="10%"> 價格</th>
+                        <th width="10%"> 折扣率</th>
+                        <th width="10%"> 小計</th>
                     </tr>
                     <!-- START BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
@@ -24,6 +26,9 @@
                         <td>
                             {VALUE_P_NAME}
                         </td>
+                        <td class="desc">
+                            {VALUE_SPEC}
+                        </td>
                         <td class="nums">
                             {VALUE_P_AMOUNT}
                         </td>
@@ -31,12 +36,15 @@
                             {VALUE_P_SELL_PRICE}
                         </td>
                         <td class="nums">
+                            {VALUE_DISCOUNT}
+                        </td>                        
+                        <td class="nums">
                             {VALUE_P_SUBTOTAL_PRICE}
                         </td>
                     </tr>
                     <!-- END BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
-                        <td colspan="6">
+                        <td colspan="8">
                             <div align="right"> 小計:&nbsp;</div>
                         </td>
                         <td class="nums">
@@ -44,7 +52,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6">
+                        <td colspan="8">
                             <div align="right"> 折扣:&nbsp;</div>
                         </td>
                         <td class="nums">
@@ -52,7 +60,7 @@
                         </td>
                     </tr>                    
                     <tr>
-                        <td colspan="6">
+                        <td colspan="8">
                             <div align="right"> 運費:&nbsp;</div>
                         </td>
                         <td class="nums">
@@ -60,7 +68,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6">
+                        <td colspan="8">
                             <div align="right"> 手續費:&nbsp;</div>
                         </td>
                         <td class="nums">
@@ -68,7 +76,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="6">
+                        <th colspan="8">
                             <div align="right"> 合計:&nbsp;</div>
                         </th>
                         <th class="nums"> 

@@ -199,6 +199,9 @@ class INQUIRY{
                 $selectrs = $db->query($sql);
                 $total_price=0;
                 $i=0;
+                if($cms_cfg['ws_module']['ws_cart_spec']){
+                    $tpl->newBlock("SPEC_TITLE");
+                }                   
                 while($row = $db->fetch_array($selectrs,1)){
                     $i++;
                     $sub_total_price = $row["p_sell_price"] * $row["oi_amount"];
@@ -206,9 +209,13 @@ class INQUIRY{
                     $tpl->newBlock( "INQUIRY_ITEMS_LIST" );
                     $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                         "VALUE_P_NAME" => $row["p_name"],
-                                        "VALUE_P_AMOUNT" => $row["ii_amount"],
+                                        "VALUE_P_AMOUNT" => $row["amount"],
                                         "VALUE_P_SERIAL"  => $i,
                     ));
+                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                        $tpl->newBlock("SPEC_FIELD");
+                        $tpl->assign("VALUE_SPEC",$row["spec"]);
+                    }                       
                 }
             }else{
                 header("location : inquiry.php?func=i_list");

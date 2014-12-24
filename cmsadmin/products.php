@@ -17,6 +17,15 @@ class PRODUCTS{
         $this->op_limit=10;
         $this->jp_limit=10;
         switch($_REQUEST["func"]){
+            case "save_spec_attr":
+                $this->save_spec_attr();
+                break;
+            case "spec_attr_table":
+                $this->spec_attr_table();
+                break;
+            case "make_spec_table":
+                $this->make_spec_table();
+                break;            
             case "classify"://產品分類方法
                 $this->current_class="CLF";
                 $method = "classify";
@@ -686,29 +695,16 @@ class PRODUCTS{
             //產品管理列表
             $sql="select p.*,pc.pc_name from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_id > '0'";
             //附加條件
-            $and_str="";
+            $and_str=array();
             if(!$this->root_user){
-                $and_str = " and (p.p_locked='0' || (p.p_locked='1' and p.p_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'))";
+                $and_str[] = " (p.p_locked='0' || (p.p_locked='1' and p.p_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'))";
             }
             if(!empty($_REQUEST["pc_parent"])){
-                $and_str .= " and p.pc_id = '".$_REQUEST["pc_parent"]."'";
+                $and_str[] = "  p.pc_id = '".$_REQUEST["pc_parent"]."'";
             }
-            if($_REQUEST["st"]=="all"){
-                $and_str .= " and (p.p_name like '%".$_REQUEST["sk"]."%' or p.p_spec like '%".$_REQUEST["sk"]."%' or p.p_character like '%".$_REQUEST["sk"]."%' or p.p_desc like '%".$_REQUEST["sk"]."%')";
-            }
-            if($_REQUEST["st"]=="p_name"){
-                $and_str .= " and p.p_name like '%".$_REQUEST["sk"]."%'";
-            }
-            if($_REQUEST["st"]=="p_spec"){
-                $and_str .= " and p.p_spec like '%".$_REQUEST["sk"]."%'";
-            }
-            if($_REQUEST["st"]=="p_character"){
-                $and_str .= " and p.p_character like '%".$_REQUEST["sk"]."%'";
-            }
-            if($_REQUEST["st"]=="p_desc"){
-                $and_str .= " and p.p_desc like '%".$_REQUEST["sk"]."%'";
-            }
-            $sql .= $and_str." order by pc.pc_sort ".$cms_cfg['sort_pos'].",p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc ";
+            $searchFields = new searchFields_products();
+            $and_str = $searchFields->find_search_value_sql(implode(' and ',$and_str), $_GET['st'], $_GET['sk']);
+            $sql .= ($and_str?" and ":"").$and_str." order by pc.pc_sort ".$cms_cfg['sort_pos'].",p.p_sort ".$cms_cfg['sort_pos'].",p.p_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -718,10 +714,11 @@ class PRODUCTS{
             $sql=$main->pagination($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
-            $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
-                                      "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
-                                      "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
-                                      "VALUE_NOW_PAGE" => $_REQUEST['nowp']
+            $tpl->assignGlobal( array(
+                "VALUE_TOTAL_BOX" => $rsnum,
+                "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                "VALUE_NOW_PAGE" => $_REQUEST['nowp'],
+                "TAG_SEARCH_FIELD" => $searchFields->list_search_fields($_GET['st'], $_GET['sk']),
             ));
             switch($_REQUEST["st"]){
                 case "all" :
@@ -748,6 +745,31 @@ class PRODUCTS{
                 $tpl->assignGlobal("TAG_PRODUCTS_CATE_LAYER",implode(" > ",$products_cate_layer));
             }else{
                 $tpl->assignGlobal("TAG_PRODUCTS_CATE_LAYER",$TPLMSG["NO_CATE"]);
+            }
+            //排序連結
+            parse_str($_SERVER['QUERY_STRING'],$output);
+            unset($output['nowp']);
+            unset($output['jp']);
+            unset($output['pos']);
+            $sortUrlOpt = $output;
+            $tpl->assignGlobal(array(
+                "TAG_SORT_MODIFYDATE_URL" =>  $_SERVER['PHP_SELF']."?". http_build_query(array_merge($sortUrlOpt,array('sortby'=>'modifydate'))),
+                "TAG_SORT_SORT_URL" => $_SERVER['PHP_SELF']."?". http_build_query(array_merge($sortUrlOpt,array('sortby'=>'sort'))),
+            ));
+            if($_GET['sortby']=="modifydate"){
+                $sortUrlOpt['sortby'] = "modifydate";
+                $sortUrlOpt['pos'] = (!isset($_GET['pos']) || $_GET['pos']=="asc" )?"desc":"asc";
+                $tpl->assignGlobal(array(
+                    "TAG_SORT_MODIFYDATE_URL" =>  $_SERVER['PHP_SELF']."?". http_build_query($sortUrlOpt),
+                    "TAG_SORT_MODIFYDATE_SYMBOL" => (empty($_GET['pos']) || $_GET['pos']=="asc")?"↑":"↓",
+                ));
+            }elseif($_GET['sortby']=="sort"){
+                $sortUrlOpt['sortby'] = "sort";
+                $sortUrlOpt['pos'] = (!isset($_GET['pos']) || $_GET['pos']=="asc" )?"desc":"asc";
+                $tpl->assignGlobal(array(
+                    "TAG_SORT_SORT_URL" => $_SERVER['PHP_SELF']."?". http_build_query($sortUrlOpt),
+                    "TAG_SORT_SORT_SYMBOL" => (empty($_GET['pos']) || $_GET['pos']=="asc")?"↑":"↓",
+                ));
             }
             //產品列表
             $i=(($_GET['nowp']?$_GET['nowp']:1)-1)*$this->op_limit;
@@ -839,6 +861,10 @@ class PRODUCTS{
                                   "STR_PRO_SORT_DISPLAY" => "none",
                                   "VALUE_ACTION_MODE" => $action_mode,
                                   "MSG_PRODUCT_ON_CLICKS_THIS" => $TPLMSG['CHANGE_PRICE_STATUS_CLICK_ME'],
+                                  "TAG_MULTIPLE_SPEC_HIDE" => "style='display:none'",
+                                  "TAG_SINGLE_SPEC_HIDE"   => "",
+                                  "TAG_SPEC_SETS_CHK0" => "checked",
+                                  "TAG_SPEC_SETS_CHK1" => "",
         ));		
         // 無新產品不顯示產品類型欄位
         ($cms_cfg["ws_module"]["ws_new_product"])?$tpl->newBlock( "PRODUCTS_TYPE_FIELD" ):"";
@@ -937,6 +963,10 @@ class PRODUCTS{
                                           "VALUE_P_SEO_SHORT_DESC" => $main->content_file_str_replace($row["p_seo_short_desc"],'out'),
                                           "MSG_SMALL_IMG_TEMPLATE" => sprintf("%dx%d",$cms_cfg['small_prod_img_width'],$cms_cfg['small_prod_img_height']),
                                           "MSG_BIG_IMG_TEMPLATE" => sprintf("%dx%d",$cms_cfg['big_img_width'][1],$cms_cfg['big_img_height'][1]),
+                                          "TAG_MULTIPLE_SPEC_HIDE" => ($row['spec_sets'])?"":"style='display:none'",
+                                          "TAG_SINGLE_SPEC_HIDE"   => ($row['spec_sets'])?"style='display:none'":"",
+                                          "TAG_SPEC_SETS_CHK0" => ($row['spec_sets'])?"":"checked",
+                                          "TAG_SPEC_SETS_CHK1" => ($row['spec_sets'])?"checked":"",                    
                 ));
                 //有排序欄位才重新指定排序值，複製產品不使用原先產品的排序值
                 if($row['p_sort']){
@@ -1044,6 +1074,43 @@ class PRODUCTS{
             $tpl->newBlock("ONSALE_ROW");
             $main->multiple_radio("onsale",App::defaults()->yesno_status,isset($row['onsale'])? $row['onsale'] : 1, $tpl);
         }
+        if(App::configs()->ws_module->ws_cart_spec){
+            $tpl->newBlock("SPEC_ROWS");
+            //規格分類
+            ///已使用
+            $sql_psc="select a.* from ".$db->prefix("products_spec_cate")." as a inner join ".$db->prefix("products_spec_cate_sort")." as b on a.psc_id=b.psc_id where p_id='".$_GET['p_id']."' order by sort ";
+            $res = $db->query($sql_psc,true);
+            while($tmp = $db->fetch_array($res,1)){
+                $used_pscid[] = $tmp['psc_id'];
+                $tpl->newBlock( "SPEC_CATE_SORTED_LIST" );
+                $tpl->assign( array( 
+                    "VALUE_PSC_SUBJECT" => $tmp["psc_subject"],
+                    "VALUE_PSC_ID"      => $tmp["psc_id"],
+                ));
+            }
+            if($used_pscid){
+                $and_str = " and psc_id not in(".implode(',',$used_pscid).")";
+            }
+            ///未使用
+            $sql_psc="select * from ".$cms_cfg['tb_prefix']."_products_spec_cate where psc_type='0'".$and_str;
+            $selectrs_psc = $db->query($sql_psc);
+            $rsnum_psc    = $db->numRows($selectrs_psc);
+            while($row_psc = $db->fetch_array($selectrs_psc,1)){
+                $tpl->newBlock( "SPEC_CATE_LIST" );
+                $tpl->assign( array( 
+                    "VALUE_PSC_SUBJECT" => $row_psc["psc_subject"],
+                    "VALUE_PSC_ID"      => $row_psc["psc_id"],
+                ));
+            }
+            //產品規格表
+            $tpl->assignGlobal("PRODUCTS_SPEC_TABLE",$this->make_spec_table_in_form($used_pscid,$row['p_id']));
+        }
+	//產品規格表
+        $tpl->assignGlobal("PRODUCTS_SPEC_TABLE",$this->make_spec_table_in_form($used_pscid,$row['p_id']));
+        //數量折扣選項
+        $this->quantity_discount($row);
+        //折扣組合
+        $this->discount_sets($row);
     }
 //產品管理--資料更新================================================================
     function products_replace(){
@@ -1103,6 +1170,63 @@ class PRODUCTS{
             if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_products']){//有應用領域
                 if($_POST['pa_id_str']){
                     $db_msg .= $this->write_application($this->p_id,$_POST['pa_id_str']);
+                }
+            }
+            if($_REQUEST["spec_sets"]){
+                //寫入spec_cate_sort
+                if($_POST['psc_id']){
+                    $psc_layer = count($_POST['psc_id']);
+                    //原本產品的spec_cate_sort
+                    $sql = "select psc_id from ".$db->prefix("products_spec_cate_sort")." where p_id='".$this->p_id."'";
+                    $res = $db->query($sql);
+                    $old_psc_id = array();
+                    while(list($psc_id)=$db->fetch_array($res,0)){
+                        if(!in_array($psc_id,$_POST['psc_id'])){
+                            //要刪除的psc_id;
+                            $del_psc_id[] = $psc_id;
+                            continue;
+                        }
+                        //要比對的psc_id;
+                        $old_psc_id[] = $psc_id;
+                    }
+                    //準備更新spec_cate_sort
+                    foreach($_POST['psc_id'] as $k => $psc_id){
+                        if(@in_array($psc_id,$old_psc_id)){
+                            $up_psc_id[] = array($psc_id,$k+1);
+                        }else{
+                            $new_psc_id[] = array($psc_id,$k+1);
+                        }
+                    }
+                    //更新
+                    if($up_psc_id){
+                        $sql1 = "update ".$db->prefix("products_spec_cate_sort")." set sort='%d' where p_id='%d' and psc_id='%d'";
+                        foreach($up_psc_id as $sets){
+                            $sql = sprintf($sql1,$sets[1],$this->p_id,$sets[0]);
+                            $db->query($sql);
+                        }
+                    }
+                    //新增
+                    if($new_psc_id){
+                        $sql2 = "insert ".$db->prefix("products_spec_cate_sort")."(p_id,psc_id,sort)values";
+                        foreach($new_psc_id as $sets){
+                            $values[] = sprintf("('%d','%d','%d')",$this->p_id,$sets[0],$sets[1]);
+                        }
+                        $sql = $sql2.implode(",", $values);
+                        $db->query($sql,true);
+                    }
+                    //刪除
+                    if($del_psc_id){
+                        $sql3 = "delete from ".$db->prefix("products_spec_cate_sort")."  where p_id='%d' and psc_id='%d'";
+                        foreach($del_psc_id as $psc_id){
+                            $sql = sprintf($sql3,$this->p_id,$psc_id);
+                            $db->query($sql);
+                        }
+                    }
+                }
+                //寫入產品規格屬性
+                if($psc_layer){
+                    $pstItem = $this->_digPstItem($psc_layer);
+                    $this->_writePstItem($this->p_id,$pstItem);
                 }
             }
             if ( $db_msg == "" ) {
@@ -2733,6 +2857,242 @@ class PRODUCTS{
         }
         return $outout;
     }
+
+    //產生規格表
+    function make_spec_table(){
+        global $cms_cfg;
+        $db = App::getHelper('db');
+        if(App::getHelper('request')->isAjax()){
+            $result['code']=1;
+            $result['html']='NA';
+            $layer = count($_GET['pscid']);
+            //取出個別項目
+            for($i=0;$i<$layer;$i++){
+                $sql = "select * from ".$db->prefix("products_spec_title")." where psc_id='".$_GET['pscid'][$i]."' order by pst_sort ".$cms_cfg['sort_pos'];
+                $res = $db->query($sql);
+                while($row = $db->fetch_array($res,1)){
+                    $cate[$i][] = $row;
+                }
+            }
+            //組合項目
+            for($i=$layer-1;$i>0;$i--){
+                foreach($cate[$i-1] as $k=>$tmp){
+                    $cate[$i-1][$k]['join'] = $cate[$i];
+                }
+                unset($cate[$i]);
+            }
+            //輸出項目
+//            ob_start();
+//            echo "<pre>";
+//            print_r($cate[0]);
+//            echo "</pre>";
+//            $result['html'] = ob_get_clean();
+            $result['html']=$this->_print_spec($cate[0],$layer);
+//            $result['html']=$layer;
+            echo json_encode($result);
+        }
+    }
+    //產生規格表
+    function make_spec_table_in_form($pscid,$p_id){
+        global $cms_cfg;
+        $db = App::getHelper('db');
+        $result['code']=1;
+        $result['html']='NA';
+        $layer = count($pscid);
+        //取出個別項目
+        for($i=0;$i<$layer;$i++){
+            $sql = "select * from ".$db->prefix("products_spec_title")." where psc_id='".$pscid[$i]."' order by pst_sort ".$cms_cfg['sort_pos'];
+            $res = $db->query($sql);
+            while($row = $db->fetch_array($res,1)){
+                $cate[$i][] = $row;
+            }
+        }
+        //組合項目
+        for($i=$layer-1;$i>0;$i--){
+            foreach($cate[$i-1] as $k=>$tmp){
+                $cate[$i-1][$k]['join'] = $cate[$i];
+            }
+            unset($cate[$i]);
+        }
+        //取得產品已設定的項目
+        $map = $this->_getPstItemMap($p_id);
+        //輸出項目
+        return $this->_print_spec($cate[0],$layer,0,'',0,array('child'=>$map));
+
+    }    
+    //輸出規格
+    function _print_spec($itemsSets,$totalLayer,$layer=0,$pname='',$parent=0,$map=array()){
+        if(is_array($itemsSets) && !empty($itemsSets)){
+            foreach($itemsSets as $k => $item){
+                //補齊沒有開頭的項目
+                $extraItem='';
+                if($k!=0){
+                    for($i=0;$i<$layer;$i++){
+                        $extraItem.="<div class='empty'></div>";
+                    }
+                }
+                $child_keys = array_keys((array)$map['child']);
+                $tag_checked = (in_array($item['pst_id'],$child_keys))?"checked":"";
+                $ps_id = $map['child'][$item['pst_id']]['ps_id']?$map['child'][$item['pst_id']]['ps_id']:0;
+                if($extraItem){
+                    $rowStr = "<div class='row'>".$extraItem."<div class='item'><input type='checkbox' name='pstitem".$layer.$pname."[".$item['pst_id']."]' value='{$ps_id}' {$tag_checked}/>".$item['pst_subject']."</div>";
+                }else{
+                    $rowStr = "<div class='item'><input type='checkbox' name='pstitem".$layer.$pname."[".$item['pst_id']."]' value='{$ps_id}' {$tag_checked}/>".$item['pst_subject']."</div>";
+                }
+                if($item['join']){
+                    if($layer==0){
+                        $rowStr = "<div class='row'>".$rowStr.$this->_print_spec($item['join'],$totalLayer, $layer+1,$pname."[".$item['pst_id']."]",$item['pst_id'],$map['child'][$item['pst_id']]);
+                    }else{
+                        $rowStr .= $this->_print_spec($item['join'],$totalLayer, $layer+1,$pname."[".$item['pst_id']."]",$item['pst_id'],$map['child'][$item['pst_id']]);
+                    }
+                }else{
+                    if($layer==0){
+                        $rowStr = "<div class='row'>".$rowStr;
+                    }
+                }
+                //完成列項目輸出後的處理
+                if(($layer+1)==$totalLayer){
+                    $rowStr .= "</div>";
+                }
+                $out .= $rowStr;
+            }
+        }
+        return $out;
+    }
+    function _digPstItem($layer,$cur_layer=0,$parent=array()){
+        $container = array();
+        if(isset($_POST['pstitem'.$cur_layer])){
+            $target = $_POST['pstitem'.$cur_layer];
+            if(!empty($parent)){
+                foreach($parent as $p){
+                   $target = $target[$p];
+                }
+            }
+            if(is_array($target)){
+                foreach($target as $k=>$v){
+                    $container[$k]['id'] = $k;
+                    $container[$k]['ps_id'] = $v;
+                    if($cur_layer<$layer-1){
+                        $n_parent = $parent;
+                        array_push($n_parent,$k);
+                        $child = $this->_digPstItem($layer, $cur_layer+1, $n_parent);
+                        if($child){
+                            $container[$k]['child'] = $child;
+                        }
+                    }
+                }
+            }
+        }
+        return $container;
+    }
+    function _writePstItem($p_id,$items,$parent=array(),&$ps_id=array()){
+        $db = App::getHelper('db');
+        foreach($items as $sets){
+            if($sets['child']){
+                if(!$sets['ps_id']){
+                    $sql = "insert ".$db->prefix("products_spec")."(`p_id`,`pst_id`,`parent`,`p_pst_id`,`childs`)values('".$p_id."','".$sets['id']."','".$parent[0]."','".$parent[1]."','".count($sets['child'])."')";
+                    $db->query($sql);
+                    $sets['ps_id'] = $db->get_insert_id();
+                    array_push($ps_id,$sets['ps_id']);
+                }else{
+                    $sql = "update ".$db->prefix("products_spec")." set childs='".count($sets['child'])."' where ps_id='".$sets['ps_id']."'";
+                    array_push($ps_id,$sets['ps_id']);
+                    $db->query($sql);
+                }
+                $this->_writePstItem($p_id,$sets['child'], array($sets['ps_id'],$sets['id']),$ps_id);
+            }else{
+                if(!$sets['ps_id']){
+                    $sql = "insert ".$db->prefix("products_spec")."(`p_id`,`pst_id`,`parent`,`p_pst_id`)values('".$p_id."','".$sets['id']."','".$parent[0]."','".$parent[1]."')";
+                    $db->query($sql);
+                    array_push($ps_id,$db->get_insert_id());
+                }else{
+                    array_push($ps_id,$sets['ps_id']);
+                }
+            }
+        }
+        if(empty($parent) && !empty($ps_id)){
+            $sql = "delete from ".$db->prefix("products_spec")." where p_id='".$p_id."' and ps_id not in (".implode(',',$ps_id).")";
+            $db->query($sql);
+        }
+    }
+    function _getPstItemMap($p_id,$nolimit=true,$parent=0){
+        $db = App::getHelper('db');
+        $container = array();
+        $sql = "select * from ".$db->prefix("products_spec")." where p_id='".$p_id."' and parent='".$parent."'";
+        $res = $db->query($sql);
+        while($tmp = $db->fetch_array($res,1)){
+            $container[$tmp['pst_id']]['id'] = $tmp['pst_id'];
+            $container[$tmp['pst_id']]['ps_id'] = $tmp['ps_id'];
+            $goDig = $nolimit?true:($tmp['childs']>0?true:false);
+            if($goDig && ($child = $this->_getPstItemMap($p_id,$nolimit,$tmp['ps_id']))){
+                $container[$tmp['pst_id']]['child'] = $child;
+            }
+        }
+        return $container;
+    }
+    function spec_attr_table(){
+        global $cms_cfg,$ws_array,$TPLMSG;
+        $db = App::getHelper('db');
+        if(empty($_GET['p_id'])){
+            die('not data!');
+        }
+        //產品規格資料
+        $sql = "select pst_id,pst_subject from ".$db->prefix("products_spec_title")."  order by pst_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        while($tmp = $db->fetch_array($res,1)){
+            $spec_title_map[$tmp['pst_id']] = $tmp['pst_subject'];
+        }
+        //產品規格對應資料
+        $data = $this->_getPstItemMap($_GET['p_id'],false);
+        //產品價格或庫存資料
+        $type_arr = explode("_",$_GET['type']);
+        $sql = "select ps_id,{$type_arr[1]} from ".$db->prefix("products_spec_attributes")." where ps_id in(select ps_id from ".$db->prefix('products_spec')." where p_id='".$_GET['p_id']."' and childs='0')";
+        $res = $db->query($sql,true);
+        while($tmp = $db->fetch_array($res,1)){
+            $typeValue[$tmp['ps_id']] = $tmp[$type_arr[1]];
+        }
+        $out = $this->_list_spec_attr($data,$spec_title_map,$typeValue);
+        $tpl = new TemplatePower("templates/ws-manage-products-spec-map-form.html");
+        $tpl->prepare();
+        $tpl->assignGlobal(array(
+            "TYPE" => $_GET['type'],
+            'FORM_ELEMENTS' => $out,
+        ));
+        $tpl->printToScreen();
+    }
+    function _list_spec_attr($data,$dataMap,$valueMap,$layer=0){
+        $out = '';
+        if(is_array($data) && !empty($data)){
+            foreach($data as $sets){
+                $out.="<div class='gg'>";
+                $out.="<span>".$dataMap[$sets['id']]."</span>";
+                if($sets['child']){
+                    $out.=$this->_list_spec_attr($sets['child'],$dataMap,$valueMap,$layer+1);
+                }else{
+                    $out.="<input type='text' name='mapValue[".$sets['ps_id']."]' value='".$valueMap[$sets['ps_id']]."'/>";
+                    
+                }
+                $out.="</div>";
+            }
+        }
+        return $out;
+    }
+    //儲存產品規格價格、庫存
+    function save_spec_attr(){
+        $db = App::getHelper('db');
+        $tmp = explode("_",$_POST['type']);
+        $valueField = $tmp[1];
+        foreach($_POST['mapValue'] as $ps_id => $mapValue){
+            $originData = App::getHelper('dbtable')->products_spec_attributes->getData($ps_id)->getDataRow("ps_id,{$valueField}");
+            $originData[$valueField] = $mapValue;
+            if(empty($originData['ps_id'])){
+                $originData['ps_id'] = $ps_id;
+                App::getHelper('dbtable')->products_spec_attributes->insert($originData);
+            }else{
+                App::getHelper('dbtable')->products_spec_attributes->writeData($originData);
+            }
+        }
+    }    
     function preview_link($row){
         global $cms_cfg;
         return $cms_cfg['base_root']."products.php?func=p_detail&p_id=".$row['p_id']."&pc_parent=".$row['pc_id']."&preview=1";
@@ -2860,6 +3220,23 @@ class PRODUCTS{
             }
             echo json_encode($result);
         }        
+    }
+    function quantity_discount($row){
+        global $ws_array,$tpl;
+        App::getHelper('main')->multiple_radio("QUANTITY_DISCOUNT",$ws_array['product_quantity_discount_options'],$row['quantity_discount'],$tpl);
+    }
+    function discount_sets($row){
+        global $tpl;
+        $discountSets = App::getHelper('dbtable')->products_discountsets->getDataList("status='1'","id,name","id");
+        if(count($discountSets)){
+            $tpl->newBlock("DISCOUNT_SET_SELECTOR");
+            foreach($discountSets as $record){
+                $data[$record['id']] = $record['name'];
+            }
+            App::getHelper('main')->multiple_select("discount_set",$data,$row['discount_sets'],$tpl);
+        }else{
+            $tpl->assignGlobal("TAG_NO_DISCOUNT_SETS_EXISTS","未設定任何折扣組合，".App::getHelper('main')->mk_link("按此","discountsets.php?func=add")."前往設定");
+        }
     }
 }
 //ob_end_flush();

@@ -53,6 +53,15 @@ class DOWNLOAD{
                 $this->download_cate_del();
                 $this->ws_tpl_type=1;
                 break;
+            case "d_list_withtime"://檔案下載列表
+                $this->current_class="DT";
+                $this->ws_tpl_file = "templates/ws-manage-download-list-withtime-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_FORMVALID");
+                $this->download_list_withtime();
+                $this->ws_tpl_type=1;
+                break;
             case "d_list"://檔案下載列表
                 $this->current_class="D";
                 $this->ws_tpl_file = "templates/ws-manage-download-list-tpl.html";
@@ -406,9 +415,46 @@ class DOWNLOAD{
             }
         }
     }
+//檔案下載--列表================================================================
+    function download_list_withtime(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
+        //檔案下載列表
+        $sql = "select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id where d.d_id > '0' ";
+        $sql.= "order by year desc,season desc,month desc";
+        //取得總筆數
+        $selectrs = $db->query($sql);
+        $total_records    = $db->numRows($selectrs);
+        //取得分頁連結
+        $func_str="download.php?func=d_list&dc_id=".$_REQUEST["dc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+        //分頁且重新組合包含limit的sql語法
+        $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+        $selectrs = $db->query($sql);
+        $rsnum    = $db->numRows($selectrs);
+        $i=$page["start_serial"];
+        while ( $row = $db->fetch_array($selectrs,1) ) {
+            $i++;
+            $tpl->newBlock( "DOWNLOAD_LIST" );
+            if($i%2){
+                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+            }
+            $tpl->assign( array(
+                "VALUE_DC_ID"  => $row["dc_id"],
+                "VALUE_D_ID"  => $row["d_id"],
+                "VALUE_D_SORT"  => $row["d_sort"],
+                "VALUE_D_SUBJECT" => $row["d_subject"],
+                "VALUE_D_SERIAL" => $i,
+                "VALUE_DC_SUBJECT"  => $row["dc_subject"],
+                "VALUE_STATUS_IMG" => ($row["d_status"])?$cms_cfg['default_status_on']:$cms_cfg['default_status_off'],
+                "VALUE_STATUS_IMG_ALT" => ($row["d_status"])?$TPLMSG['ON']:$TPLMSG['OFF'],
+                "VALUE_YEAR"   => $row['year'],
+                "VALUE_SEASON" => $row['season'],
+                "VALUE_MONTH"  => $row['month'],
+            ));
+        }
+    }    
 //檔案下載--表單================================================================
     function download_form($action_mode){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //欄位名稱
         $cate=(trim($_REQUEST["dc_id"])!="")?1:0;
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],
@@ -475,65 +521,37 @@ class DOWNLOAD{
         }
         //下載方式
         App::getHelper('main')->multiple_radio("dltype",App::defaults()->download_type,$row['d_type'],$tpl);
+        //時間條件
+        //月份
+        $year = array();
+        for($y=date("Y");$y>=2009;$y--){
+            $year[$y] = $y;
+        }
+        App::getHelper('main')->multiple_select("year",$year,$row['year'],$tpl);
+        //季別
+        App::getHelper('main')->multiple_select('season',$ws_array['season_month']['season'],$row['season'],$tpl);
+        //月份
+        App::getHelper('main')->multiple_select("month",$ws_array['season_month']['month'],$row['month'],$tpl);
     }
 //檔案下載--資料更新================================================================
     function download_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //設定d_public
         $d_public = ($cms_cfg['ws_module']['ws_member_download'])?$_REQUEST["d_public"]:1;
-        switch ($_REQUEST["action_mode"]){
-            case "add":
-                $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_download (
-                        dc_id,
-                        d_status,
-                        d_sort,
-                        d_thumb,
-                        d_public,
-                        d_subject,
-                        d_content,
-                        d_filepath,
-                        d_modifydate,
-                        d_type
-                    ) values (
-                        '".$_REQUEST["dc_id"]."',
-                        '".$_REQUEST["d_status"]."',
-                        '".$_REQUEST["d_sort"]."',
-                        '".$main->file_str_replace($_REQUEST["d_thumb"])."',
-                        '".$d_public."',
-                        '".$_REQUEST["d_subject"]."',
-                        '".$_REQUEST["d_content"]."',
-                        '".$main->file_str_replace($_REQUEST["d_filepath"])."',
-                        '".date("Y-m-d H:i:s")."',
-                        '".$_REQUEST["d_type"]."'
-                    )";
-                break;
-            case "mod":
-                $sql="
-                    update ".$cms_cfg['tb_prefix']."_download set
-                        dc_id='".$_REQUEST["dc_id"]."',
-                        d_status='".$_REQUEST["d_status"]."',
-                        d_sort='".$_REQUEST["d_sort"]."',
-                        d_thumb='".$main->file_str_replace($_REQUEST["d_thumb"])."',
-                        d_public='".$d_public."',
-                        d_subject='".$_REQUEST["d_subject"]."',
-                        d_content='".$_REQUEST["d_content"]."',
-                        d_filepath='".$main->file_str_replace($_REQUEST["d_filepath"])."',
-                        d_modifydate='".date("Y-m-d H:i:s")."',
-                        d_type='".$_REQUEST["d_type"]."'
-                    where d_id='".$_REQUEST["d_id"]."'";
-                break;
-        }
-        if(!empty($sql)){
-            $rs = $db->query($sql);
-            $db_msg = $db->report();
-            if ( $db_msg == "" ) {
-                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                $goto_url=$cms_cfg["manage_url"]."download.php?func=d_list&dc_id=".$_REQUEST["dc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
-                $this->goto_target_page($goto_url);
-            }else{
-                $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
-            }
+        $writeData = array_merge($_POST,array(
+            'd_public' => $d_public,
+            'd_thumb'  => $main->file_str_replace($_REQUEST["d_thumb"]),
+            'd_filepath' => $main->file_str_replace($_REQUEST["d_filepath"]),
+            
+        ));
+        App::getHelper('dbtable')->download->writeData($writeData);
+        $db_msg = App::getHelper('dbtable')->download->report();
+        if ( $db_msg == "" ) {
+            $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+            $goto_url=$cms_cfg["manage_url"]."download.php?func=d_list&dc_id=".$_REQUEST["dc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+            $this->goto_target_page($goto_url);
+        }else{
+            $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
         }
     }
 //檔案下載--刪除--資料刪除可多筆處理================================================================

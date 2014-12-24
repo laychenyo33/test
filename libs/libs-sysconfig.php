@@ -62,7 +62,7 @@ spl_autoload_register(array($autoloader,"load"));
 App::configs($cms_cfg);
 App::defaults($ws_array);
 //session handler
-$sessHandler = Model_Session::factory($cms_cfg['sess_cookie_name']);
+$sessHandler = Model_Session::factory($cms_cfg['sess_cookie_name'],$ws_array['models_options']['session']);
 //helper機制
 App::addHelper('db', $db);
 App::addHelper('main', $main);

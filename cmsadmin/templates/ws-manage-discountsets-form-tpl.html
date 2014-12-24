@@ -1,0 +1,59 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>數量折扣組合{MSG_MODE}</h1>
+<form name="myform" method="post" action="discountsets.php?func=replace"  class="formular" id="formID">
+    <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
+        <tr>
+            <th><font color="red">*</font>組合名稱:</th>
+            <td>
+                <input name="name" type="text" class="validate[required]" value="{NAME}" size="60" maxlength="255"></td>
+        </tr> 
+        <tr>
+            <th>狀態:</th>
+            <td>
+                <!-- START BLOCK : STATUS_RADIO -->
+                <label><input type="radio" name="status" value="{VALUE_STATUS_KEY}" {CHECKED}> {VALUE_STATUS_NAME}</label>
+                <!-- END BLOCK : STATUS_RADIO -->
+            </td>
+        </tr>
+        <tr>
+            <th>數量折扣組合:</th>
+            <td>
+                <table id="appendGridTable"></table>
+                <script type="text/javascript">
+                    jQuery(function($){
+                        $('#appendGridTable').appendGrid({
+                            initRows: 1,
+                            columns: [
+                                    { name: 'qtyfloor', display: '最低數量', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '100px'} },
+                                    { name: 'qtyceil', display: '最高數量', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '100px'} },
+                                    { name: 'discount', display: '折扣', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '50px', 'text-align': 'right' }, value: 0 },
+                                    { name: 'id', type: 'hidden', value: 0 }
+                                ],
+                            initData: {TAG_DATA_JSON},
+                            rowDragging:true,
+                            hideButtons: {
+                                moveUp: true,
+                                moveDown: true
+                            }                    
+                        });                
+                    });
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <td>
+                <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" />
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="action_mode" value="{VALUE_ACTION_MODE}">
+    <input type="hidden" name="id" value="{ID}">
+    <input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
+    <input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
+    <input name="nowp" type="hidden" id="nowp" value="{VALUE_NOW_PAGE}">
+    <input name="jp" type="hidden" id="jp" value="{VALUE_JUMP_PAGE}">
+</form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

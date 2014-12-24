@@ -433,7 +433,7 @@ $TPLMSG['COPY_URL_DONE'] = "URL ที่จำลองแบบ";
 
 $TPLMSG['STATUS_OFF'] = "ปิด";
 $TPLMSG['STATUS_ON'] = "เกี่ยวกับ";
-$TPLMSG['QUANTITY_DISCOUNT'] = "ส่วนลด";
+$TPLMSG['QUANTITY_DISCOUNT'] = $TPLMSG['MEMBER_DISCOUNT'];
 $TPLMSG['CLASSIFY_OTHER'] = "อื่น ๆ";
 
 //pagiation
@@ -441,3 +441,19 @@ $TPLMSG['PAGINATION_FIRST_PAGE'] = "หน้าแรก";
 $TPLMSG['PAGINATION_LAST_PAGE'] = "หน้าสุดท้าย";
 $TPLMSG['PAGINATION_PREV_FEW_PAGE'] = "prev %d pages";
 $TPLMSG['PAGINATION_NEXT_FEW_PAGE'] = "next %d pages";
+
+$TPLMSG['CART_PRODUCT_NAME'] = "item name";
+$TPLMSG['OPERATION'] = "operation";
+
+$TPLMSG['PROD_TO_CART_INQUIRY'] = "Inquiry";
+$TPLMSG['PROD_TO_CART_SHOPPING'] = "add to cart";
+$TPLMSG['ADD_TO_INQUIRY'] = "add to inquiry";
+$TPLMSG['ADD_TO_SHOPPING'] = "add to shopping";
+$TPLMSG['WARNING_ADD_NOSPEC'] = "please select specification!";
+$TPLMSG['WARNING_ADD_NOAMOUNT'] = "please select amount!";
+$TPLMSG['WARNING_AMOUNT_FORMAT'] = "amount format error!";
+
+$TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = "buy %d and get discount of %d %";
+$TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discounts";
+
+$TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";

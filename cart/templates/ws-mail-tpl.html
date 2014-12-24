@@ -31,49 +31,46 @@ a:visited {
             <tr bgcolor="#D5D5D5">
                 <th width="5%"> No.</th>
                 <th width="10%"> {MSG_PRODUCT_IMAGE}</th>
-                <th width="30%"> {MSG_PRODUCT}</th>
+                <th width=""> {MSG_PRODUCT}</th>
+                <!-- START BLOCK : SPEC_TITLE -->
+                <th width="15%"> 規格</th>
+                <!-- END BLOCK : SPEC_TITLE -->                    
                 <th width="10%"> {MSG_AMOUNT}</th>
-                <!-- START BLOCK : TAG_PRICE_TH -->
-                <th width="25%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
-                <th width="20%"> {MSG_SUBTOTAL}</th>
-                <!-- END BLOCK : TAG_PRICE_TH -->
+                <th width="10%"> {MSG_PRODUCT_PRICE}{VALUE_P_DISCOUNT}</th>
+                <th width="10%"> {MSG_DISCOUNT}</th>
+                <th width="10%"> {MSG_SUBTOTAL}</th>
             </tr>
             <!-- START BLOCK : TAG_CART_LIST -->
             <tr bgcolor="#FFFFFF">
                 <td>{VALUE_P_SERIAL}</td>
                 <td><center><a href="{VALUE_P_LINK}"><img src="{VALUE_P_SMALL_IMG}" width="60"  border="0"/></a></center></td>
                 <td>{VALUE_P_NAME}</td>
+                <!-- START BLOCK : SPEC_FIELD -->
+                <td class="cart_title">{VALUE_SPEC}</td>
+                <!-- END BLOCK : SPEC_FIELD -->                 
                 <td>{VALUE_P_AMOUNT}</td>
-                <!-- START BLOCK : TAG_PRICE_TD -->
                 <td>{VALUE_P_SPECIAL_PRICE}</td>
+                <td>{TAG_QUANTITY_DISCOUNT}</td>
                 <td>{VALUE_P_SUBTOTAL_PRICE}</td>
-                <!-- END BLOCK : TAG_PRICE_TD -->
             </tr>
             <!-- END BLOCK : TAG_CART_LIST -->
           <!-- START BLOCK : TAG_PLUS_FEE -->
             <tr bgcolor="#FFFFFF">
-                <td colspan="4">
-                    <div align="right"> {MSG_PLUS_FEE}:&nbsp;</div>
-                </td>
-                <td colspan="3"> {VALUE_PLUS_FEE}</td>
+                <td colspan="{CART_FIELDS_NUMS}"></td>
+                <td> <div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
+                <td> {VALUE_PLUS_FEE}</td>
             </tr>
             <!-- END BLOCK : TAG_PLUS_FEE -->
             <!-- START BLOCK : TAG_PRICE_TOTAL -->
             <tr bgcolor="#FFFFFF">
-                <td colspan="4">
-                    <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;
-                    </div>
-                </td>
-                <td colspan="2"> {VALUE_SHIPPING_PRICE}
-                </td>
+                <td colspan="{CART_FIELDS_NUMS}"></td>
+                <td> <div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
+                <td> {VALUE_SHIPPING_PRICE}</td>
             </tr>
             <tr bgcolor="#FFFFFF">
-                <th colspan="4">
-                    <div align="right"> {MSG_TOTAL}:&nbsp;
-                    </div>
-                </th>
-                <th colspan="2" align="left"> {VALUE_TOTAL}
-                </th>
+                <th colspan="{CART_FIELDS_NUMS}"></th>
+                <th align="left"> <div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
+                <th align="left"> {VALUE_TOTAL}</th>
             </tr>
             <!-- END BLOCK : TAG_PRICE_TOTAL -->
         </table>

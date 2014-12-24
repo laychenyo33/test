@@ -34,7 +34,7 @@
                     <!-- START BLOCK : BTN_CANCEL_ORDER -->
                     <input type="button" value="取消訂單" class="cancel_order" rel="{VALUE_O_ID}"/>
                     <!-- END BLOCK : BTN_CANCEL_ORDER -->
-                    {VALUE_O_STATUS}
+                    <span class="{STATUS_CLASS}">{VALUE_O_STATUS}</span>
                 </div>   
             </td>
         </tr>
@@ -218,37 +218,41 @@
                 <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
                     <tr class="altrow">
                         <th width="5%"> No.</th>
-                        <th width="40%"> {MSG_PRODUCT}</th>
+                        <th width=""> {MSG_PRODUCT}</th>
+                        <!-- START BLOCK : SPEC_TITLE_ORDER -->
+                        <th width="25%"> 規格</th>
+                        <!-- END BLOCK : SPEC_TITLE_ORDER -->
                         <th width="10%"> {MSG_AMOUNT}</th>
-                        <!-- START BLOCK : TAG_ADV_TH -->
-                        <th width="25%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
-                        <th width="20%"> {MSG_SUBTOTAL}</th>
-                        <!-- END BLOCK : TAG_ADV_TH -->
+                        <th width="10%"> {MSG_PRODUCT_PRICE}{VALUE_P_DISCOUNT}</th>
+                        <th width="10%"> {MSG_DISCOUNT}</th>
+                        <th width="10%"> {MSG_SUBTOTAL}</th>
                     </tr>
                     <!-- START BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
                         <td>{VALUE_P_SERIAL}</td>
                         <td>{VALUE_P_NAME}</td>
+                        <!-- START BLOCK : SPEC_FIELD_ORDER -->
+                        <td>{VALUE_SPEC}</td>
+                        <!-- END BLOCK : SPEC_FIELD_ORDER -->
                         <td>{VALUE_P_AMOUNT}</td>
-                        <!-- START BLOCK : TAG_ADV_TD -->
                         <td>{VALUE_P_SELL_PRICE}</td>
+                        <td>{TAG_QUANTITY_DISCOUNT}</td>
                         <td>{VALUE_P_SUBTOTAL_PRICE}</td>
-                        <!-- END BLOCK : TAG_ADV_TD -->
                     </tr>
                     <!-- END BLOCK : ORDER_ITEMS_LIST -->
                     <!-- START BLOCK : TAG_ADV_PRICE -->
                     <!-- START BLOCK : TAG_PLUS_FEE -->
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
                         <td> {VALUE_O_FEE_PRICE}</td>
                     </tr>
                     <!-- END BLOCK : TAG_PLUS_FEE -->
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
                         <td>{VALUE_O_SHIP_PRICE}</td>
                     </tr>
                     <tr>
-                        <th colspan="4"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
+                        <th colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
                         <th> {VALUE_O_TOTAL_PRICE}</th>
                     </tr>
                     <!-- END BLOCK : TAG_ADV_PRICE -->

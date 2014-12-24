@@ -6,40 +6,44 @@
             <tr>
                 <th width="5%"> No.</th>
                 <th width="10%"> {MSG_PRODUCT_IMAGE}</th>
-                <th width="30%"> {MSG_PRODUCT}</th>
+                <th width=""> {MSG_PRODUCT}</th>
+                <!-- START BLOCK : SPEC_TITLE -->
+                <th width="15%"> 規格</th>
+                <!-- END BLOCK : SPEC_TITLE -->                     
                 <th width="10%"> {MSG_AMOUNT}</th>
-                <!-- START BLOCK : TAG_PRICE_TH -->
-                <th width="20%"> {MSG_PRODUCT_SPECIAL_PRICE}{VALUE_P_DISCOUNT}</th>
+                <th width="20%"> {MSG_PRODUCT_PRICE}{VALUE_P_DISCOUNT}</th>
+                <th width="10%"> {MSG_DISCOUNT}</th>                
                 <th width="15%"> {MSG_SUBTOTAL}</th>
-                <!-- END BLOCK : TAG_PRICE_TH -->
             </tr>
             <!-- START BLOCK : TAG_CART_LIST -->
             <tr class="cart_line">
                 <td>{VALUE_P_SERIAL}</td>
                 <td><a href="{VALUE_P_LINK}" target="_blank"><img src="{VALUE_P_SMALL_IMG}" width="40" alt="{VALUE_P_NAME}" border="0"/></a></td>
                 <td class="cart_title"><a href="{VALUE_P_LINK}" target="_blank">{VALUE_P_NAME}</a></td>
+                <!-- START BLOCK : SPEC_FIELD -->
+                <td class="cart_title">{VALUE_SPEC}</td>
+                <!-- END BLOCK : SPEC_FIELD -->                    
                 <td>{VALUE_P_AMOUNT}</td>
-                <!-- START BLOCK : TAG_PRICE_TD -->
                 <td>{VALUE_P_SPECIAL_PRICE}</td>
-                <td>{VALUE_P_SUBTOTAL_PRICE}</td>
-                <!-- END BLOCK : TAG_PRICE_TD -->             
+                <td>{TAG_QUANTITY_DISCOUNT}</td>
+                <td>{VALUE_P_SUBTOTAL_PRICE}</td>          
             </tr>
             <!-- END BLOCK : TAG_CART_LIST -->
             <!-- START BLOCK : TAG_PLUS_FEE -->
             <tr>
-            	<td colspan="4"></td>
+            	<td colspan="{CART_FIELDS_NUMS}"></td>
                 <td><div align="right">{MSG_PLUS_FEE}:&nbsp;</div></td>
                 <td> {VALUE_PLUS_FEE}</td>
             </tr>
             <!-- END BLOCK : TAG_PLUS_FEE -->
             <!-- START BLOCK : TAG_PRICE_TOTAL -->
             <tr>
-            	<td colspan="4"></td>
+            	<td colspan="{CART_FIELDS_NUMS}"></td>
                 <td><div align="right">{MSG_SHIPPING_PRICE} :</div></td>
                 <td>{VALUE_SHIPPING_PRICE}</td>
             </tr>
             <tr>
-            	<td colspan="4"></td>
+            	<td colspan="{CART_FIELDS_NUMS}"></td>
                 <td class="cart_red"><div align="right">{MSG_TOTAL} :</div></td>
                 <td class="cart_red">{VALUE_TOTAL}</td>
             </tr>
@@ -226,9 +230,10 @@
             evt.preventDefault();
             history.go(-1);
         });
-        $("#continue").click(function(evt){
-            evt.preventDefault();
-            $(myform).trigger('submit');
-        });
+//        $("#continue").click(function(evt){
+//            evt.preventDefault();
+//            $(myform).trigger('submit');
+//        });
     });
 </script>
+<!-- INCLUDE BLOCK : ../templates/ws-fn-privacy-dialog-tpl.html -->

@@ -36,6 +36,7 @@ $ws_array["front_page"]=array("index.html" => $TPLMSG["CUSTOM_INDEX_PAGE"],
 $ws_array["contactus_cate"]=array( 1 =>$TPLMSG['CONTACT_US_PRODUCTS'],2 =>$TPLMSG['CONTACT_ERROR_REPORTING'],3 =>$TPLMSG['CONTACT_SUGGESTION'],10=>$TPLMSG['CONTACT_US_OTHERS']);
 $ws_array["contactus_s"]=array( 1 =>$TPLMSG['CONTACT_S_1'],2 =>$TPLMSG['CONTACT_S_2'],3 =>$TPLMSG['CONTACT_S_3']);
 
+$ws_array['product_quantity_discount_options'] = array($TPLMSG['NO'],$TPLMSG['YES']);
 $ws_array["epaper_order_cate"]=array( 1 =>$TPLMSG['EPAPER_ORDER_NORMAL'],2 =>$TPLMSG['EPAPER_ORDER_MEMBER'],3 =>$TPLMSG['EPAPER_ORDER_FIRST']);
 $ws_array["ad_cate"]=array( 1 =>$TPLMSG['AD_INDEX_BANNER'],2 =>$TPLMSG['AD_INSIDE_BANNER'],3 =>$TPLMSG['AD_INSIDE_LEFT'],4 =>$TPLMSG['AD_INSIDE_RIGHT'],5=>$TPLMSG['AD_PRODUCTS'],6=>$TPLMSG['AD_INDEX_POPUP']);
 if($cms_cfg['ws_module']['ws_shopping_cart_module']){
@@ -101,6 +102,42 @@ $ws_array["left_desc"]=array("aboutus" => $TPLMSG["ABOUT_US_CATE_DESC"],
                     );
 $ws_array['products_info_fields_title'] = array();//例如：array('自訂1','自訂2')
 $ws_array['products_info_fields_sort'] = array();//因為內建欄位是3個，所以原則上從4開始編, 例如：array(4,5)
+//model類別初始化選項
+$ws_array['models_options'] = array(
+    'session' => array(
+        'modules' => array(
+            'cart' => array(
+                'translator' => array(
+                    'class'   => 'spec',
+                    'options' => array('db'=>$db),
+                ),
+                //'translator' => 'classname',
+            ),
+        ),
+    ),
+);
+$ws_array['season_month'] = array(
+    'label' => array('year'=>'年份','season'=>'季別','month'=>'月別'),
+    'season' => array(1=>"第一季",2=>"第二季",3=>"第三季",4=>"第四季"),
+    'month' => array( 
+        1 => array('label'=>'1月','htmlOptions'=>array('rel'=>1)),
+        2 => array('label'=>'2月','htmlOptions'=>array('rel'=>1)),
+        3 => array('label'=>'3月','htmlOptions'=>array('rel'=>1)),
+        4 => array('label'=>'4月','htmlOptions'=>array('rel'=>2)),
+        5 => array('label'=>'5月','htmlOptions'=>array('rel'=>2)),
+        6 => array('label'=>'6月','htmlOptions'=>array('rel'=>2)),
+        7 => array('label'=>'7月','htmlOptions'=>array('rel'=>3)),
+        8 => array('label'=>'8月','htmlOptions'=>array('rel'=>3)),
+        9 => array('label'=>'9月','htmlOptions'=>array('rel'=>3)),
+        10 => array('label'=>'10月','htmlOptions'=>array('rel'=>4)),
+        11 => array('label'=>'11月','htmlOptions'=>array('rel'=>4)),
+        12 => array('label'=>'12月','htmlOptions'=>array('rel'=>4)),
+    ),
+);
+$ws_array['download_time_sets'] = array(
+    'xkdfkja' => array('label'=>'財務報表','time_fields'=>array('year','season'),'dc_id'=>array(2,1)),
+    'xjdfkjb' => array('label'=>'公司年報','time_fields'=>array('year'),'dc_id'=>array(3)),
+);
 $ws_array["country_array"]=array(
 "Afghanistan",
 "Albania", 

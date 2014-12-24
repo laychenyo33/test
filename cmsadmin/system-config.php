@@ -26,6 +26,15 @@ class SYSTEMCFG{
             case "sys-vars-del":
                 $this->system_vars_del();
                 break;
+            case "sf_mod":  //運費設定
+                $this->current_class="SF";
+                $this->ws_tpl_file = "templates/ws-manage-shipfee-config-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_FORMVALID");
+                $this->system_shipfee_form();
+                $this->ws_tpl_type=1;
+                break;
             case "sc_mod":  //系統設定
                 $this->ws_tpl_file = "templates/ws-manage-system-config-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -219,6 +228,30 @@ class SYSTEMCFG{
             $this->goto_target_page($goto_url);
         }
     }
+    //系統設定--表單
+    function system_shipfee_form(){
+        global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array,$main;
+        include_once("../lang/".$cms_cfg['language']."-utf8.php");
+        $sql="select * from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
+        $selectrs = $db->query($sql);
+        $row = $db->fetch_array($selectrs,1);
+        $rsnum    = $db->numRows($selectrs);
+        if ($rsnum > 0) {
+            $tpl->assignGlobal( array(
+                "VALUE_SC_SHIPPING_PRICE" => $row["sc_shipping_price"],
+                "VALUE_SC_SHIPPING_PRICE2" => $row["sc_shipping_price2"],
+                "VALUE_SC_NO_SHIPPING_PRICE" => $row["sc_no_shipping_price"],
+                "VALUE_SC_SERVICE_FEE" => $row["sc_service_fee"],
+                "MSG_MODE" => "修改",
+            ));
+            if($cms_cfg["ws_module"]["ws_version"]=="ips" || $cms_cfg["ws_module"]["ws_version"]=="ipc"){
+                $tpl->newBlock("SHIPPING_PRICE_SETUP");
+            }
+        }else{
+            $goto_url=$cms_cfg["manage_url"]."index.php";
+            $this->goto_target_page($goto_url);
+        }
+    }    
     //資料更新
     function system_config_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;   
@@ -227,7 +260,7 @@ class SYSTEMCFG{
         $db_msg = App::getHelper('dbtable')->system_config->report();
         if ( $db_msg == "" ) {
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-            $goto_url=$cms_cfg["manage_url"]."system-config.php?func=sc_mod";
+            $goto_url=$_SERVER['HTTP_REFERER'];
             $this->goto_target_page($goto_url);
         }else{
             $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");

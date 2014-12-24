@@ -13,6 +13,18 @@ class ORDER{
     function ORDER(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
+            case "o_ex"://匯出新訂單
+                if($_GET['act']){
+                    $this->export_order();
+                }else{
+                    $this->current_class="OE";
+                    $this->ws_tpl_file = "templates/ws-manage-export-form-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $tpl->newBlock("JS_MAIN");
+                    $this->export_form();
+                    $this->ws_tpl_type=1;
+                }
+                break;            
             case "o_list"://訂單列表
                 $this->current_class="O";
                 $this->ws_tpl_file = "templates/ws-manage-order-list-tpl.html";
@@ -34,6 +46,8 @@ class ORDER{
                 $this->current_class="O";
                 $this->ws_tpl_file = "templates/ws-manage-order-reply-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->order_reply_form();
                 $this->ws_tpl_type=1;
                 break;
@@ -235,10 +249,11 @@ class ORDER{
                                           "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                                           "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                           "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
-                                          "VALUE_O_PAYMENT_TYPE"=>$ws_array["payment_type"][$row["o_payment_type"]],
-                                          "VALUE_O_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$row['o_shippment_type']],
+                                          "VALUE_O_PAYMENT_TYPE"=> $main->multi_map_value($ws_array["payment_type"],$row["o_payment_type"]),
+                                          "VALUE_O_SHIPPMENT_TYPE" => $main->multi_map_value($ws_array["shippment_type"],$row['o_shippment_type']),
                                           "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
                                           "VALUE_O_ATM_LAST5" => $row["o_atm_last5"],
+                                          "VALUE_REMIT_AMOUNT" => $row["remit_amount"],
                                           "VALUE_O_DELIVERY_STR" => sprintf("%s %s",date("Y年m月d日",$dts),$ws_array["deliery_timesec"][$row['o_deliver_time_sec']]),
                                           "VALUE_O_COMPANY_NAME" => $row["o_company_name"],
                                           "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
@@ -278,22 +293,32 @@ class ORDER{
                     $tpl->newBlock("SINGLE_ADDRESS");
                 }                
                 //訂購產品列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
+                $sql="select oi.*,p.p_small_img from ".$cms_cfg['tb_prefix']."_order_items as oi inner join ".$db->prefix("products")." as p on oi.p_id=p.p_id where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 $selectrs = $db->query($sql);
-                $total_price=0;
                 $i=0;
+                if($cms_cfg['ws_module']['ws_cart_spec']){
+                    $tpl->newBlock("SPEC_TITLE");
+                    $tpl->assignGlobal("CART_FIELD_NUMS",7);
+                }else{
+                    $tpl->assignGlobal("CART_FIELD_NUMS",6);
+                }                   
                 while($row = $db->fetch_array($selectrs,1)){
                     $i++;
-                    $sub_total_price = $row["p_sell_price"] * $row["oi_amount"];
-                    $total_price = $total_price+$sub_total_price;
+                    $sub_total_price = round($row["price"] * $row["amount"] * $row['discount']);
                     $tpl->newBlock( "ORDER_ITEMS_LIST" );
                     $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                         "VALUE_P_NAME" => $row["p_name"],
-                                        "VALUE_P_SELL_PRICE" => $row["p_sell_price"],
-                                        "VALUE_P_AMOUNT" => $row["oi_amount"],
+                                        "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['file_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
+                                        "VALUE_P_SELL_PRICE" => $row["price"],
+                                        "VALUE_P_AMOUNT" => $row["amount"],
+                                        "TAG_QUANTITY_DISCOUNT" => $row['discount']<1?$row['discount']:'',
                                         "VALUE_P_SUBTOTAL_PRICE"  => $sub_total_price,
                                         "VALUE_P_SERIAL"  => $i,
                     ));
+                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                        $tpl->newBlock("SPEC_FIELD");
+                        $tpl->assign("VALUE_SPEC",$row["spec"]);
+                    }                       
                 }
             }else{
                 header("location : order.php?func=o_list");
@@ -310,7 +335,14 @@ class ORDER{
         if ( $db_msg == "" ) {
             if($_REQUEST["o_status"] == 2){
                 $this->mail_delivery_notice($_REQUEST["o_id"]); //寄送出貨通知信                
-            } 
+            }elseif($_REQUEST["o_status"] == 3){  //出貨扣庫存
+                $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$order['o_id']."'");
+                if($order_items){
+                    foreach($order_items as $oItem){
+                        App::getHelper('session')->cart->stockChecker->runStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);
+                    }
+                }
+            }
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$cms_cfg["manage_url"]."order.php?func=o_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $this->goto_target_page($goto_url);
@@ -433,6 +465,164 @@ class ORDER{
                 closedir($dh);
             }
         }
+    }
+    function export_order(){
+        global $db,$cms_cfg,$ws_array;
+        if(isset($_POST['exportAll'])){
+            $type = "exportAll";
+        }elseif(isset($_POST['exportNew'])){
+            $type = "exportNew";
+        }else{
+            throw new Exception('no proper type of export order');
+        }
+        $exportData = $this->get_export_order_data($type);
+        if($exportData){
+            require_once "../class/phpexcel/PHPExcel.php";
+            $xlsexpotor = new XLSExportor();
+            $xlsexpotor->setTitle($exportData['title']);
+            $xlsexpotor->setData($exportData['data']);
+            $xlsexpotor->setFilename($exportData['filename']);
+//            $xlsexpotor->setFontSize(10);
+            $xlsexpotor->export();
+        }
+    }
+    function getdatefromjd($val,$format="Y-m-d"){
+        $jd = GregorianToJD(1, 1, 1970); 
+        $gregorian = JDToGregorian($jd+intval($val)-25569);               
+        return date($format,strtotime($gregorian));
+    }
+    function pid2serial($pid){
+        global $db,$cms_cfg;
+        $sql = "select p_serial from ".$cms_cfg['tb_prefix']."_products where p_id='".$pid."'";
+        list($serial) = $db->query_firstrow($sql,false);
+        if(!empty($serial)){
+            return $serial;
+        }else{
+            return $pid;
+        }
+    }
+    function _writeToSheet($sheet,$row,$r){
+        unset($row['o_plus_price']);
+        unset($row['o_charge_fee']);          
+        $i=0;         
+        foreach($row as $v){
+            if(in_array($i,array(0,7,10,11,12,16,17,18))){
+                $pDataType = PHPExcel_Cell_DataType::TYPE_STRING;
+                $sheet->setCellValueExplicit(chr(65+$i).$r, $v, $pDataType);
+            }else{
+                $sheet->setCellValueByColumnAndRow($i, $r, $v);
+            }
+            $i++;
+        }        
+    }
+    function _writeFee($sheet,$row,&$r){
+        $shipFee = $row['o_plus_price'];
+        $chargeFee = $row['o_charge_fee'];
+        $row['oi_amount'] = 1;//重設費用的數量為1
+        if($shipFee>0){//寫入運費
+            $row['p_name'] = "運費";
+            $row['p_sell_price'] = $shipFee;
+            $row['p_id'] = "F05-0033";
+            $this->_writeToSheet($sheet,$row,$r++);
+        }
+        if($chargeFee>0){//寫入手續費
+            $row['p_name'] = "手續費";
+            $row['p_sell_price'] = $chargeFee;
+            $row['p_id'] = "F06-0103";
+            $this->_writeToSheet($sheet,$row,$r++); 
+        }        
+    }
+    //輸出訂單
+    function export_form(){
+        
+    }
+    //取得輸出的訂單資料
+    function get_export_order_data($type){
+        global $ws_array,$cms_cfg;
+        $db = App::getHelper('db');
+        $exportData = array(
+            'exportAll' => array(
+                'title' => array(
+                    "訂單編號",
+                    "訂單狀態",
+                    "付款方式",
+                    "配送日期",
+                    "配送時段",
+                    "備註",
+                    "公司名稱",
+                    "統一編號",
+                    "傳真",
+                    "會員編號",
+                    "訂購者姓名",
+                    "訂購者電話",
+                    "訂購者手機",
+                    "訂購者區號",
+                    "訂購者住址",
+                    "訂購者Email",
+                    "收件者姓名",
+                    "收件者電話",
+                    "收件者手機",
+                    "收件者區號",
+                    "收件者地址",
+                    "收件者Email",
+                    "小計",
+                    "手續費",
+                    "運費",
+                    "總價",
+                    "發票",
+                    "訂購商品",
+                ),
+                'filename' => "full_order_".date("Y-m-d"),
+                'data' => array(),
+            ),
+            'exportNew' => array(
+                'title'    => array('訂單編號','訂貨人','訂貨人電話','訂貨人手機','收件人','收件人電話','收件人手機','收件人電子郵件',array('data'=>'收件人住址','width'=>50),'訂購產品'),
+                'filename' => "new_order_".date("Y-m-d"),
+                'data' => array(),
+            )
+        );
+        switch($type){
+            case "exportAll":
+                $sql = "select o_id,o_status,o_payment_type,o_deliver_date,o_deliver_time_sec,o_content,o_company_name,o_vat_number,o_fax,m_id,o_name,o_tel,o_cellphone,o_zip,concat(o_city,o_area,o_address) as address1,o_email,o_reci_name,o_reci_tel,o_reci_cellphone,o_reci_zip,concat(o_reci_city,o_reci_area,o_reci_address) as address2,o_reci_email,o_subtotal_price,o_charge_fee,o_plus_price,o_total_price,o_invoice_type from ".$db->prefix("order")." where o_status='0' and del='0' order by o_createdate ";
+                $res = $db->query($sql,true);
+                while($row = $db->fetch_array($res,0)){
+                    $sql = "select * from ".$db->prefix("order_items")." where o_id='".$row[0]."' and del='0' order by oi_id ";
+                    $res2 = $db->query($sql,true);
+                    $row[0] = array('data'=>$row[0],'type'=>'s');
+                    $row[1] = $ws_array["order_status"][$row[1]];
+                    $row[2] = $ws_array["payment_type"][$row[2]];
+                    $row[4] = $ws_array["deliery_timesec"][$row[4]];
+                    $row[24] = $row[24]<0?"運費另議":$row[24];
+                    $row[26] = $ws_array['invoice_type'][$row[26]];
+                    $tmp = array();
+                    while($prod = $db->fetch_array($res2,1)){
+                        $tmp[] = sprintf("%s*%d",$prod['p_name'],$prod['amount']);
+                    }
+                    $row[] = array('data'=> implode("\n",$tmp),'type'=>'s','wrap'=>true);
+                    $exportData[$type]['data'][] = $row;
+                }
+                break;
+            case "exportNew":
+                $sql = "select o_id,o_name,o_tel,o_cellphone,o_reci_name,o_reci_tel,o_reci_cellphone,o_reci_email,concat(o_reci_city,o_reci_area,o_reci_address) as address from ".$db->prefix("order")." where o_status='0' and del='0' order by o_createdate ";
+                $res = $db->query($sql,true);
+                while($row = $db->fetch_array($res,0)){
+                    $sql = "select * from ".$db->prefix("order_items")." where o_id='".$row[0]."' and del='0' order by oi_id ";
+                    $res2 = $db->query($sql,true);
+                    $row[0] = array('data'=>$row[0],'type'=>'s');
+                    $tmp = array();
+                    while($prod = $db->fetch_array($res2,1)){
+                        if($prod['spec']){
+                            $tmp[] = sprintf("%s(%s)*%d",$prod['p_name'],$prod['spec'],$prod['amount']);
+                        }else{
+                            $tmp[] = sprintf("%s*%d",$prod['p_name'],$prod['amount']);
+                        }
+                    }
+                    $row[] = array('data'=> implode("\n",$tmp),'type'=>'s','wrap'=>true);
+                    $exportData[$type]['data'][] = $row;
+                }
+                break;
+        }
+        return $exportData[$type];
     }
 }
 //ob_end_flush();

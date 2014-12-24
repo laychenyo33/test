@@ -1,0 +1,31 @@
+<!-- START BLOCK : SHOPPING_CART_LIST -->
+<div class="cart-item">
+    <div class="img"><img src="{VALUE_P_SMALL_IMG}" width="60" alt="{VALUE_P_NAME}" border="0"/></div>
+    <div class="info">
+        {VALUE_P_NAME}{TAG_TOO_WEIGHT}{TAG_LOCAL_ONLY}
+        <!-- START BLOCK : SPEC_FIELD -->
+        <span class="spec">{VALUE_SPEC}</span>
+        <!-- END BLOCK : SPEC_FIELD -->            
+        <br/>
+        <span class="amount">NT${VALUE_P_SUBTOTAL_PRICE}</span>
+    </div>
+    <div class="nums">{VALUE_P_AMOUNT}</div>
+</div>
+<!-- END BLOCK : SHOPPING_CART_LIST -->
+<div style="clear:both"></div>
+<div id="minicart-subtotal">不含運費小計: <span class="amount">NT${VALUE_SUBTOTAL}</span></div>
+<div id="minicart-button">
+    <a href="#" id="closecart">繼續購物</a>
+    <span id="minicart-button-sp">&nbsp;</span>
+    <a href="{TAG_ROOT_PATH}cart.php">結帳</a>
+    <div style="clear:both"></div>
+</div>
+<script type="text/javascript">
+    jQuery(function($){
+        $("#closecart").click(function(evt){
+            evt.preventDefault();
+            clearTimeout(closeMiniCart);
+            $(this).parents("#minicart").empty().hide();
+        });
+    });
+</script>

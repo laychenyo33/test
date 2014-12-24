@@ -22,15 +22,17 @@
                 <div class="ajax_place">
                     <!-- START BLOCK : UNATM_FIELD -->
                     <div class="unatm_block">
-                        匯款帳號
-                        <input type="text" name="o_atm_last5" value="" maxlength="5" size="5"/>                
+                        匯款帳號<br/>
+                        <input type="text" name="o_atm_last5" data-field rel='last5' value="" maxlength="5" size="5"/><br/>
+                        匯款金額<br/>
+                        <input type="text" name="remit_amount" value="" size="5"/><br/>                        
                         <input type="button" class="ajax_remit" value="確認匯款" rel="{VALUE_O_ID}"/>                
                     </div>
                     <!-- END BLOCK : UNATM_FIELD -->
                     <!-- START BLOCK : BTN_CANCEL_ORDER -->
                     <input type="button" value="取消訂單" class="cancel_order" rel="{VALUE_O_ID}"/>
                     <!-- END BLOCK : BTN_CANCEL_ORDER -->
-                    {VALUE_O_STATUS}
+                    <span class="{STATUS_CLASS}">{VALUE_O_STATUS}</span>
                 </div>                
             </td>
         </tr>
@@ -59,27 +61,25 @@
                   var obj = this;
                   var box = $(obj).parents(".ajax_place");                      
                   var container = $(this).parents('div.unatm_block');
-                  var last5 = $(this).prev().val();
+                  var fieldname = container.find(":input[data-field]").attr('name');
+                  var datatype = container.find(":input[data-field]").attr('rel');
+                  var fieldvalue = container.find(":input[data-field]").val();
+                  var remit_amount = container.find(":input[name=remit_amount]").val();
                   var o_id = $(this).attr('rel');
-                  if(last5!=""){
-                      if(last5.length==5){
-                          var data = {
-                              o_id:o_id,
-                              o_atm_last5:last5
-                          };
-                          box.append("<div class='layerContent'><img src='{TAG_THEME_PATH}ajax-loader.gif'/></div><div class='layerBackground'></div>");
-                          $.post("member.php?func=ajax&action=write_last5",data,function(req){
-                                if(req.code){
-                                    container.remove();
-                                    alert("訂單:"+o_id+"完成匯款，匯款後五碼為:"+last5);
-                                }else{
-                                    alert(req.msg);
-                                }
-                                box.children('.layerContent,.layerBackground').remove();                           
-                          },'json');
-                      }else{
-                          alert("不足五碼，請確認!");
-                      }
+                  if(fieldvalue!=""){
+                      var data = { o_id:o_id,datatype:datatype };
+                      data[fieldname] = fieldvalue;
+                      data['remit_amount'] = remit_amount;
+                      box.append("<div class='layerContent'><img src='{TAG_THEME_PATH}ajax-loader.gif'/></div><div class='layerBackground'></div>");
+                      $.post("member.php?func=ajax&action=write_last5",data,function(req){
+                            if(req.code){
+                                container.remove();
+                                alert("我們將在查核無誤後立即出貨, 謝謝您!");
+                            }else{
+                                alert(req.msg);
+                            }
+                            box.children('.layerContent,.layerBackground').remove();                           
+                      },'json');
                   }else{
                       alert("請輸入匯款後五碼!");
                   }
@@ -221,38 +221,46 @@
                 <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
                     <tr class="altrow">
                         <th width="5%"> No.</th>
-                        <th width="40%"> {MSG_PRODUCT}</th>
+                        <th width=""> {MSG_PRODUCT}</th>
+                        <!-- START BLOCK : SPEC_TITLE_ORDER -->
+                        <th width=""> {MSG_SPEC}</th>
+                        <!-- END BLOCK : SPEC_TITLE_ORDER -->    
                         <th width="10%"> {MSG_AMOUNT}</th>
-                        <th width="25%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
-                        <th width="20%"> {MSG_SUBTOTAL}</th>
+                        <th width="10%"> {MSG_PRODUCT_SPECIAL_PRICE}</th>
+                        <th width="10%"> {MSG_DISCOUNT}</th>
+                        <th width="10%"> {MSG_SUBTOTAL}</th>
                     </tr>
                     <!-- START BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
                         <td>{VALUE_P_SERIAL}</td>
                         <td>{VALUE_P_NAME}</td>
+                        <!-- START BLOCK : SPEC_FIELD_ORDER -->
+                        <td>{VALUE_SPEC}</td>
+                        <!-- END BLOCK : SPEC_FIELD_ORDER -->  
                         <td class="nums">{VALUE_P_AMOUNT}</td>
                         <td class="nums">{VALUE_P_SELL_PRICE}</td>
+                        <td class="nums">{TAG_QUANTITY_DISCOUNT}</td>
                         <td class="nums">{VALUE_P_SUBTOTAL_PRICE}</td>
                     </tr>
                     <!-- END BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_SUBTOTAL}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_SUBTOTAL}:&nbsp;</div></td>
                         <td class="nums">{VALUE_O_SUBTOTAL_PRICE}</td>
                     </tr>
                     <tr>
-                        <td colspan="4"><div align="right"> 折扣:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> 折扣:&nbsp;</div></td>
                         <td class="nums"><span style="color:red">{VALUE_O_MINUS_PRICE}</span></td>
                     </tr>
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_SHIPPING_PRICE}:&nbsp;</div></td>
                         <td class="nums">{VALUE_O_PLUS_PRICE}</td>
                     </tr>
                     <tr>
-                        <td colspan="4"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
+                        <td colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_PLUS_FEE}:&nbsp;</div></td>
                         <td class="nums"> {VALUE_O_CHARGE_FEE}</td>
                     </tr>                    
                     <tr>
-                        <th colspan="4"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
+                        <th colspan="{CART_FIELDS_NUMS}"><div align="right"> {MSG_TOTAL}:&nbsp;</div></th>
                         <th class="nums"> {VALUE_O_TOTAL_PRICE}</th>
                     </tr>
                 </table>
@@ -346,13 +354,19 @@
                 <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
                     <tr class="altrow">
                         <th width="5%"> No.</th>
-                        <th width="40%"> {MSG_PRODUCT}</th>
+                        <th width=""> {MSG_PRODUCT}</th>
+                        <!-- START BLOCK : SPEC_TITLE -->
+                        <th width=""> {MSG_SPEC}</th>
+                        <!-- END BLOCK : SPEC_TITLE -->    
                         <th width="10%"> {MSG_AMOUNT}</th>
                     </tr>
                     <!-- START BLOCK : INQUIRY_ITEMS_LIST -->
                     <tr>
                         <td>{VALUE_P_SERIAL}</td>
                         <td>{VALUE_P_NAME}</td>
+                        <!-- START BLOCK : SPEC_FIELD -->
+                        <td>{VALUE_SPEC}</td>
+                        <!-- END BLOCK : SPEC_FIELD -->  
                         <td>{VALUE_P_AMOUNT}</td>
                     </tr>
                     <!-- END BLOCK : INQUIRY_ITEMS_LIST -->

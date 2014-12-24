@@ -5,6 +5,7 @@
 	$cart = new CART;
 	
 	class CART {
+                protected $container;
 		function __construct() {
 			global $cms_cfg, $tpl, $TPLMSG;
 			include_once (dirname(__FILE__)."/config.php");
@@ -12,20 +13,31 @@
 			$this->m_id = $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
 			$this->ws_seo = ($cms_cfg["ws_module"]["ws_seo"])?1:0;
 			$this->order = ($cms_cfg["ws_module"]["ws_select_order"] == 1)?"desc":"asc";
-	
+                        $this->container = App::getHelper('session')->modules()->cart;
+                        //$this->container->empty_cart();
 			switch($_REQUEST["func"]) {
-				case "ajax" :
-					$this->ajax();
-					break;
+                            case "ajax":
+                                $this->ajax();
+                                break;
+                                case "c_del"://刪除購物項目
+                                    if(!$_POST['via_ajax']){
+                                        $this->ws_tpl_file = "templates/ws-cart-tpl.html";
+                                        $this->ws_load_tp($this->ws_tpl_file);
+                                        $tpl->newBlock("JS_MAIN");
+                                        $tpl->newBlock("JS_POP_IMG");
+                                        $this->ws_tpl_type=1;
+                                    }
+                                    $this->cart_del($_POST['via_ajax']);
+                                    break;                            
 				case "c_add" :
-					$this->ws_tpl_file = "templates/ws-cart-tpl.html";
-					$this->ws_load_tp($this->ws_tpl_file);
-					$this->cart_add();
-					$this->ws_tpl_type = 1;
-					break;
+//					$this -> ws_tpl_file = "templates/ws-cart-tpl.html";
+//					$this -> ws_load_tp($this -> ws_tpl_file);
+//					$this -> ws_tpl_type = 1;
+                                        $this -> cart_add();
+                                        break;
 				case "c_quick_add" :
 					//快速購物項目
-					$this->cart_quick_add();
+					$this->cart_quick_add();        
 					break;
 				case "c_finish" :
 					$this->ws_tpl_file = "templates/ws-cart-finish-tpl.html";
@@ -39,6 +51,7 @@
 					$this->ws_tpl_file = "templates/ws-cart-preview-tpl.html";
 					$this->ws_load_tp($this->ws_tpl_file);
 					$this->cart_preview();
+                                        App::getHelper('main')->load_privacy_term();
 					$this->ws_tpl_type = 1;
 					break;
 				case "c_replace" :
@@ -92,6 +105,7 @@
 				default :
 					$this->ws_tpl_file = "templates/ws-cart-tpl.html";
 					$this->ws_load_tp($this->ws_tpl_file);
+                                        $tpl->newBlock("JQUERY_UI_SCRIPT");
 					$this->cart_list();
 					$this->ws_tpl_type = 1;
 					break;
@@ -151,37 +165,44 @@
 	
 		// 增加購買產品
 		function cart_add() {
-			global $cms_cfg;
-			$_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'] = $_SERVER['HTTP_REFERER'];
-	
-			$option = "";
-	
-			if (is_array($_REQUEST["p_id"])) {
-				foreach ($_REQUEST["p_id"] as $key => $id) {
-					if (!empty($id)) {
-						$sess = $this->sess_code($id, $option);
-	
-						$_SESSION[$cms_cfg['sess_cookie_name']]["id"][$sess] = $id;
-						$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess] = (!empty($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]:$this->c_num_set;
-					}
-				}
-			} else {
-				$sess = $this->sess_code($_REQUEST["p_id"], $option);
-	
-				$_SESSION[$cms_cfg['sess_cookie_name']]["id"][$sess] = $_REQUEST["p_id"];
-				$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess] += ($_REQUEST['amount'])?$_REQUEST['amount']:$this->c_num_set;
-			}
+			global $cms_cfg,$TPLMSG;
+                        App::getHelper('session')->CONTINUE_SHOPPING_URL=$_SERVER['HTTP_REFERER'];
+                        $amount_arr = is_array($_REQUEST["amount"])?$_REQUEST["amount"]:(array)$_REQUEST["amount"];
+                        $p_id_arr = is_array($_REQUEST["p_id"])?$_REQUEST["p_id"]:(array)$_REQUEST["p_id"];
+                        $ps_id_arr = is_array($_REQUEST["ps_id"])?$_REQUEST["ps_id"]:(array)$_REQUEST["ps_id"];
+                        $stockStatus = array();
+                        foreach($p_id_arr as $k => $p_id){
+                            if($p_id){
+                                $amount = $amount_arr[$k]?$amount_arr[$k]:1;
+                                if($cms_cfg['ws_module']['ws_cart_spec']){
+                                    $result = (int)$this->container->put($p_id,$amount,$ps_id_arr[$k]);
+                                }else{
+                                    $result = (int)$this->container->put($p_id,$amount);
+                                }
+                                $stockStatus[$result]+=1;
+                            }
+                        }
 			if (!App::getHelper('request')->isAjax()) {
-				if (!empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"])) {
-					$this->cart_list();
+                                if(App::getHelper('session')->sc_cart_type==1 && $stockStatus[0]>0){
+                                    App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['HTTP_REFERER']);
+                                    die();
+                                }
+				if( $this->container->count() ){
+					header('location:'.$_SERVER['PHP_SELF']);
+                                        die();
 				} else {
 					$this->error_handle();
 				}
 			} else {
-				$res['code'] = 1;
-				$res['cart_nums'] = count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]);
-				echo json_encode($res);
-				die();
+                                $res['code'] = 1;
+                                $res['cart_nums'] = $this->container->count();
+                                $res['cart_info'] = $this->container->get_cart_info();
+                                if(App::getHelper('session')->sc_cart_type==1 && $stockStatus[0]>0){
+                                    $res['code'] = 0;
+                                    $res['msg'] = $TPLMSG['INVENTORY_SHORTAG_NOTIFY'];
+                                }
+                                echo json_encode($res);
+                                die();
 			}
 		}
 	
@@ -204,34 +225,82 @@
 		// 清單顯示
 		function cart_list() {
 			global $cms_cfg, $tpl, $TPLMSG, $ws_array;
-			if (empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"])) {//空購物車時，回到前一頁
-				App::getHelper('main')->js_notice($TPLMSG['CART_EMPTY'], $cms_cfg['base_root']."products.htm");
-				die();
-			}
-			$tpl->assignGlobal(array("MSG_ID" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG["ORDER_ID"]:$TPLMSG["INQUIRY_ID"], "MSG_NAME" => $TPLMSG['MEMBER_NAME'], "MSG_CONTENT" => $TPLMSG['CONTENT'], "MSG_MODIFY" => $TPLMSG['MODIFY'], "MSG_DEL" => $TPLMSG['DEL'], "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], "MSG_PRODUCT" => $TPLMSG['PRODUCT'], "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'], "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'], "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK'], "TAG_MAIN_FUNC" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"])?$TPLMSG['CART_SHOPPING']:$TPLMSG['CART_INQUIRY'], "TAG_SCROLL_TOP" => $_REQUEST["top"], ));
+                        if(!App::gethelper('request')->isAjax() && $this->container->count()==0){ //空購物車時，回到前一頁
+                            App::getHelper('main')->js_notice($TPLMSG['CART_EMPTY'],$cms_cfg['base_root']."products.htm");
+                            die();
+                        }  
+			$tpl->assignGlobal(array(
+                            "MSG_ID" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) ? $TPLMSG["ORDER_ID"] : $TPLMSG["INQUIRY_ID"], 
+                            "MSG_NAME" => $TPLMSG['MEMBER_NAME'], 
+                            "MSG_CONTENT" => $TPLMSG['CONTENT'], 
+                            "MSG_MODIFY" => $TPLMSG['MODIFY'], 
+                            "MSG_DEL" => $TPLMSG['DEL'], 
+                            "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], 
+                            "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], 
+                            "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], 
+                            "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], 
+                            "MSG_PRODUCT" => $TPLMSG['PRODUCT'], 
+                            "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'], 
+                            "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'], 
+                            "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK'], 
+                            "TAG_MAIN_FUNC" => ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) ? $TPLMSG['CART_SHOPPING'] : $TPLMSG['CART_INQUIRY'], 
+                            "TAG_SCROLL_TOP" => $_REQUEST["top"], 
+                            "MSG_PRODUCT_PRICE" => $TPLMSG['PRODUCT_SPECIAL_PRICE'],
+                            "MSG_DISCOUNT" => $TPLMSG['QUANTITY_DISCOUNT'],
+                        ));
 	
-			if (count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) > 0) {
+			if ($this->container->count() > 0) {
 				$tpl->newBlock("TAG_CART_ZONE");
 				$tpl->assign(array("MSG_CONTINUE_SHOPPING" => $TPLMSG['CART_CONTINUE_SHOPPING'], "MSG_FINISH_SHOPPING" => $TPLMSG['CART_FINISH_SHOPPING'], "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'], ));
-	
-				foreach ($_SESSION[$cms_cfg['sess_cookie_name']]["id"] as $sess => $ID) {
-					$row = $this->products_detail($ID);
+                                if($cms_cfg['ws_module']['ws_cart_spec']){
+                                    $tpl->assignGlobal("CART_FIELDS_NUMS",6);
+                                    $tpl->newBlock("SPEC_TITLE");
+                                }else{
+                                    $tpl->assignGlobal("CART_FIELDS_NUMS",5);
+                                }                                
+                                $cartProducts = $this->container->get_cart_products();
+				foreach ($cartProducts as $p_id =>  $row) {
 	
 					$tpl->newBlock("TAG_CART_LIST");
-					$row["p_num"] = (!is_int($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?round($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]):$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess];
-					$row["p_name"] = $row["p_name"];
 					$p_link = $this->p_link_handle($row);
+                                        $valid_stocks = $this->container->stockChecker->check($row['p_id'],$row['amount'],$row['ps_id']);        
+					$tpl->assign(array(
+                                            "VALUE_P_ID" => $row['p_id'], 
+                                            "VALUE_P_NAME" => $row["p_name"] . (!$valid_stocks?"<span>庫存不足</span>":""),
+                                            "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"]) == "") ? $cms_cfg['default_preview_pic'] : $cms_cfg["file_url"] . $row["p_small_img"], 
+                                            "VALUE_P_SPEC" => $row["spec"], 
+                                            "VALUE_P_AMOUNT" => $row["amount"], 
+                                            "TAG_QUANTITY_DISCOUNT" => ($row['discount']<1)?$row['discount']:'',
+                                            "VALUE_P_SPECIAL_PRICE" => $row['price'],
+                                            "VALUE_P_SUBTOTAL_PRICE" => $row['subtotal_price'],
+                                            "VALUE_P_LINK" => $p_link, 
+                                            "VALUE_P_SERIAL" => $i + 1, 
+                                            "VALUE_P_SESS" => $sess, 
+                                            "CART_P_ID" => $p_id,
+                                            "INVENTORY_SHORT_CLASS" => (!$valid_stocks)?"stocks_short":"",
+                                        ));
 	
-					$tpl->assign(array("VALUE_P_ID" => $ID, "VALUE_P_NAME" => $row["p_name"], "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"]) == "")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$row["p_small_img"], "VALUE_P_AMOUNT" => $row["p_num"], "VALUE_P_LINK" => $p_link, "VALUE_P_SERIAL" => $i + 1, "VALUE_P_SESS" => $sess, ));
-	
+                                        $id_sets = explode(":",$p_id);
+                                        if(count($id_sets)==2){
+                                            $tpl->assign(array(
+                                                "TAG_PS_ID_STR"   => "[".$id_sets[1]."]",
+                                                "TAG_PS_ID_QUERY" => "&ps_id=".$id_sets[1],
+                                                "TAG_PS_ID" => "psid='".$id_sets[1]."'",
+                                            ));
+                                        }
+                                        if($cms_cfg['ws_module']['ws_cart_spec']){
+                                            $tpl->newBlock("SPEC_FIELD");
+                                            $tpl->assign("VALUE_SPEC",$row["spec"]);
+                                        }
+                                        
 					for ($c_num = $this->c_num_set; $c_num <= $this->c_num; $c_num++) {
 						$tpl->newBlock("TAG_CART_NUM");
-						$tpl->assign(array("VALUE_CART_NUM" => $c_num, "VALUE_CART_CURRENT" => ($c_num == $row["p_num"])?'selected':'', ));
+						$tpl->assign(array(
+                                                    "VALUE_CART_NUM" => $c_num, 
+                                                    "VALUE_CART_CURRENT" => ($c_num == $row["amount"]) ? 'selected' : '', 
+                                                ));
 					}
-	
-					if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
-						$this->price_counter($row);
-					}
+
 					$i++;
 					$tpl->gotoBlock("SHOPPING_CART_ZONE");
 				}
@@ -239,6 +308,24 @@
 				if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
 					$this->service_rule();
 				}
+                                
+                                //輸出額外費用及總價
+                                $cartInfo = $this->container->get_cart_info();
+                                $tpl->newBlock("TAG_PLUS_FEE");
+                                $tpl->assign(array(
+                                    "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"], 
+                                    "VALUE_PLUS_FEE" => $cartInfo['charge_fee'], 
+                                ));
+                                $tpl->newBlock("TAG_PRICE_TOTAL");
+				$tpl->assign(array(
+                                    "VALUE_SHIPPING_PRICE" => $cartInfo['shipping_price'], 
+                                    "VALUE_SUBTOTAL" => $cartInfo['subtotal_price'], 
+                                    "VALUE_TOTAL" => $cartInfo['total_price'], 
+                                ));
+                                //購物車時輸出服務條款
+                                if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
+                                        $this->service_rule();
+                                }
 	
 				if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] && ($_REQUEST["func"] == "c_add" || empty($_REQUEST["func"]))) {
 					// 顯示付款方式					
@@ -263,10 +350,10 @@
 					foreach ($ws_array["payment_type"] as $key => $payment) {
 						$tpl->newBlock("PAYMENT_TYPE_ITEMS");
 						$tpl->assign(array(
-							"VALUE_PAYMENT_TYPE" => $key, 
-							"VALUE_PAYMENT_TYPE_STR" => $payment, 
-							"VALUE_PAYMENT_CURRENT" => ($key == App::getHelper('session')->o_payment_type)?'checked':'', 
-						));
+                                                        "VALUE_PAYMENT_TYPE" => $key, 
+                                                        "VALUE_PAYMENT_TYPE_STR" => $payment, 
+                                                        "VALUE_PAYMENT_CURRENT" => (strcmp($key , $this->container->get_payment_type())==0) ? 'checked' : '', 
+                                                ));
 					}
 				}
 			} else {
@@ -277,7 +364,11 @@
 		// 完成訂單清單
 		function cart_finish() {
 			global $tpl, $db, $cms_cfg, $TPLMSG, $main, $ws_array;
-	
+                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                            App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
+                            die();
+                        }
+                        $payment_type = $this->container->get_payment_type();                        
 			if (empty($this->m_id) && $cms_cfg["ws_module"]["ws_cart_login"] == 1 && empty($_REQUEST["first"])) {
 				//驗証碼
 				$_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"] = "";
@@ -299,12 +390,12 @@
 				if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
 					// 顯示付款方式
 					// 檢查是否選擇付款方式
-					if (empty($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"])) {
-						$tpl->assignGlobal("MSG_PAYMENT_ALERT", 'alert("'.$TPLMSG['NO_PAYMENT'].'"); location.href = "'.$cms_cfg["base_root"].'cart/"');
+					if ($payment_type=="") {
+						$tpl -> assignGlobal("MSG_PAYMENT_ALERT", 'alert("' . $TPLMSG['NO_PAYMENT'] . '"); location.href = "' . $cms_cfg["base_root"] . 'cart/"');
 					}
 	
 					$tpl->newBlock("PAYMENT_TYPE");
-					$tpl->assign(array("MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][App::getHelper('session')->o_payment_type], ));
+					$tpl->assign(array("MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$payment_type], ));
 	
 					// 購物收件人表單
 					$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
@@ -329,8 +420,13 @@
 		// 預覽訂單
 		function cart_preview() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $main, $allpay, $ws_array;
-	
+                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                            App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
+                            die();
+                        }
+                        
 			$this->cart_list();
+                        $payment_type = $this->container->get_payment_type();
 	
 			$tpl->newBlock("MEMBER_DATA_FORM");
 			$tpl->assign($this->basic_lang);
@@ -342,7 +438,7 @@
 			if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] == 1) {
 				// 顯示付款方式
 				$tpl->newBlock("PAYMENT_TYPE");
-				$tpl->assign(array("MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]], ));
+				$tpl->assign(array("MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$payment_type], ));
 	
 				// 收件人資訊
 				$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
@@ -380,8 +476,14 @@
 		function cart_replace() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $main, $allpay, $ws_array;
 	
+                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                            App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
+                            die();
+                        }
 			$this->o_id = $this->o_id_generator();
-	
+                        $shipment_type = $this->container->get_shipment_type();
+                        $payment_type = $this->container->get_payment_type();
+                        
 			$this->ws_tpl_file = "templates/ws-mail-tpl.html";
 			$tpl = new TemplatePower($this->ws_tpl_file);
 			$tpl->prepare();
@@ -410,10 +512,10 @@
 			// 新增會員
 			$this->new_member();
 	
-			if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] == 1) {
+			if (App::getHelper('session')->sc_cart_type == 1) {
 				// 顯示付款方式
 				$tpl->newBlock("PAYMENT_TYPE");
-				$tpl->assign(array("MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]], ));
+				$tpl->assign(array("MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$payment_type], ));
 	
 				// 收件人資訊
 				$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
@@ -432,114 +534,51 @@
 				$tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
 				$tpl->assign(array("MSG_COUNTRY" => $TPLMSG['COUNTRY'], "VALUE_M_COUNTRY" => $_REQUEST["m_country"]));
 			}
+                        //將m_換成o_
+                        foreach($_POST as $k=>$v){
+                            if(preg_match("/^m_(\w+)$/", $k,$match)){
+                                if($match[1]=="country"){
+                                    $v = $main->multi_map_value($country,$v);
+                                }
+                                $_POST['o_'.$match[1]] = $v;
+                            }
+                        }
+                        
+                        $billList = $this->container->get_cart_info();                    
 	
 			// 寫入訂單
-			$sql = "
-			            insert into ".$cms_cfg['tb_prefix']."_order (
-							o_id,
-			                m_id,
-			                o_status,
-			                o_createdate,
-			                o_modifydate,
-			                o_account,
-			                o_company_name,
-			                o_contact_s,
-			                o_name,
-			                o_zip,
-			                o_address,
-			                o_tel,
-			                o_fax,
-			                o_cellphone,
-			                o_email,
-			                o_fee_price,
-			                o_ship_price,
-			                o_subtotal_price,
-			                o_total_price,
-			                o_content,
-			                o_payment_type,
-			                o_add_name,
-							o_add_tel,
-							o_add_cellphone,
-							o_add_address,
-							o_add_mail,
-							o_invoice_type,
-							o_invoice_name,
-							o_invoice_vat,
-							o_invoice_text,
-							o_arrival_time
-						) values (
-							'".$this->o_id."',
-							'".$this->m_id."',
-							'0',
-							'".date("Y-m-d H:i:s")."',
-							'".date("Y-m-d H:i:s")."',
-							'".$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"]."',
-							'".$_REQUEST["m_company_name"]."',
-							'".$_REQUEST["m_contact_s"]."',
-							'".$_REQUEST["m_name"]."',
-							'".$_REQUEST["m_zip"]."',
-							'".$o_address."',
-							'".$_REQUEST["m_tel"]."',
-							'".$_REQUEST["m_fax"]."',
-							'".$_REQUEST["m_cellphone"]."',
-							'".$_REQUEST["m_email"]."',
-							'".$this->plus_fee."',
-							'".$this->shipping_price."',
-							'".$this->subtotal_money."',
-							'".$this->total_money."',
-							'".$_REQUEST["content"]."',
-							'".$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]."',
-							'".$_REQUEST["o_add_name"]."',
-							'".$_REQUEST["o_add_tel"]."',
-							'".$_REQUEST["o_add_cellphone"]."',
-							'".$_REQUEST["o_add_address"]."',
-							'".$_REQUEST["o_add_mail"]."',
-							'".$_REQUEST["o_invoice_type"]."',
-							'".$_REQUEST["o_invoice_name"]."',
-							'".$_REQUEST["o_invoice_vat"]."',
-							'".$_REQUEST["o_invoice_text"]."',
-							'".$o_arrival_time."'
-					)";
-			$rs = $db->query($sql, true);
-	
-			// 寫入購買產品
-			foreach ($_SESSION[$cms_cfg['sess_cookie_name']]["id"] as $sess => $ID) {
-				$row = $this->products_detail($ID);
-	
-				$row["p_num"] = (!is_int($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]))?round($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess]):$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess];
-				$row["p_name"] = $row["p_name"];
-	
-				if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
-					$special_price = $this->price_counter($row, 1);
-				}
-	
-				$row["p_price"] = $special_price;
-	
-				$sql = "
-							insert into ".$cms_cfg['tb_prefix']."_order_items (
-								m_id,
-								o_id,
-								p_id,
-								p_name,
-								p_sell_price,
-								oi_amount
-							) values (
-								'".$this->m_id."',
-								'".$this->o_id."',
-								'".$ID."',
-								'".$row["p_name"]."',
-								'".$special_price."',
-								'".$row["p_num"]."'
-							)";
-				$rs = $db->query($sql, true);
-	
-				$all_row[$sess] = $row;
-			}
+                        $orderData = array_merge($_POST,array(
+                            'o_id'         => $this->o_id,
+                            'm_id'         => $this->m_id,
+                            'o_status'     => 0,
+                            'o_createdate' => date("Y-m-d H:i:s"),
+                            'o_account'    => App::getHelper('session')->MEMBER_ACCOUNT,
+                            'o_ship_price'     => $billList['shipping_price'],
+                            'o_fee_price'     => $billList['charge_fee'],
+                            'o_subtotal_price' => $billList['subtotal_price'],
+                            'o_total_price'    => $billList['total_price'],
+                            'o_shippment_type' => $shipment_type,
+                            'o_payment_type'   => $payment_type,
+                            'o_arrival_time'   => $o_arrival_time,
+                            'o_address'        => $o_address,
+                            'o_content'        => $_POST["content"],
+                        ));
+                        $shopping = $this->container->get_cart_products();
+                        //寫入購買產品
+                        foreach($shopping as $p_id => $prod_row){
+                            $prod_row['m_id'] = $this->m_id;  //寫入記錄用
+                            $prod_row['p_sell_price'] = $prod_row['price']; //寫入記錄用
+                            $prod_row['oi_amount'] = $prod_row['amount'];  //寫入記錄用
+                            $prod_row['p_price'] = $prod_row['price']; //給歐付寶資訊用
+                            $prod_row['p_num'] = $prod_row['amount'];  //給歐付寶資訊用
+                            $shopping[$p_id] = $prod_row;
+                        }
+                        App::getHelper('dbtable')->order->writeDataWithItems($orderData,$shopping,true);
+                        
 			$this->mail_handle($mail_goto);
-			App::getHelper('session')->paymentType = $_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"];
+			App::getHelper('session')->paymentType = $payment_type;
 			switch(App::getHelper('session')->paymentType) {
-				case 1 :
-				//atm
+				case 1 ://atm
 				case 2 :
 					//貨到付款
 					$goto_url = $cms_cfg["base_url"]."shopping-result.php?status=OK&pno=".$this->o_id;
@@ -547,20 +586,21 @@
 					break;
 			}
 			// ALLPAY (歐付寶)
-			if ($allpay->allpay_switch && $_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
+			if ($allpay->allpay_switch && App::getHelper('session')->sc_cart_type==1) {
 				foreach ($allpay->all_cfg["allpay_type"] as $type => $str) {
-					if ($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] == $type && !empty($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"])) {
+					if ($payment_type == $type) {
 						$allpay_payment = $type;
+                                                break;
 					}
 				}
 	
 				if (!empty($allpay_payment)) {
 					$allpay->allpay_send($this->o_id, // 訂單編號
-					$this->total_money, // 交易總金額
-					0, // 交易描述 (不可空值)
-					$all_row, // 商品資訊 (array)
-					$allpay_payment, // 交易方式
-					0 // 選擇預設付款子項目
+						$billList['total_price'], // 交易總金額
+						0, // 交易描述 (不可空值)
+						$shopping, // 商品資訊 (array)
+						$allpay_payment, // 交易方式
+						0 // 選擇預設付款子項目
 					);
 	
 					//$mail_goto = 1;
@@ -569,9 +609,7 @@
 	
 			$db_msg = $db->report();
 			if ($db_msg == "") {
-				unset($_SESSION[$cms_cfg['sess_cookie_name']]["id"]);
-				unset($_SESSION[$cms_cfg['sess_cookie_name']]["num"]);
-				unset($_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"]);
+				$this->container->empty_cart();
 			} else {
 				$tpl->assignGlobal("MSG_ACTION_TERM", "DB Error: $db_msg, please contact MIS");
 			}
@@ -582,32 +620,66 @@
 			global $cms_cfg;
 	
 			if (!empty($form)) {
+                                $stockStatus = array();
 				foreach ($form as $sess_str => $num) {
 					unset($sess_array);
 					//echo $pass_num = (!is_int($num))?round($num):$num;
 					$sess_array = explode("|", $sess_str);
-	
-					$_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess_array[1]] = $num;
+                                        if(count($sess_array)==2){
+                                            $_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess_array[1]] = $num;
+                                            $key = explode(":",$sess_array[1]);
+                                            $result = (int)$this->container->update($key[0],$num,$key[1]);
+                                            $stockStatus[$result]+=1;
+                                        }
+                                        
 				}
 	
-				$_SESSION[$cms_cfg['sess_cookie_name']]["o_payment_type"] = $form["o_payment_type"];
+                                $this->container->set_payment_type($form["o_payment_type"]);
 			} else {
 				$this->error_handle();
 			}
 		}
 	
 		// 刪除產品
-		function cart_del($form = 0) {
-			global $cms_cfg;
-	
-			if (!empty($form)) {
-				$sess_code = $form["ajax_del"];
-				unset($_SESSION[$cms_cfg['sess_cookie_name']]["id"][$sess_code]);
-				unset($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess_code]);
-			} else {
-				$this->error_handle();
-			}
-		}
+//		function cart_del($form = 0) {
+//			global $cms_cfg;
+//	
+//			if (!empty($form)) {
+//				$sess_code = $form["ajax_del"];
+//				unset($_SESSION[$cms_cfg['sess_cookie_name']]["id"][$sess_code]);
+//				unset($_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess_code]);
+//			} else {
+//				$this->error_handle();
+//			}
+//		}
+                
+                function cart_del($via_ajax){
+                    global $db,$tpl,$cms_cfg,$TPLMSG;
+                    if($_POST["p_id"]){
+                        if($_POST["ps_id"]){
+                            $this->container->rm($_POST["p_id"],$_POST["ps_id"]);
+                        }else{
+                            $this->container->rm($_POST["p_id"]);
+                        }
+                        //unset($_SESSION[$cms_cfg['sess_cookie_name']]["advance_ship_price"]);
+                        if($this->container->count()==0){
+                            $this->container->empty_cart();
+                        }
+                    }
+                    if($via_ajax){
+                        $result['code']=1;
+                        $result = array_merge($result,$this->container->get_cart_info());
+                        echo json_encode($result);
+                    }else{
+                        if($this->container->count()){
+                            header("location:".$_SERVER['PHP_SELF']);
+                        }else{
+                            header("location:products.htm");
+                        }
+                        die();
+                    }
+                }                
+                
 	
 		## 訂單紀錄顯示 ######################################################################################
 	
@@ -645,7 +717,16 @@
 					$i++;
 	
 					$tpl->newBlock("ORDER_LIST");
-					$tpl->assign(array("VALUE_O_ID" => $row["o_id"], "VALUE_O_NAME" => $row["o_name"], "VALUE_O_CREATEDATE" => $row["o_createdate"], "VALUE_O_MODIFYDATE" => $row["o_modifydate"], "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]], "VALUE_O_SERIAL" => $i, "VALUE_O_DETAIL" => $TPLMSG['DETAIL'], ));
+					$tpl->assign(array(
+                                            "VALUE_O_ID" => $row["o_id"], 
+                                            "VALUE_O_NAME" => $row["o_name"], 
+                                            "VALUE_O_CREATEDATE" => $row["o_createdate"], 
+                                            "VALUE_O_MODIFYDATE" => $row["o_modifydate"], 
+                                            "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]], 
+                                            "VALUE_O_SERIAL" => $i, 
+                                            "VALUE_O_DETAIL" => $TPLMSG['DETAIL'], 
+                                            "STATUS_CLASS"   => "order_status_".$row['o_status'],
+                                        ));
 	
 					if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
 						$tpl->newBlock("TAG_PRICE_TD");
@@ -688,7 +769,24 @@
 	
 			if (!empty($rsnum)) {
 				$tpl->newBlock("ORDER_DETAIL_ZONE");
-				$tpl->assignGlobal( array("MSG_ORDER_DETAIL" => $TPLMSG['ORDER_DETAIL'], "MSG_ORDER_CONTENT" => $TPLMSG['ORDER_CONTENT'], "MSG_NAME" => $TPLMSG['NAME'], "MSG_STATUS" => $TPLMSG['STATUS'], "MSG_ORDER_ID" => $TPLMSG['ORDER_ID'], "MSG_CONTENT" => $TPLMSG['CONTENT'], "MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'], "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], "MSG_PRODUCT" => $TPLMSG['PRODUCT'], "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_DISCOUNT_PRICE'], "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"], ) + $this->basic_lang);
+				$tpl->assignGlobal( array(
+                                    "MSG_ORDER_DETAIL" => $TPLMSG['ORDER_DETAIL'], 
+                                    "MSG_ORDER_CONTENT" => $TPLMSG['ORDER_CONTENT'], 
+                                    "MSG_NAME" => $TPLMSG['NAME'], 
+                                    "MSG_STATUS" => $TPLMSG['STATUS'], 
+                                    "MSG_ORDER_ID" => $TPLMSG['ORDER_ID'], 
+                                    "MSG_CONTENT" => $TPLMSG['CONTENT'], 
+                                    "MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'], 
+                                    "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], 
+                                    "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], 
+                                    "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], 
+                                    "MSG_DISCOUNT" => $TPLMSG['QUANTITY_DISCOUNT'],
+                                    "MSG_PRODUCT" => $TPLMSG['PRODUCT'], 
+                                    "MSG_PRODUCT_PRICE" => $TPLMSG['PRODUCT_PRICE'], 
+                                    "MSG_SHIPPING_PRICE" => $TPLMSG['SHIPPING_PRICE'], 
+                                    "MSG_PLUS_FEE" => $TPLMSG["PLUS_FEE"],
+                                    ) + $this->basic_lang
+                                );
 	
 				$row = $db->fetch_array($selectrs, 1);
 				foreach ($row as $key => $value) {
@@ -743,15 +841,28 @@
 			$rsnum = $db->numRows($selectrs);
 	
 			if (!empty($rsnum)) {
+                                if($cms_cfg['ws_module']['ws_cart_spec']){
+                                    $tpl->newBlock("SPEC_TITLE_ORDER");
+                                    $tpl->assignGlobal("CART_FIELDS_NUMS",6);
+                                }else{
+                                    $tpl->assignGlobal("CART_FIELDS_NUMS",5);
+                                }                            
 				while ($row = $db->fetch_array($selectrs, 1)) {
 					$i++;
 					$tpl->newBlock("ORDER_ITEMS_LIST");
-					$tpl->assign(array("VALUE_P_ID" => $row["p_id"], "VALUE_P_NAME" => $row["p_name"], "VALUE_P_AMOUNT" => $row["oi_amount"], "VALUE_P_SERIAL" => $i, ));
-	
-					if (!empty($detail["o_payment_type"])) {
-						$tpl->newBlock("TAG_ADV_TD");
-						$tpl->assign(array("VALUE_P_SELL_PRICE" => $row["p_sell_price"], "VALUE_P_SUBTOTAL_PRICE" => $row["p_sell_price"] * $row["oi_amount"], ));
-					}
+					$tpl->assign(array(
+                                            "VALUE_P_ID" => $row["p_id"], 
+                                            "VALUE_P_NAME" => $row["p_name"], 
+                                            "VALUE_P_AMOUNT" => $row["amount"], 
+                                            "VALUE_P_SERIAL" => $i, 
+                                            "VALUE_P_SELL_PRICE" => $row["price"], 
+                                            "TAG_QUANTITY_DISCOUNT" => ($row['discount']<1)?$row['discount']:'',
+                                            "VALUE_P_SUBTOTAL_PRICE" => round($row["price"] * $row["amount"] * $row['discount']), 
+                                        ));
+                                        if($cms_cfg['ws_module']['ws_cart_spec']){
+                                            $tpl->newBlock("SPEC_FIELD_ORDER");
+                                            $tpl->assign("VALUE_SPEC",$row["spec"]);
+                                        }                                        
 				}
 			}
 		}
@@ -1080,13 +1191,11 @@
 		}
 	
 		// 訂單狀態檢查 (防止瀏覽器上一頁導致流程失效)
-		function cart_check() {
-			global $cms_cfg;
-	
-			if (empty($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) || count($_SESSION[$cms_cfg['sess_cookie_name']]["id"]) <= 0 || !is_array($_SESSION[$cms_cfg['sess_cookie_name']]["id"])) {
-				echo false;
-			} else {
+		function cart_check() {	
+			if ($this->container->count()) {
 				echo true;
+			} else {
+				echo false;
 			}
 		}
 	
