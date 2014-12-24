@@ -694,7 +694,16 @@
 					$i++;
 	
 					$tpl->newBlock("ORDER_LIST");
-					$tpl->assign(array("VALUE_O_ID" => $row["o_id"], "VALUE_O_NAME" => $row["o_name"], "VALUE_O_CREATEDATE" => $row["o_createdate"], "VALUE_O_MODIFYDATE" => $row["o_modifydate"], "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]], "VALUE_O_SERIAL" => $i, "VALUE_O_DETAIL" => $TPLMSG['DETAIL'], ));
+					$tpl->assign(array(
+                                            "VALUE_O_ID" => $row["o_id"], 
+                                            "VALUE_O_NAME" => $row["o_name"], 
+                                            "VALUE_O_CREATEDATE" => $row["o_createdate"], 
+                                            "VALUE_O_MODIFYDATE" => $row["o_modifydate"], 
+                                            "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]], 
+                                            "VALUE_O_SERIAL" => $i, 
+                                            "VALUE_O_DETAIL" => $TPLMSG['DETAIL'], 
+                                            "STATUS_CLASS"   => "order_status_".$row['o_status'],
+                                        ));
 	
 					if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
 						$tpl->newBlock("TAG_PRICE_TD");

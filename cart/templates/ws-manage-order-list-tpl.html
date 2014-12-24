@@ -69,7 +69,7 @@
       <td>{VALUE_O_CURAMT}</td>
       <td>{VALUE_O_TRN_TIME}</td>
       <!-- END BLOCK : ATM_TRANSFER_STATE -->
-      <td>{VALUE_O_STATUS}</td>
+      <td><span class="{STATUS_CLASS}">{VALUE_O_STATUS}</span></td>
       <td><a href="{TAG_MANAGE_ROOT}print.php?func=new_order_detail&o_id={VALUE_O_ID}" target="print">列印</a></td>
       <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','admin.php?func=o_del&o_id={VALUE_O_ID}&st={VALUE_SEARCH_TARGET}&sk={VALUE_SEARCH_KEYWORD}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}');"><img src="{TAG_MANAGE_IMAGE}icon-del2.gif" width="10" height="9" border="0" /></a></td>
     </tr>
