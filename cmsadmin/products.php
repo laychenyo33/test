@@ -940,7 +940,7 @@ class PRODUCTS{
                                           "VALUE_CHARACTER_TITLE" =>$row["p_character_title"],
                                           "VALUE_SPEC_TITLE" =>$row["p_spec_title"],
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
-                                          "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
+                                          "VALUE_P_SEO_SHORT_DESC" => $main->content_file_str_replace($row["p_seo_short_desc"],'out'),
                                           "MSG_SMALL_IMG_TEMPLATE" => sprintf("%dx%d",$cms_cfg['small_prod_img_width'],$cms_cfg['small_prod_img_height']),
                                           "MSG_BIG_IMG_TEMPLATE" => sprintf("%dx%d",$cms_cfg['big_img_width'][1],$cms_cfg['big_img_height'][1]),
                 ));

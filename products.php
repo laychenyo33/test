@@ -561,7 +561,7 @@ class PRODUCTS{
                                           "VALUE_P_CUSTOM" => $row["p_custom"],
                                           "VALUE_P_SERIAL" => $row["p_serial"],
                                           "VALUE_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"],
-                                          "VALUE_P_SEO_SHORT_DESC" => $row["p_seo_short_desc"],
+                                          "VALUE_P_SEO_SHORT_DESC" => $main->content_file_str_replace($row["p_seo_short_desc"],'out'),
                                           "VALUE_P_CROSS_CATE" => $row["p_cross_cate"],
                 ));
                 $this->products_show_pic($row["p_id"]);//顯示大圖資料
