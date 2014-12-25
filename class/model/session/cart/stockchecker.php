@@ -1,11 +1,15 @@
 <?php
 class Model_Session_Cart_Stockchecker extends Model_Modules {
     function check($p_id,$order_amount,$ps_id=null){
-        $activeStocks = $this->getStocks($p_id, $ps_id);
-        if($activeStocks>=$order_amount){
-            return true;
+        if(App::getHelper('session')->sc_cart_type==1){
+            $activeStocks = $this->getStocks($p_id, $ps_id);
+            if($activeStocks>=$order_amount){
+                return true;
+            }else{
+                return false;
+            }
         }else{
-            return false;
+            return true;
         }
     }
     
