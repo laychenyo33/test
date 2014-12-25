@@ -1036,7 +1036,7 @@ class PRODUCTS{
             }
             $tpl->newBlock("RELATED_PRODUCTS_ZONE_".$effect);
             while($row = $db->fetch_array($selectrs,1)){
-                $tpl->newBlock("RELATED_PRODUCTS");
+                $tpl->newBlock("RELATED_PRODUCTS_".$effect);
                 $p_link = $this->get_link($row,true);
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
                 $dimension = $main->resizeto($p_img,$cms_cfg['related_img_width'],$cms_cfg['related_img_height']);
