@@ -650,7 +650,7 @@ class PRODUCTS{
                     unset($amountArr[0]);
                     App::getHelper('main')->multiple_select('amounts',$amountArr,1,$tpl);
                     //無庫存提示
-                    if(App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true)<1){
+                    if(App::getHelper('session')->sc_cart_type==1 && App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true)<1){
                         //$tpl->newBlock("NO_STOCKS_NOTICE");
                         $tpl->assignGlobal(array(
                             "TAG_NO_STOCK_MSG_ZONE"    => "",
@@ -1036,7 +1036,7 @@ class PRODUCTS{
             }
             $tpl->newBlock("RELATED_PRODUCTS_ZONE_".$effect);
             while($row = $db->fetch_array($selectrs,1)){
-                $tpl->newBlock("RELATED_PRODUCTS");
+                $tpl->newBlock("RELATED_PRODUCTS_".$effect);
                 $p_link = $this->get_link($row,true);
                 $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
                 $dimension = $main->resizeto($p_img,$cms_cfg['related_img_width'],$cms_cfg['related_img_height']);

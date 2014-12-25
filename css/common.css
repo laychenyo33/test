@@ -315,6 +315,30 @@
     vertical-align: middle;
 }
 
+/* news */
+.news_list{
+	width:680px;
+	height:110px;
+	padding:20px 0 0 0;
+	border-bottom:1px dashed #CCC;
+	}	
+.news_list img{
+	float:left;
+	margin-right:10px;
+	border:1px solid #CCC;
+	}
+.news_date{
+
+	}
+.news_date a{
+	color:#069;
+	font-weight:bold;
+	}	
+.news_text{
+	line-height: 22px;
+
+	}
+
 /* contact us */
 .contact_table {
 	font-size: 12px;
@@ -373,6 +397,90 @@
 .contact_table  tr.altrow {
 	background-color: #FFFFFF;
  }
+ 
+ /* contact us */
+.contact1{
+	float:left;
+	width:350px;
+}
+.contact1 span{
+	color:#F00;
+	font-weight:bold;
+}
+.contact1 input,.contact1 select{
+	border:1px solid #999;
+	width: 180px;
+}
+.contact1 td{
+	padding:0 0 15px 0;
+}
+.contact2{
+	color:#000;	
+	float:left;
+	width:300px;
+}
+.contact2 textarea{
+	border:1px solid #999;
+	width:300px;
+	height:150px;
+	line-height:1.7em;
+}
+.ctbtn{
+	width:300px;
+	padding-top:20px;
+}
+.ctbtn1{
+	width:100px;
+	height:20px;
+	float:right;
+	text-align:center;
+	color:#FFF;
+	margin-left:1px;
+	background-color:#00aee3;
+	line-height:1.7em;
+	border:none;
+}
+
+
+
+/*電子型錄*/
+.ebook_left_list{
+	width: 180px;
+	margin: 0 auto;
+	margin-top:20px;	
+}
+.ebook_left_pic{
+	width:180px;
+	height: 212px;
+}
+.ebook_left_title{
+	width:180px;
+	margin: 5px 0 0 0;
+	text-align:center;
+}
+.ebook_left_title a{
+	color: #000;
+}
+
+.ebook_list{
+	width: 180px;
+	height: 212px;
+	float: left;
+	margin:0 60px 50px 0;
+}
+.ebook_pic{
+	width:180px;
+	height: 212px;
+}
+.ebook_title{
+	width:180px;
+	margin: 5px 0 0 0;
+	text-align:center;
+}
+.ebook_title a{
+	color: #000;
+}
+ 
  
 /*詢價頁面*/
 #inquiry{
