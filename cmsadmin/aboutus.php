@@ -426,37 +426,39 @@ class ABOUTUS{
     }
     //複製單筆資料
     function copy_data($ws_table){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //關於我們複製
         if($ws_table=="au"){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus where au_id='".$_REQUEST["id"][0]."'";
-            $selectrs = $db->query($sql);
-            $rsnum    = $db->numRows($selectrs);
-            $row = $db->fetch_array($selectrs,1);
-            if($rsnum >0){
-                $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_aboutus (
-                        au_status,
-                        au_sort,
-                        au_subject,
-                        au_content,
-                        au_modifydate
-                    ) values (
-                        ".$row["au_status"].",
-                        '".$row["au_sort"]."',
-                        '".$row["au_subject"]."',
-                        '".$row["au_content"]."',
-                        '".date("Y-m-d H:i:s")."'
-                    )";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
-                if ( $db_msg == "" ) {
-                    $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."aboutus.php?func=au_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
-                    $this->goto_target_page($goto_url);
-                }else{
-                    $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
+            $oldData = App::getHelper('dbtable')->aboutus->getData($_REQUEST["id"][0])->getDataRow();
+            foreach($oldData as $k => $v){
+                if($k!=='au_id' && $k!=='au_seo_filename'){
+                    if($k=='au_cate'){
+                        $newData['au_cate_select'] = $v;
+                    }elseif($k=='au_sort'){
+                        $newData[$k] = App::getHelper('dbtable')->aboutus->get_max_sort_value();
+                    }elseif($k=='au_subject'){
+                        $newData[$k] = $v . "(copy)";
+                    }else{
+                        $newData[$k] = $v;
+                    }
                 }
+            }
+            App::getHelper('dbtable')->aboutus->writeData($newData);
+            $db_msg = App::getHelper('dbtable')->aboutus->report();
+            if ( $db_msg == "" ) {
+                $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
+                $goto_url=App::getHelper('request')->get_link('query',array(
+                    'scriptName' => $_SERVER['PHP_SELF'],
+                    'params'        => array(
+                        'func'      => 'au_list',
+                        'au_cate'   => ($oldData["au_cate"]!=="aboutus")?$oldData["au_cate"]:null,
+                        'st'        => $_REQUEST["sk"]?$_REQUEST["st"]:null,
+                        'sk'        => $_REQUEST["sk"]?$_REQUEST["sk"]:null,
+                        'nowp'      => $_REQUEST["nowp"]?$_REQUEST["nowp"]:null,
+                        'jp'        => $_REQUEST["jp"]?$_REQUEST["jp"]:null,
+                    ),
+                ));
+                $this->goto_target_page($goto_url);
             }else{
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
             }
