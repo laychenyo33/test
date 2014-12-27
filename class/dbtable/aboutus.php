@@ -3,6 +3,7 @@ class Dbtable_Aboutus extends Dbtable_Abstract{
     //可修改的欄位
     protected $table = "aboutus";
     protected $pk = "au_id";
+    protected $sort_col = "au_sort";
     
     protected function _retrieve_cols($post){
         parent::_retrieve_cols($post);
