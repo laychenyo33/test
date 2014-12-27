@@ -428,7 +428,7 @@ class ABOUTUS{
     }
     //複製單筆資料
     function copy_data($ws_table){
-        global $db,$tpl,$cms_cfg,$TPLMSG;
+        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         //關於我們複製
         if($ws_table=="au"){
             $sql="select * from ".$cms_cfg['tb_prefix']."_aboutus where au_id='".$_REQUEST["id"][0]."'";
@@ -440,21 +440,33 @@ class ABOUTUS{
                     insert into ".$cms_cfg['tb_prefix']."_aboutus (
                         au_status,
                         au_sort,
+                        au_cate,
+                        au_subcate,
                         au_subject,
                         au_content,
+                        mobilehide,
+                        mobileonly,
                         au_modifydate
                     ) values (
                         ".$row["au_status"].",
-                        '".$row["au_sort"]."',
-                        '".$row["au_subject"]."',
-                        '".$row["au_content"]."',
+                        '".$main->get_max_sort_value($cms_cfg['tb_prefix']."_aboutus","au","","",0)."',
+                        '".$row["au_cate"]."',
+                        '".$row["au_subcate"]."',
+                        '".$db->quote($row["au_subject"]."(copy)")."',
+                        '".$db->quote($row["au_content"])."',
+                        '".$row["mobilehide"]."',
+                        '".$row["mobileonly"]."',
                         '".date("Y-m-d H:i:s")."'
                     )";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
-                    $goto_url=$cms_cfg["manage_url"]."aboutus.php?func=au_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    if($row["au_cate"]!='aboutus'){
+                        $goto_url=$cms_cfg["manage_url"]."aboutus.php?func=au_list&au_cate=".$row["au_cate"];
+                    }else{
+                        $goto_url=$cms_cfg["manage_url"]."aboutus.php?func=au_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
+                    }
                     $this->goto_target_page($goto_url);
                 }else{
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , "DB Error: $db_msg, please contact MIS");
