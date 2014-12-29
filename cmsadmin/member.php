@@ -1493,11 +1493,15 @@ class MEMBER{
     }      
     
     function ajax_get_member(){
-        $result = array(
-            array('id'=>1,'value'=>'abc','bb'=>'akjfas'),
-            array('id'=>2,'value'=>'def','bb'=>'akjfas'),
-            array('id'=>3,'value'=>'ijk','bb'=>'akjfas'),
-        );
+        $memArr = App::gethelper('dbtable')->member->getDataList("m_account like '%{$_GET['term']}%' or concat(m_lname,m_fname) like '%{$_GET['term']}%'","*","m_lname,m_fname");
+        $result = array();
+        if($memArr){
+           foreach($memArr as $mem){
+               $mem['id'] = $mem['m_id'];
+               $mem['value'] = $mem['m_lname'].$mem['m_fname'];
+               $result[] = $mem;
+           }
+        }
         echo json_encode($result);
     }
 }
