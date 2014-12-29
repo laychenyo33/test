@@ -13,6 +13,35 @@ class ORDER{
     function ORDER(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
+            case "add_temp_store":
+                $this->current_class="OTS";
+                $this->ws_tpl_file = "templates/ws-manage-temp-store-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $tpl->newBlock("JS_JQ_UI");
+                $this->tempstore_form();
+                $this->ws_tpl_type=1;                
+                break;
+            case "o_temp_store":
+                $this->current_class="OTS";
+                $this->ws_tpl_file = "templates/ws-manage-temp-store-list-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->tempstore_list();
+                $this->ws_tpl_type=1;
+                break;
+            case "o_bonus_config":
+                $this->current_class="OBC";
+                $this->ws_tpl_file = "templates/ws-manage-order-bonus-config-form-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->o_bonus_config();
+                $this->ws_tpl_type=1;
+                break;
+            case "o_bonus_list":
+                $this->current_class="OBL";
+                $this->ws_tpl_file = "templates/ws-manage-order-bonus-list-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->o_bonus_list();
+                $this->ws_tpl_type=1;
+                break;
             case "o_ex"://匯出新訂單
                 if($_GET['act']){
                     $this->export_order();
@@ -623,6 +652,22 @@ class ORDER{
                 break;
         }
         return $exportData[$type];
+    }
+    
+    function tempstore_list(){
+        global $db,$cms_cfg,$tpl,$main;
+        $sql = "select ts.m_id,sum(ts.amounts) as amounts, m.m_fname,m.m_lname from ".$db->prefix("temp_store")." as ts inner join ".$db->prefix("member")." as m on ts.m_id=m.m_id group by ts.m_id having amounts>0 order by  amounts desc ";
+        $res = $db->query($sql,true);
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("TEMP_STORE_LIST");
+            foreach($row as $k => $v){
+                $tpl->assign(strtoupper($k),$v);
+            }
+        }
+    }   
+    
+    function tempstore_form(){
+        
     }
 }
 //ob_end_flush();

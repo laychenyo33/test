@@ -38,6 +38,9 @@ class MEMBER{
         $this->member_validation = $cms_cfg['ws_module']['ws_member_join_validation'];
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         switch($_REQUEST["func"]){
+            case "ajax_get_member":
+                $this->ajax_get_member();
+                break;
             case "m_import":
                 if($cms_cfg['ws_module']['ws_member_manipulate']!=1){
                     header("location:member.php?func=m_list");
@@ -1488,6 +1491,15 @@ class MEMBER{
         list($nums) = $db->query_firstrow($sql,false);
         return $nums;
     }      
+    
+    function ajax_get_member(){
+        $result = array(
+            array('id'=>1,'value'=>'abc','bb'=>'akjfas'),
+            array('id'=>2,'value'=>'def','bb'=>'akjfas'),
+            array('id'=>3,'value'=>'ijk','bb'=>'akjfas'),
+        );
+        echo json_encode($result);
+    }
 }
 //ob_end_flush();
 ?>
