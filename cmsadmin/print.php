@@ -147,7 +147,7 @@ class PRINT_PAGE{
                     "VALUE_O_CONTENT" => $row["o_content"],
                     "VALUE_O_SHIP_PRICE" => $row["o_ship_price"],
                     "VALUE_O_FEE_PRICE" => $row["o_fee_price"],
-                    "VALUE_O_MINUS_PRICE" => $row["o_minus_price"],
+                    "VALUE_O_MINUS_PRICE" => 0-$row["o_minus_price"],
                     "VALUE_O_SUBTOTAL_PRICE" => $row["o_subtotal_price"],
                     "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                     "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
