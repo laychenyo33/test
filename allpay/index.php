@@ -79,9 +79,9 @@
 					//$p_price_array[] = $row["p_price"];
 					
 					if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]) && $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]!=100){
-	                    $p_price_get = floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"] / 100 * $row["p_special_price"]);
+                                            $p_price_get = floor($_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"] / 100 * $row["p_special_price"]);
 					}else{
-	                    $p_price_get = $row["p_special_price"];
+                                            $p_price_get = $row['price'];
 					}
 					
 					if($discount){
