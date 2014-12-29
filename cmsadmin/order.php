@@ -13,6 +13,9 @@ class ORDER{
     function ORDER(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
+            case "ajax_new_temp_store":
+                $this->ajax_new_temp_store();
+                break;
             case "add_temp_store":
                 $this->current_class="OTS";
                 $this->ws_tpl_file = "templates/ws-manage-temp-store-form-tpl.html";
@@ -667,7 +670,30 @@ class ORDER{
     }   
     
     function tempstore_form(){
-        
+        $db = App::gethelper('db');
+        $sql = "select min(p_id) as p_id,p_name from ".$db->prefix("products")." where p_status='1' group by p_name order by p_sort ";
+        $res = $db->query($sql,true);
+        while($row = $db->fetch_array($res,1)){
+            $productOption[$row['p_id']] = $row['p_name'];
+        }
+        App::gethelper("main")->multiple_select("stprod",$productOption,"");
+    }
+    
+    function ajax_new_temp_store(){
+        $db = App::gethelper("db");
+        $sql = "insert into ".$db->prefix("temp_store")."(m_id,p_id)values('{$_POST['m_id']}','{$_POST['p_id']}')";
+        $db->query($sql,true);
+        if(($db_msg = $db->report())==""){
+            $id = $db->get_insert_id();
+            $sql = "select a.*,b.p_name from ".$db->prefix("temp_store")." as a inner join ".$db->prefix("products")." as b on a.p_id=b.p_id where id='{$id}'";
+            $tempStore = $db->query_firstRow($sql,true);
+            $result['code'] = 1;
+            $result['data'] = $tempStore;
+        }else{
+            $result['code'] = 0;
+            $result['error'] = $db_msg;
+        }
+        echo json_encode($result);
     }
 }
 //ob_end_flush();

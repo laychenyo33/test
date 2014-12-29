@@ -9,9 +9,37 @@
                 輸入會員名字或手機號碼:<input type="text" name="term" id="term" value=""/>
             </td>
         </tr>
+        <tr>
+            <th>現有寄放</th>
+            <td>
+                選擇產品: <select name="product">
+                            <option value="">請選擇</option>
+                            <!-- START BLOCK : STPROD_SELECT -->
+                            <option value="{VALUE_STPROD_KEY}">{VALUE_STPROD_NAME}</option>
+                            <!-- END BLOCK : STPROD_SELECT -->
+                         </select>
+                <input type="button" id="new-store-prod" value="新增寄放產品"/>
+                <table width="450" cellspacing="0" id="tempStoreTable">
+                    <tr>
+                        <th width="40">序號</th>
+                        <th>品名</th>
+                        <th width="80">現有寄放數</th>
+                        <th width="80">操作</th>
+                    </tr>
+                    <tr id="tempTR" style="display:none">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a href="#" class="tempStoreKeep">寄放</a>
+                            <a href="#" class="tempStoreGet">提領</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </table>
-    <input type="hidden" name="sc_id" value="1"/>
-    <input type="hidden" name="act" value="save">
+    <input type="hidden" name="m_id" value=""/>
 </form>
 <script type="text/javascript">
     jQuery(function($){
@@ -19,9 +47,42 @@
             source: "member.php?func=ajax_get_member",
             minLength: 2,
             select: function( event, ui ) {
+                $(myform).find(":hidden[name=m_id]").val(ui.item.m_id);
                 console.log(ui);
             }
-        });        
+         });
+         $(".tempStoreKeep").click(function(evt){
+             evt.preventDefault();
+             alert($(this).data('id'));
+         });
+         $(".tempStoreGet").click(function(evt){
+             evt.preventDefault();
+             alert($(this).data('id'));
+         });
+         $("#new-store-prod").click(function(evt){
+             if(!myform['m_id'].value){
+                 alert("請先選擇會員!");
+                 return false;
+             }
+             if(!myform['product'].value){
+                 alert("請先選擇產品!");
+                 return false;
+             }
+             var data = {
+                 m_id: myform['m_id'].value,
+                 p_id: myform['product'].value,
+             };
+             $.post("order.php?func=ajax_new_temp_store",data,function(req){
+                 var newTR = $("#tempTR").clone(true,true);
+                 newTR.removeAttr('id').show();
+                 newTR.find("td:eq(0)").text($("#tempStoreTable").find("tr:gt(0)").size());
+                 newTR.find("td:eq(1)").text(req.data.p_name);
+                 newTR.find("td:eq(2)").text(req.data.amounts);
+                 newTR.find(".tempStoreKeep").data('id',req.data.id);
+                 newTR.find(".tempStoreGet").data('id',req.data.id);
+                 $("#tempStoreTable").append(newTR);
+             },'json');
+         });
     });
 </script>
 </div>
