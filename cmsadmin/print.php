@@ -193,14 +193,14 @@ class PRINT_PAGE{
                 $i=0;
                 while($row = $db->fetch_array($selectrs,1)){
                     $i++;
-                    $sub_total_price = $row["p_sell_price"] * $row["oi_amount"];
+                    $sub_total_price = $row["price"] * $row["amount"];
                     $total_price = $total_price+$sub_total_price;
                     $this->_tpl->newBlock( "ORDER_ITEMS_LIST" );
                     $this->_tpl->assign( array(
                         "VALUE_P_ID"  => $row["p_id"],
                         "VALUE_P_NAME" => $row["p_name"],
-                        "VALUE_P_SELL_PRICE" => $row["p_sell_price"],
-                        "VALUE_P_AMOUNT" => $row["oi_amount"],
+                        "VALUE_P_SELL_PRICE" => $row["price"],
+                        "VALUE_P_AMOUNT" => $row["amount"],
                         "VALUE_P_SUBTOTAL_PRICE"  => $sub_total_price,
                         "VALUE_P_SERIAL"  => $i,
                     ));
