@@ -711,7 +711,7 @@ class ORDER{
         while($row = $db->fetch_array($res,1)){
             $productOption[$row['p_id']] = $row['p_name'];
         }
-        App::gethelper("main")->multiple_select("stprod",$productOption,"");
+        App::gethelper("main")->multiple_select("stprod",$productOption,"",$tpl);
     }
     
     function ajax_new_temp_store(){
