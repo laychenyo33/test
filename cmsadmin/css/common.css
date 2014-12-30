@@ -809,3 +809,21 @@ span.current{color:#f00}
 .order_status_10,.order_status_10 *{color:#bbb}
 .order_status_20{color:#bbb}
 .order_status_21{color:#bbb}
+
+#cusmenu{
+    margin:0;
+    padding:4px;
+    list-style-position: outside;
+    list-style-type: none;    
+}
+#cusmenu li{
+    margin:0;
+    padding:0;    
+}
+#cusmenu li a {
+    color: #555;
+    text-decoration:none;
+}
+#cusmenu li a:hover {
+    color: #0099CC;
+}
