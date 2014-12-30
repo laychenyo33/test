@@ -1494,13 +1494,13 @@ class MEMBER{
     
     function ajax_get_member(){
         global $TPLMSG,$cms_cfg;
-        $memArr = App::gethelper('dbtable')->member->getDataList("m_account like '%{$_GET['term']}%' or concat(m_lname,m_fname) like '%{$_GET['term']}%'","*","m_lname,m_fname");
+        $memArr = App::gethelper('dbtable')->member->getDataList("m_account like '%{$_GET['term']}%' or concat(m_lname,m_fname) like '%{$_GET['term']}%' or m_cellphone like '%{$_GET['term']}%'","*","m_lname,m_fname");
         $result = array();
         if($memArr){
            foreach($memArr as $mem){
                $mem['id'] = $mem['m_id'];
                $mem['value'] = sprintf($TPLMSG['MEMBER_NAME_SET_'.$cms_cfg['ws_module']['ws_contactus_s_style']],$mem['m_fname'],$mem['m_lname']);
-               $mem['label'] = sprintf($TPLMSG['MEMBER_NAME_SET_'.$cms_cfg['ws_module']['ws_contactus_s_style']],$mem['m_fname'],$mem['m_lname'])."(".$mem['m_account'].")";
+               $mem['label'] = sprintf($TPLMSG['MEMBER_NAME_SET_'.$cms_cfg['ws_module']['ws_contactus_s_style']],$mem['m_fname'],$mem['m_lname']).($mem['m_cellphone']?"(".$mem['m_cellphone'].")":"");
                $result[] = $mem;
            }
         }
