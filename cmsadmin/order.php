@@ -13,9 +13,16 @@ class ORDER{
     function ORDER(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
+            case "ajax_op_temp_store":
+                $this->ajax_op_temp_store();
+                break;
+            case "ajax_get_tsrec":
+                $this->ajax_get_tsrec();
+                break;
             case "ajax_new_temp_store":
                 $this->ajax_new_temp_store();
                 break;
+            case "mod_temp_store":
             case "add_temp_store":
                 $this->current_class="OTS";
                 $this->ws_tpl_file = "templates/ws-manage-temp-store-form-tpl.html";
@@ -658,19 +665,47 @@ class ORDER{
     }
     
     function tempstore_list(){
-        global $db,$cms_cfg,$tpl,$main;
-        $sql = "select ts.m_id,sum(ts.amounts) as amounts, m.m_fname,m.m_lname from ".$db->prefix("temp_store")." as ts inner join ".$db->prefix("member")." as m on ts.m_id=m.m_id group by ts.m_id having amounts>0 order by  amounts desc ";
+        global $db,$cms_cfg,$tpl,$main,$TPLMSG;
+        $sql = "select ts.m_id,sum(ts.amounts) as amounts, m.m_fname,m.m_lname,m_account from ".$db->prefix("temp_store")." as ts inner join ".$db->prefix("member")." as m on ts.m_id=m.m_id group by ts.m_id  order by  amounts desc ";
         $res = $db->query($sql,true);
+        $i=1;
         while($row = $db->fetch_array($res,1)){
             $tpl->newBlock("TEMP_STORE_LIST");
             foreach($row as $k => $v){
                 $tpl->assign(strtoupper($k),$v);
             }
+            $tpl->assign(array(
+                "SERIAL" => $i++,
+                "M_NAME" => sprintf($TPLMSG['MEMBER_NAME_SET_'.$cms_cfg['ws_module']['ws_contactus_s_style']],$row['m_fname'],$row['m_lname']),
+            ));
         }
     }   
     
     function tempstore_form(){
+        global $TPLMSG,$cms_cfg,$tpl;
         $db = App::gethelper('db');
+        if($_GET['m_id']){
+            $member = App::getHelper('dbtable')->member->getData($_GET['m_id'])->getDataRow();
+            if($member){
+                $tpl->assignGlobal(array(
+                    "M_NAME" => sprintf($TPLMSG['MEMBER_NAME_SET_'.$cms_cfg['ws_module']['ws_contactus_s_style']],$member['m_fname'],$member['m_lname']),
+                    "M_ID"   => $member['m_id'],
+                ));
+                //顯示寄放記錄
+                $tsRecArr = $this->get_temp_store_record($member['m_id']);
+                if($tsRecArr){
+                    foreach($tsRecArr as $j => $tsRec){
+                        $tpl->newBlock("TSREC_ROW");
+                        foreach($tsRec as $k => $v){
+                            $tpl->assign(strtoupper($k),$v);
+                        }
+                        $tpl->assign(array(
+                            "SERIAL" => $j+1,
+                        ));
+                    }
+                }
+            }
+        }
         $sql = "select min(p_id) as p_id,p_name from ".$db->prefix("products")." where p_status='1' group by p_name order by p_sort ";
         $res = $db->query($sql,true);
         while($row = $db->fetch_array($res,1)){
@@ -681,19 +716,60 @@ class ORDER{
     
     function ajax_new_temp_store(){
         $db = App::gethelper("db");
-        $sql = "insert into ".$db->prefix("temp_store")."(m_id,p_id)values('{$_POST['m_id']}','{$_POST['p_id']}')";
-        $db->query($sql,true);
-        if(($db_msg = $db->report())==""){
-            $id = $db->get_insert_id();
-            $sql = "select a.*,b.p_name from ".$db->prefix("temp_store")." as a inner join ".$db->prefix("products")." as b on a.p_id=b.p_id where id='{$id}'";
-            $tempStore = $db->query_firstRow($sql,true);
-            $result['code'] = 1;
-            $result['data'] = $tempStore;
-        }else{
+        $sql = "select * from  ".$db->prefix("temp_store")." where m_id='{$_POST['m_id']}' and p_id='{$_POST['p_id']}'";
+        if($exists = $db->query_firstRow($sql)){
             $result['code'] = 0;
-            $result['error'] = $db_msg;
+            $result['error'] = "已存在寄放記錄!";
+        }else{
+            $sql = "insert into ".$db->prefix("temp_store")."(m_id,p_id)values('{$_POST['m_id']}','{$_POST['p_id']}')";
+            $db->query($sql,true);
+            if(($db_msg = $db->report())==""){
+                $id = $db->get_insert_id();
+                $sql = "select a.*,b.p_name from ".$db->prefix("temp_store")." as a inner join ".$db->prefix("products")." as b on a.p_id=b.p_id where id='{$id}'";
+                $tempStore = $db->query_firstRow($sql,true);
+                $result['code'] = 1;
+                $result['data'] = $tempStore;
+            }else{
+                $result['code'] = 0;
+                $result['error'] = $db_msg;
+            }
         }
         echo json_encode($result);
+    }
+    
+    function get_temp_store_record($m_id){
+        $db = App::getHelper('db');
+        $sql = "select a.*,b.p_name from ".$db->prefix("temp_store")." as a inner join ".$db->prefix("products")." as b on a.p_id=b.p_id where m_id='{$m_id}' order by b.p_sort ";
+        $res = $db->query($sql,true);
+        while($tsRec = $db->fetch_array($res,1)){
+            $record[] = $tsRec;    
+        }
+        return $record;
+    }   
+    
+    function ajax_get_tsrec(){
+        $result['code'] = 1;
+        $result['data'] = $this->get_temp_store_record($_POST['m_id']);
+        echo json_encode($result);
+    }
+    
+    function ajax_op_temp_store(){
+        $db = App::getHelper('db');
+        $sql = "select * from ".$db->prefix('temp_store')." where id='".$_POST['id']."'";
+        $tsRec = $db->query_firstRow($sql);
+        if($tsRec){
+            $result['code'] = 1;
+            $amounts = ($_POST['keepAmounts']>0)? $_POST['keepAmounts'] : 0 - $_POST['getAmounts'];
+            $tsRec['amounts']+=$amounts;
+            //更新主記錄
+            $sql = "update ".$db->prefix('temp_store')." set amounts='".$tsRec['amounts']."' where id='".$_POST['id']."'";
+            $db->query($sql);
+            //加入執行記錄
+            $sql = "insert into ".$db->prefix("temp_store_op")."(ts_id,amounts)values('".$_POST['id']."','".$amounts."')";
+            $db->query($sql);
+            $result['data'] = $tsRec;
+            echo json_encode($result);
+        }
     }
 }
 //ob_end_flush();
