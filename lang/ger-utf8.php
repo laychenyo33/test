@@ -118,6 +118,7 @@ $TPLMSG['COUNTRY']="Land";
 $TPLMSG['MEMBER_CHECK_ACCOUNT']="Gültiges Konto";
 $TPLMSG['MEMBER_CHECK_PASSWORD']="Gültig Passwort";
 $TPLMSG['MEMBER_DATA_MOD']="Bearbeiten Grunddaten";
+$TPLMSG['MEMBER_ACCOUNT_NOT_EXISTS']="Account not exists!!";
 $TPLMSG['MEMBER_LOGIN']="Login";
 $TPLMSG["MEMBER_LOGOUT"]="Abmelden";
 $TPLMSG['MEMBER_JOIN']="Registrieren";
@@ -459,4 +460,5 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
+$TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
 ?>

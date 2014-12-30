@@ -968,11 +968,11 @@ class MEMBER{
                     $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$row["m_email"],$mail_content,"Member's Password","pw",$goto_url);
                 }else{
                     $goto_url=$cms_cfg["base_root"]."member.php?func=m_forget";
-                    $main->js_notice("Account not exist!!",$goto_url);
+                    $main->js_notice($TPLMSG['MEMBER_ACCOUNT_NOT_EXISTS'],$goto_url);
                 }
             }else{
                 $goto_url=$cms_cfg["base_root"]."member.php?func=m_forget";
-                $main->js_notice("Security Error!!",$goto_url);
+                $main->js_notice($TPLMSG['SECURITY_ERROR'],$goto_url);
             }
         }
     }    

@@ -118,6 +118,7 @@ $TPLMSG['COUNTRY']="국가";
 $TPLMSG['MEMBER_CHECK_ACCOUNT']="당좌 계좌를";
 $TPLMSG['MEMBER_CHECK_PASSWORD']="비밀 번호 확인";
 $TPLMSG['MEMBER_DATA_MOD']="회원 정보 변경";
+$TPLMSG['MEMBER_ACCOUNT_NOT_EXISTS']="Account not exists!!";
 $TPLMSG['MEMBER_LOGIN']="로그인";
 $TPLMSG["MEMBER_LOGOUT"]="로그아웃";
 $TPLMSG['MEMBER_JOIN']="레지스터";
@@ -459,4 +460,5 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
+$TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
 ?>
