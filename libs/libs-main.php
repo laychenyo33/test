@@ -230,6 +230,10 @@ class MAINFUNC{
                 $tpl->newBlock("MEMBER_PROD_COLLECT");
                 $tpl->assign('TAG_LOGIN_MEMBER_COLLECT' , $TPLMSG['MEMBER_COLLECT'] );
             }
+            if(App::configs()->ws_module->ws_temp_store){
+                $tpl->newBlock("MEMBER_TEMP_STORE");
+                $tpl->assign('TAG_LOGIN_TEMP_STORE' , $TPLMSG['TEMP_STORE'] );
+            }
         }
     }
     function security_zone($si_w="200", $si_h="40"){
@@ -673,6 +677,7 @@ class MAINFUNC{
         ($cms_cfg['ws_module']['ws_multi_shipprice'])?$tpl->newBlock( "AUTHORITY_MULTI_SHIPPRICE" ):"";//訂單金額區段運費管理
         ($cms_cfg['ws_module']['ws_multi_chargefee'])?$tpl->newBlock( "AUTHORITY_MULTI_CHARGEFEE" ):"";//訂單金額區段手續費管理
         ($cms_cfg['ws_module']['ws_multi_discount'])?$tpl->newBlock( "AUTHORITY_MULTI_DISCOUNT" ):"";//訂單金額區段使用折扣率
+        ($cms_cfg['ws_module']['ws_temp_store'])?$tpl->newBlock( "AUTHORITY_TEMP_STORE" ):"";//商品寄放功能
         if($cms_cfg["ws_module"]["ws_seo"]) $tpl->newBlock("AUTHORITY_SYSVARS"); //內容變數
         $tpl->assignGlobal("TAG_ROOT_PATH" , $cms_cfg['base_root']);
         $tpl->assignGlobal("TAG_FILE_ROOT" , $cms_cfg['file_root']);

@@ -74,6 +74,7 @@ $cms_cfg["ws_module"]=array(
         "ws_multi_shipprice"=>0,        //依訂單金額區段計算運費
         "ws_multi_chargefee"=>0,        //依訂單金額區段計算手續費
         "ws_multi_discount" =>0,        //依訂單金額區段使用折扣率
+        "ws_temp_store"     =>0,        //商品寄放功能
         "ws_service"=>0,                //服務條款(IPC專用)
         "ws_vaccount"=>0,               //台銀虛擬帳號
 

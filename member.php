@@ -174,6 +174,9 @@ class MEMBER{
             case "data"://基本資料修改
                 $this->member_form("mod");
                 break;
+            case "tempstore"://商品寄放管理              
+                $this->member_tempstore($_REQUEST["type"],$_REQUEST["id"]);
+                break;            
             case "order"://訂單查詢
                 $this->member_order($_REQUEST["type"],$_REQUEST["o_id"]);
                 break;
@@ -1229,6 +1232,67 @@ class MEMBER{
             }
         }        
     }
+    //會員訂單查詢
+    function member_tempstore($type="list",$id=""){
+        global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
+        if($type=="list"){
+            $main->layer_link($TPLMSG['TEMP_STORE']);
+            $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['TEMP_STORE']  ));
+            $tpl->newBlock( "TEMPSTORE_LIST_ZONE" );
+            $sql="select * from ".$db->prefix("temp_store")." as a inner join ".$db->prefix("products")." as b on a.p_id=b.p_id where m_id='".$this->m_id."' order by b.p_sort ";
+            //取得總筆數
+            $selectrs = $db->query($sql);
+            $total_records = $db->numRows($selectrs);
+            //取得分頁連結
+            $func_str="member.php?func=m_zone&mzt=tempstore&type=list";
+            //重新組合包含limit的sql語法
+            $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
+            $selectrs = $db->query($sql);
+            $rsnum    = $db->numRows($selectrs);
+            while ( $row = $db->fetch_array($selectrs,1) ) {
+                $i++;
+                $tpl->newBlock( "TEMPSTORE_LIST" );
+                if($i%2){
+                    $tpl->assign("TAG_TR_CLASS","class='altrow'");
+                }
+                foreach($row as $k => $v){
+                    $tpl->assign(strtoupper($k),$v);
+                }
+                $tpl->assign(array(
+                    "SERIAL" => $i,
+                ));
+            }
+        }
+        if($type=="history"){
+            $tpl->newBlock( "TEMPSTORE_HISTORY_ZONE" );
+            $sql="select a.*,b.createtime,b.amounts as op_amounts from (select a.*,b.p_name from ".$db->prefix("temp_store")." as a inner join ".$db->prefix('products')." as b on a.p_id=b.p_id ) as a inner join ".$db->prefix("temp_store_op")." as b on a.id=b.ts_id where a.id='".$id."' order by createtime desc";
+            $selectrs = $db->query($sql);
+            $rsnum    = $db->numRows($selectrs);
+            if ($rsnum > 0) {
+                $i=1;
+                while($row = $db->fetch_array($selectrs,1)){
+                    $tpl->newBlock( "TEMPSTORE_HISTORY_LIST" );
+                    foreach($row as $k => $v){
+                        if($k=="op_amounts"){
+                            if($v>0){
+                                $tpl->assign("IN_AMOUNTS",$v);
+                            }else{
+                                $tpl->assign("OUT_AMOUNTS",abs($v));
+                            }
+                        }else{
+                            $tpl->assign(strtoupper($k),$v);
+                        }
+                    }
+                    $tpl->assign(array(
+                        "SERIAL" => $i++,
+                    ));
+                }
+            }else{
+                $url = $_SERVER['PHP_SELF']."?func=m_zone&mzt=tempstore";
+                $main->js_notice("沒有記錄",$url);
+            }
+        }
+    }       
 }
 
 ?>

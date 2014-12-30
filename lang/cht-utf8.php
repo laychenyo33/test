@@ -154,8 +154,8 @@ $TPLMSG['MEMBER_JOIN_VALIDATE_EMAIL'] = "請點擊以下連結回到網站驗證
 $TPLMSG['MEMBER_JOIN_VALIDATE_MANUAL'] = "您註冊的帳號將會有專人審核，待通過之後會寄發通知信給您，請耐心等候!";
 $TPLMSG['MEMBER_APPROV_NOTIFICATION_SUBJECT'] = "您在 %s 的帳號已啟用";
 $TPLMSG['MEMBER_APPROV_NOTIFICATION_CONTENT'] = "您在 %s 的帳號 %s 已啟用，歡迎回到網站上登入";
-$TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s&nbsp;%2\$s";
-$TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s&nbsp;%1\$s";
+$TPLMSG['MEMBER_NAME_SET_1'] = "%1\$s%2\$s";
+$TPLMSG['MEMBER_NAME_SET_2'] = "%2\$s%1\$s";
 $TPLMSG["MEMBER_EPAPER"] = "願意接收電子報訊息?";
 $TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"] = '%2$s%1$s';
 $TPLMSG["MEMBER_ACCOUNT_EXISTS"] = "會員帳號已存在!";
@@ -479,4 +479,5 @@ $TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = '%d個以上，%d％↓';
 $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "本產品有數量折扣";
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "庫存量不足訂購數，請修改訂購量，謝謝。";
+$TPLMSG['TEMP_STORE'] = "商品寄放";
 ?>

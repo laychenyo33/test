@@ -1,0 +1,195 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>商品寄放管理</h1>
+<form name="myform" method="post" action="order.php?func=o_bonus_config"  class="formular" id="formID">
+    <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0" class="formtable">
+        <tr>
+            <th width="100">選擇會員</th>
+            <td>
+                輸入會員名字或E-mail或手機號碼:<input type="text" name="term" id="term" value="{M_NAME}"/>
+            </td>
+        </tr>
+        <tr>
+            <th>現有寄放</th>
+            <td>
+                選擇產品: <select name="product">
+                            <option value="">請選擇</option>
+                            <!-- START BLOCK : STPROD_SELECT -->
+                            <option value="{VALUE_STPROD_KEY}">{VALUE_STPROD_NAME}</option>
+                            <!-- END BLOCK : STPROD_SELECT -->
+                         </select>
+                <input type="button" id="new-store-prod" value="新增寄放產品"/>
+                <table width="450" cellspacing="0" id="tempStoreTable">
+                    <tr>
+                        <th width="40">序號</th>
+                        <th>品名</th>
+                        <th width="80">現有寄放數</th>
+                        <th width="80">操作</th>
+                    </tr>
+                    <tr id="tempTR" style="display:none">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a href="#" class="tempStoreKeepOrGet">寄放或提領</a>
+                        </td>
+                    </tr>
+                    <!-- START BLOCK : TSREC_ROW -->
+                    <tr>
+                        <td>{SERIAL}</td>
+                        <td>{P_NAME}</td>
+                        <td>{AMOUNTS}</td>
+                        <td>
+                            <a href="#" class="tempStoreKeepOrGet" data-id="{ID}" data-amounts="{AMOUNTS}">寄放或提領</a>
+                        </td>
+                    </tr>
+                    <!-- END BLOCK : TSREC_ROW -->
+                </table>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="m_id" value="{M_ID}"/>
+</form>
+<div id="tsKeepOrGetDialog" title="產品寄放或提領">
+    <form name="tempStoreKeepOrGetForm" id="tempStoreKeepOrGetForm">
+        <input type="hidden" name="id" value=""/>
+        寄放:<input type="text" name="keepAmounts" value="" onchange="checkNumber(this);"/><br/>
+        提領:<input type="text" name="getAmounts" value="" onchange="checkNumber(this);"/>
+    </form>
+</div>
+<script type="text/javascript">
+    function checkNumber(elm){
+        var newvalue = parseInt(elm.value);
+        if(isNaN(newvalue)){
+            elm.value = '';
+        }else{
+            elm.value = newvalue;
+        }
+    }
+    jQuery(function($){
+         function addTSRow(data){
+             var newTR = $("#tempTR").clone(true,true);
+             newTR.removeAttr('id').show();
+             newTR.find("td:eq(0)").text($("#tempStoreTable").find("tr:gt(0)").size());
+             newTR.find("td:eq(1)").text(data.p_name);
+             newTR.find("td:eq(2)").text(data.amounts);
+             newTR.find(".tempStoreKeepOrGet").data('id',data.id);
+             newTR.find(".tempStoreKeepOrGet").data('amounts',0);
+             $("#tempStoreTable").append(newTR);
+         }
+         //以編輯會員進入表單時，初始化data-id
+         $('.tempStoreKeepOrGet').each(function(idx,elm){
+             if($(this).attr('data-id')){
+                 $(this).data('id',$(this).attr('data-id'));
+                 $(this).data('amounts',$(this).attr('data-amounts'));
+             }
+         });
+         $("#tsKeepOrGetDialog").dialog({
+             autoOpen:false,
+             modal:true,
+             width:320,
+             height:170,
+             buttons:{
+                 '送出':function(){
+                     var form = $(this).find("form:eq(0)");
+                     var cur_amounts = $(this).data('amounts');
+                     var keepAmounts = parseInt(form.find(":input[name=keepAmounts]").val());
+                     var getAmounts = parseInt(form.find(":input[name=getAmounts]").val());
+                     if(form.find(":input[name=id]").val()==""){
+                         alert("沒有id!");
+                         return false;
+                     }
+                     if(keepAmounts>0 || getAmounts>0){
+                         if(keepAmounts>0 && getAmounts>0){
+                             alert("請勿同時寄放或提領");
+                             return false;
+                         }
+                         if(getAmounts > cur_amounts){
+                             alert("提領數超過現有寄放數");
+                             return false;
+                         }
+                         if(keepAmounts>0){
+                             var confirmMsg = "確定寄放數量:"+keepAmounts + '?';
+                         }else{
+                             var confirmMsg = "確定提領數量:"+getAmounts + '?';
+                         }
+                         if(confirm(confirmMsg)){
+                             var data = form.serialize();
+                            $.post("order.php?func=ajax_op_temp_store",data,function(req){
+                                if(req.code==1){
+                                    location.href = "order.php?func=mod_temp_store&m_id="+req.data.m_id;
+                                }else{
+                                    console.log(req);
+                                }
+                            },'json');
+                         }
+                     }else{
+                         alert("未指定提領數或寄放數");
+                         return false;
+                     }
+                     $(this).dialog('close');
+                 },
+                 '取消':function(){
+                     $(this).dialog('close');
+                 }
+             }
+         });
+         $( "#term" ).autocomplete({
+            source: "member.php?func=ajax_get_member",
+            minLength: 2,
+            select: function( event, ui ) {
+                $(myform).find(":hidden[name=m_id]").val(ui.item.m_id);
+                var data = { m_id: ui.item.m_id };
+                $.post("order.php?func=ajax_get_tsrec",data,function(req){
+                    $("#tempStoreTable").find("tr:gt(1)").remove();
+                    if(req.data){
+                        for(var k=0;k<req.data.length;k++){
+                            addTSRow(req.data[k]);
+                        }
+                    }
+                },'json');
+                console.log(ui);
+            }
+         });
+         $(".tempStoreKeepOrGet").click(function(evt){
+             evt.preventDefault();
+             $("#tsKeepOrGetDialog").find("form:eq(0)").find(":hidden[name=id]").val($(this).data('id'));
+             $("#tsKeepOrGetDialog").find("form:eq(0)").find(":input:not([name=id])").each(function(idx,elm){
+                 $(elm).val('');
+             });
+             $("#tsKeepOrGetDialog").data('amounts',$(this).data('amounts'));
+             $("#tsKeepOrGetDialog").dialog('open');
+         });
+         $("#new-store-prod").click(function(evt){
+             if(!myform['m_id'].value){
+                 alert("請先選擇會員!");
+                 return false;
+             }
+             if(!myform['product'].value){
+                 alert("請先選擇產品!");
+                 return false;
+             }
+             var data = {
+                 m_id: myform['m_id'].value,
+                 p_id: myform['product'].value,
+             };
+             $.post("order.php?func=ajax_new_temp_store",data,function(req){
+//                 var newTR = $("#tempTR").clone(true,true);
+//                 newTR.removeAttr('id').show();
+//                 newTR.find("td:eq(0)").text($("#tempStoreTable").find("tr:gt(0)").size());
+//                 newTR.find("td:eq(1)").text(req.data.p_name);
+//                 newTR.find("td:eq(2)").text(req.data.amounts);
+//                 newTR.find(".tempStoreKeep").data('id',req.data.id);
+//                 newTR.find(".tempStoreGet").data('id',req.data.id);
+//                 $("#tempStoreTable").append(newTR);
+                 if(req.data){
+                     addTSRow(req.data);
+                 }else{
+                     alert(req.error);
+                 }
+             },'json');
+         });
+    });
+</script>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

@@ -1,0 +1,36 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>商品寄放管理</h1>
+<form action="order.php" method="get" name="myform" class="formular" id="formID">
+    <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
+        <tr>
+            <td colspan="5">
+                <ul id="cusmenu">
+                    <li><a href="order.php?func=add_temp_store">新增寄放會員</a></li>
+                </ul>
+            </td>
+        </tr>
+    <tr>
+      <th width="5%">No.</th>
+      <th width="15%">會員姓名</th>
+      <th width="15%">手機號碼</th>
+      <th width="15%">寄放數量</th>
+      <th width="">操作</th>
+    </tr>
+    <!-- START BLOCK : TEMP_STORE_LIST -->
+    <tr {TAG_TR_CLASS}>
+      <td>{SERIAL}</td>
+      <td>{M_NAME}</td>
+      <td>{M_ACCOUNT}</td>
+      <td>{AMOUNTS}</td>
+      <td><a href="order.php?func=mod_temp_store&m_id={M_ID}">編輯</a></td>
+    </tr>
+    <!-- END BLOCK : TEMP_STORE_LIST -->
+  <input type="hidden" name="total_box" value="{VALUE_TOTAL_BOX}" />
+  <input type="hidden" name="box_check" value="1" />
+  <input type="hidden" name="ws_table" value="o" />
+  </table>
+    </form>
+    <!-- INCLUDE BLOCK : ./templates/ws-manage-fn-pagination-tpl.html -->
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->
