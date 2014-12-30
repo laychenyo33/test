@@ -518,6 +518,45 @@
         </script>
     </form>
     <!-- END BLOCK : MEMBER_COLLECT -->
+    <!-- START BLOCK : TEMPSTORE_LIST_ZONE -->
+    <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
+        <tr class="altrow">
+            <th width="5%"> No.</th>
+            <th width=""> 產品</th>
+            <th width="15%"> 現有寄放數</th>
+            <th width="15%">記錄</th>
+        </tr>    
+        <!-- START BLOCK : TEMPSTORE_LIST -->
+        <tr>
+            <td>{SERIAL}</td>
+            <td>{P_NAME}</td>
+            <td>{AMOUNTS}</td>
+            <td>
+                <a href="{TAG_ROOT_PATH}member.php?func=m_zone&mzt=tempstore&type=history&id={ID}">檢視</a>
+            </td>
+        </tr>
+        <!-- END BLOCK : TEMPSTORE_LIST -->
+    </table>
+    <!-- END BLOCK : TEMPSTORE_LIST_ZONE -->
+    <!-- START BLOCK : TEMPSTORE_HISTORY_ZONE -->
+    <table width="98%" border="0" align="center" cellpadding="4" cellspacing="1" class="member_zone_table">
+        <tr class="altrow">
+            <th width="5%"> No.</th>
+            <th width="">產品</th>
+            <th width="15%">時間</th>
+            <th width="15%">寄放</th>
+            <th width="15%">提領</th>
+        </tr>
+        <!-- START BLOCK : TEMPSTORE_HISTORY_LIST -->
+        <tr>
+            <td>{SERIAL}</td>
+            <td>{P_NAME}</td>
+            <td>{CREATETIME}</td>
+            <td>{IN_AMOUNTS}</td>
+            <td>{OUT_AMOUNTS}</td>
+        </tr>
+        <!-- END BLOCK : TEMPSTORE_HISTORY_LIST -->
+    <!-- END BLOCK : TEMPSTORE_HISTORY_ZONE -->
     <div align="center">
         <font size='3' color="#ff0000"> {MSG_NO_DATA}</font>
     </div>
