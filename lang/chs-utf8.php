@@ -462,4 +462,5 @@ $TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = '%d个以上，%d％↓';
 $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "本产品有数量折扣";
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "库存量不足订购数，请修改订购量，谢谢。";
+$TPLMSG['TEMP_STORE'] = "商品寄放";
 ?>

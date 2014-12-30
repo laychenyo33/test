@@ -458,4 +458,5 @@ $TPLMSG['QUANTITY_DISCOUNT_ITEM_WRAPPER'] = "buy %d and get discount of %d %";
 $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discounts";
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
+$TPLMSG['TEMP_STORE'] = "No shipments of goods";
 ?>
