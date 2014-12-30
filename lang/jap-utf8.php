@@ -118,6 +118,7 @@ $TPLMSG['COUNTRY']="国";
 $TPLMSG['MEMBER_CHECK_ACCOUNT']="有効なアカウント";
 $TPLMSG['MEMBER_CHECK_PASSWORD']="有効なパスワード";
 $TPLMSG['MEMBER_DATA_MOD']="基本的なデータを編集";
+$TPLMSG['MEMBER_ACCOUNT_NOT_EXISTS']="Account not exists!!";
 $TPLMSG['MEMBER_LOGIN']="ログイン";
 $TPLMSG["MEMBER_LOGOUT"]="ログアウト";
 $TPLMSG['MEMBER_JOIN']="レジスタ";
@@ -459,4 +460,5 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
+$TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
 ?>

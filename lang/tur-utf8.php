@@ -118,6 +118,7 @@ $TPLMSG['COUNTRY']="Ülke";
 $TPLMSG['MEMBER_CHECK_ACCOUNT']="Geçerli Hesabı";
 $TPLMSG['MEMBER_CHECK_PASSWORD']="Geçerli Şifre";
 $TPLMSG['MEMBER_DATA_MOD']="Düzenle Temel veriler";
+$TPLMSG['MEMBER_ACCOUNT_NOT_EXISTS']="Account not exists!!";
 $TPLMSG['MEMBER_LOGIN']="Giriş";
 $TPLMSG["MEMBER_LOGOUT"]="Çıkış";
 $TPLMSG['MEMBER_JOIN']="Kayıt Ol";
@@ -459,4 +460,5 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
+$TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
 ?>

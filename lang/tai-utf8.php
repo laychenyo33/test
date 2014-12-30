@@ -118,6 +118,7 @@ $TPLMSG['COUNTRY'] = "ประเทศ";
 $TPLMSG['MEMBER_CHECK_ACCOUNT'] = "บัญชีที่ถูกต้อง";
 $TPLMSG['MEMBER_CHECK_PASSWORD'] = "รหัสผ่านที่ถูกต้อง";
 $TPLMSG['MEMBER_DATA_MOD'] = "แก้ไขข้อมูลพื้นฐาน";
+$TPLMSG['MEMBER_ACCOUNT_NOT_EXISTS']="Account not exists!!";
 $TPLMSG['MEMBER_LOGIN'] = "เข้าสู่ระบบ";
 $TPLMSG['MEMBER_LOGOUT'] = "ออกจากระบบ";
 $TPLMSG['MEMBER_JOIN'] = "สมัครสมาชิก";
@@ -458,3 +459,4 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
+$TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
