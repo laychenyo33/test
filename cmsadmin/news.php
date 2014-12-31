@@ -537,7 +537,7 @@ class NEWS{
             $tpl->assign( "VALUE_N_CONTENT" , $main->content_file_str_replace($row["n_content"],'out') );
         }
         //置頂選項
-        $main->multiple_radio("top",$ws_array['yesno_status'],$row['n_top']);
+        $main->multiple_radio("top",$ws_array['yesno_status'],$row['n_top'],$tpl);
     }
 //最新消息--資料更新================================================================
     function news_replace(){
