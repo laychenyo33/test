@@ -571,8 +571,10 @@ class PRODUCTS{
                 $this->products_show_pic($row["p_id"]);//顯示大圖資料
                 //當後台系統設定為詢價車,則強制把所有的價格隱藏
                 $show_price = (App::getHelper('session')->sc_cart_type==1)?1:0;
+                $stocksWithCart = App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true);
+                $multi_spec = (App::configs()->ws_module->ws_cart_spec && $row['spec_sets'])?true:false;
                 //詢價或加到購物車按鈕
-                if($show_price==0 || ($show_price==1 && $row['onsale']==1)){
+                if($show_price==0 || ($show_price==1 && $row['onsale']==1 && ($multi_spec || $stocksWithCart) )){ 
                     $tpl->newBlock("CART_SUBMIT");
                     $tpl->assignGlobal(array(
                         "SUBMIT_BTN_STR" => ($show_price)?$TPLMSG['PROD_TO_CART_SHOPPING']:$TPLMSG['PROD_TO_CART_INQUIRY'],
@@ -582,7 +584,7 @@ class PRODUCTS{
                         "MSG_WARNING_AMOUNTFORMAT" => $TPLMSG['WARNING_AMOUNT_FORMAT'],
                     ));
                 }
-                if(App::configs()->ws_module->ws_cart_spec && $row['spec_sets']){
+                if($multi_spec){
                     $tpl->assignGlobal(array(
                         "TAG_NO_STOCK_MSG_ZONE"    => "style=\"display:none\"",
                     ));
@@ -662,21 +664,6 @@ class PRODUCTS{
                             "TAG_NO_STOCK_MSG_ZONE"    => "style=\"display:none\"",
                         ));
                     }
-                }
-                if($show_price){
-                    $tpl->newBlock("CART_TYPE_SHOPPING");
-                    $tpl->assignGlobal("MSG_JOIN_CART",$TPLMSG["JOIN"].$TPLMSG["SHOPPING_CART"]);
-                    $tpl->assignGlobal("VALUE_P_CART_TYPE","shopping");
-                    $tpl->assignGlobal("CART_ADD",$TPLMSG['CART_ADD'].$TPLMSG['CART_SHOPPING']);
-                    if($row["p_list_price"]>0 && $row["p_special_price"]>0){ //有特價時
-                        $tpl->newBlock("FULL_PRICE");
-                    }else{ //只有定價時
-                        $tpl->newBlock("SINGLE_PRICE");
-                    }
-                    $tpl->assign(array(
-                        "VALUE_P_LIST_PRICE" => number_format($row["p_list_price"]),
-                        "VALUE_P_SPECIAL_PRICE" => number_format($row["p_special_price"]),
-                    ));
                 }
                 $this->quantity_discount($tpl,$row);
                 //影片
