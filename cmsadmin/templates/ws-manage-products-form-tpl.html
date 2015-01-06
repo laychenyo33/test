@@ -212,12 +212,25 @@
         </tr>        
         <!-- END BLOCK : SPEC_ROWS -->        
         <tr class="multiple_spec_sets"  {TAG_MULTIPLE_SPEC_HIDE}>
+            <th>庫存:</th>
+            <td colspan="3">
+			<button type="button" class="spec_attr" rel="spec_quantity">庫存</button>
+                        <div id="spec_quantity" class="specDialog" title="產品庫存"></div>
+            </td>
+        </tr>
+        <tr class="multiple_spec_sets"  {TAG_MULTIPLE_SPEC_HIDE}>
             <th>價格:</th>
             <td colspan="3">
 			<button type="button" class="spec_attr" rel="spec_price">價格</button>
                         <div id="spec_price" class="specDialog" title="產品價格"></div>
             </td>
         </tr>
+        <tr class="single_spec_sets" {TAG_SINGLE_SPEC_HIDE}>
+            <th>產品庫存:</th>
+            <td colspan="3"> 
+                <input type="text" name="stocks" id="stocks" class="validate[custom[onlyNumber]]" value="{VALUE_STOCKS}" size="7" />
+            </td>                      
+        </tr>        
         <!-- START BLOCK : PRODUCTS_PRICE_FIELD -->
         <tr class="single_spec_sets" {TAG_SINGLE_SPEC_HIDE}>
             <th>產品價格:</th>
