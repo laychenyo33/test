@@ -25,12 +25,14 @@
                 }
                 jQuery(function($){
                    $(document).ready(function(){
-                       var query = get_query();
-                      $("<form name='sform' id='sform' method='get' action=''></form>").
-                              append("<input type='hidden' name='func' value='"+query.func+"'/>").
-                              append("<input type='hidden' name='st'/>").
-                              append("<input type='hidden' name='sk'/>").
-                              appendTo('body'); 
+                      var query = get_query();
+                      var form = $("<form name='sform' id='sform' method='get' action=''></form>");
+                      for(var k in query){
+                          form.append("<input type='hidden' name='"+k+"' value='"+query[k]+"'/>");
+                      }
+                      form.append("<input type='hidden' name='st'/>").
+                           append("<input type='hidden' name='sk'/>").
+                           appendTo('body'); 
                       $("#smt_sform").click(function(){
                             var sform = $("#sform")[0];
                             sform.st.value=$("#st").val();
