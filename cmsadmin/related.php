@@ -3,7 +3,7 @@
 //ob_start();
 session_start();
 if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]) ){
-    header("location: /");
+    header("location: ".$cms_cfg['manage_root']);
     exit;
 }
 //include_once("products.php");

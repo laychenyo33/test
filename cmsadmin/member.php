@@ -4,7 +4,7 @@
 session_start();
 include_once("../conf/config.inc.php");
 if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_member"]==0){
-    header("location: /");
+    header("location: ".$cms_cfg['manage_root']);
     exit;
 }
 include_once("../libs/libs-manage-sysconfig.php");
@@ -504,6 +504,7 @@ class MEMBER{
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
+                $birthTS = strtotime($row["m_birthday"]);
                 $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_M_SORT"  => $row["m_sort"],
                                           "VALUE_OLD_M_STATUS"  => $row["m_status"],
@@ -512,7 +513,7 @@ class MEMBER{
                                           "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
                                           "VALUE_M_FNAME" => $row["m_fname"],
                                           "VALUE_M_LNAME" => $row["m_lname"],
-                                          "VALUE_M_BIRTHDAY" => $row["m_birthday"],
+                                          "VALUE_M_BIRTHDAY" => ($birthTS)?date("Y-m-d",$birthTS):'',
                                           "VALUE_M_ZIP" => $row["m_zip"],
                                           "VALUE_M_COUNTRY" => $row["m_country"],
                                           "VALUE_M_ADDRESS" => $row["m_address"],

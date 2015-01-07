@@ -16,7 +16,7 @@ PST 頭文字大寫
 session_start();
 include_once("../conf/config.inc.php");
 if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"]==0){
-    header("location: /");
+    header("location: ".$cms_cfg['manage_root']);
     exit;
 }
 include_once("../libs/libs-manage-sysconfig.php");
