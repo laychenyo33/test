@@ -247,12 +247,13 @@ class MEMBER{
                 //修改會員，顯示e-mail欄位
                 $main->layer_link( $TPLMSG['MEMBER_DATA_MOD']);
                 $tpl->newBlock( "MOD_EMAIL" );
+                $birthTS = strtotime($row["m_birthday"]);
                 $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_DATA_MOD'],
                                           "VALUE_M_ID"  => $row["m_id"],
                                           "VALUE_M_ACCOUNT" => $row["m_account"],
                                           "VALUE_M_PASSWORD" => $row["m_password"],
                                           "VALUE_M_COMPANY_NAME" => $row["m_company_name"],
-                                          "VALUE_M_BIRTHDAY" => $row["m_birthday"],
+                                          "VALUE_M_BIRTHDAY" => ($birthTS)?date("Y-m-d",$birthTS):"",
                                           "VALUE_M_ZIP" => $row["m_zip"],
                                           "VALUE_M_ADDRESS" => $row["m_address"],
                                           "VALUE_M_TEL" => $row["m_tel"],
