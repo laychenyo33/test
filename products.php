@@ -3,6 +3,10 @@
 include_once("libs/libs-sysconfig.php");
 $products = new PRODUCTS;
 class PRODUCTS{
+    protected $op_limit;
+    protected $jp_limit;
+    protected $ws_seo;
+    protected $ps;
     function PRODUCTS(){
         global $db,$cms_cfg,$tpl,$main,$TPLMSG;
         $this->op_limit=($_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"])?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"]:$cms_cfg["op_limit"];
