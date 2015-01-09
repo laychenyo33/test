@@ -316,6 +316,7 @@ class ORDER{
                         "VALUE_O_STATUS_SUBJECT"  => $value,
                         "VALUE_O_STATUS" => $key,
                         "VALUE_O_SERIAL" => $i,
+                        "STATUS_CLASS"   => "order_status_".$key,
                         "TAG_DISABLED"   => $row['o_status']>=3?"disabled":'',
                     ));
                     if($i%4==0){
