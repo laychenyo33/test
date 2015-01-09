@@ -43,6 +43,8 @@ class CART{
         $main->header_footer("");
         $main->google_code(); //google analystics code , google sitemap code
 //        $main->left_fix_cate_list();
+        $leftmenu = new Leftmenu_Products($tpl);
+        $leftmenu->make();        
     }
     function cart_result(){
         global $tpl,$cms_cfg,$db,$TPLMSG;
