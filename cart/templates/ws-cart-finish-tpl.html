@@ -187,22 +187,7 @@
             <tr>
               <th><span class="red">*</span>{MSG_CONTACT_PERSON}</th>
               <td>
-              	 <!-- START BLOCK : TAG_S_BLOCK_0 -->
-				 <select name="m_contact_s">
-				 	<!-- START BLOCK : TAG_S_OPTION_0 -->
-					<option value="{VALUE_S_KEY}" {VALUE_S_CURRENT}>{VALUE_S_STR}</option>
-					<!-- END BLOCK : TAG_S_OPTION_0 -->
-				 </select>
-				&nbsp;{MSG_MEMBER_NAME}:
-				<!-- END BLOCK : TAG_S_BLOCK_0 -->
-				<input name="m_name" id="m_name" class="validate[required]" type="text" value="{VALUE_M_NAME}" size="12" />
-              	 <!-- START BLOCK : TAG_S_BLOCK_1 -->
-				 <select name="m_contact_s">
-				 	<!-- START BLOCK : TAG_S_OPTION_1 -->
-					<option value="{VALUE_S_KEY}" {VALUE_S_CURRENT}>{VALUE_S_STR}</option>
-					<!-- END BLOCK : TAG_S_OPTION_1 -->
-				 </select>
-				<!-- END BLOCK : TAG_S_BLOCK_1 -->
+              	 {TAG_CONTACT_WITH_S}
               </td>
             </tr>
             <!-- START BLOCK : SELECT_COUNTRY -->
@@ -282,7 +267,7 @@
                 <tr>
                     <th><span class="red">*</span>{MSG_MEMBER_NAME}</th>
                     <td>
-                            <input type="text" name="o_add_name" id="o_add_name" class="validate[required] ipt1" value="">
+                            {TAG_CONTACTR_WITH_S}
                     </td>
                 </tr>
                 <tr>
@@ -410,7 +395,9 @@
 			$(":checkbox[name=fsb_same]").click(function(){
 				var FSB_VAL = $(this)[0].checked;
 				if(FSB_VAL){
-					var FSB_NAME = $("input[name=m_name]").val();
+					var FSB_FNAME = $("input[name=m_fname]").val();
+					var FSB_LNAME = $("input[name=m_lname]").val();
+					var FSB_CONTACT_S = $("select[name=m_contact_s]").val();
 					var FSB_TEL = $("input[name=m_tel]").val();
 					var FSB_CELLPHONE = $("input[name=m_cellphone]").val();
 					var FSB_ZONE = $("#zone_main option:selected").val();
@@ -428,13 +415,17 @@
 					
 					var FSB_MAIL = $("input[name=m_email]").val();
 					
-					$("input[name=o_add_name]").val(FSB_NAME);
+					$("input[name=m_reci_fname]").val(FSB_FNAME);
+					$("input[name=m_reci_lname]").val(FSB_LNAME);
+					$("select[name=m_reci_contact_s]").val(FSB_CONTACT_S);
 					$("input[name=o_add_tel]").val(FSB_TEL);
 					$("input[name=o_add_cellphone]").val(FSB_CELLPHONE);
 					$("input[name=o_add_address]").val(FSB_ADDRESS);
 					$("input[name=o_add_mail]").val(FSB_MAIL);
 				}else{
-					$("input[name=o_add_name]").val("");
+					$("input[name=m_reci_fname]").val('');
+					$("input[name=m_reci_lname]").val('');
+					$("select[name=m_reci_contact_s]").val('');
 					$("input[name=o_add_tel]").val("");
 					$("input[name=o_add_cellphone]").val("");
 					$("input[name=o_add_address]").val("");
