@@ -118,7 +118,7 @@ class CONTACTUS{
         if($_REQUEST["st"]=="cu_content"){
             $and_str .= " and cu_content like '%".$_REQUEST["sk"]."%'";
         }
-        $sql .= $and_str." order by cu_modifydate desc ";
+        $sql .= $and_str." order by cu_id desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
