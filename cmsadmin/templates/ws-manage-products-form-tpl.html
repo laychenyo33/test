@@ -210,7 +210,8 @@
                 <div id="spec_table" class="aciTree">{PRODUCTS_SPEC_TABLE}</div>                
             </td>
         </tr>        
-        <!-- END BLOCK : SPEC_ROWS -->        
+        <!-- END BLOCK : SPEC_ROWS -->
+        <!-- START BLOCK : MULTIPLE_SPEC_STOCK -->
         <tr class="multiple_spec_sets"  {TAG_MULTIPLE_SPEC_HIDE}>
             <th>庫存:</th>
             <td colspan="3">
@@ -218,6 +219,7 @@
                         <div id="spec_quantity" class="specDialog" title="產品庫存"></div>
             </td>
         </tr>
+        <!-- END BLOCK : MULTIPLE_SPEC_STOCK -->
         <tr class="multiple_spec_sets"  {TAG_MULTIPLE_SPEC_HIDE}>
             <th>價格:</th>
             <td colspan="3">
@@ -225,12 +227,14 @@
                         <div id="spec_price" class="specDialog" title="產品價格"></div>
             </td>
         </tr>
+        <!-- START BLOCK : SINGLE_SPEC_STOCK -->
         <tr class="single_spec_sets" {TAG_SINGLE_SPEC_HIDE}>
             <th>產品庫存:</th>
             <td colspan="3"> 
                 <input type="text" name="stocks" id="stocks" class="validate[custom[onlyNumber]]" value="{VALUE_STOCKS}" size="7" />
             </td>                      
         </tr>        
+        <!-- END BLOCK : SINGLE_SPEC_STOCK -->
         <!-- START BLOCK : PRODUCTS_PRICE_FIELD -->
         <tr class="single_spec_sets" {TAG_SINGLE_SPEC_HIDE}>
             <th>產品價格:</th>

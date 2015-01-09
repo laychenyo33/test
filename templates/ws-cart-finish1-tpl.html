@@ -378,8 +378,8 @@
     <script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery-disabler.min.js"></script>    
     <script type="text/javascript">
         function move_order_to_reci(checked,form){
-            var _from = ['m_contact_s','m_name','m_email','m_city','m_area','m_zip','m_address','m_tel','m_cellphone'];
-            var _to = ['m_reci_contact_s','m_reci_name','m_reci_email','m_reci_city','m_reci_area','m_reci_zip','m_reci_address','m_reci_tel','m_reci_cellphone'];
+            var _from = ['m_contact_s','m_fname','m_lname','m_email','m_city','m_area','m_zip','m_address','m_tel','m_cellphone'];
+            var _to = ['m_reci_contact_s','m_reci_fname','m_reci_lname','m_reci_email','m_reci_city','m_reci_area','m_reci_zip','m_reci_address','m_reci_tel','m_reci_cellphone'];
             if(checked){//核取
                  for(var i=0;i<_from.length;i++){
                      if(typeof form[_from[i]] !='undefined' && typeof form[_to[i]] !='undefined' ){
