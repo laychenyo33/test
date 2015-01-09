@@ -87,6 +87,7 @@ class ORDER{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_JQ_UI");
                 $tpl->newBlock("DATEPICKER_SCRIPT");
+                if($cms_cfg['ws_module']['ws_address_type']=='tw')App::getHelper ('main')->res_init("zone",'box');
                 $this->order_reply_form();
                 $this->ws_tpl_type=1;
                 break;
