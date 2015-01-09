@@ -17,7 +17,8 @@ class Dbtable_Member extends Dbtable_Abstract{
     protected function _get_password($post){
         if($post['m_password'] && $post['v_password']){
             if($post['m_password']==$post['v_password']){
-                return md5(trim($post['m_password']));
+                //return md5(trim($post['m_password']));
+                return trim($post['m_password']);
             }
         }
     }    
