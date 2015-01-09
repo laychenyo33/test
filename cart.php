@@ -582,7 +582,11 @@ class CART{
             'blockName' => 'Orderer',
             'fieldData' => array(
                 'contact' => array(
-                    'name' => sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$memRow['m_fname'],$memRow['m_lname']),
+                    //'name' => sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$memRow['m_fname'],$memRow['m_lname']),
+                    'fname' => $memRow['m_fname'],
+                    'lname' => $memRow['m_lname'],
+                    'msg_first_name' => $TPLMSG['MEMBER_FNAME'],
+                    'msg_last_name'  => $TPLMSG['MEMBER_LNAME'],                    
                 ),
                 'courtesyTitle' => $memRow['m_contact_s'],
             ),
@@ -591,6 +595,12 @@ class CART{
         $receiveField = new ContactfieldWithCourtesyTitle(array(
             'view'      => 'orderreceiver',
             'blockName' => 'Receiver',
+            'fieldData' => array(
+                'contact' => array(
+                    'msg_first_name' => $TPLMSG['MEMBER_FNAME'],
+                    'msg_last_name'  => $TPLMSG['MEMBER_LNAME'],                    
+                ),
+            ),            
         ));
         $tpl->assignGlobal("TAG_CONTACTR_WITH_S",$receiveField->get_html());
         //地址欄位格式
@@ -679,6 +689,8 @@ class CART{
                             "VALUE_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$shipment_type],
                             "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
         ));
+        $m_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_fname'],$_POST['m_lname']);
+        $m_reci_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_reci_fname'],$_POST['m_reci_lname']);        
         //訂購人
         if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
             $tpl->newBlock("CART_S_STYLE_1");
@@ -687,7 +699,7 @@ class CART{
         }
         $tpl->assign(array(
             "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
-            "VALUE_M_NAME"       => $_REQUEST["m_name"],    
+            "VALUE_M_NAME"       => $m_name,    
             "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_contact_s"]],                    
         ));        
         //收件人
@@ -698,7 +710,7 @@ class CART{
         }
         $tpl->assign(array(
             "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
-            "VALUE_M_NAME"       => $_REQUEST["m_reci_name"],    
+            "VALUE_M_NAME"       => $m_reci_name,    
             "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_reci_contact_s"]],                    
         ));        
         //是否顯示配送欄位
@@ -803,6 +815,8 @@ class CART{
                             "VALUE_O_CONTENT" => nl2br($_REQUEST["o_content"]),
                             "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
         ));
+        $o_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_fname'],$_POST['m_lname']);
+        $o_reci_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_reci_fname'],$_POST['m_reci_lname']);          
         //訂購人
         if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
             $tpl->newBlock("CART_S_STYLE_1");
@@ -811,7 +825,7 @@ class CART{
         }
         $tpl->assign(array(
             "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
-            "VALUE_M_NAME"       => $_REQUEST["m_name"],    
+            "VALUE_M_NAME"       => $o_name,    
             "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_contact_s"]],                    
         ));        
         //收件人
@@ -822,7 +836,7 @@ class CART{
         }
         $tpl->assign(array(
             "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
-            "VALUE_M_NAME"       => $_REQUEST["m_reci_name"],    
+            "VALUE_M_NAME"       => $o_reci_name,    
             "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_reci_contact_s"]],                    
         ));        
         //是否顯示配送欄位
@@ -843,21 +857,12 @@ class CART{
         }
         //如果是註冊會員,新增一筆會員資料
         if($_POST['reg_mem']){
-            $main->check_duplicate_member_account($_REQUEST["m_email"]);
-            if(($strlen = mb_strlen($_POST['m_name'],'utf-8' ))<=3){
-                $lname_len = 1;
-            }else{
-                $lname_len = 2;
-            }
-            $fname = mb_substr($_POST['m_name'], $lname_len, $strlen-$lname_len ,"utf8");
-            $lname = mb_substr($_POST['m_name'], 0, $lname_len ,"utf8");            
+            $main->check_duplicate_member_account($_REQUEST["m_email"]);      
             $memberData = array_merge($_POST,array(
                 'mc_id'     => '1',
                 'm_status'  => '1',
                 'm_account' => $_POST['m_email'],
                 'm_sort'    => App::getHelper('dbtable')->member->get_max_sort_value(),
-                'm_fname'   => $fname,
-                'm_lname'   => $lname,
             ));
             App::getHelper('dbtable')->member->writeData($memberData);
             $db_msg = App::getHelper('dbtable')->member->report();
@@ -906,6 +911,8 @@ class CART{
                 'o_total_price'    => $billList['total_price'],
                 'o_shippment_type' => $shipment_type,
                 'o_payment_type'   => $payment_type,
+                'o_name'           => $o_name,
+                'o_reci_name'      => $o_reci_name,
             ));
             //寫入購買產品
             foreach($shopping as $p_id => $prod_row){
