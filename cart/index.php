@@ -990,52 +990,18 @@
 	
 			if (empty($this->m_id) && !empty($cms_cfg["ws_module"]["ws_cart_login"])) {
 				App::getHelper('main')->check_duplicate_member_account($_REQUEST["m_account"]);
-				$sql = "
-							insert into ".$cms_cfg['tb_prefix']."_member (
-								mc_id,
-								m_status,
-								m_modifydate,
-								m_account,
-								m_password,
-								m_company_name,
-								m_contact_s,
-								m_lname,
-								m_birthday,
-								m_sex,
-								m_country,
-								m_zip,
-								m_city,
-								m_area,
-								m_address,
-								m_tel,
-								m_fax,
-								m_cellphone,
-								m_email,
-								m_epaper_status
-							) values (
-								'1',
-								'1',
-								'".date("Y-m-d H:i:s")."',
-								'".$_REQUEST["m_account"]."',
-								'".$_REQUEST["m_password"]."',
-								'".$_REQUEST["m_company_name"]."',
-								'".$_REQUEST["m_contact_s"]."',
-								'".$_REQUEST["m_name"]."',
-								'".$_REQUEST["m_birthday"]."',
-								'".$_REQUEST["m_sex"]."',
-								'".$_REQUEST["m_country"]."',
-								'".$_REQUEST["m_zip"]."',
-								'".$_REQUEST["m_city"]."',
-								'".$_REQUEST["m_area"]."',
-								'".$_REQUEST["m_address"]."',
-								'".$_REQUEST["m_tel"]."',
-								'".$_REQUEST["m_fax"]."',
-								'".$_REQUEST["m_cellphone"]."',
-								'".$_REQUEST["m_account"]."',
-								'".$_REQUEST["m_epaper_status"]."'
-							)";
-				$rs = $db->query($sql);
-				$this->m_id = $db->get_insert_id();
+                                $memberData = array_merge($_POST,array(
+                                    'mc_id'     => '1',
+                                    'm_status'  => '1',
+                                    'm_sort'    => App::getHelper('dbtable')->member->get_max_sort_value(),
+                                ));
+                                App::getHelper('dbtable')->member->writeData($memberData);
+                                $db_msg = App::getHelper('dbtable')->member->report();
+                                if ( $db_msg == "" ) {
+                                    $this->m_id = App::getHelper('dbtable')->member->get_insert_id();
+                                }else{
+                                    $this->m_id=0;
+                                }
 	
 				$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"] = $_REQUEST["m_account"];
 				$this->mail_goto_url = $cms_cfg["base_root"];
