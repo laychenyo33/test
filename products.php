@@ -7,12 +7,14 @@ class PRODUCTS{
     protected $jp_limit;
     protected $ws_seo;
     protected $ps;
+    protected $activateStockChecker;
     function PRODUCTS(){
         global $db,$cms_cfg,$tpl,$main,$TPLMSG;
         $this->op_limit=($_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"])?$_SESSION[$cms_cfg['sess_cookie_name']]["sc_one_page_limit"]:$cms_cfg["op_limit"];
         $this->jp_limit=$cms_cfg["jp_limit"];
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->ps = $cms_cfg['path_separator'];
+        $this->activateStockChecker = App::configs()->ws_module->ws_products_stocks;
         switch($_REQUEST["func"]){
             case "p_ajax_get_prod_spec":
                 $this->p_ajax_get_prod_spec($_GET['parent']);
@@ -575,7 +577,7 @@ class PRODUCTS{
                 $this->products_show_pic($row["p_id"]);//顯示大圖資料
                 //當後台系統設定為詢價車,則強制把所有的價格隱藏
                 $show_price = (App::getHelper('session')->sc_cart_type==1)?1:0;
-                $stocksWithCart = App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true);
+                $stocksWithCart = !$this->activateStockChecker || App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true);
                 $multi_spec = (App::configs()->ws_module->ws_cart_spec && $row['spec_sets'])?true:false;
                 //詢價或加到購物車按鈕
                 if($show_price==0 || ($show_price==1 && $row['onsale']==1 && ($multi_spec || $stocksWithCart) )){ 
@@ -652,11 +654,15 @@ class PRODUCTS{
                         ));
                     }
                     //$tpl->gotoBlock("BIG_IMG".$this->template_str);
-                    $amountArr = range(0,App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true));
+                    if($this->activateStockChecker){
+                        $amountArr = range(0,App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true));
+                    }else{
+                        $amountArr = range(0,100);
+                    }
                     unset($amountArr[0]);
                     App::getHelper('main')->multiple_select('amounts',$amountArr,1,$tpl);
                     //無庫存提示
-                    if(App::getHelper('session')->sc_cart_type==1 && App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true)<1){
+                    if(App::getHelper('session')->sc_cart_type==1 && ($this->activateStockChecker && App::getHelper('session')->cart->stockChecker->getStocks($row['p_id'],0,true)<1)){
                         //$tpl->newBlock("NO_STOCKS_NOTICE");
                         $tpl->assignGlobal(array(
                             "TAG_NO_STOCK_MSG_ZONE"    => "",
@@ -1188,7 +1194,7 @@ class PRODUCTS{
             }else{
                 $extend = $this->get_prodcuts_spec_extend($parent);
                 if($extend){
-                    $extend['quantity'] = App::getHelper('session')->cart->stockChecker->getStocks($p_id,$parent,true);
+                    $extend['quantity'] = $this->activateStockChecker?App::getHelper('session')->cart->stockChecker->getStocks($p_id,$parent,true):1;
                     $result['code']=2;
                     $result['img'] = $this->get_spec_img($parent);
                     $result['extend'] = $extend;

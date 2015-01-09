@@ -835,6 +835,11 @@ class PRODUCTS{
                                       "TAG_PRODUCTS_SPEC" => $TPLMSG['PRODUCT_SPEC'].":",
             ));
         }
+        //庫存欄位
+        if(App::configs()->ws_module->ws_products_stocks){
+            $tpl->newBlock("MULTIPLE_SPEC_STOCK");
+            $tpl->newBlock("SINGLE_SPEC_STOCK");
+        }
         //欄位名稱
         $cate=(trim($_REQUEST["pc_parent"])==0)?0:1;
         $tpl->assignGlobal( array("MSG_MODE" => $TPLMSG['ADD'],

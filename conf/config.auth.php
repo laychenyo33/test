@@ -60,6 +60,7 @@ $cms_cfg["ws_module"]=array(
         "ws_products_preview"     =>1, //產品前台預覽功能
         "ws_products_custom_inquiry" =>0, //產品自訂頁詢價
         "ws_products_collect"     =>0, //登入會員產品收藏記錄
+        "ws_products_stocks"      =>0, //產品庫存機制
         "ws_pageview_history"     =>0, //記錄瀏覽歷程
 
 /*      IPC SETUP                   */

@@ -9,6 +9,7 @@ class Model_Session_Cart extends Model_Modules {
     protected $discounter = array(
         'quantity' => 'quantity',
     );
+    protected $activateStockChecker;
     function __construct($model , $options=array()) {
         $this->handler = $model;
         if(!isset($this->handler->cartContainer)){
@@ -30,7 +31,9 @@ class Model_Session_Cart extends Model_Modules {
             }
         }
         //襖始化折扣器
-        $this->initDiscounter();            
+        $this->initDiscounter();
+        //是否啟用庫存檢查
+        $this->activateStockChecker = App::configs()->ws_module->ws_products_stocks;
     }
     //初始化cart
     function _init_cart(){
@@ -68,7 +71,7 @@ class Model_Session_Cart extends Model_Modules {
             $base_data_id = $this->combine_id($p_id, 0); //主要檔案內容
             $extra_data_id = $this->combine_id($p_id, $extra_id);
             //檢查庫存
-            if(!$this->stockChecker->check(
+            if($this->activateStockChecker && !$this->stockChecker->check(
                     $p_id,
                     $this->cart['products']['lists'][$extra_data_id]['amount'] + $amount,
                     $extra_id )){
@@ -114,7 +117,7 @@ class Model_Session_Cart extends Model_Modules {
     //更新購物車項目
     function update($p_id,$amount,$extra_id=null){
         //檢查庫存
-        if(!$this->stockChecker->check( $p_id, $amount, $extra_id )){
+        if($this->activateStockChecker && !$this->stockChecker->check( $p_id, $amount, $extra_id )){
             return false;
         }
         if($extra_id){
