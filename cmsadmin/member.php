@@ -8,7 +8,7 @@ if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[
     exit;
 }
 include_once("../libs/libs-manage-sysconfig.php");
-$member = new MEMBER;
+$member = new MEMBER_NEW;
 class MEMBER{
     //會員資料欄位
     protected $columns = array(
@@ -1509,4 +1509,56 @@ class MEMBER{
     }
 }
 //ob_end_flush();
+class MEMBER_NEW extends MEMBER{
+    //會員資料匯出
+    function member_data_export(){
+        global $db,$tpl,$cms_cfg,$TPLMSG;
+        if($_POST){
+            //有勾選mc_id才繼續處理
+            if($_POST['mc_id'] && $_POST['columns']){
+                //取得勾選的欄位及匯出抬頭
+                require_once "../class/phpexcel/PHPExcel.php";
+                $xlsexpotor = new XLSExportor();
+                $dataTitle = array();
+                foreach($this->columns as $info){
+                    $dataTitle[] = $info['gc'];
+                }
+                $xlsexpotor->setTitle($dataTitle);
+                //取得欲匯出的會員類別
+                $sql = "select m.* from ".$cms_cfg['tb_prefix']."_member as m inner join ".$cms_cfg['tb_prefix']."_member_cate as mc on find_in_set(mc.mc_id,m.mc_id) where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
+                $res = $db->query($sql);
+                $dataList = array();
+                while($row = $db->fetch_array($res,1)){
+                    $tmpData = array();
+                    foreach($_POST['columns'] as $col){
+                        $value = (is_array($this->columns[$col]['map']))?$this->columns[$col]['map'][$row[$col]]:$row[$col];
+                        $tmpData[] = $value;
+                    }
+                    $dataList[] = $tmpData;
+                }               
+                $xlsexpotor->setData($dataList);
+                $xlsexpotor->setFilename('export-member');
+                $xlsexpotor->export();
+            }
+            die();   
+        }
+        //會員分類
+        $sql = "select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_status='1' order by mc_sort ".$cms_cfg['sort_pos'];
+        $res = $db->query($sql);
+        while($row = $db->fetch_array($res,1)){
+            $tpl->newBlock("MEMBER_CATE_LIST");
+            $tpl->assign(array(
+                "VALUE_MC_ID"      => $row['mc_id'],
+                "VALUE_MC_SUBJECT" => $row['mc_subject'],
+            ));
+        }
+        foreach($this->columns as $col=>$info){
+            $tpl->newBlock("DATA_COLUMN_LIST");
+            $tpl->assign(array(
+                "VALUE_M_COLUMN"      => $col, 
+                "VALUE_M_COLUMN_NAME" => $info['name'], 
+            ));
+        }
+    }    
+}
 ?>
