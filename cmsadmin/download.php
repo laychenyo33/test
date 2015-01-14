@@ -511,7 +511,7 @@ class DOWNLOAD{
             $tpl->newBlock( "TAG_SELECT_DOWNLOAD_CATE" );
             $tpl->assign( array( "TAG_SELECT_DOWNLOAD_CATE_NAME"  => $row1["dc_subject"],
                                  "TAG_SELECT_DOWNLOAD_CATE_VALUE" => $row1["dc_id"],
-                                 "STR_DC_SEL"       => ($row1["dc_id"]==$_GET["dc_id"])?"selected":""
+                                 "STR_DC_SEL"       => ($row1["dc_id"]==$row["dc_id"] || $row1["dc_id"]==$_GET["dc_id"])?"selected":""
             ));
         }
         if($cms_cfg['ws_module']['ws_download_thumb']){
