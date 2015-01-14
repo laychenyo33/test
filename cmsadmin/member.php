@@ -8,7 +8,7 @@ if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[
     exit;
 }
 include_once("../libs/libs-manage-sysconfig.php");
-$member = new MEMBER_NEW;
+$member = new MEMBER;
 class MEMBER{
     //會員資料欄位
     protected $columns = array(
