@@ -19,6 +19,8 @@ class MEMBER{
         'm_sex'          => array("name"=>"性別","gc"=>"Gender","map"=>array(0=>'女',1=>'男')),
         'm_country'      => array("name"=>"國家","gc"=>"Home Country"),
         'm_zip'          => array("name"=>"郵遞區號","gc"=>"Home Postal Code"),
+        'm_city'         => array("name"=>"縣市","gc"=>"Home City"),
+        'm_area'         => array("name"=>"鄉鎮","gc"=>"Home Region"),
         'm_address'      => array("name"=>"地址","gc"=>"Home Address"),
         'm_tel'          => array("name"=>"電話","gc"=>"Home Phone"),
         'm_fax'          => array("name"=>"傳真","gc"=>"Home Fax"),
