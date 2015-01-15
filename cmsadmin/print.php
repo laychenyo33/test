@@ -13,6 +13,11 @@ class PRINT_PAGE{
     protected $_tpl;
     function PRINT_PAGE(){
         switch($_REQUEST["func"]){
+            case "member_detail"://會員資料
+                $this->ws_tpl_file = "templates/ws-manage-print-memberdetail-tpl.html";
+                $this->ws_load_tp($this->ws_tpl_file);
+                $this->member_detail($_GET['m_id']);
+                break;
             case "order_detail"://訂單列表
                 $this->ws_tpl_file = "templates/ws-manage-print-orderdetail-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
@@ -207,7 +212,35 @@ class PRINT_PAGE{
                 }
             }
         }
-    }    
+    }   
+    
+    function member_detail($m_id){
+        global $TPLMSG;
+        $db = App::getHelper('db');
+        if($member = App::getHelper('dbtable')->member->getData($m_id)->getDataRow()){
+            foreach($member as $k => $v){
+                if($k=="mc_id"){
+                    $sql = "select group_concat(mc_subject) as mc_subject from ".$db->prefix("member_cate")." as a inner join ".$db->prefix("member")." as b on find_in_set(a.mc_id,b.mc_id) where b.m_id='".$member['m_id']."' group by b.m_id";
+                    list($mc_subject) = $db->query_firstRow($sql,0);
+                    $this->_tpl->assignGlobal('VALUE_MC_SUBJECT' , $mc_subject);
+                }elseif($k=="m_status"){
+                    $v = App::getHelper('main')->multi_map_value(App::defaults()->default_status,$v);
+                }elseif($k=="m_epaper_status"){
+                    $v = App::getHelper('main')->multi_map_value(App::defaults()->yesno_status,$v);
+                }elseif($k=="m_birthday"){
+                    $ts = strtotime($v);
+                    $v = ($ts)?date("Y-m-d",$ts):'';
+                }elseif($k=='m_fname'){
+                    $name_template = $TPLMSG['MEMBER_NAME_SET_'.App::configs()->ws_module->ws_contactus_s_style];
+                    $m_name = sprintf($name_template,$member['m_fname'],$member['m_lname']);
+                    $this->_tpl->assignGlobal('VALUE_M_NAME' , $m_name);
+                }
+                $this->_tpl->assignGlobal("VALUE_".strtoupper($k),$v);
+            }
+        }else{
+            App::getHelper('main')->js_notice("無此會員",App::configs()->manage_root . "member.php");
+        }
+    }
 }
 //ob_end_flush();
 ?>

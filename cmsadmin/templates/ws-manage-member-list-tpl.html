@@ -20,12 +20,12 @@
     </table>
     <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
     <tr>
-      <td colspan="8">
+      <td colspan="9">
       目前分類 : <a href="member.php?func=m_list">TOP</a> > {TAG_NOW_CATE}
       </td>
     </tr>
     <tr>
-      <td colspan="8">
+      <td colspan="9">
         <div class="title">
         <ul>
           <li><img src="images/icon-add.gif" /><a href="member.php?func=m_add&mc_id={VALUE_NOW_MC_ID}" >新增</a></li>
@@ -47,7 +47,8 @@
       <th width="5%">No.</th>
       <th width="7%">排序</th>
       <th width="15%">會員分類</th>
-      <th width="55%">會員姓名</th>
+      <th width="">會員姓名</th>
+      <th width="5%">列印</th>
       <th width="5%">修改</th>
       <th width="5%">刪除</th>
       <th width="5%">狀態</th>
@@ -59,6 +60,7 @@
       <td><input type="text" name="sort_value[{VALUE_M_ID}]" value="{VALUE_M_SORT}" class="validate[custom[onlyNumber]]" size="2" maxlength="4"></td>
       <td>{VALUE_MC_SUBJECT}</td>
       <td>{VALUE_M_NAME}</td>
+      <td><a href="print.php?func=member_detail&m_id={VALUE_M_ID}" target="print_member_preview">列印</a></td>
       <td><a href="member.php?func=m_mod&m_id={VALUE_M_ID}&mc_id={VALUE_MC_ID}&st={VALUE_SEARCH_TARGET}&sk={SEARCH_KEYWORD}&nowp={VALUE_STR_NOWP}&jp={VALUE_STR_JP}"><img src="images/icon-edit2.gif" width="11" border="0" alt="{MSG_MODIFY}" /></a></td>
       <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','member.php?func=m_del&m_id={VALUE_M_ID}&st={VALUE_SEARCH_TARGET}&sk={VALUE_SEARCH_KEYWORD}&nowp={VALUE_STR_NOWP}&jp={VALUE_STR_JP}');"><img src="images/icon-del2.gif" width="10" height="9" border="0" /></a></td>
       <td><img src="images/{VALUE_STATUS_IMG}" alt='{VALUE_STATUS_IMG_ALT}{MSG_STATUS}'  border="0" /></td>
