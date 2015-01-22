@@ -12,6 +12,7 @@ $products = new PRODUCTS;
 class PRODUCTS{
     function PRODUCTS(){
         global $db,$cms_cfg,$tpl,$main;
+		
         $this->seo=($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->root_user=($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]=="root")?1:0;
         $this->op_limit=10;

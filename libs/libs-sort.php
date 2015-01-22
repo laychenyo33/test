@@ -9,6 +9,7 @@
 		private static $id;
 		private static $date;
 		private static $key;
+		private static $sort;
 		
 		# 初始化
 		function __construct($tb_name,$prefix,$id,$key){
@@ -46,6 +47,7 @@
 			
 			if(!empty($rsnum)){
             	self::$date = $db->fetch_array($selectrs,1);
+				self::$sort[self::$key] = self::$date[self::$prefix."_id"];
 				return true;
 			}else{
 				return false;
@@ -59,63 +61,24 @@
 		protected static function p_row(){
 			global $db,$cms_cfg;
 			
-            $sql = "select * from ".self::$tb." where pc_id = '".self::$date["pc_id"]."' order by p_sort ".self::$pos;
+            $sql = "select * from ".self::$tb." where pc_id = '".self::$date["pc_id"]."' and p_id != '".self::$date["p_id"]."' order by p_sort ".self::$pos;
             $selectrs = $db->query($sql);
 			$rsnum    = $db->numRows($selectrs);
 			
 			if(!empty($rsnum)){
 				// 確認排序順序
-				$order_pos = ($cms_cfg["sort_pos"] == "asc")?true:false;
-				
-				if(self::$date["p_sort"] >= self::$key){
-					if($order_pos){
-						// 往前移動
-						$move = false;
-					}else{
-						// 往後移動
-						$move = true;
-					}
-				}else{
-					if($order_pos){
-						// 往後移動
-						$move = true;
-					}else{
-						// 往前移動
-						$move = false;
-					}
-				}
-				
-				$sort_count = ($order_pos)?1:$rsnum;
 				while($row = $db->fetch_array($selectrs,1)){
+					++$i;
 					
-					// 插入修改位置
-					if(self::$key == $sort_count){
-						if($move){
-							if((self::$date["p_id"] != $row["p_id"])){
-								$sort[] = $row["p_id"];
-							}
-							$sort[] = self::$date["p_id"];
-						}else{
-							$sort[] = self::$date["p_id"];
-							if((self::$date["p_id"] != $row["p_id"])){
-								$sort[] = $row["p_id"];
-							}
-						}
+					if(!empty(self::$sort[$i])){
+						self::$sort[++$i] = $row["p_id"];
 					}else{
-						if((self::$date["p_id"] != $row["p_id"])){
-							$sort[] = $row["p_id"];
-						}
-					}
-					
-					// 壘算排序
-					if($order_pos){
-						$sort_count++;
-					}else{
-						$sort_count--;
+						self::$sort[$i] = $row["p_id"];
 					}
 				}
 				
-				print_r($sort);
+				ksort(self::$sort);
+				print_r(self::$sort);
 				
 				exit;
 			}
