@@ -1150,7 +1150,10 @@ class PRODUCTS{
             'p_seo_short_desc' => $main->content_file_str_replace($_REQUEST["p_seo_short_desc"],'in'),
             'p_modifydate' => date("Y-m-d H:i:s"),
             'p_modifyaccount' => App::getHelper('session')->USER_ACCOUNT,
-        ));        
+        ));
+		
+		new SORT($cms_cfg['tb_prefix']."_products",'p',$_REQUEST["now_p_id"],$_REQUEST["p_sort"]);
+		
         if(App::configs()->ws_module->ws_products_upfiles){
             $writeData['p_attach_file1'] = $main->file_str_replace($_REQUEST["p_attach_file1"]);
             $writeData['p_attach_file2'] = $main->file_str_replace($_REQUEST["p_attach_file2"]);
