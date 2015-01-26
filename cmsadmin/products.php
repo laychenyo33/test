@@ -12,6 +12,7 @@ $products = new PRODUCTS;
 class PRODUCTS{
     function PRODUCTS(){
         global $db,$cms_cfg,$tpl,$main;
+		
         $this->seo=($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_seo"] && $cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->root_user=($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]=="root")?1:0;
         $this->op_limit=10;
@@ -1144,7 +1145,8 @@ class PRODUCTS{
             'p_seo_short_desc' => $main->content_file_str_replace($_REQUEST["p_seo_short_desc"],'in'),
             'p_modifydate' => date("Y-m-d H:i:s"),
             'p_modifyaccount' => App::getHelper('session')->USER_ACCOUNT,
-        ));        
+        ));
+		
         if(App::configs()->ws_module->ws_products_upfiles){
             $writeData['p_attach_file1'] = $main->file_str_replace($_REQUEST["p_attach_file1"]);
             $writeData['p_attach_file2'] = $main->file_str_replace($_REQUEST["p_attach_file2"]);
@@ -1154,12 +1156,15 @@ class PRODUCTS{
                 $writeData["p_info_field".$j."_title"] = $_REQUEST['p_info_field'.$j.'_title'];
                 $writeData["p_info_field".$j] = $main->content_file_str_replace($_REQUEST['p_info_field'.$j],'in');
             }
-        }        
+        }
         App::getHelper('dbtable')->products->writeData($writeData);
         $db_msg = App::getHelper('dbtable')->products->report();
         $returnJson['code']=0;
         if ( $db_msg == "" ) {
             $this->p_id = $_REQUEST["now_p_id"]? $_REQUEST["now_p_id"] :  App::getHelper('dbtable')->products->get_insert_id();
+			
+			new SORT($cms_cfg['tb_prefix']."_products",'p',$_REQUEST["now_p_id"],$_REQUEST["p_sort"]);
+			
             $p_big_img_replace_str="";
             for($j=1;$j<=$cms_cfg['big_img_limit'];$j++){
                     $p_img_target="p_big_img".$j;
@@ -1567,6 +1572,19 @@ class PRODUCTS{
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
             }
+            
+        	switch($prefix){
+				case "p":
+					new SORT($cms_cfg['tb_prefix']."_products",'p',$_REQUEST["id"],false);
+				break;
+				case "pc":
+					new SORT($cms_cfg['tb_prefix']."_products_cate",'pc',$_REQUEST["id"],false);
+				break;
+				case "pa":
+					new SORT($cms_cfg['tb_prefix']."_products_application",'pa',$_REQUEST["id"],false);
+				break;
+			}
+			
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 //$goto_url=$cms_cfg["manage_url"]."products.php?func=".$ws_table."_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
@@ -2557,6 +2575,8 @@ class PRODUCTS{
         $dbtable->writeData($writeData);
         $db_msg = $dbtable->report();
         if ( $db_msg == "" ) {
+        	new SORT($cms_cfg['tb_prefix']."_products_application",'pa',$_REQUEST["now_pa_id"],$_REQUEST["pa_sort"]);
+			
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             //$goto_url=$cms_cfg["manage_url"]."products.php?func=pa_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $goto_url=App::getHelper('request')->get_link('query',array(

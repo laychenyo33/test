@@ -2,6 +2,7 @@
 ob_start("ob_gzhandler");
 include_once("../libs/libs-mysql.php");
 include_once("../libs/libs-main.php");
+include_once("../libs/libs-sort.php");
 include_once("../TP/class.TemplatePower.inc.php");
 include_once("../lang/cht-utf8.php");
 define('APP_ROOT_PATH', realpath(dirname(__FILE__).'/../') . DIRECTORY_SEPARATOR);
