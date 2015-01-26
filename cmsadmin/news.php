@@ -287,6 +287,8 @@ class NEWS{
         App::getHelper('dbtable')->news_cate->writeData($_POST);
         $db_msg = App::getHelper('dbtable')->news_cate->report();
         if ( $db_msg == "" ) {
+			new SORT($cms_cfg['tb_prefix']."_news_cate",'nc',$_REQUEST["nc_id"],$_REQUEST["nc_sort"]);
+			
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$cms_cfg["manage_url"]."news.php?func=nc_list&nc_id=".$_REQUEST["nc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $this->goto_target_page($goto_url);
@@ -629,6 +631,8 @@ class NEWS{
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
+            	new SORT($cms_cfg['tb_prefix']."_news",'n',$_REQUEST["n_id"],$_REQUEST["n_sort"]);
+            	
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 $goto_url=$cms_cfg["manage_url"]."news.php?func=n_list&nc_id=".$_REQUEST["nc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
                 $this->goto_target_page($goto_url);
@@ -739,7 +743,16 @@ class NEWS{
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
             }
-            if ( $db_msg == "" ) {
+            if ( $db_msg == "" ){
+				switch($ws_table){
+					case "nc":
+						new SORT($cms_cfg['tb_prefix']."_news_cate",'nc',$_REQUEST["id"],false);
+					break;
+					case "n":
+						//new SORT($cms_cfg['tb_prefix']."_news",'n',$_REQUEST["id"],false);
+					break;
+				}
+				
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 $goto_url=$cms_cfg["manage_url"]."news.php?func=".$ws_table."_list&nc_id=".$_REQUEST["nc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
                 $this->goto_target_page($goto_url);

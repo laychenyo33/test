@@ -7,7 +7,7 @@
 		private static $tb;
 		private static $prefix;
 		private static $id;
-		private static $date;
+		private static $data;
 		private static $key;
 		private static $sort;
 		
@@ -26,10 +26,16 @@
 			if($rs_bool){
 				switch(self::$prefix){
 					case "p":
-						self::p_row();
-					break;
 					case "pc":
-						//self::pc_row();
+					case "pa":
+					case "n":
+						self::has_cate();
+					break;
+					case "nc":
+						self::none_cate();
+					break;
+					default:
+						return false;
 					break;
 				}
 			}else{
@@ -41,46 +47,139 @@
 		protected static function get_date(){
 			global $db,$cms_cfg;
 			
-            $sql = "select * from ".self::$tb." where ".self::$prefix."_id = '".self::$id."'";
+			if(is_array(self::$id)){
+				$where = " where ".self::$prefix."_id in ('".implode("','",self::$id)."')";
+			}else{
+				$where = " where ".self::$prefix."_id = '".self::$id."'";
+			}
+			
+            $sql = "select * from ".self::$tb." ".$where;
             $selectrs = $db->query($sql);
 			$rsnum    = $db->numRows($selectrs);
 			
 			if(!empty($rsnum)){
-            	self::$date = $db->fetch_array($selectrs,1);
-				self::$sort[self::$key] = self::$date[self::$prefix."_id"];
+            	while($row = $db->fetch_array($selectrs,1)){
+            		if(isset($_REQUEST["sort_value"][$row[self::$prefix."_id"]])){
+            			self::$sort[$row[self::$prefix."_id"]] = $_REQUEST["sort_value"][$row[self::$prefix."_id"]];
+					}else{
+						self::$sort[$row[self::$prefix."_id"]] = self::$key;
+					}
+					
+					self::$data[$row[self::$prefix."_id"]] = $row;
+				}
+				
 				return true;
 			}else{
 				return false;
 			}
 		}
 		
+		# 儲存排序
+		protected static function sort_replace(array $sort){
+			global $db,$cms_cfg;
+			
+			foreach($sort as $id => $sort_key){
+				$sql = "update ".self::$tb." set ".self::$prefix."_sort='".++$i."' where ".self::$prefix."_id = '".$id."'";
+				$rs = $db->query($sql);
+				$db_msg = $db->report();
+			}
+		}
+		
 		//------------------------------------------------------------
 		#依照不同功能 執行不同的排序篩檢法
 		
-		# 產品排序
-		protected static function p_row(){
+		# 有分類的排序處理
+		protected static function has_cate(){
 			global $db,$cms_cfg;
 			
-            $sql = "select * from ".self::$tb." where pc_id = '".self::$date["pc_id"]."' and p_id != '".self::$date["p_id"]."' order by p_sort ".self::$pos;
-            $selectrs = $db->query($sql);
+			// 排序同分類產品
+			foreach(self::$data as $data_row){
+				if(isset($data_row[self::$prefix."_parent"])){
+					$cate_field = self::$prefix."_parent";
+				}else{
+					$cate_field = self::$prefix."c_id";
+				}
+				
+				$cate_array[] = $data_row[$cate_field];
+			}
+			
+			$cate_array = array_flip($cate_array);
+			$cate_array = array_flip($cate_array);
+			
+			// 分類分開計算
+			foreach($cate_array as $cate_id){
+				unset($jump_sort,$id_array,$sort,$sort_count);
+				
+				$sql = "select ".self::$prefix."_id from ".self::$tb." where ".$cate_field."='".$cate_id."' order by ".self::$prefix."_sort ".self::$pos;
+				$selectrs = $db->query($sql);
+				$rsnum    = $db->numRows($selectrs);
+				
+				// 進行排序
+				if(!empty($rsnum)){
+					while($row = $db->fetch_array($selectrs,1)){
+						
+						if(isset(self::$sort[$row[self::$prefix."_id"]])){
+							$jump_sort[] = self::$sort[$row[self::$prefix."_id"]];
+						}
+						
+						$id_array[] = $row[self::$prefix."_id"];
+					}
+					
+					$sort_count = 1;
+					foreach($id_array as $id){
+						if(in_array($sort_count,$jump_sort)){
+							++$sort_count;
+						}
+						
+						if(isset(self::$sort[$id])){
+							$sort[$id] = self::$sort[$id];
+						}else{
+							$sort[$id] = $sort_count;
+							$sort_count++;
+						}
+					}
+					
+					asort($sort,SORT_NUMERIC);
+					self::sort_replace($sort);
+				}
+			}
+		}
+
+		# 無分類的排序處理
+		protected static function none_cate(){
+			global $db,$cms_cfg;
+			
+			$sql = "select ".self::$prefix."_id from ".self::$tb." order by ".self::$prefix."_sort ".self::$pos;
+			$selectrs = $db->query($sql);
 			$rsnum    = $db->numRows($selectrs);
 			
+			// 進行排序
 			if(!empty($rsnum)){
-				// 確認排序順序
 				while($row = $db->fetch_array($selectrs,1)){
-					++$i;
 					
-					if(!empty(self::$sort[$i])){
-						self::$sort[++$i] = $row["p_id"];
+					if(isset(self::$sort[$row[self::$prefix."_id"]])){
+						$jump_sort[] = self::$sort[$row[self::$prefix."_id"]];
+					}
+					
+					$id_array[] = $row[self::$prefix."_id"];
+				}
+				
+				$sort_count = 1;
+				foreach($id_array as $id){
+					if(in_array($sort_count,$jump_sort)){
+						++$sort_count;
+					}
+					
+					if(isset(self::$sort[$id])){
+						$sort[$id] = self::$sort[$id];
 					}else{
-						self::$sort[$i] = $row["p_id"];
+						$sort[$id] = $sort_count;
+						$sort_count++;
 					}
 				}
 				
-				ksort(self::$sort);
-				print_r(self::$sort);
-				
-				exit;
+				asort($sort,SORT_NUMERIC);
+				self::sort_replace($sort);
 			}
 		}
 	}
