@@ -267,7 +267,7 @@
 	
 					$tpl->newBlock("TAG_CART_LIST");
 					$p_link = $this->p_link_handle($row);
-                                        $valid_stocks = $this->container->stockChecker->check($row['p_id'],$row['amount'],$row['ps_id']);        
+                                        $valid_stocks = !App::configs()->ws_module->ws_products_stocks || $this->container->stockChecker->check($row['p_id'],$row['amount'],$row['ps_id']);        
 					$tpl->assign(array(
                                             "VALUE_P_ID" => $row['p_id'], 
                                             "VALUE_P_NAME" => $row["p_name"] . (!$valid_stocks?"<span>庫存不足</span>":""),
