@@ -362,7 +362,7 @@ class CART{
                 }else{
                     $p_link=$cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_id."&pc_parent=".$prod_row["pc_id"];
                 }
-                $valid_stocks = $this->container->stockChecker->check($prod_row['p_id'],$prod_row['amount'],$prod_row['ps_id']);        
+                $valid_stocks = !App::configs()->ws_module->ws_products_stocks  || $this->container->stockChecker->check($prod_row['p_id'],$prod_row['amount'],$prod_row['ps_id']);        
                 $tpl->assign( array("VALUE_P_ID"  => $prod_row["p_id"],
                                     "VALUE_P_NAME"  => $prod_row["p_name"] . (!$valid_stocks?"<span>庫存不足</span>":""),
                                     "VALUE_P_SMALL_IMG" => (trim($prod_row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$prod_row["p_small_img"],

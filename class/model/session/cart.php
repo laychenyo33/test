@@ -92,7 +92,7 @@ class Model_Session_Cart extends Model_Modules {
             $this->cart['products']['amount'][$extra_data_id]+=$amount;
         }else{
             //檢查庫存
-            if(!$this->stockChecker->check(
+            if($this->activateStockChecker && !$this->stockChecker->check(
                     $p_id,
                     $this->cart['products']['lists'][$p_id]['amount'] + $amount )){
                 return false;
