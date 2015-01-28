@@ -10,6 +10,7 @@
                     1 => '%1$s %2$s',
                     2 => '%2$s %1$s',
                 );
+                protected $activateStockChecker;
 		function __construct() {
 			global $cms_cfg, $tpl, $TPLMSG;
 			include_once (dirname(__FILE__)."/config.php");
@@ -18,6 +19,7 @@
 			$this->ws_seo = ($cms_cfg["ws_module"]["ws_seo"])?1:0;
 			$this->order = ($cms_cfg["ws_module"]["ws_select_order"] == 1)?"desc":"asc";
                         $this->container = App::getHelper('session')->modules()->cart;
+                        $this->activateStockChecker = App::configs()->ws_module->ws_products_stocks;
                         //$this->container->empty_cart();
 			switch($_REQUEST["func"]) {
                             case "ajax":
@@ -508,7 +510,7 @@
 		function cart_replace() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $main, $allpay, $ws_array;
 	
-                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                        if($this->activateStockChecker && $this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
                             App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
                             die();
                         }

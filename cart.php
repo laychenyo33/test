@@ -8,6 +8,7 @@ class CART{
     protected $cart_type;
     protected $ws_seo;
     protected $contact_s_style;
+    protected $activateStockChecker;
     function CART(){
         global $db,$cms_cfg,$tpl,$main;
         $this->m_id =$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
@@ -15,6 +16,7 @@ class CART{
         $this->ws_seo=($cms_cfg["ws_module"]["ws_seo"])?1:0;
         $this->contact_s_style = $cms_cfg['ws_module']['ws_contactus_s_style'];
         $this->container = App::getHelper('session')->modules()->cart;
+        $this->activateStockChecker = App::configs()->ws_module->ws_products_stocks;
         switch($_REQUEST["func"]){
             case "ajax_cart_list":
                 $this->ws_tpl_file = "templates/ws-minicart-tpl.html";
@@ -776,7 +778,7 @@ class CART{
     //資料更新================================================================
     function cart_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
-        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+        if($this->activateStockChecker && $this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
             App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
             die();
         }
