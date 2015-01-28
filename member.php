@@ -935,7 +935,7 @@ class MEMBER{
             $main->layer_link($TPLMSG["FORGOT_PASSWORD"] );
             $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
             $tpl->newBlock("REGISTER_FORGET_PASSWORD");
-            $tpl->newBlock("LANG_".strtoupper( $cms_cfg['language']) );
+            $tpl->newBlock("REGISTER_LANG_".strtoupper( $cms_cfg['language']) );
             $main->security_zone($cms_cfg['security_image_width'],$cms_cfg['security_image_height']);
             $this->ws_tpl_type=1;            
         }else{
@@ -1007,7 +1007,7 @@ class MEMBER{
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["FORGOT_PASSWORD"] );
         $tpl->newBlock( "REGISTER_SEND_PASSWORD_SUCCESSFULLY" );
-        $tpl->newBlock( "LANG_".strtoupper($cms_cfg['language']) );
+        $tpl->newBlock( "SEND_LANG_".strtoupper($cms_cfg['language']) );
         $main->layer_link($TPLMSG["FORGOT_PASSWORD"]);
     }
     //會員紅利
