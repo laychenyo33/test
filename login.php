@@ -41,9 +41,10 @@ class LOGIN {
             $row = $db->fetch_array($selectrs,1);
             $rsnum = $db->numRows($selectrs);
             if ($rsnum > 0) {
+                $contact_s = App::configs()->ws_module->ws_contactus_s_style;
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"]=$row["m_id"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"]=$row["m_account"];
-                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_NAME"]=$row["m_fname"].$row["m_lname"];
+                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_NAME"]= sprintf($TPLMSG['MEMBER_NAME_SET_'.$contact_s],$row["m_fname"],$row["m_lname"]);
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE_ID"]=$row["mc_id"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE"]=$row["mc_subject"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=$row["mc_discount"];
