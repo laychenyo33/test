@@ -10,8 +10,10 @@ if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[
 include_once("../libs/libs-manage-sysconfig.php");
 $order = new ORDER;
 class ORDER{
+    protected $activateStockChecker;
     function ORDER(){
         global $db,$cms_cfg,$tpl;
+        $this->activateStockChecker = App::configs()->ws_module->ws_products_stocks;
         switch($_REQUEST["func"]){
             case "ajax_op_temp_store":
                 $this->ajax_op_temp_store();
@@ -377,10 +379,12 @@ class ORDER{
             if($_REQUEST["o_status"] == 2){
                 $this->mail_delivery_notice($_REQUEST["o_id"]); //寄送出貨通知信                
             }elseif($_REQUEST["o_status"] == 3){  //出貨扣庫存
-                $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$order['o_id']."'");
-                if($order_items){
-                    foreach($order_items as $oItem){
-                        App::getHelper('session')->cart->stockChecker->runStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);
+                if($this->activateStockChecker){
+                    $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$order['o_id']."'");
+                    if($order_items){
+                        foreach($order_items as $oItem){
+                            App::getHelper('session')->cart->stockChecker->runStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);
+                        }
                     }
                 }
             }

@@ -10,8 +10,10 @@ if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"])  || $_SESSION[
 include_once("../libs/libs-manage-sysconfig.php");
 $order = new ORDER;
 class ORDER{
+    protected $activateStockChecker;
     function ORDER(){
         global $db,$cms_cfg,$tpl;
+        $this->activateStockChecker = App::configs()->ws_module->ws_products_stocks;
         switch($_REQUEST["func"]){
             case "o_ex"://匯出新訂單
                 if($_GET['act']){
@@ -352,9 +354,11 @@ class ORDER{
             if($_REQUEST["o_status"] == 2){
                 $this->mail_delivery_notice($_REQUEST["o_id"]); //寄送出貨通知信                
             }elseif($_REQUEST["o_status"] == 3){
-                $order_prods = App::getHelper('dbtable')->order_items->getDataList("o_id='{$_POST['o_id']}'");
-                foreach($order_prods as $prod){
-                    App::getHelper('session')->getModule("cart")->stockchecker->runStocks($prod['p_id'],$prod['ps_id'],$prod['amount']);
+                if($this->activateStockChecker){
+                    $order_prods = App::getHelper('dbtable')->order_items->getDataList("o_id='{$_POST['o_id']}'");
+                    foreach($order_prods as $prod){
+                        App::getHelper('session')->getModule("cart")->stockchecker->runStocks($prod['p_id'],$prod['ps_id'],$prod['amount']);
+                    }
                 }
             }
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
