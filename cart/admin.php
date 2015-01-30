@@ -13,6 +13,18 @@ class ORDER{
     function ORDER(){
         global $db,$cms_cfg,$tpl;
         switch($_REQUEST["func"]){
+            case "o_ex"://匯出新訂單
+                if($_GET['act']){
+                    $this->export_order();
+                }else{
+                    $this->current_class="OE";
+                    $this->ws_tpl_file = "templates/ws-manage-export-form-tpl.html";
+                    $this->ws_load_tp($this->ws_tpl_file);
+                    $tpl->newBlock("JS_MAIN");
+                    $this->export_form();
+                    $this->ws_tpl_type=1;
+                }
+                break;              
             case "o_list"://訂單列表
                 $this->current_class="O";
                 $this->ws_tpl_file = "templates/ws-manage-order-list-tpl.html";
@@ -468,6 +480,130 @@ class ORDER{
             }
         }
     }
+
+    //輸出訂單
+    function export_form(){
+        
+    }
+    
+    function export_order(){
+        global $db,$cms_cfg,$ws_array;
+        if(isset($_POST['exportAll'])){
+            $type = "exportAll";
+        }elseif(isset($_POST['exportNew'])){
+            $type = "exportNew";
+        }else{
+            throw new Exception('no proper type of export order');
+        }
+        $exportData = $this->get_export_order_data($type);
+        if($exportData){
+            require_once "../class/phpexcel/PHPExcel.php";
+            $xlsexpotor = new XLSExportor();
+            $xlsexpotor->setTitle($exportData['title']);
+            $xlsexpotor->setData($exportData['data']);
+            $xlsexpotor->setFilename($exportData['filename']);
+//            $xlsexpotor->setFontSize(10);
+            $xlsexpotor->export();
+        }
+    }       
+    
+    //取得輸出的訂單資料
+    function get_export_order_data($type){
+        global $ws_array,$cms_cfg;
+        $db = App::getHelper('db');
+        $exportData = array(
+            'exportAll' => array(
+                'title' => array(
+                    0 => array('data'=>"訂單編號",'width'=>16.5),
+                    1 => array('data'=>"訂單狀態",'width'=>16.5),
+                    2 => array('data'=>"付款方式",'width'=>22.5),
+                    3 => array('data'=>"配送日期",'width'=>16.5),
+                    4 => array('data'=>"備註",'width'=>16.5),
+                    5 => array('data'=>"公司名稱",'width'=>16.5),
+                    6 => array('data'=>"統一編號",'width'=>16.5),
+                    7 => array('data'=>"傳真",'width'=>16.5),
+                    8 => array('data'=>"會員編號",'width'=>16.5),
+                    9 => array('data'=>"訂購者姓名",'width'=>16.5),
+                    10 => array('data'=>"訂購者電話",'width'=>16.5),
+                    11=> array('data'=>"訂購者手機",'width'=>16.5),
+                    12 => array('data'=>"訂購者區號",'width'=>16.5),
+                    13 => array('data'=>"訂購者住址",'width'=>16.5),
+                    14 => array('data'=>"訂購者Email",'width'=>28),
+                    15 => array('data'=>"收件者姓名",'width'=>16.5),
+                    16 => array('data'=>"收件者電話",'width'=>16.5),
+                    17 => array('data'=>"收件者手機",'width'=>16.5),
+                    18 => array('data'=>"收件者地址",'width'=>16.5),
+                    19 => array('data'=>"收件者Email",'width'=>28),
+                    20 => array('data'=>"小計",'width'=>10),
+                    21 => array('data'=>"手續費",'width'=>10),
+                    22 => array('data'=>"運費",'width'=>10),
+                    23 => array('data'=>"總價",'width'=>10),
+                    24 => array('data'=>"發票",'width'=>16.5),
+                    25 => array('data'=>"訂購商品",'width'=>25),
+                ),
+                'filename' => "full_order_".date("Y-m-d"),
+                'data' => array(),
+            ),
+            'exportNew' => array(
+                'title'    => array(
+                    0 => array("data"=>'訂單編號','width'=>16.5),
+                    1 => array("data"=>'訂貨人','width'=>16.5),
+                    2 => array("data"=>'訂貨人電話','width'=>16.5),
+                    3 => array("data"=>'訂貨人手機','width'=>16.5),
+                    4 => array("data"=>'收件人','width'=>16.5),
+                    5 => array("data"=>'收件人電話','width'=>16.5),
+                    6 => array("data"=>'收件人手機','width'=>16.5),
+                    7 => array("data"=>'收件人E-mail','width'=>28),
+                    8 => array('data'=>'收件人住址','width'=>50),
+                    9 => array("data"=>'訂購產品','width'=>28),
+                ),
+                'filename' => "new_order_".date("Y-m-d"),
+                'data' => array(),
+            )
+        );
+        switch($type){
+            case "exportAll":
+                $sql = "select o_id,o_status,o_payment_type,o_arrival_time,o_content,o_company_name,o_invoice_vat,o_fax,m_id,o_name,o_tel,o_cellphone,o_zip,o_address,o_email,o_add_name,o_add_tel,o_add_cellphone,o_add_address,o_add_mail,o_subtotal_price,o_fee_price,o_ship_price,o_total_price,o_invoice_type from ".$db->prefix("order")." where  del='0' order by o_createdate ";
+                $res = $db->query($sql,true);
+                while($row = $db->fetch_array($res,0)){
+                    $sql = "select * from ".$db->prefix("order_items")." where o_id='".$row[0]."' and del='0' order by oi_id ";
+                    $res2 = $db->query($sql,true);
+                    $row[0] = array('data'=>$row[0],'type'=>'s');
+                    $row[1] = $ws_array["order_status"][$row[1]];
+                    $row[2] = $ws_array["payment_type"][$row[2]];
+                    $row[3] = ($ts=strtotime($row[3]))?date("Y-m-d",$ts):"";
+                    $row[22] = $row[22]<0?"運費另議":$row[22];
+                    $row[24] = $ws_array['invoice_type'][$row[24]];
+                    $tmp = array();
+                    while($prod = $db->fetch_array($res2,1)){
+                        $tmp[] = sprintf("%s*%d",$prod['p_name'],$prod['amount']);
+                    }
+                    $row[] = array('data'=> implode("\n",$tmp),'type'=>'s','wrap'=>true);
+                    $exportData[$type]['data'][] = $row;
+                }
+                break;
+            case "exportNew":
+                $sql = "select o_id,o_name,o_tel,o_cellphone,o_add_name,o_add_tel,o_add_cellphone,o_add_mail,o_add_address from ".$db->prefix("order")." where o_status='0' and del='0' order by o_createdate ";
+                $res = $db->query($sql,true);
+                while($row = $db->fetch_array($res,0)){
+                    $sql = "select * from ".$db->prefix("order_items")." where o_id='".$row[0]."' and del='0' order by oi_id ";
+                    $res2 = $db->query($sql,true);
+                    $row[0] = array('data'=>$row[0],'type'=>'s');
+                    $tmp = array();
+                    while($prod = $db->fetch_array($res2,1)){
+                        if($prod['spec']){
+                            $tmp[] = sprintf("%s(%s)*%d",$prod['p_name'],$prod['spec'],$prod['amount']);
+                        }else{
+                            $tmp[] = sprintf("%s*%d",$prod['p_name'],$prod['amount']);
+                        }
+                    }
+                    $row[] = array('data'=> implode("\n",$tmp),'type'=>'s','wrap'=>true);
+                    $exportData[$type]['data'][] = $row;
+                }
+                break;
+        }
+        return $exportData[$type];
+    }    
 }
 //ob_end_flush();
 ?>
