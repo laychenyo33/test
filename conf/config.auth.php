@@ -118,6 +118,7 @@ $cms_cfg["ws_module"]=array(
         "ws_on_contextmenu"=>0,     //禁滑鼠右鍵
         "ws_on_copy"=>0,            //禁複製
         "ws_on_selectstart"=>0,     //禁選擇
+        "ws_on_dragstart"=>0,       //禁拖拉
         "ws_statistic"=>0,          //統計報表
         "ws_sysconfig"=>1,          //系統設定
         "ws_index_banner"=>0,       //自訂首頁banner
