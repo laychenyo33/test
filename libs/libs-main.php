@@ -1208,6 +1208,7 @@ class MAINFUNC{
         if($cms_cfg["ws_module"]["ws_on_contextmenu"]==1) $str .="onContextMenu=\"return false\" ";  //禁滑鼠右鍵
         if($cms_cfg["ws_module"]["ws_on_copy"]==1) $str .="onCopy=\"return false\" "; //禁複製
         if($cms_cfg["ws_module"]["ws_on_selectstart"]==1) $str .="onSelectStart=\"return false\"";  //禁選擇
+        if($cms_cfg["ws_module"]["ws_on_dragstart"]==1) $str .="ondragstart=\"return false\"";  //禁拖拉
         $tpl->assignGlobal("TAG_MOUSE_DISABLE", $str);
     }
     //取得最大排序值
