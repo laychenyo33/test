@@ -13,8 +13,8 @@ class MEMBER{
     //會員資料欄位
     protected $columns = array(
         'm_company_name' => array('name'=>"公司",'gc'=>"Company"),
-        'm_fname'         => array('name'=>"姓",'gc'=>"First Name"),
-        'm_lname'         => array('name'=>"名",'gc'=>"Last Name"),
+        'm_fname'         => array('name'=>"名",'gc'=>"First Name"),
+        'm_lname'         => array('name'=>"姓",'gc'=>"Last Name"),
         'm_birthday'     => array('name'=>"生日",'gc'=>'Birthday'),
         'm_sex'          => array("name"=>"性別","gc"=>"Gender","map"=>array(0=>'女',1=>'男')),
         'm_country'      => array("name"=>"國家","gc"=>"Home Country"),
