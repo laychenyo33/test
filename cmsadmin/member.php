@@ -1392,7 +1392,7 @@ class MEMBER{
     function download_checkbox_using($col,$val){
         global $db,$cms_cfg,$tpl;
         if($this->member_download){
-            $tpl->newBlock("MEMBER_DOWNLOAD");
+            $tpl->newBlock("MEMBER_DOWNLOAD_ROW");
             $sql = "select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
             $res_dc = $db->query($sql,true);
             while($dc_row = $db->fetch_array($res_dc,1)){
