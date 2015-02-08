@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><% $title %></title>
+<link rel="stylesheet" type="text/css" href="<% $frontendVars.baseUrl %>/pub/css/style.css" media="all" />
+<script type="text/javascript">
+var $frontendVars = <% $frontendVars|@json_encode %>;
+</script>
+<script type="text/javascript" src="<% $frontendVars.baseUrl %>/pub/lib/jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<% $frontendVars.baseUrl %>/pub/lib/jquery/jquery-ui-1.9.1.custom.min.js"></script>
+<script type="text/javascript" src="<% $frontendVars.baseUrl %>/pub/lib/jquery/jquery-ui-i18n.js"></script>
+<script type="text/javascript">
+        jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "zh-TW" ] );    
+</script>
+<link rel="stylesheet" type="text/css" href="<% $frontendVars.baseUrl %>/pub/lib/jquery/jquery-ui-1.9.1.custom.css" media="all" />
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h1>專案修改歷程</h1>
+        </div>
+        <% if !$login %>
+        <div id="login-bar" class="tool-bar">
+            <form action="<% $frontendVars.baseUrl %>/index/login" method="post">
+                帳號:<input type="text" name="account" value=""/><input type="submit" value="登入"/>
+            </form>
+        </div>
+        <% else %>
+        <div id="member-bare" class="tool-bar">
+            <form action="<% $frontendVars.baseUrl %>/index/logout" method="get">
+                作業中: <% $login.name %> <input type="submit" value="登出"/>
+            </form>
+        </div>
+        <% /if %>
+        <div id="content">
+            <% $content %>
+        </div>
+<!--        <div id="footer">
+            <p>Powered by <a href="http://code.google.com/p/goezframework/" target="_blank">GoEz Framework</a></p>
+        </div>-->
+    </div>
+    <!--[if lte IE 6]><script src="<% $frontendVars.baseUrl %>/pub/lib/ie6/warning.js?v=<% ''|@time %>"></script><script>window.onload=function(){e($frontendVars.baseUrl + '/pub/lib/ie6/')}</script><![endif]-->
+</body>
+</html>

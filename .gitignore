@@ -24,3 +24,5 @@ Thumbs.db
 .git-ftp.log
 /thumbs/*
 phperror.log
+/reflog/db/*
+/reflog/tpl_c/*

@@ -1,0 +1,17 @@
+    <table>
+        <tr>
+            <th id="date">時間</th>
+            <th id="operator">人員</th>
+            <th id="desc">修改內容</th>
+        </tr>
+        <% foreach from=$operationList item=item %>
+        <tr>
+            <td><% $item.modifydate %></td>
+            <td><% $item.operator %></td>
+            <td>
+                <input type="hidden" name="operation[id]" value="<% $item.id %>"/>
+                <div class="editable" data-object="operation" data-field="operation[description]"><% $item.description|nl2br %></div>
+            </td>
+        </tr>
+        <% /foreach %>        
+    </table>

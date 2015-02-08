@@ -1,0 +1,137 @@
+<div id="notice">
+    說明事項
+    <ul>
+        <li>修改請先登入，登入帳號為公司E-mail@前面的部份</li>
+        <li>[版本]可刪除，[修改記錄]不可刪除</li>
+        <li>[版本]可修改[說明]欄位，[修改記錄]可修改[修改內容]欄位。要修改時，請先在要修改的儲存格上點擊兩次就會出現編輯方塊，編輯完點網頁的其他地方即可儲存</li>
+    </ul>
+</div>
+<div id="version-list">
+        <h4>版本</h4>
+        <% if $isLogin==true %>
+        <form action="<% $frontendVars.baseUrl %>/index/save/object/version" method="post">
+            <input type="hidden" name="token" value="<% $token %>"/>
+            <table>
+                <tr>
+                    <td id="dir"><input type="text" name="version[dir]" value=""/></td>
+                    <td id="create"><input type="text" name="version[createdate]" value="" class="datepicker"/></td>
+                    <td id="desc"><input type="text" name="version[description]" value=""/></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input type="submit" value="新增"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <% /if %>
+        <table>
+            <tr>
+                <th id="dir">版本資料夾</th>
+                <th id="create">建立日期</th>
+                <th id="desc">說明</th>
+                <% if $isLogin==true %>
+                <th id="btn">&nbsp;</th>
+                <% /if %>
+            </tr>
+            <% foreach from=$versionList item=item %>
+            <tr>
+                <td><% $item.dir %></td>
+                <td><% $item.createdate %></td>
+                <td>
+                    <input type="hidden" name="version[dir]" value="<% $item.dir %>"/>
+                    <div class="editable" data-object="version" data-field="version[description]"><% $item.description|nl2br %></div>
+                </td>
+                <% if $isLogin==true %>
+                <td><a href="#" class="delVer" rel="<% $item.dir %>">刪除</a></td>
+                <% /if %>                
+            </tr>
+            <% /foreach %>
+        </table>
+</div>
+<div id="operation-list">
+        <h4>修改記錄</h4>
+        <% if $isLogin==true %>
+        <form action="<% $frontendVars.baseUrl %>/index/save/object/operation" method="post">
+            <input type="hidden" name="token" value="<% $token %>"/>
+            <table>
+                <tr>
+                    <td><textarea name="operation[description]" ></textarea></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input type="submit" value="新增"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <% /if %>
+        <table>
+            <tr>
+                <th id="date">時間</th>
+                <th id="operator">人員</th>
+                <th id="desc">修改內容</th>
+            </tr>
+            <% foreach from=$operationList item=item %>
+            <tr>
+                <td><% $item.createdate %></td>
+                <td><% $item.operator %></td>
+                <td>
+                    <input type="hidden" name="operation[id]" value="<% $item.id %>"/>
+                    <div class="editable" data-object="operation" data-field="operation[description]"><% $item.description|nl2br %></div>
+                </td>
+            </tr>
+            <% /foreach %>        
+        </table>
+</div>
+<% if $isLogin==true %>
+<script type="text/javascript">
+    jQuery(function($){
+        function updatefield(){
+            var textarea = $(this);
+            var serialdata = "token=<% $token %>";
+            var dataobject = textarea.siblings("[data-object]").attr("data-object");
+            $(this).parent().find(":input").each(function(idx,elm){
+                serialdata += ((serialdata)?"&":"")+$(elm).attr('name')+"="+encodeURI($(elm).val());
+            });
+            $.post("<% $frontendVars.baseUrl %>/index/save/object/"+dataobject,serialdata,function(req){
+                if(req.code==1){
+                    console.log('已儲存'); 
+                    textarea.prev(":hidden").html(req.description).show();
+                }else{
+                    console.log(req.error);
+                }
+                textarea.remove();
+            },'json');
+        }
+        
+        $('.editable').dblclick(function(evt){
+            var textarea = $("<textarea></textarea>").attr("name",$(this).attr('data-field'))
+                    .val($(this).text()).blur(updatefield);
+            $(this).after(textarea).hide();
+            textarea.focus();
+        });
+        
+        $('.delVer').click(function(evt){
+            evt.preventDefault();
+            if(confirm("確定要刪除"+$(this).attr('rel')+"?")){
+                var serialdata = "token=<% $token %>&dir="+$(this).attr('rel');
+                var datarow = $(this).parents('tr');
+                $.post("<% $frontendVars.baseUrl %>/index/delete/object/version",serialdata,function(req){
+                    if(req.code==1){
+                        datarow.remove();
+                    }else{
+                        alert("發生錯誤"+req.error);
+                    }
+                },'json');
+            }
+        });
+        $('.datepicker').datepicker({
+            'dateFormat':'yy-mm-dd',
+            'changeYear'    : true,
+            'changeMonth'   : true,
+            'yearRange'     : '1900:c'
+        });        
+    });
+</script>
+<% /if %>
