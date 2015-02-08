@@ -1,0 +1,17 @@
+    <table>
+        <tr>
+            <th id="dir">版本資料夾</th>
+            <th id="create">建立日期</th>
+            <th id="desc">說明</th>
+        </tr>
+        <% foreach from=$versionList item=item %>
+        <tr>
+            <td><% $item.dir %></td>
+            <td><% $item.createdate %></td>
+            <td>
+                <input type="hidden" name="version[dir]" value="<% $item.dir %>"/>
+                <div class="editable" data-object="version" data-field="version[description]"><% $item.description %></div>
+            </td>
+        </tr>
+        <% /foreach %>
+    </table>
