@@ -335,8 +335,6 @@ class DOWNLOAD{
                 header("content-disposition: attachment; filename=".$file);
                 readfile($filepath);
             }
-            if($row['d_public']=='1' || ($row['d_public']=='0' && $this->user_is_valid)){
-            }
         }
     }
 }
