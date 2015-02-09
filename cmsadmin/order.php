@@ -521,7 +521,7 @@ class ORDER{
             throw new Exception('no proper type of export order');
         }
         $exportData = $this->get_export_order_data($type);
-        if($exportData){
+        if($exportData['data']){
             require_once "../class/phpexcel/PHPExcel.php";
             $xlsexpotor = new XLSExportor();
             $xlsexpotor->setTitle($exportData['title']);
@@ -529,6 +529,8 @@ class ORDER{
             $xlsexpotor->setFilename($exportData['filename']);
 //            $xlsexpotor->setFontSize(10);
             $xlsexpotor->export();
+        }else{
+            App::getHelper('main')->js_notice('無匯出資料', $cms_cfg['manage_root'].'order.php?func=o_ex');
         }
     }
     function getdatefromjd($val,$format="Y-m-d"){
