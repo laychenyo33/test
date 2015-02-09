@@ -521,7 +521,7 @@ class ORDER{
             throw new Exception('no proper type of export order');
         }
         $exportData = $this->get_export_order_data($type);
-        if($exportData){
+        if($exportData['data']){
             require_once "../class/phpexcel/PHPExcel.php";
             $xlsexpotor = new XLSExportor();
             $xlsexpotor->setTitle($exportData['title']);
@@ -529,6 +529,8 @@ class ORDER{
             $xlsexpotor->setFilename($exportData['filename']);
 //            $xlsexpotor->setFontSize(10);
             $xlsexpotor->export();
+        }else{
+            App::getHelper('main')->js_notice('無匯出資料', $cms_cfg['manage_root'].'order.php?func=o_ex');
         }
     }
     function getdatefromjd($val,$format="Y-m-d"){
@@ -646,13 +648,15 @@ class ORDER{
                     $sql = "select * from ".$db->prefix("order_items")." where o_id='".$row[0]."' and del='0' order by oi_id ";
                     $res2 = $db->query($sql,true);
                     $row[0] = array('data'=>$row[0],'type'=>'s');
-                    $row[1] = $ws_array["order_status"][$row[1]];
-                    $row[2] = $ws_array["payment_type"][$row[2]];
+                    $row[1] = strip_tags($ws_array["order_status"][$row[1]]);
+                    $row[2] = App::getHelper('main')->multi_map_value($ws_array["payment_type"],$row[2]);
                     $row[3] = ($ts=strtotime($row[3]))?date("Y-m-d",$ts):"";
-                    $row[4] = $ws_array["deliery_timesec"][$row[4]];
+                    $row[4] = App::getHelper('main')->multi_map_value($ws_array["deliery_timesec"],$row[4]);
+                    $row[10] = str_replace('&nbsp;',' ',$row[10]);
+                    $row[16] = str_replace('&nbsp;',' ',$row[16]);
                     $row[24] = $row[24]<0?"運費另議":$row[24];
                     $row[25] = ($row[25]>0)?0-$row[25]:0;
-                    $row[27] = $ws_array['invoice_type'][$row[27]];
+                    $row[27] = App::getHelper('main')->multi_map_value($ws_array['invoice_type'],$row[27]);
                     $tmp = array();
                     while($prod = $db->fetch_array($res2,1)){
                         $tmp[] = sprintf("%s*%d",$prod['p_name'],$prod['amount']);
@@ -668,6 +672,8 @@ class ORDER{
                     $sql = "select * from ".$db->prefix("order_items")." where o_id='".$row[0]."' and del='0' order by oi_id ";
                     $res2 = $db->query($sql,true);
                     $row[0] = array('data'=>$row[0],'type'=>'s');
+                    $row[1] = str_replace('&nbsp;',' ',$row[1]);
+                    $row[4] = str_replace('&nbsp;',' ',$row[4]);
                     $tmp = array();
                     while($prod = $db->fetch_array($res2,1)){
                         if($prod['spec']){
