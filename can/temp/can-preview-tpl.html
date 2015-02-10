@@ -1,0 +1,41 @@
+		<header>
+			<h1>行銷罐頭帶入預覽</h1>
+		</header>
+
+		<main>
+			<form name="can_form" method="post" action="?func=output">
+				<h2>預覽列表</h2>
+				
+				<div class="content">
+					<table style="width: 80%;">
+						<tr>
+							<th class="center">罐頭內容</th>
+						</tr>
+						<!-- START BLOCK : TAG_CAN_LIST -->
+						<tr>
+							<td class="center">
+								<input type="hidden" name="can_desc[]" value="{VALUE_CAN_DESC}">
+								{VALUE_CAN_DESC}
+							</td>
+						</tr>
+						<!-- END BLOCK : TAG_CAN_LIST -->
+						<tr>
+							<th class="left" colspan="3">
+								<input type="button" name="back" value="回到編輯頁">
+								<input type="submit" name="output" value="確定輸出">
+							</th>
+						</tr>
+					</table>
+				</div>
+				
+				<!--<input type="hidden" name="lang" value="{VALUE_CAN_LANG}">-->
+			</form>
+		</main>
+		
+		<script>
+			$(function(){
+				$("input[name=back]").click(function(){
+					location.href = '{VALUE_BACK_LINK}';
+				});
+			});
+		</script>
