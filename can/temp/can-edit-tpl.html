@@ -41,7 +41,7 @@
 				<div class="content">
 					<table style="width: 80%;">
 						<tr>
-							<th class="center" width="100">輸出選取</th>
+							<th class="center" width="100">輸出選取
 							<th class="center">罐頭內容</th>
 						</tr>
 						<!-- START BLOCK : TAG_CAN_LIST -->
@@ -53,6 +53,7 @@
 						<tr>
 							<th class="left" colspan="3">
 								<input type="submit" name="output" value="輸出選取項目">
+								<p><label>全選 / 取消</label><input type="checkbox" name="all"></p>
 							</th>
 						</tr>
 					</table>
@@ -79,6 +80,15 @@
 					if(!CAN_WORD_NUM || !CAN_ID_SELECT){
 						alert('請填寫帶入字，並至少勾選一項罐頭輸出');
 						E.preventDefault();
+					}
+				});
+				
+				//----
+				$("input[name=all]").click(function(){
+					if($(this).prop("checked")){
+						$(".can_id").prop("checked",true);
+					}else{
+						$(".can_id").prop("checked",false);
 					}
 				});
 			});
