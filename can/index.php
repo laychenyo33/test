@@ -227,7 +227,7 @@
 	                $selectrs = self::$db->query($sql);
 	                $rsnum    = self::$db->numRows($selectrs);
 					
-					if(!empty($rsnum) && (preg_match('/^'.self::$cms_cfg["tb_prefix"].'_/', $tb_row["tb"]) || preg_match('/^ws_/', $tb_row["tb"]))){
+					if(!empty($rsnum) && preg_match('/^'.self::$cms_cfg["tb_prefix"].'_/', $tb_row["tb"])){
 						while($row = self::$db->fetch_array($selectrs,1)){
 							$rand_desc = $_REQUEST["can_desc"][rand(0,(count($_REQUEST["can_desc"]) - 1))]; // 隨機輸出罐頭
 							$sql = "update ".$tb_row["tb"]." set ".$tb_row["field"]."='".$rand_desc."' where ".$tb_row["id"]." = '".$row[$tb_row["id"]]."'";
@@ -241,18 +241,22 @@
 								$db_report[] = $sql;
 							}
 						}
-						
-						if(is_array($db_report)){
-							$report_str = '<p>'.implode("</p><br /><p>",$db_report).'</p>';
-							VIEW::assignGlobal("MSG_REPORT",'<p>執行完成，以下為所有執行的 sql 字段</p><br />'.$report_str);
-						}
-					}else{
-						VIEW::assignGlobal("MSG_REPORT",'<p>無執行項目</p>');
 					}
-
-					VIEW::assignGlobal("VALUE_BACK_LINK",self::$cms_cfg["base_root"].'can/');
 				}
+				
+				if(is_array($db_report)){
+					$report_str = '<p>'.implode("</p><br /><p>",$db_report).'</p>';
+					VIEW::assignGlobal("MSG_REPORT",'<p>執行完成，以下為所有執行的 sql 字段</p><br />'.$report_str);
+				}else{
+					$none = true;
+				}
+			}else{
+				$none = true;
 			}
+			
+			if($none) VIEW::assignGlobal("MSG_REPORT",'<p>無執行項目</p>');
+			if(!self::$cms_cfg["ws_module"]["ws_seo"]) VIEW::assignGlobal("MSG_REPORT",'<p>非 SEO 案件</p>');
+			VIEW::assignGlobal("VALUE_BACK_LINK",self::$cms_cfg["base_root"].'can/');
 		}
 	}
 
