@@ -663,6 +663,11 @@ class MEMBER{
             //有會員download
             if($this->member_download && $this->download_on=="member"){
                 $db_msg .= $this->_write_download($_POST['d_files'],'m_id',$m_id);
+                if($_POST['d_files']){ //如果有勾選檔案，寄發通知信
+                    $mtpl = App::getHelper('main')->get_mail_tpl('member-download');
+                    $mail_content = $mtpl->getOutputContent();
+                    App::getHelper('main')->ws_mail_send_simple(App::getHelper('session')->sc_email,$_POST['m_email'],$mail_content,"會員檔案下載權限",App::getHelper('session')->sc_company);
+                }
             }
             //寄發帳號啟用通知信
             if($m_id && ($_POST['m_status']==1 && $_POST['old_m_status']=='0')){
@@ -1392,7 +1397,7 @@ class MEMBER{
     function download_checkbox_using($col,$val){
         global $db,$cms_cfg,$tpl;
         if($this->member_download){
-            $tpl->newBlock("MEMBER_DOWNLOAD");
+            $tpl->newBlock("MEMBER_DOWNLOAD_ROW");
             $sql = "select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
             $res_dc = $db->query($sql,true);
             while($dc_row = $db->fetch_array($res_dc,1)){

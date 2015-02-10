@@ -309,19 +309,31 @@ class DOWNLOAD{
     //下載檔案
     function download_file($d_id){
         global $db,$cms_cfg,$main;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_download where d_status='1' and d_id='".$d_id."'";
+        if(App::configs()->ws_module->ws_member_download){
+            $m_id = App::getHelper('session')->MEMBER_ID;
+            $mc_id = App::getHelper('session')->MEMBER_CATE_ID;
+            switch(App::configs()->ws_module->ws_member_download_on){
+                case "member":
+                    $cond_member_download = " and (d_public=1 || (d_public='0' and m_id='{$m_id}'))";
+                    break;
+                case "cate":
+                default:
+                    $cond_member_download = " and (d_public=1 || (d_public='0' and mc_id='{$mc_id}'))";
+                    break;
+            }
+        }
+        $sql="select * from ".$cms_cfg['tb_prefix']."_download as a left join ".$db->prefix("member_download_map")." as b "
+            . "on a.d_id=b.d_id where d_status='1' and a.d_id='".$d_id."'".$cond_member_download;
         $row = $db->query_firstrow($sql,true);
         if($row){
-            if($row['d_public']=='1' || ($row['d_public']=='0' && $this->user_is_valid)){
-                $filepath = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row['d_filepath'];
-                if(file_exists($filepath)){
-                    $sql="update ".$cms_cfg['tb_prefix']."_download set d_times = d_times+1 where d_id='".$d_id."'";
-                    $db->query($sql);
-                    $file = $main->file_str_replace($filepath,"#(.+/)([^/]+)$#i");
-                    header("content-type: application/force-download");
-                    header("content-disposition: attachment; filename=".$file);
-                    readfile($filepath);
-                }
+            $filepath = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row['d_filepath'];
+            if(file_exists($filepath)){
+                $sql="update ".$cms_cfg['tb_prefix']."_download set d_times = d_times+1 where d_id='".$d_id."'";
+                $db->query($sql);
+                $file = $main->file_str_replace($filepath,"#(.+/)([^/]+)$#i");
+                header("content-type: application/force-download");
+                header("content-disposition: attachment; filename=".$file);
+                readfile($filepath);
             }
         }
     }
