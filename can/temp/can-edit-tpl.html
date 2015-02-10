@@ -1,0 +1,85 @@
+		<header>
+			<h1>行銷罐頭帶入</h1>
+		</header>
+		<nav>
+			<label>語系選擇</label>
+			<ul>
+				<!-- START BLOCK : TAG_LANG_LIST -->
+				<li><a href="?lang={VALUE_LANG_SUBJECT}" {VALUE_LANG_NOW}>{VALUE_LANG_STR}</a></li>
+				<!-- END BLOCK : TAG_LANG_LIST -->
+			</ul>
+		</nav>
+
+		<main>
+			<form name="can_form" method="post" action="?func=preview">
+				<h2>帶入字編輯</h2>
+					<div class="content">
+						
+						<!-- START BLOCK : TAG_CAN_WORD -->
+						<table style="width: 80%;">
+							<tr>
+								<th class="left" width="250">帶入字代碼</th>
+								<th class="left">輸入帶入字內容</th>
+							</tr>
+							<!-- START BLOCK : TAG_CAN_WORD_LIST -->
+							<tr>
+								<td>{TAG_CAN_WORD}</td>
+								<td><input type="text" class="can_word" name="can_word[{NO_TAG_WORD}]" value="{VALUE_CAN_WORD}"></td>
+							</tr>
+							<!-- END BLOCK : TAG_CAN_WORD_LIST -->							
+						</table>
+						<!-- END BLOCK : TAG_CAN_WORD -->
+						
+						<!-- START BLOCK : TAG_CAN_WORD_NONE -->
+						<p>尚未有帶入字，請先儲存編輯好的罐頭</p>
+						<!-- END BLOCK : TAG_CAN_WORD_NONE -->
+					</div>
+				<hr>
+				
+				<h2>行銷罐頭輸出</h2>
+				
+				<div class="content">
+					<table style="width: 80%;">
+						<tr>
+							<th class="center" width="100">輸出選取</th>
+							<th class="center">罐頭內容</th>
+						</tr>
+						<!-- START BLOCK : TAG_CAN_LIST -->
+						<tr>
+							<td class="center"><input type="checkbox" class="can_id" name="can_id[]" value="{VALUE_CAN_ID}"></td>
+							<td class="center">{VALUE_CAN_DESC}</td>
+						</tr>
+						<!-- END BLOCK : TAG_CAN_LIST -->
+						<tr>
+							<th class="left" colspan="3">
+								<input type="submit" name="output" value="輸出選取項目">
+							</th>
+						</tr>
+					</table>
+				</div>
+				
+				<input type="hidden" name="can_lang" value="{VALUE_CAN_LANG}">
+			</form>
+		</main>
+		
+		<script>
+			$(function(){
+				$("input[name=output]").click(function(E){
+					var CAN_WORD_NUM = 0;
+					//var CAN_WORD_DOM_NUM = $(".can_word").length;
+					var CAN_ID_SELECT = $(".can_id:checked").length;
+					
+					$(".can_word").each(function(){
+						var CAN_WORD_VAL = $(this).val();
+						if(isset(CAN_WORD_VAL)){
+							CAN_WORD_NUM++;
+						}
+					});
+					
+					if(!CAN_WORD_NUM || !CAN_ID_SELECT){
+						alert('請填寫帶入字，並至少勾選一項罐頭輸出');
+						E.preventDefault();
+					}
+				});
+			});
+		</script>
