@@ -39,7 +39,10 @@ switch($_GET['action']){
             $pc_layer = ($new_pc_layer)? $new_pc_layer : $to_cate['pc_layer'];
             foreach($products as $p_id => $product){
                 if(in_array($p_id,$_POST['clone_p_id'])){
+                    //取得大圖
+                    $bigImages = $product['bigimages'];
                     unset($product['p_id']);
+                    unset($product['bigimages']);
                     $product['pc_id'] = $pc_id;
                     $product['pc_layer'] = $pc_layer;
                     $db_fields = array();
@@ -50,6 +53,18 @@ switch($_GET['action']){
                     }
                     $sql = "insert into ".$_POST['to_lang']."products(".implode(",",$db_fields).")values(".implode(",",$db_values).")";
                     $db->query($sql,true);
+                    $new_p_id = $db->get_insert_id();
+                    //寫入大圖
+                    if($bigImages){
+                        $bimg_fields = array('`p_id`');
+                        $bimg_values = array($new_p_id);
+                        foreach($bigImages as $field => $value){
+                            $bimg_fields[] = "`".$field."`";
+                            $bimg_values[] = "'". mysql_real_escape_string($value) . "'";
+                        }                        
+                        $sql = "insert into ".$_POST['to_lang']."products_img(".implode(",",$bimg_fields).")values(".implode(",",$bimg_values).")";
+                        $db->query($sql,true);
+                    }
                 }
             }
         }
@@ -69,6 +84,14 @@ switch($_GET['action']){
             while($row = $db->fetch_array($res,1)){
                 $products[$row['p_id']] = $row;
             }
+            //複製大圖
+            $sql = "select * from ".$_POST['from_lang']."products_img where p_id in(".$_POST['id'].") ";
+            $res = $db->query($sql,true);
+            while($bigImg = $db->fetch_array($res,1)){
+                $p_id = $bigImg['p_id'];
+                unset($bigImg['p_id']);
+                $products[$p_id]['bigimages'] = $bigImg;
+            }
         }elseif($_POST['clone_mode']=="pc"){
             $pc_id = $_POST['id'];
             if($_POST['with_products']){
@@ -86,6 +109,14 @@ switch($_GET['action']){
                 while($row = $db->fetch_array($res,1)){
                     $products[$row['p_id']] = $row;
                 }
+                //複製大圖
+                $sql = "select * from ".$_POST['from_lang']."products_img where p_id in( select p_id from ".$_POST['from_lang']."products where pc_id in(".$pc_id.") ) ";
+                $res = $db->query($sql,true);
+                while($bigImg = $db->fetch_array($res,1)){
+                    $p_id = $bigImg['p_id'];
+                    unset($bigImg['p_id']);
+                    $products[$p_id]['bigimages'] = $bigImg;
+                }                
             }
         }
         if(empty($cates) && empty($products)){
