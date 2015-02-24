@@ -11,59 +11,119 @@ switch($_GET['action']){
     case "clone":
         $cates = $_SESSION['clone_date']['cates'];
         $products = $_SESSION['clone_date']['products'];
-        $sql = "select * from ".$_POST['to_lang']."products_cate where pc_id='{$_POST['to_pc_id']}'";
-        $to_cate = $db->query_firstRow($sql,true);
-        if($cates){
-            foreach($cates as $pc_id => $cate){
-                if(in_array($pc_id,$_POST['clone_pc_id'])){
-                    unset($cate['pc_id']);
-                    $cate['pc_level'] = $to_cate['pc_level'] + 1;
-                    $cate['pc_parent'] = $to_cate['pc_id'];
-                    $db_fields = array();
-                    $db_values = array();
-                    foreach($cate as $field => $value){
-                        $db_fields[] = "`".$field."`";
-                        $db_values[] = "'". mysql_real_escape_string($value) ."'";
+        if($_POST['to_all_other_lang']){ //直接複製直其他語系
+            if(is_array($_POST['all_other_lang']) && !empty($_POST['all_other_lang'])){
+                foreach($_POST['all_other_lang'] as $to_lang){
+                    if($cates){
+                        foreach($cates as $pc_id => $cate){
+                            if(in_array($pc_id,$_POST['clone_pc_id'])){
+                                unset($cate['pc_id']);
+                                $db_fields = array();
+                                $db_values = array();
+                                foreach($cate as $field => $value){
+                                    $db_fields[] = "`".$field."`";
+                                    $db_values[] = "'". mysql_real_escape_string($value) ."'";
+                                }
+                                $sql = "insert into ".$to_lang."products_cate(".implode(",",$db_fields).")values(".implode(",",$db_values).")";
+                                $db->query($sql,true);
+                                $new_pc_id = $db->get_insert_id();
+                                $pc_layer_splited = explode('-',$cate['pc_layer']);
+                                array_pop($pc_layer_splited);
+                                $new_pc_layer = implode('-',$pc_layer_splited) . "-" . $new_pc_id;
+                                $sql = "update ".$to_lang."products_cate set pc_layer='".$new_pc_layer."' where pc_id='".$new_pc_id."'";
+                                $db->query($sql,true);
+                            }
+                        }
                     }
-                    $sql = "insert into ".$_POST['to_lang']."products_cate(".implode(",",$db_fields).")values(".implode(",",$db_values).")";
-                    $db->query($sql,true);
-                    $new_pc_id = $db->get_insert_id();
-                    $new_pc_layer = $to_cate['pc_layer'] . "-" . $new_pc_id;
-                    $sql = "update ".$_POST['to_lang']."products_cate set pc_layer='".$new_pc_layer."' where pc_id='".$new_pc_id."'";
-                    $db->query($sql,true);
+                    if($products){
+                        foreach($products as $p_id => $product){
+                            if(in_array($p_id,$_POST['clone_p_id'])){
+                                //取得大圖
+                                $bigImages = $product['bigimages'];
+                                unset($product['p_id']);
+                                unset($product['bigimages']);
+                                $product['pc_id'] = $new_pc_id? $new_pc_id : $product['pc_id'];
+                                $product['pc_layer'] = $new_pc_layer? $new_pc_layer : $product['pc_layer'];
+                                $db_fields = array();
+                                $db_values = array();
+                                foreach($product as $field => $value){
+                                    $db_fields[] = "`".$field."`";
+                                    $db_values[] = "'". mysql_real_escape_string($value) . "'";
+                                }
+                                $sql = "insert into ".$to_lang."products(".implode(",",$db_fields).")values(".implode(",",$db_values).")";
+                                $db->query($sql,true);
+                                $new_p_id = $db->get_insert_id();
+                                //寫入大圖
+                                if($bigImages){
+                                    $bimg_fields = array('`p_id`');
+                                    $bimg_values = array($new_p_id);
+                                    foreach($bigImages as $field => $value){
+                                        $bimg_fields[] = "`".$field."`";
+                                        $bimg_values[] = "'". mysql_real_escape_string($value) . "'";
+                                    }                        
+                                    $sql = "insert into ".$to_lang."products_img(".implode(",",$bimg_fields).")values(".implode(",",$bimg_values).")";
+                                    $db->query($sql,true);
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
-        if($products){
-            $pc_id = ($new_pc_id)? $new_pc_id : $to_cate['pc_id'];
-            $pc_layer = ($new_pc_layer)? $new_pc_layer : $to_cate['pc_layer'];
-            foreach($products as $p_id => $product){
-                if(in_array($p_id,$_POST['clone_p_id'])){
-                    //取得大圖
-                    $bigImages = $product['bigimages'];
-                    unset($product['p_id']);
-                    unset($product['bigimages']);
-                    $product['pc_id'] = $pc_id;
-                    $product['pc_layer'] = $pc_layer;
-                    $db_fields = array();
-                    $db_values = array();
-                    foreach($product as $field => $value){
-                        $db_fields[] = "`".$field."`";
-                        $db_values[] = "'". mysql_real_escape_string($value) . "'";
-                    }
-                    $sql = "insert into ".$_POST['to_lang']."products(".implode(",",$db_fields).")values(".implode(",",$db_values).")";
-                    $db->query($sql,true);
-                    $new_p_id = $db->get_insert_id();
-                    //寫入大圖
-                    if($bigImages){
-                        $bimg_fields = array('`p_id`');
-                        $bimg_values = array($new_p_id);
-                        foreach($bigImages as $field => $value){
-                            $bimg_fields[] = "`".$field."`";
-                            $bimg_values[] = "'". mysql_real_escape_string($value) . "'";
-                        }                        
-                        $sql = "insert into ".$_POST['to_lang']."products_img(".implode(",",$bimg_fields).")values(".implode(",",$bimg_values).")";
+        }else{ //按選擇目的條件複製
+            $sql = "select * from ".$_POST['to_lang']."products_cate where pc_id='{$_POST['to_pc_id']}'";
+            $to_cate = $db->query_firstRow($sql,true);
+            if($cates){
+                foreach($cates as $pc_id => $cate){
+                    if(in_array($pc_id,$_POST['clone_pc_id'])){
+                        unset($cate['pc_id']);
+                        $cate['pc_level'] = $to_cate['pc_level'] + 1;
+                        $cate['pc_parent'] = $to_cate['pc_id'];
+                        $db_fields = array();
+                        $db_values = array();
+                        foreach($cate as $field => $value){
+                            $db_fields[] = "`".$field."`";
+                            $db_values[] = "'". mysql_real_escape_string($value) ."'";
+                        }
+                        $sql = "insert into ".$_POST['to_lang']."products_cate(".implode(",",$db_fields).")values(".implode(",",$db_values).")";
                         $db->query($sql,true);
+                        $new_pc_id = $db->get_insert_id();
+                        $new_pc_layer = $to_cate['pc_layer'] . "-" . $new_pc_id;
+                        $sql = "update ".$_POST['to_lang']."products_cate set pc_layer='".$new_pc_layer."' where pc_id='".$new_pc_id."'";
+                        $db->query($sql,true);
+                    }
+                }
+            }
+            if($products){
+                $pc_id = ($new_pc_id)? $new_pc_id : $to_cate['pc_id'];
+                $pc_layer = ($new_pc_layer)? $new_pc_layer : $to_cate['pc_layer'];
+                foreach($products as $p_id => $product){
+                    if(in_array($p_id,$_POST['clone_p_id'])){
+                        //取得大圖
+                        $bigImages = $product['bigimages'];
+                        unset($product['p_id']);
+                        unset($product['bigimages']);
+                        $product['pc_id'] = $pc_id;
+                        $product['pc_layer'] = $pc_layer;
+                        $db_fields = array();
+                        $db_values = array();
+                        foreach($product as $field => $value){
+                            $db_fields[] = "`".$field."`";
+                            $db_values[] = "'". mysql_real_escape_string($value) . "'";
+                        }
+                        $sql = "insert into ".$_POST['to_lang']."products(".implode(",",$db_fields).")values(".implode(",",$db_values).")";
+                        $db->query($sql,true);
+                        $new_p_id = $db->get_insert_id();
+                        //寫入大圖
+                        if($bigImages){
+                            $bimg_fields = array('`p_id`');
+                            $bimg_values = array($new_p_id);
+                            foreach($bigImages as $field => $value){
+                                $bimg_fields[] = "`".$field."`";
+                                $bimg_values[] = "'". mysql_real_escape_string($value) . "'";
+                            }                        
+                            $sql = "insert into ".$_POST['to_lang']."products_img(".implode(",",$bimg_fields).")values(".implode(",",$bimg_values).")";
+                            $db->query($sql,true);
+                        }
                     }
                 }
             }
@@ -155,6 +215,7 @@ function products_cate_select($lang,$pc_parent=0, $indent="") {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             .cate-options{display:none;}
+            .content-box{width:650px;margin:0 auto;}
         </style>
         <script type="text/javascript" src="../js/jquery/jquery-1.8.3.min.js"></script>
     </head>
@@ -162,50 +223,62 @@ function products_cate_select($lang,$pc_parent=0, $indent="") {
         <?php
         if($_GET['action']=="clone-preview"):
         ?>
-        <form action="<?=$_SERVER['PHP_SELF']?>?action=clone" method="post" />
-            <input type="hidden" name="clone_mode" value="<?=$_POST['clone_mode']?>"/>
-            <input type="hidden" name="with_products" value="<?=$_POST['with_products']?>"/>
-            <input type="hidden" name="from_lang" value="<?=$_POST['from_lang']?>"/>
-            <input type="hidden" name="to_lang" value="<?=$_POST['to_lang']?>"/>
-            <input type="hidden" name="to_pc_id" value="<?=$_POST['to_pc_id']?>"/>
-            <div class="desc">
-                複製選項:
-                <ul>
-                    <li>複製模式:<?=$clone_mode?></li>
-                    <? if($_POST['clone_mode']=='pc'): ?>
-                    <li>是否帶產品:<?=(($_POST['with_products'])?"是":"否")?></li>
+        <div class="content-box">
+            <form action="<?=$_SERVER['PHP_SELF']?>?action=clone" method="post" />
+                <input type="hidden" name="clone_mode" value="<?=$_POST['clone_mode']?>"/>
+                <input type="hidden" name="with_products" value="<?=$_POST['with_products']?>"/>
+                <input type="hidden" name="from_lang" value="<?=$_POST['from_lang']?>"/>
+                <input type="hidden" name="to_lang" value="<?=$_POST['to_lang']?>"/>
+                <input type="hidden" name="to_pc_id" value="<?=$_POST['to_pc_id']?>"/>
+                <input type="hidden" name="to_all_other_lang" value="<?=$_POST['to_all_other_lang']?>"/>
+                <? foreach($_POST['all_lang'] as $prefix): ?>
+                    <? if($_POST['from_lang']!==$prefix): ?>
+                <input type="hidden" name="all_other_lang[]" value="<?=$prefix?>"/>
                     <? endif; ?>
-                    <li>來源語系:<?=$_POST['from_lang']?></li>
-                    <li>目的語系:<?=$_POST['to_lang']?></li>
-                    <li>id:<?=$_POST['id']?></li>
-                    <li>目的分類:<?=$to_pc_name?></li>
-                </ul>
-            </div>
-            <? if($cates): ?>
-            <h3>分類</h3>
-            <table>
-                <? foreach($cates as $pc_id => $cate): ?>
-                <tr>
-                    <td><input type="checkbox" name="clone_pc_id[]" value="<?=$pc_id?>" checked/></td>
-                    <td><?=$cate['pc_name']?></td>
-                </tr>
                 <? endforeach; ?>
-            </table>
-            <? endif; ?>
-            
-            <? if($products): ?>
-            <h3>產品</h3>
-            <table>
-                <? foreach($products as $p_id => $product): ?>
-                <tr>
-                    <td><input type="checkbox" name="clone_p_id[]" value='<?=$p_id?>' checked/></td>
-                    <td><?=$product['p_name']?></td>
-                </tr>
-                <? endforeach;?>
-            </table>
-            <? endif; ?>
-            <input type="submit" id="clone" value="開始複製"/>
-        </form>
+                <div class="desc">
+                    複製選項:
+                    <ul>
+                        <li>複製模式:<?=$clone_mode?></li>
+                        <? if($_POST['clone_mode']=='pc'): ?>
+                        <li>是否帶產品:<?=(($_POST['with_products'])?"是":"否")?></li>
+                        <? endif; ?>
+                        <li>來源語系:<?=$_POST['from_lang']?></li>
+                        <li>來源id:<?=$_POST['id']?></li>
+                        <? if($_POST['to_all_other_lang']): ?>
+                        <li>複製至所有其他語系</li>
+                        <? else: ?>
+                        <li>目的語系:<?=$_POST['to_lang']?></li>
+                        <li>目的分類:<?=$to_pc_name?></li>
+                        <? endif; ?>
+                    </ul>
+                </div>
+                <? if($cates): ?>
+                <h3>分類</h3>
+                <table>
+                    <? foreach($cates as $pc_id => $cate): ?>
+                    <tr>
+                        <td><input type="checkbox" name="clone_pc_id[]" value="<?=$pc_id?>" checked/></td>
+                        <td><?=$cate['pc_name']?></td>
+                    </tr>
+                    <? endforeach; ?>
+                </table>
+                <? endif; ?>
+
+                <? if($products): ?>
+                <h3>產品</h3>
+                <table>
+                    <? foreach($products as $p_id => $product): ?>
+                    <tr>
+                        <td><input type="checkbox" name="clone_p_id[]" value='<?=$p_id?>' checked/></td>
+                        <td><?=$product['p_name']?></td>
+                    </tr>
+                    <? endforeach;?>
+                </table>
+                <? endif; ?>
+                <input type="submit" id="clone" value="開始複製"/>
+            </form>
+        </div>
         <?php
         else:
                 $res = $db->query("show tables from `".$cms_cfg['db_name']."`");
@@ -215,6 +288,9 @@ function products_cate_select($lang,$pc_parent=0, $indent="") {
                 }
         ?>
         <form name="tblprefixfrm" id="tblprefixfrm" action="<?=$_SERVER['PHP_SELF']?>?action=clone-preview" method="post">
+            <?php foreach($prefix as $id=>$tbl_prefix): ?>
+            <input type="hidden" name="all_lang[]" value="<?=$tbl_prefix?>"/>
+            <?php endforeach; ?>            
             <table width="650" align="center">
                 <tr>
                     <th width="120">複製模式:</th>
@@ -255,6 +331,7 @@ function products_cate_select($lang,$pc_parent=0, $indent="") {
                             <option value='<?=$tbl_prefix?>'><?=$id?></option>
                         <?php endforeach; ?>
                         </select>
+                        <label><input type="checkbox" name="to_all_other_lang" id="to_all_other_lang" value="1" <?=(count($prefix)>1)?"":"disabled"?> />所有其他語系(沿用原始分類id)</label>
                     </td>
                 </tr>
                 <tr>
@@ -288,14 +365,17 @@ function products_cate_select($lang,$pc_parent=0, $indent="") {
                });
                $("#preview").click(function(evt){
                    var err_msg = "";
+                   var to_all_other_lang = $("#to_all_other_lang")[0].checked;
                    if($("#from_lang").val()==""){
                        err_msg += "請選擇來源語系\n";
                    }
-                   if($("#to_lang").val()==""){
-                       err_msg += "請選擇目的語系\n";
-                   }
-                   if($("#id").val()==""){
-                       err_msg += "請輸入來源id\n";
+                   if(!to_all_other_lang){
+                       if($("#to_lang").val()==""){
+                           err_msg += "請選擇目的語系\n";
+                       }
+                       if($("#id").val()==""){
+                           err_msg += "請輸入來源id\n";
+                       }
                    }
                    if(err_msg!=""){
                        alert(err_msg);
@@ -303,8 +383,15 @@ function products_cate_select($lang,$pc_parent=0, $indent="") {
                    }
                    $(tblprefixfrm).submit();
                });
+               var checkIfCloneToOtherLang = function(){
+                   var disabled = $("#to_all_other_lang")[0].checked;
+                   $("#to_lang").attr('disabled',disabled);
+                   $("#to_pc_id").attr('disabled',disabled);
+               }
+               $("#to_all_other_lang").click(checkIfCloneToOtherLang);
                $("#clone_mode").trigger('change');
                $("#to_lang").trigger('change');
+               checkIfCloneToOtherLang();
             });
         </script>
         <?php
