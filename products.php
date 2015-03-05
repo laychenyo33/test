@@ -864,7 +864,7 @@ class PRODUCTS{
                 if($i%2){
                     $tpl->assign("TAG_TR_CLASS","class='altrow1'");
                 }
-                $p_img = $row['p_small_img']?$cms_cfg['base_root'] . $row['p_small_img'] : $cms_cfg['default_preview_pic'];
+                $p_img = $row['p_small_img']?$cms_cfg['file_root'] . $row['p_small_img'] : $cms_cfg['default_preview_pic'];
                 $dimension = $main->resizeto($p_img,120,120);
                 $tpl->assign( array("VALUE_PC_ID"  => $row["pc_id"],
                                     "VALUE_P_ID"  => $row["p_id"],
