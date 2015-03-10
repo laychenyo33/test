@@ -646,8 +646,8 @@
                         }
                         App::getHelper('dbtable')->order->writeDataWithItems($orderData,$shopping,true);
                         
-			$this->mail_handle($mail_goto);
 			App::getHelper('session')->paymentType = $payment_type;
+			$this->mail_handle();
 			switch(App::getHelper('session')->paymentType) {
 				case 1 ://atm
 				case 2 :
@@ -1212,7 +1212,7 @@
 		}
 	
 		// 寄送訊息
-		function mail_handle($none_goto = 0) {
+		function mail_handle($none_goto = 1) {
 			global $db, $cms_cfg, $tpl, $main, $TPLMSG;
 	
 			if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
@@ -1238,8 +1238,12 @@
 			} else {
 				$goto_url = (!empty($this->mail_goto_url))?$this->mail_goto_url:$cms_cfg["base_url"]."cart/?func=c_order_detial&o_id=".$this->o_id;
 			}
-			//$main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$mail_title,$mail_func,$goto_url,$none_goto);
-			App::getHelper('session')->mailContent = $tpl->getOutputContent();
+                        $mail_content = $tpl->getOutputContent();
+                        if(!in_array(App::getHelper('session')->paymentType,array(1,2,'Credit'))){
+                            $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_email"],$mail_content,$mail_title,$mail_func,$goto_url,null,$none_goto);
+                        }else{
+                            App::getHelper('session')->mailContent = $mail_content;
+                        }
 		}
 	
 		// 讀取各式服務條款
