@@ -72,7 +72,7 @@ class CART{
                         App::getHelper('main')->header_footer("",$TPLMSG['ORDER_SUCCESS']);
                     }else{
                         $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['ORDER_FAILED'] );
-                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_FAILED']);
+                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_FAIL']);
                     }
                     break;
                 case 3:
@@ -90,9 +90,9 @@ class CART{
                         $tpl->assignGlobal("MSG_ORDER_STATUS",$TPLMSG['ORDER_SUCCESS']);
                         App::getHelper('main')->header_footer("",$TPLMSG['ORDER_SUCCESS']);
                     }else{
-                        $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['ORDER_FAILED'] );
+                        $tpl->assignGlobal("MSG_ORDER_STATUS",$TPLMSG['ORDER_FAIL'] );
                         $tpl->assignGlobal("MSG_ORDER_FAIL_DESC",$TPLMSG['AUTHOZIED_FAILED_EXTEND_MSG']);
-                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_FAILED']);
+                        App::getHelper('main')->header_footer("",$TPLMSG['ORDER_FAIL']);
                     }
                     break;
                 case "WebATM":
