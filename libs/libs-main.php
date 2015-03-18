@@ -653,6 +653,11 @@ class MAINFUNC{
             $tpl->newBlock("AUTHORITY_PRODUCTS_CATE");
             $tpl->gotoBlock( "AUTHORITY_PRODUCTS" );
         }
+        if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_products"]){
+            if(App::getHelper('session')->sc_cart_type==1){
+                $tpl->newBlock( "AUTHORITY_PRODUCTS_DISCOUNT" );
+            }
+        }
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_new_product"]){
             $tpl->newBlock("AUTHORITY_NEW_PRODUCTS");
             $tpl->newBlock("AUTHORITY_HOT_PRODUCTS");

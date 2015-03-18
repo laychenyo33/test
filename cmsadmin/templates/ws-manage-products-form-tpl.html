@@ -126,28 +126,9 @@
         <!-- START BLOCK : SPEC_ROWS -->
         <tr>
             <th>規格種類</th>
-            <td>
+            <td colspan="3">
                 <input type="radio" name="spec_sets" id="spec_sets_0" value="0" {TAG_SPEC_SETS_CHK0}/><label for="spec_sets_0">單一規格</label>&nbsp;&nbsp;
                 <input type="radio" name="spec_sets" id="spec_sets_1" value="1" {TAG_SPEC_SETS_CHK1}/><label for="spec_sets_1">多重規格</label>
-            </td>
-            <th>數量折扣</th>
-            <td>
-                <div>
-                    <!-- START BLOCK : QUANTITY_DISCOUNT_RADIO -->
-                    <label><input type="radio" name="quantity_discount" id="quantity_discount_{VALUE_QUANTITY_DISCOUNT_KEY}" value="{VALUE_QUANTITY_DISCOUNT_KEY}" {CHECKED}/>{VALUE_QUANTITY_DISCOUNT_NAME}</label>
-                    <!-- END BLOCK : QUANTITY_DISCOUNT_RADIO -->
-                </div>
-                <div>
-                    <!-- START BLOCK : DISCOUNT_SET_SELECTOR -->
-                    <select name="discount_sets" id="discount_sets">
-                        <option value="0">選擇折扣組合</option>
-                        <!-- START BLOCK : DISCOUNT_SET_SELECT -->
-                        <option value="{VALUE_DISCOUNT_SET_KEY}" {SELECTED}>{VALUE_DISCOUNT_SET_NAME}</option>
-                        <!-- END BLOCK : DISCOUNT_SET_SELECT -->
-                    </select>
-                    <!-- START BLOCK : DISCOUNT_SET_SELECTOR -->
-                    {TAG_NO_DISCOUNT_SETS_EXISTS}
-                </div>
             </td>
         </tr>
         <tr class="multiple_spec_sets"  {TAG_MULTIPLE_SPEC_HIDE}>
@@ -248,11 +229,30 @@
         <!-- START BLOCK : ONSALE_ROW -->
         <tr>
             <th>可供購買?:</th>
-            <td colspan="3">
+            <td>
                 <!-- START BLOCK : ONSALE_RADIO -->
                 <label><input type="radio" name="onsale" value="{VALUE_ONSALE_KEY}" {CHECKED}/>{VALUE_ONSALE_NAME}</label>
                 <!-- END BLOCK : ONSALE_RADIO -->
             </td>
+            <th>數量折扣</th>
+            <td>
+                <div>
+                    <!-- START BLOCK : QUANTITY_DISCOUNT_RADIO -->
+                    <label><input type="radio" name="quantity_discount" id="quantity_discount_{VALUE_QUANTITY_DISCOUNT_KEY}" value="{VALUE_QUANTITY_DISCOUNT_KEY}" {CHECKED}/>{VALUE_QUANTITY_DISCOUNT_NAME}</label>
+                    <!-- END BLOCK : QUANTITY_DISCOUNT_RADIO -->
+                </div>
+                <div>
+                    <!-- START BLOCK : DISCOUNT_SET_SELECTOR -->
+                    <select name="discount_sets" id="discount_sets">
+                        <option value="0">選擇折扣組合</option>
+                        <!-- START BLOCK : DISCOUNT_SET_SELECT -->
+                        <option value="{VALUE_DISCOUNT_SET_KEY}" {SELECTED}>{VALUE_DISCOUNT_SET_NAME}</option>
+                        <!-- END BLOCK : DISCOUNT_SET_SELECT -->
+                    </select>
+                    <!-- START BLOCK : DISCOUNT_SET_SELECTOR -->
+                    {TAG_NO_DISCOUNT_SETS_EXISTS}
+                </div>
+            </td>            
         </tr>
         <!-- END BLOCK : ONSALE_ROW -->
         <tr>

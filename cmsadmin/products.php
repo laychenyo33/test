@@ -1080,6 +1080,10 @@ class PRODUCTS{
         if(App::getHelper('session')->sc_cart_type==1){
             $tpl->newBlock("ONSALE_ROW");
             $main->multiple_radio("onsale",App::defaults()->yesno_status,isset($row['onsale'])? $row['onsale'] : 1, $tpl);
+            //數量折扣選項
+            $this->quantity_discount($row);
+            //折扣組合
+            $this->discount_sets($row);
         }
         if(App::configs()->ws_module->ws_cart_spec){
             $tpl->newBlock("SPEC_ROWS");
@@ -1114,10 +1118,6 @@ class PRODUCTS{
         }
 	//產品規格表
         $tpl->assignGlobal("PRODUCTS_SPEC_TABLE",$this->make_spec_table_in_form($used_pscid,$row['p_id']));
-        //數量折扣選項
-        $this->quantity_discount($row);
-        //折扣組合
-        $this->discount_sets($row);
     }
 //產品管理--資料更新================================================================
     function products_replace(){
