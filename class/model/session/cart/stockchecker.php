@@ -45,7 +45,7 @@ class Model_Session_Cart_Stockchecker extends Model_Modules {
     
     function getUnDeliveryAmounts($p_id,$ps_id){
         $db = App::getHelper('db');
-        $sql = "select sum(amount) as amounts from ".$db->prefix("order_items")." as oi inner join ".$db->prefix("order"). " as o on oi.o_id=o.o_id where o.o_status<3 and oi.p_id='".$p_id."' and oi.ps_id='".(int)$ps_id."' ";
+        $sql = "select sum(amount) as amounts from ".$db->prefix("order_items")." as oi inner join ".$db->prefix("order"). " as o on oi.o_id=o.o_id where o.o_status<3 and (o.del='0' and oi.del='0') and oi.p_id='".$p_id."' and oi.ps_id='".(int)$ps_id."' ";
         list($unDeliveryAmounts) = $db->query_firstRow($sql,false);
         return $unDeliveryAmounts;
     }
