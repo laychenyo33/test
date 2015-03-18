@@ -82,16 +82,7 @@ class MAINDEFAULT{
         $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id  where p_status='1' order by rand() limit 0,3";
 		$selectrs = $db->query($sql);
         while($row = $db->fetch_array($selectrs,1)){
-            if($this->ws_seo){
-				$dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                if(trim($row["p_seo_filename"]) !=""){
-                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                }else{
-                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                }
-            }else{
-                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-            }
+            $p_link = App::getHelper('request')->get_link('products',$row);
             $tpl->newBlock( "PRODUCT_RAND_LIST" );
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                 "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
@@ -118,16 +109,7 @@ class MAINDEFAULT{
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
-            if($this->ws_seo){
-				$dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                if(trim($row["p_seo_filename"]) !=""){
-                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                }else{
-                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                }
-            }else{
-                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-            }
+            $p_link = App::getHelper('request')->get_link('products',$row);            
             $tpl->newBlock( "NEW_PRODUCTS_LIST" );
             $img = (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
             $dimension = $main->resizeto($img,$cms_cfg['idx_new_prod_img_width'],$cms_cfg['idx_new_prod_img_height']);
@@ -173,16 +155,7 @@ class MAINDEFAULT{
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
-            if($this->ws_seo){
-				$dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                if(trim($row["p_seo_filename"]) !=""){
-                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                }else{
-                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                }
-            }else{
-                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-            }
+            $p_link = App::getHelper('request')->get_link('products',$row);
             $dimension = App::getHelper('main')->resizeto($img,$cms_cfg['idx_hot_prod_img_width'],$cms_cfg['idx_hot_prod_img_height']);
             $tpl->newBlock( "HOT_PRODUCTS_LIST" );
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
@@ -228,16 +201,7 @@ class MAINDEFAULT{
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
-            if($this->ws_seo){
-				$dirname=(trim($row["pc_seo_filename"]))?$row["pc_seo_filename"]:"products";
-                if(trim($row["p_seo_filename"]) !=""){
-                    $p_link=$cms_cfg["base_root"].$dirname."/".$row["p_seo_filename"].".html";
-                }else{
-                    $p_link=$cms_cfg["base_root"].$dirname."/"."products-".$row["p_id"]."-".$row["pc_id"].".html";
-                }
-            }else{
-                $p_link=$cms_cfg["base_root"]."products.php?func=p_detail&p_id=".$row["p_id"]."&pc_parent=".$row["pc_id"];
-            }
+            $p_link = App::getHelper('request')->get_link('products',$row);            
             $dimension = App::getHelper('main')->resizeto($img,$cms_cfg['idx_pro_prod_img_width'],$cms_cfg['idx_pro_prod_img_height']);
             $tpl->newBlock( "PROMOTION_PRODUCTS_LIST" );
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
