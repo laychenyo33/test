@@ -370,15 +370,17 @@ class MAINFUNC{
             //尾檔
             //$tpl->assignGlobal("VALUE_SC_FOOTER" ,$_SESSION[$cms_cfg['sess_cookie_name']]["sc_footer"]);
             //設定廣告
-            switch($this->get_main_fun()){
-                case "index":
-                    $tpl->assignGlobal("TAG_INDEX_BANNER",App::getHelper('ad')->getAd(1,'index-banner'));//使用樣版index-banner.html
-                    break;
-                default:
-                    $tpl->assignGlobal("TAG_INSIDE_BANNER",App::getHelper('ad')->getAd(2,'inside-banner'));//使用樣版inside-banner
-                    $tpl->assignGlobal("TAG_INSIDE_LEFT_AD",App::getHelper('ad')->getAd(3,'inside-left'));//使用樣版inside-left
-                    $tpl->assignGlobal("TAG_INSIDE_RIGHT_AD",App::getHelper('ad')->getAd(4,'inside-right'));//使用樣版inside-right
-                    break;
+            if(App::configs()->ws_module->ws_ad){
+                switch($this->get_main_fun()){
+                    case "index":
+                        $tpl->assignGlobal("TAG_INDEX_BANNER",App::getHelper('ad')->getAd(1,'index-banner'));//使用樣版index-banner.html
+                        break;
+                    default:
+                        $tpl->assignGlobal("TAG_INSIDE_BANNER",App::getHelper('ad')->getAd(2,'inside-banner'));//使用樣版inside-banner
+                        $tpl->assignGlobal("TAG_INSIDE_LEFT_AD",App::getHelper('ad')->getAd(3,'inside-left'));//使用樣版inside-left
+                        $tpl->assignGlobal("TAG_INSIDE_RIGHT_AD",App::getHelper('ad')->getAd(4,'inside-right'));//使用樣版inside-right
+                        break;
+                }
             }
         }
     }
