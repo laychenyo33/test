@@ -370,7 +370,7 @@
 		// 完成訂單清單
 		function cart_finish() {
 			global $tpl, $db, $cms_cfg, $TPLMSG, $main, $ws_array;
-                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                        if($this->activateStockChecker && $this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
                             App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
                             die();
                         }
@@ -426,7 +426,7 @@
 		// 預覽訂單
 		function cart_preview() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $main, $allpay, $ws_array;
-                        if($this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
+                        if($this->activateStockChecker && $this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
                             App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
                             die();
                         }
