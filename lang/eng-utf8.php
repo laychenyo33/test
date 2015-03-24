@@ -10,9 +10,9 @@ $TPLMSG['SUBJECT'] = "Subject";
 $TPLMSG['CONTENT'] = "Content";
 $TPLMSG['NAME'] = "Name";
 $TPLMSG['JOIN'] = "Join";
-$TPLMSG['INQUIRY'] = "Inquiry";
+$TPLMSG['INQUIRY'] = "Inquire";
 $TPLMSG['INQUIRY_CART'] = "Inquiry Cart";
-$TPLMSG['INQUIRY_PRICE'] = "Inquiry";
+$TPLMSG['INQUIRY_PRICE'] = "Inquire";
 $TPLMSG['SHOPPING'] = "Buy";
 $TPLMSG['SHOPPING_CART'] = "Shopping Cart";
 $TPLMSG['STATUS'] = "Status";
@@ -42,7 +42,7 @@ $TPLMSG['PAGES'] = "Pages";
 $TPLMSG['DELETE_CHECK_STR'] = "Are you sure?";
 $TPLMSG['TOTAL_RECORDS'] = "Total Records";
 $TPLMSG['TOTAL_PAGES'] = "Total Pages";
-$TPLMSG['AMOUNT'] = "Amount";
+$TPLMSG['AMOUNT'] = "Quantity";
 $TPLMSG['DETAIL'] = "Detail";
 $TPLMSG['VIEWS'] = "View";
 $TPLMSG['FILE'] = "File";
@@ -60,7 +60,7 @@ $TPLMSG['LOGIN_SECURITY'] = "Code";
 $TPLMSG['LOGIN_LANGUAGE'] = "Language";
 $TPLMSG['LOGIN_NOTICE1'] = "Please login or sign up with your account and password.";
 $TPLMSG['LOGIN_FORGOT_PASSWORD'] = "Forgot your password?";
-$TPLMSG['LOGIN_REGISTER'] = "Go To Register";
+$TPLMSG['LOGIN_REGISTER'] = "Go to Register";
 $TPLMSG["LOGIN_BUTTON"] = "Login";
 //NEWS
 $TPLMSG['NEWS'] = "News";
@@ -83,7 +83,7 @@ $TPLMSG['CONTACT_US_PRODUCTS'] = "About Products";
 $TPLMSG['CONTACT_ERROR_REPORTING'] = "Error Feedback";
 $TPLMSG['CONTACT_SUGGESTION'] = "Suggestion";
 $TPLMSG['CONTACT_US_OTHERS'] = "Others";
-$TPLMSG['CONTACT_US_MAIL_NOTICE'] = "We welcome and value your feedbacks about our products and services. We will be response your question instantly.";
+$TPLMSG['CONTACT_US_MAIL_NOTICE'] = "We welcome and value your feedbacks about our products and services. We will be response for your question instantly.";
 $TPLMSG["CONTACT_US_DETAIL"]="Detail";
 $TPLMSG["CONTACT_US_REPLY"]="Reply";
 $TPLMSG["CONTACT_US_REPLY_CONTENT"]="Content";
@@ -91,12 +91,12 @@ $TPLMSG["CONTACT_US_REPLY_TIME"]="Replied Time";
 $TPLMSG['CONTACT_US_COMPANY_NAME']="Company Name";
 $TPLMSG['CONTACT_US_TITLE']="Title";
 $TPLMSG['CONTACT_US_FAX']="Fax";
-$TPLMSG['CONTACT_US_MOBIL']="Mobil";
+$TPLMSG['CONTACT_US_MOBIL']="Mobile";
 $TPLMSG['CONTACT_US_SITE']="Web site";
 $TPLMSG['CONTACT_US_COUNTRY']="Country";
 $TPLMSG['CONTACT_US_CITY']="City";
 $TPLMSG['CONTACT_US_SUBJECT']="Subject";
-$TPLMSG['CONTACT_US_MAIL_TOP_MESSAGE']="Thank you for your letter,  we will reply as soon as possible , thank you for your support for %s again";
+$TPLMSG['CONTACT_US_MAIL_TOP_MESSAGE']="Thank you for your letter, we will reply as soon as possible, thank you for your support for %s again";
 
 //EPAPER
 $TPLMSG['SUBSCRIBE'] = "Subscribe";
@@ -115,8 +115,8 @@ $TPLMSG['CONTACT_PERSON']="Contact Person";
 $TPLMSG['COMPANY_NAME']="Company Name";
 $TPLMSG['CELLPHONE']="Cellphone";
 $TPLMSG['COUNTRY']="Country";
-$TPLMSG['MEMBER_CHECK_ACCOUNT']="Valid Account";
-$TPLMSG['MEMBER_CHECK_PASSWORD']="Valid Password";
+$TPLMSG['MEMBER_CHECK_ACCOUNT']="Re-enter Account";
+$TPLMSG['MEMBER_CHECK_PASSWORD']="Re-enter Password";
 $TPLMSG['MEMBER_DATA_MOD']="Edit Basic data";
 $TPLMSG['MEMBER_ACCOUNT_NOT_EXISTS']="Account not exists!!";
 $TPLMSG['MEMBER_LOGIN']="Login";
@@ -176,8 +176,8 @@ $TPLMSG['CART_INQUIRY'] = "Inquiry Cart";
 $TPLMSG['CART_SHOPPING'] = "Shopping Cart";
 $TPLMSG['CART_TOTAL'] = "Total";
 $TPLMSG['CART_SUBTOTAL'] = "Subtotal";
-$TPLMSG['CART_AMOUNT'] = "Amount";
-$TPLMSG['CART_MODIFY_AMOUNT'] = "Modify Amount";
+$TPLMSG['CART_AMOUNT'] = "Quantity";
+$TPLMSG['CART_MODIFY_AMOUNT'] = "Modify Quantity";
 $TPLMSG['CART_CONTINUE_SHOPPING'] = "Continue";
 $TPLMSG['CART_CONTINUE_INQUIRY'] = "Continue";
 $TPLMSG['CART_FINISH_SHOPPING'] = "Finish";
@@ -228,7 +228,7 @@ $TPLMSG["INQUIRY_QUANTITY_UPDATED"]="Quantity updated!";
 $TPLMSG["DOWNLOAD"]="Download";
 
 //FORGOT PASSWORD
-$TPLMSG["FORGOT_PASSWORD"]="Forgot The Password";
+$TPLMSG["FORGOT_PASSWORD"]="Forgot Password";
 
 //EBOOK
 $TPLMSG["EBOOK"]="E-catalog";
@@ -314,14 +314,14 @@ $TPLMSG['CONTACT_S_2']="Mrs.";
 $TPLMSG['CONTACT_S_3']="Miss";
 $TPLMSG['ACCOUNT_ACTIVATED'] = "Your account have been activated!!! Please login again.";
 $TPLMSG['ACCOUNT_ACTIVATE_FAILED'] = "Account activating failed!";
-$TPLMSG['REGISTER_NOTIFICATION'] = "Please click on the link in the mail send by system after you submit the info , which is process of activating your account.";
+$TPLMSG['REGISTER_NOTIFICATION'] = "Please click on the link in the mail send by system after you submit the info, which is process of activating your account.";
 $TPLMSG['CONTACTUS_PRODUCT_LIST'] = "Product List";
 $TPLMSG['CONTACTUS_POSITION'] = "Department & Position";
 $TPLMSG['EPAPER_HEADER'] = "E-Paper Header";
 $TPLMSG['EPAPER_FOOTER'] = "E-Paper Footer";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "You've been remove from mail list";
 $TPLMSG['GALLERY'] = "Gallery";
-$TPLMSG["PAGE_NO_EXITS"] = "This Page doesn't exists!";
+$TPLMSG["PAGE_NO_EXITS"] = "This Page doesn't exist!";
 //Goodlink
 $TPLMSG['GOODLINK'] = "Good link";
 $TPLMSG['FIRST_TIME_SHOPPING'] = "First Time Shopping";
@@ -410,7 +410,7 @@ $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
 
 //關閉網站
-$TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website closed temporarily";
+$TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website is closed temporarily for maintenance.";
 
 $TPLMSG['ATTACH'] = "Attach file";
 $TPLMSG['MAX_UPLOAD_SIZE'] = "Max upload file size: %s";
