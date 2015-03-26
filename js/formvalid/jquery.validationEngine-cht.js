@@ -130,7 +130,10 @@
                         "alertText":"* 這個檔名已被使用"},                    
                     "onlyLetter":{
                         "regex":"/^([a-zA-Z\ \']+)*$/",
-                        "alertText":"* 請輸入英文字母(大小寫不限)"}
+                        "alertText":"* 請輸入英文字母(大小寫不限)"},
+                    "filename":{
+                        "regex":"/^([a-zA-Z0-9_\-]+)*$/",
+                        "alertText":"* 含不合法字元，僅可使用英數及_-"}
                     }   
     }
     $.validationSettings = $.extend({
