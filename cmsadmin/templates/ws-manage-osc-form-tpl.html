@@ -1,0 +1,63 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>加價購{MSG_MODE}</h1>
+<form name="myform" method="post" action="shopping-condition.php?func=replace"  class="formular" id="formID">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="formtable">
+  <tr>
+        <th>啟用狀態:</th>
+        <td>
+            <!-- START BLOCK : STATUS_RADIO -->
+            <label><input type="radio" name="status" value="{VALUE_STATUS_KEY}" {CHECKED}> {VALUE_STATUS_NAME}</label>
+            <!-- END BLOCK : STATUS_RADIO -->
+        </td>
+  </tr>
+
+
+    <tr>
+        <th><font color="#cc0000">*</font>標題</th>
+        <td>
+            <input name="subject" id="subject" type="text" class="validate[required]" value="{subject}" size="50">
+        </td>
+    </tr>
+    <tr>
+        <th><font color="#cc0000">*</font>類型</th>
+        <td>
+            <select name="type" id="type" class="validate[required]" type="select-one">
+                <option value="">選擇類型</option>
+                <!-- START BLOCK : TYPE_SELECT -->
+                <option value="{VALUE_TYPE_KEY}" {SELECTED}>{VALUE_TYPE_NAME}</option>
+                <!-- END BLOCK : TYPE_SELECT -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>購買數量</th>
+        <td>
+            <input type="text" name="quantity" value="{quantity}"/>
+        </td>
+    </tr>
+    <tr>
+        <th>訂單金額</th>
+        <td>
+            <input type="text" name="amount" value="{amount}"/>
+        </td>
+    </tr>
+
+   
+    <tr>
+        <th>&nbsp;</th>
+        <td>
+         <input type="submit" name="submit" value="{MSG_MODE}" />&nbsp;&nbsp;&nbsp;<input type="button" name="back" value="回到上一頁" onclick="history.back();" />
+        </td>
+    </tr>
+</table>
+<input type="hidden" name="id" value="{id}">
+<input type="hidden" name="action_mode" value="{VALUE_ACTION_MODE}">
+<input name="st" type="hidden" id="st" value="{VALUE_SEARCH_TARGET}">
+<input name="sk" type="hidden" id="sk" value="{VALUE_SEARCH_KEYWORD}">
+<input name="nowp" type="hidden" id="nowp" value="{VALUE_NOW_PAGE}">
+<input name="jp" type="hidden" id="jp" value="{VALUE_JUMP_PAGE}"> 
+</form>
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->
+
