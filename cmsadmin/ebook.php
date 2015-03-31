@@ -283,7 +283,7 @@ class EBOOK{
                                           "STR_EBC_LOCK_CK1" => ($row["ebc_locked"])?"checked":"",
                                           "STR_EBC_LOCK_CK0" => ($row["ebc_locked"])?"":"checked",
                                           "MSG_MODE" => $TPLMSG['MODIFY'],
-                                          "VALUE_EBC_PATH" => $row["ebc_path"]
+                                          "VALUE_EBC_PATH" => $main->content_file_str_replace($row["ebc_path"],'out'),
                 ));
             }else{
                 header("location : ebook.php?func=ebc_list");
@@ -329,7 +329,7 @@ class EBOOK{
                         '".$_REQUEST["ebc_locked"]."',
                         '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."',
                         '".$main->file_str_replace($_REQUEST['ebc_file'])."',
-                        '".$_REQUEST["ebc_path"]."'
+                        '".$main->content_file_str_replace($_REQUEST["ebc_path"],'in')."'
                     )";
 
                 $rs = $db->query($sql);
@@ -379,7 +379,7 @@ class EBOOK{
                     ebc_locked='".$_REQUEST["ebc_locked"]."',
                     ebc_modifyaccount='".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."',
                     ebc_file='".$main->file_str_replace($_REQUEST['ebc_file'])."',
-                    ebc_path='".$_REQUEST["ebc_path"]."'
+                    ebc_path='".$main->content_file_str_replace($_REQUEST["ebc_path"],'in')."'
                 where ebc_id='".$_REQUEST["now_ebc_id"]."'";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
@@ -582,7 +582,7 @@ class EBOOK{
                 $tpl->assignGlobal( array("NOW_EB_ID"  => $row["eb_id"],
                                           "NOW_EBC_ID"  => $row["ebc_id"],
                                           "VALUE_EB_SORT"  => $row["eb_sort"],
-                                          "VALUE_EB_LINK"  => $row["eb_link"],
+                                          "VALUE_EB_LINK"  => $main->content_file_str_replace($row["eb_link"],'out'),
                                           "VALUE_EB_NAME" => $row["eb_name"],
                                           "VALUE_EB_NAME_ALIAS" => $row["eb_name_alias"],
                                           "VALUE_SMALL_IMG" => (trim($row["eb_small_img"])=="")?"":$cms_cfg["file_root"].$row["eb_small_img"],
@@ -637,7 +637,7 @@ class EBOOK{
                         '".htmlspecialchars($_REQUEST["eb_name_alias"])."',
                         '".$this->file_str_replace($_REQUEST["eb_small_img"])."',
                         '".$this->file_str_replace($_REQUEST["eb_big_img"])."',
-                        '".$_REQUEST["eb_link"]."',
+                        '".$main->content_file_str_replace($_REQUEST["eb_link"],'in')."',
                         '".date("Y-m-d H:i:s")."',
                         '".$_REQUEST["eb_locked"]."',
                         '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
@@ -664,7 +664,7 @@ class EBOOK{
                     eb_name_alias = '".htmlspecialchars($_REQUEST["eb_name_alias"])."',
                     eb_small_img = '".$this->file_str_replace($_REQUEST["eb_small_img"])."',
                     eb_big_img = '".$this->file_str_replace($_REQUEST["eb_big_img"])."',
-                    eb_link = '".$_REQUEST["eb_link"]."',
+                    eb_link = '".$main->content_file_str_replace($_REQUEST["eb_link"],'in')."',
                     eb_modifydate = '".date("Y-m-d H:i:s")."',
                     eb_locked = '".$_REQUEST["eb_locked"]."',
                     eb_modifyaccount = '".$_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]."'
