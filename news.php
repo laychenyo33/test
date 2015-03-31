@@ -120,8 +120,8 @@ class NEWS{
             $i++;
             if($row["n_content_type"]==1) {
                 $n_link = $this->get_link($row, true);
-            }else{
-                $n_link = $row["n_url"];
+            }elseif($row["n_content_type"]==2){
+                $n_link = $main->content_file_str_replace($row["n_url"],'out');
             }
             $tpl->newBlock( "NEWS_LIST" );
             $n_img=(trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["n_s_pic"];
@@ -139,9 +139,6 @@ class NEWS{
                                 "VALUE_N_S_PIC_W" => $dimensions['width'],
                                 "VALUE_N_S_PIC_H" => $dimensions['height'],
             ));
-            if($row["n_content_type"]==2){
-                $tpl->assign("VALUE_N_LINK" , $row["n_url"]);
-            }
         }
     }
 //最新消息--顯示================================================================
