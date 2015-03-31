@@ -103,11 +103,11 @@ class EBOOK{
             $rsnum    = $db->numRows($selectrs);
             if($rsnum > 0){
                 //分類列表
-//                $row = $db->fetch_array($selectrs,1);
+//                $ebc_row = $db->fetch_array($selectrs,1);
 //                $tpl->newBlock( $show_style_str_ebc );
 //                 $tpl->assign( array(
-//                    "VALUE_EBC_NAME"  => $row["ebc_name"],
-//                    "VALUE_EBC_CATE_IMG" =>(trim($row["ebc_cate_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["base_root"].$row["ebc_cate_img"]
+//                    "VALUE_EBC_NAME"  => $ebc_row["ebc_name"],
+//                    "VALUE_EBC_CATE_IMG" =>(trim($ebc_row["ebc_cate_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["base_root"].$ebc_row["ebc_cate_img"]
 //                ));
             }else{
                 if($this->eb_homepage!=1){
@@ -125,11 +125,11 @@ class EBOOK{
             }
         }
 		
-		// 讀取 Flash 翻頁式內頁圖檔組成列表
-		if(!empty($ebc_row["ebc_path"])){
-			$this->flash_ebook_load($ebc_row["ebc_path"]);
-			return false;
-		}
+        // 讀取 Flash 翻頁式內頁圖檔組成列表
+        if(!empty($ebc_row["ebc_path"])){
+                $this->flash_ebook_load($ebc_row["ebc_path"]);
+                return false;
+        }
 
         //EBOOK列表
         $sql="select * from ".$cms_cfg['tb_prefix']."_ebook where eb_status='1' and ebc_id ='".$this->parent."' order by eb_sort ".$cms_cfg['sort_pos'].", eb_modifyaccount desc";
@@ -151,10 +151,10 @@ class EBOOK{
             $n= $k+1;
             $tpl->newBlock( $show_style_str_eb );
             if($row['eb_link']){
-                $eb_link=$row['eb_link'];
+                $eb_link=$main->content_file_str_replace($row['eb_link'],'out');
                 $tpl->assign("TAG_TARGET_BLANK","target=\"_blank\"");
             }else{
-            $eb_link=$cms_cfg["base_root"]."ebook.php?func=eb_detail&ebc_parent=".$row["ebc_id"]."&eb_id=".$row["eb_id"]."&nowp=".$n."&jp=".$k;
+                $eb_link=$cms_cfg["base_root"]."ebook.php?func=eb_detail&ebc_parent=".$row["ebc_id"]."&eb_id=".$row["eb_id"]."&nowp=".$n."&jp=".$k;
             }
             $tpl->assign( array(
                 "VALUE_EB_NAME" => $row["eb_name"],
