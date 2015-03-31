@@ -541,6 +541,8 @@ class PRODUCTS{
         if($cms_cfg["ws_module"]['ws_products_application'] && $cms_cfg["ws_module"]['ws_application_cates']){
             $this->application_checkbox($row["pc_id"],true);
         }
+        //加價購設定
+        $this->shoppping_condition($row,'cate');        
     }
     //產品管理分類--資料更新
     function products_cate_replace(){
@@ -585,7 +587,8 @@ class PRODUCTS{
                 if($_POST['pa_id_str']){
                     $db_msg .= $this->write_application($this->pc_id,$_POST['pa_id_str'],true);
                 }
-            }            
+            }
+            $this->write_shopping_condition('pc_id',$this->pc_id,$_POST['using_shopping_condition']);
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             //$goto_url=$cms_cfg["manage_url"]."products.php?func=pc_list&pc_parent=".$_REQUEST["pc_parent"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $goto_url=App::getHelper('request')->get_link('query',array(
@@ -1090,6 +1093,8 @@ class PRODUCTS{
             $this->quantity_discount($row);
             //折扣組合
             $this->discount_sets($row);
+            //加價購設定
+            $this->shoppping_condition($row,'product');            
         }
         if(App::configs()->ws_module->ws_cart_spec){
             $tpl->newBlock("SPEC_ROWS");
@@ -1246,6 +1251,7 @@ class PRODUCTS{
                     $this->_writePstItem($this->p_id,$pstItem);
                 }
             }
+            $this->write_shopping_condition('p_id',$this->p_id,$_POST['using_shopping_condition']);
             if ( $db_msg == "" ) {
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);                 
                 if(isset($_POST['submit2'])){
@@ -3268,6 +3274,48 @@ class PRODUCTS{
             App::getHelper('main')->multiple_select("discount_set",$data,$row['discount_sets'],$tpl);
         }else{
             $tpl->assignGlobal("TAG_NO_DISCOUNT_SETS_EXISTS","未設定任何折扣組合，".App::getHelper('main')->mk_link("按此","discountsets.php?func=add")."前往設定");
+        }
+    }
+    
+    function shoppping_condition($data,$type){
+        global $tpl;
+        $db = App::getHelper('db');
+        if(in_array($type,array('cate','product'))){
+            $today = date("Y-m-d");
+            $sql = "select * from ".$db->prefix("shopping_condition")." where type='{$type}' and (status='1' || (status='2' and start_date<='{$today}' and end_date>='{$today}' )) order by quantity";
+            $res = $db->query($sql);
+            while($condition = $db->fetch_array($res,1)){
+                $and_str = ($type=="cate")? " and pc_id='{$data['pc_id']}'":" and p_id='{$data['p_id']}'";
+                $sql = "select * from ".$db->prefix("shopping_condition_map")." where c_id='{$condition['id']}' ".$and_str;
+                $tag_selected = $db->not_empty($sql)?"selected":'';
+                $tpl->newBlock("SHOPPING_CONDITION_LIST");
+                $tpl->assign(array(
+                    'c_id' => $condition['id'],
+                    'subject' => $condition['subject'],
+                    'tag_selected' => $tag_selected,
+                ));
+            }
+        }
+    }
+    
+    function write_shopping_condition($col,$value,$c_id){
+        $db = App::getHelper('db');
+        if(is_string($c_id)){
+            $c_id = (array)$c_id;
+        }
+        if($c_id){
+            $sql = "delete from ".$db->prefix("shopping_condition_map")." where `{$col}`='{$value}' and `c_id` not in(".implode(',',$c_id).")";
+            $db->query($sql);
+            foreach($c_id as $cid){
+                $sql = "select * from ".$db->prefix("shopping_condition_map")." where `c_id`='{$cid}' and `{$col}`='{$value}' ";
+                if($db->is_empty($sql)){
+                    $sql = "insert into ".$db->prefix("shopping_condition_map")." (`c_id`,`{$col}`)values('{$cid}','{$value}')";
+                    $db->query($sql);
+                }
+            }
+        }else{
+            $sql = "delete from ".$db->prefix("shopping_condition_map")." where `{$col}`='{$value}'";
+            $db->query($sql);
         }
     }
 }

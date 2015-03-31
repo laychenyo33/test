@@ -254,6 +254,17 @@
                 </div>
             </td>            
         </tr>
+        <tr>
+            <th>使用加價購:</th>
+            <td colspan="3">
+                <select name="using_shopping_condition">
+                    <option value="">不使用</option>
+                    <!-- START BLOCK : SHOPPING_CONDITION_LIST -->
+                    <option value="{c_id}" {tag_selected}>{subject}</option>
+                    <!-- END BLOCK : SHOPPING_CONDITION_LIST -->
+                </select>
+            </td>
+        </tr>
         <!-- END BLOCK : ONSALE_ROW -->
         <tr>
             <th>產品大圖:</th>

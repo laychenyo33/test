@@ -22,6 +22,7 @@ class CONFIG{
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
                 $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");
                 $this->config_form($_REQUEST["func"]);
                 $this->ws_tpl_type=1;
                 break;
@@ -134,6 +135,9 @@ class CONFIG{
             $row = App::getHelper('dbtable')->shopping_condition->getData($_REQUEST["id"])->getDataRow();
             if ($row) {
                 foreach($row as $k=>$v){
+                    if($k=='start_date' || $k=='end_date'){
+                        $v = strtotime($v)?$v:'';
+                    }
                     $tpl->assignGlobal( $k,$v);
                 }
                 //產品清單
@@ -150,6 +154,7 @@ class CONFIG{
             }
         }
         //狀態
+        $ws_array['default_status'][2] = "區間";
         $main->multiple_radio('status',$ws_array['default_status'],$row['status'],$tpl);
         //類型
         $main->multiple_select("type",$ws_array['shopping_cond_type'],$row['type'],$tpl);
@@ -157,7 +162,11 @@ class CONFIG{
 //加價購--資料更新================================================================
     function config_replace(){
         global $db,$tpl,$TPLMSG,$main;
-        App::getHelper('dbtable')->shopping_condition->writeData($_POST);
+        $writeData = array_merge($_POST,array(
+            'start_date' => ($_POST['status']==2 && empty($_POST['start_date']))?date("Y-m-d"):$_POST['start_date'],
+            'end_date'   => ($_POST['status']==2 && empty($_POST['end_date']))?date('Y-m-d'):$_POST['end_date'],
+        ));
+        App::getHelper('dbtable')->shopping_condition->writeData($writeData);
         $c_id = $_POST['id']?$_POST['id']:App::getHelper('dbtable')->shopping_condition->get_insert_id();
         $db_msg = App::getHelper('dbtable')->shopping_condition->report();
         if ( $db_msg == "" ) {
@@ -170,17 +179,19 @@ class CONFIG{
                 }
                 //現在的產品
                 $_n = explode(',',$_POST['products']);
-                foreach($_o as $k => $_o_p_id){
-                    //舊的不存在的p_id刪除
-                    if(!in_array($_o_p_id,$_n)){
-                        $sql = "delete from ".$db->prefix("shopping_condition_products")." where c_id='{$c_id}' and p_id='{$_o_p_id}'";
-                        $db->query($sql,true);
-                        unset($_o[$k]);
+                if($_o){
+                    foreach($_o as $k => $_o_p_id){
+                        //舊的不存在的p_id刪除
+                        if(!in_array($_o_p_id,$_n)){
+                            $sql = "delete from ".$db->prefix("shopping_condition_products")." where c_id='{$c_id}' and p_id='{$_o_p_id}'";
+                            $db->query($sql,true);
+                            unset($_o[$k]);
+                        }
                     }
                 }
                 foreach($_n as $k => $_n_p_id){
                     //新舊都存在的p_id不處理
-                    if(in_array($_n_p_id,$_o)){
+                    if(in_array($_n_p_id,(array)$_o)){
                         unset($_n[$k]);
                     }
                 }
@@ -204,6 +215,10 @@ class CONFIG{
             App::getHelper('dbtable')->shopping_condition->del($_REQUEST["id"]);
             $db_msg = App::getHelper('dbtable')->shopping_condition->report();
             if ( $db_msg == "" ) {
+                $sql = "delete from ".$db->prefix("shopping_condition_map")." where c_id='{$_REQUEST["id"]}'";
+                $db->query($sql);
+                $sql = "delete from ".$db->prefix("shopping_condition_products")." where c_id='{$_REQUEST["id"]}'";
+                $db->query($sql);
                 $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                 $goto_url=$_SERVER['PHP_SELF']."?func=list&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
                 $this->goto_target_page($goto_url);

@@ -5,7 +5,7 @@
 <form action="shopping-condition.php" method="get" name="myform" class="formular" id="formID">
     <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
     <tr>
-      <td colspan="9">
+      <td colspan="10">
         <div class="title">
         <ul>
           <li><img src="images/icon-add.gif" /><a href="shopping-condition.php?func=add" >新增</a></li>
@@ -25,6 +25,7 @@
       <th width="10%">類型</th>
       <th width="7%">數量</th>
       <th width="7%">價格</th>
+      <th width="10%">加價購價格</th>
       <th width="5%">修改</th>
       <th width="5%">刪除</th>
       <th width="5%">狀態</th>
@@ -37,6 +38,7 @@
       <td>{type}</td>
       <td>{quantity}</td>
       <td>{amount}</td>
+      <td>{price}</td>
       <td><a href="shopping-condition.php?func=mod&id={id}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}"><img src="images/icon-edit2.gif" width="11" border="0" alt="{MSG_MODIFY}" /></a></td>
       <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','shopping-condition.php?func=del&id={id}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}');"><img src="images/icon-del2.gif" width="10" height="9" border="0" /></a></td>
       <td><img src="images/{VALUE_STATUS_IMG}" alt='{VALUE_STATUS_IMG_ALT}{MSG_STATUS}' border="0" /></td>
