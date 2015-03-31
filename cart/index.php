@@ -267,6 +267,7 @@
                                 }                                
                                 $gift = $this->container->getModule("giftor")->getGift($this->giftId);
                                 $cartProducts = $this->container->get_cart_products();
+                                $additionalPurchaseProducts = $this->container->getModule("conditioner")->getAdditionalPurchaseProducts();
 				foreach ($cartProducts as $p_id =>  $row) {
 	
 					$tpl->newBlock("TAG_CART_LIST");
@@ -337,6 +338,28 @@
 					$this->service_rule();
 				}
                                 
+                                if($additionalPurchaseProducts){
+                                    foreach($additionalPurchaseProducts as $condition){
+                                        $tpl->newBlock("CONDITION_LIST");
+                                        $tpl->assign(array(
+                                            'price' => $condition['price'],
+                                        ));
+                                        foreach($condition['products'] as $addProd){
+                                            $tpl->newBlock("ADD_PROD");
+                                            $img = $addProd['p_small_img']?App::configs()->file_root . $addProd['p_small_img']: App::configs()->default_preview_pic;
+                                            $dimension = App::getHelper('main')->resizeto($img,190,190);
+                                            $tpl->assign(array(
+                                                "VALUE_P_NAME" => $addProd['p_name'],
+                                                "VALUE_P_LINK" => App::getHelper('request')->get_link("products",$addProd),
+                                                "VALUE_P_SMALL_IMG" => $addProd['p_small_img'],
+                                                "VALUE_P_SMALL_IMG_W" => $dimension['width'],
+                                                "VALUE_P_SMALL_IMG_H" => $dimension['height'],
+                                                "VALUE_P_SPECIAL_PRICE" => $addProd['p_special_price'],
+                                                "VALUE_P_ADD_PRICE"     => $addProd['price'],
+                                            ));
+                                        }
+                                    }
+                                }
                                 //輸出額外費用及總價
                                 $cartInfo = $this->container->get_cart_info();
                                 $tpl->newBlock("TAG_PLUS_FEE");
