@@ -21,6 +21,7 @@ class CONFIG{
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
                 $tpl->newBlock("JS_FORMVALID");
+                $tpl->newBlock("JS_JQ_UI");
                 $this->config_form($_REQUEST["func"]);
                 $this->ws_tpl_type=1;
                 break;
@@ -135,9 +136,13 @@ class CONFIG{
                 foreach($row as $k=>$v){
                     $tpl->assignGlobal( $k,$v);
                 }
+                //產品清單
+                $sql = "select group_concat(p_id) from ".$db->prefix("shopping_condition_products")." where c_id='{$row['id']}' group by c_id";
+                list($pid_str) = $db->query_firstRow($sql,0);
                 $tpl->assignGlobal( array(
                     "STR_AU_STATUS_CK1" => ($row["status"]==1)?"checked":"",
                     "STR_AU_STATUS_CK0" => ($row["status"]==0)?"checked":"",
+                    "VALUE_PRODUCTS"    => $pid_str,
                     "MSG_MODE" => $TPLMSG['MODIFY'],
                 ));
             }else{
@@ -151,10 +156,39 @@ class CONFIG{
     }
 //加價購--資料更新================================================================
     function config_replace(){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$main;
+        global $db,$tpl,$TPLMSG,$main;
         App::getHelper('dbtable')->shopping_condition->writeData($_POST);
+        $c_id = $_POST['id']?$_POST['id']:App::getHelper('dbtable')->shopping_condition->get_insert_id();
         $db_msg = App::getHelper('dbtable')->shopping_condition->report();
         if ( $db_msg == "" ) {
+            if($_POST['products']){
+                //原來的產品
+                $sql = "select p_id from ".$db->prefix("shopping_condition_products")." where c_id='{$c_id}'";
+                $res = $db->query($sql);
+                while(list($p_id) = $db->fetch_array($res,0)){
+                    $_o[] = $p_id;
+                }
+                //現在的產品
+                $_n = explode(',',$_POST['products']);
+                foreach($_o as $k => $_o_p_id){
+                    //舊的不存在的p_id刪除
+                    if(!in_array($_o_p_id,$_n)){
+                        $sql = "delete from ".$db->prefix("shopping_condition_products")." where c_id='{$c_id}' and p_id='{$_o_p_id}'";
+                        $db->query($sql,true);
+                        unset($_o[$k]);
+                    }
+                }
+                foreach($_n as $k => $_n_p_id){
+                    //新舊都存在的p_id不處理
+                    if(in_array($_n_p_id,$_o)){
+                        unset($_n[$k]);
+                    }
+                }
+                foreach($_n as $k => $_n_p_id){
+                    $sql = "insert into ".$db->prefix("shopping_condition_products")." values('{$c_id}','{$_n_p_id}')";
+                    $db->query($sql);
+                }
+            }
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
             $goto_url=$_SERVER['PHP_SELF']."?func=list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
             $this->goto_target_page($goto_url);
