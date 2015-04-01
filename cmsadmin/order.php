@@ -341,7 +341,7 @@ class ORDER{
                     $tpl->newBlock("SINGLE_ADDRESS");
                 }                
                 //訂購產品列表
-                $sql="select oi.*,p.p_small_img from ".$cms_cfg['tb_prefix']."_order_items as oi inner join ".$db->prefix("products")." as p on oi.p_id=p.p_id where o_id='".$_REQUEST["o_id"]."'";
+                $sql="select oi.*,p.p_small_img from ".$cms_cfg['tb_prefix']."_order_items as oi left join ".$db->prefix("products")." as p on oi.p_id=p.p_id where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 if(!$_GET['showdel']){
                     $sql .= " and del='0' ";
                 }
@@ -357,9 +357,15 @@ class ORDER{
                     $i++;
                     $sub_total_price = round($row["price"] * $row["amount"] * $row['discount']);
                     $tpl->newBlock( "ORDER_ITEMS_LIST" );
+                    if($row['p_id']>0){
+                        $img = $row["p_small_img"]?$cms_cfg['file_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'];
+                    }else{
+                        $gift = App::getHelper('session')->modules()->cart->getModule("giftor")->getGift($row['p_id']);
+                        $img = App::configs()->file_root . $gift['p_small_img'];
+                    }
                     $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                         "VALUE_P_NAME" => $row["p_name"],
-                                        "VALUE_P_SMALL_IMG" => $row["p_small_img"]?$cms_cfg['file_root'].$row["p_small_img"]:$cms_cfg['default_preview_pic'],
+                                        "VALUE_P_SMALL_IMG" => $img,
                                         "VALUE_P_SELL_PRICE" => $row["price"],
                                         "VALUE_P_AMOUNT" => $row["amount"],
                                         "TAG_QUANTITY_DISCOUNT" => $row['discount']<1?$row['discount']:'',
