@@ -192,6 +192,15 @@ class MAINFUNC{
             $tpl->assignGlobal( "MEMBER_LOGINSTATUS_SWITCH",$this->mk_link($TPLMSG['MEMBER_LOGIN'], App::configs()->base_root . "member.php"));
             //載入驗証碼
             $this->security_zone($cms_cfg['security_image_width'],$cms_cfg['security_image_height']);
+            //社群登入工具
+            if(trim(App::configs()->ws_module->ws_member_social_login)!=''){
+                $tpl->newBlock("SOCIAL_LOGIN");
+                $socialLoginTool = explode(',',App::configs()->ws_module->ws_member_social_login);
+                foreach($socialLoginTool as $sTool){
+                    $tpl->newBlock(strtoupper($sTool)."_LOGIN");//登入按鈕區塊;
+                    $tpl->newBlock(strtoupper($sTool)."_JS");//登入js區塊;
+                }
+            }
         }else{
             $tpl->assignGlobal( "MEMBER_LOGINSTATUS_SWITCH",$this->mk_link($TPLMSG["MEMBER_LOGOUT"], App::configs()->base_root . "login.php?func=logout"));
             $tpl->newBlock( "MEMBER_INFO" );
