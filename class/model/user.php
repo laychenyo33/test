@@ -10,12 +10,14 @@ class Model_User extends Model_Modules {
     }
     
     function login($local_member,$return=''){
+        global $TPLMSG;
+        $contact_s = App::configs()->ws_module->ws_contactus_s_style;
         App::getHelper('session')->MEMBER_ID=$local_member["m_id"];
         App::getHelper('session')->MEMBER_ACCOUNT=$local_member["m_account"];
-        App::getHelper('session')->MEMBER_NAME=$local_member["m_fname"].$local_member["m_lname"];
+        App::getHelper('session')->MEMBER_NAME=sprintf($TPLMSG['MEMBER_NAME_SET_'.$contact_s],$local_member["m_fname"],$local_member["m_lname"]);
         App::getHelper('session')->MEMBER_CATE_ID=$local_member["mc_id"];
         App::getHelper('session')->MEMBER_CATE=$local_member["mc_subject"];
-        App::getHelper('session')->MEMBER_DISCOUNT=$local_member["mc_discount"];
+        App::getHelper('session')->MEMBER_DISCOUNT=$local_member["mc_discount"];       
         //寫入登入記錄
         $sql="
             insert into ".App::getHelper('db')->prefix("login_history")." (

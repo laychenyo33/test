@@ -41,31 +41,7 @@ class LOGIN {
             $row = $db->fetch_array($selectrs,1);
             $rsnum = $db->numRows($selectrs);
             if ($rsnum > 0) {
-                $contact_s = App::configs()->ws_module->ws_contactus_s_style;
-                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"]=$row["m_id"];
-                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"]=$row["m_account"];
-                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_NAME"]= sprintf($TPLMSG['MEMBER_NAME_SET_'.$contact_s],$row["m_fname"],$row["m_lname"]);
-                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE_ID"]=$row["mc_id"];
-                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE"]=$row["mc_subject"];
-                $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=$row["mc_discount"];
-                //寫入登入記錄
-                $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_login_history (
-                        m_id,lh_success,lh_modifydate
-                    ) values (
-                        '".$row["m_id"]."','1','".date("Y-m-d H:i:s")."'
-                    )";
-                $rs = $db->query($sql);
-                $sql = "SELECT COUNT( * ) FROM  ".$db->prefix("login_history")." WHERE m_id = '{$row['m_id']}' AND lh_success = '1'";
-                list($login_times) = $db->query_firstRow($sql,0);
-                App::getHelper('dbtable')->member->update(array('login_times'=>$login_times),"m_id='{$row['m_id']}'");
-                $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]="";
-                //echo "1";
-                if(empty($_POST['return_url'])){
-                    header("location: ".$_SERVER['HTTP_REFERER']);
-                }else{
-                    header("location: ".$_POST['return_url']);
-                }
+                Model_User::login($row,$_POST['return_url']);
             }else{
                 //echo "2";
                 $_SESSION[$cms_cfg['sess_cookie_name']]["ERROR_MSG"]=$TPLMSG['LOGIN_ERROR'];
@@ -79,8 +55,7 @@ class LOGIN {
     }
     //登出
     function Logout(){
-        session_destroy();
-        header("location: index.php");
+        Model_User::logout();
     }
 }
 
