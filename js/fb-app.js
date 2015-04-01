@@ -1,21 +1,21 @@
 jQuery(function($){
-    function getLoginedAuthInfo(response){
-        A_uid = response.authResponse.userID;
-        A_accessToken = response.authResponse.accessToken;
-        A_page_id = "391099847708485";
-        A_page_access_token = null;
-        FB.api('/me/accounts', 'get',  function(response) {
-            if(response.data !== undefined){
-                for(var k=0;k<response.data.length;k++){
-                    if(response.data[k].id==A_page_id){
-                        A_page_access_token = response.data[k].access_token;
-                        $("#postToFb,#photoToFb,#fbContent").show();
-                        break;
-                    }
-                }
-            }
-        });          
-    }
+//    function getLoginedAuthInfo(response){
+//        A_uid = response.authResponse.userID;
+//        A_accessToken = response.authResponse.accessToken;
+//        A_page_id = "391099847708485";
+//        A_page_access_token = null;
+//        FB.api('/me/accounts', 'get',  function(response) {
+//            if(response.data !== undefined){
+//                for(var k=0;k<response.data.length;k++){
+//                    if(response.data[k].id==A_page_id){
+//                        A_page_access_token = response.data[k].access_token;
+//                        $("#postToFb,#photoToFb,#fbContent").show();
+//                        break;
+//                    }
+//                }
+//            }
+//        });          
+//    }
     function updateStatusCallback(response){
           if (response.status === 'connected') {
             // the user is logged in and has authenticated your
@@ -40,7 +40,7 @@ jQuery(function($){
           xfbml      : true,
           version    : 'v2.3'
         });   
-        //FB.getLoginStatus(updateStatusCallback);
+        FB.getLoginStatus(updateStatusCallback);
     });
     
     $("#login-fb").click(function(evt){
