@@ -285,13 +285,14 @@
                             if(req.subtotal_price==0){
                                 redirect = true;
                             }
-                            dialog.dialog('close');
+                            $("#ship_price").text(req.shipping_price);
+                            $("#s_charge_fee").text(req.charge_fee);
+                            $("#total_str").text(req.total_price);
                             if(redirect){
                                 location.replace('{TAG_ROOT_PATH}products.htm');
                             }else{
-                                $("#ship_price").text(req.shipping_price);
-                                $("#s_charge_fee").text(req.charge_fee);
-                                $("#total_str").text(req.total_price);
+                                dialog.dialog('close');
+                                location.reload();                                
                             }
                         }else{
                             alert('操作失敗!');
