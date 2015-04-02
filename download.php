@@ -22,6 +22,7 @@ class DOWNLOAD{
             $this->ws_tpl_file = "templates/ws-login-form-tpl.html";
             $this->ws_load_tp($this->ws_tpl_file);
             $main->layer_link($TPLMSG["MEMBER_LOGIN"]);
+            $main->header_footer('member',$TPLMSG["MEMBER_LOGIN"]);
             $tpl->assignGlobal( "MSG_MEMBER_LOGIN",$TPLMSG["MEMBER_LOGIN"]);
             $tpl->assignGlobal( "MSG_LOGIN_NOTICE1",$TPLMSG['LOGIN_NOTICE1']);
             $this->ws_tpl_type = 1;
