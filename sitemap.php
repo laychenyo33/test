@@ -33,8 +33,10 @@ class SITEMAP{
         $main->layer_link($TPLMSG["SITEMAP"]);
         $main->header_footer("sitemap", $TPLMSG["SITEMAP"]);
         //$main->left_fix_cate_list(); //顯示產品分類
-        $leftmenu = new Leftmenu_Products($tpl);
-        $leftmenu->make();        
+        if($cms_cfg["ws_module"]["ws_products"] && $cms_cfg["ws_module"]["ws_left_main_pc"]==1){
+            $leftmenu = new Leftmenu_Products($tpl);
+            $leftmenu->make();        
+        }
         $main->google_code(); //google analystics code , google sitemap code
     }
 

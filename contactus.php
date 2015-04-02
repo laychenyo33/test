@@ -71,7 +71,7 @@ class CONTACTUS{
             $tpl->newBlock("MATH_SECURITY_ZONE");
             $main->math_security();
         }
-        if($cms_cfg["ws_module"]["ws_left_main_pc"]==1){
+        if($cms_cfg["ws_module"]["ws_products"] && $cms_cfg["ws_module"]["ws_left_main_pc"]==1){
             ///$main->left_fix_cate_list();
             $leftmenu = new Leftmenu_Products($tpl);
             $leftmenu->make();            
