@@ -309,8 +309,8 @@ class Model_Session_Cart extends Model_Modules {
         return $discounter;
     }
     
-    protected function combine_id($p_id,$ps_id){
-        return $p_id . ":" . $ps_id;        
+    protected function combine_id($p_id,$ps_id , $delimiter=':'){
+        return $p_id . $delimiter . $ps_id;
     }
     
     function checkLocalOnly(){
