@@ -36,7 +36,9 @@ class Redirectdetect{
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-products"); //主要顯示區域的css設定
         $main->google_code(); //google analystics code , google sitemap code
         //$main->left_fix_cate_list();
-        $leftmenu = new Leftmenu_Products($tpl);
-        $leftmenu->make();
+        if($cms_cfg["ws_module"]["ws_products"] && $cms_cfg["ws_module"]["ws_left_main_pc"]==1){
+            $leftmenu = new Leftmenu_Products($tpl);
+            $leftmenu->make();
+        }
     }
 }
