@@ -4,6 +4,7 @@ class Singleton_Sitemap{
         global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array;
         $ext=($this->ws_seo)?".htm":".php";
         ($cms_cfg["ws_module"]["ws_aboutus"])?$tpl->newBlock( "SITEMAP_ABOUTUS" ):"";
+        ($cms_cfg["ws_module"]["ws_contactus"])?$tpl->newBlock( "SITEMAP_CONTACTUS" ):"";
         ($cms_cfg["ws_module"]["ws_download"])?$tpl->newBlock( "SITEMAP_DOWNLOAD" ):"";
         ($cms_cfg["ws_module"]["ws_faq"])?$tpl->newBlock( "SITEMAP_FAQ" ):"";
         ($cms_cfg["ws_module"]["ws_news"])?$tpl->newBlock( "SITEMAP_NEWS" ):"";
@@ -56,9 +57,13 @@ class Singleton_Sitemap{
                                  "VALUE_CONTACTUS_LINK" =>$cms_cfg["base_root"]."contactus".$ext,
                                  "VALUE_GALLERY_LINK" =>$cms_cfg["base_root"]."gallery".$ext,
         ));
-        $this->aboutus_list();
-        $map = $this->get_product_layer();
-        $this->print_product_layer($map);
+        if($cms_cfg["ws_module"]["ws_aboutus"]){
+            $this->aboutus_list();
+        }
+        if(($cms_cfg["ws_module"]["ws_products"])){
+            $map = $this->get_product_layer();
+            $this->print_product_layer($map);
+        }
     }
 
     function get_product_layer($parent=0,$container=array()){
@@ -134,7 +139,6 @@ class Singleton_Sitemap{
         }
     }    
     
-    
     function aboutus_list(){
         global $tpl;
         $sql = "select  distinct au_cate from ".App::getHelper('db')->prefix("aboutus");
@@ -147,6 +151,5 @@ class Singleton_Sitemap{
             ));
         }
     }    
-    
 }
 ?>

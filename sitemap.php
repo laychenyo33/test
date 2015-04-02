@@ -33,8 +33,10 @@ class SITEMAP{
         $main->layer_link($TPLMSG["SITEMAP"]);
         $main->header_footer("sitemap", $TPLMSG["SITEMAP"]);
         //$main->left_fix_cate_list(); //顯示產品分類
-        $leftmenu = new Leftmenu_Products($tpl);
-        $leftmenu->make();        
+        if($cms_cfg["ws_module"]["ws_products"] && $cms_cfg["ws_module"]["ws_left_main_pc"]==1){
+            $leftmenu = new Leftmenu_Products($tpl);
+            $leftmenu->make();        
+        }
         $main->google_code(); //google analystics code , google sitemap code
     }
 
@@ -43,6 +45,7 @@ class SITEMAP{
         global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array;
         $ext=($this->ws_seo)?".htm":".php";
         ($cms_cfg["ws_module"]["ws_aboutus"])?$tpl->newBlock( "SITEMAP_ABOUTUS" ):"";
+        ($cms_cfg["ws_module"]["ws_contactus"])?$tpl->newBlock( "SITEMAP_CONTACTUS" ):"";
         ($cms_cfg["ws_module"]["ws_download"])?$tpl->newBlock( "SITEMAP_DOWNLOAD" ):"";
         ($cms_cfg["ws_module"]["ws_faq"])?$tpl->newBlock( "SITEMAP_FAQ" ):"";
         ($cms_cfg["ws_module"]["ws_news"])?$tpl->newBlock( "SITEMAP_NEWS" ):"";
@@ -95,9 +98,13 @@ class SITEMAP{
                                  "VALUE_CONTACTUS_LINK" =>$cms_cfg["base_root"]."contactus".$ext,
                                  "VALUE_GALLERY_LINK" =>$cms_cfg["base_root"]."gallery".$ext,
         ));
-        $this->aboutus_list();
-        $map = $this->get_product_layer();
-        $this->print_product_layer($map);
+        if($cms_cfg["ws_module"]["ws_aboutus"]){
+            $this->aboutus_list();
+        }
+        if(($cms_cfg["ws_module"]["ws_products"])){
+            $map = $this->get_product_layer();
+            $this->print_product_layer($map);
+        }
     }
     
     function get_product_layer($parent=0,$container=array()){
