@@ -350,6 +350,7 @@
 				}
                                 
                                 if($additionalPurchaseProducts){
+                                    $tpl->newBlock("ADD_PURCHASE_ZONE");
                                     foreach($additionalPurchaseProducts as $c_id => $condition){
                                         $tpl->newBlock("CONDITION_LIST");
                                         $tpl->assign(array(
@@ -364,7 +365,7 @@
                                                 "VALUE_P_ID" => $addProd['p_id'],
                                                 "VALUE_P_NAME" => $addProd['p_name'],
                                                 "VALUE_P_LINK" => App::getHelper('request')->get_link("products",$addProd),
-                                                "VALUE_P_SMALL_IMG" => $addProd['p_small_img'],
+                                                "VALUE_P_SMALL_IMG" => $img,
                                                 "VALUE_P_SMALL_IMG_W" => $dimension['width'],
                                                 "VALUE_P_SMALL_IMG_H" => $dimension['height'],
                                                 "VALUE_P_SPECIAL_PRICE" => $addProd['p_special_price'],
