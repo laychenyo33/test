@@ -102,6 +102,9 @@ class INQUIRY{
         if($_REQUEST["st"]=="i_name"){
             $and_str .= " and i_name like '%".$_REQUEST["sk"]."%'";
         }
+        if(!$_GET['showdel']){
+            $and_str .= " and del='0'";
+        }        
         $sql .= $and_str." order by i_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
@@ -121,7 +124,13 @@ class INQUIRY{
             $i++;
             $tpl->newBlock( "INQUIRY_LIST" );
             if($i%2){
-                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+                $rowClass[] = 'altrow';
+            }
+            if($row['del']){
+                $rowClass[] = 'del';
+            }
+            if($rowClass){
+                $tpl->assign("TAG_TR_CLASS","class='".implode(" ",$rowClass)."'");
             }
             $tpl->assign( array("VALUE_I_ID"  => $row["i_id"],
                                 "VALUE_I_NAME" => $row["i_name"],
@@ -144,9 +153,9 @@ class INQUIRY{
         if(!empty($cu_id)){
             $cu_id_str = implode(",",$cu_id);
             //刪除勾選的詢問單
-            $sql="delete from ".$cms_cfg['tb_prefix']."_inquiry where i_id in (".$cu_id_str.")";
+            $sql="update ".$cms_cfg['tb_prefix']."_inquiry set del='1' where i_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
-            $sql="delete from ".$cms_cfg['tb_prefix']."_inquiry_items where i_id in (".$cu_id_str.")";
+            $sql="update ".$cms_cfg['tb_prefix']."_inquiry_items set del='1' where i_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
@@ -175,6 +184,9 @@ class INQUIRY{
         //帶入要回覆的詢問單資料
         if(!empty($_REQUEST["i_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where i_id='".$_REQUEST["i_id"]."'";
+            if(!$_GET['showdel']){
+                $sql .= " and del='0'";
+            }            
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -196,6 +208,9 @@ class INQUIRY{
                 $tpl->newBlock("I_CONTACT_S_".$this->contact_s_style);
                 //訂購產品列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry_items where i_id='".$_REQUEST["i_id"]."'";
+                if(!$_GET['showdel']){
+                    $sql .= " and del='0' ";
+                }
                 $selectrs = $db->query($sql);
                 $total_price=0;
                 $i=0;
