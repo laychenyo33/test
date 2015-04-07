@@ -96,6 +96,9 @@ class ADMIN{
         if($_REQUEST["st"]=="ai_name"){
             $and_str .= " and ai_name like '%".$_REQUEST["sk"]."%'";
         }
+        if(!App::configs()->ws_module->ws_seo){
+            $and_str .= " and ai_for_ips='0'";
+        }
         $sql .= $and_str." order by ai_sort ".$cms_cfg['sort_pos'].",ai_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
@@ -160,6 +163,9 @@ class ADMIN{
         if($action_mode=="mod" && !empty($_REQUEST["ai_id"])){
             $tpl->newBlock( "MOD_ADMIN" );
             $sql="select * from ".$cms_cfg['tb_prefix']."_admin_info where ai_id='".$_REQUEST["ai_id"]."'";
+            if(!App::configs()->ws_module->ws_seo){
+                $sql .= " and ai_for_ips='0'";
+            }
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
