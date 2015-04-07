@@ -226,7 +226,7 @@ class DOWNLOAD{
                     ));
                 }
             }else{
-                header("location : download.php?func=dc_list");
+                header("location: download.php?func=dc_list");
                 die();
             }
         }
@@ -499,7 +499,7 @@ class DOWNLOAD{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : download.php?func=d_list");
+                header("location: download.php?func=d_list");
                 die();
             }
         }

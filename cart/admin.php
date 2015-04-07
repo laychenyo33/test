@@ -339,7 +339,7 @@ class ORDER{
                     }                     
                 }
             }else{
-                header("location : ".$_SERVER['PHP_SELF']."?func=o_list");
+                header("location: ".$_SERVER['PHP_SELF']."?func=o_list");
             }
         }
     }

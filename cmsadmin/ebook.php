@@ -286,7 +286,7 @@ class EBOOK{
                                           "VALUE_EBC_PATH" => $main->content_file_str_replace($row["ebc_path"],'out'),
                 ));
             }else{
-                header("location : ebook.php?func=ebc_list");
+                header("location: ebook.php?func=ebc_list");
             }
         }
         //載入分類資料,選擇分類
@@ -596,7 +596,7 @@ class EBOOK{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : ebook.php?func=eb_list");
+                header("location: ebook.php?func=eb_list");
             }
         }
         $this->ebook_cate_select2($this->ebook_cate_select_option,$row["ebc_id"], $parent=0, $indent="");

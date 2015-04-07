@@ -186,7 +186,7 @@ class ADMIN{
                     $tpl->newBlock( "NORMAL_ADMIN_AUTHORITY" );
                 }
             }else{
-                header("location : admin.php?func=ai_list");
+                header("location: admin.php?func=ai_list");
             }
         }else{
             //$tpl->newBlock( "JS_AUTHORITY");

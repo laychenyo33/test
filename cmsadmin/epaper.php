@@ -223,7 +223,7 @@ class EPAPER{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : epaper.php?func=ec_list");
+                header("location: epaper.php?func=ec_list");
             }
         }
     }
@@ -420,7 +420,7 @@ class EPAPER{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : epaper.php?func=e_list");
+                header("location: epaper.php?func=e_list");
             }
         }
         //電子報分類
@@ -457,7 +457,7 @@ class EPAPER{
                                           "VALUE_E_ACTION_TYPE" => "send",
                 ));
             }else{
-                header("location : epaper.php?func=e_list");
+                header("location: epaper.php?func=e_list");
             }
             //相關參數
             if(!empty($_REQUEST['nowp'])){
@@ -544,7 +544,7 @@ class EPAPER{
                     throw new Exception("specify template doesn't exists!" );
                 }
             }else{
-                header("location : epaper.php?func=e_list");
+                header("location: epaper.php?func=e_list");
             }
         }
     }

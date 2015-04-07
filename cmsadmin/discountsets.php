@@ -147,7 +147,7 @@ class DISCOUNTSETS{
                     "MSG_MODE" => $TPLMSG['MODIFY'] //表單模式變更為『修改』
                 ));
             }else{
-                header("location : discountsets.php?func=list");
+                header("location: discountsets.php?func=list");
                 die();
             }
         }
@@ -337,7 +337,7 @@ class DISCOUNTSETS{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : discountsets.php?func=pst_list");
+                header("location: discountsets.php?func=pst_list");
             }
         }
         //規格分類

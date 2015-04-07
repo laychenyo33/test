@@ -364,7 +364,7 @@ class ORDER{
                     }                       
                 }
             }else{
-                header("location : order.php?func=o_list");
+                header("location: order.php?func=o_list");
             }
         }
     }

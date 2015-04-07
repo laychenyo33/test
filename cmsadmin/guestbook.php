@@ -240,7 +240,7 @@ class GUESTBOOK{
                     ));
                 }
             }else{
-                header("location : guestbook.php?func=gb_list");
+                header("location: guestbook.php?func=gb_list");
             }
         }
     }

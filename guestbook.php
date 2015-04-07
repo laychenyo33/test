@@ -238,7 +238,7 @@ class GUESTBOOK{
                     ));
                 }
             }else{
-                header("location : guestbook.php?func=gb_list");
+                header("location: guestbook.php?func=gb_list");
             }
             $tpl->assignGlobal( array("VALUE_GB_REPLY_TYPE" => 2,
                                       "VALUE_GB_PARENT" => $_REQUEST["gb_id"],

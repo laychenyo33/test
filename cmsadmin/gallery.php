@@ -236,7 +236,7 @@ class GALLERY{
                     ));
                 }
             }else{
-                header("location : gallery.php?func=gc_list");
+                header("location: gallery.php?func=gc_list");
                 die();
             }
         }
@@ -503,7 +503,7 @@ class GALLERY{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : gallery.php?func=g_list");
+                header("location: gallery.php?func=g_list");
                 die();
             }
         }

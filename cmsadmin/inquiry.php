@@ -218,7 +218,7 @@ class INQUIRY{
                     }                       
                 }
             }else{
-                header("location : inquiry.php?func=i_list");
+                header("location: inquiry.php?func=i_list");
             }
         }
     }

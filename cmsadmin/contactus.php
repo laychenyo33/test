@@ -297,7 +297,7 @@ class CONTACTUS{
                     ));
                 }
             }else{
-                header("location : contactus.php?func=cu_list");
+                header("location: contactus.php?func=cu_list");
                 die();
             }
         }
