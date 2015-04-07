@@ -689,7 +689,7 @@ class MEMBER{
                                 "MSG_MODIFYDATE" => $TPLMSG['MODIFYDATE'],
                                 "MSG_VIEWS" => $TPLMSG['VIEWS'],
             ));
-            $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where m_id='".$this->m_id."'  order by i_createdate desc ";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where m_id='".$this->m_id."' and del='0'  order by i_createdate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);
@@ -749,7 +749,7 @@ class MEMBER{
             }
             //帶入要回覆的訂單資料
             if(!empty($_REQUEST["i_id"])){
-                $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where m_id='".$this->m_id."' and i_id='".$_REQUEST["i_id"]."'";
+                $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where m_id='".$this->m_id."' and del='0' and i_id='".$_REQUEST["i_id"]."'";
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
@@ -821,7 +821,7 @@ class MEMBER{
                 ));
             }
             //聯絡我們列表
-            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."' order by cu_modifydate desc";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."' and del='0' order by cu_modifydate desc";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -889,7 +889,7 @@ class MEMBER{
             }
             //帶入聯絡我們資料
             if(!empty($_REQUEST["cu_id"])){
-                $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."' and cu_id='".$_REQUEST["cu_id"]."'";
+                $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."' and del='0' and cu_id='".$_REQUEST["cu_id"]."'";
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
