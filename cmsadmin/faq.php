@@ -224,7 +224,7 @@ class FAQ{
                     ));
                 }
             }else{
-                header("location : faq.php?func=fc_list");
+                header("location: faq.php?func=fc_list");
             }
         }
     }
@@ -445,7 +445,7 @@ class FAQ{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : faq.php?func=f_list");
+                header("location: faq.php?func=f_list");
             }
         }
         //問與答分類

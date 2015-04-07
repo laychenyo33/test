@@ -327,6 +327,8 @@ dd {float:left; width:475px; line-height:25px; margin:0 0 10px 0;}
 }
 .zonetable tr{
 }
+.zonetable tr.del td{background:#f00;color:grey}
+.zonetable tr.del td a{color:grey}
 .zonetable td {
     background-image: url(../images/td.gif);
     background-position: left bottom;

@@ -266,7 +266,7 @@ class NEWS{
                     ));
                 }
             }else{
-                header("location : news.php?func=nc_list");
+                header("location: news.php?func=nc_list");
                 die();
             }
         }
@@ -518,7 +518,7 @@ class NEWS{
                 $tpl->newBlock("UPLOAD_NEWS_FILE");
                 $tpl->assignGlobal("TAG_STYLE_HIDDEN","display:none;");
             }else{
-                header("location : news.php?func=n_list");
+                header("location: news.php?func=n_list");
                 die();
             }
         }

@@ -991,6 +991,7 @@ class CART{
                 'i_status'     => 0,
                 'i_createdate' => date("Y-m-d H:i:s"),
                 'i_account'    => $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"],
+                'i_name'       => $o_name,
             ));
             //寫入購買產品
             foreach($inquiry as $p_id => $prod_row){

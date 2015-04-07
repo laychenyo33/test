@@ -115,9 +115,12 @@ class ORDER{
             }
         }
         //訂單列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id > '0' and del='0' ";
+        $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id > '0'";
         //附加條件
         $and_str="";
+        if(!$_GET['showdel']){
+            $and_str .= " and del='0'";
+        }        
         if($_REQUEST["o_status"]!=""){
             $and_str .= " and o_status = '".$_REQUEST["o_status"]."'";
         }
@@ -146,7 +149,13 @@ class ORDER{
             $i++;
             $tpl->newBlock( "ORDER_LIST" );
             if($i%2){
-                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+                $rowClass[] = 'altrow';
+            }
+            if($row['del']){
+                $rowClass[] = 'del';
+            }
+            if($rowClass){
+                $tpl->assign("TAG_TR_CLASS","class='".implode(" ",$rowClass)."'");
             }
             $tpl->assign( array(
                 "VALUE_O_ID"  => $row["o_id"],
@@ -222,7 +231,10 @@ class ORDER{
         }
         //帶入要回覆的訂單資料
         if(!empty($_REQUEST["o_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."' and del='0' ";
+            $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."'";
+            if(!$_GET['showdel']){
+                $sql .= " and del='0'";
+            }
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -310,7 +322,10 @@ class ORDER{
                     }
                 }
                 //訂購產品列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
+                $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
+                if(!$_GET['showdel']){
+                    $sql .= " and del='0' ";
+                }
                 $selectrs = $db->query($sql);
                 $total_price=0;
                 $i=0;
@@ -339,7 +354,7 @@ class ORDER{
                     }                     
                 }
             }else{
-                header("location : ".$_SERVER['PHP_SELF']."?func=o_list");
+                header("location: ".$_SERVER['PHP_SELF']."?func=o_list");
             }
         }
     }

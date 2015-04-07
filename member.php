@@ -266,7 +266,7 @@ class MEMBER{
                                           "TAG_SEND_SHOW" => "",
                 ));
             }else{
-                header("location : member.php?func=m_add");
+                header("location: member.php?func=m_add");
                 die();
             }
         }else{
@@ -670,7 +670,7 @@ class MEMBER{
                         }
                     }
                 }else{
-                    header("location : member.php");
+                    header("location: member.php");
                 }
             }
         }
@@ -798,7 +798,7 @@ class MEMBER{
                         }                        
                     }
                 }else{
-                    header("location : member.php");
+                    header("location: member.php");
                     die();
                 }
             }
@@ -920,7 +920,7 @@ class MEMBER{
                         ));
                     }
                 }else{
-                    header("location : member.php");
+                    header("location: member.php");
                     die();
                 }
             }

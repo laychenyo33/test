@@ -306,7 +306,7 @@ class MEMBER{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : member.php?func=mc_list");
+                header("location: member.php?func=mc_list");
             }
         }
         if($this->member_download && ($this->download_on=="" || $this->download_on=="cate")){
@@ -534,7 +534,7 @@ class MEMBER{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : member.php?func=m_list");
+                header("location: member.php?func=m_list");
                 die();
             }
         }else{
@@ -804,7 +804,7 @@ class MEMBER{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : member.php?func=mm_list");
+                header("location: member.php?func=mm_list");
             }
         }
         if($cms_cfg["ws_module"]["ws_wysiwyg"]=="tinymce"){

@@ -236,7 +236,7 @@ class AD{
                 ));
                 $this->get_items_name($row["ad_show_zone"],"pc"); //廣告顯示分類
             }else{
-                header("location : ad.php?func=ad_list");
+                header("location: ad.php?func=ad_list");
             }
         }
         switch($row["ad_file_type"]){

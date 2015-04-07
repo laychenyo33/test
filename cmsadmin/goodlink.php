@@ -211,7 +211,7 @@ class GOODLINK{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : goodlink.php?func=lc_list");
+                header("location: goodlink.php?func=lc_list");
             }
         }
     }
@@ -434,7 +434,7 @@ class GOODLINK{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : goodlink.php?func=l_list");
+                header("location: goodlink.php?func=l_list");
             }
         }
         //相關連結分類

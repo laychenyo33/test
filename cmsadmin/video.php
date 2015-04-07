@@ -224,7 +224,7 @@ class VIDEO{
                     ));
                 }
             }else{
-                header("location : video.php?func=vc_list");
+                header("location: video.php?func=vc_list");
             }
         }
         //分類影片
@@ -467,7 +467,7 @@ class VIDEO{
                     ));
                 }
             }else{
-                header("location : video.php?func=v_list");
+                header("location: video.php?func=v_list");
             }
         }
         $this->video_cate_select($row['vc_id']);

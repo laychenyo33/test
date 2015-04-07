@@ -118,6 +118,9 @@ class CONTACTUS{
         if($_REQUEST["st"]=="cu_content"){
             $and_str .= " and cu_content like '%".$_REQUEST["sk"]."%'";
         }
+        if(!$_GET['showdel']){
+            $and_str .= " and del='0'";
+        }
         $sql .= $and_str." order by cu_id desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
@@ -149,7 +152,13 @@ class CONTACTUS{
             $i++;
             $tpl->newBlock( "CONTACTUS_LIST" );
             if($i%2){
-                $tpl->assign("TAG_TR_CLASS","class='altrow'");
+                $rowClass[] = 'altrow';
+            }
+            if($row['del']){
+                $rowClass[] = 'del';
+            }
+            if($rowClass){
+                $tpl->assign("TAG_TR_CLASS","class='".implode(" ",$rowClass)."'");
             }
             $tpl->assign( array("VALUE_CU_CATE"  => $row["cu_cate"],
                                 "VALUE_CU_ID"  => $row["cu_id"],
@@ -204,9 +213,9 @@ class CONTACTUS{
             $cu_id_str = implode(",",$cu_id);
             //刪除勾選的聯絡我們
             $this->file_del($cu_id_str);
-            $sql="delete from ".$cms_cfg['tb_prefix']."_contactus where cu_id in (".$cu_id_str.")";
+            $sql="update ".$cms_cfg['tb_prefix']."_contactus set del='1' where  cu_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
-            $sql="delete from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id in (".$cu_id_str.")";
+            $sql="update ".$cms_cfg['tb_prefix']."_contactus_reply set del='1' where cu_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
@@ -250,6 +259,9 @@ class CONTACTUS{
         //帶入要回覆的聯絡我們資料
         if(!empty($_REQUEST["cu_id"])){
             $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where cu_id='".$_REQUEST["cu_id"]."'";
+            if(!$_GET['showdel']){
+                $sql .= " and del='0'";
+            }
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -287,7 +299,11 @@ class CONTACTUS{
                     }
                 }
                 //回覆資料列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id='".$_REQUEST["cu_id"]."' order by cur_modifydate desc limit 1";
+                $sql="select * from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id='".$_REQUEST["cu_id"]."' ";
+                if(!$_GET['showdel']){
+                    $sql .= " and del='0' ";
+                }
+                $sql .= "order by cur_modifydate desc limit 1";
                 $selectrs = $db->query($sql);
                 while($row = $db->fetch_array($selectrs,1)){
                     $tpl->assign("_ROOT.VALUE_CU_DEFAULT_REPLY",$row["cur_content"]);//取出做為預設回覆的內容
@@ -297,7 +313,7 @@ class CONTACTUS{
                     ));
                 }
             }else{
-                header("location : contactus.php?func=cu_list");
+                header("location: contactus.php?func=cu_list");
                 die();
             }
         }

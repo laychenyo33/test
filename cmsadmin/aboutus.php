@@ -239,7 +239,7 @@ class ABOUTUS{
                     ));
                 }
             }else{
-                header("location : aboutus.php?func=au_list");
+                header("location: aboutus.php?func=au_list");
             }
         }
         //有獨立類別

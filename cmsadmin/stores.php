@@ -241,7 +241,7 @@ class STORES{
                     ));
                 }
             }else{
-                header("location : stores.php?func=sdc_list");
+                header("location: stores.php?func=sdc_list");
             }
         }
         $cateLayer = array();
@@ -500,7 +500,7 @@ class STORES{
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
             }else{
-                header("location : stores.php?func=sd_list");
+                header("location: stores.php?func=sd_list");
             }
         }
         //門市管理分類

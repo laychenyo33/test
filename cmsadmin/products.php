@@ -522,7 +522,7 @@ class PRODUCTS{
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
                 $pc_parent=$row["pc_parent"];
             }else{
-                header("location : products.php?func=pc_list");
+                header("location: products.php?func=pc_list");
             }
         }
         //載入分類資料,選擇分類
@@ -996,7 +996,7 @@ class PRODUCTS{
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
                 $pc_id=$row["pc_id"];
             }else{
-                header("location : products.php?func=p_list");
+                header("location: products.php?func=p_list");
                 die();
             }
         }
@@ -2549,7 +2549,7 @@ class PRODUCTS{
                 }
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
             }else{
-                header("location : products.php?func=pa_list");
+                header("location: products.php?func=pa_list");
             }
         }
         $this->application_parent_select($app_select_option,$row['pa_id'],$row['pa_parent']);
@@ -2759,7 +2759,7 @@ class PRODUCTS{
                 ));
                 $_SESSION[$cms_cfg['sess_cookie_name']]["BACK_EDIT_ZONE"]=$_SERVER["HTTP_REFERER"];
             }else{
-                header("location : products.php?func=ca_list");
+                header("location: products.php?func=ca_list");
             }
         }
     }        
