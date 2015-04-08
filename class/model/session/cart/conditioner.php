@@ -86,4 +86,20 @@ class Model_Session_Cart_Conditioner extends Model_Modules
     function getAddPurchaseProduct($c_id,$p_id){
         return $this->condition[$c_id]['products'][$p_id];
     }
+    //取得使用中的加價購條件
+    function getUsingConditions(){
+        $cart_products = $this->_model->get_cart_products();
+        $cart_info = $this->_model->get_cart_info();
+        $usingConditions = array();
+        if($this->condition){
+            foreach($this->condition as $c_id=>$cond){
+                foreach($cart_products as $cp){
+                    if( !isset($cp['addPurchase']) && $this->isQualified($cp, $cart_info, $cond) ) {
+                        $usingConditions[$cond['id']] = $cond;
+                    }
+                }
+            }
+        }
+        return $usingConditions;
+    }    
 }

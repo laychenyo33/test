@@ -172,18 +172,13 @@ class Model_Session_Cart extends Model_Modules {
     //購物車產品品項數目
     function count($reCount=false){
         if($reCount){
-            $this->cart['cart_info']['itemsByType']['normal'] = 0;
-            $this->cart['cart_info']['itemsByType']['addPurchase'] = 0;
             if($this->handler->sc_cart_type==1){
+                $addPurchaseConditions = $this->conditioner->getUsingConditions();
+                $using_cid = array_keys($addPurchaseConditions);
                 foreach($this->cart['products']['lists'] as $p){
-                    if($p['addPurchase']){
-                        $this->cart['cart_info']['itemsByType']['addPurchase']++;
-                    }else{
-                        $this->cart['cart_info']['itemsByType']['normal']++;
+                    if($p['addPurchase'] && !in_array($p['c_id'],(array)$using_cid)){
+                        $this->rm_addPurchase($p['p_id'], $p['c_id']);
                     }
-                }
-                if($this->cart['cart_info']['itemsByType']['normal']==0){
-                    $this->empty_cart();
                 }
             }
             $this->cart['cart_info']['items'] = count($this->cart['products']['lists']);
