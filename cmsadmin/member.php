@@ -1535,8 +1535,12 @@ class MEMBER_NEW extends MEMBER{
                 $dataList = array();
                 while($row = $db->fetch_array($res,1)){
                     $tmpData = array();
-                    foreach($_POST['columns'] as $col){
+                    foreach($_POST['columns'] as $k => $col){
                         $value = (is_array($this->columns[$col]['map']))?$this->columns[$col]['map'][$row[$col]]:$row[$col];
+                        //第8及10欄是電話和手機欄位，強制為文字格式
+                        if(in_array($k,array(8,10))){
+                            $value = array('data'=>$value,'type'=>'s');
+                        }
                         $tmpData[] = $value;
                     }
                     $dataList[] = $tmpData;
