@@ -686,7 +686,7 @@ class CART{
                             "VALUE_M_RECI_TEL" => $_REQUEST["m_reci_tel"],
                             "VALUE_M_RECI_EMAIL" => $_REQUEST["m_reci_email"],
                             "VALUE_M_RECI_CELLPHONE" => $_REQUEST["m_reci_cellphone"],
-                            "VALUE_O_CONTENT" => nl2br($_REQUEST["o_content"]),
+                            "VALUE_O_CONTENT" => nl2br($_REQUEST["m_content"]),
                             "VALUE_O_ID" => $this->o_id,
                             "VALUE_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$shipment_type],
                             "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
@@ -814,7 +814,7 @@ class CART{
                             "VALUE_M_RECI_TEL" => $_REQUEST["m_reci_tel"],
                             "VALUE_M_RECI_EMAIL" => $_REQUEST["m_reci_email"],
                             "VALUE_M_RECI_CELLPHONE" => $_REQUEST["m_reci_cellphone"],
-                            "VALUE_O_CONTENT" => nl2br($_REQUEST["o_content"]),
+                            "VALUE_O_CONTENT" => nl2br($_REQUEST["m_content"]),
                             "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
         ));
         $o_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_fname'],$_POST['m_lname']);
