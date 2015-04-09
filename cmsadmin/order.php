@@ -166,10 +166,10 @@ class ORDER{
             $and_str .= " and del='0'";
         }
         if($_REQUEST["o_status"]!=""){
-            $and_str .= " o_status = '".$_REQUEST["o_status"]."'";
+            $and_str .= " and o_status = '".$_REQUEST["o_status"]."'";
         }
         $and_str = $search->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
-        $sql .= ($and_str?"and":"").$and_str." order by o_createdate desc ";
+        $sql .= $and_str." order by o_createdate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
