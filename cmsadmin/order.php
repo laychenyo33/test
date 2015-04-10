@@ -66,11 +66,16 @@ class ORDER{
                     $this->ws_tpl_type=1;
                 }
                 break;            
+            case "o_ex2"://匯出新訂單
+                $this->export_order2();
+                break;            
             case "o_list"://訂單列表
                 $this->current_class="O";
                 $this->ws_tpl_file = "templates/ws-manage-order-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");                
                 if($cms_cfg["ws_module"]["ws_vaccount"]==1) {
                     $this->check_atm();//檢查新匯款紀錄
                 }
@@ -110,6 +115,8 @@ class ORDER{
                 $this->ws_tpl_file = "templates/ws-manage-order-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");                  
                 if($cms_cfg["ws_module"]["ws_vaccount"]==1) {
                     $this->check_atm();//檢查新匯款紀錄
                 }
@@ -142,34 +149,17 @@ class ORDER{
         if($cms_cfg["ws_module"]["ws_vaccount"]) {
             $tpl->newBlock("TITLE_ATM_TRANSFER");
         }
-        $i=0;
-        foreach($ws_array["order_status"] as $key =>$value){
-            $i++;
-            $tpl->newBlock( "ORDER_STATUS_LIST" );
-            $tpl->assign( array("VALUE_O_STATUS_SUBJECT"  => $value,
-                                "VALUE_O_STATUS" => $key,
-                                "VALUE_O_SERIAL" => $i,
-            ));
-            if($i%4==0){
-                $tpl->assign("TAG_ORDER_STATUS_TRTD","</tr><tr>");
-            }
-            if(isset($_REQUEST["o_status"]) && $key==$_REQUEST["o_status"]){
-                $tpl->assignGlobal("TAG_NOW_CATE",$value);
-            }
-        }
         $search = new searchFields_order();
         //訂單列表
         $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id > '0'";
+        $searchfields = new searchFields_order();
         //附加條件
-        $and_str="";
+        $and_str=array();
         if(!$_GET['showdel']){
-            $and_str .= " and del='0'";
+            $and_str[] = "del='0'";
         }
-        if($_REQUEST["o_status"]!=""){
-            $and_str .= " and o_status = '".$_REQUEST["o_status"]."'";
-        }
-        $and_str = $search->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
-        $sql .= $and_str." order by o_createdate desc ";
+        $and_str = $searchfields->find_multiple_search_value($and_str);
+        $sql .= ($and_str?" and ".$and_str:"")." order by o_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
@@ -185,7 +175,7 @@ class ORDER{
         $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
                                   "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
                                   "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
-                                  "TAG_SEARCH_FIELD" => $search->list_search_fields($_GET['st'], $_GET['sk']),
+                                  'TAG_SEARCH_FIELD' => $searchfields->list_multiple_search_fields(),
         ));
         $i=$page["start_serial"];
         while ( $row = $db->fetch_array($selectrs,1) ) {
@@ -548,6 +538,21 @@ class ORDER{
             App::getHelper('main')->js_notice('無匯出資料', $cms_cfg['manage_root'].'order.php?func=o_ex');
         }
     }
+    function export_order2(){
+        global $db,$cms_cfg,$ws_array;
+        $exportData = $this->get_export_order_data("exportAll");
+        if($exportData['data']){
+            require_once "../class/phpexcel/PHPExcel.php";
+            $xlsexpotor = new XLSExportor();
+            $xlsexpotor->setTitle($exportData['title']);
+            $xlsexpotor->setData($exportData['data']);
+            $xlsexpotor->setFilename($exportData['filename']);
+//            $xlsexpotor->setFontSize(10);
+            $xlsexpotor->export();
+        }else{
+            App::getHelper('main')->js_notice('無匯出資料', $cms_cfg['manage_root'].'order.php?func=o_ex');
+        }
+    }
     function getdatefromjd($val,$format="Y-m-d"){
         $jd = GregorianToJD(1, 1, 1970); 
         $gregorian = JDToGregorian($jd+intval($val)-25569);               
@@ -657,7 +662,10 @@ class ORDER{
         );
         switch($type){
             case "exportAll":
-                $sql = "select o_id,o_status,o_payment_type,o_deliver_date,o_deliver_time_sec,o_content,o_company_name,o_vat_number,o_fax,m_id,o_name,o_tel,o_cellphone,o_zip,concat(o_city,o_area,o_address) as address1,o_email,o_reci_name,o_reci_tel,o_reci_cellphone,o_reci_zip,concat(o_reci_city,o_reci_area,o_reci_address) as address2,o_reci_email,o_subtotal_price,o_charge_fee,o_plus_price,o_minus_price,o_total_price,o_invoice_type from ".$db->prefix("order")." where  del='0' order by o_createdate ";
+                //附加條件
+                $searchfields = new searchFields_order();
+                $and_str = $searchfields->find_multiple_search_value($and_str);                
+                $sql = "select o_id,o_status,o_payment_type,o_deliver_date,o_deliver_time_sec,o_content,o_company_name,o_vat_number,o_fax,m_id,o_name,o_tel,o_cellphone,o_zip,concat(o_city,o_area,o_address) as address1,o_email,o_reci_name,o_reci_tel,o_reci_cellphone,o_reci_zip,concat(o_reci_city,o_reci_area,o_reci_address) as address2,o_reci_email,o_subtotal_price,o_charge_fee,o_plus_price,o_minus_price,o_total_price,o_invoice_type from ".$db->prefix("order")." where  del='0' ".($and_str?'and '.$and_str:"")." order by o_createdate ";
                 $res = $db->query($sql,true);
                 while($row = $db->fetch_array($res,0)){
                     $sql = "select * from ".$db->prefix("order_items")." where o_id='".$row[0]."' and del='0' order by oi_id ";
