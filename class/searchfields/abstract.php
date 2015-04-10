@@ -18,6 +18,9 @@ class searchFields_abstract {
      *      title：搜尋標題(字串)
      *      fields：該搜尋標題要比對的資料庫欄位(陣列)
      *      compare：搜尋值與資料庫欄位比對的方式，是物件內的方法名稱(字串)
+     *     fieldType:   條件欄位的格式，預設為input，其他可用選項為select及date
+     *     urlParam:   當fieldType設為date時，需設此值作為時間欄位的基礎名稱
+     *     dataSource:  當fieldType設為select時，需設定此值作為select的資料來源，其key為儲存值，對應內容為顯示的文字。
      */
     protected $search_fields = array(); 
     protected $field_template = "./templates/ws-manage-fn-search-field-tpl.html";
@@ -59,7 +62,9 @@ class searchFields_abstract {
         }
         return $tpl->getOutputContent();
     }
-    
+    /*
+         * 列出個別條件欄位
+         */
     function list_multiple_search_fields(){
         $tpl = $this->_init_tpl();        
         $tpl->newBlock("MULTIPLE_FIELDS");
@@ -104,7 +109,9 @@ class searchFields_abstract {
         }
         return $and_str;
     }
-    
+    /*
+         * 從個別條件欄位取得條件sql
+         */ 
     function find_multiple_search_value($and_str){
         if(is_array($and_str)){
             $and_str = implode(" and ",$and_str);
