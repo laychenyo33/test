@@ -22,8 +22,12 @@ class searchFields_order extends searchFields_abstract{
     ); 
     
     function __construct() {
-        global $ws_array;
-        $this->exportUrl = 'order.php?func=o_ex2';
+        global $ws_array,$cms_cfg;
+            if($cms_cfg['new_cart_path']){
+                $this->exportUrl = $cms_cfg['new_cart_path'].'admin.php?func=o_ex2';
+            }else{
+                $this->exportUrl = $cms_cfg['manage_root'].'order.php?func=o_ex2';
+            }        
         //設定欄位資料來源
         $this->search_fields['o_status']['dataSource'] = $ws_array["order_status"];
         $this->search_fields['o_payment_type']['dataSource'] = $ws_array["payment_type"];
