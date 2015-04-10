@@ -1,10 +1,25 @@
+            <!-- START BLOCK : SINGLE_FIELD -->
             <select name="st" id="st" class="seinput">
-                <!-- START BLOCK : SEARCH_FIELD_OPTION -->
-                <option value="{TAG_FIELD_VALUE}" {TAG_FIELD_SELECTED}>{TAG_FIELD_TITLE}</option>
-                <!-- END BLOCK : SEARCH_FIELD_OPTION -->
-                </select>
+            <!-- START BLOCK : SEARCH_FIELD_OPTION -->
+            <option value="{TAG_FIELD_VALUE}" {TAG_FIELD_SELECTED}>{TAG_FIELD_TITLE}</option>
+            <!-- END BLOCK : SEARCH_FIELD_OPTION -->
+            </select>
             關鍵字<input type="text" id="sk" name="sk" class="seinput" value="{VALUE_SEARCH_KEYWORD}"/>
+            <!-- END BLOCK : SINGLE_FIELD -->
+            <!-- START BLOCK : MULTIPLE_FIELDS -->
+            <div id="search_field_condition">
+                <ul>
+                    <!-- START BLOCK : MULTIPLE_FIELD_LIST -->
+                    <li><label>{FIELD_LABEL}: {TAG_FIELD}</label></li>
+                    <!-- END BLOCK : MULTIPLE_FIELD_LIST -->
+                </ul>
+            </div>
+            <!-- END BLOCK : MULTIPLE_FIELDS -->
             <input type="button" value="搜尋" id="smt_sform" />
+            <input type="button" value="清除條件" id="reset_condition" />
+            <!-- START BLOCK : EXPORT_BTN -->
+            <input type="button" value="匯出Excel" id="exportxls" data-export-url="{exportUrl}" />
+            <!-- END BLOCK : EXPORT_BTN -->
             <script type="text/javascript">
                 function get_query(){
                     var search = location.search
@@ -30,14 +45,51 @@
                       for(var k in query){
                           form.append("<input type='hidden' name='"+k+"' value='"+query[k]+"'/>");
                       }
-                      form.append("<input type='hidden' name='st'/>").
-                           append("<input type='hidden' name='sk'/>").
-                           appendTo('body'); 
+                      form.appendTo('body');
                       $("#smt_sform").click(function(){
-                            var sform = $("#sform")[0];
-                            sform.st.value=$("#st").val();
-                            sform.sk.value=$.trim($("#sk").val());
+                            var sform = $("#sform");
+                            sform.removeAttr('target');
+                            sform.removeAttr('action');
+                            $(".seinput").each(function(idx,elm){
+                                if($(elm).val()!==''){
+                                    if(sform.find(':hidden').filter('[name='+$(elm).attr('name')+']').size()){
+                                        sform.find(':hidden').filter('[name='+$(elm).attr('name')+']').val($.trim($(elm).val()));
+                                    }else{
+                                        var field = $("<input type='hidden' />");
+                                        field.attr('name',$(elm).attr('name'));
+                                        field.val($.trim($(elm).val()));
+                                        sform.append(field);
+                                    }
+                                }
+                            });
                             sform.submit();
+                      });
+                      $("#reset_condition").click(function(evt){
+                          var query = get_query();
+                          if(query && query.func){
+                              location.href = location.pathname + '?func=' + query.func;
+                          }else{
+                              location.href = location.pathname;
+                          }
+                      });
+                      $("#exportxls").click(function(){
+                            $("#sform").attr('action',$(this).attr('data-export-url'));
+                            $("#sform").find(':hidden[name=func]').remove();
+                            $("#sform").attr('target','_blank');
+                            $("#sform").attr('method','post');
+                            $(".seinput").each(function(idx,elm){
+                                if($(elm).val()!==''){
+                                    if($("#sform").find(':hidden').filter('[name='+$(elm).attr('name')+']').size()){
+                                        $("#sform").find(':hidden').filter('[name='+$(elm).attr('name')+']').val($.trim($(elm).val()));
+                                    }else{
+                                        var field = $("<input type='hidden' />");
+                                        field.attr('name',$(elm).attr('name'));
+                                        field.val($.trim($(elm).val()));
+                                        $("#sform").append(field);
+                                    }
+                                }
+                            });                          
+                            $("#sform").submit();
                       });
                    });
                 });
