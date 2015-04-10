@@ -74,6 +74,8 @@ class ORDER{
                 $this->ws_tpl_file = "templates/ws-manage-order-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");                
                 if($cms_cfg["ws_module"]["ws_vaccount"]==1) {
                     $this->check_atm();//檢查新匯款紀錄
                 }
@@ -113,6 +115,8 @@ class ORDER{
                 $this->ws_tpl_file = "templates/ws-manage-order-list-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_MAIN");
+                $tpl->newBlock("JS_JQ_UI");
+                $tpl->newBlock("DATEPICKER_SCRIPT");                  
                 if($cms_cfg["ws_module"]["ws_vaccount"]==1) {
                     $this->check_atm();//檢查新匯款紀錄
                 }
