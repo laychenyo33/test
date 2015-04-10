@@ -829,3 +829,9 @@ span.current{color:#f00}
 #cusmenu li a:hover {
     color: #0099CC;
 }
+
+#search_field_condition{}
+#search_field_condition ul{list-style: none;}
+#search_field_condition ul li{float:left;padding:5px 8px}
+#search_field_condition ul li:not(:first-child){background: url(../images/line_bg.gif) -6px 7px no-repeat }
+#search_field_condition ul li label{}

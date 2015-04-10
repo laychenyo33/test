@@ -2,28 +2,7 @@
 <div id="man_zone">
 <h1>訂單管理</h1>
 <form action="order.php" method="get" name="myform" class="formular" id="formID">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="catetable">
-        <tr>
-          <!-- START BLOCK : ORDER_STATUS_LIST -->
-          <td width="25%" valign="top">
-           <table>
-             <tr>
-               <td valign="top">
-               <a href="order.php?func=o_list&o_status={VALUE_O_STATUS}"><div class="on">{VALUE_O_STATUS_SUBJECT}</div></a>
-               </td>
-             </tr>
-          </table>
-          </td>
-          {TAG_ORDER_STATUS_TRTD}
-          <!-- END BLOCK : ORDER_STATUS_LIST -->
-        </tr>
-      </table>
     <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
-    <tr>
-      <td colspan="10">
-      目前分類 : <a href="order.php?func=o_list">TOP</a> > {TAG_NOW_CATE}
-      </td>
-    </tr>
     <tr>
       <td colspan="10">
         <div class="title">
@@ -37,7 +16,7 @@
         </ul>
       </div>
       </td>
-    </tr>
+    </tr>   
     <tr>
       <th width="3%"><a href="javascript:click_all(myform);"><img src="images/ico-markers.gif" width="12" height="12" border="0" /></a></th>
       <th width="5%">No.</th>
