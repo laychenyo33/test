@@ -121,10 +121,13 @@ class ORDER{
         $selectrs = $db->query($sql);
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結
-        $func_str=$_SERVER['PHP_SELF']."?func=o_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
-        if(isset($_GET['o_status'])){
-            $func_str.="&o_status=".$_GET['o_status'];
+        parse_str($_SERVER['QUERY_STRING'],$q);
+        foreach($q as $k=>$v){
+            if($k!='nowp' && $k!='jp'){
+                $qs[] = sprintf("%s=%s",$k,$v);
+            }
         }
+        $func_str= $_SERVER['PHP_SELF']."?".implode('&',$qs);
         //分頁且重新組合包含limit的sql語法
         $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
@@ -134,7 +137,7 @@ class ORDER{
                                   "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
                                   'TAG_SEARCH_FIELD' => $searchfields->list_multiple_search_fields(),
         ));
-        $i=$page["start_serial"];
+        $i = $main->get_pagination_offset($cms_cfg["op_limit"]);
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "ORDER_LIST" );
