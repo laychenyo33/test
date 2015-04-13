@@ -810,7 +810,7 @@ class MAINFUNC{
         if($mail_type !="epaper" && $mail_type!="pw"){
             $MAIL_HEADER   = "MIME-Version: 1.0\n";
             $MAIL_HEADER  .= "Content-Type: text/html; charset=\"utf-8\"\n";
-            $MAIL_HEADER  .= "From: =?UTF-8?B?".base64_encode($to_email[0])."?= <".$to_email[0].">"."\n";
+            $MAIL_HEADER  .= "From: ".$this->format_mail_subject($from_name)." <".$from_email[0].">"."\n";
             $MAIL_HEADER  .= "Reply-To: ".$to_email[0]."\n";
             $MAIL_HEADER  .= "Return-Path: ".$to_email[0]."\n";    // these two to set reply address
             $MAIL_HEADER  .= "X-Priority: 1\n";
