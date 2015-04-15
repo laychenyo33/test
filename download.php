@@ -133,8 +133,8 @@ class DOWNLOAD{
         $total_records    = $db->numRows($selectrs);
         //取得分頁連結且重新組合包含limit的sql語法
         if($this->ws_seo==1  && trim($_REQUEST["f"])!=""){
-            //$func_str="download/dlist-".$dc_id;
-            $func_str=$this->func_str;
+            $func_str= $cms_cfg['base_root'] . "download/dlist-".$dc_id;
+//            $func_str=$this->func_str;
             $sql=$main->pagination_rewrite($this->op_limit,$this->jp_limit,$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         }else{
             $func_str=$cms_cfg["base_root"]."download.php?func=d_list&dc_id=".$dc_id;
@@ -152,7 +152,7 @@ class DOWNLOAD{
         if($cms_cfg['ws_module']['ws_download_thumb']){
             $tpl->newBlock("THUMB_TITLE");
         }
-        $i=$page["start_serial"];
+        $i = $main->get_pagination_offset($this->op_limit);
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "DOWNLOAD_LIST" );
