@@ -132,8 +132,8 @@
                         "regex":"/^([a-zA-Z\ \']+)*$/",
                         "alertText":"* 請輸入英文字母(大小寫不限)"},
                     "filename":{
-                        "regex":"/^([a-zA-Z0-9_\-]+)*$/",
-                        "alertText":"* 含不合法字元，僅可使用英數及_-"}
+                        "regex":"/^([a-zA-Z0-9\u4e00-\u9fa5_\-]+)*$/",
+                        "alertText":"* 含不合法字元，僅可使用英數、中文及_-"}
                     }   
     }
     $.validationSettings = $.extend({
