@@ -200,14 +200,18 @@ class MAINFUNC{
             $tpl->assign("TAG_LOGIN_MEMBER_DATA",$TPLMSG['MEMBER_ZONE_DATA']);
             switch($_SESSION[$cms_cfg['sess_cookie_name']]['sc_cart_type']){
                 case "0":
-                    $tpl->newBlock("CART_TYPE_INQUIRY");
-                    $tpl->assign("TAG_LOGIN_MEMBER_INQUIRY",$TPLMSG['MEMBER_ZONE_INQUIRY']);
-                    $tpl->gotoBlock( "MEMBER_INFO" );
+                    if($cms_cfg['ws_module']['ws_inquiry']){
+                        $tpl->newBlock("CART_TYPE_INQUIRY");
+                        $tpl->assign("TAG_LOGIN_MEMBER_INQUIRY",$TPLMSG['MEMBER_ZONE_INQUIRY']);
+                        $tpl->gotoBlock( "MEMBER_INFO" );
+                    }
                     break;
                 case "1":
-                    $tpl->newBlock("CART_TYPE_ORDER");
-                    $tpl->assign("TAG_LOGIN_MEMBER_ORDER",$TPLMSG['MEMBER_ZONE_ORDER']);
-                    $tpl->gotoBlock( "MEMBER_INFO" );
+                    if($cms_cfg['ws_module']['ws_order']){
+                        $tpl->newBlock("CART_TYPE_ORDER");
+                        $tpl->assign("TAG_LOGIN_MEMBER_ORDER",$TPLMSG['MEMBER_ZONE_ORDER']);
+                        $tpl->gotoBlock( "MEMBER_INFO" );
+                    }
                     break;
             }
             if($cms_cfg['ws_module']['ws_contactus']){
