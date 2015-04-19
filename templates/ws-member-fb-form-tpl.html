@@ -60,17 +60,6 @@
                     <input name="m_cellphone"  type="text" class="validate[required] form-textfield ipt1" id="m_cellphone" value="{VALUE_M_CELLPHONE}" size="40" >
                     </td>
             </tr>
-            <!-- START BLOCK : RECOMMEND_ROW -->
-            <tr>
-                <th>從何處得知準提西方門?</th>
-                <td>
-                    <!-- START BLOCK : KNOWNBY_CHECKBOX -->
-                    <label><input type="checkbox" name="knownby[]" id="knownby_{VALUE_KNOWNBY_KEY}" value="{VALUE_KNOWNBY_KEY}"/>{VALUE_KNOWNBY_NAME}&nbsp;{EX_LABEL}</label>
-                    <!-- END BLOCK : KNOWNBY_CHECKBOX -->
-                </td>
-                
-            </tr>
-            <!-- END BLOCK : RECOMMEND_ROW -->
             <tr>
                 <th>
                    {MSG_SUBSCRIBE}</th>
@@ -111,10 +100,6 @@
 <script type="text/javascript">
     jQuery(function($){
         $(".shop_btn").click(function(evt){
-//            if($("#knownby_3:checked").size() && $("#recommended").val()==""){
-//                alert("請填寫推薦人");
-//                return false;
-//            }
             $(myform).trigger('submit');
         });
     });
