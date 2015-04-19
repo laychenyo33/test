@@ -398,12 +398,10 @@ class MEMBER{
                     unset($_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER']);
                     //已有購物或詢價時直接登入
                     if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
-                        $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"]=$this->m_id;
-                        $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ACCOUNT"]=$_REQUEST["m_account"];
-                        $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_NAME"]=$_REQUEST["m_name"];
-                        $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_CATE"]="";
-                        $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"]=100;
-                        $goto_url = ($cms_cfg['new_cart_path'])? $cms_cfg['new_cart_path'] : $cms_cfg['base_root']."cart.php";
+                        if($member = App::getHelper('member')->getData($this->m_id)->getDataRow()){
+                            $goto_url = ($cms_cfg['new_cart_path'])? $cms_cfg['new_cart_path'] : $cms_cfg['base_root']."cart.php";;
+                            Model_User::login($member,$goto_url);
+                        }
                     }
 //                    $this->ws_tpl_file = "templates/ws-mail-tpl.html";
 //                    $mtpl = new TemplatePower( $this->ws_tpl_file );

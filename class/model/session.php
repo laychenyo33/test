@@ -77,4 +77,7 @@ class Model_Session extends Model_Modules implements arrayaccess {
     public function getModuleCart(){
         return $this->getModule('cart');
     }
+    public function destroy(){
+        $this->_session = null;
+    }    
 }
