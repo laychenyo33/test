@@ -1111,3 +1111,7 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 #page a,#page span{display:inline-block;padding:3px;font-size:18px;}
 #page a{color:#356635}
 #page span.current{color:red;}
+
+#social-login-tool{padding:10px;margin:10px 0}
+#social-login-tool h4{font-size:18px;padding:10px 0}
+#social-login-tool > div{padding:10px 0;text-align:center;}

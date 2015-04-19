@@ -37,7 +37,39 @@
                 <td><a href="{TAG_ROOT_PATH}member.php?func=m_add"><div class="firstbuy_btn"><span>您不需先加入會員，按此即可完成結帳</span><br>※如您已是會員，請由左邊選項登入</div></a></td>
               </tr>
             </table>
+                <!-- START BLOCK : SOCIAL_LOGIN -->
+                <div id="social-login-tool">
+                    <h4>以現有帳號登入</h4>
+                    <!-- START BLOCK : FB_LOGIN -->
+                    <div id="fb-login">
+                        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
+                        <!--<a href="#" id="login-fb">以fb帳號登入</a>-->
+                    </div>
+                    <!-- END BLOCK : FB_LOGIN -->
+                </div>
+                <!-- END BLOCK : SOCIAL_LOGIN -->
             </div>
             <input type="hidden" name="callback" value="1">
             <input type="hidden" name="return_url" value="{TAG_RETURN_URL}"/>            
         </form>
+        <!-- START BLOCK : FB_JS -->
+        <script src="{TAG_ROOT_PATH}js/fb-app.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            function checkLoginState(){
+                FB.getLoginStatus(function(response) {
+                    if (response.status === 'connected') {
+                        var fb_uid = response.authResponse.userID;
+                        location.href = "{TAG_ROOT_PATH}fb-login.php?fb_uid="+fb_uid+"&return="+loginform['return_url'].value;
+                    } else if (response.status === 'not_authorized') {
+                        // The person is logged into Facebook, but not your app.
+                    } else {
+                        // The person is not logged into Facebook, so we're not sure if
+                        // they are logged into this app or not.
+                    }
+                }); 
+            }
+            function getLoginedAuthInfo(){
+                console.log('calling getLoginedAuthInfo');
+            }
+        </script>
+        <!-- END BLOCK : FB_JS -->

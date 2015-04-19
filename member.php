@@ -34,7 +34,11 @@ class MEMBER{
                     header("location:member.php?func=m_mod");
                     die();
                 }
-                $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
+                if(App::configs()->ws_module->ws_member_social_login && $_GET['tool']){
+                    $this->ws_tpl_file = "templates/ws-member-{$_GET['tool']}-form-tpl.html";
+                }else{
+                    $this->ws_tpl_file = "templates/ws-member-form-tpl.html";
+                }
                 $this->ws_load_tp($this->ws_tpl_file);
                 $tpl->newBlock("JS_FORMVALID");
                 if(!isset($_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER'])){
@@ -238,12 +242,15 @@ class MEMBER{
         }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($this->m_id)){
-            $tpl->newBlock( "MEMBER_MOD_MODE" );
             $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
             if ($rsnum > 0) {
+                if(empty($row['fb_uid'])){
+                    $tpl->newBlock("COMMON_USER_FIELDS");
+                    $tpl->newBlock( "MEMBER_MOD_MODE" );
+                }
                 //修改會員，顯示e-mail欄位
                 $main->layer_link( $TPLMSG['MEMBER_DATA_MOD']);
                 $tpl->newBlock( "MOD_EMAIL" );
@@ -272,6 +279,20 @@ class MEMBER{
         }else{
             //$tpl->newBlock( "MEMBER_ADD_PIC" );
             //新增模式顯示服務條款
+            $tpl->assignGlobal(array(
+                "TAG_RETURN_URL" => $_GET['return'],
+                "TAG_TOOL"       => $_GET['tool'],
+            ));
+            if(App::configs()->ws_module->ws_member_social_login && $_GET['tool']){
+                switch($_GET['tool']){
+                    case "fb":
+                        $tpl->newBlock('FB_ID');
+                        $tpl->assign('fb_uid',$_GET['fb_uid']);
+                        break;
+                }
+            }else{
+                $tpl->newBlock("COMMON_USER_FIELDS");
+            }
             $tpl->newBlock( "MEMBER_ADD_MODE" );
             $main->layer_link($TPLMSG['MEMBER_JOIN']);
             //$tpl->newBlock( "SERVICE_TERM_SHOW" );
@@ -317,6 +338,7 @@ class MEMBER{
                 $sql="
                     insert into ".$cms_cfg['tb_prefix']."_member (
                         mc_id,
+                        fb_uid,
                         m_sort,
                         m_status,
                         m_modifydate,
@@ -340,6 +362,7 @@ class MEMBER{
                         m_epaper_status
                     ) values (
                         '1',
+                        '".$_REQUEST["fb_uid"]."',
                         '".$max_sort."',
                         '".$m_status."',
                         '".date("Y-m-d H:i:s")."',
@@ -362,7 +385,11 @@ class MEMBER{
                         '".$_REQUEST["m_account"]."',
                         '".$_REQUEST["m_epaper_status"]."'
                     )";//新增時e-mail等於account
-                $goto_url=$cms_cfg["base_root"]."products.htm";
+                if($_POST['social_login_tool']){
+                    $goto_url=$cms_cfg["base_root"].$_POST['social_login_tool']."-login.php?".$_POST['social_login_tool']."_uid=".$_POST["fb_uid"]."&return=".urlencode($_POST["return"]);
+                }else{
+                    $goto_url=$cms_cfg["base_root"]."products.htm";
+                }
                 break;
             case "mod":
                 $sql="
