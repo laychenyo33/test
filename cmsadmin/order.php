@@ -334,6 +334,8 @@ class ORDER{
                         $tpl->assign("TAG_STATUS_CHECKED","checked");
                     }
                 }
+                //付款狀態
+                $main->multiple_radio("paid_status",$ws_array["order_paid_status"],$row['o_paid'],$tpl);                
                 //地址欄位格式
                 if($cms_cfg['ws_module']['ws_address_type']=='tw'){
                     $tpl->newBlock("TW_ADDRESS");
