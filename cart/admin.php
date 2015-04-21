@@ -127,7 +127,7 @@ class ORDER{
                 $qs[] = sprintf("%s=%s",$k,$v);
             }
         }
-        $func_str= $_SERVER['PHP_SELF']."?".implode('&',$qs);
+        $func_str= $_SERVER['PHP_SELF']."?".implode('&',(array)$qs);
         //分頁且重新組合包含limit的sql語法
         $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
