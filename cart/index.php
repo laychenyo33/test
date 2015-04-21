@@ -11,6 +11,7 @@
                     2 => '%2$s %1$s',
                 );
                 protected $activateStockChecker;
+                protected $giftId = -1;
 		function __construct() {
 			global $cms_cfg, $tpl, $TPLMSG;
 			include_once (dirname(__FILE__)."/config.php");
@@ -264,6 +265,7 @@
                                 }else{
                                     $tpl->assignGlobal("CART_FIELDS_NUMS",5);
                                 }                                
+                                $gift = $this->container->getModule("giftor")->getGift($this->giftId);
                                 $cartProducts = $this->container->get_cart_products();
 				foreach ($cartProducts as $p_id =>  $row) {
 	
@@ -310,6 +312,26 @@
 					$i++;
 					$tpl->gotoBlock("SHOPPING_CART_ZONE");
 				}
+                                if($gift){
+                                    $tpl->newBlock("TAG_CART_GIFT");
+                                    $tpl -> assign(array(
+                                        "VALUE_P_ID" => $gift['p_id'], 
+                                        "VALUE_P_NAME" => $gift["p_name"], 
+                                        "VALUE_P_SMALL_IMG" => (trim($gift["p_small_img"]) == "") ? $cms_cfg['base_url'].'images/ws-no-image.jpg' : $cms_cfg["file_url"] . $gift["p_small_img"],
+                                        "VALUE_P_SMALL_IMG_ALT" => strip_tags($gift["p_name"]),
+                                        "VALUE_P_AMOUNT" => $gift["amount"], 
+                                        "TAG_QUANTITY_DISCOUNT" => ($gift['discount']<1)?$gift['discount']:'',
+                                        "VALUE_P_SPECIAL_PRICE" => $gift['price'],
+                                        "VALUE_P_SUBTOTAL_PRICE" => $gift['subtotal_price'],
+                                        "VALUE_P_SERIAL" => $i+1, 
+                                        "CART_P_ID" => $p_id,                                             
+                                    ));
+
+                                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                                        $tpl->newBlock("GIFT_SPEC_FIELD");
+                                        $tpl->assign("VALUE_SPEC",$gift["spec"]);
+                                    }                                    
+                                }                                           
 				//購物車時輸出服務條款
 				if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]) {
 					$this->service_rule();
@@ -636,6 +658,10 @@
                         ));
                         $shopping = $this->container->get_cart_products();
                         //寫入購買產品
+                        //有贈品的話就寫入贈品
+                        if($gift = $this->container->getModule("giftor")->getGift($this->giftId)){
+                            $shopping[$this->giftId] = $gift;
+                        }                        
                         foreach($shopping as $p_id => $prod_row){
                             $prod_row['m_id'] = $this->m_id;  //寫入記錄用
                             $prod_row['p_sell_price'] = $prod_row['price']; //寫入記錄用
