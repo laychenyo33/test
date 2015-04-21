@@ -212,6 +212,8 @@ $TPLMSG["ORDER_CANCEL"]="<font color='red'>İptal</font>";
 $TPLMSG["ORDER_REJECT"]="<font color='red'>reddetmek</font>";
 $TPLMSG["ORDER_DETAIL"]="Detay";
 $TPLMSG["ORDER_CONTENT"]="İçerik";
+$TPLMSG["ORDER_UNPAID"]="Unpaid";
+$TPLMSG["ORDER_PAID"]="Paid";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="Ödeme Şekli";

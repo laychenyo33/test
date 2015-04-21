@@ -212,6 +212,8 @@ $TPLMSG["ORDER_CANCEL"]="<font color='red'>Отмена</font>";
 $TPLMSG["ORDER_REJECT"]="<font color='red'>Отклонить</font>";
 $TPLMSG["ORDER_DETAIL"]="Подробнее";
 $TPLMSG["ORDER_CONTENT"]="Содержание";
+$TPLMSG["ORDER_UNPAID"]="Unpaid";
+$TPLMSG["ORDER_PAID"]="Paid";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="Вид оплаты";

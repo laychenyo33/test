@@ -228,6 +228,8 @@ $TPLMSG["ORDER_CANCEL"]="<font color='red'>取消訂單</font>";
 $TPLMSG["ORDER_REJECT"]="<font color='red'>拒絕訂單</font>";
 $TPLMSG["ORDER_DETAIL"]="產品訂單詳細資料";
 $TPLMSG["ORDER_CONTENT"]="訂單內容";
+$TPLMSG["ORDER_UNPAID"]="未付款";
+$TPLMSG["ORDER_PAID"]="已付款";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="付款方式";
