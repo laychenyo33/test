@@ -399,6 +399,7 @@
                             if($post["RtnCode"] == 1){
                                 $updateOrder['o_id'] = $post["MerchantTradeNo"];
                                 $updateOrder['o_status'] = 1;
+                                $updateOrder['o_paid'] = 1;
                                 App::getHelper('dbtable')->order->writeData($updateOrder);     
                                 $mtpl = App::getHelper('main')->get_mail_tpl("receipt-notification");
                                 $mtpl->newBlock("SHOPPING_ORDER");

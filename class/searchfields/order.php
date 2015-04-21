@@ -18,6 +18,7 @@ class searchFields_order extends searchFields_abstract{
         'o_tel' => array("title"=>"電話","fields"=>array("o_tel")),
         'o_cellphone' => array("title"=>"手機","fields"=>array("o_cellphone")),
         'o_status' => array("title"=>"訂單狀態","fields"=>array("o_status"),'fieldType'=>'select'),
+        'o_paid' => array("title"=>"付款狀態","fields"=>array("o_paid"),'fieldType'=>'select'),
         'o_payment_type' => array("title"=>"付款方式","fields"=>array("o_payment_type"),'fieldType'=>'select'),
     ); 
     
@@ -31,6 +32,7 @@ class searchFields_order extends searchFields_abstract{
         //設定欄位資料來源
         $this->search_fields['o_status']['dataSource'] = $ws_array["order_status"];
         $this->search_fields['o_payment_type']['dataSource'] = $ws_array["payment_type"];
+        $this->search_fields['o_paid']['dataSource'] = $ws_array["order_paid_status"];
     }
 }
 ?>

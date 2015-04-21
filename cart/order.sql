@@ -29,21 +29,22 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `eng_order` (
   `m_id` int(8) NOT NULL,
   `o_id` varchar(20) NOT NULL,
-  `o_status` tinyint(1) NOT NULL default '1',
+  `o_status` tinyint(1) NOT NULL DEFAULT '1',
+  `o_paid` tinyint(4) NOT NULL DEFAULT '0',
   `o_createdate` datetime NOT NULL,
   `o_modifydate` datetime NOT NULL,
   `o_account` varchar(100) NOT NULL,
   `o_company_name` varchar(100) NOT NULL,
-  `o_contact_s`  TINYINT NOT NULL,
+  `o_contact_s` tinyint(4) NOT NULL,
   `o_name` varchar(100) NOT NULL,
-  `o_zip` int(5) NOT NULL default '0',
+  `o_zip` int(5) NOT NULL DEFAULT '0',
   `o_country` varchar(50) NOT NULL,
   `o_address` varchar(255) NOT NULL,
   `o_tel` varchar(50) NOT NULL,
   `o_fax` varchar(50) NOT NULL,
   `o_cellphone` varchar(50) NOT NULL,
   `o_email` varchar(255) NOT NULL,
-  `o_fee_price` int(8) NOT NULL default '0',
+  `o_fee_price` int(8) NOT NULL DEFAULT '0',
   `o_ship_price` int(8) NOT NULL,
   `o_subtotal_price` int(8) NOT NULL,
   `o_total_price` int(8) NOT NULL,
@@ -60,10 +61,11 @@ CREATE TABLE IF NOT EXISTS `eng_order` (
   `o_invoice_text` text NOT NULL,
   `o_shipping_time` date NOT NULL,
   `o_arrival_time` date NOT NULL,
-  `del` tinyint not null default 0,
-  `o_atm_last5` CHAR( 5 ) NOT NULL,
-  PRIMARY KEY  (`o_id`),
-  KEY `mc_id` (`m_id`)
+  `del` tinyint(4) NOT NULL DEFAULT '0',
+  `o_atm_last5` char(5) NOT NULL,
+  PRIMARY KEY (`o_id`),
+  KEY `mc_id` (`m_id`),
+  KEY `o_payed` (`o_paid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

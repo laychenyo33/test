@@ -212,6 +212,8 @@ $TPLMSG["ORDER_CANCEL"]="<font color='red'>Cancel</font>";
 $TPLMSG["ORDER_REJECT"]="<font color='red'>Reject</font>";
 $TPLMSG["ORDER_DETAIL"]="Detail";
 $TPLMSG["ORDER_CONTENT"]="Content";
+$TPLMSG["ORDER_UNPAID"]="Unpaid";
+$TPLMSG["ORDER_PAID"]="Paid";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="Payment Type";

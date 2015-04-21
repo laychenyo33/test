@@ -127,7 +127,7 @@ class ORDER{
                 $qs[] = sprintf("%s=%s",$k,$v);
             }
         }
-        $func_str= $_SERVER['PHP_SELF']."?".implode('&',$qs);
+        $func_str= $_SERVER['PHP_SELF']."?".implode('&',(array)$qs);
         //分頁且重新組合包含limit的sql語法
         $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
         $selectrs = $db->query($sql);
@@ -289,6 +289,8 @@ class ORDER{
                         $tpl->assign("TAG_STATUS_CHECKED","checked");
                     }
                 }
+                //付款狀態
+                $main->multiple_radio("paid_status",$ws_array["order_paid_status"],$row['o_paid'],$tpl);
                 //發票尉類型
                 App::getHelper('main')->multiple_radio("invoice_type",$ws_array['invoice_type'],$row['o_invoice_type'],$tpl);
                 require_once "AllpayInfo.php";

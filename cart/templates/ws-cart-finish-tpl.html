@@ -105,6 +105,20 @@
                 <td>{VALUE_P_SUBTOTAL_PRICE}</td>          
             </tr>
             <!-- END BLOCK : TAG_CART_LIST -->
+            <!-- START BLOCK : TAG_CART_GIFT -->
+            <tr class="cart_line">
+                <td>{VALUE_P_SERIAL}</td>
+                <td><a href="{VALUE_P_SMALL_IMG}" rel="lightbox"><img src="{VALUE_P_SMALL_IMG}" width="40" alt="{VALUE_P_SMALL_IMG_ALT}" border="0"/></a></td>
+                <td class="cart_title">{VALUE_P_NAME}</td>
+                <!-- START BLOCK : GIFT_SPEC_FIELD -->
+                <td class="cart_title">{VALUE_SPEC}</td>
+                <!-- END BLOCK : GIFT_SPEC_FIELD -->
+                <td>{VALUE_P_AMOUNT}</td>
+                <td>{VALUE_P_SPECIAL_PRICE}</td>
+                <td>{TAG_QUANTITY_DISCOUNT}</td>
+                <td>{VALUE_P_SUBTOTAL_PRICE}</td>
+            </tr>
+            <!-- END BLOCK : TAG_CART_GIFT -->            
             <!-- START BLOCK : TAG_PLUS_FEE -->
             <tr>
             	<td colspan="{CART_FIELDS_NUMS}"></td>
