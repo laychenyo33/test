@@ -212,20 +212,40 @@
                     </select></td>
             </tr>
             <!-- END BLOCK : SELECT_COUNTRY -->
+            <!-- START BLOCK : SINGLE_ADDRESS -->
             <tr>
-                <th>{MSG_ADDRESS}</th>
+                <th><font color="#ff0000">*</font>{MSG_ADDRESS}</th>
                 <td>
-                	<!-- START BLOCK : TAG_TAIWAN_ZONE -->
-                	<select id="zone_main" name="m_city"></select>
-                	<select id="zone_sub" name="m_area"></select>
-                	<!-- END BLOCK : TAG_TAIWAN_ZONE -->
-                	<input name="m_address" type="text" class="ipt2" value="{VALUE_M_ADDRESS}" >
+                    <input name="o_address" id="o_address" type="text" class="validate[required] ipt2" value="{VALUE_M_ADDRESS}" >
                 </td>
             </tr>
+            <!-- END BLOCK : SINGLE_ADDRESS -->
+            <!-- START BLOCK : TW_ADDRESS -->
+            <tr id="m_zone_row">
+                <th><font color="#ff0000">*</font>{MSG_ADDRESS}</th>
+                <td>
+                    <select name="o_city" id="o_city"></select>
+                    <select name="o_area" id="o_area"></select>  
+                    <input name="o_address" id="o_address" class="validate[required]" type="text"   value="{VALUE_M_ADDRESS}" style="width:98%" >
+                    <script type="text/javascript">
+                       //設定城市挑選器
+                       jQuery(function($){
+                            $("#m_zone_row").zone_box({
+                                    MAIN_ID : "o_city", // 縣市元素 ID (select 元素)
+                                    SUB_ID : "o_area", // 區域元素 ID (select 元素)
+                                    ZIP_ID : "o_zip", // 郵遞區號 ID (input 元素)
+                                    ZIP_GET : "", // 輸入郵遞區號
+                            });
+                            $("#o_zip").trigger('keyup');
+                       });
+                    </script>
+                </td>
+            </tr>
+            <!-- END BLOCK : TW_ADDRESS -->            
             <tr>
                 <th>{MSG_ZIP}</th>
                 <td>
-                    <input id="zone_id" name="m_zip"  type="text" value="{VALUE_M_ZIP}" size="10" ></td>
+                    <input id="o_zip" name="o_zip"  type="text" value="{VALUE_M_ZIP}" size="10" ></td>
             </tr>
             <tr>
                 <th><span class="red">*</span>{MSG_TEL}</th>
@@ -296,10 +316,39 @@
                             <input type="text" name="o_add_cellphone" id="o_add_cellphone" class="validate[required] ipt1" value="">
                     </td>
                 </tr>
+                <!-- START BLOCK : SINGLE_ADDRESS_RECI -->
                 <tr>
                     <th><span class="red">*</span>{MSG_ADDRESS}</th>
                     <td>
-                            <input type="text" name="o_add_address" id="o_add_address" class="validate[required] ipt1" value="">
+                            <input type="text" name="o_add_address" id="o_add_address" class="validate[required] ipt2" value="">
+                    </td>
+                </tr>
+                <!-- END BLOCK : SINGLE_ADDRESS_RECI -->
+                <!-- START BLOCK : TW_ADDRESS_RECI -->
+                <tr id="m_reci_zone_row">
+                    <th><font color="#ff0000">*</font>{MSG_ADDRESS}</th>
+                    <td>
+                        <select name="o_add_city" id="o_add_city"></select>
+                        <select name="o_add_area" id="o_add_area"></select><br/>
+                        <input type="text" name="o_add_address" id="o_add_address" class="validate[required] ipt2" value="">
+                        <script type="text/javascript">
+                            jQuery(function($){
+                                $("#m_reci_zone_row").zone_box({
+                                        MAIN_ID : "o_add_city", // 縣市元素 ID (select 元素)
+                                        SUB_ID : "o_add_area", // 區域元素 ID (select 元素)
+                                        ZIP_ID : "o_add_zip", // 郵遞區號 ID (input 元素)
+                                        ZIP_GET : "", // 輸入郵遞區號
+                                });
+                                $("#o_add_zip").trigger('keyup');
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <!-- END BLOCK : TW_ADDRESS_RECI -->                
+                <tr>
+                    <th>{MSG_ZIP}</th>
+                    <td>
+                        <input name="o_add_zip" id="o_add_zip" type="text"   value=""  size="5"  />
                     </td>
                 </tr>
                 <tr>
@@ -414,19 +463,8 @@
 					var FSB_CONTACT_S = $("select[name=m_contact_s]").val();
 					var FSB_TEL = $("input[name=m_tel]").val();
 					var FSB_CELLPHONE = $("input[name=m_cellphone]").val();
-					var FSB_ZONE = $("#zone_main option:selected").val();
-					var FSB_CITY = $("#zone_sub option:selected").val();
-					
-					if(typeof(FSB_ZONE) != "undefined" && typeof(FSB_CITY) != "undefined"){
-						if(FSB_CITY != "無分區"){
-							var FSB_ADDRESS = FSB_ZONE + FSB_CITY + $("input[name=m_address]").val();
-						}else{
-							var FSB_ADDRESS = FSB_ZONE + $("input[name=m_address]").val();
-						}
-					}else{
-						var FSB_ADDRESS = $("input[name=m_address]").val();
-					}
-					
+					var FSB_ZIP = $("#o_zip").val();
+                                        var FSB_ADDRESS = $("input[name=o_address]").val();
 					var FSB_MAIL = $("input[name=m_email]").val();
 					
 					$("input[name=m_reci_fname]").val(FSB_FNAME);
@@ -436,6 +474,8 @@
 					$("input[name=o_add_cellphone]").val(FSB_CELLPHONE);
 					$("input[name=o_add_address]").val(FSB_ADDRESS);
 					$("input[name=o_add_mail]").val(FSB_MAIL);
+					$("input[name=o_add_zip]").val(FSB_ZIP);
+                                        $("#o_add_zip").trigger('keyup');
 				}else{
 					$("input[name=m_reci_fname]").val('');
 					$("input[name=m_reci_lname]").val('');
@@ -444,6 +484,8 @@
 					$("input[name=o_add_cellphone]").val("");
 					$("input[name=o_add_address]").val("");
 					$("input[name=o_add_mail]").val("");
+                                        $("#o_add_city").val('').trigger('change');
+					$("input[name=o_add_zip]").val("");
 				}
 			});
 			
@@ -471,14 +513,6 @@
 			});
 			
 			//----
-			$(document).zone_box({
-				MAIN_ID : "zone_main", // 縣市元素 ID (select 元素)
-				SUB_ID : "zone_sub", // 區域元素 ID (select 元素)
-				ZIP_ID : "zone_id", // 郵遞區號 ID (input 元素)
-				ZIP_GET : "{VALUE_TAIWAN_ZIP}", // 輸入郵遞區號
-			},function(ZIP){
-				//callback
-			});
 			
 			//----
 			$(document).get_box({
