@@ -53,6 +53,7 @@ class ORDER{
                 $this->current_class="O";
                 $this->ws_tpl_file = "templates/ws-manage-order-reply-form-tpl.html";
                 $this->ws_load_tp($this->ws_tpl_file);
+                if($cms_cfg['ws_module']['ws_address_type']=='tw')App::getHelper ('main')->res_init("zone",'box');
                 $this->order_reply_form();
                 $this->ws_tpl_type=1;
                 break;
@@ -245,6 +246,7 @@ class ORDER{
                                           "VALUE_O_ADD_NAME" => $row["o_add_name"],
                                           "VALUE_O_ADD_TEL" => $row["o_add_tel"],
                                           "VALUE_O_ADD_CELLPHONE" => $row["o_add_cellphone"],
+                                          "VALUE_O_ADD_ZIP" => $row["o_add_zip"],
                                           "VALUE_O_ADD_ADDRESS" => $row["o_add_address"],
                                           "VALUE_O_ADD_MAIL" => $row["o_add_mail"],
                                           "VALUE_O_CONTENT" => $row["o_content"],
@@ -316,6 +318,12 @@ class ORDER{
                         ) );
                     }
                 }
+                //地址欄位格式
+                if($cms_cfg['ws_module']['ws_address_type']=='tw'){
+                    $tpl->newBlock("TW_ADDRESS");
+                }else{
+                    $tpl->newBlock("SINGLE_ADDRESS");
+                }                 
                 //訂購產品列表
                 $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."'";
                 if(!$_GET['showdel']){
