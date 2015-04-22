@@ -680,6 +680,7 @@ class CART{
     //預覽訂單
     function cart_preview(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$inquiry,$main,$ws_array;
+        $main->magic_gpc($_POST);
         App::getHelper('session')->tmpForm = $_POST;
         $this->cart_list();
         $tpl->newBlock( "MEMBER_DATA_FORM" );
@@ -705,26 +706,26 @@ class CART{
                             "MSG_FAX" => $TPLMSG["FAX"],
                             "MSG_EMAIL" => $TPLMSG["EMAIL"],
                             "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"],
-                            "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
-                            "VALUE_M_VAT_NUMBER" => $_REQUEST["m_vat_number"],
-                            "VALUE_M_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
-                            "VALUE_M_ZIP" => $_REQUEST["m_zip"],
-                            "VALUE_M_ADDRESS" => $_REQUEST["m_city"].$_REQUEST["m_area"].$_REQUEST["m_address"],
-                            "VALUE_M_TEL" => $_REQUEST["m_tel"],
-                            "VALUE_M_FAX" => $_REQUEST["m_fax"],
-                            "VALUE_M_EMAIL" => $_REQUEST["m_email"],
-                            "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"],
-                            "VALUE_M_RECI_CONTACT_S" => $_REQUEST["m_reci_contact_s"],
-                            "VALUE_M_RECI_NAME" => $_REQUEST["m_reci_name"],
-                            "VALUE_M_RECI_ZIP" => $_REQUEST["m_reci_zip"],
-                            "VALUE_M_RECI_ADDRESS" => $_REQUEST["m_reci_city"].$_REQUEST["m_reci_area"].$_REQUEST["m_reci_address"],
-                            "VALUE_M_RECI_TEL" => $_REQUEST["m_reci_tel"],
-                            "VALUE_M_RECI_EMAIL" => $_REQUEST["m_reci_email"],
-                            "VALUE_M_RECI_CELLPHONE" => $_REQUEST["m_reci_cellphone"],
-                            "VALUE_O_CONTENT" => nl2br($_REQUEST["m_content"]),
+                            "VALUE_M_COMPANY_NAME" => $_POST["m_company_name"],
+                            "VALUE_M_VAT_NUMBER" => $_POST["m_vat_number"],
+                            "VALUE_M_INVOICE_TYPE" => $ws_array['invoice_type'][$_POST['o_invoice_type']],
+                            "VALUE_M_ZIP" => $_POST["m_zip"],
+                            "VALUE_M_ADDRESS" => $_POST["m_city"].$_POST["m_area"].$_POST["m_address"],
+                            "VALUE_M_TEL" => $_POST["m_tel"],
+                            "VALUE_M_FAX" => $_POST["m_fax"],
+                            "VALUE_M_EMAIL" => $_POST["m_email"],
+                            "VALUE_M_CELLPHONE" => $_POST["m_cellphone"],
+                            "VALUE_M_RECI_CONTACT_S" => $_POST["m_reci_contact_s"],
+                            "VALUE_M_RECI_NAME" => $_POST["m_reci_name"],
+                            "VALUE_M_RECI_ZIP" => $_POST["m_reci_zip"],
+                            "VALUE_M_RECI_ADDRESS" => $_POST["m_reci_city"].$_POST["m_reci_area"].$_POST["m_reci_address"],
+                            "VALUE_M_RECI_TEL" => $_POST["m_reci_tel"],
+                            "VALUE_M_RECI_EMAIL" => $_POST["m_reci_email"],
+                            "VALUE_M_RECI_CELLPHONE" => $_POST["m_reci_cellphone"],
+                            "VALUE_O_CONTENT" => nl2br($_POST["m_content"]),
                             "VALUE_O_ID" => $this->o_id,
                             "VALUE_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$shipment_type],
-                            "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
+                            "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_POST['o_invoice_type']],
         ));
         $m_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_fname'],$_POST['m_lname']);
         $m_reci_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_reci_fname'],$_POST['m_reci_lname']);        
@@ -737,7 +738,7 @@ class CART{
         $tpl->assign(array(
             "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
             "VALUE_M_NAME"       => $m_name,    
-            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_contact_s"]],                    
+            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_POST["m_contact_s"]],                    
         ));        
         //收件人
         if($cms_cfg['ws_module']['ws_contactus_s_style']==1){//西式稱謂
@@ -748,7 +749,7 @@ class CART{
         $tpl->assign(array(
             "MSG_CONTACT_PERSON" => $TPLMSG['CONTACT_PERSON'],     
             "VALUE_M_NAME"       => $m_reci_name,    
-            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_REQUEST["m_reci_contact_s"]],                    
+            "VALUE_M_CONTACT_S"  => $ws_array["contactus_s"][$_POST["m_reci_contact_s"]],                    
         ));        
         //是否顯示配送欄位
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
@@ -763,7 +764,7 @@ class CART{
         if($cms_cfg["ws_module"]["ws_country"]==1) {
             $tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
             $tpl->assign(array("MSG_COUNTRY" =>$TPLMSG['COUNTRY'],
-                               "VALUE_M_COUNTRY" =>$_REQUEST["m_country"]
+                               "VALUE_M_COUNTRY" =>$_POST["m_country"]
             ));
         }
         
@@ -775,41 +776,41 @@ class CART{
                 $tpl->newBlock("CHARGE_FEE_ROW");
                 $tpl->assign("VALUE_CHARGE_FEE",$billList['charge_fee']);
             }           
-            $ts = time();
             $tpl->gotoBlock("SHOPPING_CART_ZONE");            
             $tpl->assign("VALUE_TOTAL",$billList['total_price']);
             //$this->o_id=$db->get_insert_id();
             //產生ATM虛擬帳號
-            if($cms_cfg["ws_module"]["ws_vaccount"]==1 & $_REQUEST["o_payment_type"]==2) {
-                $v_account = $this->get_vaccount($_REQUEST["o_subtotal_price"]);
+            if($cms_cfg["ws_module"]["ws_vaccount"]==1 & $_POST["o_payment_type"]==2) {
+                $v_account = $this->get_vaccount($_POST["o_subtotal_price"]);
                 //在確認信中加入虛擬帳號
                 $tpl->newBlock("VIRTUAL_ACCOUNT");
                 $tpl->assignGlobal( array(
                     "MSG_TRANSFER_BANK" => $TPLMSG['TRANSFER_BANK'],
                     "VALUE_TRANSFER_BANK_CODE" => $TPLMSG['TRANSFER_BANK_CODE'],
                     "MSG_TRANSFER_ACCOUNT" => $TPLMSG['TRANSFER_ACCOUNT'],
-                    "VALUE_VIRTUAL_ACCOUNT" => $v_account 
+                    "VALUE_VIRTUAL_ACCOUNT" => $v_account
                 ));
             }
             //顯示付款方式
             $tpl->newBlock("PAYMENT_TYPE");
             $tpl->assign("MSG_PAYMENT_TYPE" , $TPLMSG["PAYMENT_TYPE"]);
-            $tpl->assign("VALUE_PAYMENT_TYPE" , $main->multi_map_value($ws_array["payment_type"],$_REQUEST["o_payment_type"]));
-            if($_REQUEST["o_payment_type"]==1){ //ATM轉帳
+            $tpl->assign("VALUE_PAYMENT_TYPE" , $main->multi_map_value($ws_array["payment_type"],$_POST["o_payment_type"]));
+            if($_POST["o_payment_type"]==1){ //ATM轉帳
                 $tpl->newBlock("ATM_LAST_FIVE");
-                $tpl->assign("VALUE_ATM_LAST5",$_REQUEST["o_atm_last5"]);
+                $tpl->assign("VALUE_ATM_LAST5",$_POST["o_atm_last5"]);
             }            
             $tpl->gotoBlock( "MEMBER_DATA_FORM" );
             $tpl->assignGlobal("VALUE_VIRTUAL_ACCOUNT" , $v_account);
             
             //輸出post暫存
             foreach ($_POST as $k => $v) {
-                    $tpl -> newBlock("TMP_POST_FIELD");
-                    $tpl -> assign(array("TAG_POST_KEY" => $k, "TAG_POST_VALUE" => $v, ));
-            }            
-
+                if($k!=='func'){  //需先判斷此條件，避免又導到preview裡去了
+                    $tpl->newBlock("TMP_POST_FIELD");
+                    $tpl->assign(array("TAG_POST_KEY" => $k, "TAG_POST_VALUE" => htmlspecialchars($v), ));
+                }
+            }
         }
-    }    
+    }
     //資料更新================================================================
     function cart_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$shopping,$inquiry,$main,$ws_array;
@@ -817,6 +818,7 @@ class CART{
             App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
             die();
         }
+        $main->magic_gpc($_REQUEST);
 //        $this->ws_tpl_file = "templates/mail/cart".$this->cart_type."-finish.html";
 //        $tpl = new TemplatePower( $this->ws_tpl_file );
 //        $tpl->prepare();
