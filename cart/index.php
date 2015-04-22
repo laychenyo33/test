@@ -446,13 +446,13 @@
 		}
 	
 		// 預覽訂單
-		function cart_preview() {
+                function cart_preview() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $main, $allpay, $ws_array;
                         if($this->activateStockChecker && $this->container->checkCartStocks()===false){ //l購物車裡有產品庫存不足
                             App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
                             die();
                         }
-                        
+                        $main->magic_gpc($_POST);
 			$this->cart_list();
                         $payment_type = $this->container->get_payment_type();
 	
@@ -462,17 +462,17 @@
                         $contact_s = App::getHelper('main')->multi_map_value($ws_array["contactus_s"],$_POST["m_contact_s"]);
                         $name_template = $this->name_s_struct[App::configs()->ws_module->ws_contactus_s_style];
                         $name_with_s = sprintf($name_template,$contact_s,$m_name);
-			$tpl->assign(array("VALUE_O_ID" => $this->o_id, "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
-                            //"VALUE_M_CONTACT_S" => $this->gender_list($_REQUEST["m_contact_s"],1),
-                            //"VALUE_M_NAME" => $_REQUEST["m_name"],
+			$tpl->assign(array("VALUE_O_ID" => $this->o_id, "VALUE_M_COMPANY_NAME" => $_POST["m_company_name"],
+                            //"VALUE_M_CONTACT_S" => $this->gender_list($_POST["m_contact_s"],1),
+                            //"VALUE_M_NAME" => $_POST["m_name"],
                             "VALUE_M_NAME" => $name_with_s, 
-                            "VALUE_M_ZIP" => $_REQUEST["m_zip"], 
-                            "VALUE_M_ADDRESS" => $_REQUEST["m_city"].$_REQUEST["m_area"].$_REQUEST["m_address"], 
-                            "VALUE_M_TEL" => $_REQUEST["m_tel"], 
-                            "VALUE_M_FAX" => $_REQUEST["m_fax"], 
-                            "VALUE_M_EMAIL" => $_REQUEST["m_email"], 
-                            "VALUE_M_CELLPHONE" => $_REQUEST["m_cellphone"], 
-                            "VALUE_CONTENT" => $_REQUEST["content"], 
+                            "VALUE_M_ZIP" => $_POST["m_zip"], 
+                            "VALUE_M_ADDRESS" => $_POST["m_city"].$_POST["m_area"].$_POST["m_address"], 
+                            "VALUE_M_TEL" => $_POST["m_tel"], 
+                            "VALUE_M_FAX" => $_POST["m_fax"], 
+                            "VALUE_M_EMAIL" => $_POST["m_email"], 
+                            "VALUE_M_CELLPHONE" => $_POST["m_cellphone"], 
+                            "VALUE_CONTENT" => $_POST["content"], 
                         ));
 	
 			if ($_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"] == 1) {
@@ -489,39 +489,39 @@
 				$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
 				$tpl->assign($this->adv_lang);
 				$tpl->assign(array(
-                                    //"VALUE_ADD_NAME" => $_REQUEST["o_add_name"], 
+                                    //"VALUE_ADD_NAME" => $_POST["o_add_name"], 
                                     "VALUE_ADD_NAME" => $reci_name_with_s, 
-                                    "VALUE_ADD_TEL" => $_REQUEST["o_add_tel"], 
-                                    "VALUE_ADD_CELLPHONE" => $_REQUEST["o_add_cellphone"], 
-                                    "VALUE_ADD_ADDRESS" => $_REQUEST["o_add_address"], 
-                                    "VALUE_ADD_MAIL" => $_REQUEST["o_add_mail"], 
-                                    "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']], 
-                                    "VALUE_INVOICE_NAME" => $_REQUEST["o_invoice_name"], 
-                                    "VALUE_INVOICE_VAT" => $_REQUEST["o_invoice_vat"], 
-                                    "VALUE_INVOICE_TEXT" => $_REQUEST["o_invoice_text"], 
+                                    "VALUE_ADD_TEL" => $_POST["o_add_tel"], 
+                                    "VALUE_ADD_CELLPHONE" => $_POST["o_add_cellphone"], 
+                                    "VALUE_ADD_ADDRESS" => $_POST["o_add_address"], 
+                                    "VALUE_ADD_MAIL" => $_POST["o_add_mail"], 
+                                    "VALUE_INVOICE_TYPE" => $ws_array['invoice_type'][$_POST['o_invoice_type']], 
+                                    "VALUE_INVOICE_NAME" => $_POST["o_invoice_name"], 
+                                    "VALUE_INVOICE_VAT" => $_POST["o_invoice_vat"], 
+                                    "VALUE_INVOICE_TEXT" => $_POST["o_invoice_text"], 
                                 ));
 			}
 	
 			// 到貨時間
-			if (is_array($_REQUEST["o_arrival_time"])) {
-				$o_arrival_time = implode("-", $_REQUEST["o_arrival_time"]);
+			if (is_array($_POST["o_arrival_time"])) {
+				$o_arrival_time = implode("-", $_POST["o_arrival_time"]);
 				$tpl->assign("VALUE_ARRIVAL_TIME", $o_arrival_time);
 			}
 	
 			// 國家欄位
 			if ($cms_cfg["ws_module"]["ws_country"] == 1) {
 				$tpl->newBlock("MEMBER_DATA_COUNTRY_ZONE");
-				$tpl->assign(array("MSG_COUNTRY" => $TPLMSG['COUNTRY'], "VALUE_M_COUNTRY" => $_REQUEST["m_country"]));
+				$tpl->assign(array("MSG_COUNTRY" => $TPLMSG['COUNTRY'], "VALUE_M_COUNTRY" => $_POST["m_country"]));
 			}
 			//輸出post暫存
 			foreach ($_POST as $k => $v) {
 				if (!is_array($v)) {
 					$tpl->newBlock("TMP_POST_FIELD");
-					$tpl->assign(array("TAG_POST_KEY" => $k, "TAG_POST_VALUE" => $v, ));
+					$tpl->assign(array("TAG_POST_KEY" => $k, "TAG_POST_VALUE" => htmlspecialchars($v), ));
 				} else {
 					foreach ($v as $split_v) {
 						$tpl->newBlock("TMP_POST_FIELD");
-						$tpl->assign(array("TAG_POST_KEY" => $k.'[]', "TAG_POST_VALUE" => $split_v, ));
+						$tpl->assign(array("TAG_POST_KEY" => $k.'[]', "TAG_POST_VALUE" => htmlspecialchars($split_v), ));
 					}
 				}
 			}
@@ -536,6 +536,7 @@
                             App::getHelper('main')->js_notice($TPLMSG['INVENTORY_SHORTAG_NOTIFY'],$_SERVER['PHP_SELF']);
                             die();
                         }
+                        $main->magic_gpc($_REQUEST);                        
 			$this->o_id = $this->o_id_generator();
                         $shipment_type = $this->container->get_shipment_type();
                         $payment_type = $this->container->get_payment_type();
@@ -559,8 +560,8 @@
 			}
 	
 			$tpl->newBlock("MEMBER_DATA_FORM");
-                        $o_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_fname'],$_POST['m_lname']);
-                        $contact_s = App::getHelper('main')->multi_map_value($ws_array["contactus_s"],$_POST["m_contact_s"]);
+                        $o_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_REQUEST['m_fname'],$_REQUEST['m_lname']);
+                        $contact_s = App::getHelper('main')->multi_map_value($ws_array["contactus_s"],$_REQUEST["m_contact_s"]);
                         $name_template = $this->name_s_struct[App::configs()->ws_module->ws_contactus_s_style];
                         $name_with_s = sprintf($name_template,$contact_s,$o_name);
 			$tpl->assign($this->basic_lang);
@@ -592,8 +593,8 @@
                                 ));
 	
 				// 收件人資訊
-                                $m_reci_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_reci_fname'],$_POST['m_reci_lname']);
-                                $reci_contact_s = App::getHelper('main')->multi_map_value($ws_array["contactus_s"],$_POST["m_reci_contact_s"]);
+                                $m_reci_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_REQUEST['m_reci_fname'],$_REQUEST['m_reci_lname']);
+                                $reci_contact_s = App::getHelper('main')->multi_map_value($ws_array["contactus_s"],$_REQUEST["m_reci_contact_s"]);
                                 $o_add_name = sprintf($name_template,$reci_contact_s,$m_reci_name);                                
 				$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
 				$tpl->assign($this->adv_lang);
@@ -626,19 +627,19 @@
                                 ));
 			}
                         //將m_換成o_
-                        foreach($_POST as $k=>$v){
+                        foreach($_REQUEST as $k=>$v){
                             if(preg_match("/^m_(\w+)$/", $k,$match)){
                                 if($match[1]=="country"){
                                     $v = $main->multi_map_value($country,$v);
                                 }
-                                $_POST['o_'.$match[1]] = $v;
+                                $_REQUEST['o_'.$match[1]] = $v;
                             }
                         }
                         
                         $billList = $this->container->get_cart_info();                    
 	
 			// 寫入訂單
-                        $orderData = array_merge($_POST,array(
+                        $orderData = array_merge($_REQUEST,array(
                             'o_id'         => $this->o_id,
                             'm_id'         => $this->m_id,
                             'o_status'     => 0,
@@ -652,7 +653,7 @@
                             'o_payment_type'   => $payment_type,
                             'o_arrival_time'   => $o_arrival_time,
                             'o_address'        => $o_address,
-                            'o_content'        => $_POST["content"],
+                            'o_content'        => $_REQUEST["content"],
                             'o_name'           => $o_name,
                             'o_add_name'       => $o_add_name
                         ));
