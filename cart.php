@@ -684,6 +684,19 @@ class CART{
         $this->cart_list();
         $tpl->newBlock( "MEMBER_DATA_FORM" );
         $shipment_type = $this->container->get_shipment_type();
+        //處理地址欄位
+        $map = array('target'=>'address','rmTarget'=>array('city','area'));
+        $type = array('m_','m_reci_');
+        //訂購人地址
+        foreach($type as $t){
+            $target = $t.$map['target'];
+            if($_POST[$target]){
+                foreach($map['rmTarget'] as $rt){
+                    $rmTarget = $t.$rt;
+                    $_POST[$target] = str_replace($_POST[$rmTarget], '', $_POST[$target]);
+                }
+            }    
+        }
         $tpl->assign( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
                             "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
                             "MSG_ZIP" => $TPLMSG["ZIP"],
