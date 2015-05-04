@@ -83,12 +83,12 @@ class GALLERY{
         }
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
+        $imgHandler = Model_Image::factory($cms_cfg['gallery_cate_img_width'],$cms_cfg['gallery_cate_img_height']);
         $i=0;
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             $tpl->newBlock( "GALLERY_LIST" );
-            $simg = $row["g_s_pic"]?$cms_cfg['file_root'].$row["g_s_pic"]:$cms_cfg['default_preview_pic'];
-            $dimension = $main->resizeto($simg,$cms_cfg['gallery_cate_img_width'],$cms_cfg['gallery_cate_img_height']);
+            $imgInfo = $imgHandler->parse($row["g_s_pic"]);
             $tpl->assign( array("VALUE_GC_ID"  => $row["gc_id"],
                                 "VALUE_G_ID"  => $row["g_id"],
                                 "VALUE_G_SUBJECT" => $row["g_subject"],
@@ -96,9 +96,9 @@ class GALLERY{
                                 "VALUE_G_MODIFYDATE" => substr($row["g_modifydate"],0,10),
                                 "VALUE_G_TARGET" => ($row["g_pop"])?"_blank":"_parent",
                                 "VALUE_G_SERIAL" => $i,
-                                "VALUE_G_S_PIC" => $simg,
-                                "VALUE_G_S_PIC_W" => $dimension['width'],
-                                "VALUE_G_S_PIC_H" => $dimension['height'],
+                                "VALUE_G_S_PIC" => $imgInfo[0],
+                                "VALUE_G_S_PIC_W" => $imgInfo['width'],
+                                "VALUE_G_S_PIC_H" => $imgInfo['height'],
                                 "VALUE_G_STRIP_CONTENT" => str_replace("\r\n","",strip_tags($main->content_file_str_replace($row["g_content"],'out2'))),
             ));
         }
@@ -228,15 +228,15 @@ class GALLERY{
                 $thumb = $main->file_str_replace($imgs[0]);
             }
         }
-        $simg = $thumb?$cms_cfg['file_root'].$thumb:$cms_cfg['default_preview_pic'];
         $tpl->newBlock( "GALLERY_CATE_LIST" );
-        $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+        $imgHandler = Model_Image::factory($cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+        $imgInfo = $imgHandler->parse($thumb);
         $tpl->assign( array(
             "VALUE_GC_SUBJECT" => $cate['gc_subject'],
             "VALUE_GC_LINK" => $this->get_link($cate),
-            "VALUE_GC_S_PIC" => $simg,
-            "VALUE_GC_S_PIC_W" => $dimension['width'],
-            "VALUE_GC_S_PIC_H" => $dimension['height'],
+            "VALUE_GC_S_PIC" => $imgInfo[0],
+            "VALUE_GC_S_PIC_W" => $imgInfo['width'],
+            "VALUE_GC_S_PIC_H" => $imgInfo['height'],
         ));
         
     }
@@ -246,21 +246,20 @@ class GALLERY{
             $tpl->newBlock("GALLERY_CATE_DESC");
             $tpl->assign("VALUE_GC_DESC",$main->content_file_str_replace($cate['gc_desc'],'out2'));
         }
+        $imgHandler = Model_Image::factory($row['gp_file'],$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
         if($cms_cfg["ws_module"]['ws_gallery_update_db']){
             $sql = "select * from ".$cms_cfg['tb_prefix']."_gallery_pics where gc_id='".$cate['gc_id']."' order by sort ";
             $res = $db->query($sql,true);
             if($db->numRows($res)){
                 while($row = $db->fetch_array($res,1)){
                     $i++;
-                    $thumb = $main->file_str_replace($row['gp_file']);
                     $tpl->newBlock( "GALLERY_BATCH_LIST" );
-                    $simg = $cms_cfg['file_root'].$thumb;
-                    $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+                    $imgInfo = $imgHandler->parse($row['gp_file']);                    
                     $tpl->assign( array(
-                        "VALUE_G_LINK" => $simg,
-                        "VALUE_G_S_PIC" => $simg,
-                        "VALUE_G_S_PIC_W" => $dimension['width'],
-                        "VALUE_G_S_PIC_H" => $dimension['height'],
+                        "VALUE_G_LINK" => $imgInfo[0],
+                        "VALUE_G_S_PIC" => $imgInfo[0],
+                        "VALUE_G_S_PIC_W" => $imgInfo['width'],
+                        "VALUE_G_S_PIC_H" => $imgInfo['height'],
                         "VALUE_GP_DESC"   => $row['gp_desc'],
                     ));
                 }            
@@ -271,15 +270,13 @@ class GALLERY{
                 $pattern = $dir . "/*.{".$this->extension."}";
                 $imgs = glob($pattern,GLOB_BRACE);
                 foreach($imgs  as $full_path_img){
-                    $thumb = $main->file_str_replace($full_path_img);
                     $tpl->newBlock( "GALLERY_BATCH_LIST" );
-                    $simg = $cms_cfg['file_root'].$thumb;
-                    $dimension = $main->resizeto($simg,$cms_cfg['gallery_img_width'],$cms_cfg['gallery_img_height']);
+                    $imgInfo = $imgHandler->parse($full_path_img);                    
                     $tpl->assign( array(
-                        "VALUE_G_LINK" => $simg,
-                        "VALUE_G_S_PIC" => $simg,
-                        "VALUE_G_S_PIC_W" => $dimension['width'],
-                        "VALUE_G_S_PIC_H" => $dimension['height'],
+                        "VALUE_G_LINK" => $imgInfo[0],
+                        "VALUE_G_S_PIC" => $imgInfo[0],
+                        "VALUE_G_S_PIC_W" => $imgInfo['width'],
+                        "VALUE_G_S_PIC_H" => $imgInfo['height'],
                     ));
                 }
             }

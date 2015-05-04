@@ -62,16 +62,16 @@ class MAINDEFAULT{
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         if($rsnum >0){
+            $imgHandler = Model_Image::factory($cms_cfg['idx_prod_cate_img_width'],$cms_cfg['idx_prod_cate_img_height']);
             while($row = $db->fetch_array($selectrs,1)){
                 $tpl->newBlock("PRODUCT_CATE_LIST");
-                $img = $row['pc_cate_img']?$cms_cfg['file_root'].$row['pc_cate_img']:$cms_cfg['default_preview_pic'];
-                $dimension = $main->resizeto($img,$cms_cfg['idx_prod_cate_img_width'],$cms_cfg['idx_prod_cate_img_height']);
+                $imgInfo = $imgHandler->parse($row['pc_cate_img']);
                 $tpl->assign(array(
                     "VALUE_PC_NAME" => $row['pc_name'],
                     "VALUE_PC_LINK" => $cms_cfg['base_root'].$row['pc_seo_filename'].".htm",
-                    "VALUE_PC_IMG"  => $img,
-                    "VALUE_PC_IMG_W"  => $dimension['width'],
-                    "VALUE_PC_IMG_H"  => $dimension['height'],
+                    "VALUE_PC_IMG"  => $imgInfo[0],
+                    "VALUE_PC_IMG_W"  => $imgInfo['width'],
+                    "VALUE_PC_IMG_H"  => $imgInfo['height'],
                 ));
             }
         }
@@ -80,14 +80,19 @@ class MAINDEFAULT{
     function products_rand(){
         global $db,$tpl,$cms_cfg;
         $sql="select p.p_id,p.pc_id,p.p_name,p.p_name_alias,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id  where p_status='1' order by rand() limit 0,3";
-		$selectrs = $db->query($sql);
+        $selectrs = $db->query($sql);
+        $imgHandler = Model_Image::factory($cms_cfg['idx_rand_prod_img_width'],$cms_cfg['idx_rand_prod_img_height']);
         while($row = $db->fetch_array($selectrs,1)){
             $p_link = App::getHelper('request')->get_link('products',$row);
+            $imgInfo = $imgHandler->parse($row["p_small_img"]);
             $tpl->newBlock( "PRODUCT_RAND_LIST" );
-            $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
-                                "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
-                                "VALUE_P_LINK"  => $p_link,
-                                "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"],
+            $tpl->assign( array(
+                "VALUE_P_NAME" =>$row["p_name"],
+                "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
+                "VALUE_P_LINK"  => $p_link,
+                "VALUE_P_SMALL_IMG" => $imgInfo[0],
+                "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],
             ));
         }
     }
@@ -106,19 +111,19 @@ class MAINDEFAULT{
         }else{
             $show_price=1;
         }
+        $imgHandler = Model_Image::factory($cms_cfg['idx_hot_prod_img_width'],$cms_cfg['idx_hot_prod_img_height']);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
             $p_link = App::getHelper('request')->get_link('products',$row);            
             $tpl->newBlock( "NEW_PRODUCTS_LIST" );
-            $img = (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
-            $dimension = $main->resizeto($img,$cms_cfg['idx_new_prod_img_width'],$cms_cfg['idx_new_prod_img_height']);
+            $imgInfo = $imgHandler->parse($row["p_small_img"]);
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                 "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                 "VALUE_P_LINK"  => $p_link,
-                                "VALUE_P_SMALL_IMG" => $img,
-                                "VALUE_P_SMALL_IMG_W" => $dimension['width'],
-                                "VALUE_P_SMALL_IMG_H" => $dimension['height'],
+                                "VALUE_P_SMALL_IMG" => $imgInfo[0],
+                                "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                                "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],
             ));
             //詢價商品或是購物商品
             if($show_price==0){
@@ -152,18 +157,19 @@ class MAINDEFAULT{
         }else{
             $show_price=1;
         }
+        $imgHandler = Model_Image::factory($cms_cfg['idx_hot_prod_img_width'],$cms_cfg['idx_hot_prod_img_height']);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
             $p_link = App::getHelper('request')->get_link('products',$row);
-            $dimension = App::getHelper('main')->resizeto($img,$cms_cfg['idx_hot_prod_img_width'],$cms_cfg['idx_hot_prod_img_height']);
             $tpl->newBlock( "HOT_PRODUCTS_LIST" );
+            $imgInfo = $imgHandler->parse($row["p_small_img"]);
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                 "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                 "VALUE_P_LINK"  => $p_link,
-                                "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"],
-                                "VALUE_P_SMALL_IMG_W" => $dimension['width'],
-                                "VALUE_P_SMALL_IMG_H" => $dimension['height'],                    
+                                "VALUE_P_SMALL_IMG" => $imgInfo[0],
+                                "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                                "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],                    
             ));
             //詢價商品或是購物商品
             if($show_price==0){
@@ -198,18 +204,19 @@ class MAINDEFAULT{
         }else{
             $show_price=1;
         }
+        $imgHandler = Model_Image::factory($cms_cfg['idx_pro_prod_img_width'],$cms_cfg['idx_pro_prod_img_height']);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
-            $p_link = App::getHelper('request')->get_link('products',$row);            
-            $dimension = App::getHelper('main')->resizeto($img,$cms_cfg['idx_pro_prod_img_width'],$cms_cfg['idx_pro_prod_img_height']);
+            $p_link = App::getHelper('request')->get_link('products',$row);
+            $imgInfo = $imgHandler->parse($row["p_small_img"]);
             $tpl->newBlock( "PROMOTION_PRODUCTS_LIST" );
             $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                 "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                 "VALUE_P_LINK"  => $p_link,
-                                "VALUE_P_SMALL_IMG" => (trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"],
-                                "VALUE_P_SMALL_IMG_W" => $dimension['width'],
-                                "VALUE_P_SMALL_IMG_H" => $dimension['height'],                
+                                "VALUE_P_SMALL_IMG" => $imgInfo[0],
+                                "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                                "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],                
             ));
             //詢價商品或是購物商品
             if($show_price==0){
@@ -235,6 +242,7 @@ class MAINDEFAULT{
         $sql="select n.*,nc.nc_subject from ".$cms_cfg['tb_prefix']."_news as n left join ".$cms_cfg['tb_prefix']."_news_cate as nc on n.nc_id=nc.nc_id where  nc.nc_status='1' and (n.n_status='1' or (n.n_status='2' and n.n_startdate <= '".date("Y-m-d")."' and n.n_enddate >= '".date("Y-m-d")."')) order by n.n_showdate desc,n.n_sort ".$cms_cfg['sort_pos'].",n.n_modifydate desc limit 0,4";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
+        $imgHandler = Model_Image::factory($cms_cfg['idx_news_img_width'],$cms_cfg['idx_news_img_height']);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
@@ -252,8 +260,7 @@ class MAINDEFAULT{
                 $n_link = $row["n_url"];
             }
             $tpl->newBlock( "NEWS_LIST" );
-            $n_img=(trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["n_s_pic"];
-            $dimensions = App::getHelper('main')->resizeto($n_img,$cms_cfg['idx_news_img_width'],$cms_cfg['idx_news_img_height']);
+            $imgInfo = $imgHandler->parse($row["n_s_pic"]);
             $tpl->assign( array( "VALUE_NC_ID" => $row["nc_id"],
                                  "VALUE_NC_SUBJECT"  => $row["nc_subject"],
                                  "VALUE_N_ID"  => $row["n_id"],
@@ -263,9 +270,9 @@ class MAINDEFAULT{
                                  "VALUE_N_MODIFYDATE" => substr($row["n_modifydate"],0,10),
                                  "VALUE_N_SHOWDATE" => $row["n_showdate"],
                                  "VALUE_N_TARGET" => ($row["n_pop"])?"_blank":"_parent",
-                                 "VALUE_N_S_PIC" => $n_img,
-                                 "VALUE_N_S_PIC_W" => $dimensions['width'],
-                                 "VALUE_N_S_PIC_H" => $dimensions['height'],
+                                 "VALUE_N_S_PIC" => $imgInfo[0],
+                                 "VALUE_N_S_PIC_W" => $imgInfo['width'],
+                                 "VALUE_N_S_PIC_H" => $imgInfo['height'],
             ));
         }
 
@@ -340,6 +347,7 @@ class MAINDEFAULT{
         $db = App::getHelper('db');
         $sql = "select * from ".$db->prefix("gallery")." where g_status='1' order by g_modifydate desc limit 1";
         $res = $db->query($sql);
+        $imgHandler = Model_Image::factory(286,166);
         while($row = $db->fetch_array($res,1)){
             $tpl->newBlock("GALLERY_LIST");
             if($this->ws_seo){
@@ -347,15 +355,14 @@ class MAINDEFAULT{
             }else{
                 $link = $cms_cfg['base_root']."gallery.php?func=g_show&gc_id=".$row["gc_id"]."&g_id=".$row["g_id"];
             }
-            $gpic = $row['g_b_pic1']?$cms_cfg['file_root'].$row['g_b_pic1']:$cms_cfg['default_preview_pic'];
-            $dimension = App::getHelper('main')->resizeto($gpic,286,166);
+            $imgInfo = $imgHandler->parse($row['g_b_pic1']);
             $tpl->assign(array(
                 "VALUE_G_SUBJECT" => $row['g_subject'],
                 "VALUE_G_CONTENT" => App::getHelper('main')->get_short_str($row['g_content'],90),
                 "VALUE_G_LINK" => $link,
-                "VALUE_G_PIC" => $gpic,
-                "VALUE_G_PIC_W" => $dimension['width'],
-                "VALUE_G_PIC_H" => $dimension['height'],
+                "VALUE_G_PIC" => $imgInfo[0],
+                "VALUE_G_PIC_W" => $imgInfo['width'],
+                "VALUE_G_PIC_H" => $imgInfo['height'],
             ));
         }
     }

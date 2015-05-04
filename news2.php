@@ -114,6 +114,7 @@ class NEWS{
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $i=0;
+        $imgHandler = Model_Image::factory($cms_cfg['news_img_width'],$cms_cfg['news_img_height']);
         while ( $row = $db->fetch_array($selectrs,1) ) {
             $i++;
             if($row["n_content_type"]==1) {
@@ -122,8 +123,7 @@ class NEWS{
                 $n_link = $row["n_url"];
             }
             $tpl->newBlock( "NEWS_LIST" );
-            $n_img=(trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["n_s_pic"];
-            $dimensions = $main->resizeto($n_img,$cms_cfg['news_img_width'],$cms_cfg['news_img_height']);
+            $imgInfo = $imgHandler->parse($row["n_s_pic"]);
             $tpl->assign( array("VALUE_NC_ID"  => $row["nc_id"],
                                 "VALUE_N_ID"  => $row["n_id"],
                                 "VALUE_N_SUBJECT" => $row["n_subject"],
@@ -133,9 +133,9 @@ class NEWS{
                                 "VALUE_N_SHOWDATE" => $row["n_showdate"],
                                 "VALUE_N_TARGET" => ($row["n_pop"])?"_blank":"_parent",
                                 "VALUE_N_SERIAL" => $i,
-                                "VALUE_N_S_PIC" => $n_img,
-                                "VALUE_N_S_PIC_W" => $dimensions['width'],
-                                "VALUE_N_S_PIC_H" => $dimensions['height'],
+                                "VALUE_N_S_PIC" => $imgInfo[0],
+                                "VALUE_N_S_PIC_W" => $imgInfo['width'],
+                                "VALUE_N_S_PIC_H" => $imgInfo['height'],
             ));
             if($row["n_content_type"]==2){
                 $tpl->assign("VALUE_N_LINK" , $row["n_url"]);

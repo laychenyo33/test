@@ -237,16 +237,16 @@ class EBOOK{
         $sql="select * from ".$cms_cfg['tb_prefix']."_ebook_cate where ebc_parent='0' and ebc_status='1' order by ebc_sort, ebc_modifyaccount desc";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
+        $imgHandler = Model_Image::factory($cms_cfg['ebook_cate_img_width'],$cms_cfg['ebook_cate_img_height']);
         if($rsnum > 0 ){
             while($row = $db->fetch_array($selectrs,1)){
                 $ebc_link=$cms_cfg["base_root"]."ebook.php?func=eb_list&ebc_parent=".$row["ebc_id"];
                 $tpl->newBlock( "LEFT_CATE_LIST" );
-                $cate_img = (trim($row["ebc_cate_img"])=="")?$cms_cfg['default_ebook_pic']:$cms_cfg["file_root"].$row["ebc_cate_img"];
-                $dimension = $main->resizeto($cate_img,$cms_cfg['ebook_cate_img_width'],$cms_cfg['ebook_cate_img_height']);
+                $imgInfo = $imgHandler->parse($row["ebc_cate_img"]);
                 $tpl->assign( array( "VALUE_CATE_NAME" => $row["ebc_name"],
-                    "VALUE_CATE_IMG" => $cate_img,
-                    "VALUE_CATE_IMG_W" => $dimension['width'],
-                    "VALUE_CATE_IMG_H" => $dimension['height'],
+                    "VALUE_CATE_IMG" => $imgInfo[0],
+                    "VALUE_CATE_IMG_W" => $imgInfo['width'],
+                    "VALUE_CATE_IMG_H" => $imgInfo['height'],
                     "VALUE_CATE_LINK"  => $ebc_link,
                     "VALUE_CATE_NAME"  => $row['ebc_name'],
                     "TAG_CURRENT_CLASS"  => ($_GET['ebc_parent']==$row['ebc_id'])?"class='current'":"",
