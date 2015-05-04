@@ -10,6 +10,7 @@ class Model_Session_Cart extends Model_Modules {
         'quantity' => 'quantity',
     );
     protected $activateStockChecker;
+    protected $addproddelimiter = '|'; //加購產品id的分隔字元
     function __construct($model , $options=array()) {
         $this->handler = $model;
         if(!isset($this->handler->cartContainer)){
@@ -50,6 +51,7 @@ class Model_Session_Cart extends Model_Modules {
         );
         if($this->handler->sc_cart_type==1){
             $cart_sess['cart_info'] = array_merge( $cart_sess['cart_info'] ,array(
+                'itemsByType'    => array('normal'=>0,'addPurchase'=>0),
                 'shipment_type'  => 0,
                 'payment_type'   => 0,
                 'subtotal_price' => 0,
@@ -114,6 +116,26 @@ class Model_Session_Cart extends Model_Modules {
         }
         return true;
     }
+    
+    //增加加購項目
+    function put_addPurchase($c_id,$p_id,$amount){
+        if($this->conditioner->hasAddPurchaseProduct($c_id,$p_id)){
+            $combind_id = $this->combine_id($p_id, $c_id, $this->addproddelimiter);
+            $product = $this->conditioner->getAddPurchaseProduct($c_id,$p_id);
+            if($product['limit']===0 || $product['limit']>=$amount){
+                $product['amount'] = $amount;
+                $this->discounter['quantity']->checkout($product);
+                $this->cart['products']['lists'][$combind_id] = $product;
+                $this->count(true);
+                if($this->handler->sc_cart_type==1){
+                    $this->calculate();//累計價格
+                }
+                return true;
+            }
+        }
+        return false;
+    }   
+    
     //更新購物車項目
     function update($p_id,$amount,$extra_id=null){
         //檢查庫存
@@ -130,20 +152,50 @@ class Model_Session_Cart extends Model_Modules {
         }
         return true;
     }
+    
+    //更新加購項目
+    function update_addPurchase($c_id,$p_id,$amount){
+        if($this->conditioner->hasAddPurchaseProduct($c_id,$p_id)){
+            $combind_id = $this->combine_id($p_id, $c_id,$this->addproddelimiter);
+            $product = &$this->cart['products']['lists'][$combind_id];
+            if($product['limit']===0 || $product['limit']>=$amount){
+                $product['amount'] = $amount;
+                if($this->handler->sc_cart_type==1){
+                    $this->calculate();//累計價格
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    
     //購物車產品品項數目
     function count($reCount=false){
         if($reCount){
+            if($this->handler->sc_cart_type==1){
+                $addPurchaseConditions = $this->conditioner->getUsingConditions();
+                $using_cid = array_keys($addPurchaseConditions);
+                foreach($this->cart['products']['lists'] as $p){
+                    if($p['addPurchase'] && !in_array($p['c_id'],(array)$using_cid)){
+                        $this->rm_addPurchase($p['p_id'], $p['c_id']);
+                    }
+                }
+            }
             $this->cart['cart_info']['items'] = count($this->cart['products']['lists']);
         } 
         return $this->cart['cart_info']['items'];
     }
     //取得購物車產品資料
-    function get_cart_products($p_id=null,$ps_id=null){
+    function get_cart_products($p_id=null,$ps_id=null,$addpurchase=false){
         if(empty($p_id)){
             return $this->cart['products']['lists'];
         }else{
             if(!empty($ps_id)){
-                $p_id = $this->combine_id($p_id, $ps_id);
+                if($addpurchase){
+                    $p_id = $this->combine_id($p_id, $ps_id,$this->addproddelimiter);
+                }else{
+                    $p_id = $this->combine_id($p_id, $ps_id);
+                }
             }
             return $this->cart['products']['lists'][$p_id];
         }
@@ -246,6 +298,16 @@ class Model_Session_Cart extends Model_Modules {
             $this->calculate();//累計價格
         }   
     }    
+    //移除加購產品
+    function rm_addPurchase($p_id,$c_id){
+        $p_id = $this->combine_id($p_id, $c_id,$this->addproddelimiter);
+        unset($this->cart['products']['amount'][$p_id]);
+        unset($this->cart['products']['lists'][$p_id]);
+        $this->count(true);
+        if($this->handler->sc_cart_type==1){
+            $this->calculate();//累計價格
+        }   
+    }    
     protected function _translator(){
         if(is_a($this->translator,'Model_Session_Cart_Translator_Interface')){
             return $this->translator;
@@ -309,8 +371,8 @@ class Model_Session_Cart extends Model_Modules {
         return $discounter;
     }
     
-    protected function combine_id($p_id,$ps_id){
-        return $p_id . ":" . $ps_id;        
+    protected function combine_id($p_id,$ps_id , $delimiter=':'){
+        return $p_id . $delimiter . $ps_id;
     }
     
     function checkLocalOnly(){

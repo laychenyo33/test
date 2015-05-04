@@ -262,6 +262,8 @@ class PRODUCTS{
                 $and_str = " and pc_status='1' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos']." ";
                 $sql .= $and_str;
                 $selectrs = $db->query($sql);
+                //image handler
+                $imgHandler = Model_Image::factory($cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
                 $rsnum    = $db->numRows($selectrs);
                 if($rsnum > 0){
                     $tpl->newBlock( "TAG_PRODUCTS_CATE_LIST" );
@@ -278,6 +280,7 @@ class PRODUCTS{
                     }
                     $pc_img=(trim($row["pc_cate_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["pc_cate_img"];
                     $i++;
+                    $pcImgInfo = $imgHandler->parse($row["pc_cate_img"]);
                     $tpl->newBlock( $show_style_str_pc );
                     $tpl->assign( array( "VALUE_PC_NAME"  => $row["pc_name"],
                                          "VALUE_PC_NAME_ALIAS" =>$row["pc_name_alias"],
@@ -285,18 +288,12 @@ class PRODUCTS{
                                          "VALUE_PC_ID" => $row["pc_id"],
                                          "VALUE_P_TOTAL" => $p_total,
                                          "VALUE_PC_SHOW_STYLE" => $row["pc_show_style"],
-                                         "VALUE_PC_CATE_IMG" => $pc_img,
+                                         "VALUE_PC_CATE_IMG" => $pcImgInfo[0],
+                                         'VALUE_PC_SMALL_IMG_W' => $pcImgInfo['width'],
+                                         'VALUE_PC_SMALL_IMG_H' => $pcImgInfo['height'],
                                          "VALUE_PC_SERIAL" => $i,
                                          "VALUE_PC_DESC" => $main->content_file_str_replace($row['pc_desc'],'out2'),
                     ));
-                    $dimensions["width"]=$cms_cfg['small_img_width'];
-                    $dimensions["height"]=$cms_cfg['small_img_height'];
-                    if(is_file($_SERVER['DOCUMENT_ROOT'].$pc_img)){
-                        list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$pc_img);
-                        $dimensions = $main->resize_dimensions($cms_cfg['small_img_width'],$cms_cfg['small_img_height'],$width,$height);
-                    }
-                    $tpl->assign("VALUE_PC_SMALL_IMG_W",$dimensions["width"]);
-                    $tpl->assign("VALUE_PC_SMALL_IMG_H",$dimensions["height"]);
                     if($row_num){
                         if($i%$row_num==0){
                             $tpl->assign("TAG_PRODUCTS_CATE_TRTD","</tr><tr>");
@@ -416,7 +413,9 @@ class PRODUCTS{
                 }
             }
             $j=0;
-            $k=$page["start_serial"];
+            //設定產品縮圖尺寸
+            $imgHandler->setDimension($cms_cfg['small_prod_img_width'],$cms_cfg['small_prod_img_height']);
+            $k=$main->get_pagination_offset($this->op_limit);
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $p_link = $this->get_link($row,true);
                 //收集第二頁以後pc_name 做為 meta title
@@ -428,16 +427,15 @@ class PRODUCTS{
                 }
                 $j++;
                 $k++;
-                $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
-                $dimension = App::getHelper('main')->resizeto($p_img,$cms_cfg['small_prod_img_width'],$cms_cfg['small_prod_img_height']);
+                $pImgInfo = $imgHandler->parse($row["p_small_img"]);
                 $tpl->newBlock( $blockname );
                 $tpl->assign( array("VALUE_P_NAME" =>$row["p_name"],
                                     "VALUE_P_ID" =>$row["p_id"],
                                     "VALUE_P_NAME_ALIAS" =>$row["p_name_alias"],
                                     "VALUE_P_LINK"  => $p_link,
-                                    "VALUE_P_SMALL_IMG" => $p_img,
-                                    "VALUE_P_SMALL_IMG_W" => $dimension['width'],
-                                    "VALUE_P_SMALL_IMG_H" => $dimension['height'],
+                                    "VALUE_P_SMALL_IMG" => $pImgInfo[0],
+                                    "VALUE_P_SMALL_IMG_W" => $pImgInfo['width'],
+                                    "VALUE_P_SMALL_IMG_H" => $pImgInfo['height'],
                                     "VALUE_P_SPECIAL_PRICE" => $row["p_special_price"],
                                     "VALUE_P_SERIAL" => $row["p_serial"],
                                     "VALUE_P_NO" => $k,
@@ -894,9 +892,8 @@ class PRODUCTS{
                     $big_img_array[]=$row2["p_big_img".$i];
                 }
             }
-            $dimensions["width"]=$cms_cfg['big_img_width'][$this->show_style];
-            $dimensions["height"]=$cms_cfg['big_img_height'][$this->show_style];
             $pic_num=count($big_img_array);
+            $imgHandler = Model_Image::factory();
             if($pic_num >1){
                 $this->template_str="_MULTI";
                 $tpl->newBlock("BIG_IMG_MUTI");
@@ -905,19 +902,25 @@ class PRODUCTS{
                    $k++;
                    //顯示大圖
                    $tpl->newBlock("BIG_IMG_LIST");
-                   $dimensions = $main->resizeto($cms_cfg["file_root"].$value,$cms_cfg['big_img_width'][$this->show_style],$cms_cfg['big_img_height'][$this->show_style]);
-                   $tpl->assign("VALUE_P_BIG_IMG",$cms_cfg["file_root"].$value);
-                   $tpl->assign("VALUE_P_BIG_IMG_W",$dimensions["width"]);
-                   $tpl->assign("VALUE_P_BIG_IMG_H",$dimensions["height"]);
-                   $tpl->assign("VALUE_P_BIG_IMG_SERIAL",$k);
+                   $imgHandler->setDimension($cms_cfg['big_img_width'][$this->show_style],$cms_cfg['big_img_height'][$this->show_style]);
+                   $bigImgInfo = $imgHandler->parse($value);
+                   $tpl->assign(array(
+                        "VALUE_P_BIG_IMG"        => $bigImgInfo[0],
+                        "VALUE_P_BIG_IMG_W"      => $bigImgInfo["width"],
+                        "VALUE_P_BIG_IMG_H"      => $bigImgInfo["height"],
+                        "VALUE_P_BIG_IMG_SERIAL" => $k,
+                   ));
                    //顯示小圖
                    $tpl->newBlock("SMALL_IMG_LIST");
-                   $dimensions = $main->resizeto($cms_cfg["file_root"].$value,$cms_cfg['thumbs_img_width'],$cms_cfg['thumbs_img_height']);
-                   $tpl->assign("TAG_CURRENT", ($k==1)? "current" : "normal");
-                   $tpl->assign("VALUE_P_SMALL_IMG",$cms_cfg["file_root"].$value);
-                   $tpl->assign("VALUE_P_SMALL_IMG_W",$dimensions['width']);
-                   $tpl->assign("VALUE_P_SMALL_IMG_H",$dimensions['height']);
-                   $tpl->assign("VALUE_P_SMALL_IMG_SERIAL",$k);
+                   $imgHandler->setDimension($cms_cfg['thumbs_img_width'],$cms_cfg['thumbs_img_height']);
+                   $smallImgInfo = $imgHandler->parse($value);
+                   $tpl->assign(array(
+                        "TAG_CURRENT" =>  ($k==1)? "current" : "normal",
+                        "VALUE_P_SMALL_IMG" => $smallImgInfo[0],
+                        "VALUE_P_SMALL_IMG_W" => $smallImgInfo['width'],
+                        "VALUE_P_SMALL_IMG_H" => $smallImgInfo['height'],
+                        "VALUE_P_SMALL_IMG_SERIAL" => $k,
+                   ));
                 }
             }else{
                 //顯示預設單張大圖
@@ -925,17 +928,13 @@ class PRODUCTS{
                 $dimensions["height"]=$cms_cfg['single_img_height'];
                 $this->template_str="_SINGLE";
                 $tpl->newBlock("BIG_IMG_SINGLE");
-                if($pic_num==1){
-                   if(is_file($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$big_img_array[0])){
-                       list($width, $height) = getimagesize($_SERVER['DOCUMENT_ROOT'].$cms_cfg["file_root"].$big_img_array[0]);
-                       $dimensions = $main->resize_dimensions($cms_cfg['single_img_width'],$cms_cfg['single_img_height'],$width,$height);
-                   }
-                   $tpl->assign("VALUE_P_BIG_IMG",$cms_cfg["file_root"].$big_img_array[0]);
-                }else{
-                   $tpl->assign("VALUE_P_BIG_IMG",$cms_cfg['default_preview_pic']);
-                }
-                $tpl->assign("VALUE_P_BIG_IMG_W",$dimensions["width"]);
-                $tpl->assign("VALUE_P_BIG_IMG_H",$dimensions["height"]);
+                $imgHandler->setDimension($cms_cfg['thumbs_img_width'],$cms_cfg['thumbs_img_height']);
+                $imgInfo = $imgHandler->parse($big_img_array[0]);
+                $tpl->assign(array(
+                    "VALUE_P_BIG_IMG"    => $imgInfo[0],
+                    "VALUE_P_BIG_IMG_W"  => $imgInfo["width"],
+                    "VALUE_P_BIG_IMG_H"  => $imgInfo["height"],
+                ));
             }
         }
     }

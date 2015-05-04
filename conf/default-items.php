@@ -139,6 +139,7 @@ $ws_array['download_time_sets'] = array(
     'xkdfkja' => array('label'=>'財務報表','time_fields'=>array('year','season'),'dc_id'=>array(2,1)),
     'xjdfkjb' => array('label'=>'公司年報','time_fields'=>array('year'),'dc_id'=>array(3)),
 );
+$ws_array['shopping_cond_type'] = array('order'=>'訂單','cate'=>'產品分類','product'=>'產品');
 $ws_array["country_array"]=array(
 "Afghanistan",
 "Albania",

@@ -82,7 +82,7 @@
             <td>{TAG_QUANTITY_DISCOUNT}</td>
             <td>{VALUE_P_SUBTOTAL_PRICE}</td>
             <td>
-                <a href="#" class="cart-del" pid="{VALUE_P_ID}" {TAG_PS_ID}><img src="{TAG_THEME_PATH}ws-table-delete.gif"/></a>
+                <a href="#" class="cart-del" pid="{VALUE_P_ID}" {TAG_PS_ID} {TAG_C_ID}><img src="{TAG_THEME_PATH}ws-table-delete.gif"/></a>
             </td>
         </tr>
         <!-- END BLOCK : TAG_CART_LIST -->
@@ -140,7 +140,51 @@
     <input type="hidden" name="ajax_top" value="">
 </form>
 <!-- END BLOCK : TAG_CART_ZONE -->
-
+<!-- START BLOCK : ADD_PURCHASE_ZONE -->
+<div id="additionalPurchaseZone">
+    <h3>加購專區</h3>
+    <!-- START BLOCK : CONDITION_LIST -->
+    <div class="additionalPurchaseProducts">
+        <h4> {price} 元加購區</h4>
+        <div class="products_zone">
+            <!-- START BLOCK : ADD_PROD -->
+            <div class="products_list">
+                <div class="products_pic">
+                    <a href="{VALUE_P_LINK}"><img src="{VALUE_P_SMALL_IMG}" width="{VALUE_P_SMALL_IMG_W}" height="{VALUE_P_SMALL_IMG_H}"/></a>
+                </div>
+                <div class="products_title">
+                    <a href="{VALUE_P_LINK}">{VALUE_P_NAME}</a>
+                </div>
+                <div class="products_price">
+                    優惠價: <span class="sp">{VALUE_P_SPECIAL_PRICE}</span>&nbsp;&nbsp;加購價: <span class="ap">{VALUE_P_ADD_PRICE}</span>
+                </div>
+                <div class="operation"><a href="#" class="buymore" data-cid="{VALUE_C_ID}" data-pid="{VALUE_P_ID}">我要加購</a></div>
+            </div>
+            <!-- END BLOCK : ADD_PROD -->
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!-- END BLOCK : CONDITION_LIST -->
+    <script type="text/javascript">
+        jQuery(function($){
+            $(".buymore").click(function(evt){
+                evt.preventDefault();
+                var cid = $(this).attr('data-cid');
+                var pid = $(this).attr('data-pid');
+                var url = "{CART_PATH}?func=c_add&addpurchase=1";
+                var data = "c_id="+cid+"&p_id="+pid;
+                $.post(url,data,function(req){
+                    if(req.code==1){
+                        var NOW_TOP = parseInt(document.body.scrollTop, 10) ||parseInt(document.documentElement.scrollTop, 10);
+                        var d = new Date();
+                        location.href = '{TAG_ROOT_PATH}cart/?top='+ NOW_TOP+'&t=' + d.getTime();                        
+                    }
+                },'json');
+            });
+        });
+    </script>
+</div>
+<!-- END BLOCK : ADD_PURCHASE_ZONE -->
 {VALUE_ST_SHOPPING_TERM}
 {VALUE_ST_SHIPPING_TERM}
 <div id="del-cart-dialog" title="刪除購物車項目" style="display:none">
@@ -206,6 +250,7 @@
             $("#del-cart-dialog").data('activeRow',$(this).parents('tr'));
             $("#del-cart-dialog").data('p_id',$(this).attr('pid'));
             $("#del-cart-dialog").data('ps_id',$(this).attr('psid'));
+            $("#del-cart-dialog").data('c_id',$(this).attr('cid'));
             $("#del-cart-dialog").dialog('open');
         });
         $("#del-cart-dialog").dialog({
@@ -218,6 +263,7 @@
                     var data = {
                         p_id: $("#del-cart-dialog").data('p_id'),
                         ps_id: $("#del-cart-dialog").data('ps_id'),
+                        c_id: $("#del-cart-dialog").data('c_id'),
                         via_ajax:true
                     };
                     var dialog = $(this);
@@ -233,18 +279,20 @@
                             }
                             $("#del-cart-dialog").data('activeRow',null);
                             $("#del-cart-dialog").data('p_id',null);
-                            $("#del-cart-dialog").data('ps_id',null)
+                            $("#del-cart-dialog").data('ps_id',null);
+                            $("#del-cart-dialog").data('c_id',null);
                             $("#sub_total_str").text(req.subtotal_price);
                             if(req.subtotal_price==0){
                                 redirect = true;
                             }
-                            dialog.dialog('close');
+                            $("#ship_price").text(req.shipping_price);
+                            $("#s_charge_fee").text(req.charge_fee);
+                            $("#total_str").text(req.total_price);
                             if(redirect){
                                 location.replace('{TAG_ROOT_PATH}products.htm');
                             }else{
-                                $("#ship_price").text(req.shipping_price);
-                                $("#s_charge_fee").text(req.charge_fee);
-                                $("#total_str").text(req.total_price);
+                                dialog.dialog('close');
+                                location.reload();                                
                             }
                         }else{
                             alert('操作失敗!');

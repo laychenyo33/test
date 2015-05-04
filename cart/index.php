@@ -177,14 +177,19 @@
                         $amount_arr = is_array($_REQUEST["amount"])?$_REQUEST["amount"]:(array)$_REQUEST["amount"];
                         $p_id_arr = is_array($_REQUEST["p_id"])?$_REQUEST["p_id"]:(array)$_REQUEST["p_id"];
                         $ps_id_arr = is_array($_REQUEST["ps_id"])?$_REQUEST["ps_id"]:(array)$_REQUEST["ps_id"];
+                        $c_id_arr = is_array($_REQUEST["c_id"])?$_REQUEST["c_id"]:(array)$_REQUEST["c_id"];
                         $stockStatus = array();
                         foreach($p_id_arr as $k => $p_id){
                             if($p_id){
                                 $amount = $amount_arr[$k]?$amount_arr[$k]:1;
-                                if($cms_cfg['ws_module']['ws_cart_spec']){
-                                    $result = (int)$this->container->put($p_id,$amount,$ps_id_arr[$k]);
+                                if(isset($_GET['addpurchase'])){
+                                    $result = (int)$this->container->put_addPurchase($c_id_arr[$k],$p_id,$amount);
                                 }else{
-                                    $result = (int)$this->container->put($p_id,$amount);
+                                    if($cms_cfg['ws_module']['ws_cart_spec']){
+                                        $result = (int)$this->container->put($p_id,$amount,$ps_id_arr[$k]);
+                                    }else{
+                                        $result = (int)$this->container->put($p_id,$amount);
+                                    }
                                 }
                                 $stockStatus[$result]+=1;
                             }
@@ -267,6 +272,7 @@
                                 }                                
                                 $gift = $this->container->getModule("giftor")->getGift($this->giftId);
                                 $cartProducts = $this->container->get_cart_products();
+                                $additionalPurchaseProducts = $this->container->getModule("conditioner")->getAdditionalPurchaseProducts();
 				foreach ($cartProducts as $p_id =>  $row) {
 	
 					$tpl->newBlock("TAG_CART_LIST");
@@ -296,12 +302,18 @@
                                                 "TAG_PS_ID" => "psid='".$id_sets[1]."'",
                                             ));
                                         }
+                                        if($row['addPurchase']){
+                                            $tpl->assign(array(
+                                                "TAG_C_ID" => "cid='".$row['c_id']."'",
+                                            ));
+                                        }
                                         if($cms_cfg['ws_module']['ws_cart_spec']){
                                             $tpl->newBlock("SPEC_FIELD");
                                             $tpl->assign("VALUE_SPEC",$row["spec"]);
                                         }
                                         
-					for ($c_num = $this->c_num_set; $c_num <= $this->c_num; $c_num++) {
+                                        $c_num_top = $row['limit']?$row['limit']:$this->c_num;
+					for ($c_num = $this->c_num_set; $c_num <= $c_num_top; $c_num++) {
 						$tpl->newBlock("TAG_CART_NUM");
 						$tpl->assign(array(
                                                     "VALUE_CART_NUM" => $c_num, 
@@ -337,6 +349,31 @@
 					$this->service_rule();
 				}
                                 
+                                if($additionalPurchaseProducts){
+                                    $tpl->newBlock("ADD_PURCHASE_ZONE");
+                                    foreach($additionalPurchaseProducts as $c_id => $condition){
+                                        $tpl->newBlock("CONDITION_LIST");
+                                        $tpl->assign(array(
+                                            'price' => $condition['price'],
+                                        ));
+                                        foreach($condition['products'] as $addProd){
+                                            $tpl->newBlock("ADD_PROD");
+                                            $img = $addProd['p_small_img']?App::configs()->file_root . $addProd['p_small_img']: App::configs()->default_preview_pic;
+                                            $dimension = App::getHelper('main')->resizeto($img,190,190);
+                                            $tpl->assign(array(
+                                                "VALUE_C_ID"   => $c_id,
+                                                "VALUE_P_ID" => $addProd['p_id'],
+                                                "VALUE_P_NAME" => $addProd['p_name'],
+                                                "VALUE_P_LINK" => App::getHelper('request')->get_link("products",$addProd),
+                                                "VALUE_P_SMALL_IMG" => $img,
+                                                "VALUE_P_SMALL_IMG_W" => $dimension['width'],
+                                                "VALUE_P_SMALL_IMG_H" => $dimension['height'],
+                                                "VALUE_P_SPECIAL_PRICE" => $addProd['p_special_price'],
+                                                "VALUE_P_ADD_PRICE"     => $addProd['price'],
+                                            ));
+                                        }
+                                    }
+                                }
                                 //輸出額外費用及總價
                                 $cartInfo = $this->container->get_cart_info();
                                 $tpl->newBlock("TAG_PLUS_FEE");
@@ -740,15 +777,15 @@
 					unset($sess_array);
 					//echo $pass_num = (!is_int($num))?round($num):$num;
 					$sess_array = explode("|", $sess_str);
-                                        if(count($sess_array)==2){
-                                            $_SESSION[$cms_cfg['sess_cookie_name']]["num"][$sess_array[1]] = $num;
+                                        if(count($sess_array)==2){ //一般購物
                                             $key = explode(":",$sess_array[1]);
                                             $result = (int)$this->container->update($key[0],$num,$key[1]);
                                             $stockStatus[$result]+=1;
+                                        }elseif(count($sess_array)==3){ //加購產品
+                                            //update_addPurchase( $c_id, $p_id , $amount)
+                                            $result = (int)$this->container->update_addPurchase($sess_array[2],$sess_array[1],$num);
                                         }
-                                        
 				}
-	
                                 $this->container->set_payment_type($form["o_payment_type"]);
 			} else {
 				$this->error_handle();
@@ -773,6 +810,8 @@
                     if($_POST["p_id"]){
                         if($_POST["ps_id"]){
                             $this->container->rm($_POST["p_id"],$_POST["ps_id"]);
+                        }elseif($_POST["c_id"]){
+                            $this->container->rm_addPurchase($_POST["p_id"],$_POST["c_id"]);
                         }else{
                             $this->container->rm($_POST["p_id"]);
                         }

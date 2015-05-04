@@ -1115,3 +1115,18 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 #social-login-tool{padding:10px;margin:10px 0}
 #social-login-tool h4{font-size:18px;padding:10px 0}
 #social-login-tool > div{padding:10px 0;text-align:center;}
+
+#additionalPurchaseZone{padding:20px 0;}
+#additionalPurchaseZone h3{font-size:20px;}
+#additionalPurchaseZone h4{font-size:18px;padding:10px 0}
+#additionalPurchaseZone .additionalPurchaseProducts{margin:10px 0;}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone{}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .clear{clear:both}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list{float:left;border:1px solid grey;margin:10px 5px;}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list .products_pic{width:190px;height:190px;text-align:center;}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list .products_title{}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list .products_price{font-size:14px;text-align:center;color:grey}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list .products_price .sp{text-decoration:line-through  }
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list .products_price .ap{color:red;font-size:16px;}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list .operation{text-align:center;padding:6px 0;}
+#additionalPurchaseZone .additionalPurchaseProducts .products_zone .products_list .operation a{font-size:14px;color:#f06276}

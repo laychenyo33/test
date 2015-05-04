@@ -1,0 +1,57 @@
+<!-- INCLUDE BLOCK : HEADER -->
+<div id="man_zone">
+<h1>加價購管理</h1>
+<br>
+<form action="shopping-condition.php" method="get" name="myform" class="formular" id="formID">
+    <table width="95%" border="0" cellpadding="0" cellspacing="0" class="zonetable">
+    <tr>
+      <td colspan="11">
+        <div class="title">
+        <ul>
+          <li><img src="images/icon-add.gif" /><a href="shopping-condition.php?func=add" >新增</a></li>
+<!--          <li><img src="images/icon-del.gif" /><a href="#" Onclick="Javascript:return FormCheckDel(myform)">刪除</a></li>
+          <li><img src="images/icon-open.gif" /><a href="#" Onclick="Javascript:return FormCheckOn(myform)">啟用</a></li>
+          <li><img src="images/icon-stop.gif" /><a href="#" Onclick="Javascript:return FormCheckOff(myform)">停用</a></li>
+          <li><img src="images/icon-refresh.gif" /><a href="#" Onclick="Javascript:return FormCheckSort(myform)">排序</a></li>
+          <li><img src="images/icon-copy.gif" /><a href="#" Onclick="Javascript:return FormCheckCopy(myform)">複製</a></li>-->
+        </ul>
+      </div>
+      </td>
+    </tr>        
+    <tr>
+      <th width="3%"></th>
+      <th width="5%">No.</th>
+      <th width="">標題</th>
+      <th width="10%">類型</th>
+      <th width="7%">數量</th>
+      <th width="7%">價格</th>
+      <th width="10%">加價購價格</th>
+      <th width="7%">加購限制</th>
+      <th width="5%">修改</th>
+      <th width="5%">刪除</th>
+      <th width="5%">狀態</th>
+    </tr>
+    <!-- START BLOCK : CONFIG_LIST -->
+    <tr {TAG_TR_CLASS}>
+      <td align="center"></td>
+      <td>{serial}</td>
+      <td>{subject}</td>
+      <td>{type}</td>
+      <td>{quantity}</td>
+      <td>{amount}</td>
+      <td>{price}</td>
+      <td>{limit}</td>
+      <td><a href="shopping-condition.php?func=mod&id={id}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}"><img src="images/icon-edit2.gif" width="11" border="0" alt="{MSG_MODIFY}" /></a></td>
+      <td><a href="#" onClick="javascript:ConfirmMSG('{TAG_DELETE_CHECK_STR}','shopping-condition.php?func=del&id={id}&nowp={VALUE_NOW_PAGE}&jp={VALUE_JUMP_PAGE}');"><img src="images/icon-del2.gif" width="10" height="9" border="0" /></a></td>
+      <td><img src="images/{VALUE_STATUS_IMG}" alt='{VALUE_STATUS_IMG_ALT}{MSG_STATUS}' border="0" /></td>
+    </tr>
+    <!-- END BLOCK : CONFIG_LIST -->
+      <input type="hidden" name="total_box" value="{VALUE_TOTAL_BOX}" />
+      <input type="hidden" name="box_check" value="1" />
+      <input type="hidden" name="ws_table" value="au" />
+    </table>
+    <br>
+    </form>
+    {TAG_PAGINATION}
+</div>
+<!-- INCLUDE BLOCK : FOOTER -->

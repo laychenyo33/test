@@ -151,6 +151,7 @@ class DOWNLOAD{
         //如果下載顯示縮圖，開啟縮圖標題
         if($cms_cfg['ws_module']['ws_download_thumb']){
             $tpl->newBlock("THUMB_TITLE");
+            $imgHandler = Model_Image::factory(80,80);
         }
         $i = $main->get_pagination_offset($this->op_limit);
         while ( $row = $db->fetch_array($selectrs,1) ) {
@@ -185,10 +186,13 @@ class DOWNLOAD{
             ));
             //如果下載顯示縮圖，開啟縮圖欄位
             if($cms_cfg['ws_module']['ws_download_thumb']){
+                $imgInfo = $imgHandler->parse($row["d_thumb"]);
                 $tpl->newBlock("THUMB_COLUMN");
                 $tpl->assign(array(
                     "VALUE_D_SUBJECT" => $row["d_subject"],
-                    "VALUE_D_THUMB" => trim($row["d_thumb"])?$cms_cfg['file_root'].$row["d_thumb"]:$cms_cfg['default_ebook_pic'],                    
+                    "VALUE_D_THUMB" => $imgInfo[0],
+                    "VALUE_D_THUMB_W" => $imgInfo['width'],
+                    "VALUE_D_THUMB_H" => $imgInfo['height'],
                 ));
             }
         }
