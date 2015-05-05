@@ -81,8 +81,8 @@
 	$mcImageManagerConfig['upload.create_thumbnail'] = true; // true/false, create thumbnail on upload
 	$mcImageManagerConfig['upload.autoresize'] = true; // Force max width/height, IM will rescale uploaded images.
 	$mcImageManagerConfig['upload.autoresize_jpeg_quality'] = 90; // Force max width/height, IM will rescale uploaded images.
-	$mcImageManagerConfig['upload.max_width'] = "800"; // Only if force_width_height is true
-	$mcImageManagerConfig['upload.max_height'] = "800"; // Only if force_width_height is true
+	$mcImageManagerConfig['upload.max_width'] = "1500"; // Only if force_width_height is true
+	$mcImageManagerConfig['upload.max_height'] = "1500"; // Only if force_width_height is true
 	$mcImageManagerConfig['upload.multiple_upload'] = true;
 	$mcImageManagerConfig['upload.chunk_size'] = '1mb';
 	$mcImageManagerConfig['upload.format'] = "250x250=_small_/%f.%e,500x500=_medium_/%f.%e,1000x1000=_big_/%f.%e";
