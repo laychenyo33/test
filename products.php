@@ -903,11 +903,12 @@ class PRODUCTS{
                    //顯示大圖
                    $tpl->newBlock("BIG_IMG_LIST");
                    $imgHandler->setDimension($cms_cfg['big_img_width'][$this->show_style],$cms_cfg['big_img_height'][$this->show_style]);
-                   $bigImgInfo = $imgHandler->parse($value);
+                   $bigImgInfo = $imgHandler->parse($value,'medium');
                    $tpl->assign(array(
                         "VALUE_P_BIG_IMG"        => $bigImgInfo[0],
                         "VALUE_P_BIG_IMG_W"      => $bigImgInfo["width"],
                         "VALUE_P_BIG_IMG_H"      => $bigImgInfo["height"],
+                        "VALUE_P_BIG_IMG_O"      => $imgHandler->getTypedImg('big'),
                         "VALUE_P_BIG_IMG_SERIAL" => $k,
                    ));
                    //顯示小圖

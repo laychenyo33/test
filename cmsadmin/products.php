@@ -3294,10 +3294,10 @@ class PRODUCTS{
     
     function write_shopping_condition($col,$value,$c_id){
         $db = App::getHelper('db');
-        if(is_string($c_id)){
-            $c_id = (array)$c_id;
-        }
         if($c_id){
+            if(is_string($c_id)){
+                $c_id = (array)$c_id;
+            }
             $sql = "delete from ".$db->prefix("shopping_condition_map")." where `{$col}`='{$value}' and `c_id` not in(".implode(',',$c_id).")";
             $db->query($sql);
             foreach($c_id as $cid){
