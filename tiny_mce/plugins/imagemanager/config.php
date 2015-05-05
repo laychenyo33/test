@@ -36,7 +36,7 @@
 	$mcImageManagerConfig['filesystem.rootpath'] = '../../../upload_files'; // absolute or relative from this script path, required.
 	$mcImageManagerConfig['filesystem.datefmt'] = "Y-m-d H:i";
 	$mcImageManagerConfig['filesystem.include_directory_pattern'] = '';
-	$mcImageManagerConfig['filesystem.exclude_directory_pattern'] = '/^mcith$/i';
+	$mcImageManagerConfig['filesystem.exclude_directory_pattern'] = '/^(mcith|_\w+_)$/i';
 	$mcImageManagerConfig['filesystem.invalid_directory_name_msg'] = "";
 	$mcImageManagerConfig['filesystem.include_file_pattern'] = '';
 	$mcImageManagerConfig['filesystem.exclude_file_pattern'] = '/([^a-zA-Z0-9_\-\.]|^mcic_)/i';
@@ -85,7 +85,7 @@
 	$mcImageManagerConfig['upload.max_height'] = "800"; // Only if force_width_height is true
 	$mcImageManagerConfig['upload.multiple_upload'] = true;
 	$mcImageManagerConfig['upload.chunk_size'] = '1mb';
-	$mcImageManagerConfig['upload.format'] = "";
+	$mcImageManagerConfig['upload.format'] = "250x250=_small_/%f.%e,500x500=_medium_/%f.%e,1000x1000=_big_/%f.%e";
 	$mcImageManagerConfig['upload.allow_export'] = "maxsize,multiple_upload,chunk_size,overwrite,extensions";
 	$mcImageManagerConfig['upload.allow_override'] = "*";
 
