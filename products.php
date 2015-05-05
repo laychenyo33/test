@@ -929,9 +929,10 @@ class PRODUCTS{
                 $dimensions["height"]=$cms_cfg['single_img_height'];
                 $this->template_str="_SINGLE";
                 $tpl->newBlock("BIG_IMG_SINGLE");
-                $imgHandler->setDimension($cms_cfg['thumbs_img_width'],$cms_cfg['thumbs_img_height']);
-                $imgInfo = $imgHandler->parse($big_img_array[0]);
+                $imgHandler->setDimension($cms_cfg['single_img_width'],$cms_cfg['single_img_height']);
+                $imgInfo = $imgHandler->parse($big_img_array[0],'medium');
                 $tpl->assign(array(
+                    "VALUE_P_BIG_IMG_O"      => $imgHandler->getTypedImg('big'),
                     "VALUE_P_BIG_IMG"    => $imgInfo[0],
                     "VALUE_P_BIG_IMG_W"  => $imgInfo["width"],
                     "VALUE_P_BIG_IMG_H"  => $imgInfo["height"],
@@ -1032,19 +1033,19 @@ class PRODUCTS{
                     $tpl->newBlock("CHCAROUSEL_SCRIPT");
             }
             $tpl->newBlock("RELATED_PRODUCTS_ZONE_".$effect);
+            $imgHandler = Model_Image::factory($cms_cfg['related_img_width'],$cms_cfg['related_img_height']);
             while($row = $db->fetch_array($selectrs,1)){
                 $tpl->newBlock("RELATED_PRODUCTS_".$effect);
                 $p_link = $this->get_link($row,true);
-                $p_img=(trim($row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["p_small_img"];
-                $dimension = $main->resizeto($p_img,$cms_cfg['related_img_width'],$cms_cfg['related_img_height']);
+                $imgInfo = $imgHandler->parse($row["p_small_img"]);
                 $tpl->assign( array("VALUE_PC_NAME"  => $row["pc_name"],
                                     "VALUE_P_ID"  => $row["p_id"],
                                     "VALUE_P_NAME" => $row["p_name"],
                                     "VALUE_P_NAME_ALIAS" => $row["p_name_alias"],
                                     "VALUE_P_LINK" => $p_link,
-                                    "VALUE_P_SMALL_IMG" => $p_img,
-                                    "VALUE_P_SMALL_IMG_W" => $dimension['width'],
-                                    "VALUE_P_SMALL_IMG_H" => $dimension['height'],
+                                    "VALUE_P_SMALL_IMG" => $imgInfo[0],
+                                    "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                                    "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],
                 ));
             }
         }
