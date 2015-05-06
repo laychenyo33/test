@@ -280,6 +280,8 @@ class CART{
                                   //"CART_IMG_TITLE"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["title_img"],
                                   //"CART_IMG_SUB"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["sub_img"],
         ));
+        //圖片處理器
+        $imgHandler = Model_Image::factory(60,60);
         if($this->container->count()){
             $show_price=$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"];
             if($show_price==1){
@@ -366,10 +368,14 @@ class CART{
                 }else{
                     $p_link=$cms_cfg['base_url']."products.php?func=p_detail&p_id=".$p_id."&pc_parent=".$prod_row["pc_id"];
                 }
-                $valid_stocks = !App::configs()->ws_module->ws_products_stocks  || $this->container->stockChecker->check($prod_row['p_id'],$prod_row['amount'],$prod_row['ps_id']);        
+                $valid_stocks = !App::configs()->ws_module->ws_products_stocks  || $this->container->stockChecker->check($prod_row['p_id'],$prod_row['amount'],$prod_row['ps_id']);
+                $imgInfo = $imgHandler->parse($prod_row["p_small_img"]);
                 $tpl->assign( array("VALUE_P_ID"  => $prod_row["p_id"],
                                     "VALUE_P_NAME"  => $prod_row["p_name"] . (!$valid_stocks?"<span>庫存不足</span>":""),
-                                    "VALUE_P_SMALL_IMG" => (trim($prod_row["p_small_img"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$prod_row["p_small_img"],
+                                    "VALUE_P_SMALL_IMG" => App::createURL($imgInfo[0]),
+                                    "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                                    "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],
+                                    "VALUE_P_SMALL_IMG_M" => $imgHandler->getTypedImg('medium'),
                                     "VALUE_P_AMOUNT"  => $prod_row['amount'],
                                     "TAG_QUANTITY_DISCOUNT" => ($prod_row['discount']<1)?$prod_row['discount']:'',
                                     "VALUE_P_LINK" => $p_link,
@@ -452,9 +458,13 @@ class CART{
                 }else{
                     $p_link=$cms_cfg['base_url']."products.php?func=p_detail&p_id=".$prod_row["p_id"]."&pc_parent=".$prod_row["pc_id"];
                 }
+                $imgInfo = $imgHandler->parse($prod_row["p_small_img"]);
                 $tpl->assign( array("VALUE_P_ID"  => $prod_row["p_id"],
                                     "VALUE_P_NAME"  => $prod_row["p_name"],
-                                    "VALUE_P_SMALL_IMG" => (trim($prod_row["p_small_img"])=="")?"http://".$cms_cfg['server_name'].$cms_cfg['default_preview_pic']:$cms_cfg["file_url"].$prod_row["p_small_img"],
+                                    "VALUE_P_SMALL_IMG" => App::createURL($imgInfo[0]),
+                                    "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                                    "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],
+                                    "VALUE_P_SMALL_IMG_M" => $imgHandler->getTypedImg('medium'),
                                     "VALUE_P_AMOUNT"  => $prod_row['amount'],
                                     "VALUE_P_LINK" => $p_link,
                                     "VALUE_P_SERIAL"  => $i++,
