@@ -155,6 +155,8 @@ class PRODUCTS{
         $show_style_str_p_desc="SHOW_STYLE_P1_DESC";
         //一列顯示筆數
         $row_num=$cms_cfg["ws_products_row"];
+        //image handler
+        $imgHandler = Model_Image::factory($cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
         if($mode==""){
             //顯示模示: 1--圖文 2--文字 3--圖片
             //$this->show_style=1; //顯示模式固定為 圖文
@@ -262,8 +264,6 @@ class PRODUCTS{
                 $and_str = " and pc_status='1' order by pc_up_sort desc,pc_sort ".$cms_cfg['sort_pos']." ";
                 $sql .= $and_str;
                 $selectrs = $db->query($sql);
-                //image handler
-                $imgHandler = Model_Image::factory($cms_cfg['small_img_width'],$cms_cfg['small_img_height']);
                 $rsnum    = $db->numRows($selectrs);
                 if($rsnum > 0){
                     $tpl->newBlock( "TAG_PRODUCTS_CATE_LIST" );
