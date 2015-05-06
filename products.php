@@ -856,20 +856,20 @@ class PRODUCTS{
             ));
             //產品列表
             $i=$main->get_pagination_offset($this->op_limit);
+            $imgHandler = Model_Image::factory(120,120);
             while ( $row = $db->fetch_array($selectrs,1) ) {
                 $i++;
                 $tpl->newBlock( "PRODUCTS_SEARCH_LIST" );
                 if($i%2){
                     $tpl->assign("TAG_TR_CLASS","class='altrow1'");
                 }
-                $p_img = $row['p_small_img']?$cms_cfg['file_root'] . $row['p_small_img'] : $cms_cfg['default_preview_pic'];
-                $dimension = $main->resizeto($p_img,120,120);
+                $imgInfo = $imgHandler->parse($row['p_small_img']);                
                 $tpl->assign( array("VALUE_PC_ID"  => $row["pc_id"],
                                     "VALUE_P_ID"  => $row["p_id"],
                                     "VALUE_P_NAME" => $row["p_name"],
-                                    "VALUE_P_IMG" => $p_img,
-                                    "VALUE_P_IMG_W" => $dimension['width'],
-                                    "VALUE_P_IMG_H" => $dimension['height'],
+                                    "VALUE_P_IMG" => $imgInfo[0],
+                                    "VALUE_P_IMG_W" => $imgInfo['width'],
+                                    "VALUE_P_IMG_H" => $imgInfo['height'],
                                     "VALUE_P_SERIAL" => $i,
                                     "VALUE_PC_NAME"  => ($row["pc_name"])?$row["pc_name"]:$TPLMSG['NO_CATE'],
                                     "VALUE_PC_LINK" => $this->get_link($row),
