@@ -50,6 +50,7 @@ $TPLMSG['PUBLISH_ON'] = "ยังไม่ครบกำหนด";
 $TPLMSG['PUBLISH_OFF'] = "หมดอายุ";
 $TPLMSG['PAGE_BACK'] = "กลับ";
 $TPLMSG['EMAIL'] = "E-mail";
+$TPLMSG['CLEAN'] = "Clean";
 //CONFIG
 $TPLMSG['CUSTOM_INDEX_PAGE'] = "index.htm";
 $TPLMSG['SYSTEM_INDEX_PAGE'] = "หน้าเริ่มต้น";
@@ -97,6 +98,8 @@ $TPLMSG['CONTACT_US_COUNTRY'] = "ประเทศ";
 $TPLMSG['CONTACT_US_CITY'] = "เมือง";
 $TPLMSG['CONTACT_US_SUBJECT'] = "เรื่อง";
 $TPLMSG['CONTACT_US_MAIL_TOP_MESSAGE'] = "ขอขอบคุณสำหรับจดหมายของคุณเราจะตอบกลับโดยเร็วที่สุดเท่าที่เป็นไปได้ขอบคุณสำหรับการสนับสนุนของคุณสำหรับ %s อีกครั้ง";
+$TPLMSG['CONTACT_US_REQUIRED_DESC']="(<span style=\"color:#F00; font-weight:bold\"> * </span>) Marked with an asterisk are required fields, please do not blank!";
+$TPLMSG['CONTACT_US_CONTENT_DESC']="Please fill in your questions :";
 
 //EPAPER
 $TPLMSG['SUBSCRIBE'] = "สมัครสมาชิก";
