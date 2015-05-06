@@ -34,4 +34,20 @@ class Model_Request extends Model_Modules{
     function get_link($type,$data){
         return $this->getModule('link')->getModule($type)->get_link($data);
     }
+    
+    /**
+     * 將主機端路徑改成URL，Model_Request::createURL的別名
+     * @param string $localPath 主機端路徑
+     * @return string 傳回主機端路徑的URL
+     * @author 俊信 <chunhsin@allmarketing.com.tw>
+     */    
+    function createURL($localPath){
+        $localPath = str_replace(App::configs()->file_root, '', $localPath, $replace_nums);
+        if($replace_nums){
+            return App::configs()->file_url . $localPath;
+        }else{
+            $localPath = str_replace(App::configs()->base_root, '', $localPath);           
+            return App::configs()->base_url . $localPath;
+        }
+    }
 }

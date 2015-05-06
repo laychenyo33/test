@@ -46,5 +46,14 @@ class App {
         }
         return $model;
     }
+    /**
+     * 將主機端路徑改成URL，Model_Request::createURL的別名
+     * @param string $localPath 主機端路徑
+     * @return string 傳回主機端路徑的URL
+     * @author 俊信 <chunhsin@allmarketing.com.tw>
+     */
+    static function createURL($localPath){
+        return self::$_helper['request']->createURL($localPath);
+    }
     
 }
