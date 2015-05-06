@@ -54,6 +54,7 @@ $TPLMSG['PUBLISH_ON'] = "刊登中";
 $TPLMSG['PUBLISH_OFF'] = "已過期";
 $TPLMSG['PAGE_BACK'] = "回上頁";
 $TPLMSG['EMAIL'] = "E-mail";
+$TPLMSG['CLEAN'] = "清除";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系統預設首頁";
@@ -108,6 +109,8 @@ $TPLMSG['CONTACT_US_COUNTRY']="國家";
 $TPLMSG['CONTACT_US_CITY']="城市";
 $TPLMSG['CONTACT_US_SUBJECT']="專案名稱";
 $TPLMSG['CONTACT_US_MAIL_TOP_MESSAGE']="感謝您的來信，您的問題我們會儘快以 Email方式回覆，再次感謝您對%s的支持～";
+$TPLMSG['CONTACT_US_REQUIRED_DESC']="標註(<span style=\"color:#F00; font-weight:bold\"> * </span>)的欄位為必填, 請勿留空!";
+$TPLMSG['CONTACT_US_CONTENT_DESC']="請留下您的訊息 :";
 
 //EPAPER
 $TPLMSG['SUBSCRIBE'] = "訂閱電子報";

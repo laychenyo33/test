@@ -50,6 +50,7 @@ $TPLMSG['PUBLISH_ON'] = "未経過";
 $TPLMSG['PUBLISH_OFF'] = "期限切れの";
 $TPLMSG['PAGE_BACK'] = "戻る";
 $TPLMSG['EMAIL'] = "E-mail";
+$TPLMSG['CLEAN'] = "Clean";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";
@@ -97,6 +98,8 @@ $TPLMSG['CONTACT_US_COUNTRY']="国";
 $TPLMSG['CONTACT_US_CITY']="市";
 $TPLMSG['CONTACT_US_SUBJECT']="題目";
 $TPLMSG['CONTACT_US_MAIL_TOP_MESSAGE']="Thank you for your letter,  we will reply as soon as possible , thank you for your support for %s again";
+$TPLMSG['CONTACT_US_REQUIRED_DESC']="(<span style=\"color:#F00; font-weight:bold\"> * </span>) Marked with an asterisk are required fields, please do not blank!";
+$TPLMSG['CONTACT_US_CONTENT_DESC']="Please fill in your questions :";
 
 //EPAPER
 $TPLMSG['SUBSCRIBE'] = "チャンネル登録";

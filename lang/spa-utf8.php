@@ -50,6 +50,7 @@ $TPLMSG['PUBLISH_ON'] = "Restante del Cargo";
 $TPLMSG['PUBLISH_OFF'] = "Caducado";
 $TPLMSG['PAGE_BACK'] = "anterior";
 $TPLMSG['EMAIL'] = "E-mail";
+$TPLMSG['CLEAN'] = "Clean";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";
@@ -97,6 +98,8 @@ $TPLMSG['CONTACT_US_COUNTRY']="País";
 $TPLMSG['CONTACT_US_CITY']="Ciudad";
 $TPLMSG['CONTACT_US_SUBJECT']="Asunto";
 $TPLMSG['CONTACT_US_MAIL_TOP_MESSAGE']="Thank you for your letter,  we will reply as soon as possible , thank you for your support for %s again";
+$TPLMSG['CONTACT_US_REQUIRED_DESC']="(<span style=\"color:#F00; font-weight:bold\"> * </span>) Marked with an asterisk are required fields, please do not blank!";
+$TPLMSG['CONTACT_US_CONTENT_DESC']="Please fill in your questions :";
 
 //EPAPER
 $TPLMSG['SUBSCRIBE'] = "Suscribirse";
