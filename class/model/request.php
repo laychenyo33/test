@@ -42,9 +42,9 @@ class Model_Request extends Model_Modules{
      * @author 俊信 <chunhsin@allmarketing.com.tw>
      */    
     function createURL($localPath){
-        $localPath = str_replace(App::configs()->file_root, '', $localPath, $replace_nums);
+        $localPath = str_replace(App::configs()->file_root . 'upload_files/', '', $localPath, $replace_nums);
         if($replace_nums){
-            return App::configs()->file_url . $localPath;
+            return App::configs()->file_url . 'upload_files/' . $localPath;
         }else{
             $localPath = str_replace(App::configs()->base_root, '', $localPath);           
             return App::configs()->base_url . $localPath;
