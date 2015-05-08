@@ -152,6 +152,8 @@ $TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"] = '%1$s %2$s';
 $TPLMSG["MEMBER_ACCOUNT_EXISTS"] = "Conta de Usuário existiu!";
 $TPLMSG['MEMBER_FOOTPRINT'] = "My Footprint";
 $TPLMSG['MEMBER_COLLECT'] = "My Collection";
+$TPLMSG['MEMBER_LOGIN_MESSAGE1'] = "Click here to register.";
+$TPLMSG['MEMBER_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "produtos";

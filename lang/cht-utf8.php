@@ -165,6 +165,8 @@ $TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"] = '%2$s%1$s';
 $TPLMSG["MEMBER_ACCOUNT_EXISTS"] = "會員帳號已存在!";
 $TPLMSG['MEMBER_FOOTPRINT'] = "我的足跡";
 $TPLMSG['MEMBER_COLLECT'] = "我的收藏";
+$TPLMSG['MEMBER_LOGIN_MESSAGE1'] = "請按此填寫資料，即可加入會員";
+$TPLMSG['MEMBER_LOGIN_MESSAGE2'] = "※如您已經是會員，請從左邊選項登入";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "產品介紹";
