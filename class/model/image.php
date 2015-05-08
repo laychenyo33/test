@@ -170,7 +170,7 @@ class Model_Image {
       * @author 俊信 <chunhsin@allmarketing.com.tw>
       */
     function getOriginImg(){
-        return $this->active_file? $this->active_file : App::configs()->default_preview_pic;
+        return $this->active_file? App::configs()->file_root . $this->active_file : App::configs()->default_preview_pic;
     }
 
 }
