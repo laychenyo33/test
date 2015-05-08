@@ -111,7 +111,7 @@ class MAINDEFAULT{
         }else{
             $show_price=1;
         }
-        $imgHandler = Model_Image::factory($cms_cfg['idx_hot_prod_img_width'],$cms_cfg['idx_hot_prod_img_height']);
+        $imgHandler = Model_Image::factory($cms_cfg['idx_new_prod_img_width'],$cms_cfg['idx_new_prod_img_height']);
         $i=0;
         while($row = $db->fetch_array($selectrs,1)){
             $i++;
