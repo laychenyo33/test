@@ -151,6 +151,8 @@ $TPLMSG['MEMBER_NAME_IN_CART_TEMPLATE'] = '%1$s %2$s';
 $TPLMSG['MEMBER_ACCOUNT_EXISTS'] = "บัญชีสมาชิกมีอยู่!";
 $TPLMSG['MEMBER_FOOTPRINT'] = "รอยพระพุทธบาทของฉัน";
 $TPLMSG['MEMBER_COLLECT'] = "รวบรวมของฉัน";
+$TPLMSG['MEMBER_LOGIN_MESSAGE1'] = "Click here to register.";
+$TPLMSG['MEMBER_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 
 //PRODUCTS
 $TPLMSG['PRODUCTS'] = "ผลิตภัณฑ์";

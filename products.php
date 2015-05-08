@@ -318,7 +318,7 @@ class PRODUCTS{
         }else{
             //產品列表
             //$sql="select * from ".$cms_cfg['tb_prefix']."_products where p_id > '0'";
-            $sql="select p.pc_id,p.p_id,p.p_status,p.p_up_sort,p.p_sort,p.p_name,p.p_name_alias,p.p_type,p.p_desc,p.p_character,p.p_modifydate,p.p_serial,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,classify_id from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' ";
+            $sql="select p.pc_id,p.p_id,p.p_status,p.p_up_sort,p.p_sort,p_new_sort,p_hot_sort,p_pro_sort,p.p_name,p.p_name_alias,p.p_type,p.p_desc,p.p_character,p.p_modifydate,p.p_serial,p.p_small_img,p.p_seo_filename,pc.pc_seo_filename,classify_id from ".$cms_cfg['tb_prefix']."_products as p left join ".$cms_cfg['tb_prefix']."_products_cate as pc on p.pc_id=pc.pc_id where p.p_status='1' ";
             $sql= "select p.*,pi.p_big_img1 as big_img from (".$sql.") as p inner join ".$db->prefix("products_img")." as pi on p.p_id=pi.p_id ";
             //最新產品
             if($mode=="p_new"){
