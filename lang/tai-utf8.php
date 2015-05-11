@@ -51,6 +51,7 @@ $TPLMSG['PUBLISH_OFF'] = "หมดอายุ";
 $TPLMSG['PAGE_BACK'] = "กลับ";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
+$TPLMSG['COLLECTION'] = "Collection";
 //CONFIG
 $TPLMSG['CUSTOM_INDEX_PAGE'] = "index.htm";
 $TPLMSG['SYSTEM_INDEX_PAGE'] = "หน้าเริ่มต้น";
@@ -189,6 +190,7 @@ $TPLMSG['CART_FINISH_INQUIRY'] = "เสร็จ";
 $TPLMSG['CART_DELETE_CHECK'] = "คุณแน่ใจที่จะลบข้อมูล?";
 $TPLMSG['CART_EMPTY'] = "ตะกร้าว่างเปล่า!";
 $TPLMSG['CART_SPEC_TITLE'] = "สเปค";
+$TPLMSG['CART_STEP_NEXT'] = "Next";
 $TPLMSG['SHIPPING_PRICE'] = "ค่าใช้จ่ายในการจัดส่งสินค้า";
 //SERVICE TERM
 $TPLMSG['SERVICE_CENTER'] = "ศูนย์ให้บริการ";
@@ -218,11 +220,17 @@ $TPLMSG['ORDER_DETAIL'] = "รายละเอียด";
 $TPLMSG['ORDER_CONTENT'] = "เนื้อหา";
 $TPLMSG["ORDER_UNPAID"]="Unpaid";
 $TPLMSG["ORDER_PAID"]="Paid";
+$TPLMSG['ORDER_SHIP_ZONE'] = "Ship Zone";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "Order Info";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "Order By";
+$TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "Send To";
+$TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "VAT Receipt";
 
 //PAYMENT
 $TPLMSG['PAYMENT_TYPE'] = "ประเภทการชำระเงิน";
 $TPLMSG['PAYMENT_ATM'] = "เอทีเอ็ม";
 $TPLMSG['PAYMENT_CASH_ON_DELIVERY'] = "เงินสดในการจัดส่ง";
+$TPLMSG['CHOOSE_PAYMENT_TYPE'] = "choose a type";
 
 //INQUIRY
 $TPLMSG['INQUIRY_ID'] = "สอบถามรายละเอียดเพิ่มเติมรหัส";
@@ -411,9 +419,11 @@ $TPLMSG['ORDER_BUYER_INFO'] = "ข้อมูลสมาชิก";
 $TPLMSG['ORDER_RECI_INFO'] = "ข้อมูลผู้รับ";
 $TPLMSG['ORDER_INVOICE_INFO'] = "ข้อมูลใบแจ้งหนี้";
 $TPLMSG['DELIVER_STR'] = "วันที่จัดส่งและเวลา";
+$TPLMSG['INVOICE_TYPE'] = "Invoice Type";
 $TPLMSG['VAT_NUMBER'] = "เลขที่เป็นอันหนึ่งอันเดียวกัน";
 $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "มากกว่า";
+$TPLMSG['ORDER_MEMO'] = "Order message";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "ขออภัยเว็บไซต์ของเราปิดให้บริการชั่วคราว";

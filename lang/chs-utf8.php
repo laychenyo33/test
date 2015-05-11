@@ -52,6 +52,7 @@ $TPLMSG['PUBLISH_OFF'] = "已过期";
 $TPLMSG['PAGE_BACK'] = "回上页";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "清除";
+$TPLMSG['COLLECTION'] = "收藏";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系统预设首页";
@@ -194,6 +195,7 @@ $TPLMSG['CART_FINISH_INQUIRY'] = "送出询价单";
 $TPLMSG['CART_DELETE_CHECK'] = "确定要删除?";
 $TPLMSG['CART_EMPTY'] = "目前购物车是空的!";
 $TPLMSG['CART_SPEC_TITLE'] = "规格";
+$TPLMSG['CART_STEP_NEXT'] = "下一步";
 $TPLMSG['SHIPPING_PRICE'] = "运费";
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "服务中心";
@@ -223,11 +225,17 @@ $TPLMSG["ORDER_DETAIL"]="产品订单详细资料";
 $TPLMSG["ORDER_CONTENT"]="订单内容";
 $TPLMSG["ORDER_UNPAID"]="未付款";
 $TPLMSG["ORDER_PAID"]="已付款";
+$TPLMSG['ORDER_SHIP_ZONE'] = "送货区域";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "订单资讯";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "订购者资讯";
+$TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "收件者资讯";
+$TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "发票资讯";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="付款方式";
 $TPLMSG["PAYMENT_ATM"]="ATM转帐";
 $TPLMSG["PAYMENT_CASH_ON_DELIVERY"]="货到付款";
+$TPLMSG['CHOOSE_PAYMENT_TYPE'] = "请选择付款方式";
 
 //INQUIRY
 $TPLMSG["INQUIRY_ID"]="询问信编号";
@@ -416,9 +424,11 @@ $TPLMSG['ORDER_BUYER_INFO'] = "订购者资讯";
 $TPLMSG['ORDER_RECI_INFO'] = "收件者资讯";
 $TPLMSG['ORDER_INVOICE_INFO'] = "发票资讯";
 $TPLMSG['DELIVER_STR'] = "配送日期及时段";
+$TPLMSG['INVOICE_TYPE'] = "发票类型";
 $TPLMSG['VAT_NUMBER'] = "统一编号";
 $TPLMSG['PRODUCT_PRICE'] = "价格";
 $TPLMSG['READ_MORE'] = "详全文";
+$TPLMSG['ORDER_MEMO'] = "消费者备注";
 
 //关闭网站
 $TPLMSG['WEB_CLOSE_MSG'] = "很抱歉，我们的网站目前暂时关闭.";

@@ -55,6 +55,7 @@ $TPLMSG['PUBLISH_OFF'] = "已過期";
 $TPLMSG['PAGE_BACK'] = "回上頁";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "清除";
+$TPLMSG['COLLECTION'] = "收藏";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系統預設首頁";
@@ -206,7 +207,9 @@ $TPLMSG['CART_FINISH_INQUIRY'] = "送出詢價單";
 $TPLMSG['CART_DELETE_CHECK'] = "確定要刪除?";
 $TPLMSG['CART_EMPTY'] = "目前購物車是空的!";
 $TPLMSG['CART_SPEC_TITLE'] = "規格";
+$TPLMSG['CART_STEP_NEXT'] = "下一步";
 $TPLMSG['SHIPPING_PRICE'] = "運費";
+
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "服務中心";
 $TPLMSG["CONTACTUS_TERM"] = "聯絡我們說明";
@@ -235,11 +238,17 @@ $TPLMSG["ORDER_DETAIL"]="產品訂單詳細資料";
 $TPLMSG["ORDER_CONTENT"]="訂單內容";
 $TPLMSG["ORDER_UNPAID"]="未付款";
 $TPLMSG["ORDER_PAID"]="已付款";
+$TPLMSG['ORDER_SHIP_ZONE'] = "送貨區域";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "訂單資訊";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "訂購者資訊";
+$TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "收件者資訊";
+$TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "發票資訊";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="付款方式";
 $TPLMSG["PAYMENT_ATM"]="ATM轉帳或銀行匯款";
 $TPLMSG["PAYMENT_CASH_ON_DELIVERY"]="貨到付款";
+$TPLMSG['CHOOSE_PAYMENT_TYPE'] = "請選擇付款方式";
 
 //INQUIRY
 $TPLMSG["INQUIRY_ID"]="詢問信編號";
@@ -433,9 +442,11 @@ $TPLMSG['ORDER_BUYER_INFO'] = "訂購者資訊";
 $TPLMSG['ORDER_RECI_INFO'] = "收件者資訊";
 $TPLMSG['ORDER_INVOICE_INFO'] = "發票資訊";
 $TPLMSG['DELIVER_STR'] = "配送日期及時段";
+$TPLMSG['INVOICE_TYPE'] = "發票類型";
 $TPLMSG['VAT_NUMBER'] = "統一編號";
 $TPLMSG['PRODUCT_PRICE'] = "價格";
 $TPLMSG['READ_MORE'] = "詳全文";
+$TPLMSG['ORDER_MEMO'] = "消費者備註";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "很抱歉，我們的網站目前暫時關閉.";

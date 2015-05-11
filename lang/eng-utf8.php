@@ -51,6 +51,7 @@ $TPLMSG['PUBLISH_OFF'] = "Expired";
 $TPLMSG['PAGE_BACK'] = "Back";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
+$TPLMSG['COLLECTION'] = "Collection";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";
@@ -190,7 +191,11 @@ $TPLMSG['CART_FINISH_INQUIRY'] = "Finish";
 $TPLMSG['CART_DELETE_CHECK'] = "Are You Sure To Delete Data?";
 $TPLMSG['CART_EMPTY'] = "The cart is empty!";
 $TPLMSG['CART_SPEC_TITLE'] = "Specification";
+$TPLMSG['CART_STEP_NEXT'] = "Next";
+$TPLMSG['CART_LOGIN_MESSAGE1'] = "Click here to finish the order and register.";
+$TPLMSG['CART_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 $TPLMSG['SHIPPING_PRICE'] = "Shipping Costs";
+
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "Service Center";
 $TPLMSG["CONTACTUS_TERM"] = "Contact Us Term";
@@ -219,11 +224,17 @@ $TPLMSG["ORDER_DETAIL"]="Detail";
 $TPLMSG["ORDER_CONTENT"]="Content";
 $TPLMSG["ORDER_UNPAID"]="Unpaid";
 $TPLMSG["ORDER_PAID"]="Paid";
+$TPLMSG['ORDER_SHIP_ZONE'] = "Ship Zone";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "Order Info";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "Order By";
+$TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "Send To";
+$TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "VAT Receipt";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="Payment Type";
 $TPLMSG["PAYMENT_ATM"]="ATM";
 $TPLMSG["PAYMENT_CASH_ON_DELIVERY"]="Cash On Delivery";
+$TPLMSG['CHOOSE_PAYMENT_TYPE'] = "choose a type";
 
 //INQUIRY
 $TPLMSG["INQUIRY_ID"]="Inquiry ID";
@@ -412,9 +423,11 @@ $TPLMSG['ORDER_BUYER_INFO'] = "Subscriber Information";
 $TPLMSG['ORDER_RECI_INFO'] = "Recipient information";
 $TPLMSG['ORDER_INVOICE_INFO'] = "Invoice Information";
 $TPLMSG['DELIVER_STR'] = "Delivery date and time";
+$TPLMSG['INVOICE_TYPE'] = "Invoice Type";
 $TPLMSG['VAT_NUMBER'] = "Unified Numbering";
 $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
+$TPLMSG['ORDER_MEMO'] = "Order message";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website is closed temporarily for maintenance.";
