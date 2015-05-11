@@ -101,12 +101,7 @@ class Model_Image {
                 $this->parsed_typed_image[$imgType] = $this->_getTypedImg($filename, $imgType);
             }
         }
-        if (empty($filename) || !$this->_exists( App::configs()->file_root . $filename)) {
-            $newfilename = App::configs()->default_preview_pic;
-        } else {
-            $newfilename = $this->parsed_typed_image[$type];
-        }
-        return $newfilename;
+        return $this->parsed_typed_image[$type];
     }
     
     /**
@@ -121,7 +116,11 @@ class Model_Image {
         if($this->_exists( App::configs()->file_root . $typedFilename)){
             return App::configs()->file_root . $typedFilename;
         }else{
-            return App::configs()->file_root . $filename;
+            if (empty($filename) || !$this->_exists( App::configs()->file_root . $filename)) {
+                return App::configs()->default_preview_pic;
+            }else{
+                return App::configs()->file_root . $filename;
+            }
         }
     }
     
