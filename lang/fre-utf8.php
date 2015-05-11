@@ -51,6 +51,7 @@ $TPLMSG['PUBLISH_OFF'] = "expiré";
 $TPLMSG['PAGE_BACK'] = "Retour";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
+$TPLMSG['COLLECTION'] = "Collection";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";
@@ -190,6 +191,7 @@ $TPLMSG['CART_FINISH_INQUIRY'] = "Terminer";
 $TPLMSG['CART_DELETE_CHECK'] = "Etes-vous sûr de supprimer des données?";
 $TPLMSG['CART_EMPTY'] = "The cart is empty!";
 $TPLMSG['CART_SPEC_TITLE'] = "Specification";
+$TPLMSG['CART_STEP_NEXT'] = "Next";
 $TPLMSG['SHIPPING_PRICE'] = "Frais d'expédition";
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "de service centre de";
@@ -219,11 +221,17 @@ $TPLMSG["ORDER_DETAIL"]="détail";
 $TPLMSG["ORDER_CONTENT"]="Contenu";
 $TPLMSG["ORDER_UNPAID"]="Unpaid";
 $TPLMSG["ORDER_PAID"]="Paid";
+$TPLMSG['ORDER_SHIP_ZONE'] = "Ship Zone";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "Order Info";
+$TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "Order By";
+$TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "Send To";
+$TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "VAT Receipt";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="Type de paiement";
 $TPLMSG["PAYMENT_ATM"]="ATM";
 $TPLMSG["PAYMENT_CASH_ON_DELIVERY"]="comptant sur ​​la livraison";
+$TPLMSG['CHOOSE_PAYMENT_TYPE'] = "choose a type";
 
 //INQUIRY
 $TPLMSG["INQUIRY_ID"]="ID enquête";
@@ -394,30 +402,32 @@ $TPLMSG['W_SAT'] = "Sat";
 
 /*新增語彙*/
 /*以下是支付寶相關字彙*/
-$TPLMSG["PAYMENT_ALI"] = "支付寶";
-$TPLMSG["PAYMENT_TEN"] = "財付通";
-$TPLMSG['ALI_FAIL_TITLE'] = "交易失敗";
-$TPLMSG['ALI_OK_TITLE'] = "交易完成";
-$TPLMSG["ALI_TITLE"] = "購物訊息";
-$TPLMSG['ALI_FALE_MESSAGE'] = "產品售完或已下架";
-$TPLMSG["ALI_SHIP_MSG"] = "請於支付寶平台確認運費";
-$TPLMSG["MEMBER_ALI_QUERY"] = "查詢支付寶訂單";
-$TPLMSG['SHIPPMENT_1'] = "臺灣本島";
-$TPLMSG['SHIPPMENT_2'] = "離島地區(澎湖、金門、馬祖)";
-$TPLMSG['SHIPPMENT_3'] = "中國大陸(支付寶)";
-$TPLMSG['THANKS_FOR_ORDER'] = "大黑松小倆口感謝您的訂購!";
-$TPLMSG['INVOICE_TYPE_2'] = "二聯式";
-$TPLMSG['INVOICE_TYPE_3'] = "三聯式";
-$TPLMSG['ORDER_BUYER_INFO'] = "訂購者資訊";
-$TPLMSG['ORDER_RECI_INFO'] = "收件者資訊";
-$TPLMSG['ORDER_INVOICE_INFO'] = "發票資訊";
-$TPLMSG['DELIVER_STR'] = "配送日期及時段";
-$TPLMSG['VAT_NUMBER'] = "統一編號";
-$TPLMSG['PRODUCT_PRICE'] = "價格";
+$TPLMSG['PAYMENT_ALI'] = "Paypal";
+$TPLMSG['PAYMENT_TEN'] = "Caifutong";
+$TPLMSG['ALI_FAIL_TITLE'] = "Transaction fails";
+$TPLMSG['ALI_OK_TITLE'] = "Completion of the transaction";
+$TPLMSG['ALI_TITLE'] = "Shopping Information";
+$TPLMSG['ALI_FALE_MESSAGE'] = "Products are sold out or have been off the shelf";
+$TPLMSG['ALI_SHIP_MSG'] = "Please confirm shipping Alipay platform";
+$TPLMSG['MEMBER_ALI_QUERY'] = "Discover Paypal Order";
+$TPLMSG['SHIPPMENT_1'] = "Taiwan Island";
+$TPLMSG['SHIPPMENT_2'] = "Outlying islands (Penghu, Kinmen and Matsu)";
+$TPLMSG['SHIPPMENT_3'] = "Chinese mainland (Alipay)";
+$TPLMSG['THANKS_FOR_ORDER'] = "Large pine lovers appreciate your order!";
+$TPLMSG['INVOICE_TYPE_2'] = "Two-coupled";
+$TPLMSG['INVOICE_TYPE_3'] = "Triple formula";
+$TPLMSG['ORDER_BUYER_INFO'] = "Subscriber Information";
+$TPLMSG['ORDER_RECI_INFO'] = "Recipient information";
+$TPLMSG['ORDER_INVOICE_INFO'] = "Invoice Information";
+$TPLMSG['DELIVER_STR'] = "Delivery date and time";
+$TPLMSG['INVOICE_TYPE'] = "Invoice Type";
+$TPLMSG['VAT_NUMBER'] = "Unified Numbering";
+$TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
+$TPLMSG['ORDER_MEMO'] = "Order message";
 
 //關閉網站
-$TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website closed temporarily";
+$TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website is closed temporarily for maintenance.";
 
 $TPLMSG['ATTACH'] = "Attach file";
 $TPLMSG['MAX_UPLOAD_SIZE'] = "Max upload file size: %s";

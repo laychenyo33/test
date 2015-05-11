@@ -17,7 +17,10 @@
                     </td>
                   </tr>
                   <tr>
-                      <td class="fg_pw"><a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a> <a href="#" onclick="myform.submit();return false;"><img src="{TAG_THEME_PATH}btn_login.png"></a></td>
+                      <td class="fg_pw">
+                        <a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a> 
+                        <input type="button" class="shop_btn" value="{MSG_LOGIN_BUTTON}" onclick="myform.submit();return false;" />
+                      </td>
                   </tr>
                 </table>
                 <input type="hidden" name="callback" value="1">
@@ -34,12 +37,11 @@
                     <td class="cart_title_icon">{TAG_FS_SHOPPING}</td>
                   </tr>
                   <tr>
-                    <td></td>
+                      <td>
+                            <a href="#" id="first" onclick="fsfrm.submit();return false;"><div class="firstbuy_btn"><span>{TAG_LOGIN_MESSAGE1}</span><br>{TAG_LOGIN_MESSAGE2}</div></a>
+                      </td>
                   </tr>
                 </table>
                 <input type="hidden" name="shop_and_register" value="1"/>
-                <div class="cart-login_f_btn">
-                    <a href="#" id="first" onclick="fsfrm.submit();"><img style="padding-top: 20px;" src="{TAG_THEME_PATH}/btn_firstbuy.png"></a>
-                </div>
             </form>            
         </div>

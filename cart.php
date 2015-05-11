@@ -277,6 +277,7 @@ class CART{
                                   "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'],
                                   "MSG_DISCOUNT" => $TPLMSG['QUANTITY_DISCOUNT'],
                                   "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'],
+                                  "MSG_SHIP_ZONE" => $TPLMSG['ORDER_SHIP_ZONE'],
                                   //"CART_IMG_TITLE"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["title_img"],
                                   //"CART_IMG_SUB"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["sub_img"],
         ));
@@ -331,8 +332,10 @@ class CART{
             $tpl->assignGlobal( array(
                 "MSG_CONTINUE_SHOPPING"  => $TPLMSG['CART_CONTINUE_SHOPPING'],
                 "MSG_FINISH_SHOPPING"  => $TPLMSG['CART_FINISH_SHOPPING'],
+                'MSG_NEXT_STEP' => $TPLMSG['CART_STEP_NEXT'],
                 "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'],
                 "MSG_SHIPPING_PRICE"  => $TPLMSG['SHIPPING_PRICE'],
+                'TAG_COLLECTION' => $TPLMSG['COLLECTION'],
             ));
             //送貨區域
             App::getHelper('main')->multiple_radio("shipment_type",$ws_array["shippment_type"],"",$tpl);                 
@@ -560,7 +563,16 @@ class CART{
             "MSG_TEL" => $TPLMSG["TEL"],
             "MSG_FAX" => $TPLMSG["FAX"],
             "MSG_EMAIL" => $TPLMSG["EMAIL"],
-            "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"]
+            "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"],
+            'MSG_CHOOSE_PAYMENT_TYPE' => $TPLMSG['CHOOSE_PAYMENT_TYPE'],
+            /*結帳表單區塊標題*/
+            'MSG_BLOCK_ORDER'       => $TPLMSG['ORDER_BLOCK_TITLE_ORDER'],
+            'MSG_BLOCK_ORDERBY'     => $TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'],
+            'MSG_BLOCK_SENDTO'      => $TPLMSG['ORDER_BLOCK_TITLE_SENDTO'],
+            'MSG_BLOCK_VAT_RECEIPT' => $TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'],
+            'MSG_VAT_NUMBER'        => $TPLMSG['VAT_NUMBER'],
+            'MSG_INVOICE_TYPE'      => $TPLMSG['INVOICE_TYPE'],
+            'MSG_ORDER_MESSAGE'     => $TPLMSG['ORDER_MEMO'],
         ));
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("TIME_SEC_ZONE");
@@ -1327,10 +1339,14 @@ class CART{
     }
     function member_login(){
         global $main,$ws_array,$cms_cfg,$tpl,$TPLMSG;
-        $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);  
-        $tpl->assignGlobal("TAG_MAIN_FUNC",$TPLMSG['MEMBER_LOGIN']);        
-        $tpl->assignGlobal("TAG_RETURN_URL",$_SERVER['REQUEST_URI']);
-        $tpl->assignGlobal("TAG_FS_SHOPPING",$TPLMSG['FIRST_TIME_SHOPPING']);
+        $main->layer_link($ws_array["cart_type"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]);
+        $tpl->assignGlobal(array(
+            "TAG_MAIN_FUNC"      => $TPLMSG['MEMBER_LOGIN'],
+            "TAG_RETURN_URL"     => $_SERVER['REQUEST_URI'],
+            "TAG_FS_SHOPPING"    => $TPLMSG['FIRST_TIME_SHOPPING'],
+            'TAG_LOGIN_MESSAGE1' => $TPLMSG['CART_LOGIN_MESSAGE1'],
+            'TAG_LOGIN_MESSAGE2' => $TPLMSG['CART_LOGIN_MESSAGE2'],
+        ));
     }    
     //取得最新訂單號碼
     function get_oid(){
