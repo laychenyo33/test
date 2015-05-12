@@ -27,7 +27,7 @@ class ABOUTUS{
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG["ABOUT_US"]);
         $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG["ABOUT_US"]);
         $tpl->assignGlobal( "TAG_".  strtoupper($this->au_cate)."_CURRENT" , "class='current'"); //上方menu current
-        $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"]["aboutus"]); //此頁面對應的flash及圖檔名稱
+        $tpl->assignGlobal( "TAG_MAIN" , $ws_array["main"][$this->au_cate]); //此頁面對應的flash及圖檔名稱
         $tpl->assignGlobal( "TAG_MAIN_CLASS" , "main-aboutus"); //主要顯示區域的css設定
         //$main->header_footer("aboutus");
         $main->google_code(); //google analystics code , google sitemap code
