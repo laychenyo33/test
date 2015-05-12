@@ -53,6 +53,7 @@ $TPLMSG['PAGE_BACK'] = "回上页";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "清除";
 $TPLMSG['COLLECTION'] = "收藏";
+$TPLMSG['FAVORITE'] = "我的最爱";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系统预设首页";
@@ -179,7 +180,8 @@ $TPLMSG['PRODUCT_LIST_PRICE'] = "定价";
 $TPLMSG['PRODUCT_SPECIAL_PRICE'] = "特价";
 $TPLMSG['PRODUCT_DISCOUNT_PRICE'] = "折扣价";
 $TPLMSG['PRODUCT_SERIAL'] = "产品型号";
-
+$TPLMSG['PRODUCT_COLLECTION'] = "我要收藏";
+$TPLMSG['PRODUCT_OUT_OF_STOCK'] = "无现货";
 // CART
 $TPLMSG['CART_ADD'] = "加入";
 $TPLMSG['CART_INQUIRY'] = "询价车";
@@ -197,6 +199,7 @@ $TPLMSG['CART_EMPTY'] = "目前购物车是空的!";
 $TPLMSG['CART_SPEC_TITLE'] = "规格";
 $TPLMSG['CART_STEP_NEXT'] = "下一步";
 $TPLMSG['SHIPPING_PRICE'] = "运费";
+
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "服务中心";
 $TPLMSG["CONTACTUS_TERM"] = "联络我们说明";
@@ -245,6 +248,8 @@ $TPLMSG["INQUIRY_QUANTITY_UPDATED"]="已更新数量!";
 
 //DOWNLOAD
 $TPLMSG["DOWNLOAD"]="档案分享";
+$TPLMSG['DOWNLOAD_AFTER_READ'] = "读取下载(不显示真实路径)";
+$TPLMSG['DOWNLOAD_DIRECTLY'] = "直接下载(显示真实路径)";
 
 //FORGOT PASSWORD
 $TPLMSG["FORGOT_PASSWORD"]="忘记密码";
@@ -288,6 +293,7 @@ $TPLMSG['EPAPER_REGISTERED'] = "your submit is registered!";
 $TPLMSG['EPAPER_EMAIL_EXISTED'] = "e-mail existed!";
 $TPLMSG['EPAPER_MISSING_DATA'] = "name or e-mail missing";
 $TPLMSG['EPAPER_EMAIL_INVALID'] = "e-mail is invalid!";
+$TPLMSG['EPAPER_SENT'] = "电子报发送完成";
 
 $TPLMSG['SLIDE_BOX_IMAGE'] = "图片";
 $TPLMSG['SLIDE_BOX_OF'] = "之";
@@ -339,6 +345,8 @@ $TPLMSG['CONTACTUS_POSITION'] = "部门与职称";
 $TPLMSG['EPAPER_HEADER'] = "电子报页首";
 $TPLMSG['EPAPER_FOOTER'] = "电子报页尾";
 $TPLMSG['EPAPER_UNSUB_SUCCESS'] = "您已经从邮件清单里移除了!";
+$TPLMSG['EPAPER_CUSTOM_FIELD'] = "自订条件";
+
 $TPLMSG['GALLERY'] = "活动剪影";
 $TPLMSG["PAGE_NO_EXITS"] = "此页面不存在";
 //Goodlink
@@ -482,4 +490,6 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "本产品有数量折扣";
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "库存量不足订购数，请修改订购量，谢谢。";
 $TPLMSG['TEMP_STORE'] = "商品寄放";
 $TPLMSG['SECURITY_ERROR'] = "验证码错误!!";
+
+$TPLMSG['NO_STOCKS_NOTICE'] = "预订请留言";
 ?>

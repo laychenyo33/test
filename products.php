@@ -488,16 +488,20 @@ class PRODUCTS{
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$main;
         $this->discount=$_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_DISCOUNT"];
         //欄位名稱
-        $tpl->assignGlobal( array("MSG_AMOUNT"  => $TPLMSG['AMOUNT'],
-                                  "MSG_PRODUCT_NAME"  => $TPLMSG['PRODUCT_NAME'],
-                                  "MSG_PRODUCT_PRICE" => $TPLMSG['PRODUCT_PRICE'],
-                                  "MSG_PRODUCT_LIST_PRICE" => $TPLMSG['PRODUCT_LIST_PRICE'],
-                                  "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_SPECIAL_PRICE'],
-                                  "MSG_PRODUCT_SERIAL" => $TPLMSG['PRODUCT_SERIAL'],
-                                  "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'],
-                                  "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_SPECIAL_PRICE'],
-                                  "MSG_PRODUCT_CATE" => $TPLMSG["PRODUCT_CATE"],
-                                  "MSG_PRODUCT_DISCOUNT_PRICE" => $TPLMSG["PRODUCT_DISCOUNT_PRICE"]));
+        $tpl->assignGlobal( array(
+            "MSG_AMOUNT"  => $TPLMSG['AMOUNT'],
+            "MSG_PRODUCT_NAME"  => $TPLMSG['PRODUCT_NAME'],
+            "MSG_PRODUCT_PRICE" => $TPLMSG['PRODUCT_PRICE'],
+            "MSG_PRODUCT_LIST_PRICE" => $TPLMSG['PRODUCT_LIST_PRICE'],
+            "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_SPECIAL_PRICE'],
+            "MSG_PRODUCT_SERIAL" => $TPLMSG['PRODUCT_SERIAL'],
+            "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'],
+            "MSG_PRODUCT_SPECIAL_PRICE" => $TPLMSG['PRODUCT_SPECIAL_PRICE'],
+            "MSG_PRODUCT_CATE" => $TPLMSG["PRODUCT_CATE"],
+            "MSG_PRODUCT_DISCOUNT_PRICE" => $TPLMSG["PRODUCT_DISCOUNT_PRICE"],
+            "MSG_FAVORITE" => $TPLMSG['FAVORITE'],
+            "MSG_INQUIRY" => $TPLMSG['INQUIRY'],
+        ));
 
         //相關參數
         if(!empty($_REQUEST['nowp'])){
@@ -666,6 +670,7 @@ class PRODUCTS{
                             "TAG_NO_STOCK_MSG_ZONE"    => "",
                             "TAG_CART_HANDLER_DISPLAY" => "style='display:none'",
                             "TAG_NO_STOCKS_LINK" => $main->mk_link($TPLMSG['NO_STOCKS_NOTICE'],$cms_cfg['base_root']."contactus.htm",array('class'=>'no_stocks')),
+                            'MSG_OUT_OF_STOCK' => $TPLMSG['PRODUCT_OUT_OF_STOCK']                            
                         ));
                     }else{
                         $tpl->assignGlobal(array(
@@ -781,7 +786,10 @@ class PRODUCTS{
                 //收藏數量
                 if(App::configs()->ws_module->ws_products_collect){
                     $tpl->newBlock("PROD_COLLECT");
-                    $tpl->assign("MSG_COLLECT_NUMS",$main->collect_nums($row['p_id']));
+                    $tpl->assign(array(
+                        'MSG_COLLECTION' => $TPLMSG['PRODUCT_COLLECTION'],
+                        "MSG_COLLECT_NUMS" => $main->collect_nums($row['p_id']),
+                    ));
                 }
             }
         }else{
@@ -1033,6 +1041,7 @@ class PRODUCTS{
                     $tpl->newBlock("CHCAROUSEL_SCRIPT");
             }
             $tpl->newBlock("RELATED_PRODUCTS_ZONE_".$effect);
+            $tpl->assign("MSG_RELATED_TITLE",$TPLMSG['RELATED_PRODUCTS']);
             $imgHandler = Model_Image::factory($cms_cfg['related_img_width'],$cms_cfg['related_img_height']);
             while($row = $db->fetch_array($selectrs,1)){
                 $tpl->newBlock("RELATED_PRODUCTS_".$effect);

@@ -52,6 +52,7 @@ $TPLMSG['PAGE_BACK'] = "geri";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
 $TPLMSG['COLLECTION'] = "Collection";
+$TPLMSG['FAVORITE'] = "Favorite";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";
@@ -175,6 +176,8 @@ $TPLMSG['PRODUCT_LIST_PRICE'] = "Liste Fiyatı";
 $TPLMSG['PRODUCT_SPECIAL_PRICE'] = "Açık Satış";
 $TPLMSG['PRODUCT_DISCOUNT_PRICE'] = "İndirim Fiyatı";
 $TPLMSG['PRODUCT_SERIAL'] = "Ürün Seri";
+$TPLMSG['PRODUCT_COLLECTION'] = "Collect it";
+$TPLMSG['PRODUCT_OUT_OF_STOCK'] = "Out of stock.";
 
 // CART
 $TPLMSG['CART_ADD'] = "";
@@ -192,7 +195,10 @@ $TPLMSG['CART_DELETE_CHECK'] = "Veri Silme için Emin misiniz?";
 $TPLMSG['CART_EMPTY'] = "The cart is empty!";
 $TPLMSG['CART_SPEC_TITLE'] = "Specification";
 $TPLMSG['CART_STEP_NEXT'] = "Next";
+$TPLMSG['CART_LOGIN_MESSAGE1'] = "Click here to finish the order and register.";
+$TPLMSG['CART_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 $TPLMSG['SHIPPING_PRICE'] = "Nakliye Ücretleri";
+
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "Hizmet Merkezi";
 $TPLMSG["CONTACTUS_TERM"] = "Süre İletişim";
@@ -478,4 +484,6 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
 $TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
+
+$TPLMSG['NO_STOCKS_NOTICE'] = "contact us";
 ?>

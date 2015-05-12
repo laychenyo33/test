@@ -52,6 +52,7 @@ $TPLMSG['PAGE_BACK'] = "กลับ";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
 $TPLMSG['COLLECTION'] = "Collection";
+$TPLMSG['FAVORITE'] = "Favorite";
 //CONFIG
 $TPLMSG['CUSTOM_INDEX_PAGE'] = "index.htm";
 $TPLMSG['SYSTEM_INDEX_PAGE'] = "หน้าเริ่มต้น";
@@ -174,6 +175,8 @@ $TPLMSG['PRODUCT_LIST_PRICE'] = "ราคาตามรายการ";
 $TPLMSG['PRODUCT_SPECIAL_PRICE'] = "ขาย";
 $TPLMSG['PRODUCT_DISCOUNT_PRICE'] = "ราคาส่วนลด";
 $TPLMSG['PRODUCT_SERIAL'] = "ซีเรียลของผลิตภัณฑ์";
+$TPLMSG['PRODUCT_COLLECTION'] = "Collect it";
+$TPLMSG['PRODUCT_OUT_OF_STOCK'] = "Out of stock.";
 
 // CART
 $TPLMSG['CART_ADD'] = "";
@@ -191,7 +194,10 @@ $TPLMSG['CART_DELETE_CHECK'] = "คุณแน่ใจที่จะลบข
 $TPLMSG['CART_EMPTY'] = "ตะกร้าว่างเปล่า!";
 $TPLMSG['CART_SPEC_TITLE'] = "สเปค";
 $TPLMSG['CART_STEP_NEXT'] = "Next";
+$TPLMSG['CART_LOGIN_MESSAGE1'] = "Click here to finish the order and register.";
+$TPLMSG['CART_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 $TPLMSG['SHIPPING_PRICE'] = "ค่าใช้จ่ายในการจัดส่งสินค้า";
+
 //SERVICE TERM
 $TPLMSG['SERVICE_CENTER'] = "ศูนย์ให้บริการ";
 $TPLMSG['CONTACTUS_TERM'] = "ติดต่อเราข้อตกลง";
@@ -477,3 +483,6 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
 $TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
+
+$TPLMSG['NO_STOCKS_NOTICE'] = "contact us";
+?>
