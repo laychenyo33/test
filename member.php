@@ -502,6 +502,12 @@ class MEMBER{
                                 break;
                         }
                     }
+                    //加入會員提示
+                    if(!in_array($cms_cfg['language'],array('cht','chs'))){
+                        $mtpl->newBlock("ENG_NOTIFY");
+                    }else{
+                        $mtpl->newBlock(strtoupper($cms_cfg['language'])."_NOTIFY");
+                    }
                     $mail_content=$mtpl->getOutputContent();
                     $main->ws_mail_send($_SESSION[$cms_cfg['sess_cookie_name']]['sc_email'],$_REQUEST["m_account"],$mail_content,$TPLMSG['MEMBER_CONFIRM_MAIL'],"m",$goto_url);
                 }else{
