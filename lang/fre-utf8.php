@@ -52,6 +52,7 @@ $TPLMSG['PAGE_BACK'] = "Retour";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
 $TPLMSG['COLLECTION'] = "Collection";
+$TPLMSG['FAVORITE'] = "Favorite";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";
@@ -175,6 +176,8 @@ $TPLMSG['PRODUCT_LIST_PRICE'] = "prix de liste";
 $TPLMSG['PRODUCT_SPECIAL_PRICE'] = "en vente";
 $TPLMSG['PRODUCT_DISCOUNT_PRICE'] = "Prix Discount";
 $TPLMSG['PRODUCT_SERIAL'] = "Serial produit";
+$TPLMSG['PRODUCT_COLLECTION'] = "Collect it";
+$TPLMSG['PRODUCT_OUT_OF_STOCK'] = "Out of stock.";
 
 // CART
 $TPLMSG['CART_ADD'] = "";
@@ -478,4 +481,6 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
 $TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
+
+$TPLMSG['NO_STOCKS_NOTICE'] = "contact us";
 ?>

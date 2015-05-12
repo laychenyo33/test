@@ -56,6 +56,7 @@ $TPLMSG['PAGE_BACK'] = "回上頁";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "清除";
 $TPLMSG['COLLECTION'] = "收藏";
+$TPLMSG['FAVORITE'] = "我的最愛";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系統預設首頁";
@@ -191,7 +192,8 @@ $TPLMSG['PRODUCT_LIST_PRICE'] = "定價";
 $TPLMSG['PRODUCT_SPECIAL_PRICE'] = "特價";
 $TPLMSG['PRODUCT_DISCOUNT_PRICE'] = "折扣價";
 $TPLMSG['PRODUCT_SERIAL'] = "產品型號";
-
+$TPLMSG['PRODUCT_COLLECTION'] = "我要收藏";
+$TPLMSG['PRODUCT_OUT_OF_STOCK'] = "無現貨";
 // CART
 $TPLMSG['CART_ADD'] = "加入";
 $TPLMSG['CART_INQUIRY'] = "詢價車";
@@ -500,4 +502,6 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "本產品有數量折扣";
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "庫存量不足訂購數，請修改訂購量，謝謝。";
 $TPLMSG['TEMP_STORE'] = "商品寄放";
 $TPLMSG['SECURITY_ERROR'] = "驗證碼錯誤!!";
+
+$TPLMSG['NO_STOCKS_NOTICE'] = "預訂請留言";
 ?>

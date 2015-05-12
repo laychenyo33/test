@@ -5,12 +5,12 @@
     <input type="hidden" name="p_id" value="{VALUE_P_ID}">
     <input type="hidden" name="ps_id" value="">    
     <!-- START BLOCK : PRODUCTS_DETAIL_CUSTOM -->
-    <!-- START BLOCK : INQUIRY_IN_CUSTOM -->
     <div class="btn01">
-            <div class="btn02"><a href="javascript:document.myform.submit();">Inquiry</a></div>
-            <div class="btn02"><a href="javascript:addBookmarkForBrowser(document.title,document.URL);">Favorite</a></div>
+        <!-- START BLOCK : INQUIRY_IN_CUSTOM -->
+        <div class="btn02"><a href="javascript:" onclick="document.myform.submit();return false;">{MSG_INQUIRY}</a></div>
+        <!-- END BLOCK : INQUIRY_IN_CUSTOM -->
+        <div class="btn02"><a href="javascript:" onclick="addBookmarkForBrowser(document.title,document.URL);return false;">{MSG_FAVORITE}</a></div>
     </div>    
-    <!-- END BLOCK : INQUIRY_IN_CUSTOM -->
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td>
@@ -99,7 +99,7 @@
                     <!-- END BLOCK : FULL_PRICE -->
                 <!-- END BLOCK : CART_TYPE_SHOPPING -->
             <!-- END BLOCK : SINGLE_SPEC_SETS -->
-            <div class="no_stocks" {TAG_NO_STOCK_MSG_ZONE}>無現貨，到貨通知</div>
+            <div class="no_stocks" {TAG_NO_STOCK_MSG_ZONE}>{MSG_OUT_OF_STOCK}, {TAG_NO_STOCKS_LINK}</div>
             <!-- START BLOCK : QTY_DISCOUNT -->
             <div id="quantity-discount">
                 <span id="title">{MSG_QTN_DESC}</span>
@@ -117,9 +117,9 @@
                                 <!-- START BLOCK : CART_SUBMIT -->
 				<div class="btn02"><a href="#" class="prodToCart" rel="{VALUE_P_ID}">{SUBMIT_BTN_STR}</a></div>
                                 <!-- END BLOCK : CART_SUBMIT -->
-				<div class="btn02"><a href="javascript:addBookmarkForBrowser(document.title,document.URL);">Favorite</a></div>
+				<div class="btn02"><a href="javascript:addBookmarkForBrowser(document.title,document.URL);">{MSG_FAVORITE}</a></div>
                                 <!-- START BLOCK : PROD_COLLECT -->
-				<div class="btn02"><a href="#" class="prodToCollect" rel="{VALUE_P_ID}">我要收藏(<span id="collectnums">{MSG_COLLECT_NUMS}</span>)</a></div>
+				<div class="btn02"><a href="#" class="prodToCollect" rel="{VALUE_P_ID}">{MSG_COLLECTION}(<span id="collectnums">{MSG_COLLECT_NUMS}</span>)</a></div>
                                 <!-- END BLOCK : PROD_COLLECT -->
 			</div>
             <!-- START BLOCK : ATTACH_FILE1 -->
@@ -162,7 +162,7 @@
     <!-- END BLOCK : PRODUCTS_DETAIL_DEFAULT -->
 
     <!-- START BLOCK : RELATED_PRODUCTS_ZONE_0 -->
-    <div class="products_show_title">Related Products</div>
+    <div class="products_show_title">{MSG_RELATED_TITLE}</div>
     <div id="related_products">
       <div id="imageFlow">	
         <div class="bank">
@@ -184,7 +184,7 @@
     </div>
     <!-- END BLOCK : RELATED_PRODUCTS_ZONE_0 -->
     <!-- START BLOCK : RELATED_PRODUCTS_ZONE_1 -->
-    <div class="line" style="font-size:18px; padding-bottom:7px">Other Products</div>
+    <div class="line" style="font-size:18px; padding-bottom:7px">{MSG_RELATED_TITLE}</div>
     <div id="related_products">
         <div class="direction"><a href="#" id="go-left"><<</a></div>
         <div class="container">

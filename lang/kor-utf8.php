@@ -52,6 +52,7 @@ $TPLMSG['PAGE_BACK'] = "뒤로";
 $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
 $TPLMSG['COLLECTION'] = "Collection";
+$TPLMSG['FAVORITE'] = "Favorite";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="기본 홈 페이지";
@@ -175,6 +176,8 @@ $TPLMSG['PRODUCT_LIST_PRICE'] = "가격";
 $TPLMSG['PRODUCT_SPECIAL_PRICE'] = "특별 가격";
 $TPLMSG['PRODUCT_DISCOUNT_PRICE'] = "할인 가격";
 $TPLMSG['PRODUCT_SERIAL'] = "제품 시리얼";
+$TPLMSG['PRODUCT_COLLECTION'] = "Collect it";
+$TPLMSG['PRODUCT_OUT_OF_STOCK'] = "Out of stock.";
 
 // CART
 $TPLMSG['CART_ADD'] = "";
@@ -192,7 +195,10 @@ $TPLMSG['CART_DELETE_CHECK'] = "당신이 데이터를 삭제하려면시겠습�
 $TPLMSG['CART_EMPTY'] = "The cart is empty!";
 $TPLMSG['CART_SPEC_TITLE'] = "Specification";
 $TPLMSG['CART_STEP_NEXT'] = "Next";
+$TPLMSG['CART_LOGIN_MESSAGE1'] = "Click here to finish the order and register.";
+$TPLMSG['CART_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 $TPLMSG['SHIPPING_PRICE'] = "배송 비용";
+
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "서비스 센터";
 $TPLMSG["CONTACTUS_TERM"] = "우리에게 설명 문의";
@@ -478,4 +484,6 @@ $TPLMSG['PRODUCTS_QUANTITY_DISCOUNT_DESC'] = "This product has quantity discount
 $TPLMSG['INVENTORY_SHORTAG_NOTIFY'] = "Inventory shortage order number, please modify order amount, thank you.";
 $TPLMSG['TEMP_STORE'] = "No shipments of goods";
 $TPLMSG['SECURITY_ERROR'] = "Security Code error!!";
+
+$TPLMSG['NO_STOCKS_NOTICE'] = "contact us";
 ?>
