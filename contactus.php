@@ -150,6 +150,7 @@ class CONTACTUS{
         //可附檔上傳
         if($cms_cfg["ws_module"]["ws_contactus_upfiles"]==1) {
             if($cms_cfg['contactus_upfiles_nums']){
+                $tpl->assignGlobal('TAG_FORM_ENCTYPE'," enctype=\"multipart/form-data\" ");
                 $tpl->newBlock("ATTACH_FILES");
                 for($i=1;$i<=$cms_cfg['contactus_upfiles_nums'];$i++){
                     if($i==1){
