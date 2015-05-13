@@ -68,7 +68,7 @@ class MAINDEFAULT{
                 $imgInfo = $imgHandler->parse($row['pc_cate_img']);
                 $tpl->assign(array(
                     "VALUE_PC_NAME" => $row['pc_name'],
-                    "VALUE_PC_LINK" => $cms_cfg['base_root'].$row['pc_seo_filename'].".htm",
+                    "VALUE_PC_LINK" => App::getHelper('request')->get_link('productscate',$row),
                     "VALUE_PC_IMG"  => $imgInfo[0],
                     "VALUE_PC_IMG_W"  => $imgInfo['width'],
                     "VALUE_PC_IMG_H"  => $imgInfo['height'],
