@@ -53,6 +53,10 @@ $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
 $TPLMSG['COLLECTION'] = "Collection";
 $TPLMSG['FAVORITE'] = "Favorite";
+$TPLMSG['DEL_CART_ITEM'] = "Delete item";
+$TPLMSG['SURE_TO_DELETE'] = "Confirm deleting?";
+$TPLMSG['AGREE'] = "Agree";
+$TPLMSG['DISAGREE'] = "Disagree";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="기본 홈 페이지";
@@ -135,6 +139,7 @@ $TPLMSG['MEMBER_ZONE_DATA']="회원 데이터 관리";
 $TPLMSG['MEMBER_ZONE_ORDER']="회원 주문 관리";
 $TPLMSG['MEMBER_ZONE_INQUIRY']="문의 편지 관리";
 $TPLMSG['MEMBER_ZONE_CONTACTUS']="연락하기";
+$TPLMSG['MEMBER_ZONE_GREETINGS']="Hi, %s";
 $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="약관에 동의";
 $TPLMSG['MEMBER_DISCOUNT']="할인";
 $TPLMSG['MEMBER_MUTI_TEL_NOTICE']="','로 구분";
@@ -232,6 +237,8 @@ $TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "Order Info";
 $TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "Order By";
 $TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "Send To";
 $TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "VAT Receipt";
+$TPLMSG['ORDER_PREVIEW_MODIFY'] = "Modify";
+$TPLMSG['ORDER_PREVIEW_FINISH'] = "Finish";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="지불 방법";
@@ -431,6 +438,7 @@ $TPLMSG['VAT_NUMBER'] = "Unified Numbering";
 $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
 $TPLMSG['ORDER_MEMO'] = "Order message";
+$TPLMSG['NEED_EXTRA_VAT_INFO'] = "need extra vat info";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website is closed temporarily for maintenance.";

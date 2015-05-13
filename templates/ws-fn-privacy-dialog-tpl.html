@@ -10,12 +10,12 @@
                width:600,
                height:500,
                buttons:{
-                   "同意":function(){
+                   "{BTN_AGREE}":function(){
                         $(this).dialog("close");
                         var relatedForm = $(this).data("relatedForm");
                         relatedForm.trigger("submit");
                    },
-                   "不同意":function(){
+                   "{BTN_DISAGREE}":function(){
                        $(this).dialog("close");
                        $("#privacy_dialog").data('displayed',0);
                    }        

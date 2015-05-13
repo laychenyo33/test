@@ -53,6 +53,10 @@ $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
 $TPLMSG['COLLECTION'] = "Collection";
 $TPLMSG['FAVORITE'] = "Favorite";
+$TPLMSG['DEL_CART_ITEM'] = "Delete item";
+$TPLMSG['SURE_TO_DELETE'] = "Confirm deleting?";
+$TPLMSG['AGREE'] = "Agree";
+$TPLMSG['DISAGREE'] = "Disagree";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="default page";
@@ -135,6 +139,7 @@ $TPLMSG['MEMBER_ZONE_DATA']="Les données du membre";
 $TPLMSG['MEMBER_ZONE_ORDER']="membre de commandes";
 $TPLMSG['MEMBER_ZONE_INQUIRY']="membre Enquêtes";
 $TPLMSG['MEMBER_ZONE_CONTACTUS']="Commentaires";
+$TPLMSG['MEMBER_ZONE_GREETINGS']="Hi, %s";
 $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="Accepter Période de service";
 $TPLMSG['MEMBER_DISCOUNT']="Remise";
 $TPLMSG['MEMBER_MUTI_TEL_NOTICE']="Séparés par ','";
@@ -229,6 +234,8 @@ $TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "Order Info";
 $TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "Order By";
 $TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "Send To";
 $TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "VAT Receipt";
+$TPLMSG['ORDER_PREVIEW_MODIFY'] = "Modify";
+$TPLMSG['ORDER_PREVIEW_FINISH'] = "Finish";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="Type de paiement";
@@ -428,6 +435,7 @@ $TPLMSG['VAT_NUMBER'] = "Unified Numbering";
 $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
 $TPLMSG['ORDER_MEMO'] = "Order message";
+$TPLMSG['NEED_EXTRA_VAT_INFO'] = "need extra vat info";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website is closed temporarily for maintenance.";

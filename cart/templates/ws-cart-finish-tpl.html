@@ -27,7 +27,7 @@
           <tr>
               <td class="fg_pw">
               <a href="{TAG_ROOT_PATH}member.php?func=m_forget">{MSG_LOGIN_FORGOT_PASSWORD}</a>
-              <input type="button" class="shop_btn" value="登入" onclick="myform.submit();return false;" />
+              <input type="button" class="shop_btn" value="{MSG_LOGIN_BTN}" onclick="myform.submit();return false;" />
               </td>
           </tr>
         </table>
@@ -41,7 +41,7 @@
             <td class="cart_title_icon">{TAG_FS_SHOPPING}</td>
           </tr>
           <tr>
-            <td><a href="#" id="first"><div class="firstbuy_btn"><span>您不需先加入會員，按此即可完成結帳</span><br>※如您已是會員，請由左邊選項登入</div></a></td>
+            <td><a href="#" id="first"><div class="firstbuy_btn"><span>{TAG_LOGIN_MESSAGE1}</span><br>{TAG_LOGIN_MESSAGE2}</div></a></td>
           </tr>
         </table>
         </div>
@@ -84,7 +84,7 @@
                 <th width="10%"> {MSG_PRODUCT_IMAGE}</th>
                 <th width=""> {MSG_PRODUCT}</th>
                 <!-- START BLOCK : SPEC_TITLE -->
-                <th width="15%"> 規格</th>
+                <th width="15%"> {MSG_SPEC}</th>
                 <!-- END BLOCK : SPEC_TITLE -->                
                 <th width="10%"> {MSG_AMOUNT}</th>
                 <th width="10%"> {MSG_PRODUCT_PRICE}{VALUE_P_DISCOUNT}</th>
@@ -397,7 +397,7 @@
             
 
             <div class="cart_btn">
-            <input type="button" class="shop_btn" id="gotopreview" value="下一步" />
+            <input type="button" class="shop_btn" id="gotopreview" value="{MSG_NEXT_STEP}>>" />
             </div>
 
             <br /><br />
@@ -494,9 +494,9 @@
 				var TYPE_VAL = $(this).val();
 				
 				if(TYPE_VAL == 2){
-					$(".tri_block").show();
-				}else{
 					$(".tri_block").hide();
+				}else{
+					$(".tri_block").show();
 				}
 			});
 			
@@ -528,6 +528,10 @@
 				}
 			});
 			$("#gotopreview").click(function(){
+                            if($(":radio[name=o_invoice_type]:checked").val()==3 && ($("input[name=o_invoice_name]").val()=="" || $("input[name=o_invoice_vat]").val()=="")){
+                                alert("{MSG_NEED_EXTRA_VAT_INFO}");
+                                return false;
+                            }
                             $(myform).trigger('submit');
                         });
 			//----

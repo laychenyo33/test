@@ -53,6 +53,10 @@ $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "Clean";
 $TPLMSG['COLLECTION'] = "Collection";
 $TPLMSG['FAVORITE'] = "Favorite";
+$TPLMSG['DEL_CART_ITEM'] = "Delete item";
+$TPLMSG['SURE_TO_DELETE'] = "Confirm deleting?";
+$TPLMSG['AGREE'] = "Agree";
+$TPLMSG['DISAGREE'] = "Disagree";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="Standardseite";
@@ -135,6 +139,7 @@ $TPLMSG['MEMBER_ZONE_DATA']="Mitglied der Data";
 $TPLMSG['MEMBER_ZONE_ORDER']="Mitglied's Orders";
 $TPLMSG['MEMBER_ZONE_INQUIRY']="Abgeordnete Anfragen";
 $TPLMSG['MEMBER_ZONE_CONTACTUS']="Ihre Meinung";
+$TPLMSG['MEMBER_ZONE_GREETINGS']="Hi, %s";
 $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="Akzeptieren Service Term";
 $TPLMSG['MEMBER_DISCOUNT']="Discount";
 $TPLMSG['MEMBER_MUTI_TEL_NOTICE']="Getrennt durch ','";
@@ -210,6 +215,8 @@ $TPLMSG["ORDER_MAIL"] = "Einkaufswagen Auto-Antwort-E-Mail";
 $TPLMSG["INQUIRY_MAIL_TITLE"] = "Anfrage Liste";
 $TPLMSG["ORDER_MAIL_TITLE"] = "Einkaufen Liste";
 $TPLMSG["ORDER_RECEIPT_NOTIFY_TITLE"] = "receipt notify";
+$TPLMSG['ORDER_PREVIEW_MODIFY'] = "Modify";
+$TPLMSG['ORDER_PREVIEW_FINISH'] = "Finish";
 
 //ORDER
 $TPLMSG["ORDER_ID"]="Bestell-ID";
@@ -428,6 +435,7 @@ $TPLMSG['VAT_NUMBER'] = "Unified Numbering";
 $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
 $TPLMSG['ORDER_MEMO'] = "Order message";
+$TPLMSG['NEED_EXTRA_VAT_INFO'] = "need extra vat info";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website is closed temporarily for maintenance.";

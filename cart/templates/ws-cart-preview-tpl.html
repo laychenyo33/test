@@ -8,7 +8,7 @@
                 <th width="10%"> {MSG_PRODUCT_IMAGE}</th>
                 <th width=""> {MSG_PRODUCT}</th>
                 <!-- START BLOCK : SPEC_TITLE -->
-                <th width="15%"> 規格</th>
+                <th width="15%"> {MSG_SPEC}</th>
                 <!-- END BLOCK : SPEC_TITLE -->                     
                 <th width="10%"> {MSG_AMOUNT}</th>
                 <th width="20%"> {MSG_PRODUCT_PRICE}{VALUE_P_DISCOUNT}</th>
@@ -66,7 +66,7 @@
     <!-- END BLOCK : TAG_CART_ZONE -->
 <br/><br/>
 
-<div class="cart_title_icon2">訂單資訊</div>
+<div class="cart_title_icon2">{MSG_ORDER_INFO}</div>
     <form name="myform" method="post" action="?func=c_replace" id="formID" class="formular">
     <div class="cart_order_info_frame">
     <!-- START BLOCK : MEMBER_DATA_FORM -->
@@ -237,8 +237,8 @@
     <br /><br />
 
     <div class="cart_btn">
-        <input type="button" id="goback" class="shop_btn" value="修改資料" />
-        <input type="button" id="continue" class="shop_btn" value="完成購物" />
+        <input type="button" id="goback" class="shop_btn" value="<<{BTN_MODIFY}" />
+        <input type="button" id="continue" class="shop_btn" value="{BTN_FINISH}>>" />
     </div>
     <!-- START BLOCK : TMP_POST_FIELD -->
     <input type="hidden" name="{TAG_POST_KEY}" value="{TAG_POST_VALUE}"/>

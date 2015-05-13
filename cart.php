@@ -278,6 +278,10 @@ class CART{
                                   "MSG_DISCOUNT" => $TPLMSG['QUANTITY_DISCOUNT'],
                                   "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'],
                                   "MSG_SHIP_ZONE" => $TPLMSG['ORDER_SHIP_ZONE'],
+                                  'MSG_DEL_DIALOG_TITLE'   => $TPLMSG['DEL_CART_ITEM'],
+                                  'MSG_DEL_DIALOG_CONTENT' => $TPLMSG['SURE_TO_DELETE'],
+                                  'STR_BTN_DEL_CONFIRM' => $TPLMSG['OK'] ,
+                                  'STR_BTN_DEL_CANCEL'  => $TPLMSG['CANCEL'] ,            
                                   //"CART_IMG_TITLE"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["title_img"],
                                   //"CART_IMG_SUB"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["sub_img"],
         ));
@@ -573,6 +577,7 @@ class CART{
             'MSG_VAT_NUMBER'        => $TPLMSG['VAT_NUMBER'],
             'MSG_INVOICE_TYPE'      => $TPLMSG['INVOICE_TYPE'],
             'MSG_ORDER_MESSAGE'     => $TPLMSG['ORDER_MEMO'],
+            "MSG_SAME_AS_ORDERBY"   => $TPLMSG['SAM'],
         ));
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("TIME_SEC_ZONE");
@@ -705,6 +710,18 @@ class CART{
         $main->magic_gpc($_POST);
         App::getHelper('session')->tmpForm = $_POST;
         $this->cart_list();
+        $tpl->assignGlobal(array(
+            'MSG_ORDER_INFO'        => $TPLMSG['ORDER_BLOCK_TITLE_ORDER'],
+            'BTN_MODIFY'            => $TPLMSG['ORDER_PREVIEW_MODIFY'],
+            'BTN_FINISH'            => $TPLMSG['ORDER_PREVIEW_FINISH'],
+            'MSG_BLOCK_ORDER'       => $TPLMSG['ORDER_BLOCK_TITLE_ORDER'],
+            'MSG_BLOCK_ORDERBY'     => $TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'],
+            'MSG_BLOCK_SENDTO'      => $TPLMSG['ORDER_BLOCK_TITLE_SENDTO'],
+            'MSG_BLOCK_VAT_RECEIPT' => $TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'],
+            'MSG_VAT_NUMBER'        => $TPLMSG['VAT_NUMBER'],
+            'MSG_INVOICE_TYPE'      => $TPLMSG['INVOICE_TYPE'],
+            'MSG_ORDER_MESSAGE'     => $TPLMSG['ORDER_MEMO'],            
+        ));        
         $tpl->newBlock( "MEMBER_DATA_FORM" );
         $shipment_type = $this->container->get_shipment_type();
         //處理地址欄位
@@ -857,6 +874,13 @@ class CART{
                             "MSG_FAX" => $TPLMSG["FAX"],
                             "MSG_EMAIL" => $TPLMSG["EMAIL"],
                             "MSG_CELLPHONE" => $TPLMSG["CELLPHONE"],
+                            'MSG_BLOCK_ORDER'       => $TPLMSG['ORDER_BLOCK_TITLE_ORDER'],
+                            'MSG_BLOCK_ORDERBY'     => $TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'],
+                            'MSG_BLOCK_SENDTO'      => $TPLMSG['ORDER_BLOCK_TITLE_SENDTO'],
+                            'MSG_BLOCK_VAT_RECEIPT' => $TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'],
+                            'MSG_VAT_NUMBER'        => $TPLMSG['VAT_NUMBER'],
+                            'MSG_INVOICE_TYPE'      => $TPLMSG['INVOICE_TYPE'],
+                            'MSG_ORDER_MESSAGE'     => $TPLMSG['ORDER_MEMO'],              
                             "VALUE_M_COMPANY_NAME" => $_REQUEST["m_company_name"],
                             "VALUE_M_VAT_NUMBER" => $_REQUEST["m_vat_number"],
                             "VALUE_M_INVOICE_TYPE" => $ws_array['invoice_type'][$_REQUEST['o_invoice_type']],
