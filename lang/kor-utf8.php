@@ -55,6 +55,8 @@ $TPLMSG['COLLECTION'] = "Collection";
 $TPLMSG['FAVORITE'] = "Favorite";
 $TPLMSG['DEL_CART_ITEM'] = "Delete item";
 $TPLMSG['SURE_TO_DELETE'] = "Confirm deleting?";
+$TPLMSG['AGREE'] = "Agree";
+$TPLMSG['DISAGREE'] = "Disagree";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.htm";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="기본 홈 페이지";

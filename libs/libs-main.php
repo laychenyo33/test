@@ -2117,6 +2117,8 @@ class MAINFUNC{
         $tpl->assignGlobal(array(
             "MSG_DIALOG_TITLE" => App::getHelper('session')->sc_company."-".$TPLMSG["PRIVACY_POLICY"],
             "MSG_PRIVACY_TERM" => $term,
+            'BTN_AGREE'    => $TPLMSG['AGREE'],
+            'BTN_DISAGREE' => $TPLMSG['DISAGREE'],
         ));
     }
     //計算分頁的偏移值

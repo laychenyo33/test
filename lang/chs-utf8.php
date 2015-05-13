@@ -56,6 +56,8 @@ $TPLMSG['COLLECTION'] = "收藏";
 $TPLMSG['FAVORITE'] = "我的最爱";
 $TPLMSG['DEL_CART_ITEM'] = "删除项目";
 $TPLMSG['SURE_TO_DELETE'] = "确定删除?";
+$TPLMSG['AGREE'] = "同意";
+$TPLMSG['DISAGREE'] = "不同意";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系统预设首页";
