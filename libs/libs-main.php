@@ -207,8 +207,9 @@ class MAINFUNC{
             $tpl->assignGlobal( "MEMBER_LOGINSTATUS_SWITCH",$this->mk_link($TPLMSG["MEMBER_LOGOUT"], App::configs()->base_root . "login.php?func=logout"));
             $tpl->newBlock( "MEMBER_INFO" );
             $tpl->assign("TAG_LOGIN_MEMBER_CATE",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_CATE']);
-            $tpl->assign("TAG_LOGIN_MEMBER_NAME",$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_NAME']);
+            $tpl->assign("TAG_LOGIN_MEMBER_NAME",sprintf($TPLMSG['MEMBER_ZONE_GREETINGS'],$_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_NAME']));
             $tpl->assign("TAG_LOGIN_MEMBER_DATA",$TPLMSG['MEMBER_ZONE_DATA']);
+            $tpl->assign("BTN_LOGOUT",$TPLMSG["MEMBER_LOGOUT"]);
             switch($_SESSION[$cms_cfg['sess_cookie_name']]['sc_cart_type']){
                 case "0":
                     if($cms_cfg['ws_module']['ws_inquiry']){

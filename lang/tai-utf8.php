@@ -137,6 +137,7 @@ $TPLMSG['MEMBER_ZONE_DATA'] = "ข้อมูลของสมาชิก";
 $TPLMSG['MEMBER_ZONE_ORDER'] = "คำสั่งซื้อของสมาชิก";
 $TPLMSG['MEMBER_ZONE_INQUIRY'] = "สอบถามข้อมูลของสมาชิก";
 $TPLMSG['MEMBER_ZONE_CONTACTUS'] = "ข้อเสนอแนะ";
+$TPLMSG['MEMBER_ZONE_GREETINGS']="Hi, %s";
 $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM'] = "ผมเห็นด้วย";
 $TPLMSG['MEMBER_DISCOUNT'] = "ส่วนลด";
 $TPLMSG['MEMBER_MUTI_TEL_NOTICE'] = "แยกจากกันโดย &#39;,&#39;";

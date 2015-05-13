@@ -137,6 +137,7 @@ $TPLMSG['MEMBER_ZONE_DATA']="Les données du membre";
 $TPLMSG['MEMBER_ZONE_ORDER']="membre de commandes";
 $TPLMSG['MEMBER_ZONE_INQUIRY']="membre Enquêtes";
 $TPLMSG['MEMBER_ZONE_CONTACTUS']="Commentaires";
+$TPLMSG['MEMBER_ZONE_GREETINGS']="Hi, %s";
 $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="Accepter Période de service";
 $TPLMSG['MEMBER_DISCOUNT']="Remise";
 $TPLMSG['MEMBER_MUTI_TEL_NOTICE']="Séparés par ','";

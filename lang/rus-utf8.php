@@ -137,6 +137,7 @@ $TPLMSG['MEMBER_ZONE_DATA']="члена данных";
 $TPLMSG['MEMBER_ZONE_ORDER']="члена заказов";
 $TPLMSG['MEMBER_ZONE_INQUIRY']="члена Запросы";
 $TPLMSG['MEMBER_ZONE_CONTACTUS']="Обратная связь";
+$TPLMSG['MEMBER_ZONE_GREETINGS']="Hi, %s";
 $TPLMSG['MEMBER_ACCEPT_SERVICE_TERM']="Принять срок службы";
 $TPLMSG['MEMBER_DISCOUNT']="Дисконт";
 $TPLMSG['MEMBER_MUTI_TEL_NOTICE']="Разделенные ','";
