@@ -577,6 +577,7 @@ class CART{
             'MSG_VAT_NUMBER'        => $TPLMSG['VAT_NUMBER'],
             'MSG_INVOICE_TYPE'      => $TPLMSG['INVOICE_TYPE'],
             'MSG_ORDER_MESSAGE'     => $TPLMSG['ORDER_MEMO'],
+            "MSG_SAME_AS_ORDERBY"   => $TPLMSG['SAM'],
         ));
         if($cms_cfg['ws_module']['ws_delivery_timesec']){
             $tpl->newBlock("TIME_SEC_ZONE");
