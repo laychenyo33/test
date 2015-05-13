@@ -53,6 +53,10 @@ class CART{
             $oid = $_GET['pno']?$_GET['pno']:$_POST["MerchantTradeNo"];
             $order = App::getHelper('dbtable')->order->getData($oid)->getDataRow();
             if($order){
+                $tpl->assignGlobal(array(
+                    'MSG_ORDER_ID'          => $TPLMSG["ORDER_ID"],
+                    'MSG_ORDER_TOTAL_MONEY' => $TPLMSG["ORDER_TOTAL_MONEY"],
+                ));
                 $tpl->newBlock("SHOPPPING_RESULT");
                 $tpl->assign(array( 
                     "ORDER_ID" => $order['o_id'],
