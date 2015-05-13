@@ -57,6 +57,8 @@ $TPLMSG['EMAIL'] = "E-mail";
 $TPLMSG['CLEAN'] = "清除";
 $TPLMSG['COLLECTION'] = "收藏";
 $TPLMSG['FAVORITE'] = "我的最愛";
+$TPLMSG['DEL_CART_ITEM'] = "刪除項目";
+$TPLMSG['SURE_TO_DELETE'] = "確定刪除?";
 //CONFIG
 $TPLMSG["CUSTOM_INDEX_PAGE"]="index.html";
 $TPLMSG["SYSTEM_INDEX_PAGE"]="系統預設首頁";

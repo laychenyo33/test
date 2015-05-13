@@ -95,8 +95,8 @@
 <div class="cart-finish-bottom">
     {MSG_SHOPPING_TERM}
 </div>
-<div id="del-cart-dialog" title="刪除購物車項目" style="display:none">
-    確定刪除嗎？
+<div id="del-cart-dialog" title="{MSG_DEL_DIALOG_TITLE}" style="display:none">
+    {MSG_DEL_DIALOG_CONTENT}
 </div>
 <script type="text/javascript">
     jQuery(function($){
@@ -218,7 +218,7 @@
                 width:400,
                 height:180,
                 buttons:{
-                    確定:function(){
+                    {STR_BTN_DEL_CONFIRM}:function(){
                         var data = {
                             p_id: $("#del-cart-dialog").data('p_id'),
                             ps_id: $("#del-cart-dialog").data('ps_id'),
@@ -249,7 +249,7 @@
                             }
                         },'json');
                     },
-                    取消:function(){
+                    {STR_BTN_DEL_CANCEL}:function(){
                         $(this).dialog('close');
                     }
                 }

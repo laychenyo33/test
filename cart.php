@@ -278,6 +278,10 @@ class CART{
                                   "MSG_DISCOUNT" => $TPLMSG['QUANTITY_DISCOUNT'],
                                   "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'],
                                   "MSG_SHIP_ZONE" => $TPLMSG['ORDER_SHIP_ZONE'],
+                                  'MSG_DEL_DIALOG_TITLE'   => $TPLMSG['DEL_CART_ITEM'],
+                                  'MSG_DEL_DIALOG_CONTENT' => $TPLMSG['SURE_TO_DELETE'],
+                                  'STR_BTN_DEL_CONFIRM' => $TPLMSG['OK'] ,
+                                  'STR_BTN_DEL_CANCEL'  => $TPLMSG['CANCEL'] ,            
                                   //"CART_IMG_TITLE"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["title_img"],
                                   //"CART_IMG_SUB"=> $ws_array["cart_img"][$_SESSION[$cms_cfg['sess_cookie_name']]["sc_cart_type"]]["sub_img"],
         ));

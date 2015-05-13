@@ -252,6 +252,7 @@
                             "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], 
                             "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], 
                             "MSG_PRODUCT" => $TPLMSG['PRODUCT'], 
+                            "MSG_SPEC" => $TPLMSG['CART_SPEC_TITLE'],
                             "MSG_PRODUCT_IMAGE" => $TPLMSG['PRODUCT_IMG'], 
                             "VALUE_MODIFY_AMOUNT" => $TPLMSG['CART_MODIFY_AMOUNT'], 
                             "TAG_DELETE_CHECK_STR" => $TPLMSG['CART_DELETE_CHECK'], 
@@ -263,7 +264,16 @@
 	
 			if ($this->container->count() > 0) {
 				$tpl->newBlock("TAG_CART_ZONE");
-				$tpl->assign(array("MSG_CONTINUE_SHOPPING" => $TPLMSG['CART_CONTINUE_SHOPPING'], "MSG_FINISH_SHOPPING" => $TPLMSG['CART_FINISH_SHOPPING'], "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'], ));
+				$tpl->assignGlobal(array(
+                                    "MSG_CONTINUE_SHOPPING" => $TPLMSG['CART_CONTINUE_SHOPPING'], 
+                                    "MSG_FINISH_SHOPPING" => $TPLMSG['CART_FINISH_SHOPPING'], 
+                                    "LINK_CONTINUE" => $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL'], 
+                                    'MSG_NEXT_STEP' => $TPLMSG['CART_STEP_NEXT'],
+                                    'MSG_DEL_DIALOG_TITLE'   => $TPLMSG['DEL_CART_ITEM'],
+                                    'MSG_DEL_DIALOG_CONTENT' => $TPLMSG['SURE_TO_DELETE'],
+                                    'STR_BTN_DEL_CONFIRM' => $TPLMSG['OK'] ,
+                                    'STR_BTN_DEL_CANCEL'  => $TPLMSG['CANCEL'] ,
+                                ));
                                 if($cms_cfg['ws_module']['ws_cart_spec']){
                                     $tpl->assignGlobal("CART_FIELDS_NUMS",6);
                                     $tpl->newBlock("SPEC_TITLE");
