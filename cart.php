@@ -709,6 +709,11 @@ class CART{
         $main->magic_gpc($_POST);
         App::getHelper('session')->tmpForm = $_POST;
         $this->cart_list();
+        $tpl->assignGlobal(array(
+            'MSG_ORDER_INFO' => $TPLMSG['ORDER_BLOCK_TITLE_ORDER'],
+            'BTN_MODIFY' => $TPLMSG['ORDER_PREVIEW_MODIFY'],
+            'BTN_FINISH' => $TPLMSG['ORDER_PREVIEW_FINISH'],
+        ));        
         $tpl->newBlock( "MEMBER_DATA_FORM" );
         $shipment_type = $this->container->get_shipment_type();
         //處理地址欄位

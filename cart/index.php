@@ -534,6 +534,11 @@
                                 }
                             }
                         }
+                        $tpl->assignGlobal(array(
+                            'MSG_ORDER_INFO' => $TPLMSG['ORDER_BLOCK_TITLE_ORDER'],
+                            'BTN_MODIFY' => $TPLMSG['ORDER_PREVIEW_MODIFY'],
+                            'BTN_FINISH' => $TPLMSG['ORDER_PREVIEW_FINISH'],
+                        ));
 			$tpl->newBlock("MEMBER_DATA_FORM");
 			$tpl->assignGlobal($this->basic_lang);
                         $m_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_fname'],$_POST['m_lname']);
