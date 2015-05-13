@@ -15,7 +15,6 @@
 		function __construct() {
 			global $cms_cfg, $tpl, $TPLMSG;
 			include_once (dirname(__FILE__)."/config.php");
-			$session = App::getHelper('session');
 			$this->m_id = $_SESSION[$cms_cfg['sess_cookie_name']]["MEMBER_ID"];
 			$this->ws_seo = ($cms_cfg["ws_module"]["ws_seo"])?1:0;
 			$this->order = ($cms_cfg["ws_module"]["ws_select_order"] == 1)?"desc":"asc";
