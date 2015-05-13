@@ -456,6 +456,7 @@ $TPLMSG['VAT_NUMBER'] = "統一編號";
 $TPLMSG['PRODUCT_PRICE'] = "價格";
 $TPLMSG['READ_MORE'] = "詳全文";
 $TPLMSG['ORDER_MEMO'] = "消費者備註";
+$TPLMSG['NEED_EXTRA_VAT_INFO'] = "請輸入公司名及統一編號";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "很抱歉，我們的網站目前暫時關閉.";

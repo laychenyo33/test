@@ -437,6 +437,7 @@ $TPLMSG['VAT_NUMBER'] = "เลขที่เป็นอันหนึ่ง�
 $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "มากกว่า";
 $TPLMSG['ORDER_MEMO'] = "Order message";
+$TPLMSG['NEED_EXTRA_VAT_INFO'] = "need extra vat info";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "ขออภัยเว็บไซต์ของเราปิดให้บริการชั่วคราว";

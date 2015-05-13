@@ -435,6 +435,7 @@ $TPLMSG['VAT_NUMBER'] = "Unified Numbering";
 $TPLMSG['PRODUCT_PRICE'] = "Price";
 $TPLMSG['READ_MORE'] = "More";
 $TPLMSG['ORDER_MEMO'] = "Order message";
+$TPLMSG['NEED_EXTRA_VAT_INFO'] = "need extra vat info";
 
 //關閉網站
 $TPLMSG['WEB_CLOSE_MSG'] = "Sorry, Our Website is closed temporarily for maintenance.";
