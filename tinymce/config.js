@@ -7,6 +7,7 @@
 		}
 		
 		tinymce.init({
+                        forced_root_block : "",
 			selector: SELECT,
 			theme: "modern",
 			width: 760,
