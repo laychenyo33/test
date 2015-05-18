@@ -202,6 +202,8 @@ $TPLMSG['CART_SPEC_TITLE'] = "Specification";
 $TPLMSG['CART_STEP_NEXT'] = "Next";
 $TPLMSG['CART_LOGIN_MESSAGE1'] = "Click here to finish the order and register.";
 $TPLMSG['CART_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
+$TPLMSG['CART_LOGIN_MESSAGE1'] = "Click here to finish the order and register.";
+$TPLMSG['CART_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 $TPLMSG['SHIPPING_PRICE'] = "Shipping Costs";
 
 //SERVICE TERM
