@@ -998,6 +998,7 @@ class CART{
                 'o_payment_type'   => $payment_type,
                 'o_name'           => $o_name,
                 'o_reci_name'      => $o_reci_name,
+                'rid'              => App::getHelper('session')->RID,
             ));
             //寫入購買產品
             //有贈品的話就寫入贈品

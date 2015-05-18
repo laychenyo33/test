@@ -731,7 +731,8 @@
                             'o_address'        => $o_address,
                             'o_content'        => $_REQUEST["content"],
                             'o_name'           => $o_name,
-                            'o_add_name'       => $o_add_name
+                            'o_add_name'       => $o_add_name,
+                            'rid'              => App::getHelper('session')->RID,
                         ));
                         $shopping = $this->container->get_cart_products();
                         //寫入購買產品
