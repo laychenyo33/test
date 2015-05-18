@@ -27,18 +27,25 @@ class searchFields_order extends searchFields_abstract{
     
     function __construct() {
         global $ws_array,$cms_cfg;
+        if(!App::configs()->ws_module->ws_rid_order){
+            unset($this->search_fields['rid']);
+        }else{
+            if($cms_cfg['new_cart_path']){
+                $this->exportRIDUrl = $cms_cfg['new_cart_path'].'admin.php?func=o_ex3';
+            }else{
+                $this->exportRIDUrl = $cms_cfg['manage_root'].'order.php?func=o_ex3';
+            }
+            $this->search_fields['rid']['dataSource'] = $ws_array['rid_order_cond'];
+        }
         if($cms_cfg['new_cart_path']){
             $this->exportUrl = $cms_cfg['new_cart_path'].'admin.php?func=o_ex2';
-            $this->exportRIDUrl = $cms_cfg['new_cart_path'].'admin.php?func=o_ex3';
         }else{
             $this->exportUrl = $cms_cfg['manage_root'].'order.php?func=o_ex2';
-            $this->exportRIDUrl = $cms_cfg['manage_root'].'order.php?func=o_ex3';
         }
         //設定欄位資料來源
         $this->search_fields['o_status']['dataSource'] = $ws_array["order_status"];
         $this->search_fields['o_payment_type']['dataSource'] = $ws_array["payment_type"];
         $this->search_fields['o_paid']['dataSource'] = $ws_array["order_paid_status"];
-        $this->search_fields['rid']['dataSource'] = $ws_array['rid_order_cond'];
     }
     
     protected function _init_tpl(){

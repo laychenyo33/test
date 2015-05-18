@@ -399,7 +399,9 @@ class MAINFUNC{
                 }
             }
             //檢測美安追蹤碼
-            $this->rid_handle();
+            if(App::configs()->ws_module->ws_rid_order){
+                $this->rid_handle();
+            }
         }
     }
     function func_metatitle($func){

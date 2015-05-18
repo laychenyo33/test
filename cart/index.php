@@ -732,8 +732,13 @@
                             'o_content'        => $_REQUEST["content"],
                             'o_name'           => $o_name,
                             'o_add_name'       => $o_add_name,
-                            'rid'              => App::getHelper('session')->RID,
                         ));
+                        //啟用美安訂單及有RID才寫入rid
+                        if(App::configs()->ws_module->ws_rid_order && App::getHelper('session')->RID){
+                            $orderData = array_merge($orderData,array(
+                                'rid' => App::getHelper('session')->RID,
+                            ));
+                        }
                         $shopping = $this->container->get_cart_products();
                         //寫入購買產品
                         //有贈品的話就寫入贈品
