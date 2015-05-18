@@ -69,6 +69,9 @@ class ORDER{
             case "o_ex2"://匯出新訂單
                 $this->export_order2();
                 break;            
+            case "o_ex3"://匯出美安訂單
+                $this->export_order3();
+                break;            
             case "o_list"://訂單列表
                 $this->current_class="O";
                 $this->ws_tpl_file = "templates/ws-manage-order-list-tpl.html";
@@ -831,6 +834,10 @@ class ORDER{
             echo json_encode($result);
         }
     }
+    
+    function export_order3(){
+        Model_Order_Rid::output();
+    }    
 }
 //ob_end_flush();
 ?>
