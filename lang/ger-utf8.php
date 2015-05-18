@@ -200,6 +200,8 @@ $TPLMSG['CART_DELETE_CHECK'] = "Sind Sie sicher, Daten zu löschen?";
 $TPLMSG['CART_EMPTY'] = "The cart is empty!";
 $TPLMSG['CART_SPEC_TITLE'] = "Specification";
 $TPLMSG['CART_STEP_NEXT'] = "Next";
+$TPLMSG['CART_LOGIN_MESSAGE1'] = "Click here to finish the order and register.";
+$TPLMSG['CART_LOGIN_MESSAGE2'] = "※If you've got a account, login from left";
 $TPLMSG['SHIPPING_PRICE'] = "Liefer-und Versandkosten";
 //SERVICE TERM
 $TPLMSG["SERVICE_CENTER"] = "Service Zentrum";

@@ -999,6 +999,12 @@ class CART{
                 'o_name'           => $o_name,
                 'o_reci_name'      => $o_reci_name,
             ));
+            //啟用美安訂單及有RID才寫入rid
+            if(App::configs()->ws_module->ws_rid_order && App::getHelper('session')->RID){
+                $orderData = array_merge($orderData,array(
+                    'rid' => App::getHelper('session')->RID,
+                ));
+            }
             //寫入購買產品
             //有贈品的話就寫入贈品
             if($gift = $this->container->getModule("giftor")->getGift($this->giftId)){

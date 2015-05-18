@@ -398,6 +398,10 @@ class MAINFUNC{
                         break;
                 }
             }
+            //檢測美安追蹤碼
+            if(App::configs()->ws_module->ws_rid_order){
+                $this->rid_handle();
+            }
         }
     }
     function func_metatitle($func){
@@ -2440,6 +2444,13 @@ class MAINFUNC{
     //判別是否為陣列或Model_Arrayaccess類別物件
     function t_array($v){
         return is_array($v) || is_a($v,'Model_Arrayaccess');
+    }
+    
+    //  檢測美安追蹤碼
+    function rid_handle(){
+        if($_GET["RID"]){
+            App::getHelper('session')->RID = $_GET["RID"];
+        }
     }    
 }
 ?>

@@ -203,6 +203,8 @@ $TPLMSG['CART_DELETE_CHECK'] = "确定要删除?";
 $TPLMSG['CART_EMPTY'] = "目前购物车是空的!";
 $TPLMSG['CART_SPEC_TITLE'] = "规格";
 $TPLMSG['CART_STEP_NEXT'] = "下一步";
+$TPLMSG['CART_LOGIN_MESSAGE1'] = "请按此快速结帐，并注册为会员";
+$TPLMSG['CART_LOGIN_MESSAGE2'] = "※如您已经是会员，请从左边选项登入";
 $TPLMSG['SHIPPING_PRICE'] = "运费";
 
 //SERVICE TERM
