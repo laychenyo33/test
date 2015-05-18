@@ -82,6 +82,15 @@ RewriteRule ^(video)/([^/]+)/([^/]+).html$  $1.php?type=show&d=$2&f=$3 [L]
 
 
 
+#美安 RID
+RewriteCond %{QUERY_STRING} ^(RID=(.*)|)
+RewriteRule ^([^/]+)-pages-([0-9]+)-([0-9]+).htm$  products.php?func=p_list&f=$1&nowp=$2&jp=$3&RID=%2 [L]
+RewriteCond %{QUERY_STRING} ^(RID=(.*)|)
+RewriteRule ^([^/]+).htm$  products.php?func=p_list&f=$1&RID=%2 [L]
+#有設定檔名產品
+RewriteCond %{QUERY_STRING} ^(RID=(.*)|)
+RewriteRule ^([^/]+)/([^/]+).html$  products.php?func=p_detail&d=$1&f=$2&RID=%2 [L]
+
 #無設定檔名目錄
 RewriteRule ^category-([0-9]+)-pages-([0-9]+)-([0-9]+).htm$  products.php?func=p_list&pc_parent=$1&nowp=$2&jp=$3 [L]
 RewriteRule ^category-([0-9]+).htm$  products.php?func=p_list&pc_parent=$1 [L]
