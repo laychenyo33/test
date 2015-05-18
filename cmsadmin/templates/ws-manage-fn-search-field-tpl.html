@@ -20,6 +20,9 @@
             <!-- START BLOCK : EXPORT_BTN -->
             <input type="button" value="匯出Excel" id="exportxls" data-export-url="{exportUrl}" />
             <!-- END BLOCK : EXPORT_BTN -->
+            <!-- START BLOCK : EXPORT_RID_BTN -->
+            <input type="button" value="匯出美安訂單" id="exportridxls" data-export-url="{exportUrl}" />
+            <!-- END BLOCK : EXPORT_RID_BTN -->
             <script type="text/javascript">
                 function get_query(){
                     var search = location.search
@@ -72,7 +75,7 @@
                               location.href = location.pathname;
                           }
                       });
-                      $("#exportxls").click(function(){
+                      $("#exportxls,#exportridxls").click(function(){
                             $("#sform").attr('action',$(this).attr('data-export-url'));
                             $("#sform").find(':hidden[name=func]').remove();
                             $("#sform").attr('target','_blank');
