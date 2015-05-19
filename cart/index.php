@@ -1215,6 +1215,11 @@
 	
 			if (empty($this->m_id) && !empty($cms_cfg["ws_module"]["ws_cart_login"])) {
 				App::getHelper('main')->check_duplicate_member_account($_REQUEST["m_account"]);
+                                foreach($_POST as $k=>$v){
+                                    if(preg_match("/^o_(\w+)$/", $k,$match)){
+                                        $_POST['m_'.$match[1]] = $v;
+                                    }
+                                }
                                 $memberData = array_merge($_POST,array(
                                     'mc_id'     => '1',
                                     'm_status'  => '1',
