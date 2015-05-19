@@ -1005,6 +1005,18 @@ class CART{
                     'rid' => App::getHelper('session')->RID,
                 ));
             }
+            //如果必要欄位為空值，導回購物車列表
+            if(!$this->checkRequireFields($orderData)){
+                ob_start();
+                print_r($_SERVER);
+                echo "\n";
+                echo "訂單資料:\n";
+                print_r($orderData);
+                $serverInfo = ob_get_clean();
+                file_put_contents('upload_files/'.date("YmdHis")."-".$_SERVER['REMOTE_ADDR'].'.log', $serverInfo);
+                $main->js_notice($TPLMSG['ORDER_DATA_SHORTAGE'],$_SERVER['PHP_SELF']);
+                die();
+            }
             //寫入購買產品
             //有贈品的話就寫入贈品
             if($gift = $this->container->getModule("giftor")->getGift($this->giftId)){
@@ -1471,6 +1483,34 @@ class CART{
             $res = array_merge($res, $this->container->get_cart_info() );
             echo json_encode($res);
         }
+    }
+    /**
+     * 檢查必要欄位
+     * @param Array $data  要寫入訂單的資料
+     * @return boolean
+     * @author 林俊信 <chunhsin@allmarketing.com.tw>
+     */
+    function checkRequireFields($data){
+        $pass=true;
+        $require_fields = array(
+            'o_shippment_type','o_payment_type','o_name','o_email','o_address',
+            'o_tel','o_cellphone','o_reci_name','o_reci_email','o_reci_address',
+            'o_reci_tel','o_reci_cellphone','o_invoice_type','o_subtotal_price','o_total_price',
+        );
+        if($require_fields){
+            foreach($require_fields as $f){
+                if(empty($data[$f])){
+                    $pass=false;
+                    break;
+                }
+                //檢查發票資訊
+                if($f=="o_invoice_type" && $data[$f]==3 && (empty($data['o_company_name']) || empty($data['o_vat_number']))){
+                    $pass=false;
+                    break;
+                }
+            }
+        }
+        return $pass;
     }
 }
 

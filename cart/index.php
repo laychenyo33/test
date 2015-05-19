@@ -705,9 +705,6 @@
                         //將m_換成o_
                         foreach($_REQUEST as $k=>$v){
                             if(preg_match("/^m_(\w+)$/", $k,$match)){
-                                if($match[1]=="country"){
-                                    $v = $main->multi_map_value($country,$v);
-                                }
                                 $_REQUEST['o_'.$match[1]] = $v;
                             }
                         }
@@ -740,6 +737,18 @@
                             ));
                         }
                         $shopping = $this->container->get_cart_products();
+                        //如果必要欄位為空值，導回購物車列表
+                        if(!$this->checkRequireFields($orderData)){
+                            ob_start();
+                            print_r($_SERVER);
+                            echo "\n";
+                            echo "訂單資料:\n";
+                            print_r($orderData);
+                            $serverInfo = ob_get_clean();
+                            file_put_contents('../upload_files/'.date("YmdHis")."-".$_SERVER['REMOTE_ADDR'].'.log', $serverInfo);
+                            $main->js_notice($TPLMSG['ORDER_DATA_SHORTAGE'],$_SERVER['PHP_SELF']);
+                            die();
+                        }
                         //寫入購買產品
                         //有贈品的話就寫入贈品
                         if($gift = $this->container->getModule("giftor")->getGift($this->giftId)){
@@ -1203,6 +1212,11 @@
 	
 			if (empty($this->m_id) && !empty($cms_cfg["ws_module"]["ws_cart_login"])) {
 				App::getHelper('main')->check_duplicate_member_account($_REQUEST["m_account"]);
+                                foreach($_POST as $k=>$v){
+                                    if(preg_match("/^o_(\w+)$/", $k,$match)){
+                                        $_POST['m_'.$match[1]] = $v;
+                                    }
+                                }
                                 $memberData = array_merge($_POST,array(
                                     'mc_id'     => '1',
                                     'm_status'  => '1',
@@ -1471,6 +1485,34 @@
 			}
 			echo json_encode($res);
 		}
+                /**
+                 * 檢查必要欄位
+                 * @param Array $data  要寫入訂單的資料
+                 * @return boolean
+                 * @author 林俊信 <chunhsin@allmarketing.com.tw>
+                 */
+                function checkRequireFields($data){
+                    $pass=true;
+                    $require_fields = array(
+                        'o_payment_type','o_name','o_email','o_address','o_tel','o_cellphone',
+                        'o_add_name','o_add_mail','o_add_address','o_add_tel','o_add_cellphone',
+                        'o_invoice_type','o_subtotal_price','o_total_price',
+                    );
+                    if($require_fields){
+                        foreach($require_fields as $f){
+                            if(empty($data[$f])){
+                                $pass=false;
+                                break;
+                            }
+                            //檢查發票資訊
+                            if($f=="o_invoice_type" && $data[$f]==3 && (empty($data['o_invoice_name']) || empty($data['o_invoice_vat']))){
+                                $pass=false;
+                                break;
+                            }
+                        }
+                    }
+                    return $pass;
+                }                
 	
 	}
 ?>

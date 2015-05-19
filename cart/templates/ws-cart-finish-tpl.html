@@ -490,13 +490,12 @@
 			});
 			
 			//----
-			$("input[name=o_invoice_type]").change(function(){
+			$(":radio[name=o_invoice_type]").click(function(){
 				var TYPE_VAL = $(this).val();
-				
 				if(TYPE_VAL == 2){
-					$(".tri_block").hide();
-				}else{
 					$(".tri_block").show();
+				}else{
+					$(".tri_block").hide();
 				}
 			});
 			
@@ -528,7 +527,7 @@
 				}
 			});
 			$("#gotopreview").click(function(){
-                            if($(":radio[name=o_invoice_type]:checked").val()==3 && ($("input[name=o_invoice_name]").val()=="" || $("input[name=o_invoice_vat]").val()=="")){
+                            if($(":radio[name=o_invoice_type]:checked").val()==2 && ($("input[name=o_invoice_name]").val()=="" || $("input[name=o_invoice_vat]").val()=="")){
                                 alert("{MSG_NEED_EXTRA_VAT_INFO}");
                                 return false;
                             }
