@@ -705,9 +705,6 @@
                         //將m_換成o_
                         foreach($_REQUEST as $k=>$v){
                             if(preg_match("/^m_(\w+)$/", $k,$match)){
-                                if($match[1]=="country"){
-                                    $v = $main->multi_map_value($country,$v);
-                                }
                                 $_REQUEST['o_'.$match[1]] = $v;
                             }
                         }
