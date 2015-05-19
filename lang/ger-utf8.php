@@ -238,6 +238,7 @@ $TPLMSG['ORDER_BLOCK_TITLE_ORDER'] = "Order Info";
 $TPLMSG['ORDER_BLOCK_TITLE_ORDERBY'] = "Order By";
 $TPLMSG['ORDER_BLOCK_TITLE_SENDTO'] = "Send To";
 $TPLMSG['ORDER_BLOCK_TITLE_VAT_RECEIPT'] = "VAT Receipt";
+$TPLMSG['ORDER_DATA_SHORTAGE'] = "The order data is on shortage, please check again.";
 
 //PAYMENT
 $TPLMSG["PAYMENT_TYPE"]="Zahlung Typ";
