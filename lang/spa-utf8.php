@@ -50,9 +50,9 @@ $TPLMSG['PUBLISH_ON'] = "Restante del Cargo";
 $TPLMSG['PUBLISH_OFF'] = "Caducado";
 $TPLMSG['PAGE_BACK'] = "anterior";
 $TPLMSG['EMAIL'] = "E-mail";
-$TPLMSG['CLEAN'] = "Clean";
+$TPLMSG['CLEAN'] = "LIMPIO";
 $TPLMSG['COLLECTION'] = "Collection";
-$TPLMSG['FAVORITE'] = "Favorite";
+$TPLMSG['FAVORITE'] = "favorito";
 $TPLMSG['DEL_CART_ITEM'] = "Delete item";
 $TPLMSG['SURE_TO_DELETE'] = "Confirm deleting?";
 $TPLMSG['AGREE'] = "Agree";
@@ -104,8 +104,8 @@ $TPLMSG['CONTACT_US_COUNTRY']="País";
 $TPLMSG['CONTACT_US_CITY']="Ciudad";
 $TPLMSG['CONTACT_US_SUBJECT']="Asunto";
 $TPLMSG['CONTACT_US_MAIL_TOP_MESSAGE']="Thank you for your letter,  we will reply as soon as possible , thank you for your support for %s again";
-$TPLMSG['CONTACT_US_REQUIRED_DESC']="(<span style=\"color:#F00; font-weight:bold\"> * </span>) Marked with an asterisk are required fields, please do not blank!";
-$TPLMSG['CONTACT_US_CONTENT_DESC']="Please fill in your questions :";
+$TPLMSG['CONTACT_US_REQUIRED_DESC']="(<span style=\"color:#F00; font-weight:bold\"> * </span>)  Los campos marcados con un asterisco son necesarios, por favor, no en blanco!";
+$TPLMSG['CONTACT_US_CONTENT_DESC']="Por favor, rellene sus preguntas :";
 
 //EPAPER
 $TPLMSG['SUBSCRIBE'] = "Suscribirse";
@@ -309,11 +309,11 @@ $TPLMSG['SLIDE_BOX_CLICK_CLOSE_LIST'] = "Click close images list";
 
 $TPLMSG['SUBMIT'] = "Submit";
 $TPLMSG['COMPANY_ADDRESS'] = "Dirección";
-$TPLMSG['PRODUCTS_FAVORITE'] = "Favorite";
+$TPLMSG['PRODUCTS_FAVORITE'] = "favorito";
 
 $TPLMSG["APPLICATION"] = "Application";
-$TPLMSG['PRODUCTS_SEARCH'] = "PRODUCTS SEARCH";
-$TPLMSG['ENTER_KEYWORD'] = "Enter Keyword";
+$TPLMSG['PRODUCTS_SEARCH'] = "búsqueda";
+$TPLMSG['ENTER_KEYWORD'] = "introducir la palabra clave";
 $TPLMSG['NEXT'] = "Próximo";
 $TPLMSG['PREV'] = "Prev";
 $TPLMSG['BACK_TO_LIST']="BACK TO LIST";
@@ -479,7 +479,7 @@ $TPLMSG['PAGINATION_NEXT_FEW_PAGE'] = "next %d pages";
 $TPLMSG['CART_PRODUCT_NAME'] = "item name";
 $TPLMSG['OPERATION'] = "operation";
 
-$TPLMSG['PROD_TO_CART_INQUIRY'] = "Inquiry";
+$TPLMSG['PROD_TO_CART_INQUIRY'] = "Encuesta";
 $TPLMSG['PROD_TO_CART_SHOPPING'] = "add to cart";
 $TPLMSG['ADD_TO_INQUIRY'] = "add to inquiry";
 $TPLMSG['ADD_TO_SHOPPING'] = "add to shopping";
