@@ -103,7 +103,7 @@ class CONTACTUS{
             }
         }
         //聯絡我們列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where cu_id > '0'";
+        $sql="select * from ".$db->prefix("contactus")." where cu_id > '0'";
         //附加條件
         $and_str="";
         if(!empty($_REQUEST["cu_cate"])){
@@ -175,23 +175,8 @@ class CONTACTUS{
 //聯絡我們--資料更新================================================================
     function contactus_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
-        $sql="
-            insert into ".$cms_cfg['tb_prefix']."_contactus (
-                cuc_id,
-                cu_status,
-                cu_sort,
-                cu_subject,
-                cu_content,
-                cu_modifydate
-            ) values (
-                '".$_REQUEST["cuc_id"]."',
-                '".$_REQUEST["cu_status"]."',
-                '".$_REQUEST["cu_sort"]."',
-                '".$_REQUEST["cu_subject"]."',
-                '".$_REQUEST["cu_content"]."',
-                '".date("Y-m-d H:i:s")."'
-            )";
         $rs = $db->query($sql);
+        App::getHelper('dbtable')->contactus->writeData($_POST);
         $db_msg = $db->report();
         if ( $db_msg == "" ) {
             $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
@@ -213,9 +198,9 @@ class CONTACTUS{
             $cu_id_str = implode(",",$cu_id);
             //刪除勾選的聯絡我們
             $this->file_del($cu_id_str);
-            $sql="update ".$cms_cfg['tb_prefix']."_contactus set del='1' where  cu_id in (".$cu_id_str.")";
+            $sql="update ".$db->prefix("contactus")." set del='1' where  cu_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
-            $sql="update ".$cms_cfg['tb_prefix']."_contactus_reply set del='1' where cu_id in (".$cu_id_str.")";
+            $sql="update ".$db->prefix("contactus_reply")." set del='1' where cu_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
@@ -258,7 +243,7 @@ class CONTACTUS{
         }        
         //帶入要回覆的聯絡我們資料
         if(!empty($_REQUEST["cu_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where cu_id='".$_REQUEST["cu_id"]."'";
+            $sql="select * from ".$db->prefix("contactus")." where cu_id='".$_REQUEST["cu_id"]."'";
             if(!$_GET['showdel']){
                 $sql .= " and del='0'";
             }
@@ -299,7 +284,7 @@ class CONTACTUS{
                     }
                 }
                 //回覆資料列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_contactus_reply where cu_id='".$_REQUEST["cu_id"]."' ";
+                $sql="select * from ".$db->prefix("contactus_reply")." where cu_id='".$_REQUEST["cu_id"]."' ";
                 if(!$_GET['showdel']){
                     $sql .= " and del='0' ";
                 }
@@ -323,7 +308,7 @@ class CONTACTUS{
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
         $re_time = date("Y-m-d H:i:s");
         $sql="
-            insert into ".$cms_cfg['tb_prefix']."_contactus_reply (
+            insert into ".$db->prefix("contactus_reply")." (
                 cu_id,
                 cur_content,
                 cur_modifydate
@@ -334,7 +319,7 @@ class CONTACTUS{
             )";
         $rs = $db->query($sql);
         $db_msg = $db->report();
-        $sql="update ".$cms_cfg['tb_prefix']."_contactus set cu_status='1' where cu_id='".$_REQUEST["cu_id"]."'";
+        $sql="update ".$db->prefix("contactus")." set cu_status='1' where cu_id='".$_REQUEST["cu_id"]."'";
         $rs = $db->query($sql);
         $db_msg = $db->report();
         if ( $db_msg == "" ) {
@@ -416,7 +401,7 @@ class CONTACTUS{
 	function file_del($cu_id = 0){
 		global $db,$cms_cfg;
 		if($cu_id != ""){
-                    $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where cu_id in (".$cu_id.")";
+                    $sql="select * from ".$db->prefix("contactus")." where cu_id in (".$cu_id.")";
                     $selectrs = $db->query($sql);
                     $rsnum    = $db->numRows($selectrs);
 

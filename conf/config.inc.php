@@ -65,6 +65,8 @@ require_once dirname(__FILE__)."/creditcard.php";
 //default language
 $cms_cfg['language'] = "eng";
 $cms_cfg['tb_prefix'] = "eng";
+$cms_cfg['default_language'] = "eng";
+$cms_cfg['default_tb_prefix'] = "eng";
 
 //Products page limit
 $cms_cfg['op_limit']=12;  //一頁筆數限制

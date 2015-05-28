@@ -231,7 +231,7 @@ class MEMBER{
         if($cms_cfg["ws_module"]["ws_version"]!="ipb" && $this->showDiscount) {
             $tpl->newBlock("SHOW_LIST_MC_DISCOUNT"); //會員分類列表折扣欄位
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
+        $sql="select * from ".$db->prefix("member_cate")." where mc_id > '0'";
         $and_str = "";
         if(!empty($_REQUEST["sk"])){
             $and_str = " and mc_subject like '%".$_REQUEST["sk"]."%'";
@@ -294,7 +294,7 @@ class MEMBER{
         }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["mc_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id='".$_REQUEST["mc_id"]."'";
+            $sql="select * from ".$db->prefix("member_cate")." where mc_id='".$_REQUEST["mc_id"]."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -321,7 +321,7 @@ class MEMBER{
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_member_cate (
+                    insert into ".$db->prefix("member_cate")." (
                         mc_status,
                         mc_sort,
                         mc_subject,
@@ -335,7 +335,7 @@ class MEMBER{
                 break;
             case "mod":
                 $sql="
-                    update ".$cms_cfg['tb_prefix']."_member_cate set
+                    update ".$db->prefix("member_cate")." set
                         mc_status=".$_REQUEST["mc_status"].",
                         mc_sort='".$_REQUEST["mc_sort"]."',
                         mc_subject='".$_REQUEST["mc_subject"]."',
@@ -371,12 +371,12 @@ class MEMBER{
         if(!empty($mc_id)){
             $mc_id_str = implode(",",$mc_id);
             //清空分類底下的會員
-            $sql="delete from ".$cms_cfg['tb_prefix']."_member where mc_id in (".$mc_id_str.")";
+            $sql="delete from ".$db->prefix("member")." where mc_id in (".$mc_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 //刪除分類
-                $sql="delete from ".$cms_cfg['tb_prefix']."_member_cate where mc_id in (".$mc_id_str.")";
+                $sql="delete from ".$db->prefix("member_cate")." where mc_id in (".$mc_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
@@ -394,7 +394,7 @@ class MEMBER{
 //會員--列表================================================================
     function member_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
+        $sql="select * from ".$db->prefix("member_cate")." where mc_id > '0'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         //沒有分類先建立分類
@@ -424,7 +424,7 @@ class MEMBER{
                 }
             }
             //會員列表
-            $sql="select * from ".$cms_cfg['tb_prefix']."_member as m where m.m_id > '0'";
+            $sql="select * from ".$db->prefix("member")." as m where m.m_id > '0'";
             //附加條件
             $and_str="";
             if(!empty($_REQUEST["mc_id"])){
@@ -503,7 +503,7 @@ class MEMBER{
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["m_id"])){
             $tpl->newBlock( "MEMBER_MOD_MODE" );
-            $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$_REQUEST["m_id"]."'";
+            $sql="select * from ".$db->prefix("member")." where m_id='".$_REQUEST["m_id"]."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -581,7 +581,7 @@ class MEMBER{
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_member (
+                    insert into ".$db->prefix("member")." (
                         mc_id,
                         m_status,
                         m_sort,
@@ -631,7 +631,7 @@ class MEMBER{
                 break;
             case "mod":
                 $sql="
-                    update ".$cms_cfg['tb_prefix']."_member set
+                    update ".$db->prefix("member")." set
                         mc_id='".$mc_id_str."',
                         m_status='".$_REQUEST["m_status"]."',
                         m_sort='".$_REQUEST["m_sort"]."',
@@ -702,7 +702,7 @@ class MEMBER{
         if(!empty($m_id)){
             $m_id_str = implode(",",$m_id);
             //刪除勾選的會員
-            $sql="delete from ".$cms_cfg['tb_prefix']."_member where m_id in (".$m_id_str.")";
+            $sql="delete from ".$db->prefix("member")." where m_id in (".$m_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
@@ -718,7 +718,7 @@ class MEMBER{
     function member_message_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //會員訊息列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_member_message  where mm_id > '0'";
+        $sql="select * from ".$db->prefix("member_message")."  where mm_id > '0'";
         //附加條件
         $and_str="";
         if($_REQUEST["st"]=="all"){
@@ -793,7 +793,7 @@ class MEMBER{
         }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["mm_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_member_message where mm_id='".$_REQUEST["mm_id"]."'";
+            $sql="select * from ".$db->prefix("member_message")." where mm_id='".$_REQUEST["mm_id"]."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -823,7 +823,7 @@ class MEMBER{
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_member_message (
+                    insert into ".$db->prefix("member_message")." (
                         mm_status,
                         mm_sort,
                         mm_subject,
@@ -839,7 +839,7 @@ class MEMBER{
                 break;
             case "mod":
                 $sql="
-                    update ".$cms_cfg['tb_prefix']."_member_message set
+                    update ".$db->prefix("member_message")." set
                         mm_status='".$_REQUEST["mm_status"]."',
                         mm_sort='".$_REQUEST["mm_sort"]."',
                         mm_subject='".$_REQUEST["mm_subject"]."',
@@ -871,7 +871,7 @@ class MEMBER{
         if(!empty($mm_id)){
             $mm_id_str = implode(",",$mm_id);
             //刪除勾選的最新消息
-            $sql="delete from ".$cms_cfg['tb_prefix']."_member_message where mm_id in (".$mm_id_str.")";
+            $sql="delete from ".$db->prefix("member_message")." where mm_id in (".$mm_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
@@ -903,12 +903,12 @@ class MEMBER{
             if(!empty($mc_id)){
                 $mc_id_str = implode(",",$mc_id);
                 //更改分類底下的會員狀態
-                $sql="update ".$cms_cfg['tb_prefix']."_member set m_status='".$value."' where mc_id in (".$mc_id_str.")";
+                $sql="update ".$db->prefix("member")." set m_status='".$value."' where mc_id in (".$mc_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     //狀態分類狀態
-                    $sql="update ".$cms_cfg['tb_prefix']."_member_cate set mc_status='".$value."' where mc_id in (".$mc_id_str.")";
+                    $sql="update ".$db->prefix("member_cate")." set mc_status='".$value."' where mc_id in (".$mc_id_str.")";
                     $rs = $db->query($sql);
                     $db_msg = $db->report();
                     if ( $db_msg == "" ) {
@@ -933,7 +933,7 @@ class MEMBER{
             if(!empty($m_id)){
                 $m_id_str = implode(",",$m_id);
                 //刪除勾選的會員
-                $sql="update ".$cms_cfg['tb_prefix']."_member set m_status='".$value."' where m_id in (".$m_id_str.")";
+                $sql="update ".$db->prefix("member")." set m_status='".$value."' where m_id in (".$m_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
@@ -952,10 +952,10 @@ class MEMBER{
         //會員分類更改排序值
         if(!empty($_REQUEST["sort_value"]) && !empty($ws_table)){
             if($ws_table=="mc"){
-                $table_name=$cms_cfg['tb_prefix']."_member_cate";
+                $table_name=$db->prefix("member_cate");
             }
             if($ws_table=="m"){
-                $table_name=$cms_cfg['tb_prefix']."_member";
+                $table_name=$db->prefix("member");
             }
             foreach($_REQUEST["id"] as $key => $value){
                 $sql="update ".$table_name." set ".$ws_table."_sort='".$_REQUEST["sort_value"][$value]."' where ".$ws_table."_id='".$value."'";
@@ -976,13 +976,13 @@ class MEMBER{
         global $db,$tpl,$cms_cfg,$TPLMSG;
         //會員分類複製
         if($ws_table=="mc"){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id='".$_REQUEST["id"][0]."'";
+            $sql="select * from ".$db->prefix("member_cate")." where mc_id='".$_REQUEST["id"][0]."'";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $row = $db->fetch_array($selectrs,1);
             if($rsnum >0){
                 $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_member_cate (
+                    insert into ".$db->prefix("member_cate")." (
                         mc_status,
                         mc_sort,
                         mc_subject,
@@ -1006,53 +1006,14 @@ class MEMBER{
         }
         //會員複製
         if($ws_table=="m"){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$_REQUEST["id"][0]."'";
+            $sql="select * from ".$db->prefix("member")." where m_id='".$_REQUEST["id"][0]."'";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $row = $db->fetch_array($selectrs,1);
             if($rsnum >0){
-                $sql="
-                    insert into ws_member (
-                        mc_id,
-                        m_status,
-                        m_sort,
-                        m_modifydate,
-                        m_account,
-                        m_password,
-                        m_company_name,
-                        m_contact_s,
-                        m_name,
-                        m_birthday,
-                        m_sex,
-                        m_zip,
-                        m_address,
-                        m_tel,
-                        m_fax,
-                        m_cellphone,
-                        m_email,
-                        m_epaper_status
-                    ) values (
-                        '".$row["mc_id"]."',
-                        ".$row["m_status"].",
-                        '".$row["m_sort"]."',
-                        '".date("Y-m-d H:i:s")."',
-                        '".$row["m_account"]."',
-                        '".$row["m_password"]."',
-                        '".$row["m_company_name"]."',
-                        '".$row["m_contact_s"]."',
-                        '".$row["m_name"]."',
-                        '".$row["m_birthday"]."',
-                        '".$row["m_sex"]."',
-                        '".$row["m_zip"]."',
-                        '".$row["m_address"]."',
-                        '".$row["m_tel"]."',
-                        '".$row["m_fax"]."',
-                        '".$row["m_cellphone"]."',
-                        '".$row["m_email"]."',
-                        '".$row["m_epaper_status"]."'
-                    )";
-                $rs = $db->query($sql);
-                $db_msg = $db->report();
+                unset($row['m_id']);
+                App::getHelper('dbtable')->member->writeData($row);
+                $db_msg = App::getHelper('dbtable')->member->report();
                 if ( $db_msg == "" ) {
                     $tpl->assignGlobal( "MSG_ACTION_TERM" , $TPLMSG["ACTION_TERM"]);
                     $goto_url=$cms_cfg["manage_url"]."member.php?func=m_list&mc_id=".$_REQUEST["mc_id"]."&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"]."&nowp=".$_REQUEST["nowp"]."&jp=".$_REQUEST["jp"];
@@ -1062,7 +1023,6 @@ class MEMBER{
                 }
             }
         }
-
     }
 
     //資料處理
@@ -1186,7 +1146,7 @@ class MEMBER{
                             foreach($_POST['mapto'] as $idx => $col){
                                 if($col=="m_email" ){
                                     if($csv[$idx]!=''){
-                                        $sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_account='".mysql_real_escape_string($csv[$idx])."'";
+                                        $sql = "select * from ".$db->prefix("member")." where m_account='".mysql_real_escape_string($csv[$idx])."'";
                                         $res_m = $db->query($sql,true);
                                         $conflic = ($db->numRows($res_m))?true:false;
                                         if($conflic){ //email已存在就更新mc_id
@@ -1194,7 +1154,7 @@ class MEMBER{
                                             $mc_id_arr = explode(',',$row['mc_id']);
                                             array_push($mc_id_arr, $_POST['mc_id']);
                                             $mc_id_arr = array_unique($mc_id_arr);
-                                            $sql = "update ".$cms_cfg['tb_prefix']."_member set mc_id='".implode(',',$mc_id_arr)."' where m_account='".mysql_real_escape_string($csv[$idx])."' limit 1";
+                                            $sql = "update ".$db->prefix("member")." set mc_id='".implode(',',$mc_id_arr)."' where m_account='".mysql_real_escape_string($csv[$idx])."' limit 1";
                                             $res_s = $db->query($sql);
                                             if($db->report()==""){
                                                 $conflic = false;
@@ -1221,7 +1181,7 @@ class MEMBER{
                                     $tpl->newBlock("WRITED_RECORD");
                                     $wNums++;
                                     if(!$update){
-                                        $sql = "insert into ".$cms_cfg['tb_prefix']."_member(".implode(',',$columns).")values(".implode(',',$values).")";
+                                        $sql = "insert into ".$db->prefix("member")."(".implode(',',$columns).")values(".implode(',',$values).")";
                                         $db->query($sql,true);
     //                                    $tpl->assign("VALUE_QUERY",$sql);
                                     }
@@ -1292,7 +1252,7 @@ class MEMBER{
                 array_walk($wanted_column,array($this,"_format_csv_title"),$this->columns);
                 $this->_format_csv_line($fp,$wanted_column);
                 //取得欲匯出的會員類別
-                $sql = "select m.* from ".$cms_cfg['tb_prefix']."_member as m inner join ".$cms_cfg['tb_prefix']."_member_cate as mc on find_in_set(mc.mc_id,m.mc_id) where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
+                $sql = "select m.* from ".$db->prefix("member")." as m inner join ".$db->prefix("member_cate")." as mc on find_in_set(mc.mc_id,m.mc_id) where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
                 $res = $db->query($sql);
                 while($row = $db->fetch_array($res,1)){
                     $wanted_column = array();
@@ -1311,7 +1271,7 @@ class MEMBER{
             die();   
         }
         //會員分類
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_status='1' order by mc_sort ".$cms_cfg['sort_pos'];
+        $sql = "select * from ".$db->prefix("member_cate")." where mc_status='1' order by mc_sort ".$cms_cfg['sort_pos'];
         $res = $db->query($sql);
         while($row = $db->fetch_array($res,1)){
             $tpl->newBlock("MEMBER_CATE_LIST");
@@ -1367,7 +1327,7 @@ class MEMBER{
     //會員分類
     function member_cate_select($mcid=null){
         global $db,$cms_cfg,$tpl;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_id > '0'";
+        $sql="select * from ".$db->prefix("member_cate")." where mc_id > '0'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         $mcid_arr = explode(',',$mcid);
@@ -1398,10 +1358,10 @@ class MEMBER{
         global $db,$cms_cfg,$tpl;
         if($this->member_download){
             $tpl->newBlock("MEMBER_DOWNLOAD_ROW");
-            $sql = "select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
+            $sql = "select * from ".$db->prefix("download_cate")." where dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
             $res_dc = $db->query($sql,true);
             while($dc_row = $db->fetch_array($res_dc,1)){
-                $sql = "select d.*,".$col." as `checked` from ".$cms_cfg['tb_prefix']."_download as d left join (select * from ".$cms_cfg['tb_prefix']."_member_download_map where ".$col."='".$val."') as mdm on d.d_id=mdm.d_id where d_public='0' and dc_id='".$dc_row['dc_id']."' order by d_sort ".$cms_cfg['sort_pos'];
+                $sql = "select d.*,".$col." as `checked` from ".$db->prefix("download")." as d left join (select * from ".$db->prefix("member_download_map")." where ".$col."='".$val."') as mdm on d.d_id=mdm.d_id where d_public='0' and dc_id='".$dc_row['dc_id']."' order by d_sort ".$cms_cfg['sort_pos'];
                 $d_res = $db->query($sql,true);
                 //分類下有限制性檔案才輸出類別
                 if($db->numRows($d_res)){
@@ -1433,7 +1393,7 @@ class MEMBER{
     function get_mc_name($mc_id_str){
         global $db,$cms_cfg;
         if($mc_id_str){
-            $sql = "select mc_subject from ".$cms_cfg['tb_prefix']."_member_cate where mc_id in(".$mc_id_str.")";
+            $sql = "select mc_subject from ".$db->prefix("member_cate")." where mc_id in(".$mc_id_str.")";
             $rs = $db->query($sql,true);
             while(list($ms) = $db->fetch_array($rs)){
                 $tmp[]=$ms;
@@ -1445,9 +1405,9 @@ class MEMBER{
         global $db,$tpl,$cms_cfg;
         if($this->member_download){
             $db->query("start transaction");
-            $db->query("delete from ".$cms_cfg['tb_prefix']."_member_download_map where ".$col."='".$col_value."'");
+            $db->query("delete from ".$db->prefix("member_download_map")." where ".$col."='".$col_value."'");
             if(is_array($d_files)){
-                $sql = "insert into ".$cms_cfg['tb_prefix']."_member_download_map (".$col.",d_id)values";
+                $sql = "insert into ".$db->prefix("member_download_map")." (".$col.",d_id)values";
                 foreach($d_files as $d_id){
                     $values[] = "('".$col_value."','".$d_id."')";
                 }
@@ -1468,11 +1428,11 @@ class MEMBER{
     function get_uncated_mid(){
         global $db,$cms_cfg;
         //先取得當前有效的分類id
-        $sql = "select group_concat(mc_id) as mc_id_str from ".$cms_cfg['tb_prefix']."_member_cate where mc_status='1' group by mc_status";
+        $sql = "select group_concat(mc_id) as mc_id_str from ".$db->prefix("member_cate")." where mc_status='1' group by mc_status";
         list($mc_id_str) = $db->query_firstrow($sql,false);
         $mc_id_arr = explode(',',$mc_id_str);
         //抓取所有的會員
-        $sql = "select m_id,mc_id from ".$cms_cfg['tb_prefix']."_member ";
+        $sql = "select m_id,mc_id from ".$db->prefix("member");
         $res = $db->query($sql,true);
         $m_id_arr = array();
         while($row = $db->fetch_array($res,1)){
@@ -1495,7 +1455,7 @@ class MEMBER{
         }else{
             $and_str = " find_in_set('".$mc_id."',mc_id) >0 ";                
         }        
-        $sql = "select count(*) as nums from ".$cms_cfg['tb_prefix']."_member where ". $and_str;
+        $sql = "select count(*) as nums from ".$db->prefix("member")." where ". $and_str;
         list($nums) = $db->query_firstrow($sql,false);
         return $nums;
     }      
@@ -1532,7 +1492,7 @@ class MEMBER_NEW extends MEMBER{
                 }
                 $xlsexpotor->setTitle($dataTitle);
                 //取得欲匯出的會員類別
-                $sql = "select m.* from ".$cms_cfg['tb_prefix']."_member as m inner join ".$cms_cfg['tb_prefix']."_member_cate as mc on find_in_set(mc.mc_id,m.mc_id) where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
+                $sql = "select m.* from ".$db->prefix("member")." as m inner join ".$db->prefix("member_cate")." as mc on find_in_set(mc.mc_id,m.mc_id) where mc_status='1' and m_status='1' and mc.mc_id in(".implode(',',$_POST['mc_id']).")";
                 $res = $db->query($sql);
                 $dataList = array();
                 while($row = $db->fetch_array($res,1)){
@@ -1554,7 +1514,7 @@ class MEMBER_NEW extends MEMBER{
             die();   
         }
         //會員分類
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_member_cate where mc_status='1' order by mc_sort ".$cms_cfg['sort_pos'];
+        $sql = "select * from ".$db->prefix("member_cate")." where mc_status='1' order by mc_sort ".$cms_cfg['sort_pos'];
         $res = $db->query($sql);
         while($row = $db->fetch_array($res,1)){
             $tpl->newBlock("MEMBER_CATE_LIST");

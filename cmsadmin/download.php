@@ -142,7 +142,7 @@ class DOWNLOAD{
     //檔案下載分類--列表
     function download_cate_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id > '0'";
+        $sql="select * from ".$db->prefix("download_cate")." where dc_id > '0'";
         $and_str = "";
         if(!empty($_REQUEST["sk"])){
             $and_str = " and dc_subject like '%".$_REQUEST["sk"]."%'";
@@ -203,7 +203,7 @@ class DOWNLOAD{
         }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["dc_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id='".$_REQUEST["dc_id"]."'";
+            $sql="select * from ".$db->prefix("download_cate")." where dc_id='".$_REQUEST["dc_id"]."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -257,7 +257,7 @@ class DOWNLOAD{
         switch ($_REQUEST["action_mode"]){
             case "add":
                 $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_download_cate (
+                    insert into ".$db->prefix("download_cate")." (
                         dc_status,
                         dc_sort,
                         ".$add_field_str."
@@ -271,7 +271,7 @@ class DOWNLOAD{
                 break;
             case "mod":
                 $sql="
-                    update ".$cms_cfg['tb_prefix']."_download_cate set
+                    update ".$db->prefix("download_cate")." set
                         dc_status='".$_REQUEST["dc_status"]."',
                         dc_sort='".$_REQUEST["dc_sort"]."',
                         ".$update_str."
@@ -302,12 +302,12 @@ class DOWNLOAD{
         if(!empty($dc_id)){
             $dc_id_str = implode(",",$dc_id);
             //清空分類底下的檔案下載
-            $sql="delete from ".$cms_cfg['tb_prefix']."_download where  dc_id in (".$dc_id_str.")";
+            $sql="delete from ".$db->prefix("download")." where  dc_id in (".$dc_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 //刪除分類
-                $sql="delete from ".$cms_cfg['tb_prefix']."_download_cate where dc_id in (".$dc_id_str.")";
+                $sql="delete from ".$db->prefix("download_cate")." where dc_id in (".$dc_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
@@ -325,7 +325,7 @@ class DOWNLOAD{
 //檔案下載--列表================================================================
     function download_list(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id > '0'";
+        $sql="select * from ".$db->prefix("download_cate")." where dc_id > '0'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         //沒有分類先建立分類
@@ -355,7 +355,7 @@ class DOWNLOAD{
                 }
             }
             //檔案下載列表
-            $sql="select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id where d.d_id > '0'";
+            $sql="select d.*,dc.dc_subject from ".$db->prefix("download")." as d left join ".$db->prefix("download_cate")." as dc on d.dc_id=dc.dc_id where d.d_id > '0'";
             //附加條件
             $and_str="";
             if(!empty($_REQUEST["dc_id"])){
@@ -421,7 +421,7 @@ class DOWNLOAD{
     function download_list_withtime(){
         global $db,$tpl,$cms_cfg,$TPLMSG,$main,$ws_array;
         //檔案下載列表
-        $sql = "select d.*,dc.dc_subject from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id where d.d_id > '0' ";
+        $sql = "select d.*,dc.dc_subject from ".$db->prefix("download")." as d left join ".$db->prefix("download_cate")." as dc on d.dc_id=dc.dc_id where d.d_id > '0' ";
         $sql.= "order by year desc,season desc,month desc";
         //取得總筆數
         $selectrs = $db->query($sql);
@@ -482,7 +482,7 @@ class DOWNLOAD{
         }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["d_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_download where d_id='".$_REQUEST["d_id"]."'";
+            $sql="select * from ".$db->prefix("download")." where d_id='".$_REQUEST["d_id"]."'";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -504,7 +504,7 @@ class DOWNLOAD{
             }
         }
         //檔案下載分類
-        $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id > '0'";
+        $sql="select * from ".$db->prefix("download_cate")." where dc_id > '0'";
         $selectrs = $db->query($sql);
         $rsnum    = $db->numRows($selectrs);
         while($row1 = $db->fetch_array($selectrs,1)){
@@ -567,7 +567,7 @@ class DOWNLOAD{
         if(!empty($d_id)){
             $d_id_str = implode(",",$d_id);
             //刪除勾選的檔案下載
-            $sql="delete from ".$cms_cfg['tb_prefix']."_download where d_id in (".$d_id_str.")";
+            $sql="delete from ".$db->prefix("download")." where d_id in (".$d_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
@@ -599,12 +599,12 @@ class DOWNLOAD{
             if(!empty($dc_id)){
                 $dc_id_str = implode(",",$dc_id);
                 //更改分類底下的檔案下載狀態
-                $sql="update ".$cms_cfg['tb_prefix']."_download set d_status='".$value."' where dc_id in (".$dc_id_str.")";
+                $sql="update ".$db->prefix("download")." set d_status='".$value."' where dc_id in (".$dc_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {
                     //狀態分類狀態
-                    $sql="update ".$cms_cfg['tb_prefix']."_download_cate set dc_status='".$value."' where dc_id in (".$dc_id_str.")";
+                    $sql="update ".$db->prefix("download_cate")." set dc_status='".$value."' where dc_id in (".$dc_id_str.")";
                     $rs = $db->query($sql);
                     $db_msg = $db->report();
                     if ( $db_msg == "" ) {
@@ -648,10 +648,10 @@ class DOWNLOAD{
         //檔案下載分類更改排序值
         if(!empty($_REQUEST["sort_value"]) && !empty($ws_table)){
             if($ws_table=="dc"){
-                $table_name=$cms_cfg['tb_prefix']."_download_cate";
+                $table_name=$db->prefix("download_cate");
             }
             if($ws_table=="d"){
-                $table_name=$cms_cfg['tb_prefix']."_download";
+                $table_name=$db->prefix("download");
             }
             foreach($_REQUEST["id"] as $key => $value){
                 $sql="update ".$table_name." set ".$ws_table."_sort='".$_REQUEST["sort_value"][$value]."' where ".$ws_table."_id='".$value."'";
@@ -672,13 +672,13 @@ class DOWNLOAD{
         global $db,$tpl,$cms_cfg,$TPLMSG;
         //檔案下載分類複製
         if($ws_table=="dc"){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_download_cate where dc_id='".$_REQUEST["id"][0]."'";
+            $sql="select * from ".$db->prefix("download_cate")." where dc_id='".$_REQUEST["id"][0]."'";
             $selectrs = $db->query($sql);
             $rsnum    = $db->numRows($selectrs);
             $row = $db->fetch_array($selectrs,1);
             if($rsnum >0){
                 $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_download_cate (
+                    insert into ".$db->prefix("download_cate")." (
                         dc_status,
                         dc_sort,
                         dc_subject

@@ -56,9 +56,9 @@ class LOGIN {
         global $db,$tpl,$TPLMSG,$cms_cfg,$si;
         if (isset($_POST['callback']) && $si->isValid()) {
             if($_REQUEST["ai_account"]=="root" && $_REQUEST["ai_password"]==$cms_cfg['db_password']){
-                $sql="select ai_id,ai_account,ai_name from ".$cms_cfg['tb_prefix']."_admin_info where ai_account='".$_REQUEST["ai_account"]."'";
+                $sql="select ai_id,ai_account,ai_name from ".$db->prefix("admin_info")." where ai_account='".$_REQUEST["ai_account"]."'";
             }else{
-                $sql="select ai_id,ai_account,ai_name from ".$cms_cfg['tb_prefix']."_admin_info where ai_account='".$_REQUEST["ai_account"]."' and ai_password='".$_REQUEST["ai_password"]."' and ai_status='1'";
+                $sql="select ai_id,ai_account,ai_name from ".$db->prefix("admin_info")." where ai_account='".$_REQUEST["ai_account"]."' and ai_password='".$_REQUEST["ai_password"]."' and ai_status='1'";
             }
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
@@ -67,7 +67,7 @@ class LOGIN {
                 $_SESSION[$cms_cfg['sess_cookie_name']]["USER_ACCOUNT"]=$row["ai_account"];
                 $_SESSION[$cms_cfg['sess_cookie_name']]["USER_NAME"]=$row["ai_name"];
                 $_SESSION['isLoggedIn'] = true;
-                $sql="select * from ".$cms_cfg['tb_prefix']."_admin_authority where ai_id='".$row["ai_id"]."' ";
+                $sql="select * from ".$db->prefix("admin_authority")." where ai_id='".$row["ai_id"]."' ";
                 $selectrs1 = $db->query($sql);
                 $rsnum1    = $db->numRows($selectrs1);
                 $row1 = $db->fetch_array($selectrs1,1);
@@ -76,7 +76,7 @@ class LOGIN {
                 }
                 //寫入登入記錄
                 $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_login_history (
+                    insert into ".$db->prefix("login_history")." (
                         ai_id,lh_success,lh_modifydate
                     ) values (
                         '".$row["ai_id"]."','1','".date("Y-m-d H:i:s")."'

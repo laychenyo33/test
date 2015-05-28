@@ -46,7 +46,7 @@ class PRINT_PAGE{
         }
         //帶入要回覆的訂單資料
         if(!empty($_REQUEST["o_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$o_id."' and del='0' ";
+            $sql="select * from ".$db->prefix("order")." where o_id='".$o_id."' and del='0' ";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -91,7 +91,7 @@ class PRINT_PAGE{
                     ));
                 }
                 //訂購產品列表
-                $sql="select oi.*,p.p_small_img,p.p_serial from ".$cms_cfg['tb_prefix']."_order_items as oi inner join ".$db->prefix("products")." as p on oi.p_id=p.p_id where oi.o_id='".$o_id."' and oi.del='0' ";
+                $sql="select oi.*,p.p_small_img,p.p_serial from ".$db->prefix("order_items")." as oi inner join ".$db->prefix("products")." as p on oi.p_id=p.p_id where oi.o_id='".$o_id."' and oi.del='0' ";
                 $selectrs = $db->query($sql);
                 $total_price=0;
                 $i=0;
@@ -128,7 +128,7 @@ class PRINT_PAGE{
         }
         //帶入要回覆的訂單資料
         if(!empty($_REQUEST["o_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."' and del='0' ";
+            $sql="select * from ".$db->prefix("order")." where o_id='".$_REQUEST["o_id"]."' and del='0' ";
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
@@ -192,7 +192,7 @@ class PRINT_PAGE{
                     }
                 }
                 //訂購產品列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$_REQUEST["o_id"]."' and del='0' ";
+                $sql="select * from ".$db->prefix("order_items")." where o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 $selectrs = $db->query($sql);
                 $total_price=0;
                 $i=0;

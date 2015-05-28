@@ -10,7 +10,7 @@ $validateError=$_POST['validateError'];
 $arrayToJs = array();
 $arrayToJs[0] = $validateId;
 $arrayToJs[1] = $validateError;
-$sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_admin_info where ai_account='".$validateValue."'";
+$sql="select count(*) as total from ".$db->prefix("admin_info")." where ai_account='".$validateValue."'";
 $selectrs = $db->query($sql);
 $row = $db->fetch_array($selectrs,1);
 if($row["total"]){		// validate??

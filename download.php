@@ -112,18 +112,18 @@ class DOWNLOAD{
             $main->layer_link($TPLMSG['DOWNLOAD']);
         }
         $and_str .= $con;
-        $sql="select d.*,dc.*,'0' as dtype from ".$cms_cfg['tb_prefix']."_download as d left join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.dc_id=dc.dc_id
+        $sql="select d.*,dc.*,'0' as dtype from ".$db->prefix("download")." as d left join ".$db->prefix("download_cate")." as dc on d.dc_id=dc.dc_id
                   where  d.d_status='1' and d.d_public='1' ".$and_str;
         if($this->member_download && $this->is_login){
             if($this->download_on=="member"){
                 $m_id = $_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_ID'];
-                $sql .= " union select d.*,dc.*,'1' as dtype from ".$cms_cfg['tb_prefix']."_download as d inner join ".$cms_cfg['tb_prefix']."_member_download_map as mdm 
-                        inner join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.d_id=mdm.d_id and d.dc_id=dc.dc_id 
+                $sql .= " union select d.*,dc.*,'1' as dtype from ".$db->prefix("download")." as d inner join ".$db->prefix("member_download_map")." as mdm 
+                        inner join ".$db->prefix("download_cate")." as dc on d.d_id=mdm.d_id and d.dc_id=dc.dc_id 
                         where d.d_public='0' and mdm.m_id='".$m_id."'".$and_str;                        
             }else{
                 $mc_id = $_SESSION[$cms_cfg['sess_cookie_name']]['MEMBER_CATE_ID'];
-                $sql .= " union select d.*,dc.*,'2' as dtype from ".$cms_cfg['tb_prefix']."_download as d inner join ".$cms_cfg['tb_prefix']."_member_download_map as mdm 
-                        inner join ".$cms_cfg['tb_prefix']."_download_cate as dc on d.d_id=mdm.d_id and d.dc_id=dc.dc_id 
+                $sql .= " union select d.*,dc.*,'2' as dtype from ".$db->prefix("download")." as d inner join ".$db->prefix("member_download_map")." as mdm 
+                        inner join ".$db->prefix("download_cate")." as dc on d.d_id=mdm.d_id and d.dc_id=dc.dc_id 
                         where d.d_public='0' and mdm.mc_id='".$mc_id."'".$and_str;         
             }
         }
@@ -283,7 +283,7 @@ class DOWNLOAD{
 //            $sql.=" union ";
 //            $sql.="select dc.* from ".$cms_cfg['tb_prefix']."_download_cate as dc left join ".$cms_cfg['tb_prefix']."_download as d on dc.dc_id=d.dc_id where dc.dc_status='1' and d.d_public='0' group by dc.dc_id order by dc_sort ".$cms_cfg['sort_pos']." ";
 //        }       
-        $sql="select dc.* from ".$cms_cfg['tb_prefix']."_download_cate as dc  where dc.dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
+        $sql="select dc.* from ".$db->prefix("download_cate")." as dc  where dc.dc_status='1' order by dc_sort ".$cms_cfg['sort_pos'];
         $selectrs = $db->query($sql,true);
         $i=0;
         $menu=array();
@@ -327,13 +327,13 @@ class DOWNLOAD{
                     break;
             }
         }
-        $sql="select * from ".$cms_cfg['tb_prefix']."_download as a left join ".$db->prefix("member_download_map")." as b "
+        $sql="select * from ".$db->prefix("download")." as a left join ".$db->prefix("member_download_map")." as b "
             . "on a.d_id=b.d_id where d_status='1' and a.d_id='".$d_id."'".$cond_member_download;
         $row = $db->query_firstrow($sql,true);
         if($row){
             $filepath = $_SERVER['DOCUMENT_ROOT'].$cms_cfg['file_root'].$row['d_filepath'];
             if(file_exists($filepath)){
-                $sql="update ".$cms_cfg['tb_prefix']."_download set d_times = d_times+1 where d_id='".$d_id."'";
+                $sql="update ".$db->prefix("download")." set d_times = d_times+1 where d_id='".$d_id."'";
                 $db->query($sql);
                 $file = $main->file_str_replace($filepath,"#(.+/)([^/]+)$#i");
                 header("content-type: application/force-download");

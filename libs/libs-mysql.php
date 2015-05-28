@@ -9,6 +9,7 @@ class DB {
   var $query_time = 0;
   var $query_array = array();
   var $prefix;
+  var $default_prefix;
 
   function DB($db_host, $db_user, $db_password, $db_name, $tb_prefix,$db_persistent = 0) {
 
@@ -30,7 +31,7 @@ class DB {
           $this->connection = $dbselect;
           $this->error("Could not select database ($db_name).");
         }
-        $this->prefix = $tb_prefix;
+        $this->setPrefix($tb_prefix);
       }
       return $this->connection;
     }
@@ -262,7 +263,11 @@ class DB {
       return $arr;
   }
   function prefix($table_name){
-      return sprintf("`%s_%s`",$this->prefix,$table_name);
+      if(preg_match('/(contactus|inquiry|order|member|login_history|admin_info|admin_authority|download|allpay)/i',$table_name)){
+          return sprintf("`%s_%s`",$this->default_prefix,$table_name);
+      }else{
+          return sprintf("`%s_%s`",$this->prefix,$table_name);
+      }
   }
   //顯示資料表欄位
   function list_fields($table_name){
@@ -285,6 +290,12 @@ class DB {
   function fieldname($fieldname){
       return "`{$fieldname}`";
   }  
+  
+  function setPrefix($prefix){
+      global $cms_cfg;
+      $this->prefix = $prefix;
+      $this->default_prefix = $cms_cfg['default_tb_prefix'];
+  }
   
 } // end of class
 

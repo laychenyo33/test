@@ -17,7 +17,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) != 'WIN'){
     $ck_dns=checkdnsrr($domain[1], 'MX');
 }
 if($ck_dns){
-    $sql="select count(*) as total from ".$cms_cfg['tb_prefix']."_member where m_account='".$validateValue."'";
+    $sql="select count(*) as total from ".$db->prefix("member")." where m_account='".$validateValue."'";
     $selectrs = $db->query($sql);
     $row = $db->fetch_array($selectrs,1);
 }else{

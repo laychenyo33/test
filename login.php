@@ -33,7 +33,7 @@ class LOGIN {
         global $db,$tpl,$TPLMSG,$cms_cfg,$si;
 
         if (isset($_POST['callback']) && $this->valid_pass) {
-            $sql="select m.m_id,m.m_account,m.m_fname,m.m_lname,mc.mc_id,mc.mc_subject,mc.mc_discount from ".$cms_cfg['tb_prefix']."_member as m left join ".$cms_cfg['tb_prefix']."_member_cate as mc on mc.mc_id=m.mc_id
+            $sql="select m.m_id,m.m_account,m.m_fname,m.m_lname,mc.mc_id,mc.mc_subject,mc.mc_discount from ".$db->prefix("member")." as m left join ".$db->prefix("member_cate")." as mc on mc.mc_id=m.mc_id
                      where m.m_account='".$_REQUEST["mm_account"]."' and
                            m.m_password='".$_REQUEST["mm_password"]."' and
                            m.m_status='1'";

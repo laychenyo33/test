@@ -2,6 +2,7 @@
 abstract class Dbtable_Abstract {
     //可修改的欄位
     protected $prefix;
+    protected $default_prefix;
     protected $table;
     protected $db;
     protected $pk;
@@ -15,7 +16,7 @@ abstract class Dbtable_Abstract {
     
     public function __construct(DB $db,$prefix) {
         $this->db = $db;
-        $this->prefix = $prefix;
+        $this->setPrefix($prefix);
         if(!$this->table){
             throw new Exception("no table name assign!");
         }else{
@@ -139,7 +140,11 @@ abstract class Dbtable_Abstract {
     }
     
     protected function tablename(){
-        return $this->prefix."_".$this->table;
+        if(preg_match('/(contactus|inquiry|order|member|login_history|admin_info|admin_authority|download|allpay)/i',$this->table)){
+            return $this->default_prefix."_".$this->table;
+        }else{
+            return $this->prefix."_".$this->table;
+        }        
     }
     
     public function getDataNums($con){
@@ -266,6 +271,11 @@ abstract class Dbtable_Abstract {
             return "'".$value."'";
         }
     }
+    
+    function setPrefix($prefix){
+        $this->prefix = $prefix;
+        $this->default_prefix = App::configs()->default_tb_prefix;
+    }    
 }
 
 ?>

@@ -90,7 +90,7 @@ class ADMIN{
         //沒有簽權限程式的不顯示管理員功能,只保留修改root密碼權限
         ($cms_cfg["ws_module"]["ws_admin"])?$tpl->newBlock( "IMG_ITEM_ADMIN" ):"";
         //管理員列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_admin_info  where ai_id > '0'";
+        $sql="select * from ".$db->prefix("admin_info")."  where ai_id > '0'";
         //附加條件
         $and_str="";
         if($_REQUEST["st"]=="ai_name"){
@@ -162,7 +162,7 @@ class ADMIN{
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($_REQUEST["ai_id"])){
             $tpl->newBlock( "MOD_ADMIN" );
-            $sql="select * from ".$cms_cfg['tb_prefix']."_admin_info where ai_id='".$_REQUEST["ai_id"]."'";
+            $sql="select * from ".$db->prefix("admin_info")." where ai_id='".$_REQUEST["ai_id"]."'";
             if(!App::configs()->ws_module->ws_seo){
                 $sql .= " and ai_for_ips='0'";
             }
@@ -230,7 +230,7 @@ class ADMIN{
             $tpl->newBlock("GOOGLE_ANALYTICS_AUTH");
         }
         //管理員權限
-        $sql="select * from ".$cms_cfg['tb_prefix']."_admin_authority where ai_id='".$row["ai_id"]."'";
+        $sql="select * from ".$db->prefix("admin_authority")." where ai_id='".$row["ai_id"]."'";
         $selectrs = $db->query($sql);
         $rsnum = $db->numRows($selectrs);
         while($row1 = $db->fetch_array($selectrs,1)){
@@ -265,7 +265,7 @@ class ADMIN{
 //管理員--資料更新================================================================
     function admin_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
-        $sql="select count(*) as exist_account from ".$cms_cfg['tb_prefix']."_admin_info where ai_account='".$_REQUEST["ai_account"]."' and ai_account!='".$_REQUEST["old_ai_account"]."'";
+        $sql="select count(*) as exist_account from ".$db->prefix("admin_info")." where ai_account='".$_REQUEST["ai_account"]."' and ai_account!='".$_REQUEST["old_ai_account"]."'";
         $rs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         if($row["exist_account"]>0){
@@ -378,12 +378,12 @@ class ADMIN{
         if(!empty($ai_id)){
             $ai_id_str = implode(",",$ai_id);
             //刪除勾選的管理員
-            $sql="delete from ".$cms_cfg['tb_prefix']."_admin_info where ai_id in (".$ai_id_str.")";
+            $sql="delete from ".$db->prefix("admin_info")." where ai_id in (".$ai_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
                 //刪除勾選的管理員權限
-                $sql="delete from ".$cms_cfg['tb_prefix']."_admin_authority where ai_id in (".$ai_id_str.")";
+                $sql="delete from ".$db->prefix("admin_authority")." where ai_id in (".$ai_id_str.")";
                 $rs = $db->query($sql);
                 $db_msg = $db->report();
                 if ( $db_msg == "" ) {

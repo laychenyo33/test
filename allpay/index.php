@@ -344,7 +344,7 @@
 		function member_allapy_detail($o_id=0){
 			global $tpl,$db,$cms_cfg,$TPLMSG;
 			
-			$sql="select * from ".$cms_cfg["tb_prefix"]."_allpay_payinfo where o_id='".$o_id."'";
+			$sql="select * from ".$db->prefix("allpay_payinfo")." where o_id='".$o_id."'";
 			$selectrs = $db->query($sql);
 			$rsnum    = $db->numRows($selectrs);
 			
