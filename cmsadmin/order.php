@@ -154,7 +154,7 @@ class ORDER{
         }
         $search = new searchFields_order();
         //訂單列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id > '0'";
+        $sql="select * from ".$db->prefix("order")." where o_id > '0'";
         $searchfields = new searchFields_order();
         //附加條件
         $and_str=array();
@@ -269,7 +269,7 @@ class ORDER{
         }
         //帶入要回覆的訂單資料
         if(!empty($_REQUEST["o_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$_REQUEST["o_id"]."'";
+            $sql="select * from ".$db->prefix("order")." where o_id='".$_REQUEST["o_id"]."'";
             if(!$_GET['showdel']){
                 $sql .= " and del='0'";
             }
@@ -438,7 +438,7 @@ class ORDER{
 //        $tpl = new TemplatePower( $this->ws_tpl_file );
 //        $tpl->prepare();
         $tpl = App::getHelper('main')->get_mail_tpl("delivery-notification");
-        $sql = "select * from ".$cms_cfg['tb_prefix']."_order where o_id='".$o_id."'";
+        $sql = "select * from ".$db->prefix("order")." where o_id='".$o_id."'";
         $selectrs = $db->query($sql);
         $row = $db->fetch_array($selectrs,1);
         if($row){
@@ -503,13 +503,13 @@ class ORDER{
                             }
                         }
                         //比對資料庫
-                        $sql="select * from ".$cms_cfg['tb_prefix']."_order where o_virtual_account='".$atm["RCPTId"]."'";
+                        $sql="select * from ".$db->prefix("order")." where o_virtual_account='".$atm["RCPTId"]."'";
                         $selectrs = $db->query($sql);
                         if($db->numRows($selectrs)) {
                             $row = $db->fetch_array($selectrs,1);
                             $atm["CurAmt"] = sprintf("%d", $atm["CurAmt"]);
                             if($row["o_total_price"] == $atm["CurAmt"]) {
-                                $sql="update ".$cms_cfg['tb_prefix']."_order set o_curamt='".$atm["CurAmt"]."' , o_trn_time='".$atm["TrnDt"]." ".$atm["TrnTime"]."' , o_remit_status='1' where o_virtual_account='".$atm["RCPTId"]."'";
+                                $sql="update ".$db->prefix("order")." set o_curamt='".$atm["CurAmt"]."' , o_trn_time='".$atm["TrnDt"]." ".$atm["TrnTime"]."' , o_remit_status='1' where o_virtual_account='".$atm["RCPTId"]."'";
                                 $rs = $db->query($sql);
                                 $db_msg = $db->report();
                                 if($db_msg != "") {
@@ -574,7 +574,7 @@ class ORDER{
     }
     function pid2serial($pid){
         global $db,$cms_cfg;
-        $sql = "select p_serial from ".$cms_cfg['tb_prefix']."_products where p_id='".$pid."'";
+        $sql = "select p_serial from ".$db->prefix("products")." where p_id='".$pid."'";
         list($serial) = $db->query_firstrow($sql,false);
         if(!empty($serial)){
             return $serial;

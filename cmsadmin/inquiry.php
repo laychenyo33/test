@@ -93,7 +93,7 @@ class INQUIRY{
             }
         }
         //詢問單列表
-        $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where i_id > '0'";
+        $sql="select * from ".$db->prefix("inquiry")." where i_id > '0'";
         //附加條件
         $and_str="";
         if($_REQUEST["i_status"]!=""){
@@ -153,9 +153,9 @@ class INQUIRY{
         if(!empty($cu_id)){
             $cu_id_str = implode(",",$cu_id);
             //刪除勾選的詢問單
-            $sql="update ".$cms_cfg['tb_prefix']."_inquiry set del='1' where i_id in (".$cu_id_str.")";
+            $sql="update ".$db->prefix("inquiry")." set del='1' where i_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
-            $sql="update ".$cms_cfg['tb_prefix']."_inquiry_items set del='1' where i_id in (".$cu_id_str.")";
+            $sql="update ".$db->prefix("inquiry_items")." set del='1' where i_id in (".$cu_id_str.")";
             $rs = $db->query($sql);
             $db_msg = $db->report();
             if ( $db_msg == "" ) {
@@ -183,7 +183,7 @@ class INQUIRY{
         }
         //帶入要回覆的詢問單資料
         if(!empty($_REQUEST["i_id"])){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where i_id='".$_REQUEST["i_id"]."'";
+            $sql="select * from ".$db->prefix("inquiry")." where i_id='".$_REQUEST["i_id"]."'";
             if(!$_GET['showdel']){
                 $sql .= " and del='0'";
             }            
@@ -207,7 +207,7 @@ class INQUIRY{
                 //稱謂類型
                 $tpl->newBlock("I_CONTACT_S_".$this->contact_s_style);
                 //訂購產品列表
-                $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry_items where i_id='".$_REQUEST["i_id"]."'";
+                $sql="select * from ".$db->prefix("inquiry_items")." where i_id='".$_REQUEST["i_id"]."'";
                 if(!$_GET['showdel']){
                     $sql .= " and del='0' ";
                 }
@@ -240,7 +240,7 @@ class INQUIRY{
 //詢問單回覆--資料更新================================================================
     function inquiry_replace(){
         global $db,$tpl,$cms_cfg,$TPLMSG;
-        $sql="update ".$cms_cfg['tb_prefix']."_inquiry set  i_reply='".$_REQUEST["i_reply"]."' , i_status='1' , i_modifydate='".date("Y-m-d H:i:s")."' where  i_id='".$_REQUEST["i_id"]."'";
+        $sql="update ".$db->prefix("inquiry")." set i_reply='".$_REQUEST["i_reply"]."' , i_status='1' , i_modifydate='".date("Y-m-d H:i:s")."' where  i_id='".$_REQUEST["i_id"]."'";
         $rs = $db->query($sql);
         $db_msg = $db->report();
         if ( $db_msg == "" ) {

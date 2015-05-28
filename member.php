@@ -201,7 +201,7 @@ class MEMBER{
 
     //會員管理--表單================================================================
     function member_form($action_mode){
-        global $db,$tpl,$cms_cfg,$TPLMSG,$ws_array,$main;
+        global $tpl,$cms_cfg,$TPLMSG,$main;
         $main->load_js_msg();
         //欄位名稱
         $tpl->assignGlobal( array("TAG_MAIN_FUNC"  => $TPLMSG['MEMBER_JOIN'],
@@ -242,11 +242,8 @@ class MEMBER{
         }
         //如果為修改模式,帶入資料庫資料
         if($action_mode=="mod" && !empty($this->m_id)){
-            $sql="select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
-            $selectrs = $db->query($sql);
-            $row = $db->fetch_array($selectrs,1);
-            $rsnum    = $db->numRows($selectrs);
-            if ($rsnum > 0) {
+            $row = App::getHelper('dbtable')->member->getData($this->m_id)->getDataRow();
+            if ($row) {
                 if(empty($row['fb_uid'])){
                     $tpl->newBlock("COMMON_USER_FIELDS");
                     $tpl->newBlock( "MEMBER_MOD_MODE" );
@@ -335,56 +332,11 @@ class MEMBER{
                 $main->check_duplicate_member_account($_REQUEST["m_account"]);
                 $max_sort = $main->get_max_sort_value($cms_cfg['tb_prefix']."_member",'m');
                 $m_status = ($cms_cfg["ws_module"]['ws_member_join_validation'])?0:1;
-                $sql="
-                    insert into ".$cms_cfg['tb_prefix']."_member (
-                        mc_id,
-                        fb_uid,
-                        m_sort,
-                        m_status,
-                        m_modifydate,
-                        m_account,
-                        m_password,
-                        m_company_name,
-                        m_contact_s,
-                        m_fname,
-                        m_lname,
-                        m_birthday,
-                        m_sex,
-                        m_country,
-                        m_city,
-                        m_area,
-                        m_zip,
-                        m_address,
-                        m_tel,
-                        m_fax,
-                        m_cellphone,
-                        m_email,
-                        m_epaper_status
-                    ) values (
-                        '1',
-                        '".$_REQUEST["fb_uid"]."',
-                        '".$max_sort."',
-                        '".$m_status."',
-                        '".date("Y-m-d H:i:s")."',
-                        '".$_REQUEST["m_account"]."',
-                        '".$_REQUEST["m_password"]."',
-                        '".$_REQUEST["m_company_name"]."',
-                        '".$_REQUEST["m_contact_s"]."',
-                        '".$_REQUEST["m_fname"]."',
-                        '".$_REQUEST["m_lname"]."',
-                        '".$_REQUEST["m_birthday"]."',
-                        '".$_REQUEST["m_sex"]."',
-                        '".$_REQUEST["m_country"]."',
-                        '".$_REQUEST["m_city"]."',
-                        '".$_REQUEST["m_area"]."',
-                        '".$_REQUEST["m_zip"]."',
-                        '".$_REQUEST["m_address"]."',
-                        '".$_REQUEST["m_tel"]."',
-                        '".$_REQUEST["m_fax"]."',
-                        '".$_REQUEST["m_cellphone"]."',
-                        '".$_REQUEST["m_account"]."',
-                        '".$_REQUEST["m_epaper_status"]."'
-                    )";//新增時e-mail等於account
+                $new_member_fields = array(
+                    'mc_id'    => 1,
+                    'm_sort'   => $max_sort,
+                    'm_status' => $m_status,
+                );
                 if($_POST['social_login_tool']){
                     $goto_url=$cms_cfg["base_root"].$_POST['social_login_tool']."-login.php?".$_POST['social_login_tool']."_uid=".$_POST["fb_uid"]."&return=".urlencode($_POST["return"]);
                 }else{
@@ -392,41 +344,21 @@ class MEMBER{
                 }
                 break;
             case "mod":
-                $sql="
-                    update ".$cms_cfg['tb_prefix']."_member set
-                        m_modifydate='".date("Y-m-d H:i:s")."',
-                        m_password='".$_REQUEST["m_password"]."',
-                        m_company_name='".$_REQUEST["m_company_name"]."',
-                        m_contact_s='".$_REQUEST["m_contact_s"]."',
-                        m_fname='".$_REQUEST["m_fname"]."',
-                        m_lname='".$_REQUEST["m_lname"]."',
-                        m_birthday='".$_REQUEST["m_birthday"]."',
-                        m_sex='".$_REQUEST["m_sex"]."',
-                        m_country='".$_REQUEST["m_country"]."',
-                        m_city='".$_REQUEST["m_city"]."',
-                        m_area='".$_REQUEST["m_area"]."',
-                        m_zip='".$_REQUEST["m_zip"]."',
-                        m_address='".$_REQUEST["m_address"]."',
-                        m_tel='".$_REQUEST["m_tel"]."',
-                        m_fax='".$_REQUEST["m_fax"]."',
-                        m_cellphone='".$_REQUEST["m_cellphone"]."',
-                        m_email='".$_REQUEST["m_email"]."',
-                        m_epaper_status='".$_REQUEST["m_epaper_status"]."'
-                    where m_id='".$this->m_id."'";
                 $goto_url=$cms_cfg["base_url"]."member.php?func=m_mod";
                 break;
         }
-        if(!empty($sql)){
-            $rs = $db->query($sql);
-            $this->m_id = $db->get_insert_id();
-            $db_msg = $db->report();
+        $memberData = array_merge($_POST,(array)$new_member_fields);
+        if($memberData){
+            App::getHelper('dbtable')->member->writeData($memberData);
+            $this->m_id = $_POST['m_id']? $_POST['m_id'] : App::getHelper('dbtable')->member->get_insert_id();
+            $db_msg = App::getHelper('dbtable')->member->report();
             if ( $db_msg == "" ) {
                 if($_REQUEST["action_mode"]=="add"){
                     unset($_SESSION[$cms_cfg['sess_cookie_name']]['JOIN_MEMBER']);
                     //已有購物或詢價時直接登入
                     if(!empty($_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"])){
                         if($member = App::getHelper('member')->getData($this->m_id)->getDataRow()){
-                            $goto_url = ($cms_cfg['new_cart_path'])? $cms_cfg['new_cart_path'] : $cms_cfg['base_root']."cart.php";;
+                            $goto_url = ($cms_cfg['new_cart_path'])? $cms_cfg['new_cart_path'] : $cms_cfg['base_root']."cart.php";
                             Model_User::login($member,$goto_url);
                         }
                     }
@@ -536,7 +468,7 @@ class MEMBER{
                                 "MSG_TOTAL_MONEY" => $TPLMSG['ORDER_TOTAL_MONEY'],
                                 "MSG_VIEWS" => $TPLMSG['VIEWS'],
             ));
-            $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and del='0' order by o_createdate desc";
+            $sql="select * from ".$db->prefix("order")." where m_id='".$this->m_id."' and del='0' order by o_createdate desc";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -623,7 +555,7 @@ class MEMBER{
             }            
             //帶入要回覆的訂單資料
             if(!empty($_REQUEST["o_id"])){
-                $sql="select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and o_id='".$_REQUEST["o_id"]."' and del='0' ";
+                $sql="select * from ".$db->prefix("order")." where m_id='".$this->m_id."' and o_id='".$_REQUEST["o_id"]."' and del='0' ";
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
@@ -720,7 +652,7 @@ class MEMBER{
                                 "MSG_MODIFYDATE" => $TPLMSG['MODIFYDATE'],
                                 "MSG_VIEWS" => $TPLMSG['VIEWS'],
             ));
-            $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where m_id='".$this->m_id."' and del='0'  order by i_createdate desc ";
+            $sql="select * from ".$db->prefix("inquiry")." where m_id='".$this->m_id."' and del='0'  order by i_createdate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records = $db->numRows($selectrs);
@@ -780,7 +712,7 @@ class MEMBER{
             }
             //帶入要回覆的訂單資料
             if(!empty($_REQUEST["i_id"])){
-                $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry where m_id='".$this->m_id."' and del='0' and i_id='".$_REQUEST["i_id"]."'";
+                $sql="select * from ".$db->prefix("inquiry")." where m_id='".$this->m_id."' and del='0' and i_id='".$_REQUEST["i_id"]."'";
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
@@ -805,17 +737,14 @@ class MEMBER{
                           "VALUE_I_CONTACT_S" => $ws_array['contactus_s'][$row["i_contact_s"]],
                     ));
                     //訂購產品列表
-                    $sql="select * from ".$cms_cfg['tb_prefix']."_inquiry_items where i_id='".$_REQUEST["i_id"]."'";
+                    $sql="select * from ".$db->prefix("inquiry_items")." where i_id='".$_REQUEST["i_id"]."'";
                     $selectrs = $db->query($sql);
-                    $total_price=0;
                     $i=0;
                     if($cms_cfg['ws_module']['ws_cart_spec']){
                         $tpl->newBlock("SPEC_TITLE");
                     }                    
                     while($row = $db->fetch_array($selectrs,1)){
                         $i++;
-                        $sub_total_price = $row["p_sell_price"] * $row["ii_amount"];
-                        $total_price = $total_price+$sub_total_price;
                         $tpl->newBlock( "INQUIRY_ITEMS_LIST" );
                         $tpl->assign( array("VALUE_P_ID"  => $row["p_id"],
                                             "VALUE_P_NAME" => $row["p_name"],
@@ -852,12 +781,12 @@ class MEMBER{
                 ));
             }
             //聯絡我們列表
-            $sql="select * from ".$cms_cfg['tb_prefix']."_contactus where m_id='".$this->m_id."' and del='0' order by cu_modifydate desc";
+            $sql="select * from ".$db->prefix("contactus")." where m_id='".$this->m_id."' and del='0' order by cu_modifydate desc";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
-            //取得分頁連結
-            $func_str="contactus.php?func=cu_list&st=".$_REQUEST["st"]."&sk=".$_REQUEST["sk"];
+            //取得分頁連結          
+            $func_str="member.php?func=m_zone&mzt=contactus&type=list";
             //重新組合包含limit的sql語法
             $sql=$main->pagination($cms_cfg["op_limit"],$cms_cfg["jp_limit"],$_REQUEST["nowp"],$_REQUEST["jp"],$func_str,$total_records,$sql);
             $selectrs = $db->query($sql);
@@ -973,14 +902,14 @@ class MEMBER{
             require_once("./libs/libs-security-image.php");
             $si = new securityImage();  
             if($si->isValid()){
-                $sql="select m_fname,m_lname,m_account,m_password,m_email from ".$cms_cfg["tb_prefix"]."_member where m_account='".$_REQUEST["m_email"]."'";
+                $sql="select m_fname,m_lname,m_account,m_password,m_email from ".$db->prefix("member")." where m_account='".$_REQUEST["m_email"]."'";
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
                 if ($rsnum > 0) {
                     //重設密碼
                     $row['m_password'] = $main->rand_str(17);
-                    $sql = "update ".$cms_cfg['tb_prefix']."_member set m_password='".$db->quote($row['m_password'])."' where m_account='".$db->quote($row['m_email'])."'";
+                    $sql = "update ".$db->prefix("member")." set m_password='".$db->quote($row['m_password'])."' where m_account='".$db->quote($row['m_email'])."'";
                     $db->query($sql,true);
                     //寄出通知信
 //                    $tpl = new TemplatePower( "templates/ws-mail-tpl.html" );
@@ -1010,7 +939,7 @@ class MEMBER{
     }    
     function member_message_list(){
         global $db,$tpl,$main,$cms_cfg,$TPLMSG,$ws_array;
-        $sql="select * from ".$cms_cfg['tb_prefix']."_member_message order by mm_sort asc,mm_modifydate desc ";
+        $sql="select * from ".$db->prefix("member_message")." order by mm_sort asc,mm_modifydate desc ";
         //取得總筆數
         $selectrs = $db->query($sql);
         $total_records = $db->numRows($selectrs);

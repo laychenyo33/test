@@ -878,7 +878,7 @@
 		function cart_order() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $ws_array, $main;
 	
-			$sql = "select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and del!='1' order by o_createdate desc";
+			$sql = "select * from ".$db->prefix("order")." where m_id='".$this->m_id."' and del!='1' order by o_createdate desc";
 			//取得總筆數
 			$selectrs = $db->query($sql);
 			$total_records = $db->numRows($selectrs);
@@ -954,7 +954,7 @@
 		function cart_order_detail() {
 			global $db, $tpl, $cms_cfg, $TPLMSG, $ws_array;
 	
-			$sql = "select * from ".$cms_cfg['tb_prefix']."_order where m_id='".$this->m_id."' and o_id='".$_REQUEST["o_id"]."'";
+			$sql = "select * from ".$db->prefix("order")." where m_id='".$this->m_id."' and o_id='".$_REQUEST["o_id"]."'";
 			$selectrs = $db->query($sql);
 			$rsnum = $db->numRows($selectrs);
 	
@@ -1027,7 +1027,7 @@
 		function cart_order_detail_item($detail = 0) {
 			global $db, $tpl, $cms_cfg, $TPLMSG;
 	
-			$sql = "select * from ".$cms_cfg['tb_prefix']."_order_items where o_id='".$detail["o_id"]."'";
+			$sql = "select * from ".$db->prefix("order_items")." where o_id='".$detail["o_id"]."'";
 			$selectrs = $db->query($sql);
 			$rsnum = $db->numRows($selectrs);
 	
@@ -1151,7 +1151,7 @@
 		function member_detail() {
 			global $db, $cms_cfg, $tpl, $main,$TPLMSG;
 	
-			$sql = "select * from ".$cms_cfg['tb_prefix']."_member where m_id='".$this->m_id."'";
+			$sql = "select * from ".$db->prefix("member")." where m_id='".$this->m_id."'";
 			$selectrs = $db->query($sql);
 			$rsnum = $db->numRows($selectrs);
 	
