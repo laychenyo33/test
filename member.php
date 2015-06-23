@@ -1166,21 +1166,21 @@ class MEMBER{
             $tpl->newBlock("SHOP_TITLE");
         }
         $offset = 1;
+        $imgHandler = Model_Image::factory(80,80);
         while($collect = App::getHelper('db')->fetch_array($res,1)){
             $prod = App::getHelper('dbtable')->products->getData($collect['p_id'])->getDataRow();
             if($prod){
                 $tpl->newBlock("COLLECT_LIST");
-                $p_img = $collect['p_small_img']?app::configs()->base_root.$collect['p_small_img']:App::configs()->default_preview_pic;
-                $dimension = App::getHelper('main')->resizeto($p_img,80,80);
+                $imgInfo = $imgHandler->parse($collect['p_small_img']);
                 $price = $prod['p_special_price']?$prod['p_special_price']:$prod['p_list_price'];
                 $tpl->assign(array(
                     "TAG_SERIAL" => $offset++,
                     "COLLECT_ID" => $collect['id'],
                     "VALUE_P_NAME" => $collect['p_name'],
                     "VALUE_P_LINK" => App::getHelper('request')->get_link('products',$prod),
-                    "VALUE_P_SMALL_IMG" => $p_img,
-                    "VALUE_P_SMALL_IMG_W" => $dimension['width'],
-                    "VALUE_P_SMALL_IMG_H" => $dimension['height'],
+                    "VALUE_P_SMALL_IMG" => $imgInfo[0],
+                    "VALUE_P_SMALL_IMG_W" => $imgInfo['width'],
+                    "VALUE_P_SMALL_IMG_H" => $imgInfo['height'],
                     "MSG_CREATEDATE" => $collect['createdate'],
                 ));
                 if(App::getHelper('session')->sc_cart_type==1){
