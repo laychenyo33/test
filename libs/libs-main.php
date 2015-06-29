@@ -1166,6 +1166,7 @@ class MAINFUNC{
     function file_str_replace($input_path,$pattern='#(.*/)(upload_files/.+)$#i',$replacement='$2'){
         global $cms_cfg;
         $input_path=preg_replace( $pattern, $replacement, $input_path);
+        $input_path = str_replace('%20',' ',$input_path);
         return $input_path;
     }
     function content_file_str_replace($content,$direction){
