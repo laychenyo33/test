@@ -12,14 +12,20 @@
 AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/x-javascript
 
 #伺服端設定靜態資源到期日
-ExpiresActive On
-ExpiresByType text/css "access plus 1 week"
-ExpiresByType text/javascript "access plus 1 week"
-ExpiresByType application/x-javascript "access plus 1 week"
-ExpiresByType image/gif "access  plus 1 week"
-ExpiresByType image/jpg "access plus 1 week"
-ExpiresByType image/jpeg "access plus 1 week"
-ExpiresByType image/png "access plus 1 week"
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # Default directive
+    ExpiresDefault "access plus 1 month"
+    # My favicon
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType text/javascript "access plus 1 week"
+    ExpiresByType application/x-javascript "access plus 1 week"
+    ExpiresByType image/gif "access  plus 1 week"
+    ExpiresByType image/jpg "access plus 1 week"
+    ExpiresByType image/jpeg "access plus 1 week"
+    ExpiresByType image/png "access plus 1 week"
+</IfModule>
 
 Options ExecCGI Includes IncludesNOEXEC SymLinksIfOwnerMatch -Indexes
 ErrorDocument 404 /cms/redirect-detect.php
