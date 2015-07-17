@@ -3,6 +3,7 @@ abstract class Leftmenu_Abstract {
     public $tpl;
     public $currentRow;
     protected $menuItems;
+    protected $currentClass = "current";
     
     function __construct(TemplatePower $tpl) {
         $this->tpl = $tpl;

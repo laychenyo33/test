@@ -11,7 +11,7 @@ class Leftmenu_News extends Leftmenu_Abstract {
                 'link' => App::getHelper('request')->get_link('newscate',$row),
             );
             if($_GET["nc_id"]==$row["nc_id"] || $this->check_seo_name($_GET['type'],$_GET['f'],$row)){
-                $menu_item['tag_cur'] = "class='current'";
+                $menu_item['tag_cur'] = "class='".$this->currentClass."'";
                 $this->currentRow = $row;
             }
             $left_menu[] = $menu_item;

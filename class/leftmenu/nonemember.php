@@ -16,10 +16,10 @@ class Leftmenu_Nonemember extends Leftmenu_Abstract {
     protected function _init() {
         switch($_GET['func']){
             case "m_add":
-                $this->menuItems[0]['tag_cur']="current";
+                $this->menuItems[0]['tag_cur']=$this->currentClass;
                 break;
             case "m_forget":
-                $this->menuItems[1]['tag_cur']="current";
+                $this->menuItems[1]['tag_cur']=$this->currentClass;
                 break;
         }
     }

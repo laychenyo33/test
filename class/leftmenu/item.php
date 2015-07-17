@@ -31,7 +31,7 @@ class Leftmenu_Item extends Leftmenu_Abstract {
             $tmp = array(
                 'name' => $itemRow[$this->item['labelField']],
                 'link' => $itemLink,
-                'tag_cur' => (strcasecmp($_SERVER['REQUEST_URI'], $itemLink)==0)?"class='current'":"",
+                'tag_cur' => (strcasecmp($_SERVER['REQUEST_URI'], $itemLink)==0)?"class='".$this->currentClass."'":"",
             );
             $container[] = $tmp;
         }

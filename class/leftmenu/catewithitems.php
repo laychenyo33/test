@@ -80,7 +80,7 @@ class Leftmenu_Catewithitems extends Leftmenu_Abstract {
             $tmp = array(
                 'name' => $cateRow[$this->cate['labelField']],
                 'link' => $cateLink,
-                'tag_cur' => ($this->checkCurrent($cateLink,$cateRow))?"class='current'":"",
+                'tag_cur' => ($this->checkCurrent($cateLink,$cateRow))?"class='".$this->currentClass."'":"",
             );
             if($digs<$maxDigs){
                 $sub = array();
@@ -88,7 +88,7 @@ class Leftmenu_Catewithitems extends Leftmenu_Abstract {
                 //選中左選單項目的次選單，或是擁有被選中的次選單項目，才將次選單加進顯示列表
                 if($sub && ($tmp['tag_cur']!='' || $sub['active'] )){
                     $tmp['sub'] = $sub;
-                    $tmp['tag_cur'] = "class='current'";
+                    $tmp['tag_cur'] = "class='".$this->currentClass."'";
                 }
             }
             if($tmp['tag_cur']!=''){
@@ -107,7 +107,7 @@ class Leftmenu_Catewithitems extends Leftmenu_Abstract {
                 $tmp = array(
                     'name' => $itemRow[$this->items['labelField']],
                     'link' => $p_link,
-                    'tag_cur' => $this->checkCurrent($p_link, $itemRow , false)?"class='current'":"",
+                    'tag_cur' => $this->checkCurrent($p_link, $itemRow , false)?"class='".$this->currentClass."'":"",
                 );
                 if($tmp['tag_cur']!=''){
                     $container['active'] = true;
