@@ -50,7 +50,7 @@ class Leftmenu_Cate extends Leftmenu_Abstract {
             $tmp = array(
                 'name' => $cateRow[$this->cate['labelField']],
                 'link' => $cateLink,
-                'tag_cur' => (strcasecmp($_SERVER['REQUEST_URI'], $cateLink)==0)?"class='current'":"",
+                'tag_cur' => (strcasecmp($_SERVER['REQUEST_URI'], $cateLink)==0)?"class='".$this->currentClass."'":"",
             );
             if($digs<$maxDigs){
                 $sub = array();
@@ -58,7 +58,7 @@ class Leftmenu_Cate extends Leftmenu_Abstract {
                 //選中左選單項目的次選單，或是擁有被選中的次選單項目，才將次選單加進顯示列表
                 if($sub && ($tmp['tag_cur']!='' || $sub['active'] )){
                     $tmp['sub'] = $sub;
-                    $tmp['tag_cur'] = "class='current'";
+                    $tmp['tag_cur'] = "class='".$this->currentClass."'";
                 }
             }
             if($tmp['tag_cur']!=''){

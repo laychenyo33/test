@@ -20,7 +20,7 @@ class Leftmenu_Aboutus extends Leftmenu_Abstract {
             $menuItem['name'] = $row['au_subject'];
             $menuItem['link'] = ($i==1)? App::configs()->base_root . $this->au_cate.".htm" : $this->get_link($row);
             if(($i==1 && $sel_top_record) || ($_REQUEST["au_id"]==$row["au_id"]) || (App::configs()->ws_module->ws_seo && ($_REQUEST["f"] && $_REQUEST["f"]==$row["au_seo_filename"]))){
-                $menuItem['tag_cur'] = "class='current'";
+                $menuItem['tag_cur'] = "class='".$this->currentClass."'";
                 $this->currentRow = $row;
                 if(App::configs()->ws_module->ws_seo){
                     $meta_array=array(
@@ -42,7 +42,7 @@ class Leftmenu_Aboutus extends Leftmenu_Abstract {
                             $left_menu[$row['au_subcate']]['link'] = '#';
                         }
                         if(isset($menuItem['tag_cur'])){
-                            $left_menu[$row['au_subcate']]['tag_cur'] = "class='current'";
+                            $left_menu[$row['au_subcate']]['tag_cur'] = "class='".$this->currentClass."'";
                         }
                         $left_menu[$row['au_subcate']]['sub'][]=$menuItem;
                     }else{

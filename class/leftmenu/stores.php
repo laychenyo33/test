@@ -17,7 +17,7 @@ class Leftmenu_Stores extends Leftmenu_Abstract {
             $menu_item = array(
                 'name'    => $info,
                 'link'    => $cate_link,
-                'tag_cur' => ($_GET['f']=='webstores' || $_GET['sd_type']==2)?"class='current'":"",
+                'tag_cur' => ($_GET['f']=='webstores' || $_GET['sd_type']==2)?"class='".$this->currentClass."'":"",
             );       
             if($sd_type==1){
                 $sql = "select * from ". $db->prefix("stores_cate")." where sdc_status='1' order by sdc_sort ".App::configs()->sort_pos;
@@ -25,7 +25,7 @@ class Leftmenu_Stores extends Leftmenu_Abstract {
                 if($db->numRows($res)){
                     while($row = $db->fetch_array($res,1)){
                         if($_GET['f']==$row['sdc_seo_filename'] || $_GET['sdc_id']==$row['sdc_id']){
-                            $current_class="class='current'";    
+                            $current_class="class='".$this->currentClass."'";    
                             $this->currentRow = $row;
                         }else{
                             $current_class="";

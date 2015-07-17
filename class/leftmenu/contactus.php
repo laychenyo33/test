@@ -15,6 +15,6 @@ class Leftmenu_Contactus extends Leftmenu_Abstract {
     }
     
     protected function _init(){
-        $this->menuItems[0]['tag_cur'] = "current";
+        $this->menuItems[0]['tag_cur'] = $this->currentClass;
     }
 }
