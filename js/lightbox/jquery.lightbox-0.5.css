@@ -54,6 +54,10 @@
 	width: 100%;
 	z-index: 10;
 }
+
+#lightbox-nav a{
+    height: 100% !important;
+}
 #lightbox-container-image-box > #lightbox-nav { left: 0; }
 #lightbox-nav a { outline: none;}
 #lightbox-nav-btnPrev, #lightbox-nav-btnNext {
