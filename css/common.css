@@ -1023,16 +1023,18 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 .btn-ebook {
 	font-size:25px;
 	color: #666;
-	float: left;
+	display: inline-block;
 	padding:0 15px;
+	text-align: center;
 }
 .btn-ebook span{
 	display:block;	
 }
 .btn-ebook-out {
-	width:110px;
+	width:100%;
 	margin:0 auto;
-	padding: 10px 0 50px 0px;
+	text-align: center;
+	padding: 10px 0 0 0;
 }
 
 
