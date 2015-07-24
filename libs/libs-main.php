@@ -268,7 +268,12 @@ class MAINFUNC{
     function header_footer($meta_array,$seo_h1=""){
         global $db,$tpl,$cms_cfg,$ws_array,$TPLMSG,$detect;
         static $e =0;//本方法的執行次數
-        $e++;        
+        $e++;
+
+        if($e == 1){
+            LANG::fetch();
+        }
+
         if($cms_cfg["ws_module"]["ws_seo"] ==0 ){
             unset($meta_array);
             // IPB META SETUP

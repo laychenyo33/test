@@ -6,12 +6,11 @@
 		public static $prefix = 'LANG'; # 指定輸出標籤前綴詞
 		private static $output;
 
-		function __construct(){
-			self::fetch();
-		}
+		#function __construct(){}
 
 		# 組合語系標籤
 		public static function fetch(){
+			parent::stalize();
 			self::$output = false;
 
 			$args = func_get_args();
@@ -43,6 +42,4 @@
 			}
 		}
 	}
-
-	new LANG;
 ?>
