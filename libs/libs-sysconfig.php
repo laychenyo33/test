@@ -54,6 +54,7 @@ if($cms_cfg['ws_module']['ws_shopping_cart_module']){
     }
 }
 include_once(APP_ROOT_PATH."conf/default-items.php");
+include_once(APP_ROOT_PATH."static/index.php");
 //autoload class
 require APP_ROOT_PATH."class/autoloader.php";
 $autoloader = new autoloader();
