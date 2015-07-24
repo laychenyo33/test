@@ -103,7 +103,7 @@ $ws_array["left_desc"]=array("aboutus" => $TPLMSG["ABOUT_US_CATE_DESC"],
                     );
 
 # 用於建立主選單各項名詞輸出 (static/lang)
-$ws_array["default_words"] = array('ABOUT_US','PRODUCTS','APPLICATION','EBOOK','STORES','DOWNLOAD','NEWS','VIDEO','FAQ','SERVICE_TERM','CONTACT_US','GUESTBOOK','SITEMAP');
+$ws_array["default_words"] = array('HOME','ABOUT_US','PRODUCTS','APPLICATION','EBOOK','STORES','DOWNLOAD','NEWS','VIDEO','FAQ','SERVICE_TERM','CONTACT_US','GUESTBOOK','SITEMAP');
 
 $ws_array['products_info_fields_title'] = array();//例如：array('自訂1','自訂2')
 $ws_array['products_info_fields_sort'] = array();//因為內建欄位是3個，所以原則上從4開始編, 例如：array(4,5)
