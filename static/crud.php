@@ -2,7 +2,7 @@
 	
 	# 建立、讀取、更新、刪除 資料庫補助 class
 
-	class CRUD extends STATICTOOL{
+	class CRUD extends STA{
 
 		public static 
 			$id, # 取得 insert id
