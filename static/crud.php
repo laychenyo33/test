@@ -10,7 +10,7 @@
 			$sql, # 紀錄組合成的搜尋字串
 			$data; # 紀錄取得資料
 
-		function __construct(){}
+		#function __construct(){}
 
 		# 引號處理
 		private static function strslashes($var=false){
@@ -256,5 +256,3 @@
 			}
 		}		
 	}
-
-	new CRUD;
