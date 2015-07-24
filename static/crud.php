@@ -38,14 +38,21 @@
 			}
 		}
 		
-		private static function update($tbl_name,array $input){
+		private static function update($tbl_name,array $input,$target=false){
 			
 			if(is_array($input) && count($input)){
-				$input_keys = array_keys($input); // 輸出所有欄位名稱
-				$last_key = array_pop($input_keys); // 取出最後一位
-				
-				$where_handle = $last_key." = '".$input[$last_key]."'"; // 組建 where 字串
-				unset($input[$last_key]); // 刪除陣列最後一位
+
+				if(is_array($target)){
+					# 指定目標欄位
+					list($last_key) = array_keys($target);
+					$where_handle = $last_key." = '".$target[$last_key]."'"; # 組建 where 字串
+				}else{
+					# 未指定目標欄位取最後一項
+					$input_keys = array_keys($input); # 輸出所有欄位名稱
+					$last_key = array_pop($input_keys); # 取出最後一位
+					$where_handle = $last_key." = '".$input[$last_key]."'"; # 組建 where 字串
+					unset($input[$last_key]); # 刪除陣列最後一位
+				}
 				
 				foreach($input as $field => $value){
 					$value_str = ($value === 'null')?'NULL':"'".$value."'";
