@@ -520,6 +520,8 @@ class MEMBER{
                                           "VALUE_M_BIRTHDAY" => ($birthTS)?date("Y-m-d",$birthTS):'',
                                           "VALUE_M_ZIP" => $row["m_zip"],
                                           "VALUE_M_COUNTRY" => $row["m_country"],
+                                          "VALUE_M_CITY" => $row["m_city"],
+                                          "VALUE_M_AREA" => $row["m_area"],
                                           "VALUE_M_ADDRESS" => $row["m_address"],
                                           "VALUE_M_TEL" => $row["m_tel"],
                                           "VALUE_M_FAX" => $row["m_fax"],
