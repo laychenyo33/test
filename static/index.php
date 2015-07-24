@@ -1,7 +1,7 @@
 <?php
 
 	# 靜態化工具
-	class STATICTOOL{
+	class STA{
 
 		public static 
 			$db,
@@ -42,5 +42,5 @@
 		}
 	}
 
-	new STATICTOOL;
+	new STA;
 ?>
