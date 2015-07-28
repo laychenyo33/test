@@ -287,13 +287,17 @@
                         childSelect.on('reset_child',reset_child);                    
                         paretObject.child = childSelect;
                         $(paretObject).after(childSelect);
-                    }else if(req.code==2){
-                        if(req.extend.quantity==0){
-                            $(".no_stocks").show();
-                            $("#cart-handler").hide();
-                        }else{
-                            $(".no_stocks").hide();
-                            $("#cart-handler").show();
+                    } else if (req.code == 2) {
+                        if(req.extend){
+                            if (req.extend.quantity == 0) {
+                                $(".no_stocks").show();
+                                $("#cart-handler").hide();
+                            } else {
+                                $(".no_stocks").hide();
+                                $("#cart-handler").show();
+                            }
+                            $("#inventory").text(req.extend.quantity);
+                            $("#prod_price").text("NT$ " + req.extend.price);
                         }
                         if($(paretObject).next().is("img")){
                             $(paretObject).next().remove();
@@ -303,8 +307,6 @@
                             $(paretObject).after(simg);
                             paretObject.child = simg;
                         }
-                        $("#inventory").text(req.extend.quantity);
-                        $("#prod_price").text("NT$ "+req.extend.price);
                         $(myform['ps_id']).val($(paretObject).val());
                     }else if(req.code==0){
                         alert('get data failed!');

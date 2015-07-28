@@ -1202,11 +1202,11 @@ class PRODUCTS{
                 $result['child']=$dataSets['list'];
                 $result['cate']=$dataSets['spec_cate'];
             }else{
+                $extend['quantity'] = $this->activateStockChecker?App::getHelper('session')->cart->stockChecker->getStocks($p_id,$parent,true):1;
+                $result['code']=2;
+                $result['img'] = $this->get_spec_img($parent);
                 $extend = $this->get_prodcuts_spec_extend($parent);
                 if($extend){
-                    $extend['quantity'] = $this->activateStockChecker?App::getHelper('session')->cart->stockChecker->getStocks($p_id,$parent,true):1;
-                    $result['code']=2;
-                    $result['img'] = $this->get_spec_img($parent);
                     $result['extend'] = $extend;
                 }
             }
