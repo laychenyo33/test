@@ -15,6 +15,9 @@ class ORDER{
         global $db,$cms_cfg,$tpl;
         $this->activateStockChecker = App::configs()->ws_module->ws_products_stocks;
         switch($_REQUEST["func"]){
+            case "ajax_del_order_item":
+                $this->ajax_del_order_items();            
+                break;
             case "ajax_op_temp_store":
                 $this->ajax_op_temp_store();
                 break;
@@ -328,7 +331,7 @@ class ORDER{
                         "VALUE_O_STATUS" => $key,
                         "VALUE_O_SERIAL" => $i,
                         "STATUS_CLASS"   => "order_status_".$key,
-                        "TAG_DISABLED"   => $row['o_status']>=3?"disabled":'',
+                        "TAG_DISABLED"   => ($row['o_status']==3 && $key!=9 || $row['o_status']>3)?"disabled":'',
                     ));
                     if($i%4==0){
                         $tpl->assign("TAG_BR","<br>");
@@ -352,12 +355,18 @@ class ORDER{
                 }
                 $selectrs = $db->query($sql);
                 $i=0;
+                $cart_field_nums = 6;
                 if($cms_cfg['ws_module']['ws_cart_spec']){
                     $tpl->newBlock("SPEC_TITLE");
-                    $tpl->assignGlobal("CART_FIELD_NUMS",7);
-                }else{
-                    $tpl->assignGlobal("CART_FIELD_NUMS",6);
-                }                   
+                    $cart_field_nums++;
+                }
+                $order_status = $row['o_status'];
+                if($order_status<3){
+                    $tpl->newBlock("DEL_ORDER_ITEM_BUTTON");
+                    $tpl->newBlock("CHECK_TO_DEL_TITLE");
+                    $cart_field_nums++;
+                }
+                $tpl->assignGlobal("CART_FIELD_NUMS",$cart_field_nums);
                 while($row = $db->fetch_array($selectrs,1)){
                     $i++;
                     $sub_total_price = round($row["price"] * $row["amount"] * $row['discount']);
@@ -381,6 +390,12 @@ class ORDER{
                         $tpl->newBlock("SPEC_FIELD");
                         $tpl->assign("VALUE_SPEC",$row["spec"]);
                     }                       
+                    if($order_status<3){
+                        $tpl->newBlock("CHECK_TO_DEL_FIELD");
+                        $tpl->assign(array(
+                            "VALUE_OI_ID" => $row["oi_id"],
+                        ));
+                    }
                 }
             }else{
                 header("location: order.php?func=o_list");
@@ -399,11 +414,18 @@ class ORDER{
                 $this->mail_delivery_notice($_REQUEST["o_id"]); //寄送出貨通知信                
             }elseif($_REQUEST["o_status"] == 3){  //出貨扣庫存
                 if($this->activateStockChecker){
-                    $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$order['o_id']."'");
+                    $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$_REQUEST["o_id"]."'");
                     if($order_items){
                         foreach($order_items as $oItem){
                             App::getHelper('session')->cart->stockChecker->runStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);
                         }
+                    }
+                }
+            }elseif($_REQUEST["o_status"] == 9 && $_REQUEST['origin_status']==3 && $this->activateStockChecker ){ //如果完成訂單取消，回存產品庫存
+                $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$_REQUEST["o_id"]."'");
+                if($order_items){
+                    foreach($order_items as $oItem){
+                        App::getHelper('session')->cart->stockChecker->returnStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);
                     }
                 }
             }
@@ -838,6 +860,44 @@ class ORDER{
     function export_order3(){
         Model_Order_Rid::output();
     }    
+
+    function ajax_del_order_items(){
+        $result['code'] = 0;
+        if($_POST['toDelItem']){
+            foreach($_POST['toDelItem'] as $oi_id){
+                $oItem = App::getHelper('dbtable')->order_items->getData($oi_id)->getDataRow();
+                if($oItem){
+                    $orderData = App::getHelper('dbtable')->order->getData($oItem['o_id'])->getDataRow('o_id,o_status,o_plus_price,o_charge_fee,o_extra_price');
+                    if($orderData['o_status']==3){
+                        //回存產品庫存
+                        App::getHelper('session')->cart->stockChecker->returnStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);                    
+                    }
+                    App::getHelper('dbtable')->order_items->del($oItem['oi_id']);
+                    $oItemList = App::getHelper('dbtable')->order_items->getDataList("o_id='".$oItem['o_id']."' and del='0'");
+                    //如果訂單項目所屬訂單還有其他項目，修改訂單價格
+                    if($oItemList){
+                        $subtotal_price = 0;
+                        foreach($oItemList as $oItem){
+                            $subtotal_price += round($oItem["price"] * $oItem["amount"] * $oItem['discount']);
+                        }
+                        $orderData['o_subtotal_price'] = $subtotal_price;
+                        $orderData['o_total_price'] = $orderData['o_subtotal_price'] + $orderData['o_plus_price'] + $orderData['o_charge_fee'] + $orderData['o_extra_price']; 
+                        App::getHelper('dbtable')->order->writeData($orderData);
+                        $result['code'] = 1;
+                        $result['msg'] = "已刪除指定訂單項目";
+                    }else{ //沒有其他項目，刪除整筆訂單
+                        $result['code'] = 2;
+                        $result['msg'] = "此筆訂單已沒有其他項目，已刪除整筆訂單";
+                        App::getHelper('dbtable')->order->del($oItem['o_id']);
+                    }
+                }
+            }
+        }else{
+            $result['code'] = -1;//沒有傳oi_id
+            $result['msg'] = "沒有傳oi_id";
+        }
+        echo json_encode($result);
+    }
 }
 //ob_end_flush();
 ?>
