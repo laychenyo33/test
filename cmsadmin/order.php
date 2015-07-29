@@ -237,14 +237,16 @@ class ORDER{
 //            $rs = $db->query($sql);
 //            $sql="delete from ".$cms_cfg['tb_prefix']."_order_items where o_id in (".$cu_id_str.")";
             //判斷是否加回庫存
-            $orderList = App::getHelper('dbtable')->order->getDataList("o_id in(".$cu_id_str.")",'o_id,o_status');
-            if(!empty($orderList)){
-                foreach($orderList as $orderData){
-                    if($orderData['o_status']==3){ //只有當訂單狀態為完成才進行回存庫存
-                        $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$orderData['o_id']."'");
-                        if($order_items){
-                            foreach($order_items as $oItem){
-                                App::getHelper('session')->cart->stockChecker->returnStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);
+            if($this->activateStockChecker){
+                $orderList = App::getHelper('dbtable')->order->getDataList("o_id in(".$cu_id_str.")",'o_id,o_status');
+                if(!empty($orderList)){
+                    foreach($orderList as $orderData){
+                        if($orderData['o_status']==3){ //只有當訂單狀態為完成才進行回存庫存
+                            $order_items = App::getHelper('dbtable')->order_items->getDataList("o_id='".$orderData['o_id']."'");
+                            if($order_items){
+                                foreach($order_items as $oItem){
+                                    App::getHelper('session')->cart->stockChecker->returnStocks($oItem['p_id'],$oItem['ps_id'],$oItem['amount']);
+                                }
                             }
                         }
                     }
