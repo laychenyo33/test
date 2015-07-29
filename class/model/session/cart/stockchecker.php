@@ -50,30 +50,42 @@ class Model_Session_Cart_Stockchecker extends Model_Modules {
         return $unDeliveryAmounts;
     }
     
-    function runStocks($p_id,$ps_id,$amount){
+    function runStocks($p_id,$ps_id,$amount,$minus=true){
         //實際庫存
         if($ps_id){
-            return $this->runStocksInProudctSpec($ps_id,$amount);
+            return $this->runStocksInProudctSpec($ps_id,$amount,$minus);
         }else{
-            return $this->runStocksInProudct($p_id,$amount);
+            return $this->runStocksInProudct($p_id,$amount,$minus);
         }
     }
     
-    function runStocksInProudct($p_id,$amount){
+    function runStocksInProudct($p_id,$amount,$minus=true){
         $prod = App::getHelper('dbtable')->products->getData($p_id)->getDataRow('p_id,stocks');
-        $prod['stocks'] -= $amount;
+        if($minus){
+            $prod['stocks'] -= $amount;
+        }else{
+            $prod['stocks'] += $amount;
+        }
         App::getHelper('dbtable')->products->writeData($prod);
         return $prod['stocks'];
     }
     
-    function runStocksInProudctSpec($ps_id,$amount){
+    function runStocksInProudctSpec($ps_id,$amount,$minus=true){
         $db = App::getHelper('db');
         $sql = "select quantity from ".$db->prefix("products_spec_attributes")." where ps_id='".$ps_id."'";
         list($quantity) = $db->query_firstRow($sql,false);
-        $quantity -= $amount;
+        if($minus){
+            $quantity -= $amount;
+        }else{
+            $quantity += $amount; 
+        }
         $sql = "update ".$db->prefix("products_spec_attributes")." set quantity='{$quantity}' where ps_id='".$ps_id."'";
         $db->query($sql);
         return $quantity;
     }    
     
+    function returnStocks($p_id,$ps_id,$amount){
+        //實際庫存
+        $this->runStocks($p_id, $ps_id, $amount,false);      
+    }
 }
