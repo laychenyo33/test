@@ -193,11 +193,21 @@
         </tr>        
         <tr>
             <th colspan="2"  valign="top" class="table_title_color">訂單內容</th>
+	 </tr>    
+         <!-- START BLOCK : DEL_ORDER_ITEM_BUTTON -->
+        <tr>
+            <th colspan="2">
+                <input type="button" id="delOrderItems" value="刪除訂單項目"/>
+            </th>
         </tr>
+         <!-- END BLOCK : DEL_ORDER_ITEM_BUTTON -->
         <tr>
             <td colspan="2">
                 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="producttable">
                     <tr>
+                        <!-- START BLOCK : CHECK_TO_DEL_TITLE -->
+                        <th width="5%"> <input type="checkbox" id="checkAll" /></th>
+                        <!-- END BLOCK : CHECK_TO_DEL_TITLE -->
                         <th width="5%"> No.</th>
                         <th width="10%"> 圖片</th>
                         <th width=""> 產品</th>
@@ -211,6 +221,11 @@
                     </tr>
                     <!-- START BLOCK : ORDER_ITEMS_LIST -->
                     <tr>
+                        <!-- START BLOCK : CHECK_TO_DEL_FIELD -->
+                        <td>
+                            <input type="checkbox" name="toDelItem[]" value="{VALUE_OI_ID}" />
+                        </td>
+                        <!-- END BLOCK : CHECK_TO_DEL_FIELD -->
                         <td>
                             {VALUE_P_SERIAL}
                         </td>
@@ -371,3 +386,32 @@
 </form>
 </div>
 <!-- INCLUDE BLOCK : FOOTER -->
+<script type="text/javascript">
+    jQuery(function($){
+        $("#checkAll").click(function(evt){
+            var checked = $(this)[0].checked;
+            $(".producttable :checkbox[name^=toDelItem]")[0].checked = checked;
+        });
+        $("#delOrderItems").click(function(evt){
+            if($(".producttable :checkbox[name^=toDelItem]:checked").size()){
+                if(confirm("確定要刪除指定訂單項目?")){
+                    $.post("order.php?func=ajax_del_order_item",$(myform).serialize(),function(req){
+                        if(req.msg){
+                            alert(req.msg);
+                        }
+                        switch(req.code){
+                            case 1:
+                                location.reload();
+                                break;
+                            case 2:
+                                location.replace("order.php");
+                                break;
+                        }
+                    },'json');
+                }
+            }else{
+                alert("沒有指定訂單項目");
+            }
+        });
+    });
+</script>
