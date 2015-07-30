@@ -361,16 +361,9 @@ class DOWNLOAD{
             if(!empty($_REQUEST["dc_id"])){
                 $and_str .= " and d.dc_id = '".$_REQUEST["dc_id"]."'";
             }
-            if($_REQUEST["st"]=="all"){
-                $and_str .= " and (d.d_subject like '%".$_REQUEST["sk"]."%' or d.d_content like '%".$_REQUEST["sk"]."%')";
-            }
-            if($_REQUEST["st"]=="d_subject"){
-                $and_str .= " and d.d_subject like '%".$_REQUEST["sk"]."%'";
-            }
-            if($_REQUEST["st"]=="d_content"){
-                $and_str .= " and d.d_content like '%".$_REQUEST["sk"]."%'";
-            }
-            $sql .= $and_str." order by dc.dc_sort ".$cms_cfg['sort_pos'].",d.d_sort ".$cms_cfg['sort_pos'].",d.d_modifydate desc ";
+            $searchHandler = new searchFields_download();
+            $and_str = $searchHandler->find_search_value_sql($and_str, $_GET['st'], $_GET['sk']);
+            $sql .= ($and_str? " and ".$and_str : "" )." order by dc.dc_sort ".$cms_cfg['sort_pos'].",d.d_sort ".$cms_cfg['sort_pos'].",d.d_modifydate desc ";
             //取得總筆數
             $selectrs = $db->query($sql);
             $total_records    = $db->numRows($selectrs);
@@ -382,20 +375,10 @@ class DOWNLOAD{
             $rsnum    = $db->numRows($selectrs);
             $tpl->assignGlobal( array("VALUE_TOTAL_BOX" => $rsnum,
                                       "VALUE_SEARCH_KEYWORD" => $_REQUEST["sk"],
-                                      "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR']
+                                      "TAG_DELETE_CHECK_STR" => $TPLMSG['DELETE_CHECK_STR'],
+                                      'TAG_SEARCH_FIELD' => $searchHandler->list_search_fields($_GET['st'], $_GET['sk']),
 
             ));
-            switch($_REQUEST["st"]){
-                case "all" :
-                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK0", "selected");
-                    break;
-                case "d_subject" :
-                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK1", "selected");
-                    break;
-                case "d_content" :
-                    $tpl->assignGlobal("STR_SELECT_SEARCH_TARGET_CK2", "selected");
-                    break;
-            }
             $tpl->assignGlobal( "VALUE_NOW_DC_ID" , $_REQUEST["dc_id"]);
             $i=$page["start_serial"];
             while ( $row = $db->fetch_array($selectrs,1) ) {
