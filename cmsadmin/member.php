@@ -1389,9 +1389,15 @@ class MEMBER{
     }    
     //取得會員類別名稱
     function get_mc_name($mc_id_str){
-        global $db,$cms_cfg;
+        global $db;
         if($mc_id_str){
-            $sql = "select mc_subject from ".$db->prefix("member_cate")." where mc_id in(".$mc_id_str.")";
+            $mc_id_arr = explode(',',$mc_id_str);
+            foreach($mc_id_arr as $k=>$v){
+                if(empty($v)){
+                    unset($mc_id_arr[$k]);
+                }
+            }
+            $sql = "select mc_subject from ".$db->prefix("member_cate")." where mc_id in(".$mc_id_arr.")";
             $rs = $db->query($sql,true);
             while(list($ms) = $db->fetch_array($rs)){
                 $tmp[]=$ms;
