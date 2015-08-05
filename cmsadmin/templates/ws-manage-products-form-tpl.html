@@ -562,15 +562,17 @@
 <script type="text/javascript" src="{TAG_ROOT_PATH}js/jquery.selective.js"></script>
 <script type="text/javascript">
     jQuery(function($){
-        var originData = $("#p_related_products").val().split(',');
-        $(".related-prod-selector").selective({
-            source: 'products.php?func=p_select_products2',
-            preventDuplicates: true,
-            data: originData,
-        });
-        $(".related-prod-selector").change(function(evt){
-            $(":hidden[name=p_related_products]").val($(".related-prod-selector").selective('get').toString());
-        });
+        if($("#p_related_products").size()){
+            var originData = $("#p_related_products").val().split(',');
+            $(".related-prod-selector").selective({
+                source: 'products.php?func=p_select_products2',
+                preventDuplicates: true,
+                data: originData,
+            });
+            $(".related-prod-selector").change(function(evt){
+                $(":hidden[name=p_related_products]").val($(".related-prod-selector").selective('get').toString());
+            });
+        }
     });
 </script>
 <!-- END BLOCK : JS_SELECTIVE -->
