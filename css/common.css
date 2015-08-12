@@ -445,7 +445,8 @@
 
 
 
-/*電子型錄*/
+/*電子型錄頁面*/
+
 .ebook_left_list{
 	width: 180px;
 	margin: 0 auto;
@@ -481,6 +482,59 @@
 }
 .ebook_title a{
 	color: #000;
+}
+
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot?camh3');
+	src:url('fonts/icomoon.eot?#iefixcamh3') format('embedded-opentype'),
+		url('fonts/icomoon.woff?camh3') format('woff'),
+		url('fonts/icomoon.ttf?camh3') format('truetype'),
+		url('fonts/icomoon.svg?camh3#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-print:before {
+	content: "\e600";
+}
+.icon-download:before {
+	content: "\e601";
+}
+.btn-ebook {
+	font-size:25px;
+	color: #666;
+	display: inline-block;
+	padding:0 15px;
+	text-align: center;
+}
+.btn-ebook span{
+	display:block;	
+}
+.btn-ebook-out {
+	margin:0 auto;
+	text-align: center;
+	padding: 10px 0;
+}
+
+.btn-ebook-out a{
+	color: #333;
+
 }
  
  
@@ -988,54 +1042,7 @@ p.store_title{margin-bottom:10px;font-size:15px;color: #f06276;font-weight:bold;
 }
 
 
-/*電子型錄頁面*/
-@font-face {
-	font-family: 'icomoon';
-	src:url('fonts/icomoon.eot?camh3');
-	src:url('fonts/icomoon.eot?#iefixcamh3') format('embedded-opentype'),
-		url('fonts/icomoon.woff?camh3') format('woff'),
-		url('fonts/icomoon.ttf?camh3') format('truetype'),
-		url('fonts/icomoon.svg?camh3#icomoon') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
 
-[class^="icon-"], [class*=" icon-"] {
-	font-family: 'icomoon';
-	speak: none;
-	font-style: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	line-height: 1;
-
-	/* Better Font Rendering =========== */
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-
-.icon-print:before {
-	content: "\e600";
-}
-.icon-download:before {
-	content: "\e601";
-}
-.btn-ebook {
-	font-size:25px;
-	color: #666;
-	display: inline-block;
-	padding:0 15px;
-	text-align: center;
-}
-.btn-ebook span{
-	display:block;	
-}
-.btn-ebook-out {
-	width:100%;
-	margin:0 auto;
-	text-align: center;
-	padding: 10px 0 0 0;
-}
 
 
 /*行銷關鍵字區塊*/
