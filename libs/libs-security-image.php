@@ -136,7 +136,7 @@ function generateImage() {
     //$font = 'images/magik.TTF';
     //$font="images/BastardusSans.ttf";
 //    $font="images/security/fonts/font".rand(1,23).".ttf";
-    $font="images/security/fonts/font6.ttf";
+    $font="images/security/fonts/font8.ttf";
 
     // Add some shadow to the text
     $r = 0;
