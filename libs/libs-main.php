@@ -1187,7 +1187,7 @@ class MAINFUNC{
                     '%((http://)*'.$cms_cfg['server_name'].')('.$cms_cfg['file_root'].')([^\s"><]+)%i',
                     '%('.$cms_cfg['file_root'].')((upload_files/|tiny_mce/|tinymce/)[^\s"><]+\.(html|htm|php|png|gif|jpg|jpeg|js|css))%i',
                     '%('.$cms_cfg['base_root'].')([^\s"><]+)%i',
-                    '%('.$cms_cfg['file_root'].')([^\s"><]+)%i',
+                    '%^('.$cms_cfg['file_root'].')([^\s"><]+)%i',
                     '%(\A|=\s*\\\*[\'"])(\.\./|'.$cms_cfg['file_root'].')*(upload_files/[^"\'\s]+)%i',
                     '%(\A|=\s*\\\*[\'"])(\.\./|'.$cms_cfg['base_root'].')*(images/[^"\'\s]+)%i',
                 ),
