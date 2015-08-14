@@ -1088,7 +1088,9 @@ class PRODUCTS{
             //折扣組合
             $this->discount_sets($row);
             //加價購設定
-            $this->shoppping_condition($row,'product');            
+            $this->shoppping_condition($row,'product');
+            //多重規格價格
+            $tpl->newBlock("MULTIPLE_SPEC_PRICE");
         }
         if(App::configs()->ws_module->ws_cart_spec){
             $tpl->newBlock("SPEC_ROWS");
