@@ -481,6 +481,7 @@ class CART{
                     $tpl->assign(array(
                         "TAG_PS_ID_STR"   => "[".$id_sets[1]."]",
                         "TAG_PS_ID_QUERY" => "&ps_id=".$id_sets[1],
+                        "TAG_PS_ID" => "psid='".$id_sets[1]."'",
                     ));
                 }
                 if($cms_cfg['ws_module']['ws_cart_spec']){
