@@ -281,7 +281,9 @@
                                 }                                
                                 $gift = $this->container->getModule("giftor")->getGift($this->giftId);
                                 $cartProducts = $this->container->get_cart_products();
-                                $additionalPurchaseProducts = $this->container->getModule("conditioner")->getAdditionalPurchaseProducts();
+                                if(App::configs()->ws_module->ws_cart_plus_shopping){
+                                    $additionalPurchaseProducts = $this->container->getModule("conditioner")->getAdditionalPurchaseProducts();
+                                }
 				foreach ($cartProducts as $p_id =>  $row) {
 	
 					$tpl->newBlock("TAG_CART_LIST");

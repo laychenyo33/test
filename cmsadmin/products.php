@@ -542,7 +542,10 @@ class PRODUCTS{
             $this->application_checkbox($row["pc_id"],true);
         }
         //加價購設定
-        $this->shoppping_condition($row,'cate');        
+        if(App::getHelper('session')->sc_cart_type==1 && App::getHelper('session')->AUTHORITY['aa_order'] && App::configs()->ws_module->ws_cart_plus_shopping){
+            $tpl->newBlock("SHOPPING_CONDITION");
+            $this->shoppping_condition($row,'cate');        
+        }
     }
     //產品管理分類--資料更新
     function products_cate_replace(){
@@ -1094,7 +1097,10 @@ class PRODUCTS{
             //折扣組合
             $this->discount_sets($row);
             //加價購設定
-            $this->shoppping_condition($row,'product');
+            if(App::getHelper('session')->AUTHORITY['aa_order'] && App::configs()->ws_module->ws_cart_plus_shopping){
+                $tpl->newBlock("SHOPPING_CONDITION");
+                $this->shoppping_condition($row,'product');
+            }
             //多重規格價格
             $tpl->newBlock("MULTIPLE_SPEC_PRICE");
         }

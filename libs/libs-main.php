@@ -673,6 +673,7 @@ class MAINFUNC{
         if($cms_cfg['ws_module']['ws_news_unique_cate']) $tpl->newBlock("AUTHORITY_NEWS_UNIQUE_CATE");
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_order"] && $cms_cfg["ws_module"]["ws_order"])?$tpl->newBlock( "AUTHORITY_ORDER" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_order"] && $cms_cfg["ws_module"]["ws_order_export"])?$tpl->newBlock( "AUTHORITY_ORDER_EXPORT" ):"";
+        ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_order"] && $cms_cfg["ws_module"]["ws_cart_plus_shopping"])?$tpl->newBlock( "AUTHORITY_ORDER_PLUS_SHOPPING" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_products"])?$tpl->newBlock( "AUTHORITY_PRODUCTS" ):"";
         ($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products"] && $cms_cfg["ws_module"]["ws_cart_spec"])?$tpl->newBlock( "AUTHORITY_PRODUCTS_SPEC" ):"";
         if($_SESSION[$cms_cfg['sess_cookie_name']]["AUTHORITY"]["aa_products_cate"] && $cms_cfg["ws_module"]["ws_products"]){
