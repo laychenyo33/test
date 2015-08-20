@@ -97,6 +97,7 @@ $cms_cfg["ws_module"]=array(
         'ws_shopping_cart_module' => '',  //購物車功能模組，留空使用預設值，以+組合字串，+前是購物車模組資料夾，+後是使用的類別路徑
         "ws_cart_spec"=>0,              //購物車帶規格欄位
         "ws_cart_gift"=>0,              //購物贈品機制
+        "ws_cart_plus_shopping"=>0,     //加價購機制
         "ws_delivery_timesec"=>0,       //購物車或詢價車是否顯示配送欄位
         "ws_download_login"=>0,         //檔案下載是否需要會員登入
         "ws_new_product_login"=>0,      //最新產品是否需要會員登入

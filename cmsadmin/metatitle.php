@@ -92,12 +92,12 @@ class METATITLE{
         foreach($_POST['meta'] as $mt_name => $metafields){
             $sql="
                 update ".$db->prefix("metatitle")." set
-                    mt_seo_title='".htmlspecialchars($metafields["mt_seo_title"])."',
-                    mt_seo_keyword='".htmlspecialchars($metafields["mt_seo_keyword"])."',
-                    mt_seo_description='".htmlspecialchars($metafields["mt_seo_description"])."',
+                    mt_seo_title='".$db->quote(htmlspecialchars($metafields["mt_seo_title"]))."',
+                    mt_seo_keyword='".$db->quote(htmlspecialchars($metafields["mt_seo_keyword"]))."',
+                    mt_seo_description='".$db->quote(htmlspecialchars($metafields["mt_seo_description"]))."',
                     mt_seo_short_desc='".$db->quote($main->content_file_str_replace($metafields["mt_seo_short_desc"],'in'))."',
                     mt_seo_custom='".$db->quote($main->content_file_str_replace($metafields["mt_seo_custom"],'in'))."',
-                    mt_seo_h1='".htmlspecialchars($metafields["mt_seo_h1"])."'
+                    mt_seo_h1='".$db->quote(htmlspecialchars($metafields["mt_seo_h1"]))."'
                 where mt_name='".$mt_name."'";
             $rs = $db->query($sql);
             $db_msg .= $db->report();
