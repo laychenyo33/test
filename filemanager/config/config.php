@@ -224,7 +224,7 @@ $relative_path_from_current_pos         = array('_small_/','_medium_/','_big_/')
 $relative_image_creation_name_to_prepend= array('','',''); //name to prepend on filename
 $relative_image_creation_name_to_append = array('','',''); //name to append on filename
 $relative_image_creation_width          = array(250,500,1000); //width of image (you can leave empty if you set height)
-$relative_image_creation_height         = array(200,500,1000); //height of image (you can leave empty if you set width)
+$relative_image_creation_height         = array(250,500,1000); //height of image (you can leave empty if you set width)
 /*
   #             $option:     0 / exact = defined size;
   #                          1 / portrait = keep aspect set height;
