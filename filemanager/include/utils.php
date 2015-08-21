@@ -55,8 +55,10 @@ function create_img($imgfile, $imgthumb, $newwidth, $newheight="",$option="auto"
     if(image_check_memory_usage($imgfile,$newwidth,$newheight)){
 	require_once('php_image_magician.php');  
 	$magicianObj = new imageLib($imgfile);
-	$magicianObj -> resizeImage($newwidth, $newheight, $option);  
-	$magicianObj -> saveImage($imgthumb,80);
+        if($magicianObj->getHeight()>$newheight || $magicianObj->getWidth()>$newwidth){
+            $magicianObj -> resizeImage($newwidth, $newheight, $option);
+            $magicianObj -> saveImage($imgthumb,80);
+        }
 	return true;
     }else{
 	return false;
