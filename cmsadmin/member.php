@@ -1399,12 +1399,14 @@ class MEMBER{
                     unset($mc_id_arr[$k]);
                 }
             }
-            $sql = "select mc_subject from ".$db->prefix("member_cate")." where mc_id in(".$mc_id_arr.")";
-            $rs = $db->query($sql,true);
-            while(list($ms) = $db->fetch_array($rs)){
-                $tmp[]=$ms;
+            if($mc_id_arr){
+                $sql = "select mc_subject from ".$db->prefix("member_cate")." where mc_id in(".implode(',',$mc_id_arr).")";
+                $rs = $db->query($sql,true);
+                while(list($ms) = $db->fetch_array($rs)){
+                    $tmp[]=$ms;
+                }
+                return @implode(', ',$tmp);       
             }
-            return @implode(', ',$tmp);       
         }
     }
     function _write_download($d_files,$col,$col_value){
