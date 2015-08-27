@@ -505,7 +505,7 @@ class NEWS{
                                           "STR_N_POP_CK1" => ($row["n_pop"]==1)?"checked":"",
                                           "STR_N_POP_CK0" => ($row["n_pop"]==0)?"checked":"",
                                           "VALUE_N_S_PIC" => (trim($row["n_s_pic"])=="")?"":$row["n_s_pic"],
-                                          "VALUE_PIC_PREVIEW" => (trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["base_root"].$row["n_s_pic"],
+                                          "VALUE_PIC_PREVIEW" => (trim($row["n_s_pic"])=="")?$cms_cfg['default_preview_pic']:$cms_cfg["file_root"].$row["n_s_pic"],
                                           "MSG_MODE" => $TPLMSG['MODIFY']
                 ));
                 if($this->seo){
