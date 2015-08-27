@@ -4,27 +4,36 @@
 	class EBOOK{
 
 		private static $setting;
-		public static $output,$imgsize;
+		public static $output,$imgsize,$download;
 
 		function __construct(){
 			self::$setting = include 'config.php';
 
+			# 讀取圖片檔案
 			define('ROOT_PATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 			$files = glob(ROOT_PATH.self::$setting["path"].'/*.'.self::$setting["subname"]);
 
 			if(is_array($files)){
 				sort($files);
 
+				# 輸出頁面
 				foreach($files as $key => $file){
 					$remove_path = str_replace(ROOT_PATH.self::$setting["path"].'/', '', $file);
 					self::$output[$key] = self::$setting["path"].'/'.str_replace('.'.self::$setting["subname"], '', $remove_path).'.'.self::$setting["subname"];
+
+					# 取得圖片大小
 					if(empty($key)) self::$imgsize = getimagesize(self::$output[$key]);
 				}
+			}
 
-				
+			# 下載檔案
+			if(!empty(self::$setting["download_path"]) && !empty(self::$setting["download_file"])){
+				$download_path = self::$setting["download_path"].'/'.self::$setting["download_file"];
+				if(file_exists($download_path)) self::$download = "<li><a id='download' href=\"{$download_path}\" target=\"_blank\" >Download</a></li>";
 			}
 		}
 
+		# 列出頁面
 		public static function fetch(){
 			if(is_array(self::$output)){
 				foreach(self::$output as $key => $page){
@@ -88,19 +97,16 @@
 				<!--<li><a id='flipsound' href="#" title='flip sound on/off' >Flip sound</a></li>-->
 				<li><a id='fullscreen' href="#" title='fullscreen on/off' >Fullscreen</a></li>
 				<li><a id='thumbs'    href="#" title='thumbnails on/off' >Thumbs</a></li>
-				<li><a id='download'  href="images/cover.jpg" target="_blank" >Download</a></li>
+				<?=EBOOK::$download?>
 			</ul>
 		</nav>
 	<div id="main">
 
   		<div id='features'>
 
+			<?=EBOOK::fetch();?>
 
-		<?=EBOOK::fetch();?>
-
-
-
-		</div> <!-- features -->
+		</div>
 
 	</div>
 	<div id='thumbs_holder'>
