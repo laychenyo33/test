@@ -117,6 +117,7 @@ $ws_array['models_options'] = array(
                     'options' => array('db'=>$db),
                 ),
                 //'translator' => 'classname',
+                'discounter' => array('member'=>'member'),
             ),
         ),
     ),
