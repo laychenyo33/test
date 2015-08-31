@@ -226,19 +226,14 @@ class CART{
     }
     function cart_quick_add(){
         global $cms_cfg;
-        $_SESSION[$cms_cfg['sess_cookie_name']]['CONTINUE_SHOPPING_URL']=$_SERVER['HTTP_REFERER'];
-        $amount=$_REQUEST["amount"];
-        foreach($_REQUEST["amount"] as $key => $value){
-            if($value !=""){
-                $_SESSION[$cms_cfg['sess_cookie_name']]["CART_PID"][$key]=1;
-                if(empty($_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$key])){
-                    $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$key]=$value;
-                }else{
-                    $_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$key]=$_SESSION[$cms_cfg['sess_cookie_name']]["amount"][$key]+$value;
-                }
+        App::getHelper('session')->CONTINUE_SHOPPING_URL=$_SERVER['HTTP_REFERER'];
+        foreach($_REQUEST["amount"] as $p_id => $amount){
+            if($amount !=""){
+                $this->container->put($p_id,$amount);
             }
         }
-        $this->cart_list();
+        header("location: ".$_SERVER['PHP_SELF']);
+        die();
     }
     function cart_list(){
         global $db,$tpl,$TPLMSG,$ws_array,$cms_cfg,$main;
