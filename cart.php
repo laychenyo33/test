@@ -404,6 +404,12 @@ class CART{
                     $tpl->newBlock("SPEC_FIELD");
                     $tpl->assign("VALUE_SPEC",$prod_row["spec"]);
                 }
+                if($cms_cfg['ws_module']['ws_products_collect']){
+                    $tpl->newBlock("TAG_COLLECTION_LINK");
+                    $tpl->assignGlobal(array(
+                        "VALUE_P_ID" => $prod_row["p_id"],
+                    ));
+                }
                 $tpl->gotoBlock( "SHOPPING_CART_ZONE" );
             }
             if($gift){
