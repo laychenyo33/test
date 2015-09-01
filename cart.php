@@ -337,7 +337,8 @@ class CART{
                 'TAG_COLLECTION' => $TPLMSG['COLLECTION'],
             ));
             //送貨區域
-            App::getHelper('main')->multiple_radio("shipment_type",$ws_array["shippment_type"],"",$tpl);                 
+            $source_of_shipment = Model_Shipprice::getShipmentSource();
+            App::getHelper('main')->multiple_radio("shipment_type",$source_of_shipment,"",$tpl);
             if($cms_cfg['ws_module']['ws_cart_spec']){
                 $tpl->assignGlobal("CART_FIELDS_NUMS",7);
                 $tpl->newBlock("SPEC_TITLE");
@@ -670,9 +671,10 @@ class CART{
                 $tpl->newBlock("SINGLE_ADDRESS_RECI");
             }              
             //運送區域
+            $source_of_shipment = Model_Shipprice::getShipmentSource();          
             $shipment_type = $this->container->get_shipment_type();
             $tpl->assignGlobal("VALUE_SHIPMENT_TYPE",$shipment_type);
-            $tpl->assignGlobal("VALUE_SHIPMENT_ZONE",$ws_array["shippment_type"][$shipment_type]);
+            $tpl->assignGlobal("VALUE_SHIPMENT_ZONE",$source_of_shipment[$shipment_type]);
             if($shipment_typ==3){
                 $tpl->assignGlobal("VALUE_SHIPPING_PRICE_STR",$TPLMSG["ALI_SHIP_MSG"]);
             }
@@ -739,6 +741,7 @@ class CART{
                 }
             }    
         }
+        $source_of_shipment = Model_Shipprice::getShipmentSource();
         $tpl->assign( array("MSG_MEMBER_NAME"  => $TPLMSG['MEMBER_NAME'],
                             "MSG_COMPANY_NAME" =>$TPLMSG['COMPANY_NAME'],
                             "MSG_ZIP" => $TPLMSG["ZIP"],
@@ -765,7 +768,7 @@ class CART{
                             "VALUE_M_RECI_CELLPHONE" => $_POST["m_reci_cellphone"],
                             "VALUE_O_CONTENT" => nl2br($_POST["m_content"]),
                             "VALUE_O_ID" => $this->o_id,
-                            "VALUE_SHIPPMENT_TYPE" => $ws_array["shippment_type"][$shipment_type],
+                            "VALUE_SHIPPMENT_TYPE" => $source_of_shipment[$shipment_type],
                             "VALUE_O_INVOICE_TYPE" => $ws_array['invoice_type'][$_POST['o_invoice_type']],
         ));
         $m_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_fname'],$_POST['m_lname']);
@@ -978,9 +981,11 @@ class CART{
                 $tpl->assign("VALUE_CHARGE_FEE",$billList['charge_fee']);
             }
             $tpl->gotoBlock( "MEMBER_DATA_FORM" );
+            //配送地區
+            $source_of_shipment = Model_Shipprice::getShipmentSource();
             $tpl->assign(array(
                 "VALUE_O_ID" => $oid,
-                "VALUE_SHIPPMENT_TYPE" => $main->multi_map_value($ws_array["shippment_type"],$shipment_type),
+                "VALUE_SHIPPMENT_TYPE" => $main->multi_map_value($source_of_shipment,$shipment_type),
             ));
             $ts = time();
             $tpl->gotoBlock("SHOPPING_CART_ZONE");            
