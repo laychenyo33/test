@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS `eng_order` (
   `o_total_price` int(8) NOT NULL,
   `o_content` text NOT NULL,
   `o_payment_type` varchar(100) NOT NULL,
+  `o_shipment_type` int(11) NOT NULL,
   `o_add_name` varchar(255) NOT NULL,
   `o_add_tel` varchar(50) NOT NULL,
   `o_add_cellphone` varchar(50) NOT NULL,
@@ -67,9 +68,10 @@ CREATE TABLE IF NOT EXISTS `eng_order` (
   `del` tinyint(4) NOT NULL DEFAULT '0',
   `o_atm_last5` char(5) NOT NULL,
   `rid` VARCHAR( 255 ) NOT NULL,
-  PRIMARY KEY (`o_id`),
+  PRIMARY KEY  (`o_id`),
   KEY `mc_id` (`m_id`),
-  KEY `o_payed` (`o_paid`)
+  KEY `o_payed` (`o_paid`),
+  KEY `o_shipment_type` (`o_shipment_type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
