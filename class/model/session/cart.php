@@ -89,8 +89,6 @@ class Model_Session_Cart extends Model_Modules {
                 $this->cart['products']['lists'][$extra_data_id]['amount'] += $amount;
             }
             $this->cart['products']['amount'][$extra_data_id]+=$amount;
-            //重設折扣
-            $this->cart['products']['lists'][$extra_data_id]['discount'] = 1;
         }else{
             //檢查庫存
             if($this->activateStockChecker && !$this->stockChecker->check(
@@ -105,8 +103,6 @@ class Model_Session_Cart extends Model_Modules {
                 $this->cart['products']['lists'][$p_id]['amount'] += $amount;
             }
             $this->cart['products']['amount'][$p_id]+=$amount;
-            //重設折扣
-            $this->cart['products']['lists'][$p_id]['discount'] = 1;
         }
         $this->count(true);
         if($this->handler->sc_cart_type==1){
@@ -122,8 +118,6 @@ class Model_Session_Cart extends Model_Modules {
             $product = $this->conditioner->getAddPurchaseProduct($c_id,$p_id);
             if($product['limit']===0 || $product['limit']>=$amount){
                 $product['amount'] = $amount;
-                //重設折扣
-                $product['discount'] = 1;
                 $this->cart['products']['lists'][$combind_id] = $product;
                 $this->count(true);
                 if($this->handler->sc_cart_type==1){
@@ -145,8 +139,6 @@ class Model_Session_Cart extends Model_Modules {
             $p_id = $this->combine_id($p_id, $extra_id);
         }
         $this->cart['products']['lists'][$p_id]['amount'] = $amount;
-        //重設折扣
-        $this->cart['products']['lists'][$p_id]['discount'] = 1;
         if($this->handler->sc_cart_type==1){
             $this->calculate();//累計價格
         }
@@ -160,8 +152,6 @@ class Model_Session_Cart extends Model_Modules {
             $product = &$this->cart['products']['lists'][$combind_id];
             if($product['limit']===0 || $product['limit']>=$amount){
                 $product['amount'] = $amount;
-                //重設折扣
-                $product['discount'] = 1;
                 if($this->handler->sc_cart_type==1){
                     $this->calculate();//累計價格
                 }
@@ -245,10 +235,15 @@ class Model_Session_Cart extends Model_Modules {
     function calculate(){
         $cart_subtotal_price = 0;
         $advance_ship_price = false;
-        //執行前折扣
-        $this->runDiscount("pre");
-        //計算訂單金額
         if(!empty($this->cart['products']['lists']) && is_array($this->cart['products']['lists'])){
+            //重設折扣
+            foreach($this->cart['products']['lists'] as $index_id => $dataRow){
+                $dataRow['discount'] = 1;
+                $this->cart['products']['lists'][$index_id] = $dataRow;                   
+            }
+            //執行前折扣
+            $this->runDiscount("pre");
+            //計算訂單金額
             foreach($this->cart['products']['lists'] as $index_id => $dataRow){
                 $cart_subtotal_price+=$dataRow['subtotal_price'];                      
             }
