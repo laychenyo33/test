@@ -87,9 +87,6 @@ class Model_Session_Cart extends Model_Modules {
                 $this->cart['products']['lists'][$extra_data_id] = $row;
             }else{
                 $this->cart['products']['lists'][$extra_data_id]['amount'] += $amount;
-                if($this->handler->sc_cart_type==1){
-                    $this->discounter['quantity']->checkout($this->cart['products']['lists'][$extra_data_id]);
-                }
             }
             $this->cart['products']['amount'][$extra_data_id]+=$amount;
         }else{
@@ -104,9 +101,6 @@ class Model_Session_Cart extends Model_Modules {
                 $this->cart['products']['lists'][$p_id] = $prod;
             }else{
                 $this->cart['products']['lists'][$p_id]['amount'] += $amount;
-                if($this->handler->sc_cart_type==1){
-                    $this->discounter['quantity']->checkout($this->cart['products']['lists'][$p_id]);
-                }
             }
             $this->cart['products']['amount'][$p_id]+=$amount;
         }
@@ -124,7 +118,6 @@ class Model_Session_Cart extends Model_Modules {
             $product = $this->conditioner->getAddPurchaseProduct($c_id,$p_id);
             if($product['limit']===0 || $product['limit']>=$amount){
                 $product['amount'] = $amount;
-                $this->discounter['quantity']->checkout($product);
                 $this->cart['products']['lists'][$combind_id] = $product;
                 $this->count(true);
                 if($this->handler->sc_cart_type==1){
@@ -147,7 +140,6 @@ class Model_Session_Cart extends Model_Modules {
         }
         $this->cart['products']['lists'][$p_id]['amount'] = $amount;
         if($this->handler->sc_cart_type==1){
-            $this->discounter['quantity']->checkout($this->cart['products']['lists'][$p_id]);            
             $this->calculate();//累計價格
         }
         return true;
@@ -227,7 +219,6 @@ class Model_Session_Cart extends Model_Modules {
             $row['amount'] = $amount;
             if($this->handler->sc_cart_type==1){
                 $row['price'] = $row['p_special_price']?$row['p_special_price']:$row['p_list_price'];
-                $this->discounter['quantity']->checkout($row);
             }
             return $row;
         }else{
@@ -245,6 +236,14 @@ class Model_Session_Cart extends Model_Modules {
         $cart_subtotal_price = 0;
         $advance_ship_price = false;
         if(!empty($this->cart['products']['lists']) && is_array($this->cart['products']['lists'])){
+            //重設折扣
+            foreach($this->cart['products']['lists'] as $index_id => $dataRow){
+                $dataRow['discount'] = 1;
+                $this->cart['products']['lists'][$index_id] = $dataRow;                   
+            }
+            //執行前折扣
+            $this->runDiscount("pre");
+            //計算訂單金額
             foreach($this->cart['products']['lists'] as $index_id => $dataRow){
                 $cart_subtotal_price+=$dataRow['subtotal_price'];                      
             }
@@ -254,6 +253,8 @@ class Model_Session_Cart extends Model_Modules {
         $this->cart['cart_info']['charge_fee'] = (in_array($this->cart['cart_info']['payment_type'],$this->need_charge_fee_payment))?Model_Chargefee::calculate($this->cart['cart_info']['subtotal_price']):0;
         $this->cart['cart_info']['subtotal_price'] = $cart_subtotal_price;
         $this->cart['cart_info']['total_price'] = $this->cart['cart_info']['subtotal_price']+($this->cart['cart_info']['shipping_price']<0?0:$this->cart['cart_info']['shipping_price'])+$this->cart['cart_info']['charge_fee']-$this->cart['cart_info']['minus_price'];
+        //執行後折扣
+        $this->runDiscount("post");
     }
     function empty_cart(){
         $this->_init_cart();
@@ -271,7 +272,6 @@ class Model_Session_Cart extends Model_Modules {
                 if(!$row['price']){
                     $row['price'] = $row['p_special_price']?$row['p_special_price']:$row['p_list_price'];
                 }
-                $this->discounter['quantity']->checkout($row);
             }
             return $row;
         }else{
@@ -363,11 +363,7 @@ class Model_Session_Cart extends Model_Modules {
         if(!class_exists($class)){
             throw new Exception("cart discounter class not find!");
         }
-        if($options){
-            $discounter = new $class($options);
-        }else{
-            $discounter = new $class;
-        }
+        $discounter = new $class($this,$options);
         return $discounter;
     }
     
@@ -393,5 +389,37 @@ class Model_Session_Cart extends Model_Modules {
             }
         }
         return true;
+    }
+    
+    function runDiscount($position){
+        if($position && in_array($position,array("pre","post"))){
+            foreach($this->discounter as $discountType => $discounter){
+                if($discounter->position == $position){
+                    if(!$discounter->run()){
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    function updateCartProduct($p_id,$productInfo){
+        if(isset($this->cart['products']['lists'][$p_id])){
+            $this->cart['products']['lists'][$p_id] = $productInfo;
+        }
+    }
+    
+    function updateCartInfo($name,$value){
+        if(isset($this->cart['cart_info'][$name])){
+            $this->cart['cart_info'][$name] = $value;
+        }
+    }
+    
+    /**
+     * 取得 session handler
+     * @return Model_Session_Cart
+     */
+    function getSessionHandler(){
+        return $this->handler;
     }
 }

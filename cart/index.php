@@ -270,9 +270,13 @@
                                     'MSG_NEXT_STEP' => $TPLMSG['CART_STEP_NEXT'],
                                     'MSG_DEL_DIALOG_TITLE'   => $TPLMSG['DEL_CART_ITEM'],
                                     'MSG_DEL_DIALOG_CONTENT' => $TPLMSG['SURE_TO_DELETE'],
+                                    'MSG_SHIP_ZONE' => $TPLMSG['ORDER_SHIP_ZONE'],
                                     'STR_BTN_DEL_CONFIRM' => $TPLMSG['OK'] ,
                                     'STR_BTN_DEL_CANCEL'  => $TPLMSG['CANCEL'] ,
                                 ));
+                                //送貨區域
+                                $source_of_shipment = Model_Shipprice::getShipmentSource();
+                                App::getHelper('main')->multiple_radio("shipment_type",$source_of_shipment,$this->container->get_shipment_type(),$tpl);                                
                                 if($cms_cfg['ws_module']['ws_cart_spec']){
                                     $tpl->assignGlobal("CART_FIELDS_NUMS",6);
                                     $tpl->newBlock("SPEC_TITLE");
@@ -280,6 +284,7 @@
                                     $tpl->assignGlobal("CART_FIELDS_NUMS",5);
                                 }                                
                                 $gift = $this->container->getModule("giftor")->getGift($this->giftId);
+                                $this->container->calculate();
                                 $cartProducts = $this->container->get_cart_products();
                                 if(App::configs()->ws_module->ws_cart_plus_shopping){
                                     $additionalPurchaseProducts = $this->container->getModule("conditioner")->getAdditionalPurchaseProducts();
@@ -485,7 +490,12 @@
 	
 					$tpl->newBlock("PAYMENT_TYPE");
 					$tpl->assign(array("MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$payment_type], ));
-	
+                                        
+                                        //運送區域
+                                        $source_of_shipment = Model_Shipprice::getShipmentSource();          
+                                        $shipment_type = $this->container->get_shipment_type();
+                                        $tpl->assignGlobal("VALUE_SHIPMENT_ZONE",$source_of_shipment[$shipment_type]);
+
 					// 購物收件人表單
 					$tpl->newBlock("TAG_ADDRESSEE_BLOCK");
 					$tpl->assignGlobal($this->adv_lang);
@@ -566,6 +576,12 @@
                                     "MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], 
                                     "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$payment_type], 
                                 ));
+                                
+                                //運送區域
+                                $source_of_shipment = Model_Shipprice::getShipmentSource();          
+                                $shipment_type = $this->container->get_shipment_type();
+                                $tpl->assignGlobal("VALUE_SHIPMENT_ZONE",$source_of_shipment[$shipment_type]);
+                                
 				// 收件人資訊
                                 $m_reci_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_POST['m_reci_fname'],$_POST['m_reci_lname']);
                                 $reci_contact_s = App::getHelper('main')->multi_map_value($ws_array["contactus_s"],$_POST["m_reci_contact_s"]);
@@ -668,7 +684,11 @@
                                     "MSG_PAYMENT_TYPE" => $TPLMSG["PAYMENT_TYPE"], 
                                     "VALUE_PAYMENT_TYPE" => $ws_array["payment_type"][$payment_type], 
                                 ));
-	
+                                
+                                //運送區域
+                                $source_of_shipment = Model_Shipprice::getShipmentSource();          
+                                $tpl->assignGlobal("VALUE_SHIPMENT_ZONE",$source_of_shipment[$shipment_type]);                                
+
 				// 收件人資訊
                                 $m_reci_name = sprintf($TPLMSG["MEMBER_NAME_IN_CART_TEMPLATE"],$_REQUEST['m_reci_fname'],$_REQUEST['m_reci_lname']);
                                 $reci_contact_s = App::getHelper('main')->multi_map_value($ws_array["contactus_s"],$_REQUEST["m_reci_contact_s"]);
@@ -724,7 +744,7 @@
                             'o_fee_price'     => $billList['charge_fee'],
                             'o_subtotal_price' => $billList['subtotal_price'],
                             'o_total_price'    => $billList['total_price'],
-                            'o_shippment_type' => $shipment_type,
+                            'o_shipment_type' => $shipment_type,
                             'o_payment_type'   => $payment_type,
                             'o_arrival_time'   => $o_arrival_time,
                             'o_address'        => $o_address,
@@ -826,6 +846,7 @@
                                         }
 				}
                                 $this->container->set_payment_type($form["o_payment_type"]);
+                                $this->container->set_shipment_type($form["o_shipment_type"]);
 			} else {
 				$this->error_handle();
 			}
@@ -970,6 +991,7 @@
                                     "MSG_ORDER_ID" => $TPLMSG['ORDER_ID'], 
                                     "MSG_CONTENT" => $TPLMSG['CONTENT'], 
                                     "MSG_PAYMENT_TYPE" => $TPLMSG['PAYMENT_TYPE'], 
+                                    "MSG_SHIP_ZONE" => $TPLMSG['ORDER_SHIP_ZONE'],                                    
                                     "MSG_TOTAL" => $TPLMSG['CART_TOTAL'], 
                                     "MSG_SUBTOTAL" => $TPLMSG['CART_SUBTOTAL'], 
                                     "MSG_AMOUNT" => $TPLMSG['CART_AMOUNT'], 
@@ -985,6 +1007,9 @@
 				foreach ($row as $key => $value) {
 					if ($key == 'o_payment_type') {
 						$value = $ws_array["payment_type"][$value];
+					} else if ($key == 'o_shipment_type') {//配送地區
+                                            $source_of_shipment = Model_Shipprice::getShipmentSource();                                            
+                                            $value = $source_of_shipment[$value];
 					} else if ($key == 'o_name') {
 						$value = (empty($this->gender_select))?$this->gender_list($row["o_contact_s"], 1).'&nbsp;'.$value:$value.'&nbsp;'.$this->gender_list($row["o_contact_s"], 1);
 					}

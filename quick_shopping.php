@@ -14,6 +14,7 @@ class PRODUCTS{
         $main->pageview_history($main->get_main_fun(),0,App::getHelper('session')->MEMBER_ID);        
         //有廣告模組才啟動廣告
         if($cms_cfg["ws_module"]["ws_ad"]==1) $main->ad_list(0);
+        App::getHelper('main')->layer_link();
         $tpl->printToScreen();
     }
     //載入對應的樣板
@@ -28,11 +29,10 @@ class PRODUCTS{
         $tpl->prepare();
         $tpl->assignGlobal( "TAG_MAIN_FUNC" , $TPLMSG['CART_QUICK_SHOPPING']);
         $tpl->assignGlobal( "TAG_CATE_TITLE", $ws_array["left"]["products"]);
-        $tpl->assignGlobal( "TAG_LAYER" , $TPLMSG['CART_QUICK_SHOPPING']);
         $main->header_footer("products",$TPLMSG['CART_QUICK_SHOPPING']);
-        $main->login_zone();
-        $main->left_fix_cate_list();
-        $main->google_code(); //google analystics code , google sitemap code
+        App::getHelper('main')->layer_link($TPLMSG['CART_QUICK_SHOPPING']);        
+        $leftmenu = new Leftmenu_Products($tpl);
+        $leftmenu->make();
     }
     //產品搜尋
     function products_list(){

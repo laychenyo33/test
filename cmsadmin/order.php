@@ -279,6 +279,8 @@ class ORDER{
             $selectrs = $db->query($sql);
             $row = $db->fetch_array($selectrs,1);
             $rsnum    = $db->numRows($selectrs);
+            //配送地區
+            $source_of_shipment = Model_Shipprice::getShipmentSource();
             if ($rsnum > 0) {
                 $dts = strtotime($row['o_deliver_date']);
                 $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
@@ -303,7 +305,7 @@ class ORDER{
                                           "VALUE_O_TOTAL_PRICE" => $row["o_total_price"],
                                           "VALUE_O_STATUS" => $ws_array["order_status"][$row["o_status"]],
                                           "VALUE_O_PAYMENT_TYPE"=> $main->multi_map_value($ws_array["payment_type"],$row["o_payment_type"]),
-                                          "VALUE_O_SHIPPMENT_TYPE" => $main->multi_map_value($ws_array["shippment_type"],$row['o_shippment_type']),
+                                          "VALUE_O_SHIPPMENT_TYPE" => $main->multi_map_value($source_of_shipment,$row['o_shippment_type']),
                                           "VALUE_O_INVOICE_TYPE" => $ws_array["invoice_type"][$row['o_invoice_type']],
                                           "VALUE_O_ATM_LAST5" => $row["o_atm_last5"],
                                           "VALUE_REMIT_AMOUNT" => $row["remit_amount"],

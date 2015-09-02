@@ -30,7 +30,9 @@
     <td><span class="dc">{TAG_QUANTITY_DISCOUNT}</span></td>
     <td><span class="sp">{VALUE_P_SUBTOTAL_PRICE}</span></td>
     <td>
-        <a href="#" class="prodToCollect" rel="{VALUE_P_ID}">{TAG_COLLECTION}</span>
+        <!-- START BLOCK : TAG_COLLECTION_LINK -->
+        <a href="#" class="prodToCollect" rel="{VALUE_P_ID}">{TAG_COLLECTION}</a>
+        <!-- END BLOCK : TAG_COLLECTION_LINK -->
         <a href="#" class="cart-del" pid="{VALUE_P_ID}" {TAG_PS_ID}><img src="{TAG_THEME_PATH}ws-table-delete.gif" border="0" /></a>
     </td>
 </tr>
@@ -81,7 +83,7 @@
 <div id="shipment_zone">
     {MSG_SHIP_ZONE}:
     <!-- START BLOCK : SHIPMENT_TYPE_RADIO -->
-    <label><input type="radio" name="shipment_type" id="shipment_type_{VALUE_SHIPMENT_TYPE_KEY}" value="{VALUE_SHIPMENT_TYPE_KEY}"/>{VALUE_SHIPMENT_TYPE_NAME}</label>
+    <label><input type="radio" name="shipment_type" id="shipment_type_{VALUE_SHIPMENT_TYPE_KEY}" value="{VALUE_SHIPMENT_TYPE_KEY}" {CHECKED}/>{VALUE_SHIPMENT_TYPE_NAME}</label>
     <!-- END BLOCK : SHIPMENT_TYPE_RADIO -->
 </div>
     <div class="cart_btn">

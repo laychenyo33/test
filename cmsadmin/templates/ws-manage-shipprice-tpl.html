@@ -9,8 +9,13 @@
                 $('#appendGridTable').appendGrid({
                     initRows: 1,
                     columns: [
+                        <!-- START BLOCK : PRICE_COLS -->
                             { name: 'pricefloor', display: '訂單最低金額', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '160px'} },
                             { name: 'priceceil', display: '訂單最高金額', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '100px'} },
+                        <!-- END BLOCK : PRICE_COLS -->
+                        <!-- START BLOCK : AREA_COLS -->
+                            { name: 'area', display: '地區名稱', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '100px'} },
+                        <!-- END BLOCK : AREA_COLS -->
                             { name: 'shipprice', display: '運費', type: 'text', ctrlAttr: { maxlength: 100 }, ctrlCss: { width: '50px', 'text-align': 'right' }, value: 0 },
                             { name: 'id', type: 'hidden', value: 0 }
                         ],

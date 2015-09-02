@@ -563,6 +563,8 @@ class MEMBER{
                 $selectrs = $db->query($sql);
                 $row = $db->fetch_array($selectrs,1);
                 $rsnum    = $db->numRows($selectrs);
+                //配送地區
+                $source_of_shipment = Model_Shipprice::getShipmentSource();
                 if ($rsnum > 0) {
                     $tpl->assignGlobal( array("VALUE_M_ID"  => $row["m_id"],
                                               "VALUE_O_ID"  => $row["o_id"],
@@ -591,7 +593,7 @@ class MEMBER{
                                               "VALUE_O_STATUS_SUBJECT" => $ws_array["order_status"][$row["o_status"]],
                                               "VALUE_O_CONTENT" => $row["o_content"],
                                               "VALUE_O_PAYMENT_TYPE" => $main->multi_map_value($ws_array["payment_type"],$row['o_payment_type']),
-                                              "VALUE_O_SHIPPMENT_TYPE" => $main->multi_map_value($ws_array["shippment_type"],$row['o_shippment_type']),
+                                              "VALUE_O_SHIPPMENT_TYPE" => $main->multi_map_value($source_of_shipment,$row['o_shippment_type']),
                                               "VALUE_O_INVOICE_TYPE" => $main->multi_map_value($ws_array["invoice_type"],$row['o_invoice_type']),
                                               "VALUE_O_VAT_NUMBER" => $row["o_vat_number"],
                                               "VALUE_O_DELIVER_DATE" => (strtotime($row["o_deliver_date"]))?date("Y年m月d日",strtotime($row["o_deliver_date"])):"",

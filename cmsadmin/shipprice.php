@@ -62,8 +62,18 @@ class SHIPPRICE{
             header("location:".$_SERVER['PHP_SELF']);
             die();
         }
-        $shipPriceData = App::getHelper('dbtable')->shipprice->getDataList("","pricefloor,priceceil,shipprice,id"," sort ");
-        $tpl->assignGlobal("TAG_DATA_JSON",  json_encode($shipPriceData));
+        if(App::configs()->ws_module->ws_multi_shipprice_by!=""){
+            if(App::configs()->ws_module->ws_multi_shipprice_by=="price"){
+                $tpl->newBlock("PRICE_COLS");
+                $shipPriceData = App::getHelper('dbtable')->shipprice->getDataList("","pricefloor,priceceil,shipprice,id"," sort ");
+            }elseif(App::configs()->ws_module->ws_multi_shipprice_by=="area"){
+                $tpl->newBlock("AREA_COLS");
+                $shipPriceData = App::getHelper('dbtable')->shipprice->getDataList("","area,shipprice,id"," sort ");
+            }
+            $tpl->assignGlobal("TAG_DATA_JSON",  json_encode($shipPriceData));
+        }else{
+            trigger_error("Please assign value for variable ws_multi_shipprice_by in config.", E_USER_ERROR);
+        }
     }
 
 }

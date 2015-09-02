@@ -74,6 +74,7 @@ $cms_cfg["ws_module"]=array(
         "ws_order_export" => 1,         //匯出訂單為excel，需另外加入phpexcel類別在class資料夾
         "ws_rid_order"    => 0,         //啟用美安記錄
         "ws_multi_shipprice"=>0,        //依訂單金額區段計算運費
+        "ws_multi_shipprice_by"=>'price', //price:依訂單金額區段計算運費, area:依區域名稱計算運費
         "ws_multi_chargefee"=>0,        //依訂單金額區段計算手續費
         "ws_multi_discount" =>0,        //依訂單金額區段使用折扣率
         "ws_temp_store"     =>0,        //商品寄放功能
