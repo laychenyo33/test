@@ -338,7 +338,7 @@ class CART{
             ));
             //送貨區域
             $source_of_shipment = Model_Shipprice::getShipmentSource();
-            App::getHelper('main')->multiple_radio("shipment_type",$source_of_shipment,"",$tpl);
+            App::getHelper('main')->multiple_radio("shipment_type",$source_of_shipment,$this->container->get_shipment_type(),$tpl);
             if($cms_cfg['ws_module']['ws_cart_spec']){
                 $tpl->assignGlobal("CART_FIELDS_NUMS",7);
                 $tpl->newBlock("SPEC_TITLE");
