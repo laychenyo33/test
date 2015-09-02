@@ -284,6 +284,7 @@
                                     $tpl->assignGlobal("CART_FIELDS_NUMS",5);
                                 }                                
                                 $gift = $this->container->getModule("giftor")->getGift($this->giftId);
+                                $this->container->calculate();
                                 $cartProducts = $this->container->get_cart_products();
                                 if(App::configs()->ws_module->ws_cart_plus_shopping){
                                     $additionalPurchaseProducts = $this->container->getModule("conditioner")->getAdditionalPurchaseProducts();

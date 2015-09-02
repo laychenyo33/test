@@ -243,6 +243,8 @@ class CART{
         }
         if($_POST['o_payment_type']){
             $this->container->set_payment_type($_POST['o_payment_type']);
+        }else{
+            $this->container->calculate();
         }
         //取得目前的 cart type，以及運費相關欄位
         $sql="select sc_cart_type,sc_shipping_price,sc_shipping_price2,sc_shipping_price3,sc_no_shipping_price,sc_service_fee from ".$cms_cfg['tb_prefix']."_system_config where sc_id='1'";
