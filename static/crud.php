@@ -97,9 +97,6 @@
 			if(is_array($sk) && count($sk)){
 				foreach($sk as $field => $var){
 					switch($field){
-						case "sk":
-							if(!empty($var)) $where_array[] = $var;
-						break;
 						case "custom":
 							$where_array[] = $var;
 						break;
@@ -109,8 +106,15 @@
 									$where_array[] = $field.' IS NULL';
 								break;
 								default:
-									if(preg_match("/%([^%])+/", $var) || preg_match("/([^%])+%/", $var)){
+									if(!is_array($var) && (preg_match("/%([^%])+/", $var) || preg_match("/([^%])+%/", $var))){
 										$equation = 'like';
+									}
+
+									if(!is_array($var) && (preg_match("/^!/", $var))){
+										$equation = '!=';
+										$varArray = str_split($var);
+										array_shift($varArray);
+										$var = implode('',$varArray);
 									}
 
 									if(is_array($var)){
